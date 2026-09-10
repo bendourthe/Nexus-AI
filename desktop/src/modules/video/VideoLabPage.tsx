@@ -11,7 +11,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { setModelActivity } from "../../lib/modelActivity";
-import { Download, FileJson, ImagePlus, Sparkles } from "lucide-react";
+import { Download, FileJson, ImagePlus, Settings, Sparkles } from "lucide-react";
 
 import { useModelResidency } from "../../shared/models/useModelResidency";
 import {
@@ -34,14 +34,21 @@ import {
   askBeforeModelSwitch,
   setAskBeforeModelSwitch,
 } from "../../shared/models/modelSwitchPreference";
-import { estimateGenerationSeconds } from "../../shared/chat/generationProgress";
+import {
+  estimateGenerationSeconds,
+  mergeProgress,
+} from "../../shared/chat/generationProgress";
 import {
   ModelSwitchChip,
   ModelSwitchDialog,
 } from "../../shared/models/ModelSwitchDialog";
 import { SidecarDownBanner } from "../../components/SidecarDownBanner";
-import { Button } from "../../components/ui";
+import { Select } from "../../components/ui";
 import { formatInferenceError } from "../../lib/inferenceRpcError";
+import {
+  describeGenerationFailure,
+  failureTranscriptText,
+} from "../../shared/studio/generationError";
 import {
   isBackendDownMessage,
   isSidecarFailureMessage,
@@ -65,6 +72,14 @@ import {
   persistableAssistant,
 } from "./videoFailClosed";
 import { QuickModelSwitcher } from "../../shared/models/QuickModelSwitcher";
+import {
+  StudioInlineControl,
+} from "../../shared/studio/StudioSettings";
+import {
+  allowedDurations,
+  reconcileVideoValues,
+  videoCapabilitiesFor,
+} from "../../shared/studio/modelCapabilities";
 import {
   SETTINGS_MODELS_PATH,
   installedModelsForType,
@@ -144,7 +159,10 @@ import {
   shouldTitleOnFirstSend,
 } from "../../shared/explorer/scheduleFirstPromptTitle";
 import type { StudioTurn } from "../../../../core/generations/StudioSessionStore.types";
-import { studioPersistUsage } from "../../shared/studio/studioTurnUsage";
+import {
+  elapsedSecondsSince,
+  studioPersistUsage,
+} from "../../shared/studio/studioTurnUsage";
 import {
   createIpcMediaRuntimeClient,
   isMediaRuntimeFailure,
@@ -318,6 +336,8 @@ export function VideoLabPage({
     messageId: string;
     /** v2.4.8 follow-up: the session the job belongs to (may not be visible). */
     sessionId: string | null;
+    /** v2.4.9: wall-clock start, so the bubble can report what the run cost. */
+    startedAtMs: number;
   } | null>(null);
   // v2.4.8 follow-up: see ImageStudioPage -- pending bubble survives a session
   // switch; completions persist to the job's own session.
@@ -339,12 +359,9 @@ export function VideoLabPage({
     ReadonlyMap<string, readonly TimelineSegment[]>
   >(() => new Map());
   const outputs = useRef<Map<string, string>>(new Map()); // messageId -> mp4Path
-  // v2.4.8 Phase 8: last explicit runtime stage per message (see ImageStudioPage).
-  const stageByMessage = useRef<Map<string, string>>(new Map());
-  // v2.4.8 follow-up: last byte-level load report per message (see ImageStudioPage).
-  const loadByMessage = useRef<
-    Map<string, { loadedBytes: number; totalBytes: number; etaS?: number | null }>
-  >(new Map());
+  // v2.4.8 follow-up (2026-09-08): the merged progress per message; a bare
+  // heartbeat must not erase a counted step (see ImageStudioPage).
+  const progressByMessage = useRef<Map<string, ChatMessage["progress"]>>(new Map());
   const frameRatesByMessage = useRef<Map<string, number>>(new Map());
   const [enhancementSources, setEnhancementSources] = useState<
     ReadonlyMap<string, VideoEnhancementSourceBinding>
@@ -358,6 +375,40 @@ export function VideoLabPage({
   const completedEnhancementJobs = useRef<Set<string>>(new Set());
   const enhancedMessageIds = useRef<Set<string>>(new Set());
   const [formEpoch, setFormEpoch] = useState(0);
+  /** Quick-row edits share the panel's values; the epoch remounts it. */
+  const patchValues = useCallback((patch: Partial<VideoFormValues>): void => {
+    setValues((prev) => ({ ...prev, ...patch }));
+    setFormEpoch((n) => n + 1);
+  }, []);
+
+  /**
+   * v2.4.9 -- what THIS video model can render.
+   *
+   * Operator failure: Wan 2.1 T2V 1.3B was asked for 720p / 8 s. Its catalog
+   * entry declares a 480p local path, 81 frames and a 5 s ceiling; the job ran
+   * for ten minutes and then failed. Both settings are now bounded by the
+   * model, and duration is a dropdown rather than an open number field.
+   */
+  const videoCaps = useMemo(
+    () => videoCapabilitiesFor(selectedModelId, models.find((m) => m.id === selectedModelId)?.family),
+    [models, selectedModelId],
+  );
+  /** Clip lengths this model can reach at the CURRENT frame rate. */
+  const durationChoices = useMemo(
+    () => allowedDurations(videoCaps, values.fps),
+    [videoCaps, values.fps],
+  );
+
+  const [capabilityNotice, setCapabilityNotice] = useState<string | null>(null);
+  useEffect(() => {
+    const { patch, changed } = reconcileVideoValues(values, videoCaps);
+    if (changed.length === 0) return;
+    patchValues(patch as Partial<VideoFormValues>);
+    const name =
+      models.find((m) => m.id === selectedModelId)?.displayName ?? selectedModelId;
+    setCapabilityNotice(`Adjusted for ${name}: ${changed.join(", ")}.`);
+    // Reconcile on a MODEL change, not on every keystroke within one model.
+  }, [videoCaps]);
   const [queueJobs, setQueueJobs] = useState<readonly GenerationJob[]>([]);
   const [workflowByMessage, setWorkflowByMessage] = useState<
     Record<string, Record<string, unknown>>
@@ -747,25 +798,21 @@ export function VideoLabPage({
             }
             continue;
           }
-          const stage =
-            event.stage ?? stageByMessage.current.get(messageId) ?? "loading";
-          stageByMessage.current.set(messageId, stage);
-          if (typeof event.totalBytes === "number") {
-            loadByMessage.current.set(messageId, {
-              loadedBytes: event.loadedBytes ?? 0,
-              totalBytes: event.totalBytes,
-              etaS: event.etaS,
-            });
-          }
-          patchMessage(messageId, {
-            progress: {
-              step: event.step ?? 0,
-              total: event.totalSteps ?? 0,
-              stage,
-              ...(loadByMessage.current.get(messageId) ?? {}),
-              ...(event.blockedBy ? { blockedBy: event.blockedBy } : {}),
-            },
+          const merged = mergeProgress(progressByMessage.current.get(messageId), {
+            stage: event.stage ?? "loading",
+            step: event.step ?? 0,
+            totalSteps: event.totalSteps ?? 0,
+            ...(typeof event.totalBytes === "number"
+              ? {
+                  loadedBytes: event.loadedBytes ?? 0,
+                  totalBytes: event.totalBytes,
+                  etaS: event.etaS,
+                }
+              : {}),
+            ...(event.blockedBy ? { blockedBy: event.blockedBy } : {}),
           });
+          progressByMessage.current.set(messageId, merged);
+          patchMessage(messageId, { progress: merged });
         } else if (event.kind === "complete") {
           const mp4Path = event.outputPath ?? event.mp4Path ?? "";
           if (!isUsableVideoPath(mp4Path)) {
@@ -855,6 +902,8 @@ export function VideoLabPage({
             pending: false,
             progress: undefined,
             media: { kind: "video", src: firstSrc },
+            // v2.4.9: the measured cost of the run, in brackets after the time.
+            generationSeconds: elapsedSecondsSince(activeJob?.startedAtMs),
           });
           if (isUsablePathRef(mp4Path)) {
             lastOutputRef.current = mp4Path;
@@ -1015,6 +1064,9 @@ export function VideoLabPage({
               jobId: nextJobId,
               messageId: activeJob.messageId,
               sessionId: activeJob.sessionId,
+              // A continuation keeps the original start: the reported duration
+              // is the whole chained clip, not just its final segment.
+              startedAtMs: activeJob.startedAtMs,
             });
             return;
           }
@@ -1029,11 +1081,14 @@ export function VideoLabPage({
           chainRef.current = null;
           patchMessage(activeJob.messageId, {
             pending: false,
-            content: formatVideoFailure(formatInferenceError(err)),
+            content: "",
+            failure: describeGenerationFailure(err, { surface: "video" }),
           });
           persistTurn({
             role: "assistant",
-            content: formatVideoFailure(formatInferenceError(err)),
+            content: failureTranscriptText(
+              describeGenerationFailure(err, { surface: "video" }),
+            ),
           });
           setActiveJob(null);
         }
@@ -1204,6 +1259,8 @@ export function VideoLabPage({
         ...(attachments.length > 0 ? { attachments: [...attachments] } : {}),
       };
       const assistantId = retryAssistantId ?? nextId("vassistant");
+      // A retry reuses the message; the finished run's phase must not carry over.
+      progressByMessage.current.delete(assistantId);
       if (retryAssistantId) {
         patchMessage(assistantId, {
           pending: true,
@@ -1320,17 +1377,21 @@ export function VideoLabPage({
           jobId: accepted.jobId,
           messageId: assistantId,
           sessionId: activeSessionIdRef.current,
+          startedAtMs: Date.now(),
         });
       } catch (err) {
         chainRef.current = null;
         if (!(await markMediaRuntimeFailure(assistantId, err))) {
           patchMessage(assistantId, {
             pending: false,
-            content: formatVideoFailure(formatInferenceError(err)),
+            content: "",
+            failure: describeGenerationFailure(err, { surface: "video" }),
           });
           persistTurn({
             role: "assistant",
-            content: formatVideoFailure(formatInferenceError(err)),
+            content: failureTranscriptText(
+              describeGenerationFailure(err, { surface: "video" }),
+            ),
           });
           mediaRetryRef.current = null;
         }
@@ -1754,7 +1815,7 @@ export function VideoLabPage({
               messages={shownMessages}
               enableTools={false}
               onMediaError={handleMediaError}
-              renderAfter={(m) => {
+              renderMetaActions={(m) => {
                 const enhancementSource = enhancementSources.get(m.id);
                 const panelOpen = openEnhancementPanels.has(m.id);
                 return (
@@ -1768,14 +1829,14 @@ export function VideoLabPage({
                         data-testid={`video-actions-${m.id}`}
                         style={{
                           display: "flex",
-                          gap: "var(--space-2)",
+                          gap: "var(--space-1)",
                           marginTop: "var(--space-1)",
                           flexWrap: "wrap",
                         }}
                       >
                         <button
                           type="button"
-                          className="nx-icon-btn"
+                          className="nx-icon-btn-bare"
                           aria-label={
                             isEnhancedOutput(m.id)
                               ? `Download enhanced video ${m.id}`
@@ -1802,7 +1863,7 @@ export function VideoLabPage({
                               else enhancementButtonRefs.current.delete(m.id);
                             }}
                             type="button"
-                            className="nx-icon-btn"
+                            className="nx-icon-btn-bare"
                             aria-label={`Enhance video ${m.id}`}
                             aria-expanded={panelOpen}
                             title="Create a separate enhanced copy. The original is preserved."
@@ -1842,7 +1903,7 @@ export function VideoLabPage({
                   <>
                     <button
                       type="button"
-                      className="nx-icon-btn"
+                      className="nx-icon-btn-bare"
                       aria-label={
                         isEnhancedOutput(m.id)
                           ? "Copy workflow and provenance"
@@ -1866,7 +1927,7 @@ export function VideoLabPage({
                     />
                     <button
                       type="button"
-                      className="nx-icon-btn"
+                      className="nx-icon-btn-bare"
                       aria-label="Use as Source"
                       title="Use as Source"
                       data-testid={`video-useframe-${m.id}`}
@@ -1924,15 +1985,77 @@ export function VideoLabPage({
             usage={contextUsage}
             onStartNewSession={() => void startFreshStudioSession()}
             trailing={
-              <Button
+              <button
                 type="button"
-                variant="ghost"
-                testId="video-advanced-settings"
+                className="nx-icon-btn-bare"
+                data-testid="video-advanced-settings"
                 aria-expanded={advancedOpen}
+                aria-label="Advanced settings"
+                title="Advanced settings"
                 onClick={() => setAdvancedOpen((v) => !v)}
               >
-                Advanced settings
-              </Button>
+                <Settings size={17} aria-hidden="true" />
+              </button>
+            }
+            quickControls={
+              <>
+                {/*
+                  v2.4.9 operator ask: duration was a free number field the user
+                  could raise indefinitely. An 8 s request on a model trained for
+                  5 s ran for ten minutes and then failed, so it is a dropdown of
+                  what THIS model can render at the chosen frame rate.
+                */}
+                <StudioInlineControl label="Duration" width="7rem">
+                  <Select
+                    data-testid="video-quick-duration"
+                    value={String(values.durationSeconds)}
+                    disabled={isGenerating}
+                    onChange={(e) =>
+                      patchValues({ durationSeconds: Number(e.target.value) })
+                    }
+                  >
+                    {durationChoices.map((seconds) => (
+                      <option key={seconds} value={String(seconds)}>
+                        {seconds} s
+                      </option>
+                    ))}
+                  </Select>
+                </StudioInlineControl>
+                <StudioInlineControl label="Resolution" width="11rem">
+                  <Select
+                    data-testid="video-quick-resolution"
+                    value={`${values.width}x${values.height}`}
+                    disabled={isGenerating}
+                    onChange={(e) => {
+                      const option = videoCaps.resolutions.find(
+                        (candidate) => candidate.value === e.target.value,
+                      );
+                      if (!option) return;
+                      patchValues({ width: option.width, height: option.height });
+                    }}
+                  >
+                    {videoCaps.resolutions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
+                </StudioInlineControl>
+                <StudioInlineControl label="FPS" width="5.5rem">
+                  <Select
+                    data-testid="video-quick-fps"
+                    value={String(values.fps)}
+                    disabled={isGenerating}
+                    onChange={(e) => patchValues({ fps: Number(e.target.value) as 12 | 16 | 24 })}
+                  >
+                    {videoCaps.fps.map((rate) => (
+                      <option key={rate} value={String(rate)}>
+                        {rate}
+                      </option>
+                    ))}
+                  </Select>
+                </StudioInlineControl>
+              </>
             }
           >
             <QuickModelSwitcher
@@ -1952,6 +2075,19 @@ export function VideoLabPage({
               disabled={isGenerating}
             />
           </ComposerContextRow>
+          {capabilityNotice ? (
+            <p
+              data-testid="video-capability-notice"
+              role="status"
+              style={{
+                margin: 0,
+                fontSize: "var(--text-xs)",
+                color: "var(--fg-muted)",
+              }}
+            >
+              {capabilityNotice}
+            </p>
+          ) : null}
           {advancedOpen ? (
             <div style={{ marginTop: "var(--space-2)" }}>
               <VideoPromptForm

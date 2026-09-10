@@ -7,7 +7,16 @@
  */
 
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { phaseFraction, progressLines } from "./generationProgress";
+import {
+  jobPhase,
+  MODEL_LOAD_SECONDS,
+  phaseFraction,
+  progressLines,
+  type JobPhase,
+} from "./generationProgress";
+import { GenerationProgressBar } from "./GenerationProgressBar";
+import { GenerationFailureCard } from "../studio/GenerationFailureCard";
+import { ImageViewer } from "../studio/ImageViewer";
 import type { ChatMessage, ToolCard } from "./types";
 import { AgentStateOrb } from "../../components/agentState/AgentStateOrb";
 import {
@@ -42,6 +51,14 @@ export interface MessageBubbleProps {
   onMediaError?: (message: ChatMessage) => void;
   /** v2.2.4 Phase 4 -- extra studio actions inside the media lightbox. */
   renderPreviewExtra?: (message: ChatMessage) => ReactNode;
+  /**
+   * v2.4.9 -- per-message actions rendered ON the timestamp row.
+   *
+   * Operator ask: "could the copy/save/enhance buttons appear on the same line
+   * as the time of the response?" They used to sit on their own row below the
+   * media via `renderAfter`.
+   */
+  metaActions?: ReactNode;
   /** v2.2.7 Phase 4 -- tests pin `en-US`; production uses the host locale. */
   locale?: string;
   onRepairMediaRuntime?: (message: ChatMessage) => void;
@@ -59,6 +76,7 @@ export function MessageBubble({
   enableTools = true,
   onMediaError,
   renderPreviewExtra,
+  metaActions,
   locale,
   onRepairMediaRuntime,
   onCancelMediaRepair,
@@ -114,7 +132,11 @@ export function MessageBubble({
         style={bubbleStyle(message)}
       >
         {message.pending ? null : (
-          <BubbleMeta message={message} locale={locale} />
+          <BubbleMeta
+            message={message}
+            locale={locale}
+            {...(metaActions ? { actions: metaActions } : {})}
+          />
         )}
         {message.mediaRecovery ? (
           <MediaRuntimeRecoveryCard
@@ -172,46 +194,27 @@ export function MessageBubble({
               color: "var(--fg-muted)",
               display: "flex",
               flexDirection: "column",
-              alignItems: studioPending ? "center" : "flex-start",
-              justifyContent: "center",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
               gap: "var(--space-2)",
-              width: studioPending ? "100%" : "fit-content",
+              width: "100%",
+              maxWidth: "26rem",
               overflow: "visible",
               // v2.4.4 Phase 1.1: the transcript gutter on MessageList is the
               // only left offset. Adding one here again is what pushed the pill
               // inches into the pane.
               paddingLeft: 0,
-              minHeight: studioPending ? "12rem" : "5.5rem",
             }}
           >
-            {/* v2.2.9 Phase 2.1 (T006): chat/agents pending is a dark pill that
-              cycles Thinking / Searching / Working / Solving with one stable
-              accessible name. Image/Video pending stays the hero orb. */}
-            <AgentStateOrb
-              activity={
-                isLoadingModel(message)
-                  ? "model-loading"
-                  : (message.activity ?? "chat-streaming")
-              }
-              size={studioPending ? "hero" : "bubble"}
-              showCaption
-              rotateCaptions={!studioPending}
-              caption={isLoadingModel(message) ? loadingCaption(message) : undefined}
-              accessibleName={
-                isLoadingModel(message)
-                  ? loadingAccessibleName(message)
-                  : studioPending
-                    ? "Generating media"
-                    : "Generating reply"
-              }
-              surfaceId={`message-${message.id}`}
-            />
-            <GenerationProgress
-              message={message}
-              caption={progressCaption(message)}
-            />
+            <PendingWork message={message} studioPending={studioPending} />
           </div>
         )}
+        {message.failure ? (
+          <GenerationFailureCard
+            failure={message.failure}
+            testId={`generation-failure-${message.id}`}
+          />
+        ) : null}
         {mediaFailed ? (
           <p
             data-testid={`message-media-error-${message.id}`}
@@ -254,11 +257,26 @@ export function MessageBubble({
               />
             )}
             {previewOpen ? (
-              <MediaLightbox
-                message={message}
-                extra={renderPreviewExtra?.(message)}
-                onClose={() => setPreviewOpen(false)}
-              />
+              // v2.4.9: images open in the editor-capable viewer; video keeps
+              // the simple lightbox (a clip has nothing to paint on).
+              message.media?.kind === "image" ? (
+                <ImageViewer
+                  src={message.media.src}
+                  alt={message.content || "Generated image"}
+                  downloadName={`nexus-${message.id}`}
+                  onClose={() => setPreviewOpen(false)}
+                  testId={`message-media-dialog-${message.id}`}
+                  {...(renderPreviewExtra
+                    ? { extra: renderPreviewExtra(message) }
+                    : {})}
+                />
+              ) : (
+                <MediaLightbox
+                  message={message}
+                  extra={renderPreviewExtra?.(message)}
+                  onClose={() => setPreviewOpen(false)}
+                />
+              )
             ) : null}
           </>
         ) : null}
@@ -293,9 +311,11 @@ function PendingMessage({
   message: ChatMessage;
   studioPending: boolean;
 }): JSX.Element {
-  // v2.4.8 follow-up: the model-loading state is centered on every tab, not
-  // only the studios; a chat reply that is loading takes the full row.
-  const centered = studioPending || isLoadingModel(message);
+  // v2.4.9 operator report: "When an image or video is generated, the
+  // animation should be aligned left, just like in chat and agents mode. All
+  // animations should be consistent across the app." Centering was the only
+  // thing that made a studio job look like a different product, so it is gone:
+  // every pending row on every tab starts on the transcript gutter.
   return (
     <div
       data-testid={`message-pending-${message.id}`}
@@ -305,40 +325,26 @@ function PendingMessage({
         color: "var(--fg-muted)",
         display: "flex",
         flexDirection: "column",
-        alignItems: centered ? "center" : "flex-start",
-        justifyContent: "center",
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
         gap: "var(--space-2)",
-        width: centered ? "100%" : "fit-content",
-        maxWidth: centered ? "100%" : "min(100%, 24rem)",
+        // v2.4.9 (harness screenshot): `fit-content` here re-introduced the
+        // very bug the fixed track was meant to kill -- the bar's `min(22rem,
+        // 100%)` resolved against a shrink-to-fit box, so a longer caption
+        // still produced a wider bar. A fixed-basis box makes every bar on
+        // every tab identical; `alignItems: flex-start` keeps the pill its own
+        // size inside it.
+        width: "100%",
+        maxWidth: "26rem",
         // v2.4.4 Phase 1.1 (T001): no inline padding here. The pending row is
         // an assistant row and takes its left margin from the list gutter, the
         // same one a completed assistant bubble sits on.
         paddingInline: 0,
         boxSizing: "border-box",
         overflow: "visible",
-        minHeight: studioPending ? "12rem" : undefined,
       }}
     >
-      <AgentStateOrb
-        activity={
-          isLoadingModel(message)
-            ? "model-loading"
-            : (message.activity ?? "chat-streaming")
-        }
-        size={studioPending ? "hero" : "bubble"}
-        showCaption
-        rotateCaptions={!studioPending && !isLoadingModel(message)}
-        caption={isLoadingModel(message) ? loadingCaption(message) : undefined}
-        accessibleName={
-          isLoadingModel(message)
-            ? loadingAccessibleName(message)
-            : studioPending
-              ? "Generating media"
-              : "Generating reply"
-        }
-        surfaceId={`message-${message.id}`}
-      />
-      <GenerationProgress message={message} caption={progressCaption(message)} />
+      <PendingWork message={message} studioPending={studioPending} />
     </div>
   );
 }
@@ -360,16 +366,61 @@ function PendingMessage({
  * caption names which one it is, and a byte-level bar shows how far along.
  */
 export function isLoadingModel(message: ChatMessage): boolean {
-  if (!isStudioPending(message)) {
-    // A chat reply says so explicitly (ChatPage watches Ollama residency);
-    // silence on a chat turn still means "thinking", never "loading".
-    return Boolean(message.pending && message.progress?.stage === "loading");
-  }
-  const progress = message.progress;
-  if (!progress) return true;
-  if (progress.step > 0) return false;
-  const stage = progress.stage ?? "loading";
-  return stage === "loading" || stage === "queued" || stage === "clearing";
+  return pendingPhase(message) !== "generating";
+}
+
+/**
+ * v2.4.8 follow-up (2026-09-08) -- which phase a pending message is in.
+ *
+ * Operator report: loading and generating looked the same, so a number shown
+ * during one read as a promise about the other. The phase is decided in one
+ * place and drives everything the operator sees: the animation (a fixed
+ * "Loading model" caption on a hero orb, then the rotating-caption pill the
+ * chatbot uses), the bar's meaning (weight bytes, then sampling steps) and the
+ * wording of the estimate under it.
+ */
+export function pendingPhase(message: ChatMessage): JobPhase {
+  return jobPhase(message.progress, isStudioPending(message));
+}
+
+/**
+ * The pending animation and its progress block, one per phase.
+ *
+ * Loading (and its queued / clearing preludes) is a centered hero orb with a
+ * fixed caption. Generating is the chat pill -- the same rotating-caption
+ * animation on every tab -- drawing words from the studio pool on Images and
+ * Videos and from the chat pool on Chat and Agents.
+ */
+function PendingWork({
+  message,
+  studioPending,
+}: {
+  message: ChatMessage;
+  studioPending: boolean;
+}): JSX.Element {
+  const phase = pendingPhase(message);
+  const generating = phase === "generating";
+  return (
+    <>
+      <AgentStateOrb
+        activity={generating ? (message.activity ?? "chat-streaming") : "model-loading"}
+        size={generating ? "bubble" : "hero"}
+        showCaption
+        rotateCaptions={generating}
+        captionPool={studioPending ? "studio" : "chat"}
+        {...(generating ? {} : { caption: loadingCaption(message) })}
+        accessibleName={
+          generating
+            ? studioPending
+              ? "Generating media"
+              : "Generating reply"
+            : loadingAccessibleName(message)
+        }
+        surfaceId={`message-${message.id}`}
+      />
+      <GenerationProgress message={message} phase={phase} />
+    </>
+  );
 }
 
 /**
@@ -424,14 +475,6 @@ function loadingAccessibleName(message: ChatMessage): string {
 }
 
 /**
- * The caption shown above the bar. While generating, the studio rotator picks
- * its own word, so a representative one keeps the bar from resizing per tick.
- */
-function progressCaption(message: ChatMessage): string {
-  return isLoadingModel(message) ? loadingCaption(message) : "Generating...";
-}
-
-/**
  * v2.4.8 follow-up (2026-09-07) -- one progress block for a running job.
  *
  * Operator report: a Wan video sat on a rotating word for fifteen minutes with
@@ -442,16 +485,27 @@ function progressCaption(message: ChatMessage): string {
  */
 function GenerationProgress({
   message,
-  caption,
+  phase,
 }: {
   message: ChatMessage;
-  caption: string;
+  phase: JobPhase;
 }): JSX.Element | null {
   const progress = message.progress;
   const detail = queuedDetail(progress);
-  const totalElapsed = useElapsedSeconds(message.timestamp, !detail);
-  const samplingElapsed = useSamplingElapsed(message.id, progress);
+  // A plain chat reply has nothing to measure: no phase to load, no steps and
+  // no cost model. It keeps the bare pill rather than gaining a stopwatch.
+  const measurable =
+    phase !== "generating" ||
+    Boolean(progress && progress.total > 0 && progress.step > 0) ||
+    Boolean(message.estimateSeconds);
+  const phaseElapsed = usePhaseElapsed(
+    message.id,
+    phase,
+    message.timestamp,
+    measurable && !detail,
+  );
 
+  if (!measurable) return null;
   if (detail) {
     return (
       <span
@@ -466,106 +520,128 @@ function GenerationProgress({
   const fraction = phaseFraction(progress);
   const lines = progressLines({
     progress,
-    totalElapsed,
-    samplingElapsed,
-    estimateSeconds: message.estimateSeconds,
+    phase,
+    phaseElapsed,
+    estimateSeconds: phaseEstimateSeconds(message, phase),
   });
-  if (fraction === null && !lines.primary && !lines.secondary) return null;
 
-  // The bar matches the caption's width so the two read as one unit.
-  const width = `${Math.max(18, caption.length)}ch`;
+  // v2.4.9: the bar renders from the first frame. It used to appear only once
+  // a fraction existed, which on a cold image model meant 37 seconds of bare
+  // caption and then a bar with one second left on it (operator screenshots
+  // 6 and 7). `fraction === null` is now the indeterminate sweep, not "no bar".
   return (
-    <div
-      data-testid={`model-load-progress-${message.id}`}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "var(--space-1)",
-        maxWidth: "100%",
-      }}
-    >
-      {fraction === null ? null : (
-        <progress
-          className="nexus-progress"
-          value={Math.round(fraction * 1000)}
-          max={1000}
-          aria-label={`${Math.round(fraction * 100)}% complete`}
-          style={{ width }}
-        />
-      )}
-      {lines.primary ? (
-        <span
-          data-testid={`model-load-eta-${message.id}`}
-          style={{ color: "var(--fg-muted)", fontSize: "var(--text-xs)" }}
-        >
-          {lines.primary}
-        </span>
-      ) : null}
-      {lines.secondary ? (
-        <span
-          data-testid={`generation-clock-${message.id}`}
-          style={{ color: "var(--fg-muted)", fontSize: "var(--text-xs)", opacity: 0.8 }}
-        >
-          {lines.secondary}
-        </span>
-      ) : null}
-    </div>
+    <GenerationProgressBar
+      testId={`model-load-progress-${message.id}`}
+      clockTestId={`generation-clock-${message.id}`}
+      fraction={fraction}
+      position={lines.position}
+      elapsed={lines.elapsed}
+      remaining={lines.remaining}
+      hint={lines.hint}
+      accentVar={PHASE_ACCENT_VAR[phase] ?? "--accent-chatbot"}
+    />
   );
 }
 
-/** Seconds since `startedAt`, ticking while `active`. Null without a start. */
-function useElapsedSeconds(startedAt: string | undefined, active: boolean): number | null {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    if (!active || !startedAt) return;
-    const id = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(id);
-  }, [active, startedAt]);
-  if (!startedAt || !active) return null;
-  const started = Date.parse(startedAt);
-  return Number.isFinite(started) ? Math.max(0, (now - started) / 1000) : null;
+/**
+ * One accent per phase so the bar reads as part of the surface it sits on:
+ * loading is the neutral chat accent, sampling takes the module's colour via
+ * the caller. Kept here (not inline) so every tab resolves it the same way.
+ */
+const PHASE_ACCENT_VAR: Partial<Record<JobPhase, string>> = {
+  queued: "--fg-muted",
+  clearing: "--fg-muted",
+  loading: "--accent-chatbot",
+  generating: "--accent-chatbot",
+};
+
+/**
+ * The up-front figure for the phase being shown, never for the whole job.
+ *
+ * Operator report (2026-09-08): a video showed "usually about 18 min" while it
+ * was loading weights, so the load looked like it would take 18 minutes. The
+ * sampling figure belongs to sampling; the load has its own, from the model's
+ * size where the caller knows it.
+ */
+function phaseEstimateSeconds(message: ChatMessage, phase: JobPhase): number | undefined {
+  if (phase === "generating") return message.estimateSeconds;
+  if (phase !== "loading") return undefined;
+  return message.loadEstimateSeconds ?? MODEL_LOAD_SECONDS;
 }
 
 /**
- * Seconds spent sampling, measured from the first counted step.
+ * Seconds spent in the current phase.
  *
- * The remaining-time estimate divides by steps completed, so it must not
- * include the model load that came before them.
+ * Each phase gets its own clock so a measured rate describes that phase alone:
+ * the load estimate is not diluted by sampling time and the sampling estimate
+ * does not carry the load. The loading clock anchors on the message timestamp
+ * when there is one, so it survives a re-render; later phases anchor on the
+ * moment the phase was first seen.
  */
-function useSamplingElapsed(
+function usePhaseElapsed(
   messageId: string,
-  progress: ChatMessage["progress"],
+  phase: JobPhase,
+  startedAt: string | undefined,
+  active: boolean,
 ): number | null {
-  const startRef = useRef<{ id: string; at: number } | null>(null);
-  const counting = Boolean(progress && progress.total > 0 && progress.step > 0);
+  const anchorRef = useRef<{ key: string; at: number } | null>(null);
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
-    if (!counting) return;
+    if (!active) return;
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
-  }, [counting]);
-  if (!counting) {
-    if (startRef.current?.id === messageId) startRef.current = null;
-    return null;
+  }, [active, messageId, phase]);
+  if (!active) return null;
+  const key = `${messageId}:${phase}`;
+  if (anchorRef.current?.key !== key) {
+    const started = startedAt ? Date.parse(startedAt) : NaN;
+    const anchor =
+      phase === "loading" && Number.isFinite(started) ? Math.min(started, Date.now()) : Date.now();
+    anchorRef.current = { key, at: anchor };
   }
-  if (startRef.current?.id !== messageId) {
-    startRef.current = { id: messageId, at: Date.now() };
-  }
-  return Math.max(0, (now - startRef.current.at) / 1000);
+  return Math.max(0, (now - anchorRef.current.at) / 1000);
+}
+
+/**
+ * " (00:00:42)" after the timestamp, or "" when unmeasured.
+ *
+ * One fixed HH:MM:SS shape on every mode, so a column of replies lines up and
+ * a 10-second chat turn is directly comparable to a 20-minute video without
+ * the reader parsing "2 min 5 s" against "42 s".
+ *
+ * A turn under a second still gets nothing: the brackets exist to make real
+ * work legible, not to decorate every row.
+ */
+export function formatGenerationDuration(seconds: number | undefined): string {
+  const clock = formatHhMmSs(seconds);
+  return clock ? ` (${clock})` : "";
+}
+
+/** "HH:MM:SS", or "" when there is nothing worth reporting. */
+export function formatHhMmSs(seconds: number | undefined): string {
+  if (typeof seconds !== "number" || !Number.isFinite(seconds) || seconds < 1) return "";
+  const whole = Math.floor(seconds);
+  const hours = Math.floor(whole / 3600);
+  const minutes = Math.floor((whole % 3600) / 60);
+  const rest = whole % 60;
+  const pad = (value: number): string => String(value).padStart(2, "0");
+  return `${pad(hours)}:${pad(minutes)}:${pad(rest)}`;
 }
 
 function BubbleMeta({
   message,
   locale,
+  actions,
 }: {
   message: ChatMessage;
   locale?: string;
+  /** v2.4.9 -- studio actions share the timestamp row instead of a row below. */
+  actions?: ReactNode;
 }): JSX.Element | null {
   const when = parseMessageTime(message.timestamp);
   const tokens = bubbleTokenMetadata(message);
   // Nothing known: no empty chrome row above the text.
-  if (!when && !tokens) return null;
+  if (!when && !tokens && !actions) return null;
   return (
     <div
       data-testid={`message-meta-${message.id}`}
@@ -585,7 +661,21 @@ function BubbleMeta({
           dateTime={when.toISOString()}
         >
           {formatBubbleTime(when, locale)}
+          {formatGenerationDuration(message.generationSeconds)}
         </time>
+      ) : null}
+      {actions ? (
+        <span
+          data-testid={`message-meta-actions-${message.id}`}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "var(--space-1)",
+            marginLeft: "auto",
+          }}
+        >
+          {actions}
+        </span>
       ) : null}
       {tokens && message.role === "user" ? (
         <span

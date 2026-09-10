@@ -522,6 +522,21 @@ button {
   .nexus-metal-canvas {
     display: none;
   }
+  /* v2.4.9: the generation bar keeps its meaning, loses its animation. */
+  .nexus-genbar-particles {
+    animation: none;
+  }
+  .nexus-genbar-fill {
+    transition: none;
+  }
+  .nexus-genbar[data-determinate="false"]::after {
+    animation: none;
+    opacity: 0.5;
+  }
+  .nx-icon-btn-bare,
+  .nx-icon-btn-bare svg {
+    transition: none;
+  }
 }
 
 /*
@@ -559,4 +574,156 @@ button {
 .nexus-progress::-moz-progress-bar {
   background: var(--nexus-progress-accent, var(--accent-chatbot));
   border-radius: 999px;
+}
+
+/*
+ * v2.4.9 -- the generation bar (`.nexus-genbar`).
+ *
+ * Operator ask: a glowing capsule with moving particles, in the application's
+ * own colour family rather than a grey system widget. Three layers, all CSS so
+ * no second rAF loop competes with the orb canvas:
+ *
+ *   track     -- inset capsule, faint accent rim
+ *   fill      -- accent gradient, width = measured fraction
+ *   particles -- repeating radial dots drifting along the fill
+ *
+ * Indeterminate (`data-determinate="false"`) is what shows the instant a job
+ * starts, before any byte count exists: the fill spans the track and a band
+ * sweeps across it, so the bar is never an empty box.
+ */
+.nexus-genbar {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg-0, #0a0d14) 92%, transparent),
+      color-mix(in srgb, var(--bg-1, #11151f) 92%, transparent)
+    );
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 22%, transparent),
+    inset 0 1px 3px rgb(0 0 0 / 45%);
+}
+
+.nexus-genbar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 38%, transparent),
+    color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 92%, transparent)
+  );
+  box-shadow: 0 0 12px color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 45%, transparent);
+  overflow: hidden;
+  transition: width 260ms ease-out;
+}
+
+/*
+ * The particles. One element paints several dot sizes via layered radial
+ * gradients; the layers scroll at different rates, which reads as a drifting
+ * field rather than one sliding texture.
+ */
+.nexus-genbar-particles {
+  position: absolute;
+  inset: -50% -100%;
+  background-image:
+    radial-gradient(circle at 12% 50%, rgb(255 255 255 / 85%) 0 1.1px, transparent 1.6px),
+    radial-gradient(circle at 34% 32%, rgb(255 255 255 / 55%) 0 0.9px, transparent 1.4px),
+    radial-gradient(circle at 58% 68%, rgb(255 255 255 / 70%) 0 1.3px, transparent 1.8px),
+    radial-gradient(circle at 79% 40%, rgb(255 255 255 / 45%) 0 0.8px, transparent 1.3px),
+    radial-gradient(circle at 93% 60%, rgb(255 255 255 / 65%) 0 1px, transparent 1.5px);
+  background-size: 42px 100%, 66px 100%, 54px 100%, 88px 100%, 72px 100%;
+  animation: nexus-genbar-drift 2.6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes nexus-genbar-drift {
+  from {
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+  to {
+    background-position: 42px 0, -66px 0, 54px 0, -88px 0, 72px 0;
+  }
+}
+
+/*
+ * Indeterminate: no fraction yet. The fill covers the track at reduced opacity
+ * and a brighter band sweeps through, so "working, amount unknown" is visually
+ * distinct from a real 100%.
+ */
+.nexus-genbar[data-determinate="false"] .nexus-genbar-fill {
+  opacity: 0.55;
+  transition: none;
+}
+.nexus-genbar[data-determinate="false"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 85%, transparent) 45%,
+    color-mix(in srgb, #fff 60%, transparent) 50%,
+    color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 85%, transparent) 55%,
+    transparent 100%
+  );
+  animation: nexus-genbar-sweep 1.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes nexus-genbar-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/*
+ * v2.4.9 -- a bare icon button.
+ *
+ * Operator ask: "Change the 'Advanced Settings' text to a gear icon to make
+ * the button more compact (just a gear, no outline)." `.nx-icon-btn` carries a
+ * border, a glass fill and a shadow; this is the same hit area with none of
+ * that chrome, so it reads as an affordance on the row rather than a second
+ * button competing with the model picker.
+ */
+.nx-icon-btn-bare {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: color 140ms ease, transform 140ms ease;
+}
+.nx-icon-btn-bare:hover {
+  color: var(--fg-0);
+}
+.nx-icon-btn-bare[aria-expanded="true"] {
+  color: var(--fg-0);
+}
+/* The gear turns a little when its panel is open, so state is visible without
+   adding an outline back. */
+.nx-icon-btn-bare[aria-expanded="true"] svg {
+  transform: rotate(45deg);
+}
+.nx-icon-btn-bare svg {
+  transition: transform 200ms ease;
+}
+.nx-icon-btn-bare:focus-visible {
+  outline: 2px solid var(--accent-chatbot);
+  outline-offset: 2px;
 }

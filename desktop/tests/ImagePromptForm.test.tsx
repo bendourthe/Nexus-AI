@@ -52,9 +52,39 @@ describe("ImagePromptForm", () => {
     expect(last.prompt).toBe("a fox");
   });
 
+  // v2.4.8 follow-up (2026-09-08): operator report -- some options could not be
+  // reached. LoRAs, ControlNet, the sampler and the VRAM budget used to sit in a
+  // nested collapse inside a panel that already grew past the window, so they
+  // were off-screen with no way to scroll to them. They are sections of one
+  // capped, scrolling panel now.
+  it("reaches every option without a nested Advanced collapse", () => {
+    renderForm();
+    expect(screen.queryByTestId("image-advanced")).toBeNull();
+    for (const testId of [
+      "image-resolution",
+      "image-width",
+      "image-height",
+      "image-steps",
+      "image-cfg",
+      "image-sampler",
+      "image-seed",
+      "image-fast-preview-toggle",
+      "image-add-lora",
+      "image-controlnet-toggle",
+      "image-memory-budget",
+      "image-max-cache-vram",
+      "image-layer-streaming",
+    ]) {
+      expect(screen.getByTestId(testId), testId).toBeInTheDocument();
+    }
+    // The panel scrolls inside itself rather than growing off the window.
+    const scroller = screen.getByTestId("image-settings-panel-scroll");
+    expect(scroller.style.overflowY).toBe("auto");
+    expect(scroller.style.maxHeight).not.toBe("");
+  });
+
   it("adds and removes LoRA rows", () => {
     renderForm();
-    fireEvent.click(screen.getByTestId("image-advanced"));
     fireEvent.click(screen.getByTestId("image-add-lora"));
     expect(screen.getByTestId("image-lora-0")).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("image-lora-remove-0"));
@@ -63,7 +93,6 @@ describe("ImagePromptForm", () => {
 
   it("toggles ControlNet fields", () => {
     renderForm();
-    fireEvent.click(screen.getByTestId("image-advanced"));
     fireEvent.click(screen.getByTestId("image-controlnet-toggle"));
     expect(screen.getByTestId("image-controlnet-fields")).toBeInTheDocument();
     const selectModel = within(screen.getByTestId("image-controlnet-fields")).getByTestId(
@@ -184,9 +213,8 @@ describe("ImagePromptForm", () => {
     );
   });
 
-  it("surfaces VRAM budget knobs in Advanced and forwards them", () => {
+  it("surfaces VRAM budget knobs without a second collapse and forwards them", () => {
     renderForm();
-    fireEvent.click(screen.getByText("Advanced (LoRAs, ControlNet)"));
     expect(screen.getByTestId("image-memory-budget")).toBeInTheDocument();
     fireEvent.change(screen.getByTestId("image-max-cache-vram"), { target: { value: "2" } });
     fireEvent.click(screen.getByTestId("image-layer-streaming"));

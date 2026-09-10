@@ -12,10 +12,14 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Copy, Download, FileJson, ImagePlus } from "lucide-react";
+import { Copy, Download, FileJson, ImagePlus, Settings } from "lucide-react";
 import { SidecarDownBanner } from "../../components/SidecarDownBanner";
-import { Button } from "../../components/ui";
+import { Button, Select, Switch, TextField } from "../../components/ui";
 import { formatInferenceError } from "../../lib/inferenceRpcError";
+import {
+  describeGenerationFailure,
+  failureTranscriptText,
+} from "../../shared/studio/generationError";
 import { setModelActivity } from "../../lib/modelActivity";
 import {
   isBackendDownMessage,
@@ -43,7 +47,10 @@ import {
   askBeforeModelSwitch,
   setAskBeforeModelSwitch,
 } from "../../shared/models/modelSwitchPreference";
-import { estimateGenerationSeconds } from "../../shared/chat/generationProgress";
+import {
+  estimateGenerationSeconds,
+  mergeProgress,
+} from "../../shared/chat/generationProgress";
 import {
   ModelSwitchChip,
   ModelSwitchDialog,
@@ -60,6 +67,12 @@ import {
 } from "../../shared/chat";
 import { isUsableImageBase64 } from "../../shared/studio/usablePayload";
 import { QuickModelSwitcher } from "../../shared/models/QuickModelSwitcher";
+import { StudioInlineControl } from "../../shared/studio/StudioSettings";
+import {
+  capabilityNote,
+  imageCapabilitiesFor,
+  reconcileImageValues,
+} from "../../shared/studio/modelCapabilities";
 import {
   SETTINGS_MODELS_PATH,
   installedModelsForType,
@@ -139,7 +152,10 @@ import {
   shouldTitleOnFirstSend,
 } from "../../shared/explorer/scheduleFirstPromptTitle";
 import type { StudioTurn } from "../../../../core/generations/StudioSessionStore.types";
-import { studioPersistUsage } from "../../shared/studio/studioTurnUsage";
+import {
+  elapsedSecondsSince,
+  studioPersistUsage,
+} from "../../shared/studio/studioTurnUsage";
 import {
   createIpcMediaRuntimeClient,
   isMediaRuntimeFailure,
@@ -315,6 +331,8 @@ export function ImageStudioPage({
     messageId: string;
     /** v2.4.8 follow-up: the session the job belongs to (may not be visible). */
     sessionId: string | null;
+    /** v2.4.9: wall-clock start, so the bubble can report what the run cost. */
+    startedAtMs: number;
   } | null>(null);
   // v2.4.8 follow-up: the pending assistant bubble of the running job, so a
   // session switch and back shows it again; and where its turns persist.
@@ -334,6 +352,45 @@ export function ImageStudioPage({
   const jobIdRef = useRef<string | null>(null);
   const [seededAttachment, setSeededAttachment] = useState<string | null>(null);
   const [formEpoch, setFormEpoch] = useState(0);
+  /**
+   * v2.4.8 follow-up (2026-09-08): the quick-control row edits the same
+   * values the Advanced panel does, and the panel keeps its own copy of
+   * them (it is mounted with `initial`), so a quick edit bumps the epoch to
+   * remount it. One source of truth, two places to edit it.
+   */
+  const patchValues = useCallback((patch: Partial<PromptFormValues>): void => {
+    setValues((prev) => ({ ...prev, ...patch }));
+    setFormEpoch((n) => n + 1);
+  }, []);
+
+  /**
+   * v2.4.9 -- what THIS model can be asked for.
+   *
+   * The option lists used to come from the host's VRAM tier alone, which is
+   * how a 16 GB card was offered 4096x4096 on a service that caps a request at
+   * 2048. Capability is a property of the model; the tier is a second filter.
+   */
+  const imageCaps = useMemo(
+    () => imageCapabilitiesFor(selectedModelId, models.find((m) => m.id === selectedModelId)?.family),
+    [models, selectedModelId],
+  );
+
+  /**
+   * Switching model pulls the form back inside what the new model supports, so
+   * an unsupported size can never survive the switch and fail at submit. The
+   * change is announced rather than silent.
+   */
+  const [capabilityNotice, setCapabilityNotice] = useState<string | null>(null);
+  useEffect(() => {
+    const { patch, changed } = reconcileImageValues(values, imageCaps);
+    if (changed.length === 0) return;
+    patchValues(patch as Partial<PromptFormValues>);
+    const name =
+      models.find((m) => m.id === selectedModelId)?.displayName ?? selectedModelId;
+    setCapabilityNotice(`Adjusted for ${name}: ${changed.join(", ")}.`);
+    // `values` is deliberately not a dependency: this reconciles on a MODEL
+    // change, not on every keystroke the user makes in the same model.
+  }, [imageCaps]);
   const [queueJobs, setQueueJobs] = useState<readonly GenerationJob[]>([]);
   const [workflowByMessage, setWorkflowByMessage] = useState<
     Record<string, Record<string, unknown>>
@@ -347,14 +404,12 @@ export function ImageStudioPage({
   } | null>(null);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const outputs = useRef<Map<string, string>>(new Map()); // messageId -> raw png
-  // v2.4.8 Phase 8: last explicit runtime stage per message; heartbeats carry
-  // no stage, so the previous one is kept until `generating` arrives.
-  const stageByMessage = useRef<Map<string, string>>(new Map());
-  // v2.4.8 follow-up: last byte-level load report per message; heartbeats carry
-  // no byte counts, so the previous report is kept between them.
-  const loadByMessage = useRef<
-    Map<string, { loadedBytes: number; totalBytes: number; etaS?: number | null }>
-  >(new Map());
+  // v2.4.8 follow-up (2026-09-08): the merged progress per message. A liveness
+  // heartbeat carries no stage and no counters, so writing an event straight to
+  // the message erased whatever was measured and the phase flipped back and
+  // forth; `mergeProgress` folds each event into what is already known and
+  // only ever moves forward.
+  const progressByMessage = useRef<Map<string, ChatMessage["progress"]>>(new Map());
 
   useEffect(() => {
     if (pendingReplace) setAdvancedOpen(true);
@@ -668,25 +723,21 @@ export function ImageStudioPage({
             }
             continue;
           }
-          const stage =
-            event.stage ?? stageByMessage.current.get(messageId) ?? "loading";
-          stageByMessage.current.set(messageId, stage);
-          if (typeof event.totalBytes === "number") {
-            loadByMessage.current.set(messageId, {
-              loadedBytes: event.loadedBytes ?? 0,
-              totalBytes: event.totalBytes,
-              etaS: event.etaS,
-            });
-          }
-          patchMessage(messageId, {
-            progress: {
-              step,
-              total,
-              stage,
-              ...(loadByMessage.current.get(messageId) ?? {}),
-              ...(event.blockedBy ? { blockedBy: event.blockedBy } : {}),
-            },
+          const merged = mergeProgress(progressByMessage.current.get(messageId), {
+            stage: event.stage ?? "loading",
+            step,
+            totalSteps: total,
+            ...(typeof event.totalBytes === "number"
+              ? {
+                  loadedBytes: event.loadedBytes ?? 0,
+                  totalBytes: event.totalBytes,
+                  etaS: event.etaS,
+                }
+              : {}),
+            ...(event.blockedBy ? { blockedBy: event.blockedBy } : {}),
           });
+          progressByMessage.current.set(messageId, merged);
+          patchMessage(messageId, { progress: merged });
         } else if (event.kind === "complete") {
           done = true;
           const png = event.png ?? "";
@@ -717,6 +768,9 @@ export function ImageStudioPage({
             pending: false,
             progress: undefined,
             media: { kind: "image", src: `data:image/png;base64,${png}` },
+            // v2.4.9: what the run actually cost, shown in brackets after the
+            // timestamp. Measured, never the up-front estimate.
+            generationSeconds: elapsedSecondsSince(activeJob?.startedAtMs),
           });
           const pathRef = event.outputPath?.trim() ?? "";
           if (isUsablePathRef(pathRef)) {
@@ -809,7 +863,8 @@ export function ImageStudioPage({
           clearInterval(timer);
           patchMessage(activeJob.messageId, {
             pending: false,
-            content: `Generation failed: ${formatInferenceError(err)}`,
+            content: "",
+            failure: describeGenerationFailure(err, { surface: "image" }),
           });
           setActiveJob(null);
         }
@@ -1001,6 +1056,9 @@ export function ImageStudioPage({
         ...(attachments.length > 0 ? { attachments: [...attachments] } : {}),
       };
       const assistantId = retryAssistantId ?? nextId("assistant");
+      // A retry reuses the message, so the finished run's phase must not carry
+      // over: the new job starts from "loading" like any other.
+      progressByMessage.current.delete(assistantId);
       const assistantMsg: ChatMessage = {
         id: assistantId,
         role: "assistant",
@@ -1105,6 +1163,7 @@ export function ImageStudioPage({
             jobId: accepted.jobId,
             messageId: assistantId,
             sessionId: activeSessionIdRef.current,
+            startedAtMs: Date.now(),
           });
           return;
         }
@@ -1165,16 +1224,20 @@ export function ImageStudioPage({
           jobId: accepted.jobId,
           messageId: assistantId,
           sessionId: activeSessionIdRef.current,
+          startedAtMs: Date.now(),
         });
       } catch (err) {
         if (!(await markMediaRuntimeFailure(assistantId, err))) {
           patchMessage(assistantId, {
             pending: false,
-            content: `Generation failed: ${formatInferenceError(err)}`,
+            content: "",
+            failure: describeGenerationFailure(err, { surface: "image" }),
           });
           persistTurn({
             role: "assistant",
-            content: `Generation failed: ${formatInferenceError(err)}`,
+            content: failureTranscriptText(
+              describeGenerationFailure(err, { surface: "image" }),
+            ),
           });
           mediaRetryRef.current = null;
         }
@@ -1318,6 +1381,7 @@ export function ImageStudioPage({
         jobId: accepted.jobId,
         messageId: pendingReplace.assistantId,
         sessionId: activeSessionIdRef.current,
+        startedAtMs: Date.now(),
       });
       setPendingReplace(null);
     },
@@ -1564,19 +1628,18 @@ export function ImageStudioPage({
               messages={shownMessages}
               enableTools={false}
               onMediaError={handleMediaError}
-              renderAfter={(m) =>
+              renderMetaActions={(m) =>
                 m.role === "assistant" && m.media ? (
                   <div
                     data-testid={`image-actions-${m.id}`}
                     style={{
                       display: "flex",
-                      gap: "var(--space-2)",
-                      marginTop: "var(--space-1)",
+                      gap: "var(--space-1)",
                     }}
                   >
                     <button
                       type="button"
-                      className="nx-icon-btn"
+                      className="nx-icon-btn-bare"
                       aria-label="Download"
                       title="Download"
                       data-testid={`image-download-${m.id}`}
@@ -1586,7 +1649,7 @@ export function ImageStudioPage({
                     </button>
                     <button
                       type="button"
-                      className="nx-icon-btn"
+                      className="nx-icon-btn-bare"
                       aria-label="Copy image"
                       title="Copy image"
                       data-testid={`image-copyimage-${m.id}`}
@@ -1602,7 +1665,7 @@ export function ImageStudioPage({
                   <>
                     <button
                       type="button"
-                      className="nx-icon-btn"
+                      className="nx-icon-btn-bare"
                       aria-label="Copy Workflow"
                       title="Copy Workflow"
                       data-testid={`image-copyworkflow-${m.id}`}
@@ -1618,7 +1681,7 @@ export function ImageStudioPage({
                     />
                     <button
                       type="button"
-                      className="nx-icon-btn"
+                      className="nx-icon-btn-bare"
                       aria-label="Use as Source"
                       title="Use as Source"
                       data-testid={`image-usesource-${m.id}`}
@@ -1671,15 +1734,84 @@ export function ImageStudioPage({
             usage={contextUsage}
             onStartNewSession={() => void startFreshStudioSession()}
             trailing={
-              <Button
+              <button
                 type="button"
-                variant="ghost"
-                testId="image-advanced-settings"
+                className="nx-icon-btn-bare"
+                data-testid="image-advanced-settings"
                 aria-expanded={advancedOpen}
+                aria-label="Advanced settings"
+                title="Advanced settings"
                 onClick={() => setAdvancedOpen((v) => !v)}
               >
-                Advanced settings
-              </Button>
+                <Settings size={17} aria-hidden="true" />
+              </button>
+            }
+            quickControls={
+              <>
+                <StudioInlineControl label="Size" width="11rem">
+                  <Select
+                    data-testid="image-quick-resolution"
+                    value={`${values.width}x${values.height}`}
+                    disabled={isGenerating}
+                    onChange={(e) => {
+                      const option = imageCaps.resolutions.find(
+                        (candidate) => candidate.value === e.target.value,
+                      );
+                      if (!option) return;
+                      patchValues({ width: option.width, height: option.height });
+                    }}
+                  >
+                    {imageCaps.resolutions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
+                </StudioInlineControl>
+                <StudioInlineControl label="W" width="5.5rem">
+                  <TextField
+                    testId="image-quick-width"
+                    type="number"
+                    min={imageCaps.dimension.min}
+                    max={imageCaps.dimension.max}
+                    step={imageCaps.dimension.step ?? 8}
+                    value={String(values.width)}
+                    disabled={isGenerating}
+                    onChange={(v) => patchValues({ width: Number(v) })}
+                  />
+                </StudioInlineControl>
+                <StudioInlineControl label="H" width="5.5rem">
+                  <TextField
+                    testId="image-quick-height"
+                    type="number"
+                    min={imageCaps.dimension.min}
+                    max={imageCaps.dimension.max}
+                    step={imageCaps.dimension.step ?? 8}
+                    value={String(values.height)}
+                    disabled={isGenerating}
+                    onChange={(v) => patchValues({ height: Number(v) })}
+                  />
+                </StudioInlineControl>
+                <StudioInlineControl
+                  label="Draft"
+                  width="7rem"
+                  {...(imageCaps.supportsFastPreview
+                    ? {}
+                    : {
+                        disabledReason:
+                          capabilityNote(imageCaps, "supportsFastPreview") ??
+                          "This model does not support a one-step draft.",
+                      })}
+                >
+                  <Switch
+                    testId="image-quick-fast-preview"
+                    checked={values.fastPreview && imageCaps.supportsFastPreview}
+                    disabled={isGenerating || !imageCaps.supportsFastPreview}
+                    onChange={(on) => patchValues({ fastPreview: on })}
+                    label="1-step"
+                  />
+                </StudioInlineControl>
+              </>
             }
           >
             <QuickModelSwitcher
@@ -1699,6 +1831,19 @@ export function ImageStudioPage({
               disabled={isGenerating}
             />
           </ComposerContextRow>
+          {capabilityNotice ? (
+            <p
+              data-testid="image-capability-notice"
+              role="status"
+              style={{
+                margin: 0,
+                fontSize: "var(--text-xs)",
+                color: "var(--fg-muted)",
+              }}
+            >
+              {capabilityNotice}
+            </p>
+          ) : null}
           {advancedOpen ? (
             <div style={{ marginTop: "var(--space-2)" }}>
               <ImagePromptForm
