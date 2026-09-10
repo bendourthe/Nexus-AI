@@ -20,8 +20,12 @@ def test_vscode_version_is_supported() -> None:
     assert vscode_version_is_supported("1.134.1")
     assert vscode_version_is_supported("1.135.0")
     assert vscode_version_is_supported("1.136.0")
+    # 1.137 ships Electron 42.10.0: the same Electron 42 / Node 24 
+    # NODE_MODULE_VERSION as the 42.8.1 rebuild pin, so the bundled
+    # better-sqlite3 / hnswlib-node addons load unchanged.
+    assert vscode_version_is_supported("1.137.0")
     assert not vscode_version_is_supported("1.133.9")
-    assert not vscode_version_is_supported("1.137.0")
+    assert not vscode_version_is_supported("1.138.0")
     assert not vscode_version_is_supported("not-a-version")
 
 
@@ -110,7 +114,7 @@ class TestExtensionInstaller:
             assert result is False
         assert state.step_failures and state.step_failures[0]["step"] == "extension"
 
-    @pytest.mark.parametrize("version", ["1.133.9", "1.137.0"])
+    @pytest.mark.parametrize("version", ["1.133.9", "1.138.0"])
     def test_recheck_skips_when_stable_version_changed(self, version: str) -> None:
         state = InstallerState(vscode_path="/usr/bin/code")
         log = MagicMock()

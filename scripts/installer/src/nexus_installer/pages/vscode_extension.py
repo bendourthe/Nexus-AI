@@ -2,7 +2,7 @@
 
 After the model picker the wizard offers to install the Nexus Coding VS Code
 extension from the bundled VSIX. The checkbox stays visible. It is enabled
-when Microsoft stable `code` reports 1.134, 1.135, or 1.136 (Electron 42.8.1).
+when Microsoft stable `code` reports 1.134 through 1.137 (Electron 42 ABI).
 """
 
 from __future__ import annotations
@@ -10,13 +10,13 @@ from __future__ import annotations
 import shutil
 from typing import TYPE_CHECKING
 
-from PyQt5.QtWidgets import QCheckBox, QLabel, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QLabel, QVBoxLayout, QWidget
 
 from nexus_installer.constants import (
     ACCENT,
     BG_CARD,
     BORDER,
-    TEXT_PRIMARY,
+    FS_CAPTION,
     TEXT_SECONDARY,
 )
 from nexus_installer.engine.extension_installer import (
@@ -26,6 +26,7 @@ from nexus_installer.engine.extension_installer import (
     inspect_vscode_cli,
     installed_nexus_extension_id,
 )
+from nexus_installer.widgets.selectable_check_box import SelectableCheckBox
 
 if TYPE_CHECKING:
     from nexus_installer.installer_state import InstallerState
@@ -154,11 +155,10 @@ class VsCodeExtensionPage(QWidget):
             intro.setWordWrap(True)
             layout.addWidget(intro)
 
-        self._checkbox = QCheckBox(_INSTALL_LABEL)
+        self._checkbox = SelectableCheckBox(_INSTALL_LABEL)
         self._checkbox.setChecked(detected.supported)
         self._checkbox.setEnabled(detected.supported)
         self._checkbox.setVisible(True)
-        self._checkbox.setStyleSheet(f"color: {TEXT_PRIMARY}; background: transparent;")
         self._checkbox.stateChanged.connect(self._on_toggled)
         self._apply_replace_label(detected.path)
 
@@ -170,14 +170,14 @@ class VsCodeExtensionPage(QWidget):
         self._detection_label.setWordWrap(True)
 
         if compact:
-            # v2.4.7 Phase 3.3 (T013): the compact Configuration surface shows
-            # the checkbox alone. The detection paragraph was a wall of blue
-            # text under a control that already says what it does; detection
-            # still runs and still drives the checkbox's enabled state, and the
-            # detail moves to a tooltip for the not-supported case. Applied at
-            # construction as well as on refresh: a page that never refreshes
-            # would otherwise show a disabled control with no explanation.
+            # v2.4.7 Phase 3.3 (T013) hid the detection paragraph here because
+            # it was a wall of blue text under a control that already says what
+            # it does. That is right while the option is available -- but a
+            # DISABLED checkbox with its only explanation in a tooltip reads as
+            # a broken control, so the reason is shown inline whenever the
+            # option cannot be taken, and hidden again when it can.
             layout.addWidget(self._checkbox)
+            layout.addWidget(self._detection_label)
             self._apply_detection_tooltip(True, detected)
         else:
             card = QWidget()
@@ -256,7 +256,13 @@ class VsCodeExtensionPage(QWidget):
         """
         if not compact:
             return
-        self._detection_label.setVisible(False)
+        # Visible only when it carries news the user needs: the option is off
+        # the table and they would otherwise not know why.
+        self._detection_label.setVisible(not detected.supported)
+        self._detection_label.setStyleSheet(
+            f"color: {TEXT_SECONDARY}; font-size: {FS_CAPTION}px; "
+            "background: transparent;"
+        )
         self._checkbox.setToolTip(
             "" if detected.supported else _detection_text(detected)
         )

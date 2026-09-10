@@ -38,6 +38,7 @@ from nexus_installer.engine.model_router import (
 )
 from nexus_installer.widgets.gated_auth_dialog import run_gated_prompt
 from nexus_installer.widgets.overall_progress import OverallProgressBar
+from nexus_installer.widgets.page_intro import PageLede
 from nexus_installer.widgets.phase_group import PhaseGroup
 
 if TYPE_CHECKING:
@@ -92,6 +93,15 @@ class InstallingPage(QWidget):
         self._title = QLabel("Installing...")
         self._title.setObjectName("pageTitle")
         layout.addWidget(self._title)
+
+        # Every other page opens with a lede; this one used to jump straight
+        # from the title to a progress bar.
+        layout.addWidget(
+            PageLede(
+                "Nexus is downloading and setting up everything you chose. You "
+                "can minimize this window -- the install keeps running."
+            )
+        )
 
         # Overall progress bar on top
         overall_label = QLabel("Overall progress")

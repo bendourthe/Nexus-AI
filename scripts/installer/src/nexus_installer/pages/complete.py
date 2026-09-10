@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtWidgets import (
-    QCheckBox,
     QFileDialog,
     QHBoxLayout,
     QLabel,
@@ -29,7 +28,6 @@ from nexus_installer.constants import (
     FS_BODY,
     FS_CAPTION,
     SUCCESS,
-    TEXT_BODY,
     TEXT_SECONDARY,
     WARNING,
 )
@@ -41,8 +39,10 @@ from nexus_installer.engine.model_router import (
 from nexus_installer.engine.platform_utils import no_window_kwargs
 from nexus_installer.video_enhancement_support import INSTALLER_NOTE
 from nexus_installer.widgets.callout_box import CalloutBox
+from nexus_installer.widgets.page_intro import PageLede
 from nexus_installer.widgets.primary_button import PrimaryButton
 from nexus_installer.widgets.secondary_button import SecondaryButton
+from nexus_installer.widgets.selectable_check_box import SelectableCheckBox
 
 if TYPE_CHECKING:
     from nexus_installer.installer_state import InstallerState
@@ -114,10 +114,7 @@ class CompletePage(QWidget):
         self._title.setObjectName("pageTitle")
         layout.addWidget(self._title)
 
-        self._subtitle = QLabel("Nexus is installed and ready to use.")
-        self._subtitle.setStyleSheet(
-            f"color: {TEXT_BODY}; font-size: {FS_BODY}px; background: transparent;"
-        )
+        self._subtitle = PageLede("Nexus is installed and ready to use.")
         layout.addWidget(self._subtitle)
 
         self._video2x_note = QLabel(INSTALLER_NOTE)
@@ -177,7 +174,7 @@ class CompletePage(QWidget):
         layout.addWidget(manage_card)
 
         # v1.8.0 Phase 2 -- launch the desktop app when the wizard finishes.
-        self._launch_checkbox = QCheckBox("Launch Nexus when I click Finish")
+        self._launch_checkbox = SelectableCheckBox("Launch Nexus when I click Finish")
         self._launch_checkbox.setChecked(state.launch_desktop_on_finish)
         self._launch_checkbox.stateChanged.connect(
             lambda _s: setattr(
