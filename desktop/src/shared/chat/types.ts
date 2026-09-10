@@ -8,6 +8,7 @@
  * input + model-selector contract.
  */
 
+import type { GenerationFailure } from "../studio/generationError";
 import type { AgentActivity } from "../../components/agentState/mapping";
 import type { MessageTokenUsageV1, RequestTokenUsageV1 } from "../../../../core/chat/tokenUsage";
 
@@ -65,6 +66,12 @@ export interface ChatMessage {
    */
   estimateSeconds?: number;
   /**
+   * v2.4.8 follow-up (2026-09-08): how long this model usually takes to reach
+   * the GPU. Shown during the loading phase only, so the loading wait is never
+   * described by the generation figure.
+   */
+  loadEstimateSeconds?: number;
+  /**
    * v1.17.0 Phase 2 -- agent activity driving the inline orb while this
    * message is pending. Surfaces pass a typed activity; the bubble maps it
    * to state + accent. Defaults to chat-streaming when omitted.
@@ -89,6 +96,23 @@ export interface ChatMessage {
   mediaRecovery?: MediaRuntimeRecovery;
   /** v2.4.2 Phase 3 -- SAM2 missing-weights recovery (install or paint a mask). */
   sam2Recovery?: Sam2Recovery;
+  /**
+   * v2.4.9 -- a structured generation failure.
+   *
+   * Set instead of writing a raw error into `content`. Operator report: a 4K
+   * request printed a forty-line Zod dump into the transcript. The bubble
+   * renders this as a card: one sentence, the reason, and the raw trace behind
+   * a copy button.
+   */
+  failure?: GenerationFailure;
+  /**
+   * v2.4.9 -- how long this response actually took, in seconds.
+   *
+   * Operator ask: "could the time to generate the response (for all modes) be
+   * displayed in brackets after the time?" Measured, not estimated: it is set
+   * when the job completes, so it is the real wall-clock cost of the run.
+   */
+  generationSeconds?: number;
 }
 
 export interface MediaRuntimeRecovery {

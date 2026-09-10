@@ -94,17 +94,22 @@ describe("VideoPromptForm presets", () => {
 
   it("includes flow-dpm-solver in the sampler dropdown", () => {
     render(<VideoPromptForm availableModels={AVAILABLE_MODELS} />);
-    expect(screen.getByTestId("video-advanced")).toHaveAttribute("aria-expanded", "false");
-    fireEvent.click(screen.getByTestId("video-advanced"));
+    // v2.4.8 follow-up (2026-09-08): the sampler was inside a nested Advanced
+    // collapse, below the window edge of a panel that could not scroll, so the
+    // operator could not reach it. It is a Sampling-section field now, and the
+    // panel caps and scrolls itself.
+    expect(screen.queryByTestId("video-advanced")).toBeNull();
+    const scroller = screen.getByTestId("video-settings-panel-scroll");
+    expect(scroller.style.overflowY).toBe("auto");
+    expect(scroller.style.maxHeight).not.toBe("");
     const sampler = screen.getByTestId("video-sampler") as HTMLSelectElement;
     const options = Array.from(sampler.options).map((o) => o.value);
     expect(options).toContain("flow-dpm-solver");
   });
 
-  it("exposes VRAM budget knobs in Advanced and maps them onto the request", () => {
+  it("exposes VRAM budget knobs without a second collapse and maps them onto the request", () => {
     const onChange = vi.fn();
     render(<VideoPromptForm availableModels={AVAILABLE_MODELS} onChange={onChange} />);
-    fireEvent.click(screen.getByTestId("video-advanced"));
     expect(screen.getByTestId("video-memory-budget")).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("video-layer-streaming"));
     expect(onChange).toHaveBeenCalled();

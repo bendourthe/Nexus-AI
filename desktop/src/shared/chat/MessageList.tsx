@@ -26,6 +26,8 @@ export interface MessageListProps {
   renderAfter?: (message: ChatMessage) => ReactNode;
   /** v2.2.4 Phase 4 -- extra studio actions inside the media lightbox. */
   renderPreviewExtra?: (message: ChatMessage) => ReactNode;
+  /** v2.4.9 -- per-message actions rendered on the bubble's timestamp row. */
+  renderMetaActions?: (message: ChatMessage) => ReactNode;
   /** v2.2.7 Phase 4 -- tests pin `en-US`; production uses the host locale. */
   locale?: string;
   onRepairMediaRuntime?: (message: ChatMessage) => void;
@@ -61,6 +63,7 @@ export function MessageList({
   onMediaError,
   renderAfter,
   renderPreviewExtra,
+  renderMetaActions,
   locale,
   onRepairMediaRuntime,
   onCancelMediaRepair,
@@ -124,6 +127,10 @@ export function MessageList({
           locale={locale}
           {...(onMediaError ? { onMediaError } : {})}
           {...(renderPreviewExtra ? { renderPreviewExtra } : {})}
+          {...(() => {
+            const actions = renderMetaActions?.(msg);
+            return actions ? { metaActions: actions } : {};
+          })()}
           {...(onRepairMediaRuntime ? { onRepairMediaRuntime } : {})}
           {...(onCancelMediaRepair ? { onCancelMediaRepair } : {})}
           {...(onOpenMediaRepairLog ? { onOpenMediaRepairLog } : {})}
