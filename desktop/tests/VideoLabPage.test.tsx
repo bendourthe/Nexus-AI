@@ -147,6 +147,81 @@ describe("VideoLabPage (chat)", () => {
     expect(screen.queryByTestId("video-mode")).toBeNull();
   });
 
+  // Operator ask (2026-09-08): duration and resolution are changed on nearly
+  // every prompt, so they belong in the chat area rather than behind the panel.
+  it("keeps duration and resolution in the chat area at all times", async () => {
+    const client = new InMemoryVideoClient();
+    render(
+      <VideoLabPage
+        client={client}
+        modelsClient={videoModels()}
+        drainIntervalMs={20}
+        resolveMp4Url={(p) => `mock://${p}`}
+      />,
+    );
+    // Visible with the Advanced panel closed.
+    expect(screen.queryByTestId("video-settings-panel")).toBeNull();
+    expect(screen.getByTestId("composer-quick-slot")).toBeInTheDocument();
+    // Inside one clip length, so the continuation planner emits a single
+    // segment and the dispatched duration is the one typed here.
+    fireEvent.change(screen.getByTestId("video-quick-duration"), {
+      target: { value: "3" },
+    });
+    // v2.4.9: Wan 2.1 1.3B has a 480p local path, so 720p is not offered for
+    // it at all. The operator's 720p / 8 s request on this model ran for ten
+    // minutes and then failed; the option that produced it is gone.
+    const resolutionOptions = Array.from(
+      screen.getByTestId("video-quick-resolution").querySelectorAll("option"),
+    ).map((o) => o.getAttribute("value"));
+    expect(resolutionOptions).toEqual(["854x480"]);
+    client.scriptEvents("mem-video-1", [
+      {
+        kind: "complete",
+        jobId: "mem-video-1",
+        outputPath: "/tmp/clip.mp4",
+        outputId: "mem-video-1",
+        outputHash: "a".repeat(64),
+      },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a fox" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await waitFor(() => expect(client.lastRequest).not.toBeNull());
+    const request = client.lastRequest?.request as {
+      durationSeconds: number;
+      width: number;
+      height: number;
+    };
+    expect(request.durationSeconds).toBe(3);
+    expect(request.width).toBe(854);
+    expect(request.height).toBe(480);
+    // The Advanced panel opens onto the same values, not a stale copy.
+    fireEvent.click(screen.getByTestId("video-advanced-settings"));
+    await waitFor(() =>
+      expect(screen.getByTestId("video-settings-panel")).toBeInTheDocument(),
+    );
+    // v2.4.9: the advanced panel's duration is a capability-bounded dropdown
+    // too, not a free number field.
+    const advDuration = screen.getByTestId("video-duration") as HTMLSelectElement;
+    expect(advDuration.value).toBe("3");
+    // The list is frames-bounded, not seconds-bounded: at the default 16 fps a
+    // 5 s clip is 80 frames, inside Wan 2.1's 81-frame budget, so all four fit.
+    // At 24 fps the same model only reaches 3 s -- covered in
+    // modelCapabilities.test.ts ("narrows the duration dropdown as fps rises").
+    expect(Array.from(advDuration.options).map((o) => o.value)).toEqual([
+      "2",
+      "3",
+      "4",
+      "5",
+    ]);
+    expect((screen.getByTestId("video-resolution") as HTMLSelectElement).value).toBe(
+      "854x480",
+    );
+  });
+
   it("a text-only prompt runs text2video and renders the clip inline", async () => {
     const client = new InMemoryVideoClient();
     render(
@@ -566,7 +641,7 @@ describe("VideoLabPage (chat)", () => {
         client={client}
         modelsClient={videoModels()}
         drainIntervalMs={10}
-        initialValues={{ durationSeconds: 12, clipSeconds: 4 }}
+        initialValues={{ durationSeconds: 3, clipSeconds: 1 }}
       />,
     );
     client.scriptEvents("mem-video-1", [
@@ -589,7 +664,7 @@ describe("VideoLabPage (chat)", () => {
       await Promise.resolve();
     });
     await waitFor(() => expect(client.requests.length).toBe(3));
-    expect(client.requests[0]?.request.durationSeconds).toBe(4);
+    expect(client.requests[0]?.request.durationSeconds).toBe(1);
     expect(client.requests[1]?.request.continueFrom).toMatchObject({
       priorJobId: "mem-video-1",
       segmentIndex: 1,
@@ -621,7 +696,7 @@ describe("VideoLabPage (chat)", () => {
         vramGB={24}
       />,
     );
-    fireEvent.click(screen.getByText("Advanced settings"));
+    fireEvent.click(screen.getByTestId("video-advanced-settings"));
     fireEvent.click(screen.getByTestId("video-avatar-confirm"));
     const png = new File(["x"], "face.png", { type: "image/png" });
     const wav = new File(["y"], "line.wav", { type: "audio/wav" });

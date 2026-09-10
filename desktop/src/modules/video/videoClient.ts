@@ -23,8 +23,8 @@ export interface VideoBaseRequest {
   readonly modelId: string;
   readonly prompt: string;
   readonly negativePrompt?: string;
-  readonly width: 854 | 1280;
-  readonly height: 480 | 720;
+  readonly width: number;
+  readonly height: number;
   readonly durationSeconds: number;
   readonly fps: 12 | 16 | 24;
   readonly steps: number;

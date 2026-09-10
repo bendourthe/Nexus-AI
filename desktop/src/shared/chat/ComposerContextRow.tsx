@@ -12,6 +12,16 @@ export interface ComposerContextRowProps {
   readonly onStartNewSession?: () => void;
   /** Image / Video park Advanced settings on this row (Context | Model | Advanced). */
   readonly trailing?: ReactNode;
+  /**
+   * v2.4.9: the studios' always-visible controls (resolution, size, duration)
+   * render INSIDE this row rather than on a second row under it.
+   *
+   * Operator ask: "the settings for Image and Video generation should all be
+   * on the same row as the context, model selector, etc. and be more compact."
+   * A separate `StudioQuickControls` block below the row was two rows of
+   * chrome under a one-line composer.
+   */
+  readonly quickControls?: ReactNode;
   readonly children: ReactNode;
 }
 
@@ -19,6 +29,7 @@ export function ComposerContextRow({
   usage,
   onStartNewSession,
   trailing,
+  quickControls,
   children,
 }: ComposerContextRowProps): JSX.Element {
   const showBar = usage.percent !== null && usage.denominatorKind !== "none";
@@ -53,9 +64,11 @@ export function ComposerContextRow({
           style={
             showBar
               ? {
-                  minWidth: "14rem",
-                  maxWidth: "30%",
-                  flex: "0 1 30%",
+                  // With the studio controls on the row too, the picker takes a
+                  // narrower share; it still fits the longest catalog name.
+                  minWidth: quickControls ? "11rem" : "14rem",
+                  maxWidth: quickControls ? "22%" : "30%",
+                  flex: quickControls ? "0 1 22%" : "0 1 30%",
                   overflow: "hidden",
                 }
               : { minWidth: 0, flex: "1 1 auto" }
@@ -63,6 +76,25 @@ export function ComposerContextRow({
         >
           {children}
         </div>
+        {quickControls ? (
+          <div
+            data-testid="composer-quick-slot"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "var(--space-2)",
+              flex: "1 1 auto",
+              minWidth: 0,
+              // The controls scroll sideways on a narrow window rather than
+              // wrapping the row (wrapping is what produced the inverted
+              // layout this row was built to fix).
+              overflowX: "auto",
+              scrollbarWidth: "thin",
+            }}
+          >
+            {quickControls}
+          </div>
+        ) : null}
         {trailing ? (
           <div
             data-testid="composer-advanced-slot"

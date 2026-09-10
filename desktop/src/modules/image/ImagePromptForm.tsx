@@ -2,6 +2,10 @@
  * v1.0.0 Phase 6.5 -- forms-driven prompt sidebar.
  * v1.1.0 Phase 12.7 -- Fast Preview toggle, multi-lang prompt hint,
  * Flow-DPM-Solver sampler, and 2K/4K resolutions gated by DiffusionTier.
+ * v2.4.8 follow-up (2026-09-08) -- laid out on the shared studio settings
+ * grammar (`StudioSettings.tsx`): one scrolling card, titled sections, a
+ * responsive field grid, and no nested collapse hiding LoRAs / ControlNet /
+ * VRAM behind a second button. Same fields, same rules, same test ids.
  *
  * Houses every parameter the user can tune: prompt + negative, model,
  * width / height, steps, CFG, sampler, seed, plus the collapsible
@@ -12,6 +16,15 @@
 
 import { useMemo, useState } from "react";
 import { Button, Select, Switch, TextField } from "../../components/ui";
+import {
+  StudioSettingsField,
+  StudioSettingsPanel,
+  StudioSettingsSection,
+} from "../../shared/studio/StudioSettings";
+import {
+  capabilityNote,
+  imageCapabilitiesFor,
+} from "../../shared/studio/modelCapabilities";
 import type { ControlNetRef, LoraRef } from "./diffusionClient";
 import { foldModelId } from "../../../../core/registry/modelAliases";
 import type { DiffusionTierId } from "../../../../core/config/DiffusionTier";
@@ -150,8 +163,19 @@ export function ImagePromptForm({
     ...defaultMemoryBudget(diffusionTier),
     ...initial,
   });
-  const [advancedOpen, setAdvancedOpen] = useState(false);
-  const allowedResolutions = useMemo(() => visibleResolutions(diffusionTier), [diffusionTier]);
+  /**
+   * v2.4.9: the option lists come from the SELECTED MODEL, intersected with
+   * what the host tier can run. Tier alone is what offered a 16 GB card
+   * 4096x4096 on a service that caps a request at 2048.
+   */
+  const caps = useMemo(() => imageCapabilitiesFor(values.modelId), [values.modelId]);
+  const allowedResolutions = useMemo(() => {
+    const byTier = new Set(visibleResolutions(diffusionTier).map((r) => r.value));
+    const withinTier = caps.resolutions.filter((r) => byTier.has(r.value));
+    // A model whose sizes the tier does not list (a non-square SDXL bucket, say)
+    // still gets its own list: the model is the authority on what it accepts.
+    return withinTier.length > 0 ? withinTier : caps.resolutions;
+  }, [caps, diffusionTier]);
   const selectedResolutionValue = `${values.width}x${values.height}`;
   const selectedResolutionTooHigh = !allowedResolutions.some(
     (r) => r.value === selectedResolutionValue,
@@ -178,6 +202,16 @@ export function ImagePromptForm({
   function update<K extends keyof PromptFormValues>(key: K, value: PromptFormValues[K]): void {
     setValues((prev) => {
       const next = { ...prev, [key]: value };
+      onChange?.(next);
+      return next;
+    });
+  }
+
+  function applyResolution(value: string): void {
+    const opt = RESOLUTION_OPTIONS.find((r) => r.value === value);
+    if (!opt) return;
+    setValues((prev) => {
+      const next = { ...prev, width: opt.width, height: opt.height };
       onChange?.(next);
       return next;
     });
@@ -211,358 +245,377 @@ export function ImagePromptForm({
   }
 
   return (
-    <form
-      data-testid="image-prompt-form"
-      onSubmit={(e) => e.preventDefault()}
-      style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}
-    >
-      <label>
-        <span
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "var(--space-1)",
-            fontSize: "var(--text-xs)",
-            color: "var(--fg-muted)",
-          }}
-        >
-          Prompt
-          <span
-            data-testid="image-prompt-multilang-hint"
-            title="Supports English, Chinese, and Emoji (multilingual model)."
-            aria-label="Supports English, Chinese, and Emoji (multilingual model)."
-            style={{
-              display: "inline-flex",
-              width: "1em",
-              height: "1em",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: "50%",
-              border: "1px solid var(--fg-muted)",
-              fontSize: "0.7em",
-              cursor: "help",
-            }}
-          >
-            i
-          </span>
-        </span>
-        <TextField
-          multiline
-          testId="image-prompt"
-          rows={4}
-          value={values.prompt}
-          disabled={disabled}
-          onChange={(v) => update("prompt", v)}
-        />
-      </label>
-      <label>
-        <span style={{ display: "block", fontSize: "var(--text-xs)", color: "var(--fg-muted)" }}>Negative Prompt</span>
-        <TextField
-          multiline
-          testId="image-negative-prompt"
-          rows={2}
-          value={values.negativePrompt}
-          disabled={disabled}
-          onChange={(v) => update("negativePrompt", v)}
-        />
-      </label>
-      <label>
-        <span style={{ display: "block", fontSize: "var(--text-xs)", color: "var(--fg-muted)" }}>Model</span>
-        <Select
-          data-testid="image-model"
-          value={values.modelId}
-          disabled={disabled}
-          onChange={(e) => update("modelId", e.target.value)}
-        >
-          {availableModels.map((m) => (
-            <option key={m.id} value={m.id}>
-              {m.displayName}
-            </option>
-          ))}
-        </Select>
-      </label>
-      <label>
-        Resolution
-        <Select
-          data-testid="image-resolution"
-          value={selectedResolutionValue}
-          disabled={disabled}
-          onChange={(e) => {
-            const opt = RESOLUTION_OPTIONS.find((r) => r.value === e.target.value);
-            if (!opt) return;
-            setValues((prev) => {
-              const next = { ...prev, width: opt.width, height: opt.height };
-              onChange?.(next);
-              return next;
-            });
-          }}
-        >
-          {allowedResolutions.map((r) => (
-            <option key={r.value} value={r.value}>
-              {r.label}
-            </option>
-          ))}
-        </Select>
-        {selectedResolutionTooHigh && (
-          <span
-            data-testid="image-resolution-tier-hint"
-            style={{
-              display: "block",
-              marginTop: "var(--space-1)",
-              fontSize: "var(--text-xs)",
-              color: "var(--accent-warning, #f59e0b)",
-            }}
-          >
-            Requires diffusion-high tier
-          </span>
-        )}
-      </label>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-2)" }}>
-        <label>
-          Width
-          <TextField
-            testId="image-width"
-            type="number"
-            min={64}
-            max={4096}
-            step={8}
-            value={String(values.width)}
-            disabled={disabled}
-            onChange={(v) => update("width", Number(v))}
-          />
-        </label>
-        <label>
-          Height
-          <TextField
-            testId="image-height"
-            type="number"
-            min={64}
-            max={4096}
-            step={8}
-            value={String(values.height)}
-            disabled={disabled}
-            onChange={(v) => update("height", Number(v))}
-          />
-        </label>
-        <label>
-          Steps
-          <TextField
-            testId="image-steps"
-            type="number"
-            min={1}
-            max={150}
-            value={String(values.steps)}
-            disabled={disabled}
-            onChange={(v) => update("steps", Number(v))}
-          />
-        </label>
-        <label>
-          CFG
-          <TextField
-            testId="image-cfg"
-            type="number"
-            min={0}
-            max={30}
-            step={0.1}
-            value={String(values.cfgScale)}
-            disabled={disabled}
-            onChange={(v) => update("cfgScale", Number(v))}
-          />
-        </label>
-        <label>
-          Sampler
-          <Select
-            data-testid="image-sampler"
-            value={values.sampler}
-            disabled={disabled}
-            onChange={(e) => update("sampler", e.target.value)}
-          >
-            {SAMPLERS.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </Select>
-        </label>
-        <label>
-          Seed
-          <TextField
-            testId="image-seed"
-            type="number"
-            min={0}
-            value={String(values.seed)}
-            disabled={disabled}
-            onChange={(v) => update("seed", Number(v))}
-          />
-        </label>
-      </div>
-      <Switch
-        testId="image-fast-preview-toggle"
-        checked={values.fastPreview}
-        disabled={disabled}
-        onChange={(on) => update("fastPreview", on)}
-        label={
-          <span>
-            Fast Preview <em>(1-step Sana-Sprint, ~0.5 s)</em>
-            {values.fastPreview ? (
-              <span
-                data-testid="image-fast-preview-model"
-                style={{ marginLeft: "var(--space-2)", color: "var(--accent, #10b981)" }}
-              >
-                using {fastPreviewModelId}
-              </span>
-            ) : null}
-          </span>
-        }
-      />
-      <div>
-        <Button
-          type="button"
-          variant="ghost"
-          testId="image-advanced"
-          aria-expanded={advancedOpen}
-          disabled={disabled}
-          onClick={() => setAdvancedOpen((v) => !v)}
-        >
-          Advanced (LoRAs, ControlNet)
-        </Button>
-        {advancedOpen ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)", marginTop: "var(--space-2)" }}>
-          <div>
-            <Button testId="image-add-lora" type="button" onClick={addLora} disabled={disabled}>
-              + LoRA
-            </Button>
-            {values.loras.map((lora, i) => (
-              <div key={`lora-${i}`} data-testid={`image-lora-${i}`} style={{ display: "flex", gap: "var(--space-2)" }}>
-                <Select
-                  data-testid={`image-lora-id-${i}`}
-                  value={lora.id}
-                  onChange={(e) => updateLora(i, { id: e.target.value })}
+    <StudioSettingsPanel title="Image settings" testId="image-settings-panel">
+      <form
+        data-testid="image-prompt-form"
+        onSubmit={(e) => e.preventDefault()}
+        style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}
+      >
+        <StudioSettingsSection title="Output" testId="image-section-output">
+          <StudioSettingsField label="Model">
+            <Select
+              data-testid="image-model"
+              value={values.modelId}
+              disabled={disabled}
+              onChange={(e) => update("modelId", e.target.value)}
+            >
+              {availableModels.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.displayName}
+                </option>
+              ))}
+            </Select>
+          </StudioSettingsField>
+          <StudioSettingsField
+            label="Resolution"
+            hint={
+              selectedResolutionTooHigh ? (
+                <span
+                  data-testid="image-resolution-tier-hint"
+                  style={{ fontSize: "var(--text-xs)", color: "var(--accent-warning, #f59e0b)" }}
                 >
-                  {availableLoras.map((l) => (
-                    <option key={l.id} value={l.id}>
-                      {l.displayName}
+                  Requires diffusion-high tier
+                </span>
+              ) : undefined
+            }
+          >
+            <Select
+              data-testid="image-resolution"
+              value={selectedResolutionValue}
+              disabled={disabled}
+              onChange={(e) => applyResolution(e.target.value)}
+            >
+              {allowedResolutions.map((r) => (
+                <option key={r.value} value={r.value}>
+                  {r.label}
+                </option>
+              ))}
+            </Select>
+          </StudioSettingsField>
+          <StudioSettingsField label="Width">
+            <TextField
+              testId="image-width"
+              type="number"
+              min={64}
+              max={4096}
+              step={8}
+              value={String(values.width)}
+              disabled={disabled}
+              onChange={(v) => update("width", Number(v))}
+            />
+          </StudioSettingsField>
+          <StudioSettingsField label="Height">
+            <TextField
+              testId="image-height"
+              type="number"
+              min={64}
+              max={4096}
+              step={8}
+              value={String(values.height)}
+              disabled={disabled}
+              onChange={(v) => update("height", Number(v))}
+            />
+          </StudioSettingsField>
+          <StudioSettingsField full label="Fast preview">
+            <Switch
+              testId="image-fast-preview-toggle"
+              checked={values.fastPreview}
+              disabled={disabled}
+              onChange={(on) => update("fastPreview", on)}
+              label={
+                <span>
+                  1-step Sana-Sprint, about 0.5 s
+                  {values.fastPreview ? (
+                    <span
+                      data-testid="image-fast-preview-model"
+                      style={{ marginLeft: "var(--space-2)", color: "var(--accent, #10b981)" }}
+                    >
+                      using {fastPreviewModelId}
+                    </span>
+                  ) : null}
+                </span>
+              }
+            />
+          </StudioSettingsField>
+        </StudioSettingsSection>
+
+        <StudioSettingsSection title="Sampling" testId="image-section-sampling">
+          <StudioSettingsField label="Steps">
+            <TextField
+              testId="image-steps"
+              type="number"
+              min={1}
+              max={150}
+              value={String(values.steps)}
+              disabled={disabled}
+              onChange={(v) => update("steps", Number(v))}
+            />
+          </StudioSettingsField>
+          <StudioSettingsField
+            label="CFG"
+            {...(caps.cfgScale
+              ? {}
+              : {
+                  hint: (
+                    <span style={{ fontSize: "var(--text-xs)", color: "var(--fg-muted)" }}>
+                      {capabilityNote(caps, "cfgScale") ??
+                        "This model is guidance-free; CFG has no effect."}
+                    </span>
+                  ),
+                })}
+          >
+            <TextField
+              testId="image-cfg"
+              type="number"
+              min={caps.cfgScale?.min ?? 0}
+              max={caps.cfgScale?.max ?? 30}
+              step={caps.cfgScale?.step ?? 0.1}
+              value={String(values.cfgScale)}
+              disabled={disabled || caps.cfgScale === null}
+              onChange={(v) => update("cfgScale", Number(v))}
+            />
+          </StudioSettingsField>
+          <StudioSettingsField label="Sampler">
+            <Select
+              data-testid="image-sampler"
+              value={values.sampler}
+              disabled={disabled}
+              onChange={(e) => update("sampler", e.target.value)}
+            >
+              {(caps.samplers.length > 0 ? caps.samplers : SAMPLERS).map((sampler) => (
+                <option key={sampler} value={sampler}>
+                  {sampler}
+                </option>
+              ))}
+            </Select>
+          </StudioSettingsField>
+          <StudioSettingsField label="Seed">
+            <TextField
+              testId="image-seed"
+              type="number"
+              min={0}
+              value={String(values.seed)}
+              disabled={disabled}
+              onChange={(v) => update("seed", Number(v))}
+            />
+          </StudioSettingsField>
+        </StudioSettingsSection>
+
+        <StudioSettingsSection
+          title="Prompting"
+          hint="The composer sends the prompt; these carry across turns."
+          testId="image-section-prompting"
+        >
+          <StudioSettingsField
+            full
+            label={
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--space-1)" }}>
+                Prompt
+                <span
+                  data-testid="image-prompt-multilang-hint"
+                  title="Supports English, Chinese, and Emoji (multilingual model)."
+                  aria-label="Supports English, Chinese, and Emoji (multilingual model)."
+                  style={{
+                    display: "inline-flex",
+                    width: "1em",
+                    height: "1em",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "50%",
+                    border: "1px solid var(--fg-muted)",
+                    fontSize: "0.7em",
+                    cursor: "help",
+                  }}
+                >
+                  i
+                </span>
+              </span>
+            }
+          >
+            <TextField
+              multiline
+              testId="image-prompt"
+              rows={3}
+              value={values.prompt}
+              disabled={disabled}
+              onChange={(v) => update("prompt", v)}
+            />
+          </StudioSettingsField>
+          <StudioSettingsField full label="Negative prompt">
+            <TextField
+              multiline
+              testId="image-negative-prompt"
+              rows={2}
+              value={values.negativePrompt}
+              disabled={disabled}
+              onChange={(v) => update("negativePrompt", v)}
+            />
+          </StudioSettingsField>
+        </StudioSettingsSection>
+
+        <StudioSettingsSection title="LoRAs and ControlNet" testId="image-section-conditioning">
+          <StudioSettingsField full label="LoRAs">
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
+              <Button testId="image-add-lora" type="button" onClick={addLora} disabled={disabled}>
+                + LoRA
+              </Button>
+              {values.loras.map((lora, i) => (
+                <div
+                  key={`lora-${i}`}
+                  data-testid={`image-lora-${i}`}
+                  style={{ display: "flex", gap: "var(--space-2)", alignItems: "center" }}
+                >
+                  <Select
+                    data-testid={`image-lora-id-${i}`}
+                    value={lora.id}
+                    onChange={(e) => updateLora(i, { id: e.target.value })}
+                  >
+                    {availableLoras.map((l) => (
+                      <option key={l.id} value={l.id}>
+                        {l.displayName}
+                      </option>
+                    ))}
+                  </Select>
+                  <TextField
+                    testId={`image-lora-weight-${i}`}
+                    type="number"
+                    step={0.05}
+                    min={-2}
+                    max={2}
+                    value={String(lora.weight)}
+                    onChange={(v) => updateLora(i, { weight: Number(v) })}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    testId={`image-lora-remove-${i}`}
+                    onClick={() => removeLora(i)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </StudioSettingsField>
+          <StudioSettingsField full label="ControlNet">
+            <Switch
+              testId="image-controlnet-toggle"
+              checked={Boolean(values.controlNet)}
+              disabled={disabled}
+              onChange={(on) => toggleControlNet(on)}
+              label="Condition generation on a reference image"
+            />
+          </StudioSettingsField>
+          {values.controlNet ? (
+            <StudioSettingsField full label="ControlNet model and preprocessor">
+              <div
+                data-testid="image-controlnet-fields"
+                style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}
+              >
+                <Select
+                  data-testid="image-controlnet-model"
+                  value={values.controlNet.modelId}
+                  onChange={(e) =>
+                    update("controlNet", { ...values.controlNet!, modelId: e.target.value })
+                  }
+                >
+                  {availableControlNets.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.displayName}
                     </option>
                   ))}
                 </Select>
-                <TextField
-                  testId={`image-lora-weight-${i}`}
-                  type="number"
-                  step={0.05}
-                  min={-2}
-                  max={2}
-                  value={String(lora.weight)}
-                  onChange={(v) => updateLora(i, { weight: Number(v) })}
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  testId={`image-lora-remove-${i}`}
-                  onClick={() => removeLora(i)}
+                <Select
+                  data-testid="image-controlnet-preprocessor"
+                  value={values.controlNet.preprocessor}
+                  onChange={(e) =>
+                    update("controlNet", {
+                      ...values.controlNet!,
+                      preprocessor: e.target.value as ControlNetRef["preprocessor"],
+                    })
+                  }
                 >
-                  Remove
-                </Button>
+                  <option value="canny">Canny</option>
+                  <option value="pose">Pose</option>
+                  <option value="depth">Depth</option>
+                  <option value="none">None</option>
+                </Select>
               </div>
-            ))}
-          </div>
-          <Switch
-            testId="image-controlnet-toggle"
-            checked={Boolean(values.controlNet)}
-            onChange={(on) => toggleControlNet(on)}
-            label="Enable ControlNet"
-          />
-          {values.controlNet && (
-            <div data-testid="image-controlnet-fields" style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
-              <Select
-                data-testid="image-controlnet-model"
-                value={values.controlNet.modelId}
-                onChange={(e) =>
-                  update("controlNet", { ...values.controlNet!, modelId: e.target.value })
-                }
-              >
-                {availableControlNets.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.displayName}
-                  </option>
-                ))}
-              </Select>
-              <Select
-                data-testid="image-controlnet-preprocessor"
-                value={values.controlNet.preprocessor}
-                onChange={(e) =>
-                  update("controlNet", {
-                    ...values.controlNet!,
-                    preprocessor: e.target.value as ControlNetRef["preprocessor"],
-                  })
-                }
-              >
-                <option value="canny">Canny</option>
-                <option value="pose">Pose</option>
-                <option value="depth">Depth</option>
-                <option value="none">None</option>
-              </Select>
-            </div>
-          )}
-          <div data-testid="image-memory-budget" style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
-            <strong>VRAM budget</strong>
-            <label>
-              max cache VRAM (GB)
-              <TextField
-                testId="image-max-cache-vram"
-                type="number"
-                min={0.5}
-                step={0.5}
-                value={String(values.maxCacheVramGB)}
-                disabled={disabled}
-                onChange={(v) => update("maxCacheVramGB", Number(v))}
-              />
-            </label>
-            <label>
-              max cache RAM (GB)
-              <TextField
-                testId="image-max-cache-ram"
-                type="number"
-                min={1}
-                step={1}
-                value={String(values.maxCacheRamGB)}
-                disabled={disabled}
-                onChange={(v) => update("maxCacheRamGB", Number(v))}
-              />
-            </label>
-            <label>
-              working reserve (GB)
-              <TextField
-                testId="image-working-reserve"
-                type="number"
-                min={0}
-                step={0.5}
-                value={String(values.workingMemReserveGB)}
-                disabled={disabled}
-                onChange={(v) => update("workingMemReserveGB", Number(v))}
-              />
-            </label>
+            </StudioSettingsField>
+          ) : null}
+        </StudioSettingsSection>
+
+        <StudioSettingsSection title="VRAM budget" testId="image-memory-budget">
+          <StudioSettingsField label="Max cache VRAM (GB)">
+            <TextField
+              testId="image-max-cache-vram"
+              type="number"
+              min={0.5}
+              step={0.5}
+              value={String(values.maxCacheVramGB)}
+              disabled={disabled}
+              onChange={(v) => update("maxCacheVramGB", Number(v))}
+            />
+          </StudioSettingsField>
+          <StudioSettingsField label="Max cache RAM (GB)">
+            <TextField
+              testId="image-max-cache-ram"
+              type="number"
+              min={1}
+              step={1}
+              value={String(values.maxCacheRamGB)}
+              disabled={disabled}
+              onChange={(v) => update("maxCacheRamGB", Number(v))}
+            />
+          </StudioSettingsField>
+          <StudioSettingsField label="Working reserve (GB)">
+            <TextField
+              testId="image-working-reserve"
+              type="number"
+              min={0}
+              step={0.5}
+              value={String(values.workingMemReserveGB)}
+              disabled={disabled}
+              onChange={(v) => update("workingMemReserveGB", Number(v))}
+            />
+          </StudioSettingsField>
+          <StudioSettingsField full label="Layer streaming">
             <Switch
               testId="image-layer-streaming"
               checked={values.layerStreaming}
               disabled={disabled}
               onChange={(on) => update("layerStreaming", on)}
-              label="Layer streaming (complete a previously too-small VRAM load)"
+              label="Complete a previously too-small VRAM load"
             />
-            {!budgetCheck.ok ? (
-              <p data-testid="image-budget-error" style={{ color: "var(--accent-danger, #f87171)", margin: 0 }}>
+          </StudioSettingsField>
+          {!budgetCheck.ok ? (
+            <StudioSettingsField full label="Budget">
+              <p
+                data-testid="image-budget-error"
+                style={{ color: "var(--accent-danger, #f87171)", margin: 0, fontSize: "var(--text-xs)" }}
+              >
                 {budgetCheck.errors.join(" ")}
               </p>
-            ) : null}
-            {budgetCheck.warnings.map((warning) => (
-              <p key={warning} data-testid="image-budget-warning" style={{ color: "var(--fg-muted)", margin: 0 }}>
-                {warning}
-              </p>
-            ))}
-          </div>
-        </div>
-        ) : null}
-      </div>
-    </form>
+            </StudioSettingsField>
+          ) : null}
+          {budgetCheck.warnings.length > 0 ? (
+            <StudioSettingsField full label="Notes">
+              <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                {budgetCheck.warnings.map((warning) => (
+                  <p
+                    key={warning}
+                    data-testid="image-budget-warning"
+                    style={{ color: "var(--fg-muted)", margin: 0, fontSize: "var(--text-xs)" }}
+                  >
+                    {warning}
+                  </p>
+                ))}
+              </div>
+            </StudioSettingsField>
+          ) : null}
+        </StudioSettingsSection>
+      </form>
+    </StudioSettingsPanel>
   );
 }
 

@@ -74,13 +74,28 @@ export function patchInFlight(
   inFlight.set(chatId, { ...current, pending: { ...current.pending, ...patch } });
 }
 
-/** Finish a turn and hand the reply to every mounted listener. */
+/**
+ * Finish a turn and hand the reply to every mounted listener.
+ *
+ * v2.4.9: the turn's measured wall-clock cost is stamped here rather than at
+ * each call site. This is the one place that knows both when the turn began
+ * (`beginTurn`) and when it landed, so Chat gets the same bracketed HH:MM:SS
+ * the studios show without every caller remembering to time itself.
+ */
 export function completeTurn(turn: CompletedTurn): void {
   const current = inFlight.get(turn.chatId);
+  let message = turn.message;
   if (current && current.assistantId === turn.assistantId) {
+    if (message.generationSeconds === undefined) {
+      message = {
+        ...message,
+        generationSeconds: Math.max(0, (Date.now() - current.startedAt) / 1000),
+      };
+    }
     inFlight.delete(turn.chatId);
   }
-  for (const listener of listeners) listener(turn);
+  const stamped: CompletedTurn = { ...turn, message };
+  for (const listener of listeners) listener(stamped);
 }
 
 export function subscribeCompletedTurns(listener: Listener): () => void {

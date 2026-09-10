@@ -247,7 +247,7 @@ describe("transcript gutters (v2.4.4 Phase 1)", () => {
     expect(orb.style.minWidth).toContain(`${longestPendingCaption().length}ch`);
   });
 
-  it("keeps studio hero pending centered without inheriting the chat pill chrome", () => {
+  it("keeps studio hero pending on the gutter without inheriting the chat pill chrome", () => {
     render(
       <MessageList
         messages={[
@@ -262,8 +262,15 @@ describe("transcript gutters (v2.4.4 Phase 1)", () => {
       />,
     );
     const pending = screen.getByTestId("message-pending-s1");
-    expect(pending.style.alignItems).toBe("center");
+    // v2.4.9 operator ask: "When an image or video is generated, the animation
+    // should be aligned left, just like in chat and agents mode." The studio
+    // pending row starts on the same transcript gutter as every other row.
+    expect(pending.style.alignItems).toBe("flex-start");
+    // A fixed-basis box, so every progress bar is the same width regardless of
+    // the caption above it (the harness screenshot caught fit-content leaking
+    // caption length back into the bar).
     expect(pending.style.width).toBe("100%");
+    expect(pending.style.maxWidth).toBe("26rem");
     const orb = screen.getByTestId("agent-state-orb");
     expect(orb).toHaveAttribute("data-orb-size", "hero");
     expect(orb).not.toHaveAttribute("data-orb-pill");
