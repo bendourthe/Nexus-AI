@@ -98,6 +98,7 @@ from nexus_installer.tier_defaults import (
 )
 from nexus_installer.vram_display import display_vram_gb
 from nexus_installer.widgets.model_checkbox import ModelCheckBox
+from nexus_installer.widgets.page_intro import PageLede
 from nexus_installer.widgets.selectable_text import make_labels_selectable
 
 if TYPE_CHECKING:
@@ -1091,11 +1092,7 @@ class TypedCatalogPage(QWidget):
         title.setObjectName("pageTitle")
         layout.addWidget(title)
 
-        self._subtitle = QLabel("")
-        self._subtitle.setStyleSheet(
-            f"color: {TEXT_BODY}; font-size: {FS_BODY}px; background: transparent;"
-        )
-        self._subtitle.setWordWrap(True)
+        self._subtitle = PageLede("")
         layout.addWidget(self._subtitle)
 
         catalog_label = QLabel(f"Catalog {self.catalog_hash[:12]}")

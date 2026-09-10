@@ -14,10 +14,16 @@ from nexus_installer.installer_state import InstallerState
 EXTENSION_ID = "nexus-coding.nexus-coding"
 LEGACY_EXTENSION_ID = "gemma-code.gemma-code"
 SUPPORTED_VSCODE_VERSION = "1.134.0"
-SUPPORTED_VSCODE_MAX_EXCLUSIVE = "1.137.0"
-SUPPORTED_VSCODE_MINORS = frozenset({(1, 134), (1, 135), (1, 136)})
+SUPPORTED_VSCODE_MAX_EXCLUSIVE = "1.138.0"
+SUPPORTED_VSCODE_MINORS = frozenset({(1, 134), (1, 135), (1, 136), (1, 137)})
+# The VSIX rebuild pin. `better-sqlite3` and `hnswlib-node` are non-N-API
+# addons, so the host must share this build's NODE_MODULE_VERSION -- which is
+# fixed per Electron MAJOR, not per patch. 1.137 ships Electron 42.10.0: same
+# Electron 42 / Node 24 ABI as the 42.8.1 pin, so it is admitted on evidence
+# rather than inference (the 1.136 WN-2 note).
 SUPPORTED_ELECTRON_VERSION = "42.8.1"
-SUPPORTED_VSCODE_RANGE_COPY = "1.134, 1.135, or 1.136"
+SUPPORTED_ELECTRON_MAJOR = 42
+SUPPORTED_VSCODE_RANGE_COPY = "1.134 through 1.137"
 # @vscode/vsce 2.24.0 validateEngineCompatibility accepts only *, ^x.y.z, or >=x.y.z.
 VSCE_ENGINES_VSCODE = f"^{SUPPORTED_VSCODE_VERSION}"
 
@@ -39,7 +45,7 @@ class VsCodeCliStatus:
 
 
 def vscode_version_is_supported(version: str) -> bool:
-    """True when `version` is Microsoft stable 1.134, 1.135, or 1.136."""
+    """True when `version` is Microsoft stable 1.134 through 1.137."""
     core = version.split("-", 1)[0].split("+", 1)[0]
     parts = core.split(".")
     if len(parts) < 2:
@@ -75,7 +81,7 @@ def inspect_vscode_cli(
     cli_name: str | None = None,
     run_fn=None,
 ) -> VsCodeCliStatus:
-    """Verify that a CLI is Microsoft stable VS Code 1.134, 1.135, or 1.136."""
+    """Verify that a CLI is Microsoft stable VS Code 1.134 through 1.137."""
     normalized_name = (cli_name or _cli_name(cli_path)).lower()
     if normalized_name != "code":
         return VsCodeCliStatus(
@@ -277,6 +283,7 @@ __all__ = [
     "EXTENSION_ID",
     "LEGACY_EXTENSION_ID",
     "ExtensionInstaller",
+    "SUPPORTED_ELECTRON_MAJOR",
     "SUPPORTED_ELECTRON_VERSION",
     "SUPPORTED_VSCODE_MAX_EXCLUSIVE",
     "SUPPORTED_VSCODE_RANGE_COPY",
