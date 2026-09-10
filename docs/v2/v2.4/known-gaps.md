@@ -2,11 +2,87 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-09-06
+**Last updated**: 2026-09-09
 
 Per-version tracker of unfinished work, deferrals, and follow-ups. The next plan ingests this file to decide what carries forward. Classifications: `NI` not-implemented, `DF` deferred, `BG` bug/known-issue, `MT` missing-tests/coverage, `WN` warning/suppressed, `QG` bypassed-gate/CI.
 
 Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [v2.4.1 field reliability](plans/v2.4.1-field-reliability-chat-archives-models-workspaces.md), [v2.4.1 generation recovery](plans/v2.4.1-generation-recovery-and-ui-corrections.md), [v2.4.2 field UI and generation](plans/v2.4.2-field-ui-history-and-generation.md), [v2.4.3 field density](plans/v2.4.3-field-density-identity-and-runtime.md), [v2.4.4 field chrome, restyle, SANA, density](plans/v2.4.4-field-chrome-restyle-sana-and-density.md), [v2.4.5 installer already-downloaded models](plans/v2.4.5-installer-already-downloaded-models.md), [v2.4.6 field delivery, density, and session identity](plans/v2.4.6-field-delivery-density-and-session-identity.md), [v2.4.7 installer wizard density and scope](plans/v2.4.7-installer-wizard-density-and-scope.md), [v2.4.8 desktop token split, persona, and model order](plans/v2.4.8-desktop-token-split-persona-and-model-order.md)
+
+## v2.4.9
+
+### Summary
+
+| Category | Open | Resolved |
+|---|---:|---:|
+| Not implemented (NI) | 0 | 0 |
+| Deferred (DF) | 2 | 1 |
+| Bugs / regressions (BG) | 0 | 6 |
+| Warnings (WN) | 2 | 0 |
+| Missing tests / coverage gaps (MT) | 2 | 0 |
+| Quality-gate gaps (QG) | 1 | 0 |
+
+Operator-driven UX cycle against nine screenshots and three live failures from the packaged v2.4.8 build, plus an installer round. Not a planned phase set: every item traces to something the operator saw. Two live failures shared one root cause (the studio forms offered settings the selected model could not honour), which is what `desktop/src/shared/studio/modelCapabilities.ts` now exists to prevent. Nothing here has been published; the branch is uncommitted-then-committed local work awaiting integration.
+
+### Resolved
+
+- **BG-5 (resolved)** - A 4096x4096 image request failed instantly with a raw Zod dump in the transcript. Resolution options were gated on the HOST VRAM TIER while `desktop/sidecar/src/protocol.ts:709` caps width and height at 2048, so 4K could never have succeeded on any machine. Capability is now a property of the model (`modelCapabilities.ts`), and the tier is a second filter rather than the only one. `desktop/tests/modelCapabilities.test.ts`.
+- **BG-6 (resolved)** - Wan 2.1 T2V 1.3B accepted 720p / 8 s and failed after ten minutes. Its catalog entry declares a 480p local path, `maxVideoFrames: 81` and `maxVideoSeconds: 5`. The model's own limits now bound resolution, fps and duration, and duration became a dropdown narrowed by frame budget rather than a free number field. `desktop/tests/modelCapabilities.test.ts`, `desktop/tests/VideoLabPage.test.tsx`.
+- **BG-7 (resolved)** - The generation progress bar changed width mid-run: it was sized `${widest}ch` from the longest caption under it. Replaced with a fixed track. A SECOND layer of the same defect survived the first fix and was caught only by a rendered screenshot (see WN-2 below).
+- **BG-8 (resolved)** - A cold image model showed a bare caption for ~37 s and then a bar with ~1 s left, because the bar rendered only once a byte fraction existed. It now renders immediately as an indeterminate particle sweep.
+- **BG-9 (resolved)** - A VIDEO timeout told the operator to "Check Ollama is running". Ollama serves chat, not diffusion. `generationError.ts` classifies per surface. `desktop/tests/generationError.test.ts`.
+- **BG-10 (resolved)** - The image lightbox's Fullscreen targeted a ref captured during render (frequently null) and its Download was an `<a download>` the Electron renderer ignores for a large data URL, so "most buttons are not working" was literally true. Replaced by `ImageViewer` with an object-URL save path.
+- **DF-6 (resolved)** - The v2.4.8 deferral "Video2X enhancement panel redesign" is superseded: the panel was replaced by three plain controls in `57b24967`, and this cycle moved the surrounding studio settings onto the composer row.
+
+### Open Items
+
+##### QG-1 - No end-to-end run against a real GPU job
+
+- **Source**: this cycle, all rounds
+- **Impact**: Every change is verified by typecheck, lint, build, unit tests and a rendered screenshot harness. NONE of it has been exercised against a live generation on the operator's hardware. Specifically, the capability caps have not been observed PREVENTING a real failure, only shown to produce the right option lists.
+- **Owner**: Operator
+- **Next step**: On Videos with Wan 2.1 selected, confirm the duration dropdown offers only 2-5 s and resolution only 480p, then generate one clip and check the bracketed time matches the wall clock. Then repeat one image generation and open the viewer.
+
+##### WN-1 - Sharpness preview and export do not match
+
+- **Source**: this cycle, image viewer
+- **Impact**: CSS has no sharpen primitive, so the live preview approximates sharpness with a small contrast lift while the EXPORT applies a real 3x3 unsharp mask (`sharpenPixels`). A saved file is therefore slightly crisper than what the viewer showed. Chosen deliberately over a preview that promised more than the export delivers.
+- **Owner**: Deferred
+- **Next step**: If it matters, move the preview to a canvas pipeline so both paths share one convolution.
+
+##### WN-2 - jsdom cannot see CSS math functions, so width regressions are untestable in unit tests
+
+- **Source**: this cycle, progress bar
+- **Impact**: jsdom's `cssstyle` silently drops `min()` / `clamp()` from inline styles, so a `width: min(22rem, 100%)` is invisible to a test assertion. This is why the SECOND width regression (a `fit-content` parent leaking caption length back into the bar) passed the whole unit suite and was caught only by rendering the component and looking at it. Mitigated in the touched files by using `width` + `max-width` pairs instead of `min()`, but the blind spot remains repo-wide.
+- **Owner**: Deferred
+- **Next step**: Either forbid CSS math functions in inline styles that tests assert on, or add a real-browser visual check to CI.
+
+##### MT-8 - Capability map is not asserted against the catalog
+
+- **Source**: this cycle, `modelCapabilities.ts`
+- **Impact**: The per-model entries were authored from `core/registry/catalog.json` (`visualTokenBudget`, the model descriptions) and the sidecar schema, but nothing fails when a catalog model gains no entry or when the catalog's declared limits change. An unmapped model falls back to a conservative default, which is safe but silent.
+- **Owner**: Deferred
+- **Next step**: A test that walks every `type: image|video` catalog entry and asserts an exact capability entry exists, plus that `maxFrames` matches the catalog's `visualTokenBudget`.
+
+##### MT-9 - Sidecar dimension cap is mirrored, not imported
+
+- **Source**: this cycle, `modelCapabilities.ts`
+- **Impact**: `SIDECAR_MAX_IMAGE_DIMENSION = 2048` duplicates the Zod cap in `desktop/sidecar/src/protocol.ts`. If the sidecar raises its cap, the UI keeps the old ceiling until someone notices. The duplication is deliberate (the renderer does not import sidecar internals) but unguarded.
+- **Owner**: Deferred
+- **Next step**: A test that parses the cap out of `protocol.ts` and asserts the two agree.
+
+##### DF-7 - Video advanced panel image-to-video gating not wired
+
+- **Source**: this cycle, video capability gating
+- **Impact**: `VideoModelCapabilities.supportsImageToVideo` is declared and tested but the mode selector does not consume it, so a text-to-video-only model still offers "Image -> Video" behind the gear.
+- **Owner**: Deferred
+- **Next step**: Gate the mode `<option>` list on `caps.supportsImageToVideo` and carry the note as the disabled reason.
+
+##### DF-8 - Image negative-prompt and LoRA/ControlNet gating not wired
+
+- **Source**: this cycle, image capability gating
+- **Impact**: `supportsNegativePrompt`, `supportsLoras` and `supportsControlNet` are declared per model and tested, but only CFG, samplers, resolution and fast-preview are consumed by the form. A distilled model still shows an editable negative prompt that it ignores.
+- **Owner**: Deferred
+- **Next step**: Same pattern as CFG: disable the control and surface `capabilityNote` as the reason.
 
 ## v2.4.8
 
