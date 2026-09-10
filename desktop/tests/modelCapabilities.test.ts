@@ -4,11 +4,14 @@
  * caused it, so neither can come back.
  */
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   allowedDurations,
   capabilitiesFor,
   clampToRange,
+  hasExplicitCapabilities,
   imageCapabilitiesFor,
   reconcileImageValues,
   reconcileVideoValues,
@@ -194,5 +197,109 @@ describe("generation duration formatting", () => {
     return import("../src/shared/chat/MessageBubble").then(({ formatHhMmSs }) => {
       expect(formatHhMmSs(59.9)).toBe("00:00:59");
     });
+  });
+});
+
+/**
+ * MT-8 / MT-9 -- the capability map was authored FROM the catalog and the
+ * sidecar schema but asserted against neither, so either could drift away
+ * from it silently. These bind the three files together.
+ */
+describe("capability map agrees with its sources", () => {
+  const catalog = JSON.parse(
+    // vitest's root is `desktop/`, so the catalog is one level up. A file URL
+    // built from `import.meta.url` is not resolvable under the transform.
+    readFileSync(resolve(process.cwd(), "../core/registry/catalog.json"), "utf-8"),
+  ) as { models: Array<{ id: string; type?: string; visualTokenBudget?: Record<string, number> }> };
+
+  const mediaModels = catalog.models.filter(
+    (m) => m.type === "image" || m.type === "video",
+  );
+
+  it("has an explicit entry for every image and video model in the catalog", () => {
+    // A model with no entry silently gets the conservative fallback, which is
+    // safe but hides the fact that nobody described it.
+    expect(mediaModels.length).toBeGreaterThan(0);
+    const unmapped = mediaModels
+      .filter((m) => m.id !== "sam2:hiera-tiny") // a segmenter, not a generator
+      .filter((m) => !hasExplicitCapabilities(m.id, m.type as "image" | "video"));
+    expect(unmapped.map((m) => m.id)).toEqual([]);
+  });
+
+  /**
+   * Catalog entries whose `visualTokenBudget` is INTERNALLY INCONSISTENT and
+   * therefore cannot be enforced.
+   *
+   * Both declare `maxVideoFrames: 8` with `maxVideoSeconds: 8`, i.e. one frame
+   * per second, which is not a video. The two Wan entries are coherent by
+   * contrast (121 frames / 5 s is 24 fps; 81 / 5 is 16 fps), so the field is
+   * meaningful where it was filled in properly and a placeholder here. The
+   * capability map keeps conservative hand-set values for these two.
+   *
+   * This is an allowlist, not a skip: if the catalog is corrected, the guard
+   * below fails and tells us to delete the entry rather than letting a real
+   * budget go unenforced.
+   */
+  const INCOHERENT_FRAME_BUDGETS = new Set([
+    "longcat-video-avatar-1.5",
+    "sana-video-2b-720p",
+  ]);
+
+  function budgetIsCoherent(frames: number, seconds: number): boolean {
+    // A real clip runs at 8 fps or better.
+    return frames / Math.max(1, seconds) >= 8;
+  }
+
+  it("flags a catalog frame budget that is not internally coherent", () => {
+    const incoherent = mediaModels
+      .filter((m) => m.type === "video")
+      .filter((m) => {
+        const frames = m.visualTokenBudget?.["maxVideoFrames"];
+        const seconds = m.visualTokenBudget?.["maxVideoSeconds"];
+        if (typeof frames !== "number" || typeof seconds !== "number") return false;
+        return !budgetIsCoherent(frames, seconds);
+      })
+      .map((m) => m.id);
+    // Fails when the catalog is fixed (delete the id) or when a NEW model
+    // arrives with the same placeholder (investigate, then add it knowingly).
+    expect(new Set(incoherent)).toEqual(INCOHERENT_FRAME_BUDGETS);
+  });
+
+  it("never advertises more frames than a coherent catalog budget", () => {
+    for (const model of mediaModels) {
+      if (model.type !== "video") continue;
+      if (INCOHERENT_FRAME_BUDGETS.has(model.id)) continue;
+      const budget = model.visualTokenBudget?.["maxVideoFrames"];
+      if (typeof budget !== "number") continue;
+      const caps = videoCapabilitiesFor(model.id);
+      expect(caps.maxFrames, `${model.id} maxFrames`).toBeLessThanOrEqual(budget);
+    }
+  });
+
+  it("never advertises a longer clip than the catalog's own budget", () => {
+    for (const model of mediaModels) {
+      if (model.type !== "video") continue;
+      const budget = model.visualTokenBudget?.["maxVideoSeconds"];
+      if (typeof budget !== "number") continue;
+      const caps = videoCapabilitiesFor(model.id);
+      expect(
+        Math.max(...caps.durationsSeconds),
+        `${model.id} durations`,
+      ).toBeLessThanOrEqual(budget);
+    }
+  });
+
+  it("mirrors the sidecar's real dimension cap, read from protocol.ts", () => {
+    // MT-9: the constant duplicates a Zod cap the renderer cannot import. If
+    // the sidecar raises its cap, this fails instead of leaving the UI behind.
+    const protocol = readFileSync(
+      resolve(process.cwd(), "sidecar/src/protocol.ts"),
+      "utf-8",
+    );
+    const widths = [...protocol.matchAll(/width:\s*z\.number\(\)\.int\(\)\.min\(\d+\)\.max\((\d+)\)/g)];
+    expect(widths.length, "no width cap found in protocol.ts").toBeGreaterThan(0);
+    for (const match of widths) {
+      expect(Number(match[1])).toBe(SIDECAR_MAX_IMAGE_DIMENSION);
+    }
   });
 });

@@ -441,18 +441,37 @@ export function ImagePromptForm({
               onChange={(v) => update("prompt", v)}
             />
           </StudioSettingsField>
-          <StudioSettingsField full label="Negative prompt">
+          <StudioSettingsField
+            full
+            label="Negative prompt"
+            {...(caps.supportsNegativePrompt
+              ? {}
+              : {
+                  hint: (
+                    <span style={{ fontSize: "var(--text-xs)", color: "var(--fg-muted)" }}>
+                      {capabilityNote(caps, "supportsNegativePrompt") ??
+                        "This model ignores the negative prompt."}
+                    </span>
+                  ),
+                })}
+          >
             <TextField
               multiline
               testId="image-negative-prompt"
               rows={2}
               value={values.negativePrompt}
-              disabled={disabled}
+              disabled={disabled || !caps.supportsNegativePrompt}
               onChange={(v) => update("negativePrompt", v)}
             />
           </StudioSettingsField>
         </StudioSettingsSection>
 
+        {/*
+          DF-8: a model that supports neither LoRAs nor ControlNet gets no
+          conditioning section at all. Rendering an inert one invites the user
+          to configure something the runtime will discard.
+        */}
+        {caps.supportsLoras || caps.supportsControlNet ? (
         <StudioSettingsSection title="LoRAs and ControlNet" testId="image-section-conditioning">
           <StudioSettingsField full label="LoRAs">
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
@@ -544,6 +563,7 @@ export function ImagePromptForm({
             </StudioSettingsField>
           ) : null}
         </StudioSettingsSection>
+        ) : null}
 
         <StudioSettingsSection title="VRAM budget" testId="image-memory-budget">
           <StudioSettingsField label="Max cache VRAM (GB)">

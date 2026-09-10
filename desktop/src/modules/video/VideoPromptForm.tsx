@@ -276,8 +276,25 @@ export function VideoPromptForm({
               ))}
             </Select>
           </StudioSettingsField>
+          {/*
+            DF-7: a text-to-video checkpoint must not offer image-to-video.
+            Wan 2.1 T2V is exactly that, and the option was selectable behind
+            the gear even though the runtime cannot honour it.
+          */}
           {hideMode ? null : (
-            <StudioSettingsField label="Mode">
+            <StudioSettingsField
+              label="Mode"
+              {...(caps.supportsImageToVideo
+                ? {}
+                : {
+                    hint: (
+                      <span style={{ fontSize: "var(--text-xs)", color: "var(--fg-muted)" }}>
+                        {capabilityNote(caps, "supportsImageToVideo") ??
+                          "This model is text-to-video only."}
+                      </span>
+                    ),
+                  })}
+            >
               <Select
                 data-testid="video-mode"
                 value={values.mode}
@@ -285,8 +302,10 @@ export function VideoPromptForm({
                 onChange={(e) => updateMode(e.target.value as VideoMode)}
               >
                 <option value="text2video">Text -&gt; Video</option>
-                <option value="image2video">Image -&gt; Video</option>
-                {avatarAvailable ? (
+                {caps.supportsImageToVideo ? (
+                  <option value="image2video">Image -&gt; Video</option>
+                ) : null}
+                {avatarAvailable && caps.supportsImageToVideo ? (
                   <option value="audio2video">Photo + audio -&gt; Avatar</option>
                 ) : null}
               </Select>

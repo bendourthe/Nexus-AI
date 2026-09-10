@@ -58,7 +58,9 @@ describe("ImagePromptForm", () => {
   // were off-screen with no way to scroll to them. They are sections of one
   // capped, scrolling panel now.
   it("reaches every option without a nested Advanced collapse", () => {
-    renderForm();
+    // DF-8: conditioning is model-gated, so this walks an SDXL fine-tune,
+    // which supports LoRAs and ControlNet. The SANA case is covered below.
+    renderForm(vi.fn(), { modelId: "realvisxl-v5" });
     expect(screen.queryByTestId("image-advanced")).toBeNull();
     for (const testId of [
       "image-resolution",
@@ -84,7 +86,7 @@ describe("ImagePromptForm", () => {
   });
 
   it("adds and removes LoRA rows", () => {
-    renderForm();
+    renderForm(vi.fn(), { modelId: "realvisxl-v5" });
     fireEvent.click(screen.getByTestId("image-add-lora"));
     expect(screen.getByTestId("image-lora-0")).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("image-lora-remove-0"));
@@ -92,7 +94,7 @@ describe("ImagePromptForm", () => {
   });
 
   it("toggles ControlNet fields", () => {
-    renderForm();
+    renderForm(vi.fn(), { modelId: "realvisxl-v5" });
     fireEvent.click(screen.getByTestId("image-controlnet-toggle"));
     expect(screen.getByTestId("image-controlnet-fields")).toBeInTheDocument();
     const selectModel = within(screen.getByTestId("image-controlnet-fields")).getByTestId(
@@ -101,6 +103,22 @@ describe("ImagePromptForm", () => {
     expect(selectModel).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("image-controlnet-toggle"));
     expect(screen.queryByTestId("image-controlnet-fields")).not.toBeInTheDocument();
+  });
+
+  it("hides conditioning entirely on a model that supports neither (DF-8)", () => {
+    // SANA 1.6B takes no LoRAs and no ControlNet. Rendering an inert section
+    // invites the user to configure something the runtime discards.
+    renderForm(vi.fn(), { modelId: "sana-1.6b-1024" });
+    expect(screen.queryByTestId("image-section-conditioning")).toBeNull();
+    expect(screen.queryByTestId("image-add-lora")).toBeNull();
+    expect(screen.queryByTestId("image-controlnet-toggle")).toBeNull();
+  });
+
+  it("disables the negative prompt on a distilled model (DF-8)", () => {
+    renderForm(vi.fn(), { modelId: "sana-sprint-1024" });
+    expect(screen.getByTestId("image-negative-prompt")).toBeDisabled();
+    renderForm(vi.fn(), { modelId: "realvisxl-v5" });
+    expect(screen.getAllByTestId("image-negative-prompt")[1]).not.toBeDisabled();
   });
 
   it("valuesToBaseRequest forwards numeric + array fields", () => {

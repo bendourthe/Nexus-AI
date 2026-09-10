@@ -72,21 +72,49 @@ export type EditMark =
     };
 
 /**
- * The CSS filter for a set of adjustments.
+ * The CSS filter for the three adjustments CSS can express exactly.
  *
- * Sharpness has no CSS primitive. `drop-shadow` is not sharpening, so rather
- * than fake it the preview approximates with a small contrast lift and the
- * EXPORT applies a real convolution (see `sharpenPixels`). The preview is
- * therefore slightly softer than the exported file, which is the honest
- * trade: a wrong preview that promised more would be worse.
+ * WN-1 (fixed): this used to fold sharpness in as a contrast lift, so the
+ * preview only approximated it. Worse, the EXPORT applied that same lift AND
+ * the real convolution, double-counting sharpness in the saved file. Sharpness
+ * is now absent here and handled once, by `sharpenPixels`, on both paths --
+ * see `renderAdjusted`, which the preview and the export share.
  */
 export function adjustmentFilter(a: ImageAdjustments): string {
-  const contrast = a.contrast + a.sharpness * 0.15;
   return [
     `brightness(${a.brightness}%)`,
-    `contrast(${contrast}%)`,
+    `contrast(${a.contrast}%)`,
     `saturate(${a.saturation}%)`,
   ].join(" ");
+}
+
+/**
+ * Paint `image` onto `ctx` with adjustments applied, sharpening last.
+ *
+ * ONE function for the live preview and the exported file, which is the whole
+ * point: the operator sees what they save. Order matters (filter, then
+ * convolve), so sharing the code is the only way to keep the two identical.
+ */
+export function renderAdjusted(
+  ctx: CanvasRenderingContext2D,
+  image: CanvasImageSource,
+  width: number,
+  height: number,
+  adjustments: ImageAdjustments,
+): void {
+  ctx.clearRect(0, 0, width, height);
+  ctx.filter = adjustmentFilter(adjustments);
+  ctx.drawImage(image, 0, 0, width, height);
+  ctx.filter = "none";
+  if (adjustments.sharpness <= 0) return;
+  try {
+    const raw = ctx.getImageData(0, 0, width, height);
+    raw.data.set(sharpenPixels(raw.data, width, height, adjustments.sharpness));
+    ctx.putImageData(raw, 0, 0);
+  } catch {
+    // A tainted canvas cannot be read back. The un-sharpened result is still
+    // correct in every other respect, and the export path behaves the same.
+  }
 }
 
 export function adjustmentsAreNeutral(a: ImageAdjustments): boolean {
@@ -277,30 +305,9 @@ export function ImageViewer({
     canvas.height = natural.h;
     const ctx = canvas.getContext("2d");
     if (!ctx) return null;
-    // Adjustments first, so marks are painted at full strength on top.
-    ctx.filter = adjustmentFilter(adjustments);
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    ctx.filter = "none";
-    if (adjustments.sharpness > 0) {
-      try {
-        const raw = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        // Write the sharpened bytes back into the ImageData we already own,
-        // rather than constructing a new one: `new ImageData(buffer, ...)`
-        // needs a plain ArrayBuffer, and a typed array returned from a helper
-        // is not guaranteed to have one under `lib.dom` in TS 5.7+.
-        const sharpened = sharpenPixels(
-          raw.data,
-          canvas.width,
-          canvas.height,
-          adjustments.sharpness,
-        );
-        raw.data.set(sharpened);
-        ctx.putImageData(raw, 0, 0);
-      } catch {
-        // A tainted canvas cannot be read back; the un-sharpened export is
-        // still correct in every other respect.
-      }
-    }
+    // The same call the live preview makes, so the file matches the screen.
+    // Marks go on afterwards, at full strength, unadjusted.
+    renderAdjusted(ctx, image, canvas.width, canvas.height, adjustments);
     paintMarks(ctx, marks);
     return await new Promise<Blob | null>((resolve) => {
       canvas.toBlob((blob) => resolve(blob), "image/png");
@@ -327,6 +334,33 @@ export function ImageViewer({
   );
 
   const filter = useMemo(() => adjustmentFilter(adjustments), [adjustments]);
+
+  /**
+   * WN-1 -- exact sharpness preview.
+   *
+   * CSS has no sharpen primitive, so while sharpness is on we render the same
+   * `renderAdjusted` the export uses into a canvas and show that instead of
+   * the <img>. At sharpness 0 the <img> plus a CSS filter is pixel-identical
+   * to the export and far cheaper, so brightness and saturation stay instant;
+   * only sharpening pays for a full-resolution pass, debounced so a slider
+   * drag does not queue one render per pixel of travel.
+   */
+  const sharpening = adjustments.sharpness > 0;
+  const previewRef = useRef<HTMLCanvasElement | null>(null);
+  useEffect(() => {
+    if (!sharpening || !natural) return;
+    const handle = window.setTimeout(() => {
+      const canvas = previewRef.current;
+      const image = imgRef.current;
+      if (!canvas || !image) return;
+      canvas.width = natural.w;
+      canvas.height = natural.h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      renderAdjusted(ctx, image, canvas.width, canvas.height, adjustments);
+    }, 90);
+    return () => window.clearTimeout(handle);
+  }, [adjustments, natural, sharpening]);
 
   return (
     <div
@@ -522,13 +556,25 @@ export function ImageViewer({
               setNatural({ w: node.naturalWidth, h: node.naturalHeight });
             }}
             style={{
-              display: "block",
+              display: sharpening ? "none" : "block",
               maxWidth: "100%",
               maxHeight: "calc(100vh - 9rem)",
               objectFit: "contain",
               filter,
             }}
           />
+          {sharpening ? (
+            <canvas
+              ref={previewRef}
+              data-testid={`${testId}-preview`}
+              style={{
+                display: "block",
+                maxWidth: "100%",
+                maxHeight: "calc(100vh - 9rem)",
+                objectFit: "contain",
+              }}
+            />
+          ) : null}
           <canvas
             ref={overlayRef}
             data-testid={`${testId}-overlay`}

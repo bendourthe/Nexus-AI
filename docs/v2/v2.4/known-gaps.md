@@ -15,10 +15,10 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 | Category | Open | Resolved |
 |---|---:|---:|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 2 | 1 |
-| Bugs / regressions (BG) | 0 | 6 |
-| Warnings (WN) | 2 | 0 |
-| Missing tests / coverage gaps (MT) | 2 | 0 |
+| Deferred (DF) | 0 | 3 |
+| Bugs / regressions (BG) | 2 | 9 |
+| Warnings (WN) | 1 | 1 |
+| Missing tests / coverage gaps (MT) | 1 | 2 |
 | Quality-gate gaps (QG) | 1 | 0 |
 
 Operator-driven UX cycle against nine screenshots and three live failures from the packaged v2.4.8 build, plus an installer round. Not a planned phase set: every item traces to something the operator saw. Two live failures shared one root cause (the studio forms offered settings the selected model could not honour), which is what `desktop/src/shared/studio/modelCapabilities.ts` now exists to prevent. Nothing here has been published; the branch is uncommitted-then-committed local work awaiting integration.
@@ -33,6 +33,15 @@ Operator-driven UX cycle against nine screenshots and three live failures from t
 - **BG-10 (resolved)** - The image lightbox's Fullscreen targeted a ref captured during render (frequently null) and its Download was an `<a download>` the Electron renderer ignores for a large data URL, so "most buttons are not working" was literally true. Replaced by `ImageViewer` with an object-URL save path.
 - **DF-6 (resolved)** - The v2.4.8 deferral "Video2X enhancement panel redesign" is superseded: the panel was replaced by three plain controls in `57b24967`, and this cycle moved the surrounding studio settings onto the composer row.
 
+- **BG-11 (resolved)** - The Hub catalog snapshot was refused on EVERY installer build: `catalog tag 4.9.0 is not latest (v4.9.0)`, naming the same release twice. The synced catalog writes a bare semver into `nexus-hub-version.json` while GitHub's `/releases/latest` returns a `v`-prefixed `tag_name`, and the check was a raw `!=`. Every shipped installer therefore carried NO embedded snapshot and silently fell back to an install-time sync, which is exactly the offline-install hole the snapshot exists to close. `normalize_tag` now compares releases. The pre-existing suite could not catch it: its fixture wrote `"v9.9.9"`, a prefixed form the real producer never emits. `scripts/installer/tests/test_build_hub_snapshot.py`.
+- **BG-12 (resolved)** - Placeholder HF weight pins: 12 of 107 weight files shipped with a `0000...` sha256 and therefore skipped hash verification. 9 are now pinned - 4 from the LFS `oid` the tree API exposes, and 5 small non-LFS files (a config, an index, two `modeling_*.py`) via a new resolve-and-hash fallback, because those files are parsed or EXECUTED at load time and leaving them unverified was not cosmetic. `pin-hf-weights.py` gained `digest_by_download` with an 8 MB cap.
+- **BG-13 (resolved)** - Sharpness was double-counted in every exported image. `adjustmentFilter` folded it in as a contrast lift AND the export applied the real convolution on top. Sharpness now lives in exactly one place, and `renderAdjusted` is shared by the preview and the export.
+- **WN-1 (resolved)** - Sharpness preview no longer approximates. While sharpening, the viewer renders the export's own `renderAdjusted` into a canvas (debounced 90 ms) instead of faking it with contrast; at sharpness 0 the `<img>` plus a CSS filter is pixel-identical to the export and stays instant.
+- **MT-8 (resolved)** - The capability map is now asserted against the catalog: every image/video model must have an explicit entry, and no model may advertise more frames or a longer clip than its `visualTokenBudget`. It caught a real error on its first run (LongCat declared at 121 frames against a catalog budget of 8) and surfaced a catalog data defect, recorded as BG-14 below.
+- **MT-9 (resolved)** - `SIDECAR_MAX_IMAGE_DIMENSION` is now checked against the Zod cap parsed out of `desktop/sidecar/src/protocol.ts`, so raising the sidecar cap fails the test instead of leaving the UI behind.
+- **DF-7 (resolved)** - The video mode selector is gated on `supportsImageToVideo`: a text-to-video checkpoint no longer offers Image -> Video behind the gear.
+- **DF-8 (resolved)** - The image negative prompt is disabled with its reason on a model that ignores it, and the LoRAs / ControlNet section is not rendered at all for a model supporting neither.
+
 ### Open Items
 
 ##### QG-1 - No end-to-end run against a real GPU job
@@ -42,47 +51,12 @@ Operator-driven UX cycle against nine screenshots and three live failures from t
 - **Owner**: Operator
 - **Next step**: On Videos with Wan 2.1 selected, confirm the duration dropdown offers only 2-5 s and resolution only 480p, then generate one clip and check the bracketed time matches the wall clock. Then repeat one image generation and open the viewer.
 
-##### WN-1 - Sharpness preview and export do not match
-
-- **Source**: this cycle, image viewer
-- **Impact**: CSS has no sharpen primitive, so the live preview approximates sharpness with a small contrast lift while the EXPORT applies a real 3x3 unsharp mask (`sharpenPixels`). A saved file is therefore slightly crisper than what the viewer showed. Chosen deliberately over a preview that promised more than the export delivers.
-- **Owner**: Deferred
-- **Next step**: If it matters, move the preview to a canvas pipeline so both paths share one convolution.
-
 ##### WN-2 - jsdom cannot see CSS math functions, so width regressions are untestable in unit tests
 
 - **Source**: this cycle, progress bar
 - **Impact**: jsdom's `cssstyle` silently drops `min()` / `clamp()` from inline styles, so a `width: min(22rem, 100%)` is invisible to a test assertion. This is why the SECOND width regression (a `fit-content` parent leaking caption length back into the bar) passed the whole unit suite and was caught only by rendering the component and looking at it. Mitigated in the touched files by using `width` + `max-width` pairs instead of `min()`, but the blind spot remains repo-wide.
-- **Owner**: Deferred
-- **Next step**: Either forbid CSS math functions in inline styles that tests assert on, or add a real-browser visual check to CI.
-
-##### MT-8 - Capability map is not asserted against the catalog
-
-- **Source**: this cycle, `modelCapabilities.ts`
-- **Impact**: The per-model entries were authored from `core/registry/catalog.json` (`visualTokenBudget`, the model descriptions) and the sidecar schema, but nothing fails when a catalog model gains no entry or when the catalog's declared limits change. An unmapped model falls back to a conservative default, which is safe but silent.
-- **Owner**: Deferred
-- **Next step**: A test that walks every `type: image|video` catalog entry and asserts an exact capability entry exists, plus that `maxFrames` matches the catalog's `visualTokenBudget`.
-
-##### MT-9 - Sidecar dimension cap is mirrored, not imported
-
-- **Source**: this cycle, `modelCapabilities.ts`
-- **Impact**: `SIDECAR_MAX_IMAGE_DIMENSION = 2048` duplicates the Zod cap in `desktop/sidecar/src/protocol.ts`. If the sidecar raises its cap, the UI keeps the old ceiling until someone notices. The duplication is deliberate (the renderer does not import sidecar internals) but unguarded.
-- **Owner**: Deferred
-- **Next step**: A test that parses the cap out of `protocol.ts` and asserts the two agree.
-
-##### DF-7 - Video advanced panel image-to-video gating not wired
-
-- **Source**: this cycle, video capability gating
-- **Impact**: `VideoModelCapabilities.supportsImageToVideo` is declared and tested but the mode selector does not consume it, so a text-to-video-only model still offers "Image -> Video" behind the gear.
-- **Owner**: Deferred
-- **Next step**: Gate the mode `<option>` list on `caps.supportsImageToVideo` and carry the note as the disabled reason.
-
-##### DF-8 - Image negative-prompt and LoRA/ControlNet gating not wired
-
-- **Source**: this cycle, image capability gating
-- **Impact**: `supportsNegativePrompt`, `supportsLoras` and `supportsControlNet` are declared per model and tested, but only CFG, samplers, resolution and fast-preview are consumed by the form. A distilled model still shows an editable negative prompt that it ignores.
-- **Owner**: Deferred
-- **Next step**: Same pattern as CFG: disable the control and surface `capabilityNote` as the reason.
+- **Owner**: Mitigated, not closed
+- **Next step**: `desktop/tests/inlineStyleMathGuard.test.ts` now fails if `width` or `minWidth` uses `min()` / `max()` / `clamp()` in the three files whose geometry is asserted, and it self-retires (a test fails) if jsdom ever learns to parse them. `max-width` caps are deliberately exempt: a cap can only shrink an element, so it cannot produce the containing-block bug, and banning it would force less correct fixed values purely to satisfy the harness. The real fix is a browser-based visual check in CI, which this repo does not have.
 
 ## v2.4.8
 
@@ -107,6 +81,27 @@ Phases 1-5 implemented against five operator screenshots of the v2.4.7 desktop. 
 - **BG-4 (resolved)** - Video generation failed with `module 'torch.nn' has no attribute 'RMSNorm'`: both media lock files pinned torch 2.3.0 while diffusers 0.36's SANA-Video needs 2.4+, and no readiness layer checked the version. Phase 8 pins 2.5.1 cu121 with verified wheels and adds a 2.4 floor to the installer smoke, the sidecar status, and the runtime readiness. `scripts/installer/tests/test_media_runtime_contract.py`, `desktop/tests/diffusion-runtime-factory.test.ts`, `tests/python/diffusion/test_real_execute.py`.
 
 ### Open Items
+
+##### MT-10 - `video2x-adapter.test.ts` is flaky under full-suite load
+
+- **Source**: this cycle, observed while re-establishing the test baseline
+- **Impact**: One case in `desktop/tests/video2x-adapter.test.ts` fails intermittently in a FULL `vitest run` (2 of 3 runs) and passes every time the file runs alone. It imports nothing changed this cycle (`node:crypto`, `fs`, `path`, `SettingsStore`, a temp-dir helper), was last touched in v2.3.0, and uses real filesystem temp directories with timing-sensitive waits - consistent with temp-dir or scheduling contention on Windows under parallel load. It is therefore a pre-existing test-quality defect, not a regression, but it means the "36-failure baseline" for this host is really "36 plus an intermittent 37th".
+- **Owner**: Open
+- **Next step**: Identify the specific case (the JSON reporter shows the file but the run that captured names passed), then either isolate its temp dir per test or mark the file `sequential`.
+
+##### BG-14 - Two catalog video entries declare an incoherent frame budget
+
+- **Source**: this cycle, MT-8's new catalog assertion
+- **Impact**: `longcat-video-avatar-1.5` and `sana-video-2b-720p` both declare `maxVideoFrames: 8` with `maxVideoSeconds: 8` - one frame per second, which is not a video. The two Wan entries are coherent by contrast (121/5 is 24 fps, 81/5 is 16 fps), so the field is meaningful where it was filled in properly and a placeholder here. The capability map keeps conservative hand-set values for the two, and the test carries a named allowlist so a correction (or a new model with the same placeholder) fails loudly rather than passing.
+- **Owner**: Open
+- **Next step**: Establish the real frame limits for both checkpoints, correct `core/registry/catalog.json`, then delete the allowlist entry in `modelCapabilities.test.ts`.
+
+##### BG-15 - Three SANA ControlNet repos are gated, so they can be neither pinned nor downloaded
+
+- **Source**: this cycle, BG-12's pin sweep
+- **Impact**: `Efficient-Large-Model/SANA-ControlNet-{Canny,Depth,Pose}` return HTTP 401 on the model-info endpoint itself, not 404, so the repos exist but require Hugging Face credentials. Their three weight files are the last unpinned entries (3 of 107). The wider consequence is not the pin: if a user ever enables one of these ControlNets, the DOWNLOAD will 401 too. They are `type: controlnet` with no `task`, so they do not appear in the model picker and no user has hit this yet.
+- **Owner**: Open
+- **Next step**: Decide whether these belong in the catalog at all. Pinning them would require shipping or prompting for an HF token, which breaches the local-first, zero-credential posture; the honest alternatives are to drop the three entries or to mark them as requiring user-supplied credentials.
 
 ##### MT-1 - Packaged token label is not observed
 

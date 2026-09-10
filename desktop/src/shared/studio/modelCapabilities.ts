@@ -325,6 +325,23 @@ const FALLBACK_VIDEO: VideoModelCapabilities = {
   supportsImageToVideo: false,
 };
 
+/**
+ * True when `modelId` has an EXPLICIT entry, not a family or floor fallback.
+ *
+ * The fallbacks are deliberately safe, which is also what makes them easy to
+ * ship by accident: a catalog model nobody described still produces a working
+ * form. `modelCapabilities.test.ts` uses this to fail when a new image or
+ * video model arrives with no entry, so the silence is caught at build time
+ * rather than by a user meeting an unexpectedly narrow option list.
+ */
+export function hasExplicitCapabilities(
+  modelId: string,
+  kind: "image" | "video",
+): boolean {
+  const exact = BY_MODEL_ID[modelId];
+  return Boolean(exact && exact.kind === kind);
+}
+
 /** Capabilities for `modelId`, by exact id, then family, then a safe floor. */
 export function capabilitiesFor(
   modelId: string | undefined,
