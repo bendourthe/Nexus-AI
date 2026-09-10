@@ -54,7 +54,13 @@ describe("chatTurns", () => {
     const message: ChatMessage = { id: "a1", role: "assistant", content: "Hi" };
     completeTurn({ chatId: "A", assistantId: "a1", message });
     expect(inFlightTurn("A")).toBeNull();
-    expect(listener).toHaveBeenCalledWith({ chatId: "A", assistantId: "a1", message });
+    // v2.4.9: the reply now carries the turn's measured wall-clock cost, which
+    // `completeTurn` stamps because it is the only place that knows both ends.
+    expect(listener).toHaveBeenCalledWith({
+      chatId: "A",
+      assistantId: "a1",
+      message: { ...message, generationSeconds: expect.any(Number) },
+    });
   });
 
   it("a stale completion does not clear a newer in-flight turn", () => {

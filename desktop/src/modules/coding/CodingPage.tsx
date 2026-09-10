@@ -68,6 +68,8 @@ import {
 } from "../chat/documentClient";
 import type { AgentActivity } from "../../components/agentState/mapping";
 import { useModelResidency } from "../../shared/models/useModelResidency";
+import { useModelLoadWatch } from "../../shared/models/modelLoadWatch";
+import { estimateModelLoadSeconds } from "../../shared/chat/generationProgress";
 import { ModelSwitchDialog } from "../../shared/models/ModelSwitchDialog";
 import {
   busyContextFromScheduler,
@@ -123,11 +125,25 @@ interface Turn {
   userMessageUsage?: MessageTokenUsageV1;
   assistantMessageUsage?: MessageTokenUsageV1;
   createdAt?: string;
+  /**
+   * v2.4.9: measured wall-clock cost of the agent turn, rendered as the
+   * bracketed HH:MM:SS after the timestamp -- the same treatment Chat, Images
+   * and Videos use, so "all modes" means all modes.
+   */
+  generationSeconds?: number;
 }
 
+/**
+ * v2.4.8 follow-up (2026-09-08): Agents gets the same two-phase pending state
+ * as Chat. While the model is not yet resident, the pending row carries the
+ * loading stage so the bubble shows the centered "Loading model" panel with a
+ * bar and a load estimate; once it is resident the row falls back to the
+ * rotating-caption pill that means the agent is working.
+ */
 function turnsToMessages(
   turns: readonly Turn[],
   busy: boolean,
+  modelLoad?: { readonly progress: ChatMessage["progress"]; readonly estimateSeconds: number },
 ): readonly ChatMessage[] {
   const messages: ChatMessage[] = [];
   for (const turn of turns) {
@@ -158,10 +174,19 @@ function turnsToMessages(
         })),
         pending: turn.pending,
         activity: turn.activity,
+        ...(turn.pending && modelLoad?.progress
+          ? {
+              progress: modelLoad.progress,
+              loadEstimateSeconds: modelLoad.estimateSeconds,
+            }
+          : {}),
         reasoningTokens: turn.reasoningTokens ?? null,
         reasoningText: turn.reasoningText ?? null,
         outputTokens: turn.outputTokens ?? null,
         tokensEstimated: turn.tokensEstimated,
+        ...(turn.generationSeconds !== undefined
+          ? { generationSeconds: turn.generationSeconds }
+          : {}),
         requestUsage: turn.requestUsage,
         messageUsage: turn.assistantMessageUsage,
       });
@@ -174,6 +199,12 @@ function turnsToMessages(
       content: "",
       pending: true,
       activity: "coding-tool-use",
+      ...(modelLoad?.progress
+        ? {
+            progress: modelLoad.progress,
+            loadEstimateSeconds: modelLoad.estimateSeconds,
+          }
+        : {}),
     });
   }
   return messages;
@@ -548,6 +579,9 @@ export function CodingPage({
       }
       setBusy(true);
       const createdNew = !sessionId;
+      // v2.4.9: measured, not estimated. `coding.session.sendMessage` is a
+      // single awaited round trip, so the wall clock around it IS the turn.
+      const turnStartedAtMs = Date.now();
       try {
         const id = await ensureSession();
         if (!id) return;
@@ -615,6 +649,7 @@ export function CodingPage({
               rendered.text,
               reasoningText,
             ),
+            generationSeconds: Math.max(0, (Date.now() - turnStartedAtMs) / 1000),
           },
         ]);
         if (createdNew) {
@@ -889,14 +924,39 @@ export function CodingPage({
     [],
   );
 
-  const transcriptMessages = useMemo(
-    () => turnsToMessages(turns, busy),
-    [turns, busy],
-  );
   const pickerModel = useMemo(
     () => listedModels.find((candidate) => candidate.id === modelId),
     [listedModels, modelId],
   );
+  // Ollama loads a model on its first request and reports no progress, so the
+  // watch infers it from residency plus the VRAM claimed since it began.
+  const modelLoadState = useModelLoadWatch({
+    active: busy,
+    modelId: modelId || null,
+    modelVramGB: pickerModel?.vramGB ?? null,
+  });
+  const codingModelLoad = useMemo(
+    () =>
+      modelLoadState.loading
+        ? {
+            progress: {
+              step: 0,
+              total: 0,
+              stage: "loading",
+              ...(modelLoadState.pct !== null
+                ? { loadedBytes: modelLoadState.pct, totalBytes: 100 }
+                : {}),
+            } satisfies ChatMessage["progress"],
+            estimateSeconds: estimateModelLoadSeconds(pickerModel?.vramGB ?? null),
+          }
+        : undefined,
+    [modelLoadState.loading, modelLoadState.pct, pickerModel?.vramGB],
+  );
+  const transcriptMessages = useMemo(
+    () => turnsToMessages(turns, busy, codingModelLoad),
+    [turns, busy, codingModelLoad],
+  );
+
   const contextUsage = useMemo(
     () => composerSessionUsage(transcriptMessages, pickerModel),
     [transcriptMessages, pickerModel],

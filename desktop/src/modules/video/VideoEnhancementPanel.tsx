@@ -16,7 +16,7 @@ import {
   expectedVideoEnhancementGeometry,
   videoEnhancementCapabilityCopy,
 } from "../../../../core/video/videoEnhancementSupport";
-import { Button } from "../../components/ui";
+import { Button, Switch } from "../../components/ui";
 import { useReducedMotion } from "../../motion/useReducedMotion";
 import {
   VideoEnhancementClientError,
@@ -103,6 +103,68 @@ export const VIDEO_ENHANCEMENT_SELECTIONS: readonly VideoEnhancementSelection[] 
     },
   ] satisfies readonly VideoEnhancementSelection[]);
 
+/**
+ * v2.4.8 follow-up (2026-09-07) -- three controls instead of seven cards.
+ *
+ * Operator screenshot: the panel listed every combination of scale, content
+ * class and frame rate as its own radio card, so a five-option decision filled
+ * more than a screen and the labels read as jargon ("General 4x + Smooth 2x").
+ * The same seven selections are now reached from what the user actually
+ * chooses: a resolution, whether the source is animation, and whether to
+ * double the frame rate.
+ *
+ * The frozen selection ids and presets are unchanged; only the way the user
+ * arrives at one is.
+ */
+export interface VideoEnhancementChoice {
+  /** 1 keeps the source size; 2 and 4 multiply both dimensions. */
+  readonly scale: 1 | 2 | 4;
+  /** The animation-tuned upscaler rather than the general one. */
+  readonly animation: boolean;
+  /** Double the frame rate. */
+  readonly smooth: boolean;
+}
+
+/**
+ * Fill in the combinations the presets do not offer: 2x exists only on the
+ * animation upscaler, and keeping the source size is only an enhancement when
+ * the frame rate is doubled.
+ */
+export function normalizeChoice(
+  choice: VideoEnhancementChoice,
+): VideoEnhancementChoice {
+  return {
+    scale: choice.scale,
+    animation: choice.scale === 2 ? true : choice.animation,
+    smooth: choice.scale === 1 ? true : choice.smooth,
+  };
+}
+
+/** The selection a choice maps to, or null when the choice does nothing. */
+export function selectionFromChoice(
+  choice: VideoEnhancementChoice,
+): VideoEnhancementSelectionId | null {
+  if (choice.scale === 1) return choice.smooth ? "smooth-2x" : null;
+  // Only the animation upscaler offers 2x, so 2x implies animation.
+  if (choice.scale === 2) return choice.smooth ? "animation-2x-smooth" : "animation-2x";
+  if (choice.animation) return choice.smooth ? "animation-4x-smooth" : "animation-4x";
+  return choice.smooth ? "general-4x-smooth" : "general-4x";
+}
+
+export function choiceFromSelection(
+  id: VideoEnhancementSelectionId,
+): VideoEnhancementChoice {
+  const selection = VIDEO_ENHANCEMENT_SELECTIONS.find((s) => s.id === id);
+  if (!selection) throw new Error(`Unknown video enhancement selection: ${id}`);
+  const preset = selection.upscalePreset;
+  const scale: 1 | 2 | 4 = preset === null ? 1 : preset.endsWith("2x") ? 2 : 4;
+  return {
+    scale,
+    animation: preset !== null && preset.startsWith("animation"),
+    smooth: selection.interpolationPreset !== null,
+  };
+}
+
 export interface VideoEnhancementSourceFacts {
   readonly width: number;
   readonly height: number;
@@ -177,12 +239,65 @@ const terminalStates = new Set<VideoEnhancementJobDto["state"]>([
 const panelStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: "var(--space-4)",
-  padding: "var(--space-5)",
+  // v2.4.8 follow-up: the panel used to run past the fold on a laptop screen,
+  // so its own Start button needed scrolling to reach.
+  gap: "var(--space-3)",
+  padding: "var(--space-4)",
+  maxWidth: "44rem",
   border: "1px solid var(--border-subtle)",
   borderRadius: "var(--radius-lg)",
   background: "var(--bg-elevated)",
   color: "var(--fg-0)",
+};
+
+const RESOLUTION_CHOICES = Object.freeze([
+  { scale: 1, label: "Keep" },
+  { scale: 2, label: "2x" },
+  { scale: 4, label: "4x" },
+] as const satisfies readonly { scale: 1 | 2 | 4; label: string }[]);
+
+const optionRowStyle: CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: "var(--space-3)",
+  flexWrap: "wrap",
+};
+
+const optionLabelStyle: CSSProperties = {
+  flex: "0 0 8rem",
+  fontWeight: 600,
+  fontSize: "var(--text-sm)",
+};
+
+const segmentedStyle: CSSProperties = {
+  display: "inline-flex",
+  gap: 2,
+  padding: 2,
+  borderRadius: "var(--radius-md)",
+  border: "1px solid var(--border-subtle)",
+  background: "var(--bg-1)",
+};
+
+function segmentStyle(active: boolean): CSSProperties {
+  return {
+    padding: "4px 12px",
+    borderRadius: "var(--radius-sm, 4px)",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "var(--text-sm)",
+    fontFamily: "inherit",
+    color: active ? "var(--fg-0)" : "var(--fg-muted)",
+    background: active ? "var(--bg-elevated)" : "transparent",
+    fontWeight: active ? 600 : 400,
+  };
+}
+
+const visuallyHiddenStyle: CSSProperties = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  overflow: "hidden",
+  clip: "rect(0 0 0 0)",
 };
 
 const mutedStyle: CSSProperties = {
@@ -522,6 +637,17 @@ export function VideoEnhancementPanel({
   const [selectedId, setSelectedId] =
     useState<VideoEnhancementSelectionId>("animation-2x");
   const [enqueueing, setEnqueueing] = useState(false);
+  const choice = choiceFromSelection(selectedId);
+  /** Apply a partial change, keeping the result on a real selection. */
+  const applyChoice = (patch: Partial<VideoEnhancementChoice>): void => {
+    const id = selectionFromChoice(normalizeChoice({ ...choice, ...patch }));
+    if (id) setSelectedId(id);
+  };
+  /** Would this change land on something the host can actually run? */
+  const choiceRunnable = (patch: Partial<VideoEnhancementChoice>): boolean => {
+    const id = selectionFromChoice(normalizeChoice({ ...choice, ...patch }));
+    return id !== null && (availability.get(id)?.available ?? false);
+  };
   const [cancellingId, setCancellingId] = useState<string | null>(null);
   const [operationFailure, setOperationFailure] = useState<UiFailure | null>(
     null,
@@ -658,6 +784,10 @@ export function VideoEnhancementPanel({
     available: false,
     reason: "Checking local capability...",
   };
+  // One reason line for the current choice, in place of a reason per card.
+  const selectedUnavailableReason = selectedAvailability.available
+    ? null
+    : selectedAvailability.reason;
 
   const startEnhancement = useCallback(async (): Promise<void> => {
     if (!selectedAvailability.available) return;
@@ -770,13 +900,13 @@ export function VideoEnhancementPanel({
         }}
       >
         <p style={{ margin: 0 }}>
-          Enhancement synthesizes pixels and, for Smooth choices, frames. It
-          cannot recover real detail or motion that was not recorded.
+          Enhancement invents pixels, and frames when Smooth motion is on. It
+          cannot recover detail or motion that was never recorded, and it can
+          amplify artifacts.
         </p>
         <p style={mutedStyle}>
-          Artifacts can be amplified or introduced. Processing runs locally and
-          can take substantial GPU time. Your original video is preserved; every
-          enhancement is a separate child job and output.
+          Runs locally and can take substantial GPU time. Your original video is
+          preserved; every enhancement is a separate output.
         </p>
       </div>
 
@@ -798,79 +928,78 @@ export function VideoEnhancementPanel({
         disabled={capabilityLoading || enqueueing}
         style={{ margin: 0 }}
       >
-        <legend>Enhancement preset</legend>
-        <div
-          style={{
-            display: "grid",
-            gap: "var(--space-2)",
-            marginTop: "var(--space-2)",
-          }}
-        >
-          {VIDEO_ENHANCEMENT_SELECTIONS.map((selection) => {
-            const optionAvailability = availability.get(selection.id) ?? {
-              available: false,
-              reason: "Checking local capability...",
-            };
-            const target = deriveVideoEnhancementTarget(
-              {
-                width: sourceWidth,
-                height: sourceHeight,
-                frameRate: sourceFrameRate,
-              },
-              selection.id,
-            );
-            return (
-              <label
-                key={selection.id}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "auto 1fr",
-                  gap: "var(--space-1) var(--space-2)",
-                  padding: "var(--space-2)",
-                  border: "1px solid var(--border-subtle)",
-                  borderRadius: "var(--radius-md)",
-                  opacity: optionAvailability.available ? 1 : 0.72,
-                }}
-              >
-                <input
-                  type="radio"
-                  name="video-enhancement-preset"
-                  value={selection.id}
-                  checked={selectedId === selection.id}
-                  disabled={!optionAvailability.available}
-                  onChange={() => setSelectedId(selection.id)}
-                />
-                <span>
-                  <strong>{selection.label}</strong>
-                  <span style={{ display: "block", ...mutedStyle }}>
-                    {selection.description}
-                  </span>
-                  <span style={{ display: "block", ...mutedStyle }}>
-                    Target: {formatTarget(target)}
-                  </span>
-                  {!optionAvailability.available ? (
-                    <span
-                      id={`video-enhancement-unavailable-${selection.id}`}
-                      data-testid={`video-enhancement-unavailable-${selection.id}`}
-                      style={{ display: "block", color: "var(--status-warn)" }}
-                    >
-                      {optionAvailability.reason}
-                    </span>
-                  ) : null}
-                </span>
-              </label>
-            );
-          })}
+        <legend style={visuallyHiddenStyle}>Enhancement options</legend>
+        <div style={{ display: "grid", gap: "var(--space-2)" }}>
+          <div style={optionRowStyle}>
+            <span style={optionLabelStyle}>Resolution</span>
+            <div role="radiogroup" aria-label="Resolution" style={segmentedStyle}>
+              {RESOLUTION_CHOICES.map((option) => {
+                return (
+                  <button
+                    key={option.scale}
+                    type="button"
+                    role="radio"
+                    aria-checked={choice.scale === option.scale}
+                    data-testid={`video-enhancement-scale-${option.scale}`}
+                    disabled={!choiceRunnable({ scale: option.scale })}
+                    onClick={() => applyChoice({ scale: option.scale })}
+                    style={segmentStyle(choice.scale === option.scale)}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div style={optionRowStyle}>
+            <span style={optionLabelStyle}>Animation</span>
+            <Switch
+              testId="video-enhancement-animation"
+              checked={choice.animation}
+              // 2x exists only on the animation upscaler, so it stays on there;
+              // otherwise it follows whether the flipped choice can run.
+              disabled={choice.scale !== 4 || !choiceRunnable({ animation: !choice.animation })}
+              onChange={(next) => applyChoice({ animation: next })}
+              label={
+                choice.scale === 2
+                  ? "Always on at 2x"
+                  : "Tuned for drawn or rendered video"
+              }
+            />
+          </div>
+
+          <div style={optionRowStyle}>
+            <span style={optionLabelStyle}>Smooth motion</span>
+            <Switch
+              testId="video-enhancement-smooth"
+              checked={choice.smooth}
+              // Off at 1x would leave nothing to do, and interpolation may not
+              // be available on this host at all.
+              disabled={choice.scale === 1 || !choiceRunnable({ smooth: !choice.smooth })}
+              onChange={(next) => applyChoice({ smooth: next })}
+              label="Double the frame rate"
+            />
+          </div>
         </div>
+        {selectedUnavailableReason ? (
+          <p
+            id={`video-enhancement-unavailable-${selected.id}`}
+            data-testid={`video-enhancement-unavailable-${selected.id}`}
+            style={{ ...mutedStyle, color: "var(--status-warn)" }}
+          >
+            {selectedUnavailableReason}
+          </p>
+        ) : null}
       </fieldset>
 
-      <div>
-        <strong>Selected target</strong>
+      <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexWrap: "wrap" }}>
         <p
           id="video-enhancement-selected-target"
           data-testid="video-enhancement-selected-target"
-          style={mutedStyle}
+          style={{ ...mutedStyle, flex: 1, minWidth: "12rem" }}
         >
+          <strong style={{ color: "var(--fg-0)" }}>Target</strong>{" "}
           {formatTarget(selectedTarget)}
         </p>
         <Button

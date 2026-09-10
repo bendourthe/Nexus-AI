@@ -77,19 +77,7 @@ export function pendingCaptionState(caption: PendingCaption): AgentState {
  * interval is scheduled and the first fixed caption is returned.
  */
 export function usePendingCaptionRotator(active: boolean): PendingCaption {
-  const [order] = useState<PendingCaption[]>(() => shufflePendingCaptions());
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    if (!active) return;
-    const id = window.setInterval(() => {
-      setIndex((i) => (i + 1) % order.length);
-    }, CAPTION_ROTATE_INTERVAL_MS);
-    return () => window.clearInterval(id);
-  }, [active, order.length]);
-
-  if (!active) return PENDING_CAPTIONS[0];
-  return order[index % order.length] ?? PENDING_CAPTIONS[0];
+  return useCaptionRotator(active, "chat") as PendingCaption;
 }
 
 /**
@@ -147,7 +135,57 @@ export function shuffleStudioCaptions(
  * any repeats and the next prompt gets a different order.
  */
 export function useStudioCaptionRotator(active: boolean): StudioPendingCaption {
-  const [order] = useState<StudioPendingCaption[]>(() => shuffleStudioCaptions());
+  return useCaptionRotator(active, "studio") as StudioPendingCaption;
+}
+
+/**
+ * v2.4.8 follow-up (2026-09-08) -- one rotator, two word pools.
+ *
+ * Operator report: the studios showed the same rotating word whether the GPU
+ * was loading weights or sampling, so the two phases were indistinguishable.
+ * Rotation now belongs to the generating phase alone, and the pill that chat
+ * and Agents already use is the shared animation for it -- Images and Videos
+ * pass the studio pool instead of the chat pool rather than getting a
+ * different animation.
+ */
+export type CaptionPool = "chat" | "studio";
+
+export type RotatingCaption = PendingCaption | StudioPendingCaption;
+
+export function captionsFor(pool: CaptionPool): readonly RotatingCaption[] {
+  return pool === "studio" ? STUDIO_PENDING_CAPTIONS : PENDING_CAPTIONS;
+}
+
+/** Longest caption in this pool; drives a constant width so words cannot jitter. */
+export function longestCaptionFor(pool: CaptionPool): RotatingCaption {
+  return pool === "studio" ? longestStudioCaption() : longestPendingCaption();
+}
+
+export function pillMinWidthExpr(orbPx: number, pool: CaptionPool): string {
+  const captionCh = longestCaptionFor(pool).length;
+  return `calc(${orbPx}px + var(--space-2) + ${captionCh}ch + (2 * var(--space-3)))`;
+}
+
+/**
+ * Orb motion grammar for a rotating caption. Chat words each drive their own
+ * state; every studio word is the same act of forming an output, so they all
+ * shape.
+ */
+export function rotatingCaptionState(caption: RotatingCaption): AgentState {
+  if ((STUDIO_PENDING_CAPTIONS as readonly string[]).includes(caption)) return "shaping";
+  return pendingCaptionState(caption as PendingCaption);
+}
+
+/**
+ * React hook: shuffle the pool once per mount, then walk that order every
+ * `CAPTION_ROTATE_INTERVAL_MS` while `active`, so every word appears before
+ * any repeats. Inactive returns the pool's first fixed caption and schedules
+ * no interval (the reduced-motion path).
+ */
+export function useCaptionRotator(active: boolean, pool: CaptionPool): RotatingCaption {
+  const [order] = useState<RotatingCaption[]>(() =>
+    pool === "studio" ? shuffleStudioCaptions() : shufflePendingCaptions(),
+  );
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -158,8 +196,9 @@ export function useStudioCaptionRotator(active: boolean): StudioPendingCaption {
     return () => window.clearInterval(id);
   }, [active, order.length]);
 
-  if (!active) return STUDIO_PENDING_CAPTIONS[0];
-  return order[index % order.length] ?? STUDIO_PENDING_CAPTIONS[0];
+  const first = captionsFor(pool)[0] as RotatingCaption;
+  if (!active) return first;
+  return order[index % order.length] ?? first;
 }
 
 /** True for the two studio activities that render media rather than text. */

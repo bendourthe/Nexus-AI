@@ -134,6 +134,50 @@ describe("ImageStudioPage (chat)", () => {
     expect(onGetMoreModels).toHaveBeenCalledTimes(1);
   });
 
+  // Operator ask (2026-09-08): the settings changed on nearly every prompt
+  // should not be behind a panel. Resolution, Width, Height and Fast preview
+  // sit in the chat area at all times, and what they set is what is generated.
+  it("keeps resolution, size, and fast preview in the chat area at all times", async () => {
+    const client = new InMemoryDiffusionClient();
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    // Visible with the Advanced panel closed.
+    expect(screen.queryByTestId("image-settings-panel")).toBeNull();
+    const quick = screen.getByTestId("composer-quick-slot");
+    expect(quick).toBeInTheDocument();
+    fireEvent.change(screen.getByTestId("image-quick-resolution"), {
+      target: { value: "768x768" },
+    });
+    fireEvent.change(screen.getByTestId("image-quick-height"), {
+      target: { value: "512" },
+    });
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "PNGB64==" },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a fox" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await waitFor(() => expect(client.lastRequest).not.toBeNull());
+    const request = client.lastRequest?.request as { width: number; height: number };
+    expect(request.width).toBe(768);
+    expect(request.height).toBe(512);
+    // The Advanced panel opens onto the same values, not a stale copy.
+    fireEvent.click(screen.getByTestId("image-advanced-settings"));
+    await waitFor(() =>
+      expect(screen.getByTestId("image-settings-panel")).toBeInTheDocument(),
+    );
+    expect((screen.getByTestId("image-width") as HTMLInputElement).value).toBe("768");
+    expect((screen.getByTestId("image-height") as HTMLInputElement).value).toBe("512");
+  });
+
   it("drops the four mode tabs", () => {
     render(
       <ImageStudioPage
@@ -187,6 +231,83 @@ describe("ImageStudioPage (chat)", () => {
     expect(screen.queryAllByTestId(/^message-tokens-/).length).toBe(0);
     // User bubble plus the auto-created session title both read the prompt.
     expect(screen.getAllByText("a fox").length).toBeGreaterThanOrEqual(1);
+  });
+
+  // Operator report (2026-09-08): during one run the bar and the step line
+  // appeared and disappeared repeatedly. The liveness heartbeat carries no
+  // stage and no counters, and it was being written straight over the counted
+  // step. This replays that exact stream: load, sample, heartbeat, sample.
+  it("holds the measured progress through a bare liveness heartbeat", async () => {
+    const client = new InMemoryDiffusionClient();
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [
+      {
+        kind: "progress",
+        jobId: "mem-job-1",
+        stage: "loading",
+        loadedBytes: 1_000,
+        totalBytes: 4_000,
+        etaS: 9,
+      },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a fox" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    const drain = async (): Promise<void> => {
+      await act(async () => {
+        vi.advanceTimersByTime(60);
+        await Promise.resolve();
+      });
+    };
+    await drain();
+    // Loading: the caption states the phase and the bar reports weight bytes.
+    await waitFor(() =>
+      expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
+        "Loading model 25%",
+      ),
+    );
+
+    client.scriptEvents("mem-job-1", [
+      { kind: "progress", jobId: "mem-job-1", stage: "generating", step: 4, totalSteps: 14 },
+    ]);
+    await drain();
+    const stepLine = (): string => {
+      const [line] = screen.getAllByTestId(/^model-load-progress-.*-position$/);
+      return line?.textContent ?? "";
+    };
+    await waitFor(() => expect(stepLine()).toContain("Step 4 of 14"));
+    // Generating: the pill animation, the studio pool, and a step bar.
+    const orb = screen.getByTestId("agent-state-orb");
+    expect(orb).toHaveAttribute("data-orb-pill", "true");
+    expect(STUDIO_PENDING_CAPTIONS).toContain(
+      screen.getByTestId("agent-state-orb-caption").textContent,
+    );
+
+    // The heartbeat: no stage, no step, no bytes. Nothing may be erased.
+    client.scriptEvents("mem-job-1", [
+      { kind: "progress", jobId: "mem-job-1" },
+    ]);
+    await drain();
+    expect(stepLine()).toContain("Step 4 of 14");
+    expect(screen.getByTestId("agent-state-orb")).toHaveAttribute(
+      "data-orb-pill",
+      "true",
+    );
+
+    client.scriptEvents("mem-job-1", [
+      { kind: "progress", jobId: "mem-job-1", step: 9, totalSteps: 14 },
+    ]);
+    await drain();
+    await waitFor(() => expect(stepLine()).toContain("Step 9 of 14"));
   });
 
   it("repairs an unavailable runtime and retries the same image turn exactly once", async () => {
