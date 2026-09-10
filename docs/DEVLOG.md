@@ -4,6 +4,33 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-10] v2.4.9 Phase 1 - The written bars
+
+Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-phase1-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P1](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-1-written-bars.md). Package remains **2.4.1**; nothing in the 2.4 series is released. Committed locally, not pushed.
+
+### What Changed
+
+- **D1 resolved as a split, before any Phase 1 work.** The migration-durability slice left this plan for its own minor, [v2.5.0-migration-durability](v2/v2.5/plans/v2.5.0-migration-durability.md), because it changes app start-up behaviour and computes a `feat` under semantic-release while the host plan is labelled as a patch. v2.4.9 is now four additive delivery slices plus the terminal wrap-up, renumbered from 6 to 5. Definition-of-Done clause 5 is recorded deferred scope, not a miss; A11 (the signed updater) is deferred twice over, since the dependency it was gated on moved too.
+- **A model and runtime acceptance bar** at [docs/reference/model-acceptance.md](reference/model-acceptance.md). The catalog is organised as a job map read off `core/registry/catalog.json` and `core/registry/recommended.json`: 41 jobs (18 pre-ticked per-tier defaults, 20 opt-in entries, 3 runtimes), every one of the 38 catalog ids holding exactly one job. A proposal is accepted on one of two grounds only, taking an occupied job with measured local numbers or claiming an uncovered one, and the license section states what posture a pre-ticked default may carry versus an opt-in entry.
+- **Five open questions recorded**, the load-bearing two being a two-sided divergence between the registries that nothing guards: eight `ModelCatalog.ts` prompt/tool-format bindings have no installable catalog entry, and five installable LLMs have no binding, three of them the pre-ticked chat default on the cpu, 12/16 and 24 GB tiers. `inkling-small` is `agentic: true` with `family: "inkling"` and no binding, so its tool calls parse with a Gemma grammar via the `?? "gemma4-xml"` fallback. Filed as `NI-1`.
+- **A repo-local standards critic** at `.claude/agents/nexus-standards-judge.md`: read-only (`Bash, Read, Grep, Glob`), structurally unable to approve a push, merge, tag or release, and required to account for what it examined rather than return "looks good". Its verdict format makes a `NOT ASSESSED` list mandatory.
+- **A committed job-map contract test**, `tests/unit/docs/v2.4.9-model-acceptance.test.ts`, following the seven existing `tests/unit/docs/` doc-contract meta-tests. Proven to fail on an injected duplicate holder before being trusted.
+- **Sub-task 1.3 cut.** The installer-rework staging guard defended against an uncommitted tree; the tree was clean at Phase 1 start, so `.husky/pre-commit` is untouched. The terminal phase records the cut instead of removing a guard.
+
+### Why It Changed
+
+`feature_list.json` claimed v0.8.0 against a product shipping 2.4.x and no job read it, which is the general shape this cycle is closing: artifacts that assert something nobody checks. Phase 1 addresses the model catalog's version of that. Before this, "should this model be in the catalog?" had no written answer, so breadth accumulated one defensible-in-isolation entry at a time, each carrying a download, a picker row, a fit-gate, a license the user inherits, and a support surface on three platforms.
+
+The critic exists because a bar nobody enforces is a preference. It earned its place immediately: on its first invocation, against the pinned v2.4.8 range `989107c7..f36afd9c`, it returned eleven substantiated findings and three of them were against Phase 1's own artifacts, including that the agent definition cited a `CLAUDE.md` this repository deliberately does not have (AGENTS.md is the single canonical directive, and `tests/unit/docs/AGENTS-md.test.ts` asserts the file's absence). That misattribution came from the plan itself and was corrected in four places across two plans. The remaining findings are against the v2.4.8 range and are triaged rather than fixed here, because this cycle turns visibility on and does not commit to clearing what it surfaces.
+
+### Verification
+
+Job-map invariants pass and were shown to fail when violated. The full suite was run twice, at HEAD and with the change: failures are identical at 496 tests across 61 files, every one traceable to the `better-sqlite3` Electron-ABI mismatch on this host, with the change contributing `+1` test file and `+5` passing tests. `check:docs-layout`, `check:naming` and `check:tampering` clean. No pipeline file changed; CI/CD is not this phase's deliverable.
+
+One limitation disclosed rather than smoothed over: `nexus-standards-judge` could not be dispatched by name, because the session's agent registry loaded before the file existed. The definition's content was exercised by handing the file to a general-purpose agent; the harness's lookup of its frontmatter was not. Filed as `MT-11`.
+
+---
+
 ## [2026-09-06] v2.4.7 - installer wizard density and scope (Phases 1-5)
 
 Index: [plan](v2/v2.4/plans/v2.4.7-installer-wizard-density-and-scope.md), [evidence](v2/v2.4/development/last-phase-evidence-v2.4.7-wizard-density.md), [gaps](v2/v2.4/known-gaps.md), histories [P1](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-1-selection-sizing.md), [P2](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-2-config-scope.md), [P3](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-3-page-layout.md), [P4](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-4-review-density.md), [P5](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-5-last-phase.md). Package remains **2.4.1**; nothing in the 2.4 series is released.
