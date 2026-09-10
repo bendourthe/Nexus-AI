@@ -34,12 +34,15 @@ describe("adjustmentFilter", () => {
     expect(filter).toContain("saturate(40%)");
   });
 
-  it("previews sharpness as a small contrast lift", () => {
-    // CSS has no sharpen primitive; the real convolution runs on export.
+  it("does not encode sharpness, so it cannot be double-counted (WN-1)", () => {
+    // It used to fold sharpness in as a contrast lift. The export then applied
+    // that lift AND the real convolution, so a saved file was over-contrasted.
+    // Sharpness now lives in exactly one place: sharpenPixels, via
+    // renderAdjusted, which the preview and the export both call.
     const plain = adjustmentFilter({ ...NEUTRAL_ADJUSTMENTS });
     const sharp = adjustmentFilter({ ...NEUTRAL_ADJUSTMENTS, sharpness: 100 });
-    expect(plain).not.toEqual(sharp);
-    expect(sharp).toContain("contrast(115%)");
+    expect(sharp).toEqual(plain);
+    expect(sharp).toContain("contrast(100%)");
   });
 });
 
