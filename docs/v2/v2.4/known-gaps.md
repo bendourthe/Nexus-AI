@@ -2,11 +2,11 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-09-09
+**Last updated**: 2026-09-10
 
 Per-version tracker of unfinished work, deferrals, and follow-ups. The next plan ingests this file to decide what carries forward. Classifications: `NI` not-implemented, `DF` deferred, `BG` bug/known-issue, `MT` missing-tests/coverage, `WN` warning/suppressed, `QG` bypassed-gate/CI.
 
-Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [v2.4.1 field reliability](plans/v2.4.1-field-reliability-chat-archives-models-workspaces.md), [v2.4.1 generation recovery](plans/v2.4.1-generation-recovery-and-ui-corrections.md), [v2.4.2 field UI and generation](plans/v2.4.2-field-ui-history-and-generation.md), [v2.4.3 field density](plans/v2.4.3-field-density-identity-and-runtime.md), [v2.4.4 field chrome, restyle, SANA, density](plans/v2.4.4-field-chrome-restyle-sana-and-density.md), [v2.4.5 installer already-downloaded models](plans/v2.4.5-installer-already-downloaded-models.md), [v2.4.6 field delivery, density, and session identity](plans/v2.4.6-field-delivery-density-and-session-identity.md), [v2.4.7 installer wizard density and scope](plans/v2.4.7-installer-wizard-density-and-scope.md), [v2.4.8 desktop token split, persona, and model order](plans/v2.4.8-desktop-token-split-persona-and-model-order.md)
+Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [v2.4.1 field reliability](plans/v2.4.1-field-reliability-chat-archives-models-workspaces.md), [v2.4.1 generation recovery](plans/v2.4.1-generation-recovery-and-ui-corrections.md), [v2.4.2 field UI and generation](plans/v2.4.2-field-ui-history-and-generation.md), [v2.4.3 field density](plans/v2.4.3-field-density-identity-and-runtime.md), [v2.4.4 field chrome, restyle, SANA, density](plans/v2.4.4-field-chrome-restyle-sana-and-density.md), [v2.4.5 installer already-downloaded models](plans/v2.4.5-installer-already-downloaded-models.md), [v2.4.6 field delivery, density, and session identity](plans/v2.4.6-field-delivery-density-and-session-identity.md), [v2.4.7 installer wizard density and scope](plans/v2.4.7-installer-wizard-density-and-scope.md), [v2.4.8 desktop token split, persona, and model order](plans/v2.4.8-desktop-token-split-persona-and-model-order.md), [v2.4.9 VoiceStudio field-discipline adoption](plans/v2.4.9-adoption-voicestudio-field-discipline.md)
 
 ## v2.4.9
 
@@ -14,14 +14,16 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 
 | Category | Open | Resolved |
 |---|---:|---:|
-| Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 0 | 3 |
-| Bugs / regressions (BG) | 2 | 9 |
+| Not implemented (NI) | 1 | 0 |
+| Deferred (DF) | 1 | 3 |
+| Bugs / regressions (BG) | 3 | 9 |
 | Warnings (WN) | 1 | 1 |
-| Missing tests / coverage gaps (MT) | 1 | 2 |
+| Missing tests / coverage gaps (MT) | 2 | 2 |
 | Quality-gate gaps (QG) | 1 | 0 |
 
 Operator-driven UX cycle against nine screenshots and three live failures from the packaged v2.4.8 build, plus an installer round. Not a planned phase set: every item traces to something the operator saw. Two live failures shared one root cause (the studio forms offered settings the selected model could not honour), which is what `desktop/src/shared/studio/modelCapabilities.ts` now exists to prevent. Nothing here has been published; the branch is uncommitted-then-committed local work awaiting integration.
+
+From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-discipline plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md). Its D1 decision split the migration-durability slice into [v2.5.0](../v2.5/plans/v2.5.0-migration-durability.md), so Definition-of-Done clause 5 is deferred scope for this release rather than a miss. Phase 1 items are appended below.
 
 ### Resolved
 
@@ -57,6 +59,45 @@ Operator-driven UX cycle against nine screenshots and three live failures from t
 - **Impact**: jsdom's `cssstyle` silently drops `min()` / `clamp()` from inline styles, so a `width: min(22rem, 100%)` is invisible to a test assertion. This is why the SECOND width regression (a `fit-content` parent leaking caption length back into the bar) passed the whole unit suite and was caught only by rendering the component and looking at it. Mitigated in the touched files by using `width` + `max-width` pairs instead of `min()`, but the blind spot remains repo-wide.
 - **Owner**: Mitigated, not closed
 - **Next step**: `desktop/tests/inlineStyleMathGuard.test.ts` now fails if `width` or `minWidth` uses `min()` / `max()` / `clamp()` in the three files whose geometry is asserted, and it self-retires (a test fails) if jsdom ever learns to parse them. `max-width` caps are deliberately exempt: a cap can only shrink an element, so it cannot produce the containing-block bug, and banning it would force less correct fixed values purely to satisfy the harness. The real fix is a browser-based visual check in CI, which this repo does not have.
+
+##### NI-1 - The two model registries are not tested against each other
+
+- **Source**: v2.4.9 Phase 1 (sub-task 1.1)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; recorded as OQ-1 to OQ-4 in [docs/reference/model-acceptance.md](../../reference/model-acceptance.md)
+- **Impact**: Building the job map surfaced a two-sided divergence nothing guards. Eight `core/registry/ModelCatalog.ts` format bindings have no installable `catalog.json` entry (`llama3.1:8b`, `llama3.2:3b`, `llama3.3:70b`, `qwen2.5:7b`, `qwen2.5-coder:7b`, `deepseek-coder:6.7b`, `hermes3:8b`, `hermes3:70b`) and five installable LLMs have no binding (`gemma4:e2b`, `gemma-4-12b-it-gguf`, `gemma4:26b`, `gemma4:31b`, `inkling-small`), three of which are the pre-ticked chat default on the cpu, 12/16 and 24 GB tiers. The sharp end is concrete rather than cosmetic: `inkling-small` has `family: "inkling"` and `agentic: true`, so `modules/coding/llm/parseAgentToolCalls.ts:23` falls through to `?? "gemma4-xml"` and parses its tool calls with a Gemma grammar. `ModelFamily` cannot even express `inkling`, so binding it needs a type change. `tests/unit/core/registry/ModelCatalog.test.ts` asserts sync against `core/registry/models.json` only, which is why both directions are invisible.
+- **Reason not done in this cycle**: Phase 1's scope is two documents and an agent definition. Reconciling the registries is a code change to the coding runtime with its own decision (are the eight dead bindings or missing catalog entries?) and is not a field-discipline item.
+- **Owner**: Unassigned
+- **Exit condition**: A test asserts `catalog.json` LLM entries and `ModelCatalog.ts` bindings against each other, and each of the 13 divergent ids is either bound, removed, or recorded as deliberately unbound. Evaluable by running that test.
+- **Suggested next step**: Decide the eight bindings' status first, since that decides whether the test asserts equality or a documented subset.
+
+##### MT-11 - The standards judge was never dispatched through the agent registry
+
+- **Source**: v2.4.9 Phase 1 (sub-task 1.4)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1 Verification Expectation
+- **Impact**: `.claude/agents/nexus-standards-judge.md` was created mid-session, after the agent registry had loaded, so `nexus-standards-judge` was not a dispatchable agent type. The Verification Expectation was satisfied by handing the definition to a general-purpose agent and instructing it to adopt the file verbatim, which exercised the definition's CONTENT but not the harness's lookup of it. The frontmatter (`name`, `tools: Bash, Read, Grep, Glob`, `model: opus`) is therefore unverified: a malformed field, a rejected tool name, or a wrong `model` value would not have surfaced.
+- **Owner**: Operator or next cycle
+- **Exit condition**: In a session started after this commit, dispatch `nexus-standards-judge` by name against any pinned range and confirm it returns the verdict format with the declared tool scope. One invocation closes it.
+- **Suggested next step**: Do it at the start of Phase 2, which needs a review anyway; the tool scope also gets exercised there because Phase 2's evidence rests on locally-run counts.
+
+##### DF-9 - `prompt-*` budget checks still do not cover `.claude/`
+
+- **Source**: v2.4.9 Phase 1 (sub-task 1.2), confirming pre-existing gap 10.N.H
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; required by AGENTS.md "## Claude Code addenda"
+- **Impact**: AGENTS.md requires that adding a file under `.claude/agents/` be accompanied by confirming the `prompt-*` rule globs cover the new path. Confirmed they do not: `lib/checks/prompt-oversized.mjs:72-73` scopes to `modules/coding/chat/prompts/` and `modules/coding/skills/catalog/**/SKILL.md`. So `nexus-standards-judge.md` has no prompt-size budget, and neither do the four older `.claude/agents/` files. Two `modules/coding/skills/catalog` prompts already exceed the 800-token budget as warnings, so the check does find real drift where it is pointed.
+- **Reason not done in this cycle**: Extending the glob is outside Phase 1's stated scope, and the extension is already tracked as 10.N.H under v0.9.0. Recording it here keeps the AGENTS.md obligation discharged without silently widening a check.
+- **Owner**: Inherited from 10.N.H
+- **Exit condition**: `check:prompts` reports a budget line for at least one `.claude/agents/` file, or 10.N.H is closed with a recorded decision that `.claude/` is deliberately exempt.
+- **Suggested next step**: Fold into the Phase 5.5 terminal CI/CD reconciliation, where the check surface is being compared anyway.
+
+##### BG-16 - 216 stale relative links in the living `docs/DEVLOG.md`
+
+- **Source**: v2.4.9 Phase 1 (sub-task 1.4 link verification)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; surfaced incidentally while verifying this phase's own links
+- **Impact**: A link check over `docs/DEVLOG.md` resolves 216 relative targets to files that do not exist. They are historical entries written before two renames: `src/` to `modules/coding/` (for example `../src/chat/PromptBuilder.ts`, `../src/guardrails/PermissionTiers.ts`) and `scripts/installer/pyqt/` to `scripts/installer/` (for example `../scripts/installer/pyqt/src/nexus_installer/constants.py`), plus the Gemma Code to Nexus product rename (`../src/panels/GemmaCodePanel.ts`). DEVLOG is a living document and its own index lines are how a reader navigates to the code a milestone changed, so the navigation is broken for every entry older than those renames. Nothing detects this: `check:docs-layout` validates directory shape, not link targets.
+- **Reason not done in this cycle**: Phase 1 delivers two documents and an agent definition. Repairing 216 historical links is a mechanical but unbounded edit across the whole file, and rewriting historical entries to point at current paths is itself a decision (a milestone's links arguably should resolve to what existed then). All 55 relative links in this phase's own files were verified and resolve.
+- **Owner**: Unassigned
+- **Exit condition**: A committed link checker over the living docs roots reports zero unresolved relative targets, or DEVLOG's pre-rename entries carry a stated convention (a note that historical paths are as-written and not maintained) that the checker honours. Evaluable by running the checker.
+- **Suggested next step**: Decide the convention before repairing anything, since it determines whether the fix is 216 rewrites or one documented exemption plus a checker.
 
 ## v2.4.8
 
