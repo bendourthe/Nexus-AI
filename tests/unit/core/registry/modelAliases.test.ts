@@ -134,10 +134,17 @@ describe("model alias table", () => {
   it("resolves minicpm5:2b without taking the unknown-model path (v2.4.10 Phase 1)", () => {
     const rec = lookupAlias("minicpm5:2b");
     expect(rec).toBeDefined();
-    expect(rec?.runtimeId).toBe("minicpm5:2b");
-    expect(foldModelId("minicpm5:2b")).toBe("minicpm5:2b");
+    expect(rec?.catalogId).toBe("minicpm5:2b");
+    // Phase 3 added the catalog row, so the alias now folds to the Ollama pull tag
+    // rather than to the bare coding id. That is the point of the alias table: the
+    // runtime loader is handed something it can actually pull.
+    expect(rec?.runtimeId).toBe("hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M");
+    expect(foldModelId("minicpm5:2b")).toBe("hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M");
     expect(unknownModelIdError("minicpm5:2b").message).not.toBe("");
     expect(aliasesFor("minicpm5:2b")).toContain("minicpm5:2b");
+    // Both spellings must land on the same record, or the coding runtime and the
+    // downloader would disagree about which model is selected.
+    expect(lookupAlias("hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M")).toEqual(rec);
   });
 
   it("gives minicpm5 its own family formats rather than the llama3 fallthrough (v2.4.10 Phase 1)", () => {

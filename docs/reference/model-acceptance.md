@@ -64,6 +64,7 @@ That distinction carries most of the weight in this document. The bar for taking
 | 32 GB Dynamic-quant strong candidate | `muse-glimmer:30b-dynamic` |
 | 17 GB K-quant strong candidate | `muse-glimmer:30b` |
 | patient-tier frontier MoE | `inkling-small` |
+| low-VRAM unrestricted-licence chat alternative | `minicpm5:2b` |
 | 18 GB MoE chat step between `e4b` and `31b` | `gemma4:26b` |
 | low-VRAM image safety net, INT4 via nunchaku | `sana-1.6b-int4` |
 | native-4K image entry | `sana-1.6b-4k` |
@@ -100,9 +101,11 @@ These are entries the map cannot cleanly assign, recorded rather than papered ov
 
 **OQ-3 -- Nothing tests the two registries against each other.** `tests/unit/core/registry/ModelCatalog.test.ts` asserts that `ModelCatalog.ts` stays in sync with `core/registry/models.json`. No test compares either against `catalog.json`, which is why OQ-1 and OQ-2 are both invisible today. A proposal that adds an LLM to `catalog.json` should say which side of this seam it lands on.
 
-**OQ-4 -- `ModelFamily` cannot express every catalog family.** The `ModelFamily` union in `ModelCatalog.ts` admits `gemma | llama | qwen | deepseek | lfm2.5 | hermes | muse-glimmer | nemotron-lightning | gpt-oss`. `catalog.json` ships `family: "inkling"`. Adding `inkling-small` to the coding runtime therefore requires a type change, not just a row.
+**OQ-4 -- `ModelFamily` cannot express every catalog family.** The `ModelFamily` union in `ModelCatalog.ts` admits `gemma | llama | qwen | deepseek | lfm2.5 | hermes | muse-glimmer | nemotron-lightning | gpt-oss | minicpm5`. `catalog.json` ships `family: "inkling"`. Adding `inkling-small` to the coding runtime therefore requires a type change, not just a row. (v2.4.10 extended the union with `minicpm5` for exactly this reason, which is the worked example of the cost this question describes.)
 
 **OQ-5 -- Use-restricted licenses in default slots carry inconsistent disclosure.** Only one catalog entry has a `licenseNote`: `lfm2.5:2.6b`. Three other default holders sit under licenses that impose use restrictions and carry no note -- `juggernaut-xl-v9`, whose own license string reads "CreativeML Open RAIL-M (no paid-API redeployment without a RunDiffusion license)", `realvisxl-v5` under OpenRAIL++, and the Gemma family under the Gemma Terms of Use. See the license posture below for what this document asks of new entries; the existing gap is recorded, not retroactively fixed here.
+
+**OQ-6 -- A model can call tools correctly and still be unusable as an agent, and nothing in this map records that.** v2.4.10 added `minicpm5:2b` as an opt-in chat entry rather than the low-VRAM agentic default it was proposed as. The model emits well-formed tool calls in its documented nested-XML grammar, but `<function`, `</function>`, `<param`, and `</param>` are tokenizer special tokens (ids 18-21), and Ollama's detokenizer omits special tokens from the response string. All five parsers in `TOOL_FORMAT_NAMES` return zero calls on nine transcripts, and no parser can be written against delimiters that never arrive. The blocker is neither the model nor Nexus but the boundary between them, and this map has no column for "the runtime eats the format". The consequence is live: `lfm2.5:2.6b` keeps the cpu-tier dedicated agentic job, so low-VRAM users remain on the one catalog LLM whose licence caps free commercial use at USD 10M annual revenue. Evidence and the re-probe exit condition are in [`docs/v2/v2.4/development/v2.4.10-model-evidence.md`](../v2/v2.4/development/v2.4.10-model-evidence.md); tracked as DF-1.
 
 ## The bar
 

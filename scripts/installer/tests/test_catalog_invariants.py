@@ -414,3 +414,218 @@ class TestRequiredEmbedderPolicy:
         }
         problems = validate_catalog(catalog)
         assert any("task must be embed" in p for p in problems)
+
+
+# ---------------------------------------------------------------------------
+# v2.4.10 Phase 3 (T015) -- the two hoisted catalog-wide rules, and the
+# minicpm5:2b per-id contract.
+#
+# The hoist tests deliberately use an entry id with NO bespoke check function.
+# That is the whole point of the hoist: before it, PLACEHOLDER_SHA256 was tested
+# in exactly one place (inside _check_lfm_entry) and the no-vendor-benchmark
+# convention only through per-id token tuples, so an entry nobody had written a
+# block for was protected by neither.
+# ---------------------------------------------------------------------------
+
+_MINICPM5_PIN = "ec2d5801640099e97d8d7e8003ad4d81f336e757811f03a26173dddf386602fd"
+_MINICPM5_URL = "ollama://hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M"
+
+
+def _plain_entry(**overrides: Any) -> dict[str, Any]:
+    """An entry with no bespoke check function anywhere in catalog_invariants."""
+    entry: dict[str, Any] = {
+        "id": "unrelated-model:1b",
+        "task": "chat",
+        "description": "A plain entry used to prove the catalog-wide rules apply.",
+        "source": {"protocol": "ollama", "url": "ollama://unrelated-model:1b"},
+    }
+    entry.update(overrides)
+    return entry
+
+
+def _minicpm5_entry(**overrides: Any) -> dict[str, Any]:
+    entry: dict[str, Any] = {
+        "id": "minicpm5:2b",
+        "task": "chat",
+        "agentic": False,
+        "description": "A small Apache-2.0 chat model.",
+        "license": "Apache-2.0",
+        "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+        "requiresLicense": False,
+        "tags": [],
+        "toolCallingVerified": False,
+        "source": {"protocol": "ollama", "url": _MINICPM5_URL},
+        "weights": {
+            "files": [{"path": "MiniCPM5-2B-Q4_K_M.gguf", "sha256": _MINICPM5_PIN}]
+        },
+    }
+    entry.update(overrides)
+    return entry
+
+
+def _problems(entry: dict[str, Any]) -> list[str]:
+    return validate_catalog({"models": [entry]})
+
+
+def test_hoisted_placeholder_sha_fails_on_entry_with_no_bespoke_block() -> None:
+    entry = _plain_entry(
+        weights={"files": [{"path": "w.safetensors", "sha256": "0" * 64}]}
+    )
+    problems = _problems(entry)
+    assert any("placeholder SHA-256" in p for p in problems), problems
+
+
+def test_hoisted_placeholder_sha_fails_on_empty_pin() -> None:
+    entry = _plain_entry(weights={"files": [{"path": "w.safetensors", "sha256": ""}]})
+    assert any("placeholder SHA-256" in p for p in _problems(entry))
+
+
+def test_hoisted_placeholder_sha_accepts_a_real_pin() -> None:
+    entry = _plain_entry(
+        weights={"files": [{"path": "w.gguf", "sha256": _MINICPM5_PIN}]}
+    )
+    assert not any("placeholder SHA-256" in p for p in _problems(entry))
+
+
+def test_hoisted_placeholder_sha_ignores_entries_with_no_weights() -> None:
+    # Plenty of rows pull through Ollama and carry no per-file manifest. Demanding
+    # one here would be a different rule than the one being hoisted.
+    assert not any("placeholder SHA-256" in p for p in _problems(_plain_entry()))
+
+
+def test_legacy_sana_ids_stay_exempt_from_the_placeholder_rule() -> None:
+    # Efficient-Large-Model/SANA-ControlNet-* returns HTTP 401 unauthenticated, so
+    # pin-hf-weights.py cannot rotate these. Tracked as BG-2 rather than softening
+    # the rule for everyone.
+    entry = _plain_entry(
+        id="sana-controlnet-canny",
+        weights={"files": [{"path": "m.safetensors", "sha256": "0" * 64}]},
+    )
+    assert not any("placeholder SHA-256" in p for p in _problems(entry))
+
+
+def test_hoisted_forbidden_copy_fails_on_entry_with_no_bespoke_block() -> None:
+    entry = _plain_entry(
+        description="Scores 82.1 on SWE-bench Verified and leads MMLU-Pro."
+    )
+    problems = _problems(entry)
+    assert any("vendor benchmark suite" in p for p in problems), problems
+
+
+def test_hoisted_forbidden_copy_checks_strengths_and_license_note() -> None:
+    entry = _plain_entry(
+        strengths=["Top HumanEval pass@1 in its size class"],
+        licenseNote="Permissive licence. Leads GPQA among small models.",
+    )
+    problems = _problems(entry)
+    assert any("HumanEval" in p for p in problems), problems
+    assert any("GPQA" in p for p in problems), problems
+
+
+def test_hoisted_forbidden_copy_allows_an_explicit_disclaimer() -> None:
+    # qwen3-coder:30b ships exactly this shape. Naming a suite in order to say Nexus
+    # does not quote it is the convention working, not breaking.
+    entry = _plain_entry(
+        description=(
+            "A 30B coding specialist. Vendor SWE-bench numbers are not copied here."
+        )
+    )
+    assert not any("vendor benchmark suite" in p for p in _problems(entry))
+
+
+def test_hoisted_forbidden_copy_still_fails_when_only_one_mention_is_disclaimed() -> (
+    None
+):
+    entry = _plain_entry(
+        description=(
+            "Vendor SWE-bench numbers are not copied here. It still scores 82.1 on "
+            "SWE-bench Verified."
+        )
+    )
+    assert any("vendor benchmark suite" in p for p in _problems(entry))
+
+
+def test_tool_calling_verified_requires_a_benchmark_record() -> None:
+    entry = _plain_entry(toolCallingVerified=True, provenance="Official GGUF.")
+    problems = _problems(entry)
+    assert any("toolCallingBenchmark" in p for p in problems), problems
+
+
+def test_tool_calling_benchmark_must_carry_suite_date_and_result() -> None:
+    entry = _plain_entry(
+        toolCallingVerified=True,
+        toolCallingBenchmark={"suite": "local", "date": ""},
+    )
+    problems = _problems(entry)
+    assert any("missing" in p and "date" in p and "result" in p for p in problems), (
+        problems
+    )
+
+
+def test_tool_calling_verified_with_a_complete_benchmark_passes() -> None:
+    entry = _plain_entry(
+        toolCallingVerified=True,
+        toolCallingBenchmark={
+            "suite": "nexus-harness-local",
+            "date": "2026-09-11",
+            "result": "pass: emitted a parseable span",
+        },
+    )
+    assert not any("toolCallingBenchmark" in p for p in _problems(entry))
+
+
+def test_minicpm5_valid_entry_passes() -> None:
+    assert _problems(_minicpm5_entry()) == []
+
+
+def test_minicpm5_wrong_license_label_fails() -> None:
+    problems = _problems(_minicpm5_entry(license="MIT"))
+    assert any("license must be 'Apache-2.0'" in p for p in problems), problems
+
+
+def test_minicpm5_non_first_party_target_fails() -> None:
+    entry = _minicpm5_entry(
+        source={
+            "protocol": "ollama",
+            "url": "ollama://hf.co/someone-else/MiniCPM5-2B-GGUF:Q4_K_M",
+        }
+    )
+    problems = _problems(entry)
+    assert any("first-party" in p for p in problems), problems
+
+
+def test_minicpm5_cannot_claim_agentic_capability() -> None:
+    # The Phase 2 negative result is product behaviour, not a note: all five parsers
+    # returned zero calls on nine transcripts because Ollama strips the delimiters.
+    problems = _problems(_minicpm5_entry(task="agentic", agentic=True))
+    assert any("task must be 'chat'" in p for p in problems), problems
+    assert any("agentic must be false" in p for p in problems), problems
+
+
+def test_minicpm5_cannot_claim_verified_tool_calling() -> None:
+    problems = _problems(_minicpm5_entry(toolCallingVerified=True))
+    assert any("toolCallingVerified must be false" in p for p in problems), problems
+
+
+def test_minicpm5_cannot_be_promoted_to_recommended() -> None:
+    problems = _problems(_minicpm5_entry(tags=["recommended"]))
+    assert any("must not be tagged 'recommended'" in p for p in problems), problems
+
+
+def test_minicpm5_placeholder_pin_fails() -> None:
+    entry = _minicpm5_entry(
+        weights={"files": [{"path": "MiniCPM5-2B-Q4_K_M.gguf", "sha256": "0" * 64}]}
+    )
+    assert any("placeholder SHA-256" in p for p in _problems(entry))
+
+
+def test_minicpm5_vendor_benchmark_copy_fails() -> None:
+    problems = _problems(
+        _minicpm5_entry(description="Leads MMLU-Redux and LongBenchPro for its size.")
+    )
+    assert any("MMLU-Redux" in p for p in problems), problems
+
+
+def test_minicpm5_contract_is_present_or_valid() -> None:
+    # A synthetic catalog without the id must be unchanged by this block.
+    assert not any("minicpm5" in p for p in _problems(_plain_entry()))

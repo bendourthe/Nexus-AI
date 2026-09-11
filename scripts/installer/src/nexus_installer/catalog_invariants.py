@@ -17,6 +17,7 @@ returns a list of human-readable problems (empty list == valid).
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 #: Ollama pull targets known to fail (Ollama manifest bug): the Unsloth hf.co
@@ -37,6 +38,93 @@ LFM_AGENTIC_ID = "lfm2.5:2.6b"
 LFM_LICENSE = "LFM Open License v1.0"
 LFM_OLLAMA_TARGET = "hf.co/LiquidAI/LFM2.5-2.6B-GGUF"
 PLACEHOLDER_SHA256 = "0" * 64
+
+#: v2.4.10 Phase 3 (T013) -- ids exempt from the catalog-wide placeholder-SHA rule.
+#:
+#: These three entries have shipped all-zero pins since v1.1.0 Phase 12 and CANNOT be
+#: rotated: `Efficient-Large-Model/SANA-ControlNet-*` returns HTTP 401 to an
+#: unauthenticated fetch, so `pin-hf-weights.py` has nothing to read. They are also not
+#: flagged `gated`, so invariants B and C do not catch them either.
+#:
+#: The exemption is deliberately a NAMED LIST rather than a softened rule: every future
+#: entry is covered, and removing an id from here is the whole fix. Tracked as BG-2 in
+#: docs/v2/v2.4/known-gaps.md with an evaluable exit condition.
+PLACEHOLDER_SHA_LEGACY_EXEMPT: frozenset[str] = frozenset(
+    {
+        "sana-controlnet-canny",
+        "sana-controlnet-depth",
+        "sana-controlnet-pose",
+    }
+)
+
+#: v2.4.10 Phase 3 (T013) -- benchmark suite names that must not be ASSERTED in any
+#: entry's card copy. Hoisted from the per-id tuples, which stay in place as additions.
+#:
+#: Case-sensitive, matching the existing per-id behaviour. The per-id tuples remain the
+#: place for vendor NUMBERS ("77.83", "76.0"), which are model-specific; this list is
+#: only for suite names, which are shared across vendors and so belong catalog-wide.
+GLOBAL_FORBIDDEN_BENCHMARK_SUITES: tuple[str, ...] = (
+    "SWE-Bench",
+    "SWE-bench",
+    "SWEBench",
+    "BFCL",
+    "MMLU",
+    "GPQA",
+    "HumanEval",
+    "MBPP",
+    "GSM8K",
+    "MATH-500",
+    "AIME",
+    "LiveCodeBench",
+    "IFEval",
+    "LongBench",
+    "ToolSandbox",
+    "Arena-Hard",
+    "MT-Bench",
+    "HellaSwag",
+    "AGIEval",
+    "C-Eval",
+    "CMMLU",
+    "MMMU",
+    "MathVista",
+    "TAU-bench",
+    "ACEBench",
+    "OlympiadBench",
+    "CRUXEval",
+)
+
+#: Naming a suite in order to say Nexus does NOT quote it is the convention working, not
+#: breaking. `qwen3-coder:30b` ships exactly that ("Vendor SWE-bench numbers are not
+#: copied here."), and a bare substring check would flag it. A suite name is only a
+#: violation when the sentence containing it does not disclaim it.
+BENCHMARK_DISCLAIMER_MARKERS: tuple[str, ...] = (
+    "not copied",
+    "not reproduced",
+    "not asserted",
+    "not quoted",
+    "no vendor",
+)
+
+#: v2.4.10 Phase 3 (T014) -- MiniCPM5-2B chat entry. Present-or-valid, like the LFM
+#: block: a synthetic catalog without this id is unchanged.
+#:
+#: Phase 2 resolved decision 2.2 to option 3. The model emits correct tool calls, but
+#: `<function` / `</function>` / `<param` / `</param>` are tokenizer special tokens that
+#: Ollama's detokenizer removes before any Nexus parser sees them, so the entry ships as
+#: chat-only and MUST NOT claim agentic capability. These invariants are what stop a
+#: later edit from quietly promoting it without redoing the probe.
+MINICPM5_ID = "minicpm5:2b"
+MINICPM5_LICENSE = "Apache-2.0"
+MINICPM5_OLLAMA_TARGET = "hf.co/openbmb/MiniCPM5-2B-GGUF"
+#: Enumerated from the model card rather than guessed, so the tuple has a real basis.
+#: These are the suite names openbmb/MiniCPM5-2B's README actually uses.
+MINICPM5_FORBIDDEN_BENCHMARK_TOKENS: tuple[str, ...] = (
+    "MMLU-Redux",
+    "LongBenchPro",
+    "GPQA-Diamond",
+    "Just RL",
+)
+
 #: Vendor-reported numbers and suite names that must not appear in card copy
 #: until locally reproduced (comparison Section 9).
 LFM_FORBIDDEN_BENCHMARK_TOKENS: tuple[str, ...] = (
@@ -170,6 +258,18 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
                 f"the guided token step"
             )
 
+        # E) v2.4.10 Phase 3 -- catalog-wide placeholder-SHA rule. Previously this was
+        #    checked in exactly one place, inside _check_lfm_entry, so an entry with no
+        #    bespoke block shipped an all-zero pin unchallenged.
+        problems.extend(_check_weight_pins(model, where))
+
+        # F) v2.4.10 Phase 3 -- catalog-wide no-vendor-benchmark rule. Previously
+        #    reachable only through per-id token tuples; those remain as additions.
+        problems.extend(_check_global_benchmark_copy(model, where))
+
+        # G) v2.4.10 Phase 3 -- a tool-calling claim needs a benchmark record.
+        problems.extend(_check_tool_calling_claim(model, where))
+
     # C) Known-gated regression: a model known to be access-gated must stay
     #    flagged, or the installer would 401-loop on it again.
     by_id = {m.get("id"): m for m in models if isinstance(m, dict)}
@@ -187,6 +287,10 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     lfm = by_id.get(LFM_AGENTIC_ID)
     if isinstance(lfm, dict):
         problems.extend(_check_lfm_entry(lfm))
+
+    minicpm5 = by_id.get(MINICPM5_ID)
+    if isinstance(minicpm5, dict):
+        problems.extend(_check_minicpm5_entry(minicpm5))
 
     for muse_id in MUSE_IDS:
         muse = by_id.get(muse_id)
@@ -342,6 +446,146 @@ def _check_lfm_entry(model: dict[str, Any]) -> list[str]:
                 f"vendor benchmark {token!r}"
             )
     return problems
+
+
+def _check_minicpm5_entry(model: dict[str, Any]) -> list[str]:
+    """Invariants that apply only when ``minicpm5:2b`` is in the catalog."""
+    problems: list[str] = []
+    where = MINICPM5_ID
+
+    if model.get("license") != MINICPM5_LICENSE:
+        problems.append(f"{where}: license must be '{MINICPM5_LICENSE}'")
+    license_url = str(model.get("licenseUrl") or "")
+    if not license_url.startswith("https://"):
+        problems.append(f"{where}: licenseUrl must be an https:// first-party page")
+    if model.get("requiresLicense") is True:
+        problems.append(f"{where}: requiresLicense must be false (weights are ungated)")
+    if model.get("gated"):
+        problems.append(f"{where}: must not be gated (would fire the token flow)")
+
+    source = model.get("source") if isinstance(model.get("source"), dict) else {}
+    url = str(source.get("url") or "")
+    if MINICPM5_OLLAMA_TARGET not in url:
+        problems.append(
+            f"{where}: ollama source must pull the first-party "
+            f"{MINICPM5_OLLAMA_TARGET} GGUF"
+        )
+
+    # The Phase 2 negative result is load-bearing product behaviour, not a note. If a
+    # later edit flips either of these without redoing the probe, users would be routed
+    # to a model whose tool calls this runtime provably cannot read.
+    if model.get("task") != "chat":
+        problems.append(
+            f"{where}: task must be 'chat' -- Phase 2 proved the tool-call delimiters "
+            f"are stripped by the Ollama detokenizer (see v2.4.10-model-evidence.md)"
+        )
+    if model.get("agentic"):
+        problems.append(
+            f"{where}: agentic must be false -- no Nexus parser can read this model's "
+            f"tool calls through Ollama"
+        )
+    if model.get("toolCallingVerified"):
+        problems.append(
+            f"{where}: toolCallingVerified must be false -- all five parsers returned "
+            f"zero calls on nine transcripts"
+        )
+    if "recommended" in (model.get("tags") or []):
+        problems.append(
+            f"{where}: must not be tagged 'recommended' while it ships chat-only"
+        )
+
+    blob = _card_copy(model) + " " + str(model.get("licenseNote") or "")
+    for token in MINICPM5_FORBIDDEN_BENCHMARK_TOKENS:
+        if token in blob:
+            problems.append(
+                f"{where}: card copy must not assert unverified vendor benchmark "
+                f"{token!r}"
+            )
+    return problems
+
+
+def _check_tool_calling_claim(model: dict[str, Any], where: str) -> list[str]:
+    """Catalog-wide: a verified-tool-calling claim needs a benchmark record behind it.
+
+    v2.4.10 Phase 3 (T014). Without this, an entry can assert ``toolCallingVerified``
+    with nothing recording who verified it, when, or what they observed.
+    """
+    if not model.get("toolCallingVerified"):
+        return []
+    benchmark = model.get("toolCallingBenchmark")
+    if not isinstance(benchmark, dict) or not benchmark:
+        return [
+            f"{where}: toolCallingVerified is true but no toolCallingBenchmark records "
+            f"the suite, date, and observed result"
+        ]
+    missing = [k for k in ("suite", "date", "result") if not benchmark.get(k)]
+    if missing:
+        return [
+            f"{where}: toolCallingBenchmark is missing {', '.join(sorted(missing))}"
+        ]
+    return []
+
+
+def _check_weight_pins(model: dict[str, Any], where: str) -> list[str]:
+    """Catalog-wide: a weighted entry may not ship an all-zero or empty SHA-256.
+
+    Entries with no ``weights.files`` are out of scope: plenty of rows pull through
+    Ollama and carry no per-file manifest at all, and demanding one here would be a
+    different rule than the one being hoisted.
+    """
+    problems: list[str] = []
+    weights = model.get("weights")
+    if not isinstance(weights, dict):
+        return problems
+    files = weights.get("files")
+    if not isinstance(files, list) or not files:
+        return problems
+    if str(model.get("id") or "") in PLACEHOLDER_SHA_LEGACY_EXEMPT:
+        return problems
+    for entry in files:
+        if not isinstance(entry, dict):
+            continue
+        pin = str(entry.get("sha256") or "")
+        if pin == PLACEHOLDER_SHA256 or not pin:
+            path = str(entry.get("path") or "?")
+            problems.append(
+                f"{where}: weights file {path!r} ships a placeholder SHA-256 pin; "
+                f"rotate it with scripts/installer/build/pin-hf-weights.py"
+            )
+    return problems
+
+
+def _check_global_benchmark_copy(model: dict[str, Any], where: str) -> list[str]:
+    """Catalog-wide: card copy may not assert a vendor benchmark suite result.
+
+    Naming a suite to say Nexus does not quote it is allowed, so a hit is only a
+    violation when the sentence carrying it holds no disclaimer marker.
+    """
+    problems: list[str] = []
+    blob = _card_copy(model) + " " + str(model.get("licenseNote") or "")
+    if not blob.strip():
+        return problems
+    for token in GLOBAL_FORBIDDEN_BENCHMARK_SUITES:
+        if token not in blob:
+            continue
+        if _every_mention_is_disclaimed(blob, token):
+            continue
+        problems.append(
+            f"{where}: card copy must not assert vendor benchmark suite {token!r} "
+            f"(state it as not reproduced, or drop it)"
+        )
+    return problems
+
+
+def _every_mention_is_disclaimed(blob: str, token: str) -> bool:
+    """True when every sentence mentioning ``token`` also carries a disclaimer."""
+    for sentence in re.split(r"(?<=[.!?])\s+", blob):
+        if token not in sentence:
+            continue
+        lowered = sentence.lower()
+        if not any(m in lowered for m in BENCHMARK_DISCLAIMER_MARKERS):
+            return False
+    return True
 
 
 def _card_copy(model: dict[str, Any]) -> str:

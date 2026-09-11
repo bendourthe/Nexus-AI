@@ -14,9 +14,9 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 
 | Category | Open | Resolved |
 |---|---:|---:|
-| Not implemented (NI) | 1 | 0 |
+| Not implemented (NI) | 2 | 0 |
 | Deferred (DF) | 1 | 0 |
-| Bugs / regressions (BG) | 0 | 1 |
+| Bugs / regressions (BG) | 1 | 1 |
 | Warnings (WN) | 2 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
@@ -28,6 +28,20 @@ MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](c
 - **BG-1 (resolved)** - `scripts/check-plan-scope-guard.mjs` was rewritten to CRLF by an in-place `sed`, and Vite's ESM loader rejected the CRLF `.mjs` with `SyntaxError: Invalid or unexpected token` while bare `node` imported it cleanly. Converted to LF, matching every other `scripts/check-*.mjs`. Recorded because the failure mode is invisible to a manual `node` run and would have reached CI. Source phase: 1. Plan reference: T007.
 
 ### Open Items
+
+- **BG-2** - Three catalog entries ship all-zero placeholder SHA-256 pins: `sana-controlnet-canny`, `sana-controlnet-depth`, `sana-controlnet-pose`. Found by hoisting the placeholder-SHA rule catalog-wide in Phase 3; `pin-hf-weights.py --check` independently reports the same three ("3 unpinned weights file(s), 107 in scope"). They cannot be rotated here: `Efficient-Large-Model/SANA-ControlNet-*` returns HTTP 401 to an unauthenticated fetch, so the pin helper has nothing to read. They are also not flagged `gated` and `KNOWN_GATED_IDS` is empty, so invariants B and C never caught them either. A user installing these gets no integrity check at all.
+  - Source phase: 3
+  - Plan reference: sub-task 3.2, hoist 1
+  - Reason: pre-existing since v1.1.0 Phase 12 and outside this plan's scope. Named in `PLACEHOLDER_SHA_LEGACY_EXEMPT` so the new catalog-wide rule protects every other entry rather than being softened for all.
+  - Suggested next step: decide whether these three entries are still wanted. If yes, obtain a token and rotate with `pin-hf-weights.py --from-dir`, or repoint them at a public mirror; if no, drop them. Either way the id leaves the exemption list.
+  - Exit condition (evaluable): `PLACEHOLDER_SHA_LEGACY_EXEMPT` in `scripts/installer/src/nexus_installer/catalog_invariants.py` is empty, or `python scripts/installer/build/pin-hf-weights.py --check` exits zero. Checkable by running one command.
+
+- **NI-2** - `catalog_invariants.py` still carries five bespoke per-id check functions (`_check_lfm_entry`, `_check_muse_entry`, `_check_lightning_entry`, `_check_sam2_entry`, and the new `_check_minicpm5_entry`) that share near-identical clauses for licence label, first-party target, gating, and forbidden copy. Phase 3 hoisted the two genuinely catalog-wide rules out of them, which was the in-scope part, but the remaining duplication should become a declarative per-id table.
+  - Source phase: 3
+  - Plan reference: sub-task 3.2, explicitly parked ("Do NOT restructure the four existing bespoke functions into a declarative table")
+  - Reason: named as design debt by the plan itself and deliberately excluded, because restructuring five functions is a refactor with its own risk profile unrelated to adding one model.
+  - Suggested next step: replace the five functions with one table of per-id contracts (expected licence, expected target, forbidden tokens, required flags) driven by the existing shared `_card_copy` helper, which `_check_lfm_entry` still does not use.
+  - Exit condition (evaluable): `grep -c "^def _check_.*_entry" scripts/installer/src/nexus_installer/catalog_invariants.py` returns fewer than 5. Checkable by running one command.
 
 - **DF-1** - MiniCPM5-2B is not shipped as an agentic model. Through Ollama, the four structural tool-call tags are special tokens that the detokenizer strips, so the wire grammar is unrecoverable and no parser can be written against it. A parser over the stripped text would be a delimiter-free heuristic, and the two correct fixes (Ollama-side detokenization, or moving Nexus to Ollama `/api/chat` with structured `tool_calls`) both lie outside the plan's permitted edit sites, tripping the 2.2 hard stop condition.
   - Source phase: 2
