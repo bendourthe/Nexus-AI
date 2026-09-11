@@ -16,7 +16,7 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 |---|---:|---:|
 | Not implemented (NI) | 1 | 0 |
 | Deferred (DF) | 1 | 3 |
-| Bugs / regressions (BG) | 3 | 9 |
+| Bugs / regressions (BG) | 3 | 11 |
 | Warnings (WN) | 1 | 1 |
 | Missing tests / coverage gaps (MT) | 2 | 2 |
 | Quality-gate gaps (QG) | 1 | 0 |
@@ -43,6 +43,9 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **MT-9 (resolved)** - `SIDECAR_MAX_IMAGE_DIMENSION` is now checked against the Zod cap parsed out of `desktop/sidecar/src/protocol.ts`, so raising the sidecar cap fails the test instead of leaving the UI behind.
 - **DF-7 (resolved)** - The video mode selector is gated on `supportsImageToVideo`: a text-to-video checkpoint no longer offers Image -> Video behind the gear.
 - **DF-8 (resolved)** - The image negative prompt is disabled with its reason on a model that ignores it, and the LoRAs / ControlNet section is not rendered at all for a model supporting neither.
+
+- **BG-17 (resolved)** - The v2.4.8 image-path VRAM handoff released nothing. `image_execute` called `vram_lifecycle.release_vram()` from a `finally` in the SAME frame that still held `pipe`, and the success path returns from inside that `try`, so the frame was alive and the weights were still reachable when the sweep ran. `torch.cuda.empty_cache()` returns only allocator blocks no live tensor holds, so it freed the transient activations and left the SDXL-class weights resident, which is the opposite of what the block's own comment claimed. The chat model still could not come back onto the GPU. A second defect compounded it: `_empty_cache()` ran `empty_cache()` BEFORE `gc.collect()`, skipping everything the collector was about to free, including a pipeline held alive only by the reference cycle a diffusers pipeline normally forms. Fixed by dropping `pipe` and `result` before the sweep and by collecting before emptying. The video path never had the bug: it runs the pipeline in a nested frame that has already exited when `vram_scope` sweeps. `tests/python/diffusion/test_vram_release_regression.py` proves both halves with a weakref and a call-order assertion, and both fail against pre-change code. Found by `nexus-standards-judge` reviewing the v2.4.8 range; fixed out of plan by operator decision.
+- **BG-18 (resolved)** - The v2.4.8 Ollama eviction asked about the wrong model. `evictOllamaForJob(job.pillar)` discarded the job's model identity and the fit test used a per-pillar constant, `{ image: 6.9, video: 8 }`, while `catalog.json` declares image floors from 2 to 20 GB and video floors from 12 to 24 GB. Decisive case: a 24 GB host with a chat model resident holding 12 GB reports 12 GB free; a `wan2.2-ti2v-5b` job (catalog `vramGB` 24) was tested as 8, `12 >= 8 * 1.5` passed, nothing was evicted, and the runtime then chose its offload strategy against 12 GB free for a 24 GB floor -- exactly the CPU-offload path the eviction exists to prevent. Same shape for `sana-1.6b-4k` (20), `sana-1.6b-2k` (12) and `wan2.1-t2v-1.3b` (13, the pre-ticked 16 GB video default). Fixed by resolving the job's own `modelId` against the catalog, keeping the pillar figure only as a fallback for an unknown model or an unreadable catalog. Extracted to `desktop/sidecar/src/models/mediaModelVram.ts` so it is testable without test-only exports. `desktop/tests/media-model-vram.test.ts` asserts the real catalog floors and both sides of the decisive case in one run. Found by `nexus-standards-judge`; fixed out of plan by operator decision.
 
 ### Open Items
 
