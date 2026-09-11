@@ -4,6 +4,36 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-10] v2.4.9 Phase 5 - Terminal gate (publication pending)
+
+Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-last-phase-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P5](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-5-terminal-gate.md). Package remains **2.4.1**. **Nothing pushed; no pull request; no tag.**
+
+### What Changed
+
+- **The fail-closed terminal gate ran in full**, writing one quoted section per duty into the last-phase evidence file: architecture refactor, known-gaps reconciliation, living docs, git-tree hygiene, CI/CD reconciliation, Tier 3 deep pass, Goal-vs-codebase review, human testing suggestions, the full local gate, and deferred verification.
+- **One finding fixed in flight.** `docs/reference/feature-inventory.md` was reachable from nothing; the living-docs duty exists to catch exactly that, and it did. Now linked from `CONTRIBUTING.md` and `AGENTS.md`.
+- **Two architecture findings recorded, not actioned**, both predicted by the plan: seven stale root-level `.vsix` files (untracked local litter) and `core/storage/StorageMigration.ts`, whose line 18 reads "Removed in v1.1.0" while the file, its test, and four referring comments all still exist and nothing calls it. Filed as BG-20.
+
+### Why It Changed
+
+The interesting output of a terminal gate is what it refuses to wave through.
+
+**Definition-of-Done clause 4 is not met and is not claimed.** CodeQL is configured for Python and no scanned-file count exists, because the CLI was deliberately not installed. The plan's own criterion says a count in the thousands would mean the extractor scanned a vendored virtualenv and is a miss rather than a pass; having no count at all is not better than having a wrong one, so it is recorded as deferred with the check that settles it instead of being ticked.
+
+**Branch protection changed the publication mechanics mid-plan.** Protection was applied in Phase 2 while this work sat on `develop` itself, so a direct push to `develop` is now blocked by its own required checks. Publication goes through a feature branch cut at HEAD, with no reset and no history rewrite.
+
+**The pull request will carry 14 commits, not 6.** Measured against the remote rather than local `develop`, as the runbook insists: 98 files, 12,814 insertions. Eight predate this session and cannot be unbundled, so the disposition is disclosure rather than silence.
+
+### Verification
+
+Zero new failures across four suites against the measured baseline: root vitest 61 failed / 476 passed (baseline 61 / 473), desktop 9 / 216 (baseline 9 / 215), python 313 passed (baseline 310), installer python pass. Every failure is the known better-sqlite3 ABI baseline. 54 tests added across the cycle, all confirmed collected by running them.
+
+The Tier 3 pass weighted by blast radius rather than treating artifacts equally: full procedure for the out-of-plan GPU fixes and the checks that can fail CI, reduced path for additive documents. Three adversarial probes on the drift checker confirmed feature names are compared, not compiled as patterns, and that a traversal-shaped evidence path is only ever an existence test. One bounded limit surfaced and recorded: duplicate `##` headings would leave the second slice unenforced.
+
+One decision waits at the gate. Two `feat` commits in this plan compute a **minor** under semantic-release while the plan expects a patch, which per the plan's own instruction is a finding to surface before merging rather than a version to accept.
+
+---
+
 ## [2026-09-10] v2.4.9 Phase 4 - Field feedback has a shape
 
 Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [gaps](v2/v2.4/known-gaps.md), history [P4](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-4-field-feedback.md). Package remains **2.4.1**. Committed locally, not pushed.
