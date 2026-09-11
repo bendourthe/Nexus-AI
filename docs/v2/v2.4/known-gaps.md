@@ -16,7 +16,7 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 |---|---:|---:|
 | Not implemented (NI) | 2 | 0 |
 | Deferred (DF) | 3 | 3 |
-| Bugs / regressions (BG) | 5 | 11 |
+| Bugs / regressions (BG) | 6 | 11 |
 | Warnings (WN) | 1 | 1 |
 | Missing tests / coverage gaps (MT) | 2 | 2 |
 | Quality-gate gaps (QG) | 3 | 0 |
@@ -170,6 +170,19 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Owner**: Unassigned
 - **Exit condition**: Either the file and its test are removed and the four referring comments updated, or the header's "Removed in v1.1.0" line is corrected to state that the code is retained deliberately and why. Evaluable by reading line 18 against the file's existence.
 - **Suggested next step**: Settle it alongside the v2.5.0 migration work, where the naming collision will be in front of whoever is reading these modules anyway.
+
+##### BG-21 - Windows installer fails to provision Node: leaked `mkstemp` descriptor (WinError 32)
+
+- **Source**: v2.4.9 Phase 5 (5.10), surfaced by the new `installer-smoke` pull-request trigger on its FIRST run
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 2.4
+- **Impact**: The Windows smoke test fails at the "Wiring Desktop Runtime" step. From `smoke-windows-results/installer.json`: `"success": false, "steps_failed": ["runtime"]`, with `Engine exception: PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: '...
+exus-node-c2b7vp95.zip'`. The Linux smoke test passes the same step, which is the signature of a Windows file-locking defect rather than a download or checksum problem. **Root cause identified**: `scripts/installer/src/nexus_installer/engine/runtime_provisioner.py:173` calls `Path(tempfile.mkstemp(prefix="nexus-node-", suffix=suffix)[1])`, taking only the path from the `(fd, path)` tuple and **never closing the file descriptor**. On Windows that leaves an OS handle open for the life of the process, so the `finally: tmp.unlink(missing_ok=True)` raises `PermissionError` (`missing_ok` does not cover a locked file) and the exception propagates out of the provisioner, failing the runtime step. POSIX permits unlinking an open file, which is why only Windows breaks. The consequence for a user is that a Windows install does not provision the Node runtime.
+- **Not introduced by this cycle.** The line dates to `bd63e52b` (2026-08-22) and is **already present on `origin/develop`**, confirmed by `git show origin/develop:...`. The v2.4.9 work neither caused it nor makes it worse; the new pull-request trigger on `installer-smoke` is what made it visible, roughly three weeks before the monthly cron would have. That is the trigger change doing exactly what Phase 2.4 claimed it would.
+- **Why the 2026-09-01 scheduled run passed** is not established. The defect looks deterministic on Windows, so either the runner image changed or the failing path was not reached that day. Worth a moment's confirmation before the fix is called complete, so the fix is not credited for a flake.
+- **Reason not done in this cycle**: It is pre-existing shipped code in the installer, outside every phase of this plan, and `installer-smoke` is deliberately not a required check, so it blocks nothing. Fixing it inside this plan's terminal phase would be an unrequested scope change.
+- **Owner**: Unassigned
+- **Exit condition**: `fd, path = tempfile.mkstemp(...)` followed by `os.close(fd)` (or a `with os.fdopen(fd, "wb")` write path), and a green Windows smoke run. One line, plus a regression test that asserts the descriptor is closed.
+- **Suggested next step**: Fix it before the next installer build ships, and check the two sibling `NamedTemporaryFile(delete=False)` call sites in `ollama_installer.py` for the same pattern while the context is loaded.
 
 ## v2.4.8
 
