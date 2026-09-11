@@ -2,11 +2,39 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-09-10
+**Last updated**: 2026-09-11
 
 Per-version tracker of unfinished work, deferrals, and follow-ups. The next plan ingests this file to decide what carries forward. Classifications: `NI` not-implemented, `DF` deferred, `BG` bug/known-issue, `MT` missing-tests/coverage, `WN` warning/suppressed, `QG` bypassed-gate/CI.
 
-Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [v2.4.1 field reliability](plans/v2.4.1-field-reliability-chat-archives-models-workspaces.md), [v2.4.1 generation recovery](plans/v2.4.1-generation-recovery-and-ui-corrections.md), [v2.4.2 field UI and generation](plans/v2.4.2-field-ui-history-and-generation.md), [v2.4.3 field density](plans/v2.4.3-field-density-identity-and-runtime.md), [v2.4.4 field chrome, restyle, SANA, density](plans/v2.4.4-field-chrome-restyle-sana-and-density.md), [v2.4.5 installer already-downloaded models](plans/v2.4.5-installer-already-downloaded-models.md), [v2.4.6 field delivery, density, and session identity](plans/v2.4.6-field-delivery-density-and-session-identity.md), [v2.4.7 installer wizard density and scope](plans/v2.4.7-installer-wizard-density-and-scope.md), [v2.4.8 desktop token split, persona, and model order](plans/v2.4.8-desktop-token-split-persona-and-model-order.md), [v2.4.9 VoiceStudio field-discipline adoption](plans/v2.4.9-adoption-voicestudio-field-discipline.md)
+Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [v2.4.1 field reliability](plans/v2.4.1-field-reliability-chat-archives-models-workspaces.md), [v2.4.1 generation recovery](plans/v2.4.1-generation-recovery-and-ui-corrections.md), [v2.4.2 field UI and generation](plans/v2.4.2-field-ui-history-and-generation.md), [v2.4.3 field density](plans/v2.4.3-field-density-identity-and-runtime.md), [v2.4.4 field chrome, restyle, SANA, density](plans/v2.4.4-field-chrome-restyle-sana-and-density.md), [v2.4.5 installer already-downloaded models](plans/v2.4.5-installer-already-downloaded-models.md), [v2.4.6 field delivery, density, and session identity](plans/v2.4.6-field-delivery-density-and-session-identity.md), [v2.4.7 installer wizard density and scope](plans/v2.4.7-installer-wizard-density-and-scope.md), [v2.4.8 desktop token split, persona, and model order](plans/v2.4.8-desktop-token-split-persona-and-model-order.md), [v2.4.9 VoiceStudio field-discipline adoption](plans/v2.4.9-adoption-voicestudio-field-discipline.md), [v2.4.10 MiniCPM5-2B catalog and runtime adoption](plans/v2.4.10-adoption-minicpm5-mistral-models.md)
+
+## v2.4.10
+
+### Summary
+
+| Category | Open | Resolved |
+|---|---:|---:|
+| Not implemented (NI) | 0 | 0 |
+| Deferred (DF) | 0 | 0 |
+| Bugs / regressions (BG) | 0 | 1 |
+| Warnings (WN) | 1 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
+| Quality-gate gaps (QG) | 0 | 0 |
+
+MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](comparisons/v2.4.10-comparison-minicpm5-mistral-models.md). Phase 1 registered the model in the coding runtime and recorded measured provenance; nothing user-visible has changed yet. The plan's Goal is conditional on Phase 2 tool-call evidence, so a recorded negative result is a legitimate close.
+
+### Resolved
+
+- **BG-1 (resolved)** - `scripts/check-plan-scope-guard.mjs` was rewritten to CRLF by an in-place `sed`, and Vite's ESM loader rejected the CRLF `.mjs` with `SyntaxError: Invalid or unexpected token` while bare `node` imported it cleanly. Converted to LF, matching every other `scripts/check-*.mjs`. Recorded because the failure mode is invisible to a manual `node` run and would have reached CI. Source phase: 1. Plan reference: T007.
+
+### Open Items
+
+- **WN-1** - The v2.4.10 scope guard resolves its base ref against local `develop`, then `origin/develop`, and fails closed when neither resolves. A CI runner using a shallow clone (`fetch-depth: 1`) has neither ref, so the guard would fail closed and red the job even though nothing is wrong with the diff. It is not wired into a workflow today and executes only through `tests/unit/scripts/planScopeGuard.test.ts`, so nothing is broken right now.
+  - Source phase: 1
+  - Plan reference: T007, sub-task 1.4
+  - Reason: changing a pipeline file is out of scope for a non-final phase; the plan routes pipeline work to the Phase 5 terminal reconciliation.
+  - Suggested next step: during Phase 5.5, either set `fetch-depth: 0` on the job that runs the unit suite or teach the guard to degrade to a recorded skip when no base ref exists in a shallow checkout. Decide there, with the CI provider in front of you.
+  - Exit condition (evaluable): the Phase 5.5 CI/CD coverage section of `docs/v2/v2.4/development/last-phase-evidence.md` records either the `fetch-depth` change or an explicit decision to leave the guard test-suite-only. Checkable by reading that file.
 
 ## v2.4.9
 

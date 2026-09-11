@@ -19,7 +19,7 @@
  *    content-addressed registry; the public type surface stays stable).
  */
 
-export type ModelFamily = "gemma" | "llama" | "qwen" | "deepseek" | "lfm2.5" | "hermes" | "muse-glimmer" | "nemotron-lightning" | "gpt-oss";
+export type ModelFamily = "gemma" | "llama" | "qwen" | "deepseek" | "lfm2.5" | "hermes" | "muse-glimmer" | "nemotron-lightning" | "gpt-oss" | "minicpm5";
 
 export type PromptFormatName = "gemma4" | "llama3" | "qwen" | "deepseek" | "lfm";
 
@@ -193,6 +193,17 @@ const ENTRIES: readonly LlmCatalogEntry[] = Object.freeze([
     sampling: { temperature: 0.3, topP: 0.9, topK: 50, contextLength: 128000 },
     promptFormat: "lfm",
     toolFormat: "lfm-pythonic",
+  },
+  {
+    id: "minicpm5:2b",
+    displayName: "MiniCPM5 2B",
+    family: "minicpm5",
+    runtime: "ollama",
+    vramGb: 3,
+    tags: Object.freeze(["coding", "tool-use", "lightweight"]),
+    sampling: { temperature: 1.0, topP: 0.95, topK: 50, contextLength: 131072 },
+    promptFormat: "qwen",
+    toolFormat: "qwen-json",
   },
   {
     id: "hermes3:8b",
