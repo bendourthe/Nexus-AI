@@ -170,7 +170,14 @@ def provision_node(payload_dir: Path | None, log: LogFn) -> Path | None:
         else ".tar" + pin["url"].rsplit(".tar", 1)[-1]
     )
     log(f"Downloading Node {NODE_VERSION} ({key})...", "info")
-    tmp = Path(tempfile.mkstemp(prefix="nexus-node-", suffix=suffix)[1])
+    # Close the descriptor mkstemp hands back. Taking only [1] leaks it, and on
+    # Windows that open handle makes the `finally` unlink raise WinError 32
+    # ("used by another process"), which propagates out of the provisioner and
+    # fails the whole runtime step. POSIX allows unlinking an open file, so the
+    # leak was invisible on Linux and macOS and broke only Windows installs.
+    _fd, _tmp_path = tempfile.mkstemp(prefix="nexus-node-", suffix=suffix)
+    os.close(_fd)
+    tmp = Path(_tmp_path)
     try:
         with httpx.stream("GET", pin["url"], follow_redirects=True, timeout=60) as resp:
             resp.raise_for_status()
