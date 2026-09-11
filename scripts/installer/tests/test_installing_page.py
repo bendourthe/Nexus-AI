@@ -108,3 +108,52 @@ def test_page_cancel_stops_overall_animation(qt_app: object) -> None:
     qt_app.processEvents()
     page.cancel_install()
     assert not page._progress.is_animation_running()
+
+
+def test_overall_bar_uses_the_desktop_particle_treatment(qt_app: object) -> None:
+    """v2.4.9: the installer bar and the desktop generation bar are one design.
+
+    The operator asked for "the same progress bar design as the loading model
+    one". The shared grammar is a dark inset capsule, an accent ramp, and a
+    drifting particle field -- NOT the old sweeping sheen, which was this
+    widget's own idiom and washed the fill into a pale band.
+    """
+    from nexus_installer.widgets.overall_progress import PARTICLE_LAYERS
+
+    # Five layers, mirroring the five radial-gradient layers in globals.css.
+    assert len(PARTICLE_LAYERS) == 5
+    # Alternating drift signs are what give the field depth; one direction
+    # reads as a single sliding texture.
+    drifts = [layer[3] for layer in PARTICLE_LAYERS]
+    assert any(d > 0 for d in drifts) and any(d < 0 for d in drifts)
+    for spacing, radius, alpha, _drift, y_ratio in PARTICLE_LAYERS:
+        assert spacing > 0
+        assert 0 < radius < 4
+        assert 0 < alpha <= 255
+        assert 0.0 <= y_ratio <= 1.0
+
+
+def test_overall_bar_paints_at_every_fraction(qt_app: object) -> None:
+    """Painting must not raise at the edges: empty, sliver, and full.
+
+    A zero-width fill is the one that historically divides by zero, and a
+    full-width one is where the particle loop runs longest.
+    """
+    from PyQt5.QtGui import QPixmap
+
+    for fraction in (0.0, 0.001, 0.5, 1.0):
+        bar = OverallProgressBar(reduced_motion=False)
+        bar.resize(400, 30)
+        bar.set_fraction(fraction)
+        pixmap = QPixmap(bar.size())
+        bar.render(pixmap)
+        assert not pixmap.isNull()
+
+
+def test_reduced_motion_freezes_the_particle_field(qt_app: object) -> None:
+    """Reduced motion keeps the texture and stops the movement."""
+    bar = OverallProgressBar(reduced_motion=True)
+    bar.resize(400, 30)
+    bar.set_fraction(0.6)
+    assert bar.reduced_motion is True
+    assert not bar.is_animation_running()
