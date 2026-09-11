@@ -14,20 +14,41 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 
 | Category | Open | Resolved |
 |---|---:|---:|
-| Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 0 | 0 |
+| Not implemented (NI) | 1 | 0 |
+| Deferred (DF) | 1 | 0 |
 | Bugs / regressions (BG) | 0 | 1 |
-| Warnings (WN) | 1 | 0 |
+| Warnings (WN) | 2 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
-MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](comparisons/v2.4.10-comparison-minicpm5-mistral-models.md). Phase 1 registered the model in the coding runtime and recorded measured provenance; nothing user-visible has changed yet. The plan's Goal is conditional on Phase 2 tool-call evidence, so a recorded negative result is a legitimate close.
+MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](comparisons/v2.4.10-comparison-minicpm5-mistral-models.md). Phase 2 resolved decision 2.2 to **option 3**: the model is not shipped as an agentic entry. It emits correct tool calls, but `<function`, `</function>`, `<param`, and `</param>` are special tokens (ids 18-21) that Ollama's detokenizer removes before any Nexus parser sees them, so all five parsers return zero calls on nine transcripts. The plan's Definition of Done explicitly accepts this negative branch as a pass: transcripts recorded, no agentic claim, no user routed to the model. Phase 4 is skipped in full and low-VRAM users stay on `lfm2.5:2.6b`. Evidence: [v2.4.10-model-evidence.md](development/v2.4.10-model-evidence.md), raw transcripts in [v2.4.10-minicpm5-transcripts.json](development/v2.4.10-minicpm5-transcripts.json).
 
 ### Resolved
 
 - **BG-1 (resolved)** - `scripts/check-plan-scope-guard.mjs` was rewritten to CRLF by an in-place `sed`, and Vite's ESM loader rejected the CRLF `.mjs` with `SyntaxError: Invalid or unexpected token` while bare `node` imported it cleanly. Converted to LF, matching every other `scripts/check-*.mjs`. Recorded because the failure mode is invisible to a manual `node` run and would have reached CI. Source phase: 1. Plan reference: T007.
 
 ### Open Items
+
+- **DF-1** - MiniCPM5-2B is not shipped as an agentic model. Through Ollama, the four structural tool-call tags are special tokens that the detokenizer strips, so the wire grammar is unrecoverable and no parser can be written against it. A parser over the stripped text would be a delimiter-free heuristic, and the two correct fixes (Ollama-side detokenization, or moving Nexus to Ollama `/api/chat` with structured `tool_calls`) both lie outside the plan's permitted edit sites, tripping the 2.2 hard stop condition.
+  - Source phase: 2
+  - Plan reference: sub-task 2.2, option 3
+  - Reason: not a model defect and not a Nexus defect; a runtime-boundary limitation proven by controlled experiment. Recorded rather than worked around, because every available workaround either ships dead code or ships a fragile heuristic under a grammar name.
+  - Suggested next step: re-probe when either condition below holds, then re-open the agentic question with the same five-way verdict method.
+  - Exit condition (evaluable): re-run the recorded echo experiment against a newer Ollama (`/api/generate`, `raw: true`, prompt asking the model to echo `<banana> <function <param </xyz>`). If `<function` appears in the response string, the blocker is gone. Alternatively, if Nexus gains an `/api/chat` tool-call path AND Ollama ships a tools-aware template for this GGUF, the second route opens. Both are checkable by running one command and reading one file.
+
+- **NI-1** - `minicpm5:2b` carries `toolFormat: "qwen-json"` in `ModelCatalog.ts` and `models.json`. It is a Phase 1 placeholder that is deliberately NOT correct: the model does not emit the qwen envelope. `ToolFormatName` is a closed union with no truthful member for this model, and the field is required and non-nullable, so some value must be present.
+  - Source phase: 2
+  - Plan reference: sub-task 1.3 placeholder, resolved by decision 2.2
+  - Reason: the value is inert. The row ships `task: chat` with `agentic: false`, so no agentic code path selects this model and the parser is never invoked. Making the type honest would mean either a nullable `toolFormat` or a `none` union member, both of which touch the shared type and every consumer, which is well beyond this plan.
+  - Suggested next step: when DF-1 is revisited, either point `toolFormat` at the real parser added then, or introduce a `none` member to `ToolFormatName` and audit the consumers that assume a parser always exists.
+  - Exit condition (evaluable): `grep toolFormat core/registry/models.json` for the `minicpm5:2b` entry returns something other than `qwen-json`, or the entry is removed. Checkable by reading one file.
+
+- **WN-2** - Ollama's bundled template for `hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M` has no `{{ if .Tools }}` branch (204-byte template blob handling only `.System`, `.Prompt`, `.Response`). Tool definitions passed to `/api/chat` are therefore never rendered into the prompt, and the model answers as if no tools exist. This is independent of the detokenization blocker in DF-1 and would have to be solved too.
+  - Source phase: 2
+  - Plan reference: sub-task 2.1 probe method
+  - Reason: recorded while establishing why the probe uses `/api/generate` rather than `/api/chat`. Not actionable inside this plan.
+  - Suggested next step: fold into the DF-1 re-probe; a tools-aware template is a precondition for the `/api/chat` route.
+  - Exit condition (evaluable): `cat` the template blob named by the model's Ollama manifest and check for a `.Tools` reference. Checkable by reading one file.
 
 - **WN-1** - The v2.4.10 scope guard resolves its base ref against local `develop`, then `origin/develop`, and fails closed when neither resolves. A CI runner using a shallow clone (`fetch-depth: 1`) has neither ref, so the guard would fail closed and red the job even though nothing is wrong with the diff. It is not wired into a workflow today and executes only through `tests/unit/scripts/planScopeGuard.test.ts`, so nothing is broken right now.
   - Source phase: 1
