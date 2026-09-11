@@ -1,10 +1,23 @@
-"""Prominent animated overall installer progress widget."""
+"""Prominent animated overall installer progress widget.
+
+v2.4.9: repainted to match the desktop app's generation bar
+(`.nexus-genbar` in `desktop/src/styles/globals.css`), so the installer and the
+product it installs show the same progress treatment rather than two different
+bars. The shared grammar is: a dark inset capsule with a faint accent rim, an
+accent gradient fill with an outer glow, and a field of pale particles drifting
+along the fill at several speeds.
+
+Two deliberate differences from the web bar, both because this is the
+installer's ONLY progress readout while the desktop bar has a caption and a
+timing row around it: the capsule stays tall enough to carry a percentage
+badge, and the badge is kept.
+"""
 
 from __future__ import annotations
 
 import math
 
-from PyQt5.QtCore import QRectF, QSize, Qt, QTimer
+from PyQt5.QtCore import QPointF, QRectF, QSize, Qt, QTimer
 from PyQt5.QtGui import QColor, QLinearGradient, QPainter, QPainterPath, QPen
 from PyQt5.QtWidgets import QProgressBar, QWidget
 
@@ -13,6 +26,8 @@ from nexus_installer.constants import (
     ACCENT_BRIGHT,
     ACCENT_DIM,
     BG_CARD,
+    BG_HEADER,
+    BG_WINDOW,
     BORDER,
     TEXT_PRIMARY,
 )
@@ -22,6 +37,19 @@ OVERALL_PROGRESS_HEIGHT = 30
 FRAME_INTERVAL_MS = 40
 ANIMATION_CYCLE_MS = 12_000
 BAR_INSET = 2.0
+
+#: Particle layers, mirroring the five radial-gradient layers of
+#: `.nexus-genbar-particles`. Each is (spacing px, radius px, alpha 0-255,
+#: drift px per animation cycle, vertical position 0-1). Alternating drift
+#: signs are what make the field read as depth rather than one sliding
+#: texture.
+PARTICLE_LAYERS: tuple[tuple[float, float, int, float, float], ...] = (
+    (42.0, 1.1, 217, 42.0, 0.50),
+    (66.0, 0.9, 140, -66.0, 0.32),
+    (54.0, 1.3, 178, 54.0, 0.68),
+    (88.0, 0.8, 115, -88.0, 0.40),
+    (72.0, 1.0, 166, 72.0, 0.60),
+)
 
 
 class OverallProgressBar(QProgressBar):
@@ -115,16 +143,54 @@ class OverallProgressBar(QProgressBar):
         super().hideEvent(event)  # type: ignore[arg-type]
         self._timer.stop()
 
+    def _paint_particles(self, painter: QPainter, fill_rect: QRectF) -> None:
+        """Drifting pale dots inside the fill, one pass per layer.
+
+        The web bar gets this from five repeating radial gradients animated at
+        different rates; Qt has no repeating-gradient primitive, so each layer
+        is drawn as a row of dots whose x positions are offset by the shared
+        animation phase times that layer's own drift. Same construction, same
+        result: a field with depth rather than one sliding texture.
+
+        The caller has already clipped to the fill path, so dots near the
+        leading edge are cut by the capsule instead of spilling past it.
+        """
+        if fill_rect.width() <= 0:
+            return
+        # Reduced motion keeps the field but freezes it: the dots still read as
+        # texture, nothing moves.
+        phase = 0.0 if self._reduced_motion else self._phase
+        painter.setPen(Qt.PenStyle.NoPen)
+        for spacing, dot_radius, alpha, drift, y_ratio in PARTICLE_LAYERS:
+            colour = QColor("#ffffff")
+            colour.setAlpha(alpha)
+            painter.setBrush(colour)
+            y = fill_rect.top() + fill_rect.height() * y_ratio
+            # Start one spacing to the left so a dot entering the capsule is
+            # never popped into existence at the edge.
+            offset = (phase * drift) % spacing
+            x = fill_rect.left() - spacing + offset
+            while x <= fill_rect.right() + spacing:
+                painter.drawEllipse(QPointF(x, y), dot_radius, dot_radius)
+                x += spacing
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+
     def paintEvent(self, _event: object) -> None:  # noqa: N802
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
         rect = QRectF(self.rect().adjusted(0, 0, -1, -1))
         radius = rect.height() / 2.0
 
+        # Track: the web bar's dark vertical wash under a faint accent rim.
         track_path = QPainterPath()
         track_path.addRoundedRect(rect, radius, radius)
-        painter.fillPath(track_path, QColor(BG_CARD))
-        painter.setPen(QPen(QColor(BORDER), 1.0))
+        track = QLinearGradient(0.0, rect.top(), 0.0, rect.bottom())
+        track.setColorAt(0.0, QColor(BG_WINDOW))
+        track.setColorAt(1.0, QColor(BG_HEADER))
+        painter.fillPath(track_path, track)
+        rim = QColor(ACCENT)
+        rim.setAlpha(56)  # 22% of the accent, as in the CSS inset ring
+        painter.setPen(QPen(rim, 1.0))
         painter.drawPath(track_path)
 
         denominator = max(1, self.maximum() - self.minimum())
@@ -143,50 +209,32 @@ class OverallProgressBar(QProgressBar):
             fill_path.addRoundedRect(fill_rect, fill_radius, fill_radius)
 
             painter.save()
+            # Outer glow, the Qt stand-in for the CSS box-shadow on the fill.
+            glow = QColor(ACCENT)
+            for step, alpha in ((2.5, 26), (1.5, 44)):
+                glow.setAlpha(alpha)
+                halo = QPainterPath()
+                halo_rect = fill_rect.adjusted(-step, -step, step, step)
+                halo_radius = halo_rect.height() / 2.0
+                halo.addRoundedRect(halo_rect, halo_radius, halo_radius)
+                painter.setPen(QPen(glow, 1.2))
+                painter.setBrush(Qt.BrushStyle.NoBrush)
+                painter.drawPath(halo)
+
+            # Fill: dim at the left, full accent at the leading edge, matching
+            # the web bar's 38% -> 92% ramp.
             base = QLinearGradient(fill_rect.left(), 0.0, fill_rect.right(), 0.0)
             base.setColorAt(0.0, QColor(ACCENT_DIM))
-            base.setColorAt(0.45, QColor(ACCENT))
-            base.setColorAt(1.0, QColor(ACCENT_DIM))
+            base.setColorAt(1.0, QColor(ACCENT))
             painter.fillPath(fill_path, base)
 
             painter.setClipPath(fill_path)
-            sheen_width = max(80.0, min(220.0, fill_rect.width() * 0.42))
-            phase = 0.5 if self._reduced_motion else self._phase
-            sheen_center = (
-                fill_rect.left()
-                - sheen_width
-                + phase * (fill_rect.width() + (sheen_width * 2.0))
-            )
-            sheen = QLinearGradient(
-                sheen_center - sheen_width,
-                fill_rect.top(),
-                sheen_center + sheen_width,
-                fill_rect.bottom(),
-            )
-            transparent = QColor(ACCENT_BRIGHT)
-            transparent.setAlpha(0)
-            soft = QColor(ACCENT_BRIGHT)
-            soft.setAlpha(72)
-            glass = QColor("#e8fbff")
-            glass.setAlpha(145)
-            sheen.setColorAt(0.0, transparent)
-            sheen.setColorAt(0.32, soft)
-            sheen.setColorAt(0.5, glass)
-            sheen.setColorAt(0.68, soft)
-            sheen.setColorAt(1.0, transparent)
-            painter.fillRect(fill_rect, sheen)
-
-            top_glass = QLinearGradient(0.0, fill_rect.top(), 0.0, fill_rect.bottom())
-            top = QColor("#ffffff")
-            top.setAlpha(70)
-            bottom = QColor("#03131c")
-            bottom.setAlpha(45)
-            clear = QColor("#ffffff")
-            clear.setAlpha(0)
-            top_glass.setColorAt(0.0, top)
-            top_glass.setColorAt(0.38, clear)
-            top_glass.setColorAt(1.0, bottom)
-            painter.fillRect(fill_rect, top_glass)
+            self._paint_particles(painter, fill_rect)
+            # v2.4.9: the sweeping sheen and the top/bottom "glass" ramp are
+            # gone. They were this widget's own idiom and, next to the desktop
+            # bar, washed the fill into a pale band that read as a different
+            # control. The web bar's fill is the accent ramp plus particles;
+            # so is this one now.
             painter.restore()
 
             outline = QColor(ACCENT_BRIGHT)
