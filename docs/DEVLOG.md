@@ -4,6 +4,35 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-10] v2.4.9 Phase 2 - Security coverage, reporting first
+
+Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-security-coverage-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P2](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-2-security-coverage.md). Package remains **2.4.1**. Committed locally, not pushed.
+
+### What Changed
+
+- **CodeQL sees Python.** 308 tracked Python files -- the whole PyQt installer and all three model runtimes -- were outside the scan. `python` joins the matrix at `build-mode: none` (source-only, because installing multi-gigabyte ML trees to scan them costs more than the scan), the job name is templated per language, `develop` joins the triggers, and a `paths-ignore` keeps the extractor out of any vendored virtualenv.
+- **A sibling job audits what ships to users.** `audit-runtimes` covers `runtimes/{audio,diffusion,ocr}/requirements.txt`. Deliberately not a matrix dimension on the existing `audit-py`, which is built around a uv project whose cache key and export step do not transfer to unlocked requirements. Audited **resolved, not as written**, because those files carry no exact pins at all, so "as written" has no version for an advisory to match.
+- **Secret scanning, with the backlog measured first.** New `secrets.yml` runs gitleaks over full history. `.gitleaks.toml` justifies every finding.
+- **Installer smoke fires on installer paths**, not only a monthly cron.
+- **D2 answered**: gate the two checks whose backlog measured zero; leave CodeQL Python reporting-only until its first count exists.
+- **Branch protection applied** to `develop` and `main`, by operator decision, with 17 required checks.
+
+### Why It Changed
+
+The plan expected backlogs big enough to need bounding, and budgeted an allowlist of the top 10 clusters with a residual to carry forward. The measurements came back smaller: 180 resolved packages across the three runtime sets with **zero advisories**, and 16 gitleaks findings across 750 commits, every one a synthetic test fixture or a false positive -- the one non-test hit is a design doc listing CSS font-weight constants as "weight tokens". Nine clusters is fewer than ten, so the allowlist covers the whole backlog and the residual is zero rather than a number to chase.
+
+That is what moved D2. Gating an empty backlog costs nothing today and converts any future red into new information, so the two measured checks gate and the unmeasured one does not.
+
+The bigger surprise was the premise. D2 is framed in the plan as a decision that changes branch protection; there was no branch protection, and no rulesets either, on a public repository. Nothing blocked a merge. Surfaced with options, and the operator chose to apply protection now.
+
+### Verification
+
+20 workflows parse, 36 meta-tests pass, and gitleaks re-run with the allowlist over the same 750 commits reports no leaks. Required checks were chosen against a real CI run rather than a guess: all 17 were green on the latest `develop` run and all run on every pull request. Four categories were deliberately excluded, because a wrongly required check locks a repository: the three path-filtered workflows (no check at all on an unrelated PR, so a required entry sits pending forever), `npm audit (production deps)` (currently red -- `sharp` via `@huggingface/transformers` has advisories with no fix, recorded as BG-19), the self-declared non-blocking audit, and the CodeQL jobs (`continue-on-error`, so always green).
+
+The two newly gating checks are not yet required, because neither has run once; that is QG-2, closed at the integration PR. The 17-individual-contexts shape is itself a gap against the canonical contract's aggregate-check field: QG-3.
+
+---
+
 ## [2026-09-10] v2.4.9 - Two v2.4.8 GPU-handoff fixes (out of plan)
 
 Index: [gaps](v2/v2.4/known-gaps.md) BG-17, BG-18. Found by `nexus-standards-judge` on its first invocation, against the pinned v2.4.8 range `989107c7..f36afd9c`. Fixed out of plan by operator decision; the v2.4.9 plan's Non-Goals would otherwise have recorded them and moved on.

@@ -1,0 +1,77 @@
+# gitleaks configuration -- v2.4.9 Phase 2.
+#
+# Secret scanning runs NON-GATING in this release. The point of landing it now
+# is to size the historical backlog before anyone commits to clearing it, and
+# the backlog turned out to be small: a full-history scan of 750 commits
+# (~40 MB) returned 16 findings across 9 files, and every one is a synthetic
+# fixture or a false positive. There is no residual: this allowlist covers the
+# whole backlog rather than a bounded top-N slice, so the exit condition the
+# plan budgeted for ("residual count reaches zero") is already met.
+#
+# Every entry below names why the matched value is not a live secret. An entry
+# that cannot state that does not belong here -- the correct response to a real
+# secret is rotation and history surgery, never an allowlist line.
+#
+# Note on wording: these descriptions deliberately DESCRIBE the fixture values
+# rather than reproducing them. Quoting the literals here would make this file
+# itself a finding, and the repository's own pre-write secret-scan hook blocks
+# exactly that, which is the check behaving correctly.
+#
+# Scan reproduced with:
+#   gitleaks git --no-banner --redact --report-format json --report-path <out>
+
+title = "Nexus-AI gitleaks configuration"
+
+[extend]
+# Start from the shipped ruleset rather than hand-rolling detectors.
+useDefault = true
+
+# --- Redaction and policy tests -------------------------------------------
+#
+# These files exist to prove that Nexus REDACTS secrets. Each one has to embed
+# a string that looks like a credential, because a redaction test with nothing
+# to redact asserts nothing. The values are visibly constructed: a token prefix
+# concatenated with a repeated character, sequential digits, and alphabet runs.
+
+[[allowlists]]
+description = "redactSecrets unit test. Fixtures are built in-source by concatenating a token prefix with a repeated character, so no value is a real credential. The test asserts each one is scrubbed from telemetry."
+paths = ['''^tests/unit/core/observability/redactSecrets\.test\.ts$''']
+
+[[allowlists]]
+description = "TraceFile unit test. An api-key assignment written into a fake trace line to prove the trace writer strips it before the file is persisted."
+paths = ['''^tests/unit/observability/TraceFile\.test\.ts$''']
+
+[[allowlists]]
+description = "check-prompt-policy hook test. A synthetic personal-access-token and JWT fed to the prompt-policy hook to prove it blocks a prompt carrying credentials."
+paths = ['''^tests/unit/hooks/check-prompt-policy\.test\.ts$''']
+
+[[allowlists]]
+description = "coding-panelData test. The flagged string is the INPUT to redactSecrets(); its three fake credentials are alphabet runs, and the assertion is that none of them survives the call."
+paths = ['''^desktop/tests/coding-panelData\.test\.ts$''']
+
+[[allowlists]]
+description = "credential-vault MCP integration test. A fixture secret stored in and read back from the vault under test. It never leaves the test process."
+paths = ['''^tests/integration/mcp/credential-vault-mcp\.test\.ts$''']
+
+[[allowlists]]
+description = "gemma-check CLI test. A synthetic private-key block used to prove the tampering check reports it. Not a usable key."
+paths = ['''^tests/unit/cli/gemma-check\.test\.ts$''']
+
+# --- Fixtures in behavioural tests ----------------------------------------
+
+[[allowlists]]
+description = "ReflexionDiagnoser test. A fake personal-access-token whose body is sequential digits, asserted to be absent from the diagnosis the engine produces."
+paths = ['''^tests/unit/skilloptimizer/ReflexionDiagnoser\.test\.ts$''']
+
+[[allowlists]]
+description = "studioStore test. A prompt string carrying a fake access-key id built from an alphabet run, round-tripped through the generation index; the test asserts the stored workflow no longer contains the key prefix."
+paths = ['''^tests/unit/core/generations/studioStore\.test\.ts$''']
+
+# --- False positive --------------------------------------------------------
+
+[[allowlists]]
+description = "v1.9.0 UI design doc. The generic-api-key rule matches a sentence listing CSS font-weight constants as 'weight tokens'. They are numeric style constants, not credentials. Both the historical and current paths are listed because the file moved in the docs-layout refactor and history is scanned."
+paths = [
+  '''^docs/v1/v1\.9/ui-rework-design\.md$''',
+  '''^docs/versions/v1/v1\.9\.0/ui-rework-design\.md$''',
+]
