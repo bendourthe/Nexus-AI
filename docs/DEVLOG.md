@@ -4,6 +4,33 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-10] v2.4.9 Phase 3 - The inventory becomes true, then enforced
+
+Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [contract](reference/feature-inventory.md), [gaps](v2/v2.4/known-gaps.md), history [P3](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-3-inventory-enforced.md). Package remains **2.4.1**. Committed locally, not pushed.
+
+### What Changed
+
+- **`feature_list.json` rebuilt against the shipped product.** It declared `v0.8.0` while `package.json` read `2.4.1`, and its 21 entries described an architecture that no longer exists (a "6-stage compaction pipeline", a "webview render protocol"). Now 29 entries, one per feature the README actually names, every `evidence` path resolving.
+- **A drift checker that gates every pull request.** `scripts/check-feature-drift.mjs` asserts two things in both directions: every evidence path resolves, and the inventory and the README name the same features. Dependency-free, so its CI job needs no install.
+- **A daily rolling issue.** `docs-drift.yml` keeps exactly one open issue, updates it in place, and closes it when drift clears.
+- **The contract is written down**, at [docs/reference/feature-inventory.md](reference/feature-inventory.md), because the checker's behaviour is unreadable without the three decisions behind it.
+
+### Why It Changed
+
+An inventory nobody reads is not an inventory. The interesting part is what the checker refuses to do. It never executes `verificationCommand`: that would be a full test run wearing an inventory's clothes, duplicating `ci.yml` and far too slow to gate a PR, so those fields are advisory and the gate's limit is stated rather than hidden -- it catches a feature that was deleted, moved or renamed, not one that exists and is broken.
+
+The version field was removed outright rather than corrected. `semantic-release` bumps `package.json` on `main` without touching this file, so a gating version assertion would go red on the first release and be unfixable from inside the release commit that broke it.
+
+The region bound is the load-bearing part. `README.md` carries a ~180-line changelog whose prose names features, so a whole-file match would pass a feature that had been deleted from the capabilities table but still appeared in an old changelog entry. The checker reads only two heading-bounded slices.
+
+### Verification
+
+Proven to fail before being trusted, on four scenarios run against the real repository and reverted. The decisive one: `GPU scheduler` was deleted from the capabilities table while left in changelog prose, so the string still appeared **3 times** in `README.md` -- and the checker still failed. Then 17 unit tests in `tests/unit/scripts/check-feature-drift.test.ts` (`.test.ts`, confirmed collected rather than assumed, because `configs/vitest.config.ts` silently skips `.test.mjs`), including a live assertion that the repository's own inventory agrees with its own README. 53 tests green across the related suites; 21 workflows parse.
+
+Coverage is two README regions, not the whole file; `### CLI tools (already shipped)` is outside the contract and recorded as DF-10.
+
+---
+
 ## [2026-09-10] v2.4.9 Phase 2 - Security coverage, reporting first
 
 Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-security-coverage-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P2](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-2-security-coverage.md). Package remains **2.4.1**. Committed locally, not pushed.

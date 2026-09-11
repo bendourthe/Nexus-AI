@@ -15,7 +15,7 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 | Category | Open | Resolved |
 |---|---:|---:|
 | Not implemented (NI) | 1 | 0 |
-| Deferred (DF) | 1 | 3 |
+| Deferred (DF) | 2 | 3 |
 | Bugs / regressions (BG) | 4 | 11 |
 | Warnings (WN) | 1 | 1 |
 | Missing tests / coverage gaps (MT) | 2 | 2 |
@@ -130,6 +130,16 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Owner**: Phase 5.5
 - **Exit condition**: One required context that always resolves, covering the path-filtered workflows through their skip states. Evaluable by opening a pull request that touches no installer path and confirming the aggregate still resolves.
 - **Suggested next step**: Compare against the contract in 5.5 before adding more individual contexts, so the list does not grow into something that has to be unwound.
+
+##### DF-10 - The feature inventory covers two README regions, not the whole file
+
+- **Source**: v2.4.9 Phase 3 (sub-task 3.1, decision D3 part B)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 3; contract in [docs/reference/feature-inventory.md](../../reference/feature-inventory.md)
+- **Impact**: `check-feature-drift.mjs` enforces 29 names across `## The Four Pillars` and `## Featured Capabilities`. Features named elsewhere in `README.md` are outside the contract and can be deleted from the tree without CI noticing: `### CLI tools (already shipped)` (line 340), `## Quick Start (developer workflow)`, and `## Roadmap`. The bound is deliberate -- the regions must exclude the ~180-line changelog, whose prose names features and would otherwise produce false passes -- but the consequence is that "a CI run fails when a feature named in README.md no longer exists" is true for those two regions and not for the rest of the file.
+- **Reason not done in this cycle**: Widening coverage means deciding, per additional region, what counts as a feature claim. `### CLI tools` lists commands rather than features and `## Roadmap` names things that deliberately do NOT exist yet, so a naive widening would turn the roadmap into a set of failing assertions.
+- **Owner**: Unassigned
+- **Exit condition**: Either an additional region is added to `REGIONS` in the checker with its own entries, or this document records the decision that the two regions are the whole contract and the others are prose. Evaluable by reading the checker's `REGIONS` map against the README's `## ` headings.
+- **Suggested next step**: `### CLI tools (already shipped)` is the strongest candidate, since "already shipped" is exactly the claim this gate exists to keep honest.
 
 ## v2.4.8
 
