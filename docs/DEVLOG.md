@@ -4,6 +4,30 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-10] v2.4.9 - Two v2.4.8 GPU-handoff fixes (out of plan)
+
+Index: [gaps](v2/v2.4/known-gaps.md) BG-17, BG-18. Found by `nexus-standards-judge` on its first invocation, against the pinned v2.4.8 range `989107c7..f36afd9c`. Fixed out of plan by operator decision; the v2.4.9 plan's Non-Goals would otherwise have recorded them and moved on.
+
+### What Changed
+
+- **The image path now actually releases its VRAM.** `image_execute` swept the CUDA cache from a `finally` in the same frame that still held `pipe`, and the success path returns from inside that `try`, so the weights were still reachable when the sweep ran. `empty_cache()` returns only blocks no live tensor holds, so it freed the transient activations and left the SDXL-class weights resident. `pipe` and `result` are now dropped before the sweep.
+- **`_empty_cache()` collects before it empties.** The old order ran `torch.cuda.empty_cache()` first and `gc.collect()` second, so anything the collector was about to free was skipped, including a pipeline held alive only by the reference cycle a diffusers pipeline normally forms. This one also improves the video path.
+- **Eviction asks about the job's own model.** `evictOllamaForJob(job.pillar)` threw the model identity away and tested a per-pillar constant (`image: 6.9`, `video: 8`) against catalog floors that run 2 to 20 GB for images and 12 to 24 GB for video. The resolution moved to `desktop/sidecar/src/models/mediaModelVram.ts`, which reads the job's `modelId` against `catalog.json` and keeps the pillar figure only as a fallback.
+
+### Why It Changed
+
+These are not cosmetic. On a 24 GB host with a chat model holding 12 GB, a `wan2.2-ti2v-5b` job needs 24 GB and was tested as though it needed 8, so `12 >= 8 * 1.5` passed, nothing was evicted, and the runtime picked CPU offload against 12 GB free for a 24 GB floor. That is the slow path the eviction was added to prevent, on the pre-ticked 24 GB video default's bigger sibling. The VRAM defect has the same shape from the other side: the handoff that was supposed to give the GPU back gave back only the scratch space.
+
+The v2.4.8 commit describing both fixes reads as though they work. Neither did, and no test covered either call. That is the case for the critic Phase 1 added.
+
+### Verification
+
+Python suite 313 passed, up from 310, with the three new assertions in `tests/python/diffusion/test_vram_release_regression.py`. Two of those three **fail against pre-change code** and were run that way to prove it: the weakref is still alive at sweep time, and the call order comes back `['empty_cache', 'gc_collect']`. Desktop suite unchanged at 36 failures, the documented `better-sqlite3` ABI baseline, with 2085 passing (up 11, all from `desktop/tests/media-model-vram.test.ts`). Typecheck and lint exit 0. `ruff check runtimes` still reports exactly one error, the pre-existing unused `typing.Any` recorded as WN-1 under v2.4.5 and left alone as out of scope.
+
+Neither fix has been exercised against a live GPU. QG-1 still stands.
+
+---
+
 ## [2026-09-10] v2.4.9 Phase 1 - The written bars
 
 Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-phase1-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P1](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-1-written-bars.md). Package remains **2.4.1**; nothing in the 2.4 series is released. Committed locally, not pushed.
