@@ -4,6 +4,32 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-10] v2.4.9 Phase 4 - Field feedback has a shape
+
+Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [gaps](v2/v2.4/known-gaps.md), history [P4](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-4-field-feedback.md). Package remains **2.4.1**. Committed locally, not pushed.
+
+### What Changed
+
+- **`.github/ISSUE_TEMPLATE/` now exists.** A GitHub issue form, not a Markdown template, so fields can genuinely be required: Nexus version, install source, OS, and GPU, all `required: true`, all consumed by the crash-class report. Nothing was added that nothing reads.
+- **`config.yml` routes the rest.** Questions, feature requests and security reports go elsewhere; there is deliberately no feature-request form. Blank issues stay enabled on purpose, because a report filed in the wrong shape is worth more than one never filed, and the report script counts unversioned reports rather than dropping them.
+- **`scripts/crash-class-report.mjs`** buckets issues by failure class and by build version, read-only through the authenticated `gh` CLI. Unversioned reports get their own bucket and are never folded into a version.
+
+### Why It Changed
+
+A bug report that does not say which build it came from cannot be counted against that build, and a report from an obsolete build must not count against one that already fixed it.
+
+The plan asked for five classes derived from the 50 most recent issues. **This repository has zero issues**, so there was nothing to cluster, and clustering nothing would have produced five invented classes wearing the authority of a sample. The classes come instead from the repository's own v2.4.x field-failure record, each carrying its provenance in the source, recorded as NI-2 with a re-derivation trigger.
+
+### Verification
+
+Fixture-based, per the plan's honesty note: every issue that exists today predates the form, so asserting a non-empty per-version distribution would be asserting something only accidentally true. 18 tests cover the bucketing, and the load-bearing assertion is that an unversioned report appears in **no** version total.
+
+The tests caught two real bugs in the classifier, both the over-broad failure the plan warned about. The form asks "How did you install it?" and most answers are the literal word "Installer", so classifying over the whole body put **every form-filed issue** into `install-provision` regardless of content; classification now reads the title plus only the narrative sections. And `fail` does not match "fails", so "Video generation fails" fell through to unclassified. The first would have produced a confident, precise-looking report in which one class swallowed everything.
+
+The rendered New-issue page is deferred: a GitHub issue form only renders once merged to the default branch.
+
+---
+
 ## [2026-09-10] v2.4.9 Phase 3 - The inventory becomes true, then enforced
 
 Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [contract](reference/feature-inventory.md), [gaps](v2/v2.4/known-gaps.md), history [P3](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-3-inventory-enforced.md). Package remains **2.4.1**. Committed locally, not pushed.

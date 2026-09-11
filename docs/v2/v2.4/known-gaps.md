@@ -14,8 +14,8 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 
 | Category | Open | Resolved |
 |---|---:|---:|
-| Not implemented (NI) | 1 | 0 |
-| Deferred (DF) | 2 | 3 |
+| Not implemented (NI) | 2 | 0 |
+| Deferred (DF) | 3 | 3 |
 | Bugs / regressions (BG) | 4 | 11 |
 | Warnings (WN) | 1 | 1 |
 | Missing tests / coverage gaps (MT) | 2 | 2 |
@@ -140,6 +140,26 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Owner**: Unassigned
 - **Exit condition**: Either an additional region is added to `REGIONS` in the checker with its own entries, or this document records the decision that the two regions are the whole contract and the others are prose. Evaluable by reading the checker's `REGIONS` map against the README's `## ` headings.
 - **Suggested next step**: `### CLI tools (already shipped)` is the strongest candidate, since "already shipped" is exactly the claim this gate exists to keep honest.
+
+##### NI-2 - Crash classes were not derived from data, because there is no data
+
+- **Source**: v2.4.9 Phase 4 (sub-task 4.2)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 4
+- **Impact**: The plan bounds the classification work by sampling the 50 most recent issues. `gh issue list --state all --limit 100` returns **zero** issues for this repository, so there was nothing to cluster. The five classes in `scripts/crash-class-report.mjs` (`install-provision`, `model-load`, `gpu-handoff`, `generation-failure`, `data-persistence`) are derived instead from this repository's own recorded field failures across the v2.4.x cycles, each carrying its provenance in the source. They are a defensible first pass and they are **not** evidence about what users actually report. A class that never matches, or one that swallows everything, will only become visible once real reports exist; the per-class counts the report prints are what make that visible.
+- **Reason not done in this cycle**: No input existed. Inventing five classes and calling them a sample would have been worse than saying so.
+- **Owner**: Unassigned
+- **Exit condition**: Re-derive the classes from at least 20 issues filed through the bug form, and record the sample. Clears on the same trigger as "first non-empty crash-class report".
+- **Suggested next step**: Do both at once, once the form has collected reports; a re-derivation and a first real distribution are the same exercise.
+
+##### DF-11 - The crash-class report is operator-run, not scheduled
+
+- **Source**: v2.4.9 Phase 4 (sub-task 4.3)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 4
+- **Impact**: `scripts/crash-class-report.mjs` runs on an operator's machine against an authenticated `gh`. It is not wired into CI, so nothing produces a periodic failure-trend report; someone has to remember to run it. Wiring it would mean giving CI a token to read issues, which is a credential surface added for a report that nobody currently reads on a schedule, so the trade was declined rather than overlooked.
+- **Reason not done in this cycle**: The report has no data yet (see NI-2), so scheduling it now would schedule an empty result.
+- **Owner**: Unassigned
+- **Exit condition**: Either a scheduled job publishes the report where someone reads it, or this gap records the decision that it stays operator-run. Evaluable by looking for the job.
+- **Suggested next step**: Revisit alongside NI-2; a trend report is worth scheduling once there is a trend.
 
 ## v2.4.8
 
