@@ -16,7 +16,7 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 |---|---:|---:|
 | Not implemented (NI) | 2 | 0 |
 | Deferred (DF) | 3 | 3 |
-| Bugs / regressions (BG) | 4 | 11 |
+| Bugs / regressions (BG) | 5 | 11 |
 | Warnings (WN) | 1 | 1 |
 | Missing tests / coverage gaps (MT) | 2 | 2 |
 | Quality-gate gaps (QG) | 3 | 0 |
@@ -160,6 +160,16 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Owner**: Unassigned
 - **Exit condition**: Either a scheduled job publishes the report where someone reads it, or this gap records the decision that it stays operator-run. Evaluable by looking for the job.
 - **Suggested next step**: Revisit alongside NI-2; a trend report is worth scheduling once there is a trend.
+
+##### BG-20 - `core/storage/StorageMigration.ts` outlived its own removal note
+
+- **Source**: v2.4.9 Phase 5 (sub-task 5.1, architecture refactor)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 5.1, which predicted this finding by name
+- **Impact**: `core/storage/StorageMigration.ts:18` reads "Removed in v1.1.0." The file is still present, and so is `tests/unit/core/storage/StorageMigration.test.ts`, which still runs. Every remaining reference is a comment or doc string (`core/storage/paths.ts:6,31`, `core/diagnostics/DoctorReport.ts:95,217`); **nothing calls it**. So the repository carries a one-shot `~/.gemma-code/` to `~/.nexus/` migration that its own header says was removed four minor versions ago, plus a test suite asserting the behaviour of dead code. The name is also actively confusing: the v2.5.0 migration-durability plan had to add an explicit note telling implementers NOT to touch this file, because "StorageMigration" is exactly what a database-migration helper would be called.
+- **Reason not done in this cycle**: Phase 5.1 is report-only by design, and deleting a migration path is a decision about users still on `~/.gemma-code/`, not a cleanup. Removing it needs someone to decide that no supported upgrade path still crosses it.
+- **Owner**: Unassigned
+- **Exit condition**: Either the file and its test are removed and the four referring comments updated, or the header's "Removed in v1.1.0" line is corrected to state that the code is retained deliberately and why. Evaluable by reading line 18 against the file's existence.
+- **Suggested next step**: Settle it alongside the v2.5.0 migration work, where the naming collision will be in front of whoever is reading these modules anyway.
 
 ## v2.4.8
 
