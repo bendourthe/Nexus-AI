@@ -69,7 +69,7 @@ class TestDetectVsCodeCli:
         assert result.supported is True
         assert result.version == "1.136.0"
 
-    @pytest.mark.parametrize("version", ["1.133.9", "1.137.0"])
+    @pytest.mark.parametrize("version", ["1.133.9", "1.138.0"])
     def test_rejects_earlier_and_later_stable_versions(self, version: str) -> None:
         result = detect_vscode_cli(
             which_fn=lambda name: "/usr/bin/code" if name == "code" else None,
@@ -214,7 +214,7 @@ class TestVsCodeExtensionPage:
         page = VsCodeExtensionPage(
             state,
             detect_fn=lambda: _status(
-                version="1.137.0",
+                version="1.138.0",
                 supported=False,
                 reason="version-mismatch",
             ),
@@ -224,8 +224,8 @@ class TestVsCodeExtensionPage:
         assert page._checkbox.isChecked() is False
         assert page._checkbox.isEnabled() is False
         assert page._checkbox.isHidden() is False
-        assert "1.137.0" in page._detection_label.text()
-        assert "1.134, 1.135, or 1.136" in page._detection_label.text()
+        assert "1.138.0" in page._detection_label.text()
+        assert "1.134 through 1.137" in page._detection_label.text()
         assert "exactly" not in page._detection_label.text()
 
     def test_1_136_host_is_enabled_and_ticked(self, qt_app) -> None:
@@ -329,7 +329,7 @@ class TestVsCodeExtensionPage:
         page = VsCodeExtensionPage(state, detect_fn=_status)
         page.set_interactive(False)
         page._detect_fn = lambda: _status(
-            version="1.137.0",
+            version="1.138.0",
             supported=False,
             reason="version-mismatch",
         )

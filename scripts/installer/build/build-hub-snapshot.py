@@ -104,6 +104,27 @@ def resolve_latest_tag(upstream: str = DEFAULT_UPSTREAM) -> str | None:
     return None
 
 
+def normalize_tag(tag: str | None) -> str:
+    """Compare release tags without tripping over the `v` prefix.
+
+    The two sides of the staleness check disagree on convention and always
+    have: the synced catalog's `nexus-hub-version.json` records a BARE semver
+    (`4.9.0`), while GitHub's `/releases/latest` returns `tag_name` with the
+    prefix (`v4.9.0`). A raw `!=` therefore reported an up-to-date catalog as
+    stale -- the build log read `catalog tag 4.9.0 is not latest (v4.9.0)`,
+    naming the same release twice -- and every installer since shipped with no
+    embedded Hub snapshot, silently falling back to an install-time sync.
+
+    The unit tests missed it because their fixture wrote `"version": "v9.9.9"`,
+    a prefixed form the real producer never emits. `test_build_hub_snapshot.py`
+    now pins the bare form specifically.
+    """
+    text = (tag or "").strip()
+    if text[:1] in {"v", "V"}:
+        text = text[1:]
+    return text
+
+
 def _tar_filter(info: tarfile.TarInfo) -> tarfile.TarInfo | None:
     parts = Path(info.name).parts
     if any(part in EXCLUDED_NAMES for part in parts):
@@ -143,7 +164,7 @@ def build_snapshot(catalog: Path, out_dir: Path, *, require_latest: bool = True)
                 file=sys.stderr,
             )
             return 1
-        if tag != latest:
+        if normalize_tag(tag) != normalize_tag(latest):
             print(
                 f"ERROR: catalog tag {tag or 'unknown'} is not latest ({latest}). "
                 "Refusing to embed a stale Hub snapshot. Sync latest, then pack.",

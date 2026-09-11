@@ -188,6 +188,10 @@ import {
 } from "./diffusion/dispatcher.js";
 import { foldRequestModelId } from "./diffusion/route.js";
 import {
+  jobModelId,
+  mediaModelVramGB,
+} from "./models/mediaModelVram.js";
+import {
   IMAGE_RUNTIME_NOT_READY,
   VIDEO_RUNTIME_NOT_READY,
 } from "./diffusion/resultGuard.js";
@@ -814,7 +818,7 @@ async function pumpStudio(ctx: HandlerContext): Promise<void> {
             // resident the diffusion runtime lands in CPU offload and an image
             // takes minutes instead of seconds, so evict Ollama's residents
             // when the media model would not fit beside them.
-            await evictOllamaForJob(job.pillar);
+            await evictOllamaForJob(job.pillar, job.parameters);
             if (job.pillar === "video") {
               const result = await buildVideoJobRequest(
                 job.jobType as "text2video" | "image2video" | "audio2video",
@@ -866,15 +870,15 @@ async function pumpStudio(ctx: HandlerContext): Promise<void> {
   }
 }
 
-/** VRAM a media model needs on the GPU (SDXL class / Wan 1.3B class). */
-const MEDIA_MODEL_VRAM_GB: Record<"image" | "video", number> = { image: 6.9, video: 8 };
-
-async function evictOllamaForJob(pillar: "image" | "video"): Promise<void> {
+async function evictOllamaForJob(
+  pillar: "image" | "video",
+  parameters: Record<string, unknown>,
+): Promise<void> {
   try {
     const { sample } = await sampleGpu();
     const evicted = await evictOllamaIfTight({
       freeVramGB: sample ? sample.freeVramGB : null,
-      modelVramGB: MEDIA_MODEL_VRAM_GB[pillar],
+      modelVramGB: await mediaModelVramGB(pillar, jobModelId(parameters)),
       baseUrl: ollamaBaseUrl(),
     });
     if (evicted.length > 0) {

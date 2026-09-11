@@ -10,11 +10,11 @@ import type { AgentActivity } from "./mapping";
 import { resolveAgentState } from "./mapping";
 import {
   isStudioActivity,
-  longestPendingCaption,
-  pendingCaptionState,
-  pendingPillMinWidthExpr,
-  usePendingCaptionRotator,
-  useStudioCaptionRotator,
+  longestCaptionFor,
+  pillMinWidthExpr,
+  rotatingCaptionState,
+  useCaptionRotator,
+  type CaptionPool,
 } from "./captionRotator";
 import {
   clampOrbDpr,
@@ -44,6 +44,13 @@ export interface AgentStateOrbProps {
    * caption, static, no rotation. Implies `showCaption`.
    */
   rotateCaptions?: boolean;
+  /**
+   * v2.4.8 follow-up (2026-09-08): which word pool a rotating caption draws
+   * from. Defaults to the studio pool for the two studio activities and the
+   * chat pool otherwise, so Images and Videos get the chat pill animation
+   * with their own vocabulary.
+   */
+  captionPool?: CaptionPool;
   /**
    * v2.4.8 Phase 8: a fixed caption that overrides the mapping label and the
    * studio rotator (e.g. "Loading model..." before sampling starts).
@@ -79,6 +86,7 @@ export function AgentStateOrb({
   size = "inline",
   showCaption = false,
   rotateCaptions = false,
+  captionPool,
   caption,
   accessibleName,
   surfaceId,
@@ -94,22 +102,16 @@ export function AgentStateOrb({
   const allowed = useAllowsMotion("orb");
   const paused = reduce || !visible || !allowed;
   const cssSize = orbPixelSize(size);
-  // Rotator hook is unconditional (hooks rule); it schedules an interval only
-  // while rotation is requested and motion is allowed.
-  const rotatingCaption = usePendingCaptionRotator(rotateCaptions && !reduce);
-  // v2.4.4 Phase 5.3 (T020): Image and Video pending rotate their own words.
-  // Both hooks are called unconditionally (hooks rule); only one is read.
+  // v2.4.4 Phase 5.3 (T020) / v2.4.8 follow-up: one rotator, pool chosen by
+  // activity unless the caller names one. The hook is called unconditionally
+  // (hooks rule) and schedules an interval only while rotation is live.
   const studio = isStudioActivity(activity);
-  const studioCaption = useStudioCaptionRotator(studio && showCaption && !reduce);
+  const pool: CaptionPool = captionPool ?? (studio ? "studio" : "chat");
+  const rotates = (rotateCaptions || (studio && showCaption)) && !caption;
+  const rotatingCaption = useCaptionRotator(rotates && !reduce, pool);
   const captionShown = showCaption || rotateCaptions;
-  const captionText =
-    caption ??
-    (rotateCaptions
-      ? rotatingCaption
-      : studio
-        ? studioCaption
-        : `${mapping.label}...`);
-  const engineState = rotateCaptions ? pendingCaptionState(rotatingCaption) : mapping.state;
+  const captionText = caption ?? (rotates ? rotatingCaption : `${mapping.label}...`);
+  const engineState = rotates ? rotatingCaptionState(rotatingCaption) : mapping.state;
   const hostLabel =
     accessibleName ?? (rotateCaptions ? "Generating reply" : `Agent ${mapping.label.toLowerCase()}`);
 
@@ -227,7 +229,7 @@ export function AgentStateOrb({
         // canvas. A 999px capsule clips the 48px bubble orb's left dots.
         // Pill chrome is a sibling layer; the canvas stays unclipped.
         overflow: "visible",
-        minWidth: rotateCaptions ? pendingPillMinWidthExpr(cssSize) : undefined,
+        minWidth: rotateCaptions ? pillMinWidthExpr(cssSize, pool) : undefined,
         // v2.4.4 Phase 1.2: no second pill inset. The transcript gutter on the
         // message list is the only left offset, so the pending pill starts on
         // the same gutter as a completed assistant bubble and its glow still
@@ -288,7 +290,7 @@ export function AgentStateOrb({
             color: "var(--fg-muted)",
             fontSize: "var(--text-sm)",
             whiteSpace: "nowrap",
-            minWidth: rotateCaptions ? `${longestPendingCaption().length}ch` : undefined,
+            minWidth: rotateCaptions ? `${longestCaptionFor(pool).length}ch` : undefined,
           }}
         >
           {captionText}

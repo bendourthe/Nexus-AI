@@ -543,9 +543,15 @@ class TestWizardDensityV247:
         assert page._disk_label is not None
         assert page._error_label is not None
 
-    def test_compact_vscode_row_has_no_detection_paragraph(
+    def test_compact_vscode_row_hides_the_paragraph_only_when_installable(
         self, qt_app: object, monkeypatch: pytest.MonkeyPatch
     ) -> None:
+        """The paragraph is noise beside a usable control, and the only
+        explanation beside an unusable one.
+
+        v2.4.7 hid it unconditionally, which left a disabled checkbox with its
+        reason in a tooltip -- indistinguishable from a broken control.
+        """
         from nexus_installer.engine.extension_installer import VsCodeCliStatus
         from nexus_installer.pages.configuration import ConfigurationPage
 
@@ -553,8 +559,24 @@ class TestWizardDensityV247:
             "nexus_installer.pages.vscode_extension.detect_vscode_cli",
             lambda: VsCodeCliStatus(None, None, None, False, "not-found"),
         )
-        page = ConfigurationPage(InstallerState())
-        assert page._vscode._detection_label.isVisibleTo(page._vscode) is False
+        blocked = ConfigurationPage(InstallerState())
+        assert blocked._vscode._checkbox.isEnabled() is False
+        assert blocked._vscode._detection_label.isVisibleTo(blocked._vscode) is True
+        assert blocked._vscode._detection_label.text().strip()
+
+        monkeypatch.setattr(
+            "nexus_installer.pages.vscode_extension.detect_vscode_cli",
+            lambda: VsCodeCliStatus(
+                "/usr/bin/code", "code", "1.137.0", True, "supported"
+            ),
+        )
+        available = ConfigurationPage(
+            InstallerState(), list_fn=lambda _path: (None, "")
+        )
+        assert available._vscode._checkbox.isEnabled() is True
+        assert (
+            available._vscode._detection_label.isVisibleTo(available._vscode) is False
+        )
 
     def test_detection_still_drives_the_checkbox(self, qt_app: object) -> None:
         # Removing the paragraph must not remove the information: an

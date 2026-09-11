@@ -122,6 +122,14 @@ When you ship a new tool (built-in handler or MCP-side):
 - Update [docs/archive/versions/v0/v0.5.0/tool-audit.md](docs/archive/v0/v0.5/tool-audit.md) with a row classifying the tool against the severity rubric (`blocker | friction | optimization`).
 - Ensure every error returned by the handler contains the failing parameter name and a `Usage:` hint per the actionability convention. Property-based tests in [tests/unit/tools/errors.test.ts](./tests/unit/tools/errors.test.ts) enforce this on every PR.
 
+## Adding a model or runtime
+
+Model, model-variant, and Python-runtime proposals are judged against the job map in [docs/reference/model-acceptance.md](./docs/reference/model-acceptance.md). The catalog is organised so that every entry owns at least one named job and every job has exactly one holder, which means a proposal is accepted on one of two grounds: it takes a job from its current holder with measured numbers from this project's own hardware, or it claims a job nobody holds. "It benchmarks well" is not a job.
+
+A related contract governs the feature inventory rather than the model catalog: [docs/reference/feature-inventory.md](./docs/reference/feature-inventory.md) records what `feature_list.json` asserts, which two `README.md` regions the drift checker parses, and why it never executes a `verificationCommand`. Adding a feature to either of those README regions requires an inventory entry in the same commit, or the `check-feature-drift` job fails.
+
+The bar is higher for an entry that `core/registry/recommended.json` pre-ticks, because a default reaches users who never evaluated the choice. That is also where the license rules bite: a commercially capped license is not acceptable for a pre-ticked default when an alternative fits the same tier. Read the acceptance bar before opening the PR, and update its job map in the same commit as any change to `core/registry/catalog.json` or `core/registry/recommended.json`.
+
 ## Tool quality and severity
 
 When discussing tool surfaces (existing or proposed), use the severity rubric in [docs/archive/versions/v0/v0.5.0/tool-audit.md](docs/archive/v0/v0.5/tool-audit.md): `blocker | friction | optimization`. The labels are vocabulary, not a CI gate; they keep PR descriptions and review threads grounded in the same definitions. If you add a new tool or change an existing tool's schema, update the audit table in the same PR.

@@ -12,30 +12,47 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QLabel, QVBoxLayout, QWidget
 
 from nexus_installer.constants import (
     ACCENT_CHAT,
     ACCENT_CODING,
     ACCENT_IMAGE,
     ACCENT_VIDEO,
-    FS_CAPTION,
     FS_H1,
-    TEXT_BODY,
 )
 from nexus_installer.pages.configuration import ConfigurationPage
 from nexus_installer.pages.prerequisites import PrerequisitesPage
 from nexus_installer.widgets.gradient_wordmark import GradientWordmark
+from nexus_installer.widgets.page_intro import CapabilityGrid, PageLede, PageNote
 
 if TYPE_CHECKING:
     from nexus_installer.installer_state import InstallerState
 
-# (label, module accent) -- the desktop app's four pillars.
-_PILLARS: tuple[tuple[str, str], ...] = (
-    ("Chat", ACCENT_CHAT),
-    ("Agentic Coding", ACCENT_CODING),
-    ("Image", ACCENT_IMAGE),
-    ("Video", ACCENT_VIDEO),
+# (name, one-line description, module accent) -- the desktop app's four
+# pillars. The former version was a bare chip row that named the pillars
+# without saying what any of them do.
+_PILLARS: tuple[tuple[str, str, str], ...] = (
+    (
+        "Chat",
+        "Talk to local language models, with your documents as context.",
+        ACCENT_CHAT,
+    ),
+    (
+        "Agentic Coding",
+        "An agent that reads, writes and runs your code, in the app or in VS Code.",
+        ACCENT_CODING,
+    ),
+    (
+        "Image",
+        "Generate and edit images from a prompt on your own GPU.",
+        ACCENT_IMAGE,
+    ),
+    (
+        "Video",
+        "Turn prompts or stills into short video clips, then upscale them.",
+        ACCENT_VIDEO,
+    ),
 )
 
 
@@ -68,34 +85,26 @@ class WelcomePage(QWidget):
         )
         layout.addWidget(title)
 
-        subtitle = QLabel(
-            "Nexus is your fully local AI workstation: chat, agentic coding, "
-            "and image and video generation, all running on your own hardware. "
-            "This wizard installs everything for you -- the runtime, the models "
-            "you pick, the VS Code extension, and the Nexus desktop app -- with "
-            "no terminal required. Duration depends on your connection and the "
-            "models you select."
-        )
-        subtitle.setObjectName("secondaryLabel")
-        subtitle.setStyleSheet(
-            f"color: {TEXT_BODY}; font-size: {FS_CAPTION}px; background: transparent;"
-        )
-        subtitle.setWordWrap(True)
-        layout.addWidget(subtitle)
-
-        # Pillar chips in the desktop app's module accents.
-        chips = QHBoxLayout()
-        chips.setSpacing(8)
-        for pillar_name, pillar_accent in _PILLARS:
-            chip = QLabel(pillar_name)
-            chip.setStyleSheet(
-                f"color: {pillar_accent}; border: 1px solid {pillar_accent}; "
-                f"border-radius: 10px; padding: 2px 10px; font-size: {FS_CAPTION}px; "
-                f"background: transparent;"
+        # One claim, at a size someone actually reads.
+        layout.addWidget(
+            PageLede(
+                "Your fully local AI workstation. Every model runs on your own "
+                "hardware, and nothing you type or generate leaves this machine."
             )
-            chips.addWidget(chip)
-        chips.addStretch()
-        layout.addLayout(chips)
+        )
+
+        # What the app does, as four accent-coded cards rather than a
+        # paragraph the reader has to unpack.
+        layout.addWidget(CapabilityGrid(_PILLARS))
+
+        layout.addWidget(
+            PageNote(
+                "This wizard installs all of it for you -- the runtime, the models "
+                "you pick, the VS Code extension, and the Nexus desktop app -- with "
+                "no terminal required. How long it takes depends on your connection "
+                "and the models you select."
+            )
+        )
 
         # The machine checks, including GPU detection, directly under the hero.
         self._prereq = PrerequisitesPage(state)

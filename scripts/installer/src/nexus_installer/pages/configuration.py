@@ -17,7 +17,6 @@ from typing import TYPE_CHECKING
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
-    QCheckBox,
     QFrame,
     QGridLayout,
     QHBoxLayout,
@@ -36,6 +35,7 @@ from nexus_installer.constants import (
 from nexus_installer.pages.install_path import InstallPathPage
 from nexus_installer.pages.vscode_extension import VsCodeExtensionPage
 from nexus_installer.vram_display import display_vram_gb
+from nexus_installer.widgets.selectable_check_box import SelectableCheckBox
 
 if TYPE_CHECKING:
     from nexus_installer.installer_state import InstallerState
@@ -114,14 +114,16 @@ class ConfigurationPage(QWidget):
         features_label.setObjectName("cardHead")
         features_layout.addWidget(features_label)
 
-        self._shortcut_toggle = QCheckBox("Add Start Menu / Applications shortcut")
+        self._shortcut_toggle = SelectableCheckBox(
+            "Add Start Menu / Applications shortcut"
+        )
         self._shortcut_toggle.setChecked(bool(state.add_start_menu_shortcut))
         self._shortcut_toggle.toggled.connect(
             lambda checked: setattr(state, "add_start_menu_shortcut", bool(checked))
         )
         features_layout.addWidget(self._shortcut_toggle)
 
-        self._desktop_shortcut_toggle = QCheckBox("Add a Desktop shortcut")
+        self._desktop_shortcut_toggle = SelectableCheckBox("Add a Desktop shortcut")
         self._desktop_shortcut_toggle.setChecked(bool(state.add_desktop_shortcut))
         self._desktop_shortcut_toggle.toggled.connect(
             lambda checked: setattr(state, "add_desktop_shortcut", bool(checked))
@@ -143,7 +145,7 @@ class ConfigurationPage(QWidget):
         unsloth_layout.setContentsMargins(0, 0, 0, 0)
         unsloth_layout.setSpacing(8)
 
-        self._unsloth = QCheckBox(
+        self._unsloth = SelectableCheckBox(
             "(optional) Install Unsloth Core "
             "(local QLoRA fine-tuning runtime for Nexus)"
         )

@@ -52,9 +52,41 @@ describe("ImagePromptForm", () => {
     expect(last.prompt).toBe("a fox");
   });
 
+  // v2.4.8 follow-up (2026-09-08): operator report -- some options could not be
+  // reached. LoRAs, ControlNet, the sampler and the VRAM budget used to sit in a
+  // nested collapse inside a panel that already grew past the window, so they
+  // were off-screen with no way to scroll to them. They are sections of one
+  // capped, scrolling panel now.
+  it("reaches every option without a nested Advanced collapse", () => {
+    // DF-8: conditioning is model-gated, so this walks an SDXL fine-tune,
+    // which supports LoRAs and ControlNet. The SANA case is covered below.
+    renderForm(vi.fn(), { modelId: "realvisxl-v5" });
+    expect(screen.queryByTestId("image-advanced")).toBeNull();
+    for (const testId of [
+      "image-resolution",
+      "image-width",
+      "image-height",
+      "image-steps",
+      "image-cfg",
+      "image-sampler",
+      "image-seed",
+      "image-fast-preview-toggle",
+      "image-add-lora",
+      "image-controlnet-toggle",
+      "image-memory-budget",
+      "image-max-cache-vram",
+      "image-layer-streaming",
+    ]) {
+      expect(screen.getByTestId(testId), testId).toBeInTheDocument();
+    }
+    // The panel scrolls inside itself rather than growing off the window.
+    const scroller = screen.getByTestId("image-settings-panel-scroll");
+    expect(scroller.style.overflowY).toBe("auto");
+    expect(scroller.style.maxHeight).not.toBe("");
+  });
+
   it("adds and removes LoRA rows", () => {
-    renderForm();
-    fireEvent.click(screen.getByTestId("image-advanced"));
+    renderForm(vi.fn(), { modelId: "realvisxl-v5" });
     fireEvent.click(screen.getByTestId("image-add-lora"));
     expect(screen.getByTestId("image-lora-0")).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("image-lora-remove-0"));
@@ -62,8 +94,7 @@ describe("ImagePromptForm", () => {
   });
 
   it("toggles ControlNet fields", () => {
-    renderForm();
-    fireEvent.click(screen.getByTestId("image-advanced"));
+    renderForm(vi.fn(), { modelId: "realvisxl-v5" });
     fireEvent.click(screen.getByTestId("image-controlnet-toggle"));
     expect(screen.getByTestId("image-controlnet-fields")).toBeInTheDocument();
     const selectModel = within(screen.getByTestId("image-controlnet-fields")).getByTestId(
@@ -72,6 +103,22 @@ describe("ImagePromptForm", () => {
     expect(selectModel).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("image-controlnet-toggle"));
     expect(screen.queryByTestId("image-controlnet-fields")).not.toBeInTheDocument();
+  });
+
+  it("hides conditioning entirely on a model that supports neither (DF-8)", () => {
+    // SANA 1.6B takes no LoRAs and no ControlNet. Rendering an inert section
+    // invites the user to configure something the runtime discards.
+    renderForm(vi.fn(), { modelId: "sana-1.6b-1024" });
+    expect(screen.queryByTestId("image-section-conditioning")).toBeNull();
+    expect(screen.queryByTestId("image-add-lora")).toBeNull();
+    expect(screen.queryByTestId("image-controlnet-toggle")).toBeNull();
+  });
+
+  it("disables the negative prompt on a distilled model (DF-8)", () => {
+    renderForm(vi.fn(), { modelId: "sana-sprint-1024" });
+    expect(screen.getByTestId("image-negative-prompt")).toBeDisabled();
+    renderForm(vi.fn(), { modelId: "realvisxl-v5" });
+    expect(screen.getAllByTestId("image-negative-prompt")[1]).not.toBeDisabled();
   });
 
   it("valuesToBaseRequest forwards numeric + array fields", () => {
@@ -184,9 +231,8 @@ describe("ImagePromptForm", () => {
     );
   });
 
-  it("surfaces VRAM budget knobs in Advanced and forwards them", () => {
+  it("surfaces VRAM budget knobs without a second collapse and forwards them", () => {
     renderForm();
-    fireEvent.click(screen.getByText("Advanced (LoRAs, ControlNet)"));
     expect(screen.getByTestId("image-memory-budget")).toBeInTheDocument();
     fireEvent.change(screen.getByTestId("image-max-cache-vram"), { target: { value: "2" } });
     fireEvent.click(screen.getByTestId("image-layer-streaming"));

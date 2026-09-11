@@ -4,6 +4,169 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-10] v2.4.9 Phase 5 - Terminal gate (publication pending)
+
+Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-last-phase-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P5](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-5-terminal-gate.md). Package remains **2.4.1**. **Nothing pushed; no pull request; no tag.**
+
+### What Changed
+
+- **The fail-closed terminal gate ran in full**, writing one quoted section per duty into the last-phase evidence file: architecture refactor, known-gaps reconciliation, living docs, git-tree hygiene, CI/CD reconciliation, Tier 3 deep pass, Goal-vs-codebase review, human testing suggestions, the full local gate, and deferred verification.
+- **One finding fixed in flight.** `docs/reference/feature-inventory.md` was reachable from nothing; the living-docs duty exists to catch exactly that, and it did. Now linked from `CONTRIBUTING.md` and `AGENTS.md`.
+- **Two architecture findings recorded, not actioned**, both predicted by the plan: seven stale root-level `.vsix` files (untracked local litter) and `core/storage/StorageMigration.ts`, whose line 18 reads "Removed in v1.1.0" while the file, its test, and four referring comments all still exist and nothing calls it. Filed as BG-20.
+
+### Why It Changed
+
+The interesting output of a terminal gate is what it refuses to wave through.
+
+**Definition-of-Done clause 4 is not met and is not claimed.** CodeQL is configured for Python and no scanned-file count exists, because the CLI was deliberately not installed. The plan's own criterion says a count in the thousands would mean the extractor scanned a vendored virtualenv and is a miss rather than a pass; having no count at all is not better than having a wrong one, so it is recorded as deferred with the check that settles it instead of being ticked.
+
+**Branch protection changed the publication mechanics mid-plan.** Protection was applied in Phase 2 while this work sat on `develop` itself, so a direct push to `develop` is now blocked by its own required checks. Publication goes through a feature branch cut at HEAD, with no reset and no history rewrite.
+
+**The pull request will carry 14 commits, not 6.** Measured against the remote rather than local `develop`, as the runbook insists: 98 files, 12,814 insertions. Eight predate this session and cannot be unbundled, so the disposition is disclosure rather than silence.
+
+### Verification
+
+Zero new failures across four suites against the measured baseline: root vitest 61 failed / 476 passed (baseline 61 / 473), desktop 9 / 216 (baseline 9 / 215), python 313 passed (baseline 310), installer python pass. Every failure is the known better-sqlite3 ABI baseline. 54 tests added across the cycle, all confirmed collected by running them.
+
+The Tier 3 pass weighted by blast radius rather than treating artifacts equally: full procedure for the out-of-plan GPU fixes and the checks that can fail CI, reduced path for additive documents. Three adversarial probes on the drift checker confirmed feature names are compared, not compiled as patterns, and that a traversal-shaped evidence path is only ever an existence test. One bounded limit surfaced and recorded: duplicate `##` headings would leave the second slice unenforced.
+
+One decision waits at the gate. Two `feat` commits in this plan compute a **minor** under semantic-release while the plan expects a patch, which per the plan's own instruction is a finding to surface before merging rather than a version to accept.
+
+---
+
+## [2026-09-10] v2.4.9 Phase 4 - Field feedback has a shape
+
+Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [gaps](v2/v2.4/known-gaps.md), history [P4](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-4-field-feedback.md). Package remains **2.4.1**. Committed locally, not pushed.
+
+### What Changed
+
+- **`.github/ISSUE_TEMPLATE/` now exists.** A GitHub issue form, not a Markdown template, so fields can genuinely be required: Nexus version, install source, OS, and GPU, all `required: true`, all consumed by the crash-class report. Nothing was added that nothing reads.
+- **`config.yml` routes the rest.** Questions, feature requests and security reports go elsewhere; there is deliberately no feature-request form. Blank issues stay enabled on purpose, because a report filed in the wrong shape is worth more than one never filed, and the report script counts unversioned reports rather than dropping them.
+- **`scripts/crash-class-report.mjs`** buckets issues by failure class and by build version, read-only through the authenticated `gh` CLI. Unversioned reports get their own bucket and are never folded into a version.
+
+### Why It Changed
+
+A bug report that does not say which build it came from cannot be counted against that build, and a report from an obsolete build must not count against one that already fixed it.
+
+The plan asked for five classes derived from the 50 most recent issues. **This repository has zero issues**, so there was nothing to cluster, and clustering nothing would have produced five invented classes wearing the authority of a sample. The classes come instead from the repository's own v2.4.x field-failure record, each carrying its provenance in the source, recorded as NI-2 with a re-derivation trigger.
+
+### Verification
+
+Fixture-based, per the plan's honesty note: every issue that exists today predates the form, so asserting a non-empty per-version distribution would be asserting something only accidentally true. 18 tests cover the bucketing, and the load-bearing assertion is that an unversioned report appears in **no** version total.
+
+The tests caught two real bugs in the classifier, both the over-broad failure the plan warned about. The form asks "How did you install it?" and most answers are the literal word "Installer", so classifying over the whole body put **every form-filed issue** into `install-provision` regardless of content; classification now reads the title plus only the narrative sections. And `fail` does not match "fails", so "Video generation fails" fell through to unclassified. The first would have produced a confident, precise-looking report in which one class swallowed everything.
+
+The rendered New-issue page is deferred: a GitHub issue form only renders once merged to the default branch.
+
+---
+
+## [2026-09-10] v2.4.9 Phase 3 - The inventory becomes true, then enforced
+
+Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [contract](reference/feature-inventory.md), [gaps](v2/v2.4/known-gaps.md), history [P3](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-3-inventory-enforced.md). Package remains **2.4.1**. Committed locally, not pushed.
+
+### What Changed
+
+- **`feature_list.json` rebuilt against the shipped product.** It declared `v0.8.0` while `package.json` read `2.4.1`, and its 21 entries described an architecture that no longer exists (a "6-stage compaction pipeline", a "webview render protocol"). Now 29 entries, one per feature the README actually names, every `evidence` path resolving.
+- **A drift checker that gates every pull request.** `scripts/check-feature-drift.mjs` asserts two things in both directions: every evidence path resolves, and the inventory and the README name the same features. Dependency-free, so its CI job needs no install.
+- **A daily rolling issue.** `docs-drift.yml` keeps exactly one open issue, updates it in place, and closes it when drift clears.
+- **The contract is written down**, at [docs/reference/feature-inventory.md](reference/feature-inventory.md), because the checker's behaviour is unreadable without the three decisions behind it.
+
+### Why It Changed
+
+An inventory nobody reads is not an inventory. The interesting part is what the checker refuses to do. It never executes `verificationCommand`: that would be a full test run wearing an inventory's clothes, duplicating `ci.yml` and far too slow to gate a PR, so those fields are advisory and the gate's limit is stated rather than hidden -- it catches a feature that was deleted, moved or renamed, not one that exists and is broken.
+
+The version field was removed outright rather than corrected. `semantic-release` bumps `package.json` on `main` without touching this file, so a gating version assertion would go red on the first release and be unfixable from inside the release commit that broke it.
+
+The region bound is the load-bearing part. `README.md` carries a ~180-line changelog whose prose names features, so a whole-file match would pass a feature that had been deleted from the capabilities table but still appeared in an old changelog entry. The checker reads only two heading-bounded slices.
+
+### Verification
+
+Proven to fail before being trusted, on four scenarios run against the real repository and reverted. The decisive one: `GPU scheduler` was deleted from the capabilities table while left in changelog prose, so the string still appeared **3 times** in `README.md` -- and the checker still failed. Then 17 unit tests in `tests/unit/scripts/check-feature-drift.test.ts` (`.test.ts`, confirmed collected rather than assumed, because `configs/vitest.config.ts` silently skips `.test.mjs`), including a live assertion that the repository's own inventory agrees with its own README. 53 tests green across the related suites; 21 workflows parse.
+
+Coverage is two README regions, not the whole file; `### CLI tools (already shipped)` is outside the contract and recorded as DF-10.
+
+---
+
+## [2026-09-10] v2.4.9 Phase 2 - Security coverage, reporting first
+
+Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-security-coverage-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P2](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-2-security-coverage.md). Package remains **2.4.1**. Committed locally, not pushed.
+
+### What Changed
+
+- **CodeQL sees Python.** 308 tracked Python files -- the whole PyQt installer and all three model runtimes -- were outside the scan. `python` joins the matrix at `build-mode: none` (source-only, because installing multi-gigabyte ML trees to scan them costs more than the scan), the job name is templated per language, `develop` joins the triggers, and a `paths-ignore` keeps the extractor out of any vendored virtualenv.
+- **A sibling job audits what ships to users.** `audit-runtimes` covers `runtimes/{audio,diffusion,ocr}/requirements.txt`. Deliberately not a matrix dimension on the existing `audit-py`, which is built around a uv project whose cache key and export step do not transfer to unlocked requirements. Audited **resolved, not as written**, because those files carry no exact pins at all, so "as written" has no version for an advisory to match.
+- **Secret scanning, with the backlog measured first.** New `secrets.yml` runs gitleaks over full history. `.gitleaks.toml` justifies every finding.
+- **Installer smoke fires on installer paths**, not only a monthly cron.
+- **D2 answered**: gate the two checks whose backlog measured zero; leave CodeQL Python reporting-only until its first count exists.
+- **Branch protection applied** to `develop` and `main`, by operator decision, with 17 required checks.
+
+### Why It Changed
+
+The plan expected backlogs big enough to need bounding, and budgeted an allowlist of the top 10 clusters with a residual to carry forward. The measurements came back smaller: 180 resolved packages across the three runtime sets with **zero advisories**, and 16 gitleaks findings across 750 commits, every one a synthetic test fixture or a false positive -- the one non-test hit is a design doc listing CSS font-weight constants as "weight tokens". Nine clusters is fewer than ten, so the allowlist covers the whole backlog and the residual is zero rather than a number to chase.
+
+That is what moved D2. Gating an empty backlog costs nothing today and converts any future red into new information, so the two measured checks gate and the unmeasured one does not.
+
+The bigger surprise was the premise. D2 is framed in the plan as a decision that changes branch protection; there was no branch protection, and no rulesets either, on a public repository. Nothing blocked a merge. Surfaced with options, and the operator chose to apply protection now.
+
+### Verification
+
+20 workflows parse, 36 meta-tests pass, and gitleaks re-run with the allowlist over the same 750 commits reports no leaks. Required checks were chosen against a real CI run rather than a guess: all 17 were green on the latest `develop` run and all run on every pull request. Four categories were deliberately excluded, because a wrongly required check locks a repository: the three path-filtered workflows (no check at all on an unrelated PR, so a required entry sits pending forever), `npm audit (production deps)` (currently red -- `sharp` via `@huggingface/transformers` has advisories with no fix, recorded as BG-19), the self-declared non-blocking audit, and the CodeQL jobs (`continue-on-error`, so always green).
+
+The two newly gating checks are not yet required, because neither has run once; that is QG-2, closed at the integration PR. The 17-individual-contexts shape is itself a gap against the canonical contract's aggregate-check field: QG-3.
+
+---
+
+## [2026-09-10] v2.4.9 - Two v2.4.8 GPU-handoff fixes (out of plan)
+
+Index: [gaps](v2/v2.4/known-gaps.md) BG-17, BG-18. Found by `nexus-standards-judge` on its first invocation, against the pinned v2.4.8 range `989107c7..f36afd9c`. Fixed out of plan by operator decision; the v2.4.9 plan's Non-Goals would otherwise have recorded them and moved on.
+
+### What Changed
+
+- **The image path now actually releases its VRAM.** `image_execute` swept the CUDA cache from a `finally` in the same frame that still held `pipe`, and the success path returns from inside that `try`, so the weights were still reachable when the sweep ran. `empty_cache()` returns only blocks no live tensor holds, so it freed the transient activations and left the SDXL-class weights resident. `pipe` and `result` are now dropped before the sweep.
+- **`_empty_cache()` collects before it empties.** The old order ran `torch.cuda.empty_cache()` first and `gc.collect()` second, so anything the collector was about to free was skipped, including a pipeline held alive only by the reference cycle a diffusers pipeline normally forms. This one also improves the video path.
+- **Eviction asks about the job's own model.** `evictOllamaForJob(job.pillar)` threw the model identity away and tested a per-pillar constant (`image: 6.9`, `video: 8`) against catalog floors that run 2 to 20 GB for images and 12 to 24 GB for video. The resolution moved to `desktop/sidecar/src/models/mediaModelVram.ts`, which reads the job's `modelId` against `catalog.json` and keeps the pillar figure only as a fallback.
+
+### Why It Changed
+
+These are not cosmetic. On a 24 GB host with a chat model holding 12 GB, a `wan2.2-ti2v-5b` job needs 24 GB and was tested as though it needed 8, so `12 >= 8 * 1.5` passed, nothing was evicted, and the runtime picked CPU offload against 12 GB free for a 24 GB floor. That is the slow path the eviction was added to prevent, on the pre-ticked 24 GB video default's bigger sibling. The VRAM defect has the same shape from the other side: the handoff that was supposed to give the GPU back gave back only the scratch space.
+
+The v2.4.8 commit describing both fixes reads as though they work. Neither did, and no test covered either call. That is the case for the critic Phase 1 added.
+
+### Verification
+
+Python suite 313 passed, up from 310, with the three new assertions in `tests/python/diffusion/test_vram_release_regression.py`. Two of those three **fail against pre-change code** and were run that way to prove it: the weakref is still alive at sweep time, and the call order comes back `['empty_cache', 'gc_collect']`. Desktop suite unchanged at 36 failures, the documented `better-sqlite3` ABI baseline, with 2085 passing (up 11, all from `desktop/tests/media-model-vram.test.ts`). Typecheck and lint exit 0. `ruff check runtimes` still reports exactly one error, the pre-existing unused `typing.Any` recorded as WN-1 under v2.4.5 and left alone as out of scope.
+
+Neither fix has been exercised against a live GPU. QG-1 still stands.
+
+---
+
+## [2026-09-10] v2.4.9 Phase 1 - The written bars
+
+Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-phase1-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P1](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-1-written-bars.md). Package remains **2.4.1**; nothing in the 2.4 series is released. Committed locally, not pushed.
+
+### What Changed
+
+- **D1 resolved as a split, before any Phase 1 work.** The migration-durability slice left this plan for its own minor, [v2.5.0-migration-durability](v2/v2.5/plans/v2.5.0-migration-durability.md), because it changes app start-up behaviour and computes a `feat` under semantic-release while the host plan is labelled as a patch. v2.4.9 is now four additive delivery slices plus the terminal wrap-up, renumbered from 6 to 5. Definition-of-Done clause 5 is recorded deferred scope, not a miss; A11 (the signed updater) is deferred twice over, since the dependency it was gated on moved too.
+- **A model and runtime acceptance bar** at [docs/reference/model-acceptance.md](reference/model-acceptance.md). The catalog is organised as a job map read off `core/registry/catalog.json` and `core/registry/recommended.json`: 41 jobs (18 pre-ticked per-tier defaults, 20 opt-in entries, 3 runtimes), every one of the 38 catalog ids holding exactly one job. A proposal is accepted on one of two grounds only, taking an occupied job with measured local numbers or claiming an uncovered one, and the license section states what posture a pre-ticked default may carry versus an opt-in entry.
+- **Five open questions recorded**, the load-bearing two being a two-sided divergence between the registries that nothing guards: eight `ModelCatalog.ts` prompt/tool-format bindings have no installable catalog entry, and five installable LLMs have no binding, three of them the pre-ticked chat default on the cpu, 12/16 and 24 GB tiers. `inkling-small` is `agentic: true` with `family: "inkling"` and no binding, so its tool calls parse with a Gemma grammar via the `?? "gemma4-xml"` fallback. Filed as `NI-1`.
+- **A repo-local standards critic** at `.claude/agents/nexus-standards-judge.md`: read-only (`Bash, Read, Grep, Glob`), structurally unable to approve a push, merge, tag or release, and required to account for what it examined rather than return "looks good". Its verdict format makes a `NOT ASSESSED` list mandatory.
+- **A committed job-map contract test**, `tests/unit/docs/v2.4.9-model-acceptance.test.ts`, following the seven existing `tests/unit/docs/` doc-contract meta-tests. Proven to fail on an injected duplicate holder before being trusted.
+- **Sub-task 1.3 cut.** The installer-rework staging guard defended against an uncommitted tree; the tree was clean at Phase 1 start, so `.husky/pre-commit` is untouched. The terminal phase records the cut instead of removing a guard.
+
+### Why It Changed
+
+`feature_list.json` claimed v0.8.0 against a product shipping 2.4.x and no job read it, which is the general shape this cycle is closing: artifacts that assert something nobody checks. Phase 1 addresses the model catalog's version of that. Before this, "should this model be in the catalog?" had no written answer, so breadth accumulated one defensible-in-isolation entry at a time, each carrying a download, a picker row, a fit-gate, a license the user inherits, and a support surface on three platforms.
+
+The critic exists because a bar nobody enforces is a preference. It earned its place immediately: on its first invocation, against the pinned v2.4.8 range `989107c7..f36afd9c`, it returned eleven substantiated findings and three of them were against Phase 1's own artifacts, including that the agent definition cited a `CLAUDE.md` this repository deliberately does not have (AGENTS.md is the single canonical directive, and `tests/unit/docs/AGENTS-md.test.ts` asserts the file's absence). That misattribution came from the plan itself and was corrected in four places across two plans. The remaining findings are against the v2.4.8 range and are triaged rather than fixed here, because this cycle turns visibility on and does not commit to clearing what it surfaces.
+
+### Verification
+
+Job-map invariants pass and were shown to fail when violated. The full suite was run twice, at HEAD and with the change: failures are identical at 496 tests across 61 files, every one traceable to the `better-sqlite3` Electron-ABI mismatch on this host, with the change contributing `+1` test file and `+5` passing tests. `check:docs-layout`, `check:naming` and `check:tampering` clean. No pipeline file changed; CI/CD is not this phase's deliverable.
+
+One limitation disclosed rather than smoothed over: `nexus-standards-judge` could not be dispatched by name, because the session's agent registry loaded before the file existed. The definition's content was exercised by handing the file to a general-purpose agent; the harness's lookup of its frontmatter was not. Filed as `MT-11`.
+
+---
+
 ## [2026-09-06] v2.4.7 - installer wizard density and scope (Phases 1-5)
 
 Index: [plan](v2/v2.4/plans/v2.4.7-installer-wizard-density-and-scope.md), [evidence](v2/v2.4/development/last-phase-evidence-v2.4.7-wizard-density.md), [gaps](v2/v2.4/known-gaps.md), histories [P1](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-1-selection-sizing.md), [P2](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-2-config-scope.md), [P3](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-3-page-layout.md), [P4](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-4-review-density.md), [P5](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-5-last-phase.md). Package remains **2.4.1**; nothing in the 2.4 series is released.

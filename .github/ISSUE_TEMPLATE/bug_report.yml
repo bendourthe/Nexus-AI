@@ -1,0 +1,82 @@
+name: Bug report
+description: Something in Nexus is broken. Takes about a minute.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Four short questions first. They exist so a report can be attributed to a
+        build: `scripts/crash-class-report.mjs` reads the answers below to count
+        how often a failure class recurs per version, and a report without a
+        version cannot be counted against the build it came from.
+
+  - type: input
+    id: app-version
+    attributes:
+      label: Nexus version
+      description: >-
+        Settings > About, or the installer's title bar. Paste the number exactly,
+        for example 2.4.8. If you built from source, put the commit SHA.
+      placeholder: "2.4.8"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install-source
+    attributes:
+      label: How did you install it?
+      options:
+        - Installer (Windows .exe / macOS .dmg / Linux)
+        - VS Code extension (VSIX)
+        - Built from source
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system and version
+      placeholder: "Windows 11 26200, macOS 15.2, Ubuntu 24.04"
+    validations:
+      required: true
+
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU, or "CPU only"
+      description: >-
+        Model and VRAM if you know it. Most generation and model-loading
+        failures are hardware-shaped, so this is usually the first thing a
+        triager needs.
+      placeholder: "RTX 4070 12GB, or: CPU only"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: >-
+        Include the exact error text if there was one. A screenshot is welcome
+        but text is searchable.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open ...
+        2. Select ...
+        3. ...
+    validations:
+      required: false

@@ -23,7 +23,10 @@ import {
 } from "../src/components/agentState/captionRotator";
 import { MessageBubble } from "../src/shared/chat/MessageBubble";
 import type { ChatMessage } from "../src/shared/chat/types";
-import { STUDIO_PENDING_CAPTIONS } from "../src/components/agentState/captionRotator";
+import {
+  longestStudioCaption,
+  STUDIO_PENDING_CAPTIONS,
+} from "../src/components/agentState/captionRotator";
 
 afterEach(() => {
   cleanup();
@@ -191,10 +194,12 @@ describe("MessageBubble pending pill", () => {
     expect(pending.style.paddingInline).toBe("0px");
   });
 
-  it("keeps Image/Video pending on the hero preset without the pill", () => {
-    // v2.4.8: a studio job that has not reported a stage yet is loading
-    // its model, not creating; the studio rotator starts once the runtime
-    // says it is generating. Both states use the hero orb, never the pill.
+  it("splits Image/Video pending into a loading hero and a generating pill", () => {
+    // v2.4.8 follow-up (2026-09-08): the two phases must not look alike. A
+    // studio job that has not reported a stage yet is loading its model, and
+    // that is the centered hero orb with a fixed caption. Once the runtime
+    // says it is generating, the studios switch to the chat pill -- the same
+    // rotating-caption animation -- drawing on the studio word pool.
     const base: ChatMessage = {
       id: "p2",
       role: "assistant",
@@ -214,10 +219,12 @@ describe("MessageBubble pending pill", () => {
       />,
     );
     const orb = screen.getByRole("img", { name: /generating media/i });
-    expect(orb).toHaveAttribute("data-orb-size", "hero");
-    expect(orb).not.toHaveAttribute("data-orb-pill");
-    // v2.4.4 Phase 5.3: studio pending uses its own pool.
+    expect(orb).toHaveAttribute("data-orb-size", "bubble");
+    expect(orb).toHaveAttribute("data-orb-pill", "true");
+    // The pill is sized by the studio pool, not the chat pool.
+    expect(orb.style.minWidth).toContain(`${longestStudioCaption().length}ch`);
     expect(STUDIO_PENDING_CAPTIONS).toContain(captionText());
+    expect(PENDING_CAPTIONS).not.toContain(captionText());
   });
 });
 
