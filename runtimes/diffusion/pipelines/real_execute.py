@@ -365,8 +365,10 @@ def image_execute(ctx: ExecutionContext) -> PipelineOutput:
         # opposite of what the comment above claimed. The video path never had
         # this bug: it runs the pipeline in a nested frame that has already
         # exited by the time `vram_scope` sweeps.
-        pipe = None
-        result = None
+        # `del`, not `= None`: unbinding is what this line is for, and saying so
+        # explicitly reads better than an assignment nothing consumes. Both names
+        # are bound before the `try`, so this can never raise NameError.
+        del pipe, result
         vram_lifecycle.release_vram()
 
 

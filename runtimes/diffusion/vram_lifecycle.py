@@ -32,14 +32,11 @@ from __future__ import annotations
 import contextlib
 import gc
 import time
-from typing import Any, Callable, Iterator, List, Optional
+from typing import Callable, Iterator, List, Optional
 
 
 TelemetryEvent = dict
 TelemetryPublisher = Callable[[TelemetryEvent], None]
-
-
-_BYTES_PER_GB = 1024**3
 
 
 _publisher: Optional[TelemetryPublisher] = None
