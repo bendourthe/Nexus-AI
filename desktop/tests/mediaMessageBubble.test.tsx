@@ -64,8 +64,10 @@ describe("MessageBubble media", () => {
     expect(orb).toHaveAttribute("data-orb-size", "bubble");
     expect(orb).toHaveAttribute("data-orb-pill", "true");
     expect(orb.querySelector("canvas")?.style.height).toBe("48px");
+    // v2.4.9: generating is the LEFT-aligned pill at a fixed basis; loading
+    // is the centered hero at full width. Phase decides, not tab.
     expect(screen.getByTestId("message-pending-a2")).toHaveStyle({
-      width: "100%",
+      width: "26rem",
     });
     expect(screen.queryByTestId("message-bubble-a2")).toBeNull();
     expect(
@@ -260,7 +262,7 @@ describe("MessageBubble media", () => {
     // Elapsed and time left share ONE row (operator ask).
     expect(
       screen.getByTestId("generation-clock-studio-bytes").textContent,
-    ).toContain("about 12 s left");
+    ).toContain("about 12 seconds left");
     // The generation figure never describes the load: while loading, the only
     // estimate on screen is the load's own (operator report: a video read
     // "usually about 18 min" while it was still reading weights).
@@ -286,7 +288,7 @@ describe("MessageBubble media", () => {
     );
     expect(
       screen.getByTestId("generation-clock-studio-bytes").textContent,
-    ).toContain("about 3 min left");
+    ).toContain("about 3 minutes left");
     rerender(
       <MessageBubble
         message={{
@@ -330,9 +332,11 @@ describe("MessageBubble media", () => {
     expect(generatingBar).not.toBeNull();
     expect(generatingBar).toHaveAttribute("data-determinate", "false");
     expect(screen.queryByText("Loading model 100%")).toBeNull();
+    // v2.4.9: no cost-model hint. The estimate is the remaining figure now.
+    expect(screen.queryByTestId("model-load-progress-studio-bytes-hint")).toBeNull();
     expect(
-      screen.getByTestId("model-load-progress-studio-bytes-hint").textContent,
-    ).toContain("generating usually takes about 1 min");
+      screen.getByTestId("generation-clock-studio-bytes").textContent,
+    ).toContain("about 1 minute left");
   });
 
   it("replaces undecodable generated media with a visible failure", () => {

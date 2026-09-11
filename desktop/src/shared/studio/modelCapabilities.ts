@@ -79,11 +79,30 @@ export interface ImageModelCapabilities {
 export interface VideoModelCapabilities {
   readonly kind: "video";
   readonly resolutions: readonly ResolutionChoice[];
-  /** Selectable clip lengths in seconds -- a dropdown, never a free field. */
+  /**
+   * Selectable clip lengths in seconds -- a dropdown, never a free field.
+   *
+   * v2.4.9 second pass: these are USER-FACING lengths, not per-generation
+   * native lengths. A model still renders one short clip at a time, and
+   * `planVideoContinuation` chains those into the requested length, so the
+   * offered set no longer has to fit inside a single pass. Every video model
+   * therefore offers the SAME options: switching model must not silently
+   * rewrite the user's duration, which is what produced 2/3/4/5 -> 2/3/4 ->
+   * 2/3 across two model switches.
+   */
   readonly durationsSeconds: readonly number[];
   readonly fps: readonly number[];
   /** Hard frame ceiling from the catalog's `visualTokenBudget`. */
   readonly maxFrames: number;
+  /**
+   * Hard SECONDS ceiling for one generation pass, also from the catalog.
+   *
+   * Frames and seconds can disagree: Wan 2.2's 121 frames are 5 seconds at its
+   * native 24 fps, but would be 7.5 at 16 fps -- beyond what the checkpoint was
+   * trained to keep coherent. A segment must satisfy BOTH, so this is not
+   * derivable from `maxFrames` and is declared separately.
+   */
+  readonly maxClipSeconds: number;
   readonly steps: NumericRange;
   readonly cfgScale: NumericRange | null;
   readonly samplers: readonly string[];
@@ -93,6 +112,23 @@ export interface VideoModelCapabilities {
 }
 
 export type ModelCapabilities = ImageModelCapabilities | VideoModelCapabilities;
+
+/**
+ * The duration options every video model offers.
+ *
+ * Operator instruction: "I don't want any video shorter than 3 seconds, so the
+ * bare minimum should never go under 3 seconds. Ideally I'd like options like
+ * 4, 6, 8 and 10 seconds if possible for these models."
+ *
+ * It is possible because a long clip is a CHAIN of native-length segments
+ * (`core/video/continuation.ts`, capped at 120 s), not one pass. The former
+ * per-model sets were native single-pass lengths, which is why they shifted
+ * under the user on every model change.
+ */
+export const VIDEO_DURATION_CHOICES: readonly number[] = [4, 6, 8, 10];
+
+/** Never offer a clip shorter than this, whatever the model. */
+export const MIN_VIDEO_SECONDS = 3;
 
 function res(width: number, height: number, label?: string): ResolutionChoice {
   return {
@@ -205,9 +241,10 @@ const SANA_SPRINT: ImageModelCapabilities = {
 const WAN_21_T2V: VideoModelCapabilities = {
   kind: "video",
   resolutions: [VIDEO_480P],
-  durationsSeconds: [2, 3, 4, 5],
+  durationsSeconds: VIDEO_DURATION_CHOICES,
   fps: [12, 16, 24],
   maxFrames: 81,
+  maxClipSeconds: 5,
   steps: { min: 10, max: 50, step: 1 },
   cfgScale: { min: 1, max: 12, step: 0.5 },
   samplers: ["flow-dpm-solver", "flow-euler"],
@@ -224,9 +261,10 @@ const WAN_21_T2V: VideoModelCapabilities = {
 const WAN_22_TI2V: VideoModelCapabilities = {
   kind: "video",
   resolutions: [VIDEO_720P, VIDEO_480P],
-  durationsSeconds: [2, 3, 4, 5],
+  durationsSeconds: VIDEO_DURATION_CHOICES,
   fps: [16, 24],
   maxFrames: 121,
+  maxClipSeconds: 5,
   steps: { min: 10, max: 50, step: 1 },
   cfgScale: { min: 1, max: 12, step: 0.5 },
   samplers: ["flow-dpm-solver", "flow-euler"],
@@ -238,9 +276,10 @@ const WAN_22_TI2V: VideoModelCapabilities = {
 const SANA_VIDEO: VideoModelCapabilities = {
   kind: "video",
   resolutions: [VIDEO_720P, VIDEO_480P],
-  durationsSeconds: [2, 3, 4],
+  durationsSeconds: VIDEO_DURATION_CHOICES,
   fps: [24],
   maxFrames: 96,
+  maxClipSeconds: 4,
   steps: { min: 10, max: 40, step: 1 },
   cfgScale: { min: 1, max: 10, step: 0.5 },
   samplers: ["flow-dpm-solver"],
@@ -255,9 +294,10 @@ const SANA_VIDEO: VideoModelCapabilities = {
 const LONGCAT_AVATAR: VideoModelCapabilities = {
   kind: "video",
   resolutions: [VIDEO_480P],
-  durationsSeconds: [2, 3, 4, 5],
+  durationsSeconds: VIDEO_DURATION_CHOICES,
   fps: [24],
   maxFrames: 121,
+  maxClipSeconds: 5,
   steps: { min: 10, max: 40, step: 1 },
   cfgScale: { min: 1, max: 10, step: 0.5 },
   samplers: ["flow-dpm-solver"],
@@ -315,9 +355,10 @@ const FALLBACK_IMAGE: ImageModelCapabilities = {
 const FALLBACK_VIDEO: VideoModelCapabilities = {
   kind: "video",
   resolutions: [VIDEO_480P],
-  durationsSeconds: [2, 3, 4],
+  durationsSeconds: VIDEO_DURATION_CHOICES,
   fps: [24],
   maxFrames: 81,
+  maxClipSeconds: 3,
   steps: { min: 10, max: 40, step: 1 },
   cfgScale: { min: 1, max: 12, step: 0.5 },
   samplers: [],
@@ -480,13 +521,12 @@ export function reconcileVideoValues(
     }
   }
 
-  const fps = patch.fps ?? values.fps;
-  const allowed = allowedDurations(caps, fps);
+  const allowed = allowedDurations(caps);
   if (!allowed.includes(values.durationSeconds)) {
     const target = nearestDuration(values.durationSeconds, allowed);
     if (target !== null) {
       patch.durationSeconds = target;
-      changed.push(`duration set to ${target} s`);
+      changed.push(`duration set to ${target} seconds`);
     }
   }
 
@@ -500,24 +540,42 @@ export function reconcileVideoValues(
 }
 
 /**
- * Durations this model can actually render at `fps`.
+ * Durations this model offers. Stable across frame-rate changes.
  *
- * A clip is frames, not seconds: 5 s at 24 fps is 120 frames, which a
- * 81-frame model cannot do. The dropdown therefore narrows as fps rises,
- * instead of offering a length that will fail after ten minutes of work.
+ * v2.4.9 first pass narrowed this by frame budget, on the reasoning that a
+ * clip is frames rather than seconds. That was true of ONE generation pass and
+ * wrong about the product: the app chains segments, so a 10 s clip on an
+ * 81-frame model is two passes, not an impossibility. The narrowing is what
+ * the operator saw as options mutating on every model and fps change.
+ *
+ * The frame budget still matters -- it decides how long each SEGMENT is. That
+ * is `nativeClipSeconds` below, which the page feeds to the continuation
+ * planner.
  */
 export function allowedDurations(
   caps: VideoModelCapabilities,
-  fps: number,
+  _fps?: number,
 ): readonly number[] {
-  if (!fps || fps <= 0) return caps.durationsSeconds;
-  const fitting = caps.durationsSeconds.filter(
-    (seconds) => Math.round(seconds * fps) <= caps.maxFrames,
-  );
-  // Never return an empty dropdown: the shortest option is always offered.
-  if (fitting.length > 0) return fitting;
-  const shortest = caps.durationsSeconds[0];
-  return typeof shortest === "number" ? [shortest] : [];
+  return caps.durationsSeconds.filter((seconds) => seconds >= MIN_VIDEO_SECONDS);
+}
+
+/**
+ * How many seconds ONE generation pass covers at `fps`.
+ *
+ * `planVideoContinuation` splits the requested duration into segments of this
+ * length. Derived from the model's own frame budget so a segment is always
+ * inside what the checkpoint can render: Wan 2.1 (81 frames) is 5 seconds at
+ * 16 fps and 3 at 24, while Wan 2.2 (121) is 7 at 16 and 5 at 24.
+ */
+export function nativeClipSeconds(
+  caps: VideoModelCapabilities,
+  fps: number,
+): number {
+  const rate = fps > 0 ? fps : (caps.fps[caps.fps.length - 1] ?? 24);
+  // Both ceilings bind: frames decide what one pass can render, seconds decide
+  // how long the checkpoint stays coherent. The smaller wins.
+  const byFrames = Math.floor(caps.maxFrames / rate);
+  return Math.max(1, Math.min(byFrames, caps.maxClipSeconds));
 }
 
 function nearestDuration(value: number, allowed: readonly number[]): number | null {

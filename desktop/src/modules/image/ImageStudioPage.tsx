@@ -380,14 +380,16 @@ export function ImageStudioPage({
    * an unsupported size can never survive the switch and fail at submit. The
    * change is announced rather than silent.
    */
-  const [capabilityNotice, setCapabilityNotice] = useState<string | null>(null);
+  /**
+   * Pull the form inside what the new model supports, silently.
+   *
+   * v2.4.9 second pass: the "Adjusted for X" sentence is gone at the
+   * operator's request. The controls themselves show the corrected values.
+   */
   useEffect(() => {
     const { patch, changed } = reconcileImageValues(values, imageCaps);
     if (changed.length === 0) return;
     patchValues(patch as Partial<PromptFormValues>);
-    const name =
-      models.find((m) => m.id === selectedModelId)?.displayName ?? selectedModelId;
-    setCapabilityNotice(`Adjusted for ${name}: ${changed.join(", ")}.`);
     // `values` is deliberately not a dependency: this reconciles on a MODEL
     // change, not on every keystroke the user makes in the same model.
   }, [imageCaps]);
@@ -1657,22 +1659,27 @@ export function ImageStudioPage({
                     >
                       <Copy size={16} aria-hidden="true" />
                     </button>
-                  </div>
-                ) : null
-              }
-              renderPreviewExtra={(m) =>
-                m.role === "assistant" && m.media ? (
-                  <>
-                    <button
-                      type="button"
-                      className="nx-icon-btn-bare"
-                      aria-label="Copy Workflow"
-                      title="Copy Workflow"
-                      data-testid={`image-copyworkflow-${m.id}`}
-                      onClick={() => void copyWorkflow(m.id)}
-                    >
-                      <FileJson size={16} aria-hidden="true" />
-                    </button>
+                    {/*
+                      v2.4.9: these moved off the image viewer's toolbar. The
+                      operator reported the viewer's icon row "not doing
+                      anything" -- two of them DID work, but only when the
+                      image carried workflow metadata, which is indis-
+                      tinguishable from broken when it does not. They now live
+                      on the transcript row and render only when they have
+                      something to act on, so a visible button always works.
+                    */}
+                    {workflowByMessage[m.id] ? (
+                      <button
+                        type="button"
+                        className="nx-icon-btn-bare"
+                        aria-label="Copy Workflow"
+                        title="Copy Workflow"
+                        data-testid={`image-copyworkflow-${m.id}`}
+                        onClick={() => void copyWorkflow(m.id)}
+                      >
+                        <FileJson size={16} aria-hidden="true" />
+                      </button>
+                    ) : null}
                     <RecallActions
                       messageId={m.id}
                       testIdPrefix="image"
@@ -1689,7 +1696,7 @@ export function ImageStudioPage({
                     >
                       <ImagePlus size={16} aria-hidden="true" />
                     </button>
-                  </>
+                  </div>
                 ) : null
               }
               onRepairMediaRuntime={(message) =>
@@ -1748,7 +1755,7 @@ export function ImageStudioPage({
             }
             quickControls={
               <>
-                <StudioInlineControl label="Size" width="11rem">
+                <StudioInlineControl label="Size" width="13.5rem">
                   <Select
                     data-testid="image-quick-resolution"
                     value={`${values.width}x${values.height}`}
@@ -1831,19 +1838,6 @@ export function ImageStudioPage({
               disabled={isGenerating}
             />
           </ComposerContextRow>
-          {capabilityNotice ? (
-            <p
-              data-testid="image-capability-notice"
-              role="status"
-              style={{
-                margin: 0,
-                fontSize: "var(--text-xs)",
-                color: "var(--fg-muted)",
-              }}
-            >
-              {capabilityNotice}
-            </p>
-          ) : null}
           {advancedOpen ? (
             <div style={{ marginTop: "var(--space-2)" }}>
               <ImagePromptForm

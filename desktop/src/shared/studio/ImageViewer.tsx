@@ -29,6 +29,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Brush,
+  Copy,
   Contrast,
   Download,
   Redo2,
@@ -169,7 +170,13 @@ export interface ImageViewerProps {
   /** Base name for a saved file, without extension. */
   readonly downloadName?: string;
   readonly onClose: () => void;
-  /** Extra studio buttons (Copy workflow, Enhance) in the toolbar. */
+  /**
+   * v2.4.9: accepted and IGNORED. The studios pass their Copy-workflow / seed
+   * / layers row here; the operator reported none of those buttons did
+   * anything, so the viewer no longer renders them. Kept on the interface so
+   * the call sites stay valid and the intent is explicit rather than a silent
+   * prop drop.
+   */
   readonly extra?: React.ReactNode;
   readonly testId?: string;
 }
@@ -181,7 +188,6 @@ export function ImageViewer({
   alt,
   downloadName = "nexus-image",
   onClose,
-  extra,
   testId = "image-viewer",
 }: ImageViewerProps): JSX.Element {
   const [adjustments, setAdjustments] = useState<ImageAdjustments>({ ...NEUTRAL_ADJUSTMENTS });
@@ -314,6 +320,16 @@ export function ImageViewer({
     });
   }, [adjustments, marks, natural]);
 
+  /**
+   * v2.4.9 -- one Save and one Copy, each asking WHICH version.
+   *
+   * The toolbar previously carried two save buttons plus a row of studio
+   * actions that did nothing ("all the buttons in screenshot 4 should be
+   * removed - they're not doing anything anyways"). Two buttons for one verb
+   * also forces the user to decide before they know the choice exists.
+   */
+  const [pendingAction, setPendingAction] = useState<"save" | "copy" | null>(null);
+
   const save = useCallback(
     async (which: "edited" | "original"): Promise<void> => {
       const blob =
@@ -331,6 +347,35 @@ export function ImageViewer({
       window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
     },
     [downloadName, exportEdited, src],
+  );
+
+  /** Copy either version to the clipboard as PNG bytes. */
+  const copy = useCallback(
+    async (which: "edited" | "original"): Promise<void> => {
+      const blob =
+        which === "original"
+          ? await fetch(src).then((r) => r.blob())
+          : await exportEdited();
+      if (!blob) return;
+      try {
+        await navigator.clipboard.write([
+          new ClipboardItem({ "image/png": blob }),
+        ]);
+      } catch {
+        // Clipboard image writes are permission-gated; Save still works.
+      }
+    },
+    [exportEdited, src],
+  );
+
+  const runPending = useCallback(
+    (which: "edited" | "original"): void => {
+      const action = pendingAction;
+      setPendingAction(null);
+      if (action === "save") void save(which);
+      if (action === "copy") void copy(which);
+    },
+    [copy, pendingAction, save],
   );
 
   const filter = useMemo(() => adjustmentFilter(adjustments), [adjustments]);
@@ -506,30 +551,91 @@ export function ImageViewer({
           <RotateCcw size={16} aria-hidden="true" />
         </ToolButton>
 
-        <div style={{ marginLeft: "auto", display: "flex", gap: "var(--space-2)" }}>
-          {extra}
-          <button
-            type="button"
-            data-testid={`${testId}-download-edited`}
-            onClick={() => void save("edited")}
-            disabled={!edited}
-            style={primaryButtonStyle(edited)}
+        {/*
+          v2.4.9: `extra` (the studio's Copy-workflow / seed / layers row) is
+          deliberately NOT rendered. The operator reported those buttons did
+          nothing, and an inert control in a toolbar is worse than no control.
+          The prop stays on the interface so the studios keep compiling; it is
+          unused here on purpose.
+        */}
+        <div style={{ marginLeft: "auto", display: "flex", gap: "var(--space-1)" }}>
+          <ToolButton
+            label="Copy image"
+            testId={`${testId}-copy`}
+            onClick={() => (edited ? setPendingAction("copy") : void copy("original"))}
           >
-            <Download size={15} aria-hidden="true" /> Save edited
-          </button>
-          <button
-            type="button"
-            data-testid={`${testId}-download-original`}
-            onClick={() => void save("original")}
-            style={primaryButtonStyle(true)}
+            <Copy size={16} aria-hidden="true" />
+          </ToolButton>
+          <ToolButton
+            label="Save image"
+            testId={`${testId}-save`}
+            onClick={() => (edited ? setPendingAction("save") : void save("original"))}
           >
-            <Download size={15} aria-hidden="true" /> Save original
-          </button>
+            <Download size={16} aria-hidden="true" />
+          </ToolButton>
           <ToolButton label="Close" testId={`${testId}-close`} onClick={onClose}>
             <X size={16} aria-hidden="true" />
           </ToolButton>
         </div>
       </div>
+
+      {pendingAction ? (
+        <div
+          data-testid={`${testId}-version-choice`}
+          role="dialog"
+          aria-modal="true"
+          aria-label={pendingAction === "save" ? "Save which version" : "Copy which version"}
+          onClick={(e) => {
+            e.stopPropagation();
+            setPendingAction(null);
+          }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "color-mix(in srgb, #000 55%, transparent)",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "var(--space-3)",
+              padding: "var(--space-4)",
+              borderRadius: "var(--radius-lg, 14px)",
+              background: "var(--bg-1)",
+              border: "1px solid var(--border-1)",
+              minWidth: "18rem",
+            }}
+          >
+            <strong style={{ color: "var(--fg-0)" }}>
+              {pendingAction === "save" ? "Save which version?" : "Copy which version?"}
+            </strong>
+            <div style={{ display: "flex", gap: "var(--space-2)" }}>
+              <button
+                type="button"
+                data-testid={`${testId}-choice-edited`}
+                onClick={() => runPending("edited")}
+                style={primaryButtonStyle(true)}
+              >
+                Edited
+              </button>
+              <button
+                type="button"
+                data-testid={`${testId}-choice-original`}
+                onClick={() => runPending("original")}
+                style={primaryButtonStyle(true)}
+              >
+                Original
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {/* Stage: the image at its own resolution, capped to the viewport. */}
       <div

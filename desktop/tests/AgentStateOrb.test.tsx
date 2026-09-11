@@ -247,7 +247,7 @@ describe("transcript gutters (v2.4.4 Phase 1)", () => {
     expect(orb.style.minWidth).toContain(`${longestPendingCaption().length}ch`);
   });
 
-  it("keeps studio hero pending on the gutter without inheriting the chat pill chrome", () => {
+  it("centers the loading hero without inheriting the chat pill chrome", () => {
     render(
       <MessageList
         messages={[
@@ -262,15 +262,14 @@ describe("transcript gutters (v2.4.4 Phase 1)", () => {
       />,
     );
     const pending = screen.getByTestId("message-pending-s1");
-    // v2.4.9 operator ask: "When an image or video is generated, the animation
-    // should be aligned left, just like in chat and agents mode." The studio
-    // pending row starts on the same transcript gutter as every other row.
-    expect(pending.style.alignItems).toBe("flex-start");
-    // A fixed-basis box, so every progress bar is the same width regardless of
-    // the caption above it (the harness screenshot caught fit-content leaking
-    // caption length back into the bar).
+    // v2.4.9 second pass: PHASE decides alignment. This message has no
+    // progress, so it is still LOADING -- a centered hero on every tab.
+    // Generating is the left-aligned pill (covered in mediaMessageBubble).
+    expect(pending.style.alignItems).toBe("center");
+    // A fixed basis, so the bar is one width in both phases (fit-content is
+    // what leaked caption length back into the bar the first time).
     expect(pending.style.width).toBe("100%");
-    expect(pending.style.maxWidth).toBe("26rem");
+    expect(pending.style.maxWidth).toBe("100%");
     const orb = screen.getByTestId("agent-state-orb");
     expect(orb).toHaveAttribute("data-orb-size", "hero");
     expect(orb).not.toHaveAttribute("data-orb-pill");

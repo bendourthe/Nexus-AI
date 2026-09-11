@@ -8,6 +8,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import {
+  formatDuration,
   jobPhase,
   MODEL_LOAD_SECONDS,
   phaseFraction,
@@ -194,11 +195,11 @@ export function MessageBubble({
               color: "var(--fg-muted)",
               display: "flex",
               flexDirection: "column",
-              alignItems: "flex-start",
-              justifyContent: "flex-start",
+              alignItems: isLoadingModel(message) ? "center" : "flex-start",
+              justifyContent: isLoadingModel(message) ? "center" : "flex-start",
               gap: "var(--space-2)",
-              width: "100%",
-              maxWidth: "26rem",
+              width: isLoadingModel(message) ? "100%" : "26rem",
+              maxWidth: "100%",
               overflow: "visible",
               // v2.4.4 Phase 1.1: the transcript gutter on MessageList is the
               // only left offset. Adding one here again is what pushed the pill
@@ -311,11 +312,18 @@ function PendingMessage({
   message: ChatMessage;
   studioPending: boolean;
 }): JSX.Element {
-  // v2.4.9 operator report: "When an image or video is generated, the
-  // animation should be aligned left, just like in chat and agents mode. All
-  // animations should be consistent across the app." Centering was the only
-  // thing that made a studio job look like a different product, so it is gone:
-  // every pending row on every tab starts on the transcript gutter.
+  /*
+   * v2.4.9, second operator pass: alignment is decided by PHASE, not by tab.
+   *
+   * "The loading animation should be centered for all modes ... which should
+   * only apply to the model generation animation, not the loading."
+   *
+   * The first pass made everything left-aligned, which fixed the studio/chat
+   * mismatch but flattened this distinction with it. Loading (and its queued /
+   * clearing preludes) is a centered hero block on every tab; generating is
+   * the left-aligned pill on every tab.
+   */
+  const centered = isLoadingModel(message);
   return (
     <div
       data-testid={`message-pending-${message.id}`}
@@ -325,17 +333,16 @@ function PendingMessage({
         color: "var(--fg-muted)",
         display: "flex",
         flexDirection: "column",
-        alignItems: "flex-start",
-        justifyContent: "flex-start",
+        // v2.4.9 second pass: PHASE decides alignment, not tab. Loading is a
+        // centered hero block everywhere; generating is the left-aligned pill
+        // everywhere. A fixed basis (not `fit-content`) keeps the bar one
+        // width in both phases -- `fit-content` is what leaked caption length
+        // back into the bar the first time.
+        alignItems: centered ? "center" : "flex-start",
+        justifyContent: centered ? "center" : "flex-start",
         gap: "var(--space-2)",
-        // v2.4.9 (harness screenshot): `fit-content` here re-introduced the
-        // very bug the fixed track was meant to kill -- the bar's `min(22rem,
-        // 100%)` resolved against a shrink-to-fit box, so a longer caption
-        // still produced a wider bar. A fixed-basis box makes every bar on
-        // every tab identical; `alignItems: flex-start` keeps the pill its own
-        // size inside it.
-        width: "100%",
-        maxWidth: "26rem",
+        width: centered ? "100%" : "26rem",
+        maxWidth: "100%",
         // v2.4.4 Phase 1.1 (T001): no inline padding here. The pending row is
         // an assistant row and takes its left margin from the list gutter, the
         // same one a completed assistant bubble sits on.
@@ -456,8 +463,8 @@ export function loadPercent(progress: LoadProgress | undefined): number | null {
 export function loadEtaLabel(progress: LoadProgress | undefined): string | null {
   const eta = progress?.etaS;
   if (typeof eta !== "number" || !Number.isFinite(eta) || eta <= 0) return null;
-  if (eta < 60) return `about ${Math.max(1, Math.round(eta))} s left`;
-  return `about ${Math.max(1, Math.round(eta / 60))} min left`;
+  // Units are spelled out app-wide (v2.4.9); formatDuration owns the wording.
+  return `about ${formatDuration(eta)} left`;
 }
 
 export function loadingCaption(message: ChatMessage): string {

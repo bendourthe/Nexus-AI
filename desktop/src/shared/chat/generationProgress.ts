@@ -76,14 +76,29 @@ export function estimateModelLoadSeconds(vramGB?: number | null): number {
 }
 
 /** "45 s" / "3 min" / "1 h 5 min". Rounded, never false-precise. */
+/**
+ * "45 seconds" / "2 minutes" / "1 hour 5 minutes".
+ *
+ * v2.4.9 operator instruction: "never use shorter names for time units. Across
+ * the entire app, spell out seconds, minutes, hours". Abbreviations read as
+ * jargon next to prose, and `s` next to a number is ambiguous with a plural.
+ * Singular and plural are both handled, so "1 minutes" never appears.
+ */
 export function formatDuration(seconds: number): string {
   const total = Math.max(0, Math.round(seconds));
-  if (total < 60) return `${Math.max(1, total)} s`;
+  if (total < 60) return plural(Math.max(1, total), "second");
   const minutes = Math.round(total / 60);
-  if (minutes < 60) return `${minutes} min`;
+  if (minutes < 60) return plural(minutes, "minute");
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
-  return rest === 0 ? `${hours} h` : `${hours} h ${rest} min`;
+  return rest === 0
+    ? plural(hours, "hour")
+    : `${plural(hours, "hour")} ${plural(rest, "minute")}`;
+}
+
+/** `1 second` / `2 seconds`. */
+export function plural(count: number, unit: string): string {
+  return `${count} ${unit}${count === 1 ? "" : "s"}`;
 }
 
 /** "0:07" / "4:12" / "1:02:30" -- a running clock, always exact. */
@@ -343,15 +358,24 @@ export function progressLines(input: {
   const clock: string[] = [];
   const elapsed = phaseElapsed !== null ? `${formatElapsed(phaseElapsed)} elapsed` : null;
   if (elapsed) clock.push(elapsed);
-  // The cost model is only worth showing while nothing has been measured yet,
-  // and it names its own phase so the number cannot be read as the other one.
-  let hint: string | null = null;
+
+  /*
+   * v2.4.9 operator instruction: the cost-model line ("models usually load in
+   * about 25 seconds") is gone. It was a second, differently-worded line under
+   * the clock saying roughly what the right-hand figure already says, and the
+   * operator asked to "go straight to 'about 125 seconds left'".
+   *
+   * So when nothing has been measured yet, the up-front estimate becomes the
+   * REMAINING figure directly, counted down by the time already spent. That
+   * keeps one line, one wording, and one place to look -- and the moment a
+   * real measurement arrives it supersedes this without the layout shifting.
+   */
+  const hint: string | null = null;
   if (!measured && estimateSeconds && estimateSeconds > 0 && phase !== "queued") {
-    hint =
-      phase === "loading"
-        ? `models usually load in about ${formatDuration(estimateSeconds)}`
-        : `generating usually takes about ${formatDuration(estimateSeconds)}`;
-    clock.push(hint);
+    const left = estimateSeconds - (phaseElapsed ?? 0);
+    // Past the estimate, stop promising: "about 0 seconds left" is a lie the
+    // user can see through, and a negative number is worse.
+    remaining = left > 0 ? `about ${formatDuration(left)} left` : "almost done";
   }
 
   return {

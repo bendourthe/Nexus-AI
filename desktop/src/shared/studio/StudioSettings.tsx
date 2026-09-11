@@ -283,7 +283,18 @@ export function StudioInlineControl({
       >
         {label}
       </span>
-      <span style={{ display: "block", flex: `0 1 ${width}`, minWidth: 0 }}>{children}</span>
+      {/*
+        `.nx-composer-control` gives the child the Context pill's height,
+        radius, border and fill, so the settings and the pill read as one row
+        rather than two toolbars. `flex: 0 0 auto` at the declared width stops
+        a long option ("1216 x 832 (landscape)") from being cropped.
+      */}
+      <span
+        className="nx-composer-control"
+        style={{ display: "block", flex: `0 0 ${width}`, minWidth: 0 }}
+      >
+        {children}
+      </span>
     </label>
   );
 }

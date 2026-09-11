@@ -77,6 +77,7 @@ import {
 } from "../../shared/studio/StudioSettings";
 import {
   allowedDurations,
+  nativeClipSeconds,
   reconcileVideoValues,
   videoCapabilitiesFor,
 } from "../../shared/studio/modelCapabilities";
@@ -393,20 +394,35 @@ export function VideoLabPage({
     () => videoCapabilitiesFor(selectedModelId, models.find((m) => m.id === selectedModelId)?.family),
     [models, selectedModelId],
   );
-  /** Clip lengths this model can reach at the CURRENT frame rate. */
-  const durationChoices = useMemo(
-    () => allowedDurations(videoCaps, values.fps),
-    [videoCaps, values.fps],
-  );
+  /**
+   * The offered clip lengths. Stable across model and fps changes by design:
+   * a long clip is a CHAIN of native segments, so the option set does not
+   * depend on what one pass can render.
+   */
+  const durationChoices = useMemo(() => allowedDurations(videoCaps), [videoCaps]);
 
-  const [capabilityNotice, setCapabilityNotice] = useState<string | null>(null);
+  /**
+   * Per-segment length for the continuation planner, from the model's own
+   * frame budget at the current frame rate. Keeping this in sync is what lets
+   * the duration dropdown stay constant while the segments stay renderable.
+   */
+  useEffect(() => {
+    const clip = nativeClipSeconds(videoCaps, values.fps);
+    if (clip !== values.clipSeconds) patchValues({ clipSeconds: clip });
+  }, [patchValues, values.clipSeconds, values.fps, videoCaps]);
+
+  /**
+   * Pull the form inside what the new model supports.
+   *
+   * v2.4.9 second pass: this no longer ANNOUNCES what it changed. The operator
+   * asked for the sentence to go, and with durations now stable across models
+   * there is far less for it to say -- usually only a resolution or frame-rate
+   * correction, which is visible in the controls themselves.
+   */
   useEffect(() => {
     const { patch, changed } = reconcileVideoValues(values, videoCaps);
     if (changed.length === 0) return;
     patchValues(patch as Partial<VideoFormValues>);
-    const name =
-      models.find((m) => m.id === selectedModelId)?.displayName ?? selectedModelId;
-    setCapabilityNotice(`Adjusted for ${name}: ${changed.join(", ")}.`);
     // Reconcile on a MODEL change, not on every keystroke within one model.
   }, [videoCaps]);
   const [queueJobs, setQueueJobs] = useState<readonly GenerationJob[]>([]);
@@ -2005,7 +2021,7 @@ export function VideoLabPage({
                   5 s ran for ten minutes and then failed, so it is a dropdown of
                   what THIS model can render at the chosen frame rate.
                 */}
-                <StudioInlineControl label="Duration" width="7rem">
+                <StudioInlineControl label="Duration" width="7.5rem">
                   <Select
                     data-testid="video-quick-duration"
                     value={String(values.durationSeconds)}
@@ -2021,7 +2037,7 @@ export function VideoLabPage({
                     ))}
                   </Select>
                 </StudioInlineControl>
-                <StudioInlineControl label="Resolution" width="11rem">
+                <StudioInlineControl label="Resolution" width="12rem">
                   <Select
                     data-testid="video-quick-resolution"
                     value={`${values.width}x${values.height}`}
@@ -2075,19 +2091,6 @@ export function VideoLabPage({
               disabled={isGenerating}
             />
           </ComposerContextRow>
-          {capabilityNotice ? (
-            <p
-              data-testid="video-capability-notice"
-              role="status"
-              style={{
-                margin: 0,
-                fontSize: "var(--text-xs)",
-                color: "var(--fg-muted)",
-              }}
-            >
-              {capabilityNotice}
-            </p>
-          ) : null}
           {advancedOpen ? (
             <div style={{ marginTop: "var(--space-2)" }}>
               <VideoPromptForm

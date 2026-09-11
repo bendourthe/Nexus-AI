@@ -99,6 +99,13 @@ export interface ComposerPersonaAction {
   readonly testId?: string;
   /** Lets the caller count the toggle as part of the popover's dismiss surface. */
   readonly toggleRef?: RefObject<HTMLButtonElement | null>;
+  /**
+   * v2.4.9: the SAVED persona currently applied, if any. Rendered beside the
+   * icon so the chat says which persona is speaking -- the operator asked for
+   * a name that "would appear in the chat when selected", and an anonymous
+   * blob of instruction text gave no way to tell at a glance.
+   */
+  readonly activeName?: string | null;
   onToggle(): void;
 }
 
@@ -528,6 +535,25 @@ export function MediaComposer({
                 >
                   <UserRound size={18} aria-hidden="true" />
                 </button>
+              ) : null}
+              {personaAction?.activeName ? (
+                <span
+                  data-testid="composer-persona-name"
+                  title={`Persona: ${personaAction.activeName}`}
+                  style={{
+                    maxWidth: "9rem",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    padding: "0.1rem 0.5rem",
+                    borderRadius: "999px",
+                    border: "1px solid color-mix(in srgb, var(--accent-chatbot) 45%, transparent)",
+                    color: "var(--accent-chatbot)",
+                    fontSize: "var(--text-xs)",
+                  }}
+                >
+                  {personaAction.activeName}
+                </span>
               ) : null}
               {hasOverflow ? (
                 <button

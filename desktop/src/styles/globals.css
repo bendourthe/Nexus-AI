@@ -727,3 +727,61 @@ button {
   outline: 2px solid var(--accent-chatbot);
   outline-offset: 2px;
 }
+
+/*
+ * v2.4.9 -- composer-row controls.
+ *
+ * Operator ask: "make the height of all the added settings the same as the
+ * height of the context progress bar or model selector, and with the same
+ * colour scheme."
+ *
+ * The Context pill and the studio settings were drawn by different components
+ * with different chrome: the pill is a 999px capsule on an 80% --bg-1 wash
+ * with a 14% white border, while `Select` is an 8px rounded box on
+ * --bg-elevated with --border-subtle. Side by side on one row that read as two
+ * toolbars. This is the pill treatment, applied to whatever control sits in
+ * the quick slot, so the row is one object.
+ */
+.nx-composer-control > select,
+.nx-composer-control > input {
+  height: 2rem;
+  box-sizing: border-box;
+  padding: 0 1.6rem 0 0.75rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--fg-0) 14%, transparent);
+  background-color: color-mix(in srgb, var(--bg-1) 80%, transparent);
+  color: var(--fg-0);
+  font-size: var(--text-xs);
+  line-height: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+/* A number field has no dropdown arrow, so it keeps symmetric padding. */
+.nx-composer-control > input {
+  padding-right: 0.75rem;
+}
+
+.nx-composer-control > select:hover,
+.nx-composer-control > input:hover {
+  border-color: color-mix(in srgb, var(--fg-0) 24%, transparent);
+}
+
+.nx-composer-control > select:focus-visible,
+.nx-composer-control > input:focus-visible {
+  outline: 2px solid var(--accent-chatbot);
+  outline-offset: 1px;
+}
+
+.nx-composer-control > select:disabled,
+.nx-composer-control > input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* The Context pill is the row's flexible member: it absorbs whatever the
+   fixed-width settings leave, so the row has no trailing gap. */
+.nx-composer-row-fill {
+  flex: 1 1 auto;
+  min-width: 8rem;
+}

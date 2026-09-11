@@ -164,9 +164,20 @@ describe("VideoLabPage (chat)", () => {
     expect(screen.getByTestId("composer-quick-slot")).toBeInTheDocument();
     // Inside one clip length, so the continuation planner emits a single
     // segment and the dispatched duration is the one typed here.
-    fireEvent.change(screen.getByTestId("video-quick-duration"), {
-      target: { value: "3" },
-    });
+    // v2.4.9: the offered set is constant across models and frame rates
+    // (4/6/8/10), because a long clip is a chain of native segments.
+    const quickDuration = screen.getByTestId("video-quick-duration") as HTMLSelectElement;
+    expect(Array.from(quickDuration.options).map((o) => o.value)).toEqual([
+      "4",
+      "6",
+      "8",
+      "10",
+    ]);
+    // 4 s is one pass on this model (5 s native at 16 fps), so the dispatched
+    // request is the whole clip. A longer choice would be a CHAIN, and
+    // `lastRequest` would be its tail segment -- the chaining path has its own
+    // test below.
+    fireEvent.change(quickDuration, { target: { value: "4" } });
     // v2.4.9: Wan 2.1 1.3B has a 480p local path, so 720p is not offered for
     // it at all. The operator's 720p / 8 s request on this model ran for ten
     // minutes and then failed; the option that produced it is gone.
@@ -195,7 +206,7 @@ describe("VideoLabPage (chat)", () => {
       width: number;
       height: number;
     };
-    expect(request.durationSeconds).toBe(3);
+    expect(request.durationSeconds).toBe(4);
     expect(request.width).toBe(854);
     expect(request.height).toBe(480);
     // The Advanced panel opens onto the same values, not a stale copy.
@@ -206,16 +217,12 @@ describe("VideoLabPage (chat)", () => {
     // v2.4.9: the advanced panel's duration is a capability-bounded dropdown
     // too, not a free number field.
     const advDuration = screen.getByTestId("video-duration") as HTMLSelectElement;
-    expect(advDuration.value).toBe("3");
-    // The list is frames-bounded, not seconds-bounded: at the default 16 fps a
-    // 5 s clip is 80 frames, inside Wan 2.1's 81-frame budget, so all four fit.
-    // At 24 fps the same model only reaches 3 s -- covered in
-    // modelCapabilities.test.ts ("narrows the duration dropdown as fps rises").
+    expect(advDuration.value).toBe("4");
     expect(Array.from(advDuration.options).map((o) => o.value)).toEqual([
-      "2",
-      "3",
       "4",
-      "5",
+      "6",
+      "8",
+      "10",
     ]);
     expect((screen.getByTestId("video-resolution") as HTMLSelectElement).value).toBe(
       "854x480",
@@ -641,7 +648,7 @@ describe("VideoLabPage (chat)", () => {
         client={client}
         modelsClient={videoModels()}
         drainIntervalMs={10}
-        initialValues={{ durationSeconds: 3, clipSeconds: 1 }}
+        initialValues={{ durationSeconds: 10 }}
       />,
     );
     client.scriptEvents("mem-video-1", [
@@ -663,8 +670,11 @@ describe("VideoLabPage (chat)", () => {
       vi.advanceTimersByTime(80);
       await Promise.resolve();
     });
-    await waitFor(() => expect(client.requests.length).toBe(3));
-    expect(client.requests[0]?.request.durationSeconds).toBe(1);
+    // v2.4.9: clipSeconds is derived from the MODEL, not passed in. Wan 2.1 at
+    // the default 16 fps renders 5 s per pass, so a 10 s request is two
+    // chained segments.
+    await waitFor(() => expect(client.requests.length).toBe(2));
+    expect(client.requests[0]?.request.durationSeconds).toBe(5);
     expect(client.requests[1]?.request.continueFrom).toMatchObject({
       priorJobId: "mem-video-1",
       segmentIndex: 1,
