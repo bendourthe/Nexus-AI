@@ -19,7 +19,7 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 | Bugs / regressions (BG) | 6 | 11 |
 | Warnings (WN) | 1 | 2 |
 | Missing tests / coverage gaps (MT) | 2 | 2 |
-| Quality-gate gaps (QG) | 3 | 0 |
+| Quality-gate gaps (QG) | 4 | 0 |
 
 Operator-driven UX cycle against nine screenshots and three live failures from the packaged v2.4.8 build, plus an installer round. Not a planned phase set: every item traces to something the operator saw. Two live failures shared one root cause (the studio forms offered settings the selected model could not honour), which is what `desktop/src/shared/studio/modelCapabilities.ts` now exists to prevent. Nothing here has been published; the branch is uncommitted-then-committed local work awaiting integration.
 
@@ -185,6 +185,16 @@ exus-node-c2b7vp95.zip'`. The Linux smoke test passes the same step, which is th
 - **Owner**: Unassigned
 - **Exit condition**: `fd, path = tempfile.mkstemp(...)` followed by `os.close(fd)` (or a `with os.fdopen(fd, "wb")` write path), and a green Windows smoke run. One line, plus a regression test that asserts the descriptor is closed.
 - **Suggested next step**: Fix it before the next installer build ships, and check the two sibling `NamedTemporaryFile(delete=False)` call sites in `ollama_installer.py` for the same pattern while the context is loaded.
+
+##### QG-4 - The merge to `develop` re-runs the complete CI suite a second time
+
+- **Source**: v2.4.9 Phase 5 (5.10 post-merge verification)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 5.5; the runbook treats a duplicate post-merge suite as a finding against the terminal reconciliation
+- **Impact**: Merging PR #65 into `develop` triggered five workflows on the `push` event -- CI, CodeQL, Secret scan, Installer tests, and Shell Build -- and CI is the full 18-job suite. That suite had already run against the pull request's synthetic merge result minutes earlier, so the identical work is billed twice for every merge. `ci.yml`, `codeql.yml` and `secrets.yml` all declare `push` and `pull_request` on the same branches with no discrimination between them, which is also the root cause of the duplicate-context problem that blocked this very pull request: two runs both emit `init.ps1 (Windows)`, one of which skips, so requiring that context left the merge permanently blocked until the context was removed.
+- **Reason not done in this cycle**: Changing the push/pull_request trigger split is a pipeline-topology change, and the Non-Goals table excludes applying unreconciled canonical-contract fields. It belongs with `QG-3`, whose aggregate-check work touches the same triggers.
+- **Owner**: Unassigned, with `QG-3`
+- **Exit condition**: A merge to `develop` runs only its intended post-merge work (smoke, publication, or provenance) and not a second full suite, evaluable by listing the workflows a merge push triggers. A reasonable shape is `pull_request` for validation plus `push` limited to what genuinely differs after merge.
+- **Suggested next step**: Settle it together with `QG-3`. Removing the duplicate run also removes the duplicate-context class of failure, so one change closes two problems.
 
 ## v2.4.8
 
