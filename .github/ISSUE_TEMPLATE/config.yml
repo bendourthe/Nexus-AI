@@ -1,0 +1,29 @@
+# v2.4.9 Phase 4 -- the issue chooser.
+#
+# blank_issues_enabled is TRUE deliberately. Forcing every report through the
+# bug form would push the reports that do not fit it (a question, a packaging
+# oddity, a security concern someone is unsure how to classify) into the wrong
+# template or into silence, and a report filed in the wrong shape is still worth
+# more than one never filed. `crash-class-report.mjs` counts anything without a
+# machine-readable version in its unknown bucket rather than dropping it, so a
+# blank issue costs accuracy in one bucket instead of losing the report.
+blank_issues_enabled: true
+
+contact_links:
+  - name: Question or design discussion
+    url: https://github.com/bendourthe/Nexus-AI/issues/new?labels=discussion
+    about: >-
+      Not a defect. Open a discussion-tagged issue instead, per CONTRIBUTING.md.
+
+  - name: Feature request
+    url: https://github.com/bendourthe/Nexus-AI/issues/new?labels=discussion
+    about: >-
+      There is no feature-request form on purpose. Proposals are argued in a
+      discussion issue first; a model or runtime proposal is judged against
+      docs/reference/model-acceptance.md.
+
+  - name: Security vulnerability
+    url: https://github.com/bendourthe/Nexus-AI/security/advisories/new
+    about: >-
+      Please do not open a public issue. Report privately through a GitHub
+      security advisory.

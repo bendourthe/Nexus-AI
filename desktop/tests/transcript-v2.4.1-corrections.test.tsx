@@ -80,7 +80,7 @@ describe("v2.4.1 transcript corrections", () => {
     // transcript gutter on MessageList. Keeping a `var(--space-2)` inline
     // padding here as well is what stacked into the drifted-right pill.
     expect(screen.getByTestId("message-pending-pending")).toHaveStyle({
-      maxWidth: "min(100%, 24rem)",
+      maxWidth: "26rem",
       paddingInline: "0px",
       boxSizing: "border-box",
       overflow: "visible",

@@ -6,10 +6,27 @@
  * fps, resolution, steps, CFG, seed, sampler. Keeps its own controlled
  * state so the page only sees the final `VideoFormValues` snapshot when
  * the user clicks Generate.
+ *
+ * v2.4.8 follow-up (2026-09-08) -- operator report: some of these options
+ * could not be reached. Two causes, both gone: the panel grew past the
+ * window with no scroller (the shared `StudioSettingsPanel` caps and scrolls
+ * it), and Sampler plus the VRAM budget sat inside a second collapse below
+ * that edge (they are titled sections now). The layout is the same grammar
+ * Images uses, so the two studios read as one product.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Button, Select, Switch, TextField } from "../../components/ui";
+import { Select, Switch, TextField } from "../../components/ui";
+import {
+  StudioSettingsField,
+  StudioSettingsPanel,
+  StudioSettingsSection,
+} from "../../shared/studio/StudioSettings";
+import {
+  allowedDurations,
+  capabilityNote,
+  videoCapabilitiesFor,
+} from "../../shared/studio/modelCapabilities";
 import { foldModelId } from "../../../../core/registry/modelAliases";
 import { planVideoContinuation } from "../../../../core/video/continuation";
 import type { DiffusionTierId } from "../../../../core/config/DiffusionTier";
@@ -23,8 +40,13 @@ export interface VideoFormValues {
   readonly mode: VideoMode;
   readonly durationSeconds: number;
   readonly fps: 12 | 16 | 24;
-  readonly width: 854 | 1280;
-  readonly height: 480 | 720;
+  /**
+   * v2.4.9: plain numbers, not a two-value union. The allowed pairs now come
+   * from `modelCapabilities` per model (Wan 2.1 is 480p-only, Wan 2.2 adds
+   * 720p), so the type cannot enumerate them here.
+   */
+  readonly width: number;
+  readonly height: number;
   readonly steps: number;
   readonly cfgScale: number;
   readonly sampler: string;
@@ -59,10 +81,11 @@ export interface VideoPromptFormProps {
 const SAMPLERS = ["euler", "euler_a", "dpmpp_2m", "dpmpp_sde", "ddim", "lms", "flow-dpm-solver"];
 const LOW_BUDGET = defaultMemoryBudget("diffusion-low");
 const FPS_VALUES: Array<12 | 16 | 24> = [12, 16, 24];
-const RESOLUTIONS: Array<{
+/** Shared with the always-visible quick-control row on the page. */
+export const VIDEO_RESOLUTIONS: Array<{
   label: string;
-  width: 854 | 1280;
-  height: 480 | 720;
+  width: number;
+  height: number;
 }> = [
   { label: "480p (854x480)", width: 854, height: 480 },
   { label: "720p (1280x720)", width: 1280, height: 720 },
@@ -73,8 +96,11 @@ export const DEFAULT_VIDEO_FORM_VALUES: VideoFormValues = {
   negativePrompt: "",
   modelId: "wan2.1-t2v-1.3b",
   mode: "text2video",
+  // v2.4.9: 4 s at 16 fps is 64 frames, inside Wan 2.1 1.3B's 81-frame budget.
+  // The old default (4 s at 24 fps = 96 frames) was already past it, so the
+  // capability reconciler would have had to rewrite the form on first paint.
   durationSeconds: 4,
-  fps: 24,
+  fps: 16,
   width: 854,
   height: 480,
   steps: 30,
@@ -150,7 +176,6 @@ export function VideoPromptForm({
   }, [values, onChange]);
 
   const [presetId, setPresetId] = useState<string>("custom");
-  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   function update<K extends keyof VideoFormValues>(
     key: K,
@@ -175,11 +200,23 @@ export function VideoPromptForm({
     });
   }
 
-  function updateResolution(width: 854 | 1280, height: 480 | 720): void {
+  function updateResolution(width: number, height: number): void {
     setValues((prev) => ({ ...prev, width, height }));
   }
 
   const modelsForMode = availableModels.filter((m) => m.mode === values.mode);
+  /**
+   * v2.4.9 -- the advanced panel is bounded by the SELECTED MODEL, the same
+   * way the composer row already was. Leaving it ungated meant a user could
+   * still dial in 720p / 8 s on Wan 2.1 behind the gear and hit the exact
+   * ten-minute failure the quick controls now prevent.
+   */
+  const caps = useMemo(() => videoCapabilitiesFor(values.modelId), [values.modelId]);
+  const durationChoices = useMemo(
+    () => allowedDurations(caps, values.fps),
+    [caps, values.fps],
+  );
+
   const continuation = useMemo(
     () => planVideoContinuation(values.durationSeconds, values.clipSeconds),
     [values.durationSeconds, values.clipSeconds],
@@ -205,228 +242,241 @@ export function VideoPromptForm({
   );
 
   return (
-    <div
-      data-testid="video-prompt-form"
-      style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}
-    >
-      <label>
-        Preset
-        <Select
-          data-testid="video-preset"
-          value={presetId}
-          disabled={disabled}
-          onChange={(e) => applyPreset(e.target.value)}
-        >
-          {VIDEO_PRESETS.map((p) => (
-            <option key={p.id} value={p.id} title={p.description}>
-              {p.label}
-            </option>
-          ))}
-        </Select>
-      </label>
-
-      {!hideMode && (
-        <label>
-          Mode
-          <Select
-            data-testid="video-mode"
-            value={values.mode}
-            disabled={disabled}
-            onChange={(e) => updateMode(e.target.value as VideoMode)}
+    <StudioSettingsPanel title="Video settings" testId="video-settings-panel">
+      <div
+        data-testid="video-prompt-form"
+        style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}
+      >
+        <StudioSettingsSection title="Output" testId="video-section-output">
+          <StudioSettingsField label="Preset">
+            <Select
+              data-testid="video-preset"
+              value={presetId}
+              disabled={disabled}
+              onChange={(e) => applyPreset(e.target.value)}
+            >
+              {VIDEO_PRESETS.map((p) => (
+                <option key={p.id} value={p.id} title={p.description}>
+                  {p.label}
+                </option>
+              ))}
+            </Select>
+          </StudioSettingsField>
+          <StudioSettingsField label="Model">
+            <Select
+              data-testid="video-model"
+              value={values.modelId}
+              disabled={disabled || modelsForMode.length === 0}
+              onChange={(e) => update("modelId", e.target.value)}
+            >
+              {modelsForMode.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.displayName}
+                </option>
+              ))}
+            </Select>
+          </StudioSettingsField>
+          {/*
+            DF-7: a text-to-video checkpoint must not offer image-to-video.
+            Wan 2.1 T2V is exactly that, and the option was selectable behind
+            the gear even though the runtime cannot honour it.
+          */}
+          {hideMode ? null : (
+            <StudioSettingsField
+              label="Mode"
+              {...(caps.supportsImageToVideo
+                ? {}
+                : {
+                    hint: (
+                      <span style={{ fontSize: "var(--text-xs)", color: "var(--fg-muted)" }}>
+                        {capabilityNote(caps, "supportsImageToVideo") ??
+                          "This model is text-to-video only."}
+                      </span>
+                    ),
+                  })}
+            >
+              <Select
+                data-testid="video-mode"
+                value={values.mode}
+                disabled={disabled}
+                onChange={(e) => updateMode(e.target.value as VideoMode)}
+              >
+                <option value="text2video">Text -&gt; Video</option>
+                {caps.supportsImageToVideo ? (
+                  <option value="image2video">Image -&gt; Video</option>
+                ) : null}
+                {avatarAvailable && caps.supportsImageToVideo ? (
+                  <option value="audio2video">Photo + audio -&gt; Avatar</option>
+                ) : null}
+              </Select>
+            </StudioSettingsField>
+          )}
+          <StudioSettingsField
+            label="Duration (s)"
+            hint={
+              continuation.length > 1 ? (
+                <span
+                  data-testid="video-continuation-hint"
+                  style={{ fontSize: "var(--text-xs)", color: "var(--fg-muted)" }}
+                >
+                  {continuation.length} segments of up to {values.clipSeconds}s (prototype seams)
+                </span>
+              ) : undefined
+            }
           >
-            <option value="text2video">Text -&gt; Video</option>
-            <option value="image2video">Image -&gt; Video</option>
-            {avatarAvailable ? (
-              <option value="audio2video">Photo + audio -&gt; Avatar</option>
-            ) : null}
-          </Select>
-        </label>
-      )}
+            <Select
+              data-testid="video-duration"
+              value={String(values.durationSeconds)}
+              disabled={disabled}
+              onChange={(e) => update("durationSeconds", Number(e.target.value))}
+            >
+              {durationChoices.map((seconds) => (
+                <option key={seconds} value={String(seconds)}>
+                  {seconds} s
+                </option>
+              ))}
+            </Select>
+          </StudioSettingsField>
+          <StudioSettingsField label="Resolution">
+            <Select
+              data-testid="video-resolution"
+              value={`${values.width}x${values.height}`}
+              disabled={disabled}
+              onChange={(e) => {
+                const found = caps.resolutions.find((r) => r.value === e.target.value);
+                if (!found) return;
+                updateResolution(found.width, found.height);
+              }}
+            >
+              {caps.resolutions.map((r) => (
+                <option key={r.value} value={r.value}>
+                  {r.label}
+                </option>
+              ))}
+            </Select>
+          </StudioSettingsField>
+          <StudioSettingsField label="FPS">
+            <Select
+              data-testid="video-fps"
+              value={values.fps}
+              disabled={disabled}
+              onChange={(e) => update("fps", Number(e.target.value) as 12 | 16 | 24)}
+            >
+              {(caps.fps.length > 0 ? caps.fps : FPS_VALUES).map((f) => (
+                <option key={f} value={f}>
+                  {f}
+                </option>
+              ))}
+            </Select>
+          </StudioSettingsField>
+        </StudioSettingsSection>
 
-      <label>
-        Prompt
-        <TextField
-          multiline
-          testId="video-prompt"
-          value={values.prompt}
-          disabled={disabled}
-          rows={3}
-          onChange={(v) => update("prompt", v)}
-        />
-      </label>
+        <StudioSettingsSection title="Sampling" testId="video-section-sampling">
+          <StudioSettingsField label="Steps">
+            <TextField
+              testId="video-steps"
+              type="number"
+              min={caps.steps.min}
+              max={caps.steps.max}
+              step={caps.steps.step ?? 1}
+              value={String(values.steps)}
+              disabled={disabled}
+              onChange={(v) => update("steps", clamp(Number(v), caps.steps.min, caps.steps.max))}
+            />
+          </StudioSettingsField>
+          <StudioSettingsField
+            label="CFG scale"
+            {...(caps.cfgScale
+              ? {}
+              : {
+                  hint: (
+                    <span style={{ fontSize: "var(--text-xs)", color: "var(--fg-muted)" }}>
+                      {capabilityNote(caps, "cfgScale") ??
+                        "This model is guidance-free; CFG has no effect."}
+                    </span>
+                  ),
+                })}
+          >
+            <TextField
+              testId="video-cfg"
+              type="number"
+              min={caps.cfgScale?.min ?? 0}
+              max={caps.cfgScale?.max ?? 30}
+              step={caps.cfgScale?.step ?? 0.1}
+              value={String(values.cfgScale)}
+              disabled={disabled || caps.cfgScale === null}
+              onChange={(v) => update("cfgScale", Number(v))}
+            />
+          </StudioSettingsField>
+          <StudioSettingsField label="Sampler">
+            <Select
+              data-testid="video-sampler"
+              value={values.sampler}
+              disabled={disabled}
+              onChange={(e) => update("sampler", e.target.value)}
+            >
+              {(caps.samplers.length > 0 ? caps.samplers : SAMPLERS).map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </Select>
+          </StudioSettingsField>
+          <StudioSettingsField label="Seed">
+            <TextField
+              testId="video-seed"
+              type="number"
+              min={0}
+              value={String(values.seed)}
+              disabled={disabled}
+              onChange={(v) => update("seed", Number(v))}
+            />
+          </StudioSettingsField>
+        </StudioSettingsSection>
 
-      <label>
-        Negative Prompt
-        <TextField
-          multiline
-          testId="video-negative-prompt"
-          value={values.negativePrompt}
-          disabled={disabled}
-          rows={2}
-          onChange={(v) => update("negativePrompt", v)}
-        />
-      </label>
-
-      <label>
-        Model
-        <Select
-          data-testid="video-model"
-          value={values.modelId}
-          disabled={disabled || modelsForMode.length === 0}
-          onChange={(e) => update("modelId", e.target.value)}
+        <StudioSettingsSection
+          title="Prompting"
+          hint="The composer sends the prompt; these carry across turns."
+          testId="video-section-prompting"
         >
-          {modelsForMode.map((m) => (
-            <option key={m.id} value={m.id}>
-              {m.displayName}
-            </option>
-          ))}
-        </Select>
-      </label>
+          <StudioSettingsField full label="Prompt">
+            <TextField
+              multiline
+              testId="video-prompt"
+              value={values.prompt}
+              disabled={disabled}
+              rows={3}
+              onChange={(v) => update("prompt", v)}
+            />
+          </StudioSettingsField>
+          <StudioSettingsField full label="Negative prompt">
+            <TextField
+              multiline
+              testId="video-negative-prompt"
+              value={values.negativePrompt}
+              disabled={disabled}
+              rows={2}
+              onChange={(v) => update("negativePrompt", v)}
+            />
+          </StudioSettingsField>
+        </StudioSettingsSection>
 
-      <label>
-        Duration (s)
-        <TextField
-          testId="video-duration"
-          type="number"
-          min={1}
-          max={120}
-          value={String(values.durationSeconds)}
-          disabled={disabled}
-          onChange={(v) => update("durationSeconds", clamp(Number(v), 1, 120))}
-        />
-        {continuation.length > 1 ? (
-          <span data-testid="video-continuation-hint">
-            {continuation.length} segments of up to {values.clipSeconds}s (prototype seams)
-          </span>
+        {avatarAvailable ? (
+          <StudioSettingsSection title="Talking head" testId="video-section-avatar">
+            <StudioSettingsField full label="Local generation">
+              <Switch
+                testId="video-avatar-confirm"
+                checked={values.confirmLocalAvatar}
+                disabled={disabled}
+                onChange={(on) => update("confirmLocalAvatar", on)}
+                label="Generate talking-head locally. Photo and audio never leave this device."
+              />
+            </StudioSettingsField>
+          </StudioSettingsSection>
         ) : null}
-      </label>
 
-      <label>
-        FPS
-        <Select
-          data-testid="video-fps"
-          value={values.fps}
-          disabled={disabled}
-          onChange={(e) => update("fps", Number(e.target.value) as 12 | 16 | 24)}
-        >
-          {FPS_VALUES.map((f) => (
-            <option key={f} value={f}>
-              {f}
-            </option>
-          ))}
-        </Select>
-      </label>
-
-      <label>
-        Resolution
-        <Select
-          data-testid="video-resolution"
-          value={`${values.width}x${values.height}`}
-          disabled={disabled}
-          onChange={(e) => {
-            const found = RESOLUTIONS.find(
-              (r) => `${r.width}x${r.height}` === e.target.value,
-            );
-            if (!found) return;
-            updateResolution(found.width, found.height);
-          }}
-        >
-          {RESOLUTIONS.map((r) => (
-            <option key={r.label} value={`${r.width}x${r.height}`}>
-              {r.label}
-            </option>
-          ))}
-        </Select>
-      </label>
-
-      <label>
-        Steps
-        <TextField
-          testId="video-steps"
-          type="number"
-          min={1}
-          max={150}
-          value={String(values.steps)}
-          disabled={disabled}
-          onChange={(v) => update("steps", clamp(Number(v), 1, 150))}
-        />
-      </label>
-
-      <label>
-        CFG Scale
-        <TextField
-          testId="video-cfg"
-          type="number"
-          min={0}
-          max={30}
-          step={0.1}
-          value={String(values.cfgScale)}
-          disabled={disabled}
-          onChange={(v) => update("cfgScale", Number(v))}
-        />
-      </label>
-
-      <label>
-        Seed
-        <TextField
-          testId="video-seed"
-          type="number"
-          min={0}
-          value={String(values.seed)}
-          disabled={disabled}
-          onChange={(v) => update("seed", Number(v))}
-        />
-      </label>
-
-      {avatarAvailable ? (
-        <Switch
-          testId="video-avatar-confirm"
-          checked={values.confirmLocalAvatar}
-          disabled={disabled}
-          onChange={(on) => update("confirmLocalAvatar", on)}
-          label="Generate talking-head locally. Photo and audio never leave this device."
-        />
-      ) : null}
-
-      <div>
-        <Button
-          type="button"
-          variant="ghost"
-          testId="video-advanced"
-          aria-expanded={advancedOpen}
-          disabled={disabled}
-          onClick={() => setAdvancedOpen((v) => !v)}
-        >
-          Advanced
-        </Button>
-        <div
-          hidden={!advancedOpen}
-          style={{
-            display: advancedOpen ? "flex" : "none",
-            flexDirection: "column",
-            gap: "var(--space-2)",
-            marginTop: "var(--space-2)",
-          }}
-        >
-        <label>
-          Sampler
-          <Select
-            data-testid="video-sampler"
-            value={values.sampler}
-            disabled={disabled}
-            onChange={(e) => update("sampler", e.target.value)}
-          >
-            {SAMPLERS.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </Select>
-        </label>
-        <div data-testid="video-memory-budget" style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
-          <strong>VRAM budget</strong>
-          <label>
-            max cache VRAM (GB)
+        <StudioSettingsSection title="VRAM budget" testId="video-memory-budget">
+          <StudioSettingsField label="Max cache VRAM (GB)">
             <TextField
               testId="video-max-cache-vram"
               type="number"
@@ -436,9 +486,8 @@ export function VideoPromptForm({
               disabled={disabled}
               onChange={(v) => update("maxCacheVramGB", Number(v))}
             />
-          </label>
-          <label>
-            max cache RAM (GB)
+          </StudioSettingsField>
+          <StudioSettingsField label="Max cache RAM (GB)">
             <TextField
               testId="video-max-cache-ram"
               type="number"
@@ -448,9 +497,8 @@ export function VideoPromptForm({
               disabled={disabled}
               onChange={(v) => update("maxCacheRamGB", Number(v))}
             />
-          </label>
-          <label>
-            working reserve (GB)
+          </StudioSettingsField>
+          <StudioSettingsField label="Working reserve (GB)">
             <TextField
               testId="video-working-reserve"
               type="number"
@@ -460,28 +508,44 @@ export function VideoPromptForm({
               disabled={disabled}
               onChange={(v) => update("workingMemReserveGB", Number(v))}
             />
-          </label>
-          <Switch
-            testId="video-layer-streaming"
-            checked={values.layerStreaming}
-            disabled={disabled}
-            onChange={(on) => update("layerStreaming", on)}
-            label="Layer streaming (complete a previously too-small VRAM load)"
-          />
+          </StudioSettingsField>
+          <StudioSettingsField full label="Layer streaming">
+            <Switch
+              testId="video-layer-streaming"
+              checked={values.layerStreaming}
+              disabled={disabled}
+              onChange={(on) => update("layerStreaming", on)}
+              label="Complete a previously too-small VRAM load"
+            />
+          </StudioSettingsField>
           {!budgetCheck.ok ? (
-            <p data-testid="video-budget-error" style={{ color: "var(--accent-danger, #f87171)", margin: 0 }}>
-              {budgetCheck.errors.join(" ")}
-            </p>
+            <StudioSettingsField full label="Budget">
+              <p
+                data-testid="video-budget-error"
+                style={{ color: "var(--accent-danger, #f87171)", margin: 0, fontSize: "var(--text-xs)" }}
+              >
+                {budgetCheck.errors.join(" ")}
+              </p>
+            </StudioSettingsField>
           ) : null}
-          {budgetCheck.warnings.map((warning) => (
-            <p key={warning} data-testid="video-budget-warning" style={{ color: "var(--fg-muted)", margin: 0 }}>
-              {warning}
-            </p>
-          ))}
-        </div>
-        </div>
+          {budgetCheck.warnings.length > 0 ? (
+            <StudioSettingsField full label="Notes">
+              <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                {budgetCheck.warnings.map((warning) => (
+                  <p
+                    key={warning}
+                    data-testid="video-budget-warning"
+                    style={{ color: "var(--fg-muted)", margin: 0, fontSize: "var(--text-xs)" }}
+                  >
+                    {warning}
+                  </p>
+                ))}
+              </div>
+            </StudioSettingsField>
+          ) : null}
+        </StudioSettingsSection>
       </div>
-    </div>
+    </StudioSettingsPanel>
   );
 }
 

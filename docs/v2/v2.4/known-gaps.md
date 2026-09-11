@@ -2,11 +2,189 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-09-06
+**Last updated**: 2026-09-10
 
 Per-version tracker of unfinished work, deferrals, and follow-ups. The next plan ingests this file to decide what carries forward. Classifications: `NI` not-implemented, `DF` deferred, `BG` bug/known-issue, `MT` missing-tests/coverage, `WN` warning/suppressed, `QG` bypassed-gate/CI.
 
-Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [v2.4.1 field reliability](plans/v2.4.1-field-reliability-chat-archives-models-workspaces.md), [v2.4.1 generation recovery](plans/v2.4.1-generation-recovery-and-ui-corrections.md), [v2.4.2 field UI and generation](plans/v2.4.2-field-ui-history-and-generation.md), [v2.4.3 field density](plans/v2.4.3-field-density-identity-and-runtime.md), [v2.4.4 field chrome, restyle, SANA, density](plans/v2.4.4-field-chrome-restyle-sana-and-density.md), [v2.4.5 installer already-downloaded models](plans/v2.4.5-installer-already-downloaded-models.md), [v2.4.6 field delivery, density, and session identity](plans/v2.4.6-field-delivery-density-and-session-identity.md), [v2.4.7 installer wizard density and scope](plans/v2.4.7-installer-wizard-density-and-scope.md), [v2.4.8 desktop token split, persona, and model order](plans/v2.4.8-desktop-token-split-persona-and-model-order.md)
+Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [v2.4.1 field reliability](plans/v2.4.1-field-reliability-chat-archives-models-workspaces.md), [v2.4.1 generation recovery](plans/v2.4.1-generation-recovery-and-ui-corrections.md), [v2.4.2 field UI and generation](plans/v2.4.2-field-ui-history-and-generation.md), [v2.4.3 field density](plans/v2.4.3-field-density-identity-and-runtime.md), [v2.4.4 field chrome, restyle, SANA, density](plans/v2.4.4-field-chrome-restyle-sana-and-density.md), [v2.4.5 installer already-downloaded models](plans/v2.4.5-installer-already-downloaded-models.md), [v2.4.6 field delivery, density, and session identity](plans/v2.4.6-field-delivery-density-and-session-identity.md), [v2.4.7 installer wizard density and scope](plans/v2.4.7-installer-wizard-density-and-scope.md), [v2.4.8 desktop token split, persona, and model order](plans/v2.4.8-desktop-token-split-persona-and-model-order.md), [v2.4.9 VoiceStudio field-discipline adoption](plans/v2.4.9-adoption-voicestudio-field-discipline.md)
+
+## v2.4.9
+
+### Summary
+
+| Category | Open | Resolved |
+|---|---:|---:|
+| Not implemented (NI) | 2 | 0 |
+| Deferred (DF) | 3 | 3 |
+| Bugs / regressions (BG) | 6 | 11 |
+| Warnings (WN) | 1 | 2 |
+| Missing tests / coverage gaps (MT) | 2 | 2 |
+| Quality-gate gaps (QG) | 3 | 0 |
+
+Operator-driven UX cycle against nine screenshots and three live failures from the packaged v2.4.8 build, plus an installer round. Not a planned phase set: every item traces to something the operator saw. Two live failures shared one root cause (the studio forms offered settings the selected model could not honour), which is what `desktop/src/shared/studio/modelCapabilities.ts` now exists to prevent. Nothing here has been published; the branch is uncommitted-then-committed local work awaiting integration.
+
+From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-discipline plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md). Its D1 decision split the migration-durability slice into [v2.5.0](../v2.5/plans/v2.5.0-migration-durability.md), so Definition-of-Done clause 5 is deferred scope for this release rather than a miss. Phase 1 items are appended below.
+
+### Resolved
+
+- **BG-5 (resolved)** - A 4096x4096 image request failed instantly with a raw Zod dump in the transcript. Resolution options were gated on the HOST VRAM TIER while `desktop/sidecar/src/protocol.ts:709` caps width and height at 2048, so 4K could never have succeeded on any machine. Capability is now a property of the model (`modelCapabilities.ts`), and the tier is a second filter rather than the only one. `desktop/tests/modelCapabilities.test.ts`.
+- **BG-6 (resolved)** - Wan 2.1 T2V 1.3B accepted 720p / 8 s and failed after ten minutes. Its catalog entry declares a 480p local path, `maxVideoFrames: 81` and `maxVideoSeconds: 5`. The model's own limits now bound resolution, fps and duration, and duration became a dropdown narrowed by frame budget rather than a free number field. `desktop/tests/modelCapabilities.test.ts`, `desktop/tests/VideoLabPage.test.tsx`.
+- **BG-7 (resolved)** - The generation progress bar changed width mid-run: it was sized `${widest}ch` from the longest caption under it. Replaced with a fixed track. A SECOND layer of the same defect survived the first fix and was caught only by a rendered screenshot (see WN-2 below).
+- **BG-8 (resolved)** - A cold image model showed a bare caption for ~37 s and then a bar with ~1 s left, because the bar rendered only once a byte fraction existed. It now renders immediately as an indeterminate particle sweep.
+- **BG-9 (resolved)** - A VIDEO timeout told the operator to "Check Ollama is running". Ollama serves chat, not diffusion. `generationError.ts` classifies per surface. `desktop/tests/generationError.test.ts`.
+- **BG-10 (resolved)** - The image lightbox's Fullscreen targeted a ref captured during render (frequently null) and its Download was an `<a download>` the Electron renderer ignores for a large data URL, so "most buttons are not working" was literally true. Replaced by `ImageViewer` with an object-URL save path.
+- **DF-6 (resolved)** - The v2.4.8 deferral "Video2X enhancement panel redesign" is superseded: the panel was replaced by three plain controls in `57b24967`, and this cycle moved the surrounding studio settings onto the composer row.
+
+- **BG-11 (resolved)** - The Hub catalog snapshot was refused on EVERY installer build: `catalog tag 4.9.0 is not latest (v4.9.0)`, naming the same release twice. The synced catalog writes a bare semver into `nexus-hub-version.json` while GitHub's `/releases/latest` returns a `v`-prefixed `tag_name`, and the check was a raw `!=`. Every shipped installer therefore carried NO embedded snapshot and silently fell back to an install-time sync, which is exactly the offline-install hole the snapshot exists to close. `normalize_tag` now compares releases. The pre-existing suite could not catch it: its fixture wrote `"v9.9.9"`, a prefixed form the real producer never emits. `scripts/installer/tests/test_build_hub_snapshot.py`.
+- **BG-12 (resolved)** - Placeholder HF weight pins: 12 of 107 weight files shipped with a `0000...` sha256 and therefore skipped hash verification. 9 are now pinned - 4 from the LFS `oid` the tree API exposes, and 5 small non-LFS files (a config, an index, two `modeling_*.py`) via a new resolve-and-hash fallback, because those files are parsed or EXECUTED at load time and leaving them unverified was not cosmetic. `pin-hf-weights.py` gained `digest_by_download` with an 8 MB cap. Confirmed on a fresh build: the snapshot now embeds (`Snapshot built from ~/.nexus-ai/catalog`, 3301 KB) and the exe grew 239.5 -> 242.7 MB, which is the snapshot's own size, and the pin log reads 3 of 107 instead of 12.
+- **BG-13 (resolved)** - Sharpness was double-counted in every exported image. `adjustmentFilter` folded it in as a contrast lift AND the export applied the real convolution on top. Sharpness now lives in exactly one place, and `renderAdjusted` is shared by the preview and the export.
+- **WN-1 (resolved)** - Sharpness preview no longer approximates. While sharpening, the viewer renders the export's own `renderAdjusted` into a canvas (debounced 90 ms) instead of faking it with contrast; at sharpness 0 the `<img>` plus a CSS filter is pixel-identical to the export and stays instant.
+- **MT-8 (resolved)** - The capability map is now asserted against the catalog: every image/video model must have an explicit entry, and no model may advertise more frames or a longer clip than its `visualTokenBudget`. It caught a real error on its first run (LongCat declared at 121 frames against a catalog budget of 8) and surfaced a catalog data defect, recorded as BG-14 below.
+- **MT-9 (resolved)** - `SIDECAR_MAX_IMAGE_DIMENSION` is now checked against the Zod cap parsed out of `desktop/sidecar/src/protocol.ts`, so raising the sidecar cap fails the test instead of leaving the UI behind.
+- **DF-7 (resolved)** - The video mode selector is gated on `supportsImageToVideo`: a text-to-video checkpoint no longer offers Image -> Video behind the gear.
+- **DF-8 (resolved)** - The image negative prompt is disabled with its reason on a model that ignores it, and the LoRAs / ControlNet section is not rendered at all for a model supporting neither.
+
+- **BG-17 (resolved)** - The v2.4.8 image-path VRAM handoff released nothing. `image_execute` called `vram_lifecycle.release_vram()` from a `finally` in the SAME frame that still held `pipe`, and the success path returns from inside that `try`, so the frame was alive and the weights were still reachable when the sweep ran. `torch.cuda.empty_cache()` returns only allocator blocks no live tensor holds, so it freed the transient activations and left the SDXL-class weights resident, which is the opposite of what the block's own comment claimed. The chat model still could not come back onto the GPU. A second defect compounded it: `_empty_cache()` ran `empty_cache()` BEFORE `gc.collect()`, skipping everything the collector was about to free, including a pipeline held alive only by the reference cycle a diffusers pipeline normally forms. Fixed by dropping `pipe` and `result` before the sweep and by collecting before emptying. The video path never had the bug: it runs the pipeline in a nested frame that has already exited when `vram_scope` sweeps. `tests/python/diffusion/test_vram_release_regression.py` proves both halves with a weakref and a call-order assertion, and both fail against pre-change code. Found by `nexus-standards-judge` reviewing the v2.4.8 range; fixed out of plan by operator decision.
+- **BG-18 (resolved)** - The v2.4.8 Ollama eviction asked about the wrong model. `evictOllamaForJob(job.pillar)` discarded the job's model identity and the fit test used a per-pillar constant, `{ image: 6.9, video: 8 }`, while `catalog.json` declares image floors from 2 to 20 GB and video floors from 12 to 24 GB. Decisive case: a 24 GB host with a chat model resident holding 12 GB reports 12 GB free; a `wan2.2-ti2v-5b` job (catalog `vramGB` 24) was tested as 8, `12 >= 8 * 1.5` passed, nothing was evicted, and the runtime then chose its offload strategy against 12 GB free for a 24 GB floor -- exactly the CPU-offload path the eviction exists to prevent. Same shape for `sana-1.6b-4k` (20), `sana-1.6b-2k` (12) and `wan2.1-t2v-1.3b` (13, the pre-ticked 16 GB video default). Fixed by resolving the job's own `modelId` against the catalog, keeping the pillar figure only as a fallback for an unknown model or an unreadable catalog. Extracted to `desktop/sidecar/src/models/mediaModelVram.ts` so it is testable without test-only exports. `desktop/tests/media-model-vram.test.ts` asserts the real catalog floors and both sides of the decisive case in one run. Found by `nexus-standards-judge`; fixed out of plan by operator decision.
+
+- **WN-1 (resolved, carried from v2.4.5)** - `python -m ruff check runtimes` reported one error, an unused `typing.Any` import at `runtimes/diffusion/vram_lifecycle.py:35`, and the v2.4.8 commit message claimed "ruff clean on runtimes" while it was not. Cleared alongside a genuinely-dead `_BYTES_PER_GB` constant in the same module, which CodeQL Python flagged on its very first run (alert 99). Both are one-line deletions of confirmed-unused symbols in a file this plan already modified, and leaving one while fixing the other would have been arbitrary. `ruff check runtimes` now reports `All checks passed!` for the first time in the cycle. Deliberate small scope addition, taken because both were blocking signal on this plan's own pull request.
+
+### Open Items
+
+##### QG-1 - No end-to-end run against a real GPU job
+
+- **Source**: this cycle, all rounds
+- **Impact**: Every change is verified by typecheck, lint, build, unit tests and a rendered screenshot harness. NONE of it has been exercised against a live generation on the operator's hardware. Specifically, the capability caps have not been observed PREVENTING a real failure, only shown to produce the right option lists.
+- **Owner**: Operator
+- **Next step**: On Videos with Wan 2.1 selected, confirm the duration dropdown offers only 2-5 s and resolution only 480p, then generate one clip and check the bracketed time matches the wall clock. Then repeat one image generation and open the viewer.
+
+##### WN-2 - jsdom cannot see CSS math functions, so width regressions are untestable in unit tests
+
+- **Source**: this cycle, progress bar
+- **Impact**: jsdom's `cssstyle` silently drops `min()` / `clamp()` from inline styles, so a `width: min(22rem, 100%)` is invisible to a test assertion. This is why the SECOND width regression (a `fit-content` parent leaking caption length back into the bar) passed the whole unit suite and was caught only by rendering the component and looking at it. Mitigated in the touched files by using `width` + `max-width` pairs instead of `min()`, but the blind spot remains repo-wide.
+- **Owner**: Mitigated, not closed
+- **Next step**: `desktop/tests/inlineStyleMathGuard.test.ts` now fails if `width` or `minWidth` uses `min()` / `max()` / `clamp()` in the three files whose geometry is asserted, and it self-retires (a test fails) if jsdom ever learns to parse them. `max-width` caps are deliberately exempt: a cap can only shrink an element, so it cannot produce the containing-block bug, and banning it would force less correct fixed values purely to satisfy the harness. The real fix is a browser-based visual check in CI, which this repo does not have.
+
+##### NI-1 - The two model registries are not tested against each other
+
+- **Source**: v2.4.9 Phase 1 (sub-task 1.1)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; recorded as OQ-1 to OQ-4 in [docs/reference/model-acceptance.md](../../reference/model-acceptance.md)
+- **Impact**: Building the job map surfaced a two-sided divergence nothing guards. Eight `core/registry/ModelCatalog.ts` format bindings have no installable `catalog.json` entry (`llama3.1:8b`, `llama3.2:3b`, `llama3.3:70b`, `qwen2.5:7b`, `qwen2.5-coder:7b`, `deepseek-coder:6.7b`, `hermes3:8b`, `hermes3:70b`) and five installable LLMs have no binding (`gemma4:e2b`, `gemma-4-12b-it-gguf`, `gemma4:26b`, `gemma4:31b`, `inkling-small`), three of which are the pre-ticked chat default on the cpu, 12/16 and 24 GB tiers. The sharp end is concrete rather than cosmetic: `inkling-small` has `family: "inkling"` and `agentic: true`, so `modules/coding/llm/parseAgentToolCalls.ts:23` falls through to `?? "gemma4-xml"` and parses its tool calls with a Gemma grammar. `ModelFamily` cannot even express `inkling`, so binding it needs a type change. `tests/unit/core/registry/ModelCatalog.test.ts` asserts sync against `core/registry/models.json` only, which is why both directions are invisible.
+- **Reason not done in this cycle**: Phase 1's scope is two documents and an agent definition. Reconciling the registries is a code change to the coding runtime with its own decision (are the eight dead bindings or missing catalog entries?) and is not a field-discipline item.
+- **Owner**: Unassigned
+- **Exit condition**: A test asserts `catalog.json` LLM entries and `ModelCatalog.ts` bindings against each other, and each of the 13 divergent ids is either bound, removed, or recorded as deliberately unbound. Evaluable by running that test.
+- **Suggested next step**: Decide the eight bindings' status first, since that decides whether the test asserts equality or a documented subset.
+
+##### MT-11 - The standards judge was never dispatched through the agent registry
+
+- **Source**: v2.4.9 Phase 1 (sub-task 1.4)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1 Verification Expectation
+- **Impact**: `.claude/agents/nexus-standards-judge.md` was created mid-session, after the agent registry had loaded, so `nexus-standards-judge` was not a dispatchable agent type. The Verification Expectation was satisfied by handing the definition to a general-purpose agent and instructing it to adopt the file verbatim, which exercised the definition's CONTENT but not the harness's lookup of it. The frontmatter (`name`, `tools: Bash, Read, Grep, Glob`, `model: opus`) is therefore unverified: a malformed field, a rejected tool name, or a wrong `model` value would not have surfaced.
+- **Owner**: Operator or next cycle
+- **Exit condition**: In a session started after this commit, dispatch `nexus-standards-judge` by name against any pinned range and confirm it returns the verdict format with the declared tool scope. One invocation closes it.
+- **Suggested next step**: Do it at the start of Phase 2, which needs a review anyway; the tool scope also gets exercised there because Phase 2's evidence rests on locally-run counts.
+
+##### DF-9 - `prompt-*` budget checks still do not cover `.claude/`
+
+- **Source**: v2.4.9 Phase 1 (sub-task 1.2), confirming pre-existing gap 10.N.H
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; required by AGENTS.md "## Claude Code addenda"
+- **Impact**: AGENTS.md requires that adding a file under `.claude/agents/` be accompanied by confirming the `prompt-*` rule globs cover the new path. Confirmed they do not: `lib/checks/prompt-oversized.mjs:72-73` scopes to `modules/coding/chat/prompts/` and `modules/coding/skills/catalog/**/SKILL.md`. So `nexus-standards-judge.md` has no prompt-size budget, and neither do the four older `.claude/agents/` files. Two `modules/coding/skills/catalog` prompts already exceed the 800-token budget as warnings, so the check does find real drift where it is pointed.
+- **Reason not done in this cycle**: Extending the glob is outside Phase 1's stated scope, and the extension is already tracked as 10.N.H under v0.9.0. Recording it here keeps the AGENTS.md obligation discharged without silently widening a check.
+- **Owner**: Inherited from 10.N.H
+- **Exit condition**: `check:prompts` reports a budget line for at least one `.claude/agents/` file, or 10.N.H is closed with a recorded decision that `.claude/` is deliberately exempt.
+- **Suggested next step**: Fold into the Phase 5.5 terminal CI/CD reconciliation, where the check surface is being compared anyway.
+
+##### BG-16 - 216 stale relative links in the living `docs/DEVLOG.md`
+
+- **Source**: v2.4.9 Phase 1 (sub-task 1.4 link verification)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; surfaced incidentally while verifying this phase's own links
+- **Impact**: A link check over `docs/DEVLOG.md` resolves 216 relative targets to files that do not exist. They are historical entries written before two renames: `src/` to `modules/coding/` (for example `../src/chat/PromptBuilder.ts`, `../src/guardrails/PermissionTiers.ts`) and `scripts/installer/pyqt/` to `scripts/installer/` (for example `../scripts/installer/pyqt/src/nexus_installer/constants.py`), plus the Gemma Code to Nexus product rename (`../src/panels/GemmaCodePanel.ts`). DEVLOG is a living document and its own index lines are how a reader navigates to the code a milestone changed, so the navigation is broken for every entry older than those renames. Nothing detects this: `check:docs-layout` validates directory shape, not link targets.
+- **Reason not done in this cycle**: Phase 1 delivers two documents and an agent definition. Repairing 216 historical links is a mechanical but unbounded edit across the whole file, and rewriting historical entries to point at current paths is itself a decision (a milestone's links arguably should resolve to what existed then). All 55 relative links in this phase's own files were verified and resolve.
+- **Owner**: Unassigned
+- **Exit condition**: A committed link checker over the living docs roots reports zero unresolved relative targets, or DEVLOG's pre-rename entries carry a stated convention (a note that historical paths are as-written and not maintained) that the checker honours. Evaluable by running the checker.
+- **Suggested next step**: Decide the convention before repairing anything, since it determines whether the fix is 216 rewrites or one documented exemption plus a checker.
+
+##### BG-19 - `npm audit (production deps)` is red, and `sharp` has no fix
+
+- **Source**: v2.4.9 Phase 2 (sub-task 2.5, while selecting required checks)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 2
+- **Impact**: The `npm audit (production deps)` job has been failing on `develop` since `f8185e38`, and it is the ONLY failing job in that CI run. Reproduced locally: 8 production vulnerabilities (1 low, 2 moderate, 5 high). The blocking one is `sharp <=0.35.4-rc.0`, reached transitively through `@huggingface/transformers`, carrying inherited libvips advisories (CVE-2026-33327, CVE-2026-33328, CVE-2026-35590, CVE-2026-35591) and libheif advisories (GHSA-g89c-p67h-r497, GHSA-2jg2-4ch7-h545), with **no fix available**. `hono` and `protobufjs` findings do have fixes. Because the job is red, it could not be added to the branch protection required-check set applied in this phase, so the one production-dependency gate the repository has is also the one gate that is not enforced.
+- **Reason not done in this cycle**: The Non-Goals table excludes remediating what the visibility work surfaces, and the decisive dependency has no upstream fix, so the remedy is an override, a replacement for `@huggingface/transformers`, or an accepted risk -- each a decision, not a patch.
+- **Owner**: Unassigned
+- **Exit condition**: `npm audit --omit=dev` exits zero, or the residual advisories are recorded as accepted with a dated review, and `npm audit (production deps)` joins the required-check set. Evaluable by running the command.
+- **Suggested next step**: Run `npm audit fix` for `hono` and `protobufjs` first, since those are free, then decide `sharp` separately on its own merits.
+
+##### QG-2 - Two gating checks are not yet in the required-check set
+
+- **Source**: v2.4.9 Phase 2 (sub-task 2.5)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 2, D2
+- **Impact**: D2 made `gitleaks` and `pip-audit (model runtimes)` gating at the workflow level, so a finding turns their run red. Neither is in the branch-protection required-check list applied in this phase, because neither has executed once and requiring a check that has never produced a run leaves it permanently pending and blocks every merge. Until they are added, a red run on either is visible but does not block a merge.
+- **Owner**: Operator, at the integration pull request
+- **Exit condition**: Both checks show one green run on the integration pull request, then both context names are added to the required list on `develop` and `main`. Evaluable by reading `gh api repos/:owner/:repo/branches/<b>/protection`.
+- **Suggested next step**: Do it during 5.10, where the integration pull request produces the first runs anyway.
+
+##### QG-3 - Required checks are 17 individual contexts, not an aggregate gate
+
+- **Source**: v2.4.9 Phase 2 (sub-task 2.5)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 5.5 terminal CI/CD reconciliation
+- **Impact**: Branch protection now lists 17 individual check contexts. The canonical CI/CD contract expects a single always-resolving aggregate required check instead. The difference is not cosmetic: three workflows are path-filtered on pull requests (`installer-tests.yml`, `installer-smoke.yml`, `shell-build.yml`), so they produce no check at all on a pull request outside their filter and **cannot be required individually without blocking every unrelated merge**. Those three are therefore unguarded by protection today. An aggregate job that always runs and resolves its dependencies' skip states is the pattern that closes this, and adding a required context also has to stay in step with any future job rename.
+- **Reason not done in this cycle**: Authoring an aggregate gate is a pipeline-topology change, and the Non-Goals table excludes applying unreconciled canonical-contract fields. Phase 5.5 is where the comparison happens.
+- **Owner**: Phase 5.5
+- **Exit condition**: One required context that always resolves, covering the path-filtered workflows through their skip states. Evaluable by opening a pull request that touches no installer path and confirming the aggregate still resolves.
+- **Suggested next step**: Compare against the contract in 5.5 before adding more individual contexts, so the list does not grow into something that has to be unwound.
+
+##### DF-10 - The feature inventory covers two README regions, not the whole file
+
+- **Source**: v2.4.9 Phase 3 (sub-task 3.1, decision D3 part B)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 3; contract in [docs/reference/feature-inventory.md](../../reference/feature-inventory.md)
+- **Impact**: `check-feature-drift.mjs` enforces 29 names across `## The Four Pillars` and `## Featured Capabilities`. Features named elsewhere in `README.md` are outside the contract and can be deleted from the tree without CI noticing: `### CLI tools (already shipped)` (line 340), `## Quick Start (developer workflow)`, and `## Roadmap`. The bound is deliberate -- the regions must exclude the ~180-line changelog, whose prose names features and would otherwise produce false passes -- but the consequence is that "a CI run fails when a feature named in README.md no longer exists" is true for those two regions and not for the rest of the file.
+- **Reason not done in this cycle**: Widening coverage means deciding, per additional region, what counts as a feature claim. `### CLI tools` lists commands rather than features and `## Roadmap` names things that deliberately do NOT exist yet, so a naive widening would turn the roadmap into a set of failing assertions.
+- **Owner**: Unassigned
+- **Exit condition**: Either an additional region is added to `REGIONS` in the checker with its own entries, or this document records the decision that the two regions are the whole contract and the others are prose. Evaluable by reading the checker's `REGIONS` map against the README's `## ` headings.
+- **Suggested next step**: `### CLI tools (already shipped)` is the strongest candidate, since "already shipped" is exactly the claim this gate exists to keep honest.
+
+##### NI-2 - Crash classes were not derived from data, because there is no data
+
+- **Source**: v2.4.9 Phase 4 (sub-task 4.2)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 4
+- **Impact**: The plan bounds the classification work by sampling the 50 most recent issues. `gh issue list --state all --limit 100` returns **zero** issues for this repository, so there was nothing to cluster. The five classes in `scripts/crash-class-report.mjs` (`install-provision`, `model-load`, `gpu-handoff`, `generation-failure`, `data-persistence`) are derived instead from this repository's own recorded field failures across the v2.4.x cycles, each carrying its provenance in the source. They are a defensible first pass and they are **not** evidence about what users actually report. A class that never matches, or one that swallows everything, will only become visible once real reports exist; the per-class counts the report prints are what make that visible.
+- **Reason not done in this cycle**: No input existed. Inventing five classes and calling them a sample would have been worse than saying so.
+- **Owner**: Unassigned
+- **Exit condition**: Re-derive the classes from at least 20 issues filed through the bug form, and record the sample. Clears on the same trigger as "first non-empty crash-class report".
+- **Suggested next step**: Do both at once, once the form has collected reports; a re-derivation and a first real distribution are the same exercise.
+
+##### DF-11 - The crash-class report is operator-run, not scheduled
+
+- **Source**: v2.4.9 Phase 4 (sub-task 4.3)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 4
+- **Impact**: `scripts/crash-class-report.mjs` runs on an operator's machine against an authenticated `gh`. It is not wired into CI, so nothing produces a periodic failure-trend report; someone has to remember to run it. Wiring it would mean giving CI a token to read issues, which is a credential surface added for a report that nobody currently reads on a schedule, so the trade was declined rather than overlooked.
+- **Reason not done in this cycle**: The report has no data yet (see NI-2), so scheduling it now would schedule an empty result.
+- **Owner**: Unassigned
+- **Exit condition**: Either a scheduled job publishes the report where someone reads it, or this gap records the decision that it stays operator-run. Evaluable by looking for the job.
+- **Suggested next step**: Revisit alongside NI-2; a trend report is worth scheduling once there is a trend.
+
+##### BG-20 - `core/storage/StorageMigration.ts` outlived its own removal note
+
+- **Source**: v2.4.9 Phase 5 (sub-task 5.1, architecture refactor)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 5.1, which predicted this finding by name
+- **Impact**: `core/storage/StorageMigration.ts:18` reads "Removed in v1.1.0." The file is still present, and so is `tests/unit/core/storage/StorageMigration.test.ts`, which still runs. Every remaining reference is a comment or doc string (`core/storage/paths.ts:6,31`, `core/diagnostics/DoctorReport.ts:95,217`); **nothing calls it**. So the repository carries a one-shot `~/.gemma-code/` to `~/.nexus/` migration that its own header says was removed four minor versions ago, plus a test suite asserting the behaviour of dead code. The name is also actively confusing: the v2.5.0 migration-durability plan had to add an explicit note telling implementers NOT to touch this file, because "StorageMigration" is exactly what a database-migration helper would be called.
+- **Reason not done in this cycle**: Phase 5.1 is report-only by design, and deleting a migration path is a decision about users still on `~/.gemma-code/`, not a cleanup. Removing it needs someone to decide that no supported upgrade path still crosses it.
+- **Owner**: Unassigned
+- **Exit condition**: Either the file and its test are removed and the four referring comments updated, or the header's "Removed in v1.1.0" line is corrected to state that the code is retained deliberately and why. Evaluable by reading line 18 against the file's existence.
+- **Suggested next step**: Settle it alongside the v2.5.0 migration work, where the naming collision will be in front of whoever is reading these modules anyway.
+
+##### BG-21 - Windows installer fails to provision Node: leaked `mkstemp` descriptor (WinError 32)
+
+- **Source**: v2.4.9 Phase 5 (5.10), surfaced by the new `installer-smoke` pull-request trigger on its FIRST run
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 2.4
+- **Impact**: The Windows smoke test fails at the "Wiring Desktop Runtime" step. From `smoke-windows-results/installer.json`: `"success": false, "steps_failed": ["runtime"]`, with `Engine exception: PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: '...
+exus-node-c2b7vp95.zip'`. The Linux smoke test passes the same step, which is the signature of a Windows file-locking defect rather than a download or checksum problem. **Root cause identified**: `scripts/installer/src/nexus_installer/engine/runtime_provisioner.py:173` calls `Path(tempfile.mkstemp(prefix="nexus-node-", suffix=suffix)[1])`, taking only the path from the `(fd, path)` tuple and **never closing the file descriptor**. On Windows that leaves an OS handle open for the life of the process, so the `finally: tmp.unlink(missing_ok=True)` raises `PermissionError` (`missing_ok` does not cover a locked file) and the exception propagates out of the provisioner, failing the runtime step. POSIX permits unlinking an open file, which is why only Windows breaks. The consequence for a user is that a Windows install does not provision the Node runtime.
+- **Not introduced by this cycle.** The line dates to `bd63e52b` (2026-08-22) and is **already present on `origin/develop`**, confirmed by `git show origin/develop:...`. The v2.4.9 work neither caused it nor makes it worse; the new pull-request trigger on `installer-smoke` is what made it visible, roughly three weeks before the monthly cron would have. That is the trigger change doing exactly what Phase 2.4 claimed it would.
+- **Why the 2026-09-01 scheduled run passed** is not established. The defect looks deterministic on Windows, so either the runner image changed or the failing path was not reached that day. Worth a moment's confirmation before the fix is called complete, so the fix is not credited for a flake.
+- **Reason not done in this cycle**: It is pre-existing shipped code in the installer, outside every phase of this plan, and `installer-smoke` is deliberately not a required check, so it blocks nothing. Fixing it inside this plan's terminal phase would be an unrequested scope change.
+- **Owner**: Unassigned
+- **Exit condition**: `fd, path = tempfile.mkstemp(...)` followed by `os.close(fd)` (or a `with os.fdopen(fd, "wb")` write path), and a green Windows smoke run. One line, plus a regression test that asserts the descriptor is closed.
+- **Suggested next step**: Fix it before the next installer build ships, and check the two sibling `NamedTemporaryFile(delete=False)` call sites in `ollama_installer.py` for the same pattern while the context is loaded.
 
 ## v2.4.8
 
@@ -31,6 +209,27 @@ Phases 1-5 implemented against five operator screenshots of the v2.4.7 desktop. 
 - **BG-4 (resolved)** - Video generation failed with `module 'torch.nn' has no attribute 'RMSNorm'`: both media lock files pinned torch 2.3.0 while diffusers 0.36's SANA-Video needs 2.4+, and no readiness layer checked the version. Phase 8 pins 2.5.1 cu121 with verified wheels and adds a 2.4 floor to the installer smoke, the sidecar status, and the runtime readiness. `scripts/installer/tests/test_media_runtime_contract.py`, `desktop/tests/diffusion-runtime-factory.test.ts`, `tests/python/diffusion/test_real_execute.py`.
 
 ### Open Items
+
+##### MT-10 - `video2x-adapter.test.ts` is flaky under full-suite load
+
+- **Source**: this cycle, observed while re-establishing the test baseline
+- **Impact**: One case in `desktop/tests/video2x-adapter.test.ts` fails intermittently in a FULL `vitest run` (2 of 3 runs) and passes every time the file runs alone. It imports nothing changed this cycle (`node:crypto`, `fs`, `path`, `SettingsStore`, a temp-dir helper), was last touched in v2.3.0, and uses real filesystem temp directories with timing-sensitive waits - consistent with temp-dir or scheduling contention on Windows under parallel load. It is therefore a pre-existing test-quality defect, not a regression, but it means the "36-failure baseline" for this host is really "36 plus an intermittent 37th".
+- **Owner**: Open
+- **Next step**: Identify the specific case (the JSON reporter shows the file but the run that captured names passed), then either isolate its temp dir per test or mark the file `sequential`.
+
+##### BG-14 - Two catalog video entries declare an incoherent frame budget
+
+- **Source**: this cycle, MT-8's new catalog assertion
+- **Impact**: `longcat-video-avatar-1.5` and `sana-video-2b-720p` both declare `maxVideoFrames: 8` with `maxVideoSeconds: 8` - one frame per second, which is not a video. The two Wan entries are coherent by contrast (121/5 is 24 fps, 81/5 is 16 fps), so the field is meaningful where it was filled in properly and a placeholder here. The capability map keeps conservative hand-set values for the two, and the test carries a named allowlist so a correction (or a new model with the same placeholder) fails loudly rather than passing.
+- **Owner**: Open
+- **Next step**: Establish the real frame limits for both checkpoints, correct `core/registry/catalog.json`, then delete the allowlist entry in `modelCapabilities.test.ts`.
+
+##### BG-15 - Three SANA ControlNet repos are gated, so they can be neither pinned nor downloaded
+
+- **Source**: this cycle, BG-12's pin sweep
+- **Impact**: `Efficient-Large-Model/SANA-ControlNet-{Canny,Depth,Pose}` return HTTP 401 on the model-info endpoint itself, not 404, so the repos exist but require Hugging Face credentials. Their three weight files are the last unpinned entries (3 of 107). The wider consequence is not the pin: if a user ever enables one of these ControlNets, the DOWNLOAD will 401 too. They are `type: controlnet` with no `task`, so they do not appear in the model picker and no user has hit this yet.
+- **Owner**: Open
+- **Next step**: Decide whether these belong in the catalog at all. Pinning them would require shipping or prompting for an HF token, which breaches the local-first, zero-credential posture; the honest alternatives are to drop the three entries or to mark them as requiring user-supplied credentials.
 
 ##### MT-1 - Packaged token label is not observed
 

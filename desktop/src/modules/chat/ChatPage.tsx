@@ -40,6 +40,7 @@ import {
   type ChatSessionClient,
 } from "./chatIpcClient";
 import { formatChatTurnError } from "../../lib/inferenceRpcError";
+import { estimateModelLoadSeconds } from "../../shared/chat/generationProgress";
 import type { Chat, ChatMessageRecord } from "./types";
 import {
   ComposerContextRow,
@@ -419,6 +420,14 @@ export function ChatPage({
         : undefined,
     [modelLoad.loading, modelLoad.pct],
   );
+  // v2.4.8 follow-up (2026-09-08): Ollama publishes no load estimate, so the
+  // chat load had a clock and no idea how long it would run. The model's own
+  // VRAM footprint gives an up-front figure, and the percent the watch reports
+  // gives a measured one within a tick or two.
+  const loadEstimateSeconds = useMemo(
+    () => estimateModelLoadSeconds(effectiveModel?.vramGB ?? null),
+    [effectiveModel?.vramGB],
+  );
 
   const messages = useMemo(() => {
     if (!activeChat) return [];
@@ -428,7 +437,7 @@ export function ChatPage({
     const rows = loadingProgress
       ? stored.map((m) =>
           m.pending && m.role === "assistant" && m.activity === "chat-streaming"
-            ? { ...m, progress: loadingProgress }
+            ? { ...m, progress: loadingProgress, loadEstimateSeconds }
             : m,
         )
       : stored;
@@ -442,6 +451,7 @@ export function ChatPage({
         pending: true,
         activity: "chat-streaming",
         progress: loadingProgress ?? { step: 0, total: 0, stage: "loading" },
+        loadEstimateSeconds,
       });
     }
     if (voiceLoop.captureVisible) {
@@ -459,6 +469,7 @@ export function ChatPage({
     messagesByChat,
     voiceLoop.captureVisible,
     loadingProgress,
+    loadEstimateSeconds,
     warmingModelId,
     warmBubbleId,
   ]);

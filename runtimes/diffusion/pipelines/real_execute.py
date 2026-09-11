@@ -264,6 +264,10 @@ def image_execute(ctx: ExecutionContext) -> PipelineOutput:
         raise RuntimeNotReady("img2img is not supported for INT4 SANA weights")
     source_digest: str | None = None
     strength: float | None = None
+    # Bound before the `try` so the `finally` can always drop them, including
+    # on the paths that raise before a pipeline is ever loaded.
+    pipe = None
+    result = None
     try:
         seeded = _seeded_generator(ctx.params.seed)
         if ctx.mode == "img2img":
@@ -350,6 +354,21 @@ def image_execute(ctx: ExecutionContext) -> PipelineOutput:
         # v2.4.8 follow-up: give the VRAM back so the chat model can come back
         # onto the GPU. Without this the torch caching allocator kept the SDXL
         # weights' worth of VRAM reserved between jobs.
+        #
+        # v2.4.9 correction: dropping the references here is what makes the
+        # sweep effective, and the v2.4.8 version did not do it. The success
+        # path returns from inside the `try`, so this frame is still alive
+        # when `finally` runs and `pipe` -- which owns the weights -- is still
+        # bound. `torch.cuda.empty_cache()` returns only the allocator blocks
+        # no live tensor holds, so sweeping with `pipe` still bound freed the
+        # transient activations and left the weights resident, which is the
+        # opposite of what the comment above claimed. The video path never had
+        # this bug: it runs the pipeline in a nested frame that has already
+        # exited by the time `vram_scope` sweeps.
+        # `del`, not `= None`: unbinding is what this line is for, and saying so
+        # explicitly reads better than an assignment nothing consumes. Both names
+        # are bound before the `try`, so this can never raise NameError.
+        del pipe, result
         vram_lifecycle.release_vram()
 
 

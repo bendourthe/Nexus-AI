@@ -28,7 +28,6 @@ from PyQt5.QtWidgets import (
 
 from nexus_installer.constants import (
     ACCENT,
-    FS_BODY,
     FS_CAPTION,
     FS_H2,
     SECTION_ACCENTS,
@@ -59,6 +58,7 @@ from nexus_installer.pages.typed_catalog import (
 from nexus_installer.registry_paths import default_catalog_path
 from nexus_installer.vram_display import display_vram_gb
 from nexus_installer.widgets.callout_box import CalloutBox
+from nexus_installer.widgets.page_intro import PageLede
 from nexus_installer.widgets.ring_gauge import RingGauge
 from nexus_installer.widgets.selectable_text import make_labels_selectable
 
@@ -247,11 +247,12 @@ class ReviewPage(QWidget):
         title.setObjectName("pageTitle")
         self._layout.addWidget(title)
 
-        subtitle = QLabel("Please review your installation settings before proceeding.")
-        subtitle.setStyleSheet(
-            f"color: {TEXT_SECONDARY}; font-size: {FS_BODY}px; background: transparent;"
+        self._layout.addWidget(
+            PageLede(
+                "This is everything the installer is about to do. Nothing is "
+                "downloaded or written to disk until you start the install."
+            )
         )
-        self._layout.addWidget(subtitle)
 
         # Left column: the facts card with the connection note directly under
         # it, at the same width.

@@ -359,6 +359,23 @@ jobs:
   # Architecture boundary check via dependency-cruiser. Fails fast on any
   # violation; re-run `bash scripts/check-architecture.sh --verbose` to inspect.
 
+  # v2.4.9 Phase 3 -- the feature inventory has to stay true. feature_list.json
+  # claimed v0.8.0 against a product shipping 2.4.x and no job read it, which is
+  # how an inventory becomes decoration. This gates it in both directions: every
+  # evidence path must resolve, and the inventory and the two README regions must
+  # name the same features. No npm install needed -- the checker is dependency-free.
+  check-feature-drift:
+    name: check-feature-drift
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+      - run: node scripts/check-feature-drift.mjs
+
   check-architecture:
     name: check-architecture
     runs-on: ubuntu-latest
@@ -537,3 +554,98 @@ jobs:
         run: |
           cd scripts/installer
           uv run --with pip-audit -- pip-audit --strict -r requirements-audit.txt
+
+  # v2.4.9 Phase 2 -- the three requirement sets that actually reach a user
+  # machine. A SIBLING job, deliberately not a matrix dimension on audit-py:
+  # that job is built around a uv project (its cache key is the installer's
+  # uv.lock and it runs `uv export`), and the runtime sets are plain
+  # requirements.txt with no lock file, so neither the key nor the export
+  # transfers.
+  #
+  # Resolution strategy, decided in Phase 2 and stated here because it changes
+  # what the numbers mean: the runtime sets are audited RESOLVED, not as
+  # written. They carry no exact pins at all (runtimes/diffusion pins nothing;
+  # the other two carry only `>=` floors), so "as written" has no version to
+  # check an advisory against. Resolving is also what matches a user machine,
+  # where the installer builds the venv from wheels resolved at payload-build
+  # time. pip-audit resolves each requirement to the latest matching version,
+  # which is what a fresh install gets.
+  #
+  # Naming note: the existing installer job above deliberately keeps its
+  # original check name. Renaming it would churn a name that branch protection
+  # references, for cosmetic gain, which is the same footgun this plan flagged
+  # for the CodeQL check. This job is unambiguous on its own instead.
+  #
+  # D2 (answered 2026-09-10) made this GATING, on the strength of the
+  # measurement rather than a preference: all three sets resolve to 180
+  # packages with ZERO advisories today, so gating costs nothing now and any
+  # red is new information.
+  #
+  # The failure mode the plan worried about is real and is handled explicitly
+  # below: an unfixable upstream ML advisory must not block every merge
+  # forever. When one lands, add it to IGNORE_VULNS with a dated reason rather
+  # than turning the job off.
+  audit-runtimes:
+    name: pip-audit (model runtimes)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+      - name: Cache pip-audit advisory DB
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ~/.cache/pip-audit
+          key: pip-audit-runtimes-${{ runner.os }}-${{ hashFiles('runtimes/*/requirements.txt') }}
+      - name: Install pip-audit
+        run: python -m pip install --disable-pip-version-check pip-audit
+      - name: Audit each runtime requirement set
+        # Fails loudly on a missing or unparseable file, naming it, rather than
+        # skipping it silently. Advisory findings are reported, not gated.
+        run: |
+          set -u
+          status=0
+          # Unfixable upstream advisories go here with a dated reason, so one
+          # of them cannot hold every merge hostage. Empty today.
+          IGNORE_VULNS=""
+          IGNORE_ARGS=""
+          for vuln in $IGNORE_VULNS; do
+            IGNORE_ARGS="$IGNORE_ARGS --ignore-vuln $vuln"
+          done
+          for set_name in audio diffusion ocr; do
+            req="runtimes/${set_name}/requirements.txt"
+            if [ ! -f "$req" ]; then
+              echo "::error file=${req}::runtime requirement set is missing"
+              status=1
+              continue
+            fi
+            echo "::group::pip-audit ${req}"
+            if ! python -m pip_audit -r "$req" --progress-spinner off                  ${IGNORE_ARGS}                  --format json --output "audit-${set_name}.json"; then
+              echo "::error file=${req}::pip-audit reported advisories for ${set_name}"
+              status=1
+            fi
+            python - "$set_name" <<'PYCOUNT'
+          import json, sys
+          name = sys.argv[1]
+          with open(f"audit-{name}.json", encoding="utf-8") as fh:
+              report = json.load(fh)
+          deps = report.get("dependencies", [])
+          flagged = [d for d in deps if d.get("vulns")]
+          print(f"{name}: {len(deps)} packages audited, {len(flagged)} with advisories")
+          for dep in flagged:
+              ids = ", ".join(v.get("id", "?") for v in dep["vulns"])
+              print(f"  - {dep['name']} {dep.get('version')}: {ids}")
+          PYCOUNT
+            echo "::endgroup::"
+          done
+          exit "$status"
+      - name: Upload runtime audit reports
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: audit-runtimes
+          path: audit-*.json
+          retention-days: 30
