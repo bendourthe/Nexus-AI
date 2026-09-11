@@ -17,7 +17,7 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 | Not implemented (NI) | 2 | 0 |
 | Deferred (DF) | 1 | 0 |
 | Bugs / regressions (BG) | 1 | 1 |
-| Warnings (WN) | 2 | 0 |
+| Warnings (WN) | 1 | 1 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
@@ -26,6 +26,8 @@ MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](c
 ### Resolved
 
 - **BG-1 (resolved)** - `scripts/check-plan-scope-guard.mjs` was rewritten to CRLF by an in-place `sed`, and Vite's ESM loader rejected the CRLF `.mjs` with `SyntaxError: Invalid or unexpected token` while bare `node` imported it cleanly. Converted to LF, matching every other `scripts/check-*.mjs`. Recorded because the failure mode is invisible to a manual `node` run and would have reached CI. Source phase: 1. Plan reference: T007.
+
+- **WN-1 (resolved)** - The v2.4.10 scope guard fails closed when no base ref resolves, and this repository's workflows use `actions/checkout` with no `fetch-depth`, so CI gets a shallow clone where neither `develop` nor `origin/develop` exists. Left alone, `tests/unit/scripts/planScopeGuard.test.ts` would have failed the "Test TypeScript" job on every run for a purely environmental reason, which Phase 5.5 confirmed by reading `.github/workflows/ci.yml`. Resolved without weakening the guard and without changing a pipeline file: the CLI stays fail-closed (a developer running it locally still gets exit 1), while the test asserts the two properties separately -- fail-closed holds in every environment, and "no guarded path touched" is asserted wherever a base ref resolved. Proven three ways: a clean tree with a resolvable base passes, a simulated shallow checkout (`PLAN_SCOPE_GUARD_BASE` pointing at a nonexistent ref) passes through the fail-closed branch, and a deliberate violation of a guarded path still fails the suite. Source phase: 1, resolved in 5. Plan reference: T007, sub-task 5.5.
 
 ### Open Items
 
@@ -64,12 +66,6 @@ MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](c
   - Suggested next step: fold into the DF-1 re-probe; a tools-aware template is a precondition for the `/api/chat` route.
   - Exit condition (evaluable): `cat` the template blob named by the model's Ollama manifest and check for a `.Tools` reference. Checkable by reading one file.
 
-- **WN-1** - The v2.4.10 scope guard resolves its base ref against local `develop`, then `origin/develop`, and fails closed when neither resolves. A CI runner using a shallow clone (`fetch-depth: 1`) has neither ref, so the guard would fail closed and red the job even though nothing is wrong with the diff. It is not wired into a workflow today and executes only through `tests/unit/scripts/planScopeGuard.test.ts`, so nothing is broken right now.
-  - Source phase: 1
-  - Plan reference: T007, sub-task 1.4
-  - Reason: changing a pipeline file is out of scope for a non-final phase; the plan routes pipeline work to the Phase 5 terminal reconciliation.
-  - Suggested next step: during Phase 5.5, either set `fetch-depth: 0` on the job that runs the unit suite or teach the guard to degrade to a recorded skip when no base ref exists in a shallow checkout. Decide there, with the CI provider in front of you.
-  - Exit condition (evaluable): the Phase 5.5 CI/CD coverage section of `docs/v2/v2.4/development/last-phase-evidence.md` records either the `fetch-depth` change or an explicit decision to leave the guard test-suite-only. Checkable by reading that file.
 
 ## v2.4.9
 
