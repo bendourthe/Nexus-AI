@@ -46,8 +46,12 @@ export function ContextUsageBar({
     fontSize: "var(--text-xs)",
     color: "var(--fg-0)",
     // v2.2.9 Phase 1.2 (T002): the Context pill is the WIDE control of the
-    // composer footer (~70-75% of the row); the picker trails, bounded.
-    flex: "3 1 auto",
+    // composer footer; the picker trails, bounded.
+    // v2.4.9: it is also the row's FLEXIBLE member. The studio settings size
+    // to their content so their labels cannot crop, and the pill absorbs
+    // whatever is left, so the row never ends in a gap.
+    flex: "1 1 auto",
+    height: "2rem",
   };
   const fill: CSSProperties = {
     position: "absolute",

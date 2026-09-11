@@ -16,6 +16,7 @@ import type { VideoSettingsClient } from "./videoSettingsTypes";
 import { createMockVideoSettingsClient } from "./mockVideoSettingsClient";
 
 import { PreferencesSettings } from "./PreferencesSettings";
+import { PersonasSettings } from "./PersonasSettings";
 import { ModelsSettings, type ModelsClient } from "./ModelsSettings";
 import { SkillsSettings, type SkillsSettingsClient } from "./SkillsSettings";
 import { SkillOptimizerSettings, type SkillOptimizerClient } from "./SkillOptimizerSettings";
@@ -42,6 +43,7 @@ import type { ArchivedChatsClient } from "./ArchivedChatsSettings";
 type SettingsTab =
   // v2.4.8 follow-up: Preferences leads, and is where Settings opens.
   | "preferences"
+  | "personas"
   | "models"
   | "skills"
   | "optimizer"
@@ -55,6 +57,7 @@ type SettingsTab =
 
 const SETTINGS_TABS: readonly SettingsTab[] = [
   "preferences",
+  "personas",
   "models",
   "skills",
   "optimizer",
@@ -199,6 +202,14 @@ export function SettingsPage({
         </button>
         <button
           type="button"
+          data-testid="settings-tab-personas"
+          onClick={() => setTab("personas")}
+          style={tabButtonStyle(tab === "personas")}
+        >
+          Personas
+        </button>
+        <button
+          type="button"
           data-testid="settings-tab-models"
           onClick={() => setTab("models")}
           style={tabButtonStyle(tab === "models")}
@@ -280,6 +291,8 @@ export function SettingsPage({
       </nav>
       {tab === "preferences" ? (
         <PreferencesSettings />
+      ) : tab === "personas" ? (
+        <PersonasSettings />
       ) : tab === "models" ? (
         <ModelsSettings client={models} hostVramGB={hostVramGB} gpuVendor={hostGpuVendor} />
       ) : tab === "skills" ? (

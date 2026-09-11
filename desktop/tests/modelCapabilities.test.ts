@@ -12,6 +12,7 @@ import {
   capabilitiesFor,
   clampToRange,
   hasExplicitCapabilities,
+  nativeClipSeconds,
   imageCapabilitiesFor,
   reconcileImageValues,
   reconcileVideoValues,
@@ -90,10 +91,22 @@ describe("video capabilities", () => {
     expect(caps.notes?.resolutions).toMatch(/480p/);
   });
 
-  it("caps Wan 2.1 duration at its trained clip length", () => {
-    const caps = videoCapabilitiesFor("wan2.1-t2v-1.3b");
-    expect(Math.max(...caps.durationsSeconds)).toBeLessThanOrEqual(5);
-    expect(caps.durationsSeconds).not.toContain(8);
+  it("offers the same duration set on every model, never under 3 seconds", () => {
+    // v2.4.9 second pass. The operator saw the options mutate on each model
+    // switch (2/3/4/5 -> 2/3/4 -> 2/3) because they were per-pass native
+    // lengths. A long clip is a CHAIN of native segments, so the offered set
+    // is one constant and the frame budget decides the SEGMENT length instead.
+    const ids = [
+      "wan2.1-t2v-1.3b",
+      "wan2.2-ti2v-5b",
+      "sana-video-2b-720p",
+      "longcat-video-avatar-1.5",
+    ];
+    for (const id of ids) {
+      const caps = videoCapabilitiesFor(id);
+      expect(caps.durationsSeconds, id).toEqual([4, 6, 8, 10]);
+      expect(Math.min(...caps.durationsSeconds), id).toBeGreaterThanOrEqual(3);
+    }
   });
 
   it("offers 720p on the model that actually supports it", () => {
@@ -102,11 +115,24 @@ describe("video capabilities", () => {
     expect(caps.supportsImageToVideo).toBe(true);
   });
 
-  it("narrows the duration dropdown as frame rate rises", () => {
-    // 81 frames at 24 fps is 3.375 s, so 4 s and 5 s must drop out.
+  it("does NOT narrow the dropdown as frame rate rises", () => {
+    // This is the regression guard for the operator's report: the options must
+    // be identical at every frame rate, because chaining covers the gap.
     const caps = videoCapabilitiesFor("wan2.1-t2v-1.3b");
-    expect(allowedDurations(caps, 12)).toEqual([2, 3, 4, 5]);
-    expect(allowedDurations(caps, 24)).toEqual([2, 3]);
+    expect(allowedDurations(caps, 12)).toEqual(allowedDurations(caps, 24));
+    expect(allowedDurations(caps, 24)).toEqual([4, 6, 8, 10]);
+  });
+
+  it("derives the per-pass segment from BOTH the frame and seconds budgets", () => {
+    // 81 frames is 5 seconds at 16 fps and 3 at 24, inside Wan 2.1's 5 s cap.
+    const wan21 = videoCapabilitiesFor("wan2.1-t2v-1.3b");
+    expect(nativeClipSeconds(wan21, 16)).toBe(5);
+    expect(nativeClipSeconds(wan21, 24)).toBe(3);
+    // Wan 2.2's 121 frames would be 7.5 s at 16 fps, but the checkpoint is
+    // only trained to stay coherent for 5. The smaller ceiling wins.
+    const wan22 = videoCapabilitiesFor("wan2.2-ti2v-5b");
+    expect(nativeClipSeconds(wan22, 16)).toBe(5);
+    expect(nativeClipSeconds(wan22, 24)).toBe(5);
   });
 
   it("never returns an empty duration list", () => {
@@ -115,6 +141,8 @@ describe("video capabilities", () => {
       maxFrames: 1,
     };
     expect(allowedDurations(caps, 24).length).toBeGreaterThan(0);
+    // Even an absurd budget still yields a renderable segment.
+    expect(nativeClipSeconds(caps, 24)).toBeGreaterThanOrEqual(1);
   });
 });
 
@@ -154,11 +182,13 @@ describe("reconciling values on a model switch", () => {
       { width: 1280, height: 720, durationSeconds: 8, fps: 24, steps: 30 },
       caps,
     );
+    // The 720p request is still corrected -- that one the model cannot do.
     expect(patch.width).toBe(854);
     expect(patch.height).toBe(480);
-    expect(patch.durationSeconds).toBeLessThanOrEqual(5);
     expect(changed.join(" ")).toMatch(/resolution set to/);
-    expect(changed.join(" ")).toMatch(/duration set to/);
+    // 8 seconds is now a VALID request (two chained segments), so it is left
+    // alone. Rewriting it was the behaviour the operator objected to.
+    expect(patch.durationSeconds).toBeUndefined();
   });
 });
 
@@ -276,16 +306,20 @@ describe("capability map agrees with its sources", () => {
     }
   });
 
-  it("never advertises a longer clip than the catalog's own budget", () => {
+  it("keeps each SEGMENT inside the catalog's own seconds budget", () => {
+    // The offered duration may exceed the budget, because it is a chain. The
+    // per-pass segment may not -- that is the number the checkpoint renders.
     for (const model of mediaModels) {
       if (model.type !== "video") continue;
       const budget = model.visualTokenBudget?.["maxVideoSeconds"];
       if (typeof budget !== "number") continue;
       const caps = videoCapabilitiesFor(model.id);
-      expect(
-        Math.max(...caps.durationsSeconds),
-        `${model.id} durations`,
-      ).toBeLessThanOrEqual(budget);
+      for (const fps of caps.fps) {
+        expect(
+          nativeClipSeconds(caps, fps),
+          `${model.id} segment at ${fps} fps`,
+        ).toBeLessThanOrEqual(budget);
+      }
     }
   });
 

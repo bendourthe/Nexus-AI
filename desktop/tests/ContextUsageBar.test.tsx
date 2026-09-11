@@ -45,7 +45,11 @@ describe("ContextUsageBar", () => {
       </ComposerContextRow>,
     );
     const bar = screen.getByTestId("context-usage-bar");
-    expect(bar.style.flex).toBe("3 1 auto");
+    // v2.4.9: the pill is the row's FLEXIBLE member. The studio settings size
+    // to their content so their labels cannot crop, and the pill absorbs the
+    // slack, so the row never ends in a gap.
+    expect(bar.style.flex).toBe("1 1 auto");
+    expect(bar.style.height).toBe("2rem");
     const slot = screen.getByTestId("composer-picker-slot");
     expect(slot.style.flex).toBe("0 1 30%");
     expect(slot.style.maxWidth).toBe("30%");

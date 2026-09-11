@@ -15,6 +15,14 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  addPersona,
+  findPersona,
+  loadPersonas,
+  savePersonas,
+  validatePersona,
+  type Persona,
+} from "../../shared/persona/personaLibrary";
 import { useDismissOnOutside } from "../../shared/ui/useDismissOnOutside";
 import {
   FolderTree,
@@ -298,6 +306,64 @@ export function ChatPage({
     },
     [draftPersona, setChatPersona],
   );
+  /*
+   * v2.4.9 -- the saved-persona library.
+   *
+   * The per-chat persona stays a free-text field (a one-off instruction is a
+   * normal thing to want). What is new is a NAMED library on top: pick one
+   * from the dropdown to apply its text, or name the text you just wrote and
+   * keep it. The chosen name is tracked per chat so the transcript can show
+   * which persona is active -- an anonymous blob of text gave the user no way
+   * to tell at a glance.
+   */
+  const [savedPersonas, setSavedPersonas] = useState<readonly Persona[]>([]);
+  const [personaIdByChat, setPersonaIdByChat] = useState<Record<string, string>>({});
+  const [personaSaveName, setPersonaSaveName] = useState("");
+  const [personaSaveError, setPersonaSaveError] = useState<string | null>(null);
+  useEffect(() => setSavedPersonas(loadPersonas()), []);
+
+  const personaScopeKey = activeChat?.id ?? "__draft__";
+  const activePersonaId = personaIdByChat[personaScopeKey] ?? null;
+  const activePersonaName = useMemo(
+    () => findPersona(savedPersonas, activePersonaId)?.name ?? null,
+    [activePersonaId, savedPersonas],
+  );
+
+  const applySavedPersona = useCallback(
+    (id: string | null): void => {
+      setPersonaSaveError(null);
+      setPersonaIdByChat((prev) => {
+        const next = { ...prev };
+        if (id) next[personaScopeKey] = id;
+        else delete next[personaScopeKey];
+        return next;
+      });
+      const persona = findPersona(savedPersonas, id);
+      if (!persona) return;
+      if (activeChat) setChatPersona(activeChat.id, persona.body);
+      else setDraftPersona(persona.body);
+    },
+    [activeChat, personaScopeKey, savedPersonas, setChatPersona],
+  );
+
+  const saveCurrentPersona = useCallback((): void => {
+    const body = activeChat ? (personaByChatRef.current[activeChat.id] ?? "") : draftPersona;
+    const check = validatePersona({ name: personaSaveName, body }, savedPersonas);
+    if (!check.ok) {
+      setPersonaSaveError(check.error);
+      return;
+    }
+    const next = addPersona(savedPersonas, { name: personaSaveName, body });
+    setSavedPersonas(next);
+    savePersonas(next);
+    const created = next[next.length - 1];
+    if (created) {
+      setPersonaIdByChat((prev) => ({ ...prev, [personaScopeKey]: created.id }));
+    }
+    setPersonaSaveName("");
+    setPersonaSaveError(null);
+  }, [activeChat, draftPersona, personaSaveName, personaScopeKey, savedPersonas]);
+
   // v2.2.7 Phase 3: persona is a text control under the composer, not a header gear.
   const [personaOpen, setPersonaOpen] = useState(false);
   // v2.4.8 Phase 2 (T007): the popover closes on an outside pointer or Escape.
@@ -1626,6 +1692,33 @@ export function ChatPage({
               >
                 Persona for this chat
               </label>
+              {/*
+                v2.4.9: pick a saved persona, or keep writing a one-off below.
+                Selecting one copies its text into the chat AND records its
+                name, so the transcript can say which persona is active.
+              */}
+              <select
+                data-testid="chat-persona-select"
+                value={activePersonaId ?? ""}
+                onChange={(e) => applySavedPersona(e.target.value || null)}
+                style={{
+                  width: "100%",
+                  boxSizing: "border-box",
+                  padding: "var(--space-2) var(--space-3)",
+                  borderRadius: "var(--radius-md)",
+                  border: "1px solid var(--border-subtle)",
+                  background: "var(--bg-1)",
+                  color: "var(--fg-0)",
+                  fontSize: "var(--text-sm)",
+                }}
+              >
+                <option value="">Custom (not saved)</option>
+                {savedPersonas.map((persona) => (
+                  <option key={persona.id} value={persona.id}>
+                    {persona.name}
+                  </option>
+                ))}
+              </select>
               <textarea
                 id="chat-persona-field"
                 data-testid="chat-persona"
@@ -1654,6 +1747,50 @@ export function ChatPage({
                   outline: "none",
                 }}
               />
+              <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "center" }}>
+                <input
+                  data-testid="chat-persona-save-name"
+                  value={personaSaveName}
+                  onChange={(e) => setPersonaSaveName(e.target.value)}
+                  placeholder="Save as..."
+                  style={{
+                    flex: "1 1 auto",
+                    minWidth: 0,
+                    boxSizing: "border-box",
+                    padding: "var(--space-1) var(--space-2)",
+                    borderRadius: "var(--radius-md)",
+                    border: "1px solid var(--border-subtle)",
+                    background: "var(--bg-1)",
+                    color: "var(--fg-0)",
+                    fontSize: "var(--text-xs)",
+                  }}
+                />
+                <button
+                  type="button"
+                  data-testid="chat-persona-save"
+                  onClick={saveCurrentPersona}
+                  style={{
+                    padding: "0.25rem 0.7rem",
+                    borderRadius: "999px",
+                    border: "1px solid var(--border-1)",
+                    background: "transparent",
+                    color: "var(--fg-0)",
+                    cursor: "pointer",
+                    fontSize: "var(--text-xs)",
+                  }}
+                >
+                  Save
+                </button>
+              </div>
+              {personaSaveError ? (
+                <span
+                  data-testid="chat-persona-save-error"
+                  role="alert"
+                  style={{ color: "var(--status-err, #ef4444)", fontSize: "var(--text-xs)" }}
+                >
+                  {personaSaveError}
+                </span>
+              ) : null}
             </div>
           ) : null}
           <MediaComposer
@@ -1671,6 +1808,7 @@ export function ChatPage({
               active: personaOpen,
               testId: "chat-persona-toggle",
               toggleRef: personaToggleRef,
+              activeName: activePersonaName,
               onToggle: () => setPersonaOpen((v) => !v),
             }}
             accept={chatComposerAccept({

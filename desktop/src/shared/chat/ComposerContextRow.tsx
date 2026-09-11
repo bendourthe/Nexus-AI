@@ -83,11 +83,14 @@ export function ComposerContextRow({
               display: "flex",
               alignItems: "center",
               gap: "var(--space-2)",
-              flex: "1 1 auto",
+              // v2.4.9: the settings size to their CONTENT so a long option
+              // cannot crop; the Context pill absorbs the slack instead, which
+              // is what closes the trailing gap in the row.
+              flex: "0 0 auto",
               minWidth: 0,
-              // The controls scroll sideways on a narrow window rather than
-              // wrapping the row (wrapping is what produced the inverted
-              // layout this row was built to fix).
+              // On a narrow window they scroll sideways rather than wrapping
+              // the row (wrapping is what produced the inverted layout this
+              // row was built to fix).
               overflowX: "auto",
               scrollbarWidth: "thin",
             }}

@@ -17,13 +17,18 @@ import {
 // fifteen minutes with no bar, no clock and no estimate. These are the numbers
 // behind the block that replaced it.
 describe("generationProgress", () => {
-  it("formats durations without false precision", () => {
-    expect(formatDuration(0)).toBe("1 s");
-    expect(formatDuration(12.4)).toBe("12 s");
-    expect(formatDuration(59)).toBe("59 s");
-    expect(formatDuration(150)).toBe("3 min");
-    expect(formatDuration(3600)).toBe("1 h");
-    expect(formatDuration(3900)).toBe("1 h 5 min");
+  it("formats durations without false precision, in spelled-out units", () => {
+    // v2.4.9 operator instruction: "never use shorter names for time units.
+    // Across the entire app, spell out seconds, minutes, hours."
+    expect(formatDuration(0)).toBe("1 second");
+    expect(formatDuration(1)).toBe("1 second");
+    expect(formatDuration(12.4)).toBe("12 seconds");
+    expect(formatDuration(59)).toBe("59 seconds");
+    expect(formatDuration(60)).toBe("1 minute");
+    expect(formatDuration(150)).toBe("3 minutes");
+    expect(formatDuration(3600)).toBe("1 hour");
+    expect(formatDuration(3900)).toBe("1 hour 5 minutes");
+    expect(formatDuration(7260)).toBe("2 hours 1 minute");
   });
 
   it("formats the running clock exactly", () => {
@@ -71,7 +76,7 @@ describe("generationProgress", () => {
       phaseElapsed: 100,
       estimateSeconds: 1080,
     });
-    expect(measured.primary).toBe("Step 10 of 30 · about 3 min left");
+    expect(measured.primary).toBe("Step 10 of 30 · about 3 minutes left");
     // The cost model is gone: there is a real rate now.
     expect(measured.secondary).toBe("1:40 elapsed");
 
@@ -81,10 +86,12 @@ describe("generationProgress", () => {
       phaseElapsed: 8,
       estimateSeconds: 1080,
     });
+    // v2.4.9: no cost-model sentence. The up-front estimate becomes the
+    // REMAINING figure directly, counted down by time already spent.
     expect(guessed.primary).toBeNull();
-    expect(guessed.secondary).toBe(
-      "0:08 elapsed · generating usually takes about 18 min",
-    );
+    expect(guessed.hint).toBeNull();
+    expect(guessed.remaining).toBe("about 18 minutes left");
+    expect(guessed.secondary).toBe("0:08 elapsed");
   });
 
   it("uses the runtime's own byte estimate while weights load", () => {
@@ -94,7 +101,7 @@ describe("generationProgress", () => {
       phaseElapsed: 5,
       estimateSeconds: 25,
     });
-    expect(lines.primary).toBe("about 12 s left");
+    expect(lines.primary).toBe("about 12 seconds left");
     expect(lines.secondary).toBe("0:05 elapsed");
   });
 
@@ -107,18 +114,19 @@ describe("generationProgress", () => {
       phaseElapsed: 4,
       estimateSeconds: 25,
     });
-    expect(loading.secondary).toBe(
-      "0:04 elapsed · models usually load in about 25 s",
-    );
+    // v2.4.9: the cost-model sentence is gone; the estimate is counted
+    // down as this phase's own remaining time instead.
+    expect(loading.secondary).toBe("0:04 elapsed");
+    expect(loading.remaining).toBe("about 21 seconds left");
+    expect(loading.hint).toBeNull();
     const generating = progressLines({
       progress: { step: 0, total: 0, stage: "generating" },
       phase: "generating",
       phaseElapsed: 4,
       estimateSeconds: 1080,
     });
-    expect(generating.secondary).toBe(
-      "0:04 elapsed · generating usually takes about 18 min",
-    );
+    expect(generating.secondary).toBe("0:04 elapsed");
+    expect(generating.remaining).toBe("about 18 minutes left");
   });
 
   it("measures the load's own remaining time when the runtime gives none", () => {
@@ -140,7 +148,7 @@ describe("generationProgress", () => {
       phaseElapsed: 20,
       estimateSeconds: 25,
     });
-    expect(lines.primary).toBe("about 30 s left");
+    expect(lines.primary).toBe("about 30 seconds left");
     // Measured now, so the up-front figure is gone.
     expect(lines.secondary).toBe("0:20 elapsed");
   });
