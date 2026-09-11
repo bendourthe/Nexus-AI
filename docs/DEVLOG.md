@@ -4,6 +4,31 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-10] v2.4.9 - Installer rebuild, with BG-21 fixed first
+
+Index: [gaps](v2/v2.4/known-gaps.md) BG-21. Artifact `dist/NexusSetup.exe`, 254,476,060 bytes, sha256 `e7a35f1c45ed...` (gitignored, not committed).
+
+### What Changed
+
+- **BG-21 fixed before the build, not after.** A Windows installer built from the previous tree would have failed at "Wiring Desktop Runtime", which is the step a field test hits first, so building it as-is would have produced an artifact that could not complete an install. `provision_node` now closes the descriptor `tempfile.mkstemp()` hands back instead of discarding it.
+- **Rebuilt the full Windows chain**: VSIX (`nexus-coding-2.4.1-win32-x64.vsix`), the Tauri desktop shell bundle, and the PyInstaller onefile.
+
+### Why It Changed
+
+Every plan ends with an installer rebuild, and this one had a reason to fix first. The defect was found by the `installer-smoke` pull-request trigger added in Phase 2.4, roughly three weeks before the monthly cron would have shown it, and it had been latent since 2026-08-22.
+
+### Verification
+
+**Reproduced locally before fixing**, as the lifecycle requires rather than re-running a red check and hoping. Reverting the one-line change makes the new tests fail with `PermissionError: [WinError 32]` on the same `nexus-node-*.zip` path CI reported; restoring it makes them pass. The regression test asserts the descriptor is closed and the scratch file is actually gone, and is deliberately platform-independent so it fails on every OS rather than only the one that breaks.
+
+Full installer pytest suite green, ruff clean on `src` and `tests`, and the packaged smoke passed all five assertions: single artifact, no leftover two-artifact wizard, and `--version`, `--check-registry` and `--check-desktop-payload` each exiting 0.
+
+The build also re-reported the known 3-of-107 unpinned weight files, which are the gated SANA ControlNet repos already recorded as BG-12 and BG-15, not a new finding.
+
+**Not yet verified on a real Windows runner.** `installer-smoke` triggers on pull-request paths, schedule, or manual dispatch, so the push to `develop` did not re-run it; the three most recent runs all predate the fix. A `workflow_dispatch` would prove it end-to-end at roughly 400 billed minutes, since the macOS exclusion applies only to pull requests.
+
+---
+
 ## [2026-09-10] v2.4.9 Phase 5 - Terminal gate (publication pending)
 
 Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-last-phase-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P5](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-5-terminal-gate.md). Package remains **2.4.1**. **Nothing pushed; no pull request; no tag.**
