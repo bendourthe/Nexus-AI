@@ -127,4 +127,27 @@ describe("model alias table", () => {
     };
     expect(() => buildAliasTable(catalog, [])).toThrow(DuplicateModelAliasError);
   });
+
+  // v2.4.10 Phase 1 (T006). A family with no `familyFormats` branch falls through to the
+  // llama3 default at the bottom of that function, so the model would silently run on the
+  // wrong tool parser. These assertions fail if the minicpm5 branch is ever removed.
+  it("resolves minicpm5:2b without taking the unknown-model path (v2.4.10 Phase 1)", () => {
+    const rec = lookupAlias("minicpm5:2b");
+    expect(rec).toBeDefined();
+    expect(rec?.runtimeId).toBe("minicpm5:2b");
+    expect(foldModelId("minicpm5:2b")).toBe("minicpm5:2b");
+    expect(unknownModelIdError("minicpm5:2b").message).not.toBe("");
+    expect(aliasesFor("minicpm5:2b")).toContain("minicpm5:2b");
+  });
+
+  it("gives minicpm5 its own family formats rather than the llama3 fallthrough (v2.4.10 Phase 1)", () => {
+    const coding = lookupAlias("minicpm5:2b")?.coding;
+    expect(coding).toBeDefined();
+    expect(coding?.family).toBe("minicpm5");
+    // ChatML on the wire, confirmed from the vendor chat_template.jinja.
+    expect(coding?.promptFormat).toBe("qwen");
+    // Asserted as "not the fallthrough" rather than as a fixed value: Phase 2 measures the
+    // real grammar and may change this to a dedicated parser.
+    expect(coding?.toolFormat).not.toBe("llama3-json");
+  });
 });
