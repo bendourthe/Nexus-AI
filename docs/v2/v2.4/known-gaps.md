@@ -16,7 +16,7 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 |---|---:|---:|
 | Not implemented (NI) | 2 | 0 |
 | Deferred (DF) | 3 | 3 |
-| Bugs / regressions (BG) | 6 | 11 |
+| Bugs / regressions (BG) | 5 | 12 |
 | Warnings (WN) | 1 | 2 |
 | Missing tests / coverage gaps (MT) | 2 | 2 |
 | Quality-gate gaps (QG) | 4 | 0 |
@@ -48,6 +48,8 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **BG-18 (resolved)** - The v2.4.8 Ollama eviction asked about the wrong model. `evictOllamaForJob(job.pillar)` discarded the job's model identity and the fit test used a per-pillar constant, `{ image: 6.9, video: 8 }`, while `catalog.json` declares image floors from 2 to 20 GB and video floors from 12 to 24 GB. Decisive case: a 24 GB host with a chat model resident holding 12 GB reports 12 GB free; a `wan2.2-ti2v-5b` job (catalog `vramGB` 24) was tested as 8, `12 >= 8 * 1.5` passed, nothing was evicted, and the runtime then chose its offload strategy against 12 GB free for a 24 GB floor -- exactly the CPU-offload path the eviction exists to prevent. Same shape for `sana-1.6b-4k` (20), `sana-1.6b-2k` (12) and `wan2.1-t2v-1.3b` (13, the pre-ticked 16 GB video default). Fixed by resolving the job's own `modelId` against the catalog, keeping the pillar figure only as a fallback for an unknown model or an unreadable catalog. Extracted to `desktop/sidecar/src/models/mediaModelVram.ts` so it is testable without test-only exports. `desktop/tests/media-model-vram.test.ts` asserts the real catalog floors and both sides of the decisive case in one run. Found by `nexus-standards-judge`; fixed out of plan by operator decision.
 
 - **WN-1 (resolved, carried from v2.4.5)** - `python -m ruff check runtimes` reported one error, an unused `typing.Any` import at `runtimes/diffusion/vram_lifecycle.py:35`, and the v2.4.8 commit message claimed "ruff clean on runtimes" while it was not. Cleared alongside a genuinely-dead `_BYTES_PER_GB` constant in the same module, which CodeQL Python flagged on its very first run (alert 99). Both are one-line deletions of confirmed-unused symbols in a file this plan already modified, and leaving one while fixing the other would have been arbitrary. `ruff check runtimes` now reports `All checks passed!` for the first time in the cycle. Deliberate small scope addition, taken because both were blocking signal on this plan's own pull request.
+
+- **BG-21 (resolved)** - The Windows installer failed at "Wiring Desktop Runtime" with `PermissionError: [WinError 32]` on the downloaded Node archive, so a Windows install did not provision the Node runtime at all. `runtime_provisioner.provision_node` created its scratch file with `Path(tempfile.mkstemp(...)[1])`, taking only the path and discarding the descriptor; on Windows that open handle made the `finally: tmp.unlink(missing_ok=True)` raise, and the exception propagated out of the provisioner. POSIX permits unlinking an open file, which is why Linux stayed green and only Windows broke, and why the defect survived from 2026-08-22 unnoticed. Fixed by capturing and closing the descriptor. **Reproduced locally before fixing**: reverting the change makes the new tests fail with the identical `WinError 32` on the same `nexus-node-*.zip` path CI reported. `scripts/installer/tests/test_runtime_provisioner_fd_leak.py` asserts the descriptor is closed and the scratch file is gone, and is platform-independent so it fails on every OS rather than only the one that breaks. Found by the `installer-smoke` pull-request trigger added in Phase 2.4, roughly three weeks before the monthly cron would have shown it.
 
 ### Open Items
 
@@ -172,29 +174,6 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Owner**: Unassigned
 - **Exit condition**: Either the file and its test are removed and the four referring comments updated, or the header's "Removed in v1.1.0" line is corrected to state that the code is retained deliberately and why. Evaluable by reading line 18 against the file's existence.
 - **Suggested next step**: Settle it alongside the v2.5.0 migration work, where the naming collision will be in front of whoever is reading these modules anyway.
-
-##### BG-21 - Windows installer fails to provision Node: leaked `mkstemp` descriptor (WinError 32)
-
-- **Source**: v2.4.9 Phase 5 (5.10), surfaced by the new `installer-smoke` pull-request trigger on its FIRST run
-- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 2.4
-- **Impact**: The Windows smoke test fails at the "Wiring Desktop Runtime" step. From `smoke-windows-results/installer.json`: `"success": false, "steps_failed": ["runtime"]`, with `Engine exception: PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: '...
-exus-node-c2b7vp95.zip'`. The Linux smoke test passes the same step, which is the signature of a Windows file-locking defect rather than a download or checksum problem. **Root cause identified**: `scripts/installer/src/nexus_installer/engine/runtime_provisioner.py:173` calls `Path(tempfile.mkstemp(prefix="nexus-node-", suffix=suffix)[1])`, taking only the path from the `(fd, path)` tuple and **never closing the file descriptor**. On Windows that leaves an OS handle open for the life of the process, so the `finally: tmp.unlink(missing_ok=True)` raises `PermissionError` (`missing_ok` does not cover a locked file) and the exception propagates out of the provisioner, failing the runtime step. POSIX permits unlinking an open file, which is why only Windows breaks. The consequence for a user is that a Windows install does not provision the Node runtime.
-- **Not introduced by this cycle.** The line dates to `bd63e52b` (2026-08-22) and is **already present on `origin/develop`**, confirmed by `git show origin/develop:...`. The v2.4.9 work neither caused it nor makes it worse; the new pull-request trigger on `installer-smoke` is what made it visible, roughly three weeks before the monthly cron would have. That is the trigger change doing exactly what Phase 2.4 claimed it would.
-- **Why the 2026-09-01 scheduled run passed** is not established. The defect looks deterministic on Windows, so either the runner image changed or the failing path was not reached that day. Worth a moment's confirmation before the fix is called complete, so the fix is not credited for a flake.
-- **Reason not done in this cycle**: It is pre-existing shipped code in the installer, outside every phase of this plan, and `installer-smoke` is deliberately not a required check, so it blocks nothing. Fixing it inside this plan's terminal phase would be an unrequested scope change.
-- **Owner**: Unassigned
-- **Exit condition**: `fd, path = tempfile.mkstemp(...)` followed by `os.close(fd)` (or a `with os.fdopen(fd, "wb")` write path), and a green Windows smoke run. One line, plus a regression test that asserts the descriptor is closed.
-- **Suggested next step**: Fix it before the next installer build ships, and check the two sibling `NamedTemporaryFile(delete=False)` call sites in `ollama_installer.py` for the same pattern while the context is loaded.
-
-##### QG-4 - The merge to `develop` re-runs the complete CI suite a second time
-
-- **Source**: v2.4.9 Phase 5 (5.10 post-merge verification)
-- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 5.5; the runbook treats a duplicate post-merge suite as a finding against the terminal reconciliation
-- **Impact**: Merging PR #65 into `develop` triggered five workflows on the `push` event -- CI, CodeQL, Secret scan, Installer tests, and Shell Build -- and CI is the full 18-job suite. That suite had already run against the pull request's synthetic merge result minutes earlier, so the identical work is billed twice for every merge. `ci.yml`, `codeql.yml` and `secrets.yml` all declare `push` and `pull_request` on the same branches with no discrimination between them, which is also the root cause of the duplicate-context problem that blocked this very pull request: two runs both emit `init.ps1 (Windows)`, one of which skips, so requiring that context left the merge permanently blocked until the context was removed.
-- **Reason not done in this cycle**: Changing the push/pull_request trigger split is a pipeline-topology change, and the Non-Goals table excludes applying unreconciled canonical-contract fields. It belongs with `QG-3`, whose aggregate-check work touches the same triggers.
-- **Owner**: Unassigned, with `QG-3`
-- **Exit condition**: A merge to `develop` runs only its intended post-merge work (smoke, publication, or provenance) and not a second full suite, evaluable by listing the workflows a merge push triggers. A reasonable shape is `pull_request` for validation plus `push` limited to what genuinely differs after merge.
-- **Suggested next step**: Settle it together with `QG-3`. Removing the duplicate run also removes the duplicate-context class of failure, so one change closes two problems.
 
 ## v2.4.8
 
