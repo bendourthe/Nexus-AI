@@ -16,10 +16,10 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 |---|---:|---:|
 | Not implemented (NI) | 1 | 0 |
 | Deferred (DF) | 1 | 3 |
-| Bugs / regressions (BG) | 3 | 11 |
+| Bugs / regressions (BG) | 4 | 11 |
 | Warnings (WN) | 1 | 1 |
 | Missing tests / coverage gaps (MT) | 2 | 2 |
-| Quality-gate gaps (QG) | 1 | 0 |
+| Quality-gate gaps (QG) | 3 | 0 |
 
 Operator-driven UX cycle against nine screenshots and three live failures from the packaged v2.4.8 build, plus an installer round. Not a planned phase set: every item traces to something the operator saw. Two live failures shared one root cause (the studio forms offered settings the selected model could not honour), which is what `desktop/src/shared/studio/modelCapabilities.ts` now exists to prevent. Nothing here has been published; the branch is uncommitted-then-committed local work awaiting integration.
 
@@ -101,6 +101,35 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Owner**: Unassigned
 - **Exit condition**: A committed link checker over the living docs roots reports zero unresolved relative targets, or DEVLOG's pre-rename entries carry a stated convention (a note that historical paths are as-written and not maintained) that the checker honours. Evaluable by running the checker.
 - **Suggested next step**: Decide the convention before repairing anything, since it determines whether the fix is 216 rewrites or one documented exemption plus a checker.
+
+##### BG-19 - `npm audit (production deps)` is red, and `sharp` has no fix
+
+- **Source**: v2.4.9 Phase 2 (sub-task 2.5, while selecting required checks)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 2
+- **Impact**: The `npm audit (production deps)` job has been failing on `develop` since `f8185e38`, and it is the ONLY failing job in that CI run. Reproduced locally: 8 production vulnerabilities (1 low, 2 moderate, 5 high). The blocking one is `sharp <=0.35.4-rc.0`, reached transitively through `@huggingface/transformers`, carrying inherited libvips advisories (CVE-2026-33327, CVE-2026-33328, CVE-2026-35590, CVE-2026-35591) and libheif advisories (GHSA-g89c-p67h-r497, GHSA-2jg2-4ch7-h545), with **no fix available**. `hono` and `protobufjs` findings do have fixes. Because the job is red, it could not be added to the branch protection required-check set applied in this phase, so the one production-dependency gate the repository has is also the one gate that is not enforced.
+- **Reason not done in this cycle**: The Non-Goals table excludes remediating what the visibility work surfaces, and the decisive dependency has no upstream fix, so the remedy is an override, a replacement for `@huggingface/transformers`, or an accepted risk -- each a decision, not a patch.
+- **Owner**: Unassigned
+- **Exit condition**: `npm audit --omit=dev` exits zero, or the residual advisories are recorded as accepted with a dated review, and `npm audit (production deps)` joins the required-check set. Evaluable by running the command.
+- **Suggested next step**: Run `npm audit fix` for `hono` and `protobufjs` first, since those are free, then decide `sharp` separately on its own merits.
+
+##### QG-2 - Two gating checks are not yet in the required-check set
+
+- **Source**: v2.4.9 Phase 2 (sub-task 2.5)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 2, D2
+- **Impact**: D2 made `gitleaks` and `pip-audit (model runtimes)` gating at the workflow level, so a finding turns their run red. Neither is in the branch-protection required-check list applied in this phase, because neither has executed once and requiring a check that has never produced a run leaves it permanently pending and blocks every merge. Until they are added, a red run on either is visible but does not block a merge.
+- **Owner**: Operator, at the integration pull request
+- **Exit condition**: Both checks show one green run on the integration pull request, then both context names are added to the required list on `develop` and `main`. Evaluable by reading `gh api repos/:owner/:repo/branches/<b>/protection`.
+- **Suggested next step**: Do it during 5.10, where the integration pull request produces the first runs anyway.
+
+##### QG-3 - Required checks are 17 individual contexts, not an aggregate gate
+
+- **Source**: v2.4.9 Phase 2 (sub-task 2.5)
+- **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 5.5 terminal CI/CD reconciliation
+- **Impact**: Branch protection now lists 17 individual check contexts. The canonical CI/CD contract expects a single always-resolving aggregate required check instead. The difference is not cosmetic: three workflows are path-filtered on pull requests (`installer-tests.yml`, `installer-smoke.yml`, `shell-build.yml`), so they produce no check at all on a pull request outside their filter and **cannot be required individually without blocking every unrelated merge**. Those three are therefore unguarded by protection today. An aggregate job that always runs and resolves its dependencies' skip states is the pattern that closes this, and adding a required context also has to stay in step with any future job rename.
+- **Reason not done in this cycle**: Authoring an aggregate gate is a pipeline-topology change, and the Non-Goals table excludes applying unreconciled canonical-contract fields. Phase 5.5 is where the comparison happens.
+- **Owner**: Phase 5.5
+- **Exit condition**: One required context that always resolves, covering the path-filtered workflows through their skip states. Evaluable by opening a pull request that touches no installer path and confirming the aggregate still resolves.
+- **Suggested next step**: Compare against the contract in 5.5 before adding more individual contexts, so the list does not grow into something that has to be unwound.
 
 ## v2.4.8
 
