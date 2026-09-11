@@ -359,6 +359,23 @@ jobs:
   # Architecture boundary check via dependency-cruiser. Fails fast on any
   # violation; re-run `bash scripts/check-architecture.sh --verbose` to inspect.
 
+  # v2.4.9 Phase 3 -- the feature inventory has to stay true. feature_list.json
+  # claimed v0.8.0 against a product shipping 2.4.x and no job read it, which is
+  # how an inventory becomes decoration. This gates it in both directions: every
+  # evidence path must resolve, and the inventory and the two README regions must
+  # name the same features. No npm install needed -- the checker is dependency-free.
+  check-feature-drift:
+    name: check-feature-drift
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+      - run: node scripts/check-feature-drift.mjs
+
   check-architecture:
     name: check-architecture
     runs-on: ubuntu-latest
