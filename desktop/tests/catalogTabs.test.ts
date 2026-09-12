@@ -281,3 +281,117 @@ describe("catalogTabs", () => {
     ]);
   });
 });
+
+// ---------------------------------------------------------------------------
+// v2.4.10 Phase 3 (T016) -- un-promoted position of minicpm5:2b in Settings.
+//
+// Fixture approach, stated as the plan requires: this block maps the REAL
+// core/registry/catalog.json entries into ListedModelDto rows rather than
+// extending core/registry/model-display-order.fixture.json. The mapping is the
+// cost the plan budgeted for, and it buys the property the fixture cannot give:
+// if someone edits the shipped entry's tags, task, agentic flag, or releaseDate,
+// these assertions move with it. Raw catalog entries carry no `installed` or
+// `source`, so both are supplied here (not downloaded, catalog-only), which is
+// also the state the plan's Verification Expectation asks to be observed.
+//
+// Positions are asserted RELATIVE to named neighbours. A full id sequence over
+// the live catalog would break on every future entry for unrelated reasons.
+// ---------------------------------------------------------------------------
+describe("v2.4.10 minicpm5:2b un-promoted placement", () => {
+  const CATALOG_PATH = resolve(__dirname, "../../core/registry/catalog.json");
+
+  interface CatalogEntry {
+    id: string;
+    displayName: string;
+    family?: string;
+    type?: string;
+    task?: string;
+    agentic?: boolean;
+    tags?: string[];
+    releaseDate?: string;
+    vramGB?: number;
+    hideBelowVramGB?: number;
+  }
+
+  function catalogRows(): ListedModelDto[] {
+    const raw = JSON.parse(readFileSync(CATALOG_PATH, "utf8")) as { models: CatalogEntry[] };
+    return raw.models.map((m) =>
+      model({
+        id: m.id,
+        displayName: m.displayName,
+        family: m.family ?? m.id,
+        type: (m.type ?? "llm") as ListedModelDto["type"],
+        task: m.task as ListedModelDto["task"],
+        agentic: m.agentic,
+        tags: m.tags ?? [],
+        releaseDate: m.releaseDate,
+        vramGB: m.vramGB,
+        hideBelowVramGB: m.hideBelowVramGB,
+        installed: false,
+        source: "catalog-only",
+      } as Partial<ListedModelDto> & Pick<ListedModelDto, "id" | "displayName" | "installed" | "source">),
+    );
+  }
+
+  // A host at or above the entry's vramGB (3), so the row is not over budget.
+  const OPTS = { hostVramGB: 16, gpuVendor: "nvidia" };
+
+  it("puts minicpm5:2b on the Chat tab and NOT on the Agentic tab", () => {
+    const entry = catalogRows().find((m) => m.id === "minicpm5:2b");
+    expect(entry).toBeDefined();
+    // Tab membership via catalogTabsFor, never by filtering task === "agentic":
+    // chat rows carrying agentic: true also land on the Agentic tab.
+    const tabs = catalogTabsFor(entry as ListedModelDto);
+    expect(tabs).toContain("chat");
+    expect(tabs).not.toContain("agentic");
+  });
+
+  it("keeps minicpm5:2b off the Agentic tab listing entirely", () => {
+    // This is the Phase 2 decision expressed as a product assertion. Shipping it
+    // task: agentic would have sorted it FIRST among untagged Agentic rows, because
+    // its release date is the newest in the catalog, making the most prominent
+    // unticked agentic option the one proven not to call tools here.
+    const ids = visibleModelsOnTab(catalogRows(), "agentic", OPTS).map((m) => m.id);
+    expect(ids).not.toContain("minicpm5:2b");
+  });
+
+  it("leaves lfm2.5:2.6b leading the Agentic tab, since Phase 4 was skipped", () => {
+    const ids = visibleModelsOnTab(catalogRows(), "agentic", OPTS).map((m) => m.id);
+    expect(ids[0]).toBe("lfm2.5:2.6b");
+  });
+
+  it("sorts minicpm5:2b after every recommended-tagged Chat row", () => {
+    const rows = visibleModelsOnTab(catalogRows(), "chat", OPTS);
+    const ids = rows.map((m) => m.id);
+    const mine = ids.indexOf("minicpm5:2b");
+    expect(mine).toBeGreaterThanOrEqual(0);
+    const lastRecommended = rows.reduce(
+      (acc, m, i) => ((m.tags ?? []).includes("recommended") ? i : acc),
+      -1,
+    );
+    expect(mine).toBeGreaterThan(lastRecommended);
+  });
+
+  it("sorts minicpm5:2b ahead of every older-dated untagged Chat row", () => {
+    const rows = visibleModelsOnTab(catalogRows(), "chat", OPTS);
+    const mine = rows.findIndex((m) => m.id === "minicpm5:2b");
+    expect(mine).toBeGreaterThanOrEqual(0);
+    const myDate = rows[mine]?.releaseDate ?? "";
+    // Expressed as a function of the Phase 1 confirmed date rather than as "first":
+    // every untagged row that sorts BEFORE it must be at least as new.
+    const untaggedBefore = rows
+      .slice(0, mine)
+      .filter((m) => !(m.tags ?? []).length);
+    for (const row of untaggedBefore) {
+      // ISO-8601 dates, so lexicographic order is chronological order. Compared as
+      // strings rather than with toBeGreaterThanOrEqual, which takes only numbers.
+      expect((row.releaseDate ?? "") >= myDate).toBe(true);
+    }
+  });
+
+  it("ships minicpm5:2b untagged, so no Recommended badge is claimed", () => {
+    const entry = catalogRows().find((m) => m.id === "minicpm5:2b");
+    expect(entry?.tags ?? []).toEqual([]);
+    expect(recommendationKind(entry as ListedModelDto)).not.toBe("recommended");
+  });
+});

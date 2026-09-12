@@ -84,6 +84,13 @@ function familyFormats(family: string): {
   if (key.startsWith("lfm")) {
     return { family: "lfm2.5", promptFormat: "lfm", toolFormat: "lfm-pythonic" };
   }
+  // MiniCPM5 is ChatML on the wire (`<|im_start|>` / `<|im_end|>`, confirmed from the
+  // vendor chat template), so it shares the qwen prompt format. Its tool-call grammar is
+  // NOT qwen's; see v2.4.10-model-evidence.md. The branch exists so the family never falls
+  // through to the llama3 default below, which would pick a parser by accident.
+  if (key.startsWith("minicpm")) {
+    return { family: "minicpm5", promptFormat: "qwen", toolFormat: "qwen-json" };
+  }
   if (key.startsWith("llama")) {
     return { family: "llama", promptFormat: "llama3", toolFormat: "llama3-json" };
   }

@@ -61,6 +61,53 @@
       ]
     },
     {
+      "id": "minicpm5:2b",
+      "family": "minicpm5",
+      "name": "minicpm5",
+      "tag": "2b",
+      "quant": "Q4_K_M",
+      "type": "llm",
+      "task": "chat",
+      "displayName": "MiniCPM5 2B",
+      "releaseDate": "2026-09-06",
+      "origin": "China",
+      "agentic": false,
+      "description": "OpenBMB's MiniCPM5-2B is a 2.5B-parameter chat model from China under a plain Apache-2.0 licence. The Q4_K_M GGUF is 1.56 GB and runs on a 3 GB GPU or with no dedicated GPU at all. Context is 128K (GGUF native window, confirmed by a local Ollama generate with num_ctx=131072 on a short prompt).",
+      "strengths": [
+        "Apache-2.0 with no commercial-use or revenue restriction",
+        "128K context at a 1.56 GB download",
+        "Runs on CPU-only hosts and sub-4 GB GPUs"
+      ],
+      "differentiators": "A small chat model under a plain Apache-2.0 licence, with a 128K context at 1.56 GB. Built on the stock LlamaForCausalLM architecture, so it loads on the standard runtime with no custom kernel. Tool calling is not offered: see the licence note.",
+      "licenseNote": "Apache-2.0, with no revenue cap and no use restriction. Nexus ships this entry as chat-only. The model does emit tool calls, but its four tool-call delimiters are tokenizer special tokens that the Ollama runtime removes before Nexus can read them, so agentic use is not supported here and no agentic claim is made.",
+      "sizeGB": 1.56,
+      "vramGB": 3,
+      "contextWindow": 131072,
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "requiresLicense": false,
+      "source": {
+        "protocol": "ollama",
+        "url": "ollama://hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M",
+        "repo": "openbmb/MiniCPM5-2B-GGUF"
+      },
+      "weights": {
+        "layoutVersion": 1,
+        "files": [
+          {
+            "path": "MiniCPM5-2B-Q4_K_M.gguf",
+            "sha256": "ec2d5801640099e97d8d7e8003ad4d81f336e757811f03a26173dddf386602fd"
+          }
+        ]
+      },
+      "tags": [],
+      "toolCallingVerified": false,
+      "provenance": "Official OpenBMB GGUF, Q4_K_M, ungated Hugging Face repo openbmb/MiniCPM5-2B-GGUF. Pulled at install time from the official repo via Ollama's hf.co bridge; Nexus does not redistribute weights.",
+      "modalities": [
+        "text"
+      ]
+    },
+    {
       "id": "qwen3.5:9b",
       "family": "qwen3.5",
       "name": "qwen3.5",

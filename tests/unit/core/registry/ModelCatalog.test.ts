@@ -27,7 +27,7 @@ describe("ModelCatalog", () => {
     );
   });
 
-  it("listFamilies covers gemma/llama/qwen/deepseek/lfm2.5/hermes/muse-glimmer/nemotron-lightning", () => {
+  it("listFamilies covers gemma/llama/qwen/deepseek/lfm2.5/hermes/muse-glimmer/nemotron-lightning/minicpm5", () => {
     const families = ModelCatalog.listFamilies().sort();
     expect(families).toEqual([
       "deepseek",
@@ -36,6 +36,7 @@ describe("ModelCatalog", () => {
       "hermes",
       "lfm2.5",
       "llama",
+      "minicpm5",
       "muse-glimmer",
       "nemotron-lightning",
       "qwen",
