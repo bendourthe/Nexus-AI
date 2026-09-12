@@ -230,6 +230,10 @@ export const ModelFamily = z.enum([
   "muse-glimmer",
   "nemotron-lightning",
   "gpt-oss",
+  // v2.4.10: must mirror ModelFamily in core/registry/ModelCatalog.ts. This enum
+  // validates at the sidecar wire boundary, so a family missing here is rejected at
+  // RUNTIME, not just at typecheck.
+  "minicpm5",
 ]);
 export type ModelFamilyT = z.infer<typeof ModelFamily>;
 
