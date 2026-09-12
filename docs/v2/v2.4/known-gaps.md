@@ -16,7 +16,7 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 |---|---:|---:|
 | Not implemented (NI) | 3 | 0 |
 | Deferred (DF) | 1 | 0 |
-| Bugs / regressions (BG) | 1 | 1 |
+| Bugs / regressions (BG) | 1 | 3 |
 | Warnings (WN) | 1 | 1 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
@@ -24,6 +24,10 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](comparisons/v2.4.10-comparison-minicpm5-mistral-models.md). Phase 2 resolved decision 2.2 to **option 3**: the model is not shipped as an agentic entry. It emits correct tool calls, but `<function`, `</function>`, `<param`, and `</param>` are special tokens (ids 18-21) that Ollama's detokenizer removes before any Nexus parser sees them, so all five parsers return zero calls on nine transcripts. The plan's Definition of Done explicitly accepts this negative branch as a pass: transcripts recorded, no agentic claim, no user routed to the model. Phase 4 is skipped in full and low-VRAM users stay on `lfm2.5:2.6b`. Evidence: [v2.4.10-model-evidence.md](development/v2.4.10-model-evidence.md), raw transcripts in [v2.4.10-minicpm5-transcripts.json](development/v2.4.10-minicpm5-transcripts.json).
 
 ### Resolved
+
+- **BG-3 (resolved)** - `npm audit (production deps)` failed on PR #66 with a moderate `hono` advisory, blocking the merge. Not introduced by this branch: phases 1-5 made no dependency or lockfile change (the only `package.json` edit is one npm script), the failure reproduced on `develop`, and the same job failed on the `develop` push that predates the pull request. `hono` is transitive via `@modelcontextprotocol/sdk@1.29.0`. Three moderate advisories applied at `<=4.13.4`: path traversal in `toSSG()` (GHSA-gqvv-2mrq-wpjv, CVSS 6.5), memory exhaustion in `parseBody()` (GHSA-g6gw-c38x-mqfc, 5.3), and a query-parser cache-key differential (GHSA-crvj-82cr-hjcx, 5.9). Fixed at the maintainer's direction rather than allowlisted, because a clean fix existed: lockfile-only, five patch/minor bumps and no majors (`hono` 4.13.2 -> 4.13.7, plus `adm-zip`, `body-parser`, `brace-expansion`, `type-is`). The gate now reports `OK: 4 allowlisted, 0 blocking`, down from 6 allowlisted plus 1 blocking, since `brace-expansion` and `protobufjs` cleared alongside it. One trap recorded for reuse: `npm audit fix --omit=dev` PRUNES devDependencies from `node_modules`, silently breaking eslint and the vitest/better-sqlite3 type entry points; a plain `npm install` restores them without reverting the lockfile fix. Source phase: 5. Plan reference: none; found by CI.
+
+- **BG-4 (resolved)** - Four type errors reached PR #66 because the local gate ran `tsc -b` at the repository root but never `npm run typecheck` in the desktop workspace. Two were test-only mistakes from Phase 3 (`toBeGreaterThanOrEqual` given strings, `recommendationKind` given two arguments). The other two exposed NI-3: `desktop/sidecar/src/protocol.ts` holds a Zod enum of model families that validates at the sidecar wire boundary, so `minicpm5` missing there would have been a RUNTIME rejection of a coding session, not merely a typecheck failure. Fixing that enum then broke a fourth enumeration in `desktop/tests/coding-protocol.test.ts`, caught by CI again because only the touched file was re-run instead of the whole desktop suite. Source phase: 5. Plan reference: none; found by CI.
 
 - **BG-1 (resolved)** - `scripts/check-plan-scope-guard.mjs` was rewritten to CRLF by an in-place `sed`, and Vite's ESM loader rejected the CRLF `.mjs` with `SyntaxError: Invalid or unexpected token` while bare `node` imported it cleanly. Converted to LF, matching every other `scripts/check-*.mjs`. Recorded because the failure mode is invisible to a manual `node` run and would have reached CI. Source phase: 1. Plan reference: T007.
 
