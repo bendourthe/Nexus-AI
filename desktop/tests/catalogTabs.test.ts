@@ -383,13 +383,15 @@ describe("v2.4.10 minicpm5:2b un-promoted placement", () => {
       .slice(0, mine)
       .filter((m) => !(m.tags ?? []).length);
     for (const row of untaggedBefore) {
-      expect(row.releaseDate ?? "").toBeGreaterThanOrEqual(myDate);
+      // ISO-8601 dates, so lexicographic order is chronological order. Compared as
+      // strings rather than with toBeGreaterThanOrEqual, which takes only numbers.
+      expect((row.releaseDate ?? "") >= myDate).toBe(true);
     }
   });
 
   it("ships minicpm5:2b untagged, so no Recommended badge is claimed", () => {
     const entry = catalogRows().find((m) => m.id === "minicpm5:2b");
     expect(entry?.tags ?? []).toEqual([]);
-    expect(recommendationKind(entry as ListedModelDto, new Set())).not.toBe("recommended");
+    expect(recommendationKind(entry as ListedModelDto)).not.toBe("recommended");
   });
 });
