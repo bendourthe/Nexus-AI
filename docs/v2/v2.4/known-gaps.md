@@ -14,7 +14,7 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 
 | Category | Open | Resolved |
 |---|---:|---:|
-| Not implemented (NI) | 2 | 0 |
+| Not implemented (NI) | 3 | 0 |
 | Deferred (DF) | 1 | 0 |
 | Bugs / regressions (BG) | 1 | 1 |
 | Warnings (WN) | 1 | 1 |
@@ -51,6 +51,13 @@ MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](c
   - Reason: not a model defect and not a Nexus defect; a runtime-boundary limitation proven by controlled experiment. Recorded rather than worked around, because every available workaround either ships dead code or ships a fragile heuristic under a grammar name.
   - Suggested next step: re-probe when either condition below holds, then re-open the agentic question with the same five-way verdict method.
   - Exit condition (evaluable): re-run the recorded echo experiment against a newer Ollama (`/api/generate`, `raw: true`, prompt asking the model to echo `<banana> <function <param </xyz>`). If `<function` appears in the response string, the blocker is gone. Alternatively, if Nexus gains an `/api/chat` tool-call path AND Ollama ships a tools-aware template for this GGUF, the second route opens. Both are checkable by running one command and reading one file.
+
+- **NI-3** - The model-family list exists in **four** hand-maintained copies, and adding one model required editing every one of them. They are: the `ModelFamily` TypeScript union in `core/registry/ModelCatalog.ts`, the `family` values mirrored in `core/registry/models.json`, the `ModelFamily` **Zod enum** in `desktop/sidecar/src/protocol.ts`, and the enumeration assertion in `desktop/tests/coding-protocol.test.ts`. Two more places enumerate the union in assertions (`ModelCatalog.test.ts` `listFamilies`, `desktop/tests/coding-models.test.ts`).
+  - Source phase: 5 (found by CI after the local gate missed it)
+  - Plan reference: none; discovered while fixing a red check on PR #66
+  - Reason: three of the four were discovered only by something going red, and the Zod enum is the dangerous one because it validates at the sidecar wire boundary. A family missing there is rejected at RUNTIME, not merely at typecheck, so a coding session on the new model would have failed in the product while every local test passed.
+  - Suggested next step: derive the Zod enum from the TypeScript union (`z.enum(MODEL_FAMILIES)` over a single exported `as const` tuple) so the wire schema cannot drift from the type, and have the enumeration tests assert against that tuple rather than a hand-typed literal.
+  - Exit condition (evaluable): `grep -rn '"nemotron-lightning"' core desktop --include=*.ts --include=*.json` returns one definition site plus references, rather than four independent literal lists. Checkable by running one command.
 
 - **NI-1** - `minicpm5:2b` carries `toolFormat: "qwen-json"` in `ModelCatalog.ts` and `models.json`. It is a Phase 1 placeholder that is deliberately NOT correct: the model does not emit the qwen envelope. `ToolFormatName` is a closed union with no truthful member for this model, and the field is required and non-nullable, so some value must be present.
   - Source phase: 2
