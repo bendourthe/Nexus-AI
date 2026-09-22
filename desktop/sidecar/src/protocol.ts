@@ -8,6 +8,7 @@
 // consume. Later phases drop schemas in without re-shaping the union.
 
 import { z } from "zod";
+import { MODEL_FAMILIES } from "../../../core/registry/ModelCatalog.js";
 
 const TokenUsageProvenanceSchema = z.object({
   accuracy: z.enum(["exact", "estimated", "legacy"]),
@@ -220,21 +221,7 @@ export type DesktopPayloadResponseT = z.infer<typeof DesktopPayloadResponse>;
 
 // ---- Coding session lifecycle ------------------------------------------------
 
-export const ModelFamily = z.enum([
-  "gemma",
-  "llama",
-  "qwen",
-  "deepseek",
-  "lfm2.5",
-  "hermes",
-  "muse-glimmer",
-  "nemotron-lightning",
-  "gpt-oss",
-  // v2.4.10: must mirror ModelFamily in core/registry/ModelCatalog.ts. This enum
-  // validates at the sidecar wire boundary, so a family missing here is rejected at
-  // RUNTIME, not just at typecheck.
-  "minicpm5",
-]);
+export const ModelFamily = z.enum(MODEL_FAMILIES);
 export type ModelFamilyT = z.infer<typeof ModelFamily>;
 
 const WorkspaceScopeFields = {

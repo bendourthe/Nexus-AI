@@ -148,7 +148,7 @@
       "tags": ["coding", "tool-use", "lightweight"],
       "sampling": { "temperature": 1.0, "topP": 0.95, "topK": 50, "contextLength": 131072 },
       "promptFormat": "qwen",
-      "toolFormat": "qwen-json"
+      "toolFormat": "none"
     },
     {
       "id": "hermes3:8b",
