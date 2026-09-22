@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { MODEL_FAMILIES } from "../../core/registry/ModelCatalog";
 import {
   CodingMemorySnapshotRequest,
   CodingSessionCancelRequest,
@@ -50,7 +51,7 @@ describe("coding protocol", () => {
   });
 
   it("ModelFamily covers the v1.0.0 catalog families", () => {
-    expect(ModelFamily.options).toEqual(["gemma", "llama", "qwen", "deepseek", "lfm2.5", "hermes", "muse-glimmer", "nemotron-lightning", "gpt-oss", "minicpm5"]);
+    expect(ModelFamily.options).toEqual([...MODEL_FAMILIES]);
   });
 
   it("isMethod is exhaustive against IPC_METHODS", () => {

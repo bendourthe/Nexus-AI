@@ -14,7 +14,7 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 
 | Category | Open | Resolved |
 |---|---:|---:|
-| Not implemented (NI) | 3 | 0 |
+| Not implemented (NI) | 0 | 3 |
 | Deferred (DF) | 1 | 0 |
 | Bugs / regressions (BG) | 1 | 3 |
 | Warnings (WN) | 1 | 1 |
@@ -33,6 +33,12 @@ MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](c
 
 - **WN-1 (resolved)** - The v2.4.10 scope guard fails closed when no base ref resolves, and this repository's workflows use `actions/checkout` with no `fetch-depth`, so CI gets a shallow clone where neither `develop` nor `origin/develop` exists. Left alone, `tests/unit/scripts/planScopeGuard.test.ts` would have failed the "Test TypeScript" job on every run for a purely environmental reason, which Phase 5.5 confirmed by reading `.github/workflows/ci.yml`. Resolved without weakening the guard and without changing a pipeline file: the CLI stays fail-closed (a developer running it locally still gets exit 1), while the test asserts the two properties separately -- fail-closed holds in every environment, and "no guarded path touched" is asserted wherever a base ref resolved. Proven three ways: a clean tree with a resolvable base passes, a simulated shallow checkout (`PLAN_SCOPE_GUARD_BASE` pointing at a nonexistent ref) passes through the fail-closed branch, and a deliberate violation of a guarded path still fails the suite. Source phase: 1, resolved in 5. Plan reference: T007, sub-task 5.5.
 
+- **NI-1 (resolved)** - `minicpm5:2b` uses `toolFormat: "none"`. The `none` parser returns no calls, so the chat-only row does not claim the qwen envelope. Resolved 2026-09-21.
+
+- **NI-2 (resolved)** - Per-id catalog checks dispatch through `_ID_CONTRACTS`. `^def _check_.*_entry` is gone. Resolved 2026-09-21.
+
+- **NI-3 (resolved)** - `MODEL_FAMILIES` is the single family tuple. The sidecar Zod enum and the enumeration tests derive from it. Resolved 2026-09-21.
+
 ### Open Items
 
 - **BG-2** - Three catalog entries ship all-zero placeholder SHA-256 pins: `sana-controlnet-canny`, `sana-controlnet-depth`, `sana-controlnet-pose`. Found by hoisting the placeholder-SHA rule catalog-wide in Phase 3; `pin-hf-weights.py --check` independently reports the same three ("3 unpinned weights file(s), 107 in scope"). They cannot be rotated here: `Efficient-Large-Model/SANA-ControlNet-*` returns HTTP 401 to an unauthenticated fetch, so the pin helper has nothing to read. They are also not flagged `gated` and `KNOWN_GATED_IDS` is empty, so invariants B and C never caught them either. A user installing these gets no integrity check at all.
@@ -42,33 +48,12 @@ MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](c
   - Suggested next step: decide whether these three entries are still wanted. If yes, obtain a token and rotate with `pin-hf-weights.py --from-dir`, or repoint them at a public mirror; if no, drop them. Either way the id leaves the exemption list.
   - Exit condition (evaluable): `PLACEHOLDER_SHA_LEGACY_EXEMPT` in `scripts/installer/src/nexus_installer/catalog_invariants.py` is empty, or `python scripts/installer/build/pin-hf-weights.py --check` exits zero. Checkable by running one command.
 
-- **NI-2** - `catalog_invariants.py` still carries five bespoke per-id check functions (`_check_lfm_entry`, `_check_muse_entry`, `_check_lightning_entry`, `_check_sam2_entry`, and the new `_check_minicpm5_entry`) that share near-identical clauses for licence label, first-party target, gating, and forbidden copy. Phase 3 hoisted the two genuinely catalog-wide rules out of them, which was the in-scope part, but the remaining duplication should become a declarative per-id table.
-  - Source phase: 3
-  - Plan reference: sub-task 3.2, explicitly parked ("Do NOT restructure the four existing bespoke functions into a declarative table")
-  - Reason: named as design debt by the plan itself and deliberately excluded, because restructuring five functions is a refactor with its own risk profile unrelated to adding one model.
-  - Suggested next step: replace the five functions with one table of per-id contracts (expected licence, expected target, forbidden tokens, required flags) driven by the existing shared `_card_copy` helper, which `_check_lfm_entry` still does not use.
-  - Exit condition (evaluable): `grep -c "^def _check_.*_entry" scripts/installer/src/nexus_installer/catalog_invariants.py` returns fewer than 5. Checkable by running one command.
-
 - **DF-1** - MiniCPM5-2B is not shipped as an agentic model. Through Ollama, the four structural tool-call tags are special tokens that the detokenizer strips, so the wire grammar is unrecoverable and no parser can be written against it. A parser over the stripped text would be a delimiter-free heuristic, and the two correct fixes (Ollama-side detokenization, or moving Nexus to Ollama `/api/chat` with structured `tool_calls`) both lie outside the plan's permitted edit sites, tripping the 2.2 hard stop condition.
   - Source phase: 2
   - Plan reference: sub-task 2.2, option 3
   - Reason: not a model defect and not a Nexus defect; a runtime-boundary limitation proven by controlled experiment. Recorded rather than worked around, because every available workaround either ships dead code or ships a fragile heuristic under a grammar name.
   - Suggested next step: re-probe when either condition below holds, then re-open the agentic question with the same five-way verdict method.
   - Exit condition (evaluable): re-run the recorded echo experiment against a newer Ollama (`/api/generate`, `raw: true`, prompt asking the model to echo `<banana> <function <param </xyz>`). If `<function` appears in the response string, the blocker is gone. Alternatively, if Nexus gains an `/api/chat` tool-call path AND Ollama ships a tools-aware template for this GGUF, the second route opens. Both are checkable by running one command and reading one file.
-
-- **NI-3** - The model-family list exists in **four** hand-maintained copies, and adding one model required editing every one of them. They are: the `ModelFamily` TypeScript union in `core/registry/ModelCatalog.ts`, the `family` values mirrored in `core/registry/models.json`, the `ModelFamily` **Zod enum** in `desktop/sidecar/src/protocol.ts`, and the enumeration assertion in `desktop/tests/coding-protocol.test.ts`. Two more places enumerate the union in assertions (`ModelCatalog.test.ts` `listFamilies`, `desktop/tests/coding-models.test.ts`).
-  - Source phase: 5 (found by CI after the local gate missed it)
-  - Plan reference: none; discovered while fixing a red check on PR #66
-  - Reason: three of the four were discovered only by something going red, and the Zod enum is the dangerous one because it validates at the sidecar wire boundary. A family missing there is rejected at RUNTIME, not merely at typecheck, so a coding session on the new model would have failed in the product while every local test passed.
-  - Suggested next step: derive the Zod enum from the TypeScript union (`z.enum(MODEL_FAMILIES)` over a single exported `as const` tuple) so the wire schema cannot drift from the type, and have the enumeration tests assert against that tuple rather than a hand-typed literal.
-  - Exit condition (evaluable): `grep -rn '"nemotron-lightning"' core desktop --include=*.ts --include=*.json` returns one definition site plus references, rather than four independent literal lists. Checkable by running one command.
-
-- **NI-1** - `minicpm5:2b` carries `toolFormat: "qwen-json"` in `ModelCatalog.ts` and `models.json`. It is a Phase 1 placeholder that is deliberately NOT correct: the model does not emit the qwen envelope. `ToolFormatName` is a closed union with no truthful member for this model, and the field is required and non-nullable, so some value must be present.
-  - Source phase: 2
-  - Plan reference: sub-task 1.3 placeholder, resolved by decision 2.2
-  - Reason: the value is inert. The row ships `task: chat` with `agentic: false`, so no agentic code path selects this model and the parser is never invoked. Making the type honest would mean either a nullable `toolFormat` or a `none` union member, both of which touch the shared type and every consumer, which is well beyond this plan.
-  - Suggested next step: when DF-1 is revisited, either point `toolFormat` at the real parser added then, or introduce a `none` member to `ToolFormatName` and audit the consumers that assume a parser always exists.
-  - Exit condition (evaluable): `grep toolFormat core/registry/models.json` for the `minicpm5:2b` entry returns something other than `qwen-json`, or the entry is removed. Checkable by reading one file.
 
 - **WN-2** - Ollama's bundled template for `hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M` has no `{{ if .Tools }}` branch (204-byte template blob handling only `.System`, `.Prompt`, `.Response`). Tool definitions passed to `/api/chat` are therefore never rendered into the prompt, and the model answers as if no tools exist. This is independent of the detokenization blocker in DF-1 and would have to be solved too.
   - Source phase: 2
