@@ -89,7 +89,7 @@ function familyFormats(family: string): {
   // NOT qwen's; see v2.4.10-model-evidence.md. The branch exists so the family never falls
   // through to the llama3 default below, which would pick a parser by accident.
   if (key.startsWith("minicpm")) {
-    return { family: "minicpm5", promptFormat: "qwen", toolFormat: "qwen-json" };
+    return { family: "minicpm5", promptFormat: "qwen", toolFormat: "none" };
   }
   if (key.startsWith("llama")) {
     return { family: "llama", promptFormat: "llama3", toolFormat: "llama3-json" };
