@@ -64,6 +64,7 @@ describe("ModelCatalog", () => {
         "qwen-json",
         "deepseek-json",
         "lfm-pythonic",
+        "none",
       ]).toContain(entry.toolFormat);
     }
   });

@@ -413,12 +413,20 @@ const LfmPythonic: ToolCallFormat = {
   },
 };
 
+const NoneFormat: ToolCallFormat = {
+  name: "none",
+  parse(): readonly ParsedToolCall[] {
+    return [];
+  },
+};
+
 const STRATEGIES: Record<ToolFormatName, ToolCallFormat> = {
   "gemma4-xml": Gemma4Xml,
   "llama3-json": Llama3Json,
   "qwen-json": QwenJson,
   "deepseek-json": DeepSeekJson,
   "lfm-pythonic": LfmPythonic,
+  none: NoneFormat,
 };
 
 export function getToolCallFormat(name: ToolFormatName): ToolCallFormat {
@@ -433,4 +441,5 @@ export const TOOL_FORMAT_NAMES: readonly ToolFormatName[] = Object.freeze([
   "qwen-json",
   "deepseek-json",
   "lfm-pythonic",
+  "none",
 ]);

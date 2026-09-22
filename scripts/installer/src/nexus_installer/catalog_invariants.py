@@ -18,6 +18,7 @@ returns a list of human-readable problems (empty list == valid).
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from typing import Any
 
 #: Ollama pull targets known to fail (Ollama manifest bug): the Unsloth hf.co
@@ -286,16 +287,16 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     #    no-vendor-benchmark copy must all hold.
     lfm = by_id.get(LFM_AGENTIC_ID)
     if isinstance(lfm, dict):
-        problems.extend(_check_lfm_entry(lfm))
+        problems.extend(_run_id_contract(lfm, LFM_AGENTIC_ID))
 
     minicpm5 = by_id.get(MINICPM5_ID)
     if isinstance(minicpm5, dict):
-        problems.extend(_check_minicpm5_entry(minicpm5))
+        problems.extend(_run_id_contract(minicpm5, MINICPM5_ID))
 
     for muse_id in MUSE_IDS:
         muse = by_id.get(muse_id)
         if isinstance(muse, dict):
-            problems.extend(_check_muse_entry(muse, muse_id))
+            problems.extend(_run_id_contract(muse, muse_id))
     if any(isinstance(by_id.get(i), dict) for i in MUSE_IDS) and not all(
         isinstance(by_id.get(i), dict) for i in MUSE_IDS
     ):
@@ -307,7 +308,7 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     for lightning_id in LIGHTNING_IDS:
         lightning = by_id.get(lightning_id)
         if isinstance(lightning, dict):
-            problems.extend(_check_lightning_entry(lightning, lightning_id))
+            problems.extend(_run_id_contract(lightning, lightning_id))
     if any(isinstance(by_id.get(i), dict) for i in LIGHTNING_IDS) and not all(
         isinstance(by_id.get(i), dict) for i in LIGHTNING_IDS
     ):
@@ -318,7 +319,7 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
 
     sam2 = by_id.get("sam2:hiera-tiny")
     if isinstance(sam2, dict):
-        problems.extend(_check_sam2_entry(sam2))
+        problems.extend(_run_id_contract(sam2, "sam2:hiera-tiny"))
 
     for gemma_id in GEMMA_OLLAMA_IDS:
         gemma = by_id.get(gemma_id)
@@ -384,7 +385,7 @@ def _check_required_embedder(by_id: dict[str, Any]) -> list[str]:
     return problems
 
 
-def _check_lfm_entry(model: dict[str, Any]) -> list[str]:
+def _lfm_contract(model: dict[str, Any]) -> list[str]:
     """Invariants that apply only when ``lfm2.5:2.6b`` is in the catalog."""
     problems: list[str] = []
     where = LFM_AGENTIC_ID
@@ -448,7 +449,7 @@ def _check_lfm_entry(model: dict[str, Any]) -> list[str]:
     return problems
 
 
-def _check_minicpm5_entry(model: dict[str, Any]) -> list[str]:
+def _minicpm5_contract(model: dict[str, Any]) -> list[str]:
     """Invariants that apply only when ``minicpm5:2b`` is in the catalog."""
     problems: list[str] = []
     where = MINICPM5_ID
@@ -604,7 +605,7 @@ def _card_copy(model: dict[str, Any]) -> str:
     )
 
 
-def _check_muse_entry(model: dict[str, Any], where: str) -> list[str]:
+def _muse_contract(model: dict[str, Any], where: str) -> list[str]:
     """Invariants that apply when a Muse Glimmer entry is in the catalog."""
     problems: list[str] = []
     if model.get("family") != "muse-glimmer":
@@ -649,7 +650,7 @@ def _check_muse_entry(model: dict[str, Any], where: str) -> list[str]:
     return problems
 
 
-def _check_lightning_entry(model: dict[str, Any], where: str) -> list[str]:
+def _lightning_contract(model: dict[str, Any], where: str) -> list[str]:
     """Invariants that apply when a Nemotron Lightning entry is in the catalog."""
     problems: list[str] = []
     if model.get("family") != "nemotron-lightning":
@@ -684,7 +685,7 @@ def _check_lightning_entry(model: dict[str, Any], where: str) -> list[str]:
     return problems
 
 
-def _check_sam2_entry(model: dict[str, Any]) -> list[str]:
+def _sam2_contract(model: dict[str, Any]) -> list[str]:
     problems: list[str] = []
     where = "sam2:hiera-tiny"
     if model.get("license") != "Apache-2.0":
@@ -697,6 +698,33 @@ def _check_sam2_entry(model: dict[str, Any]) -> list[str]:
     if "utility" not in tags or "sam2" not in tags:
         problems.append(f"{where}: must be tagged utility and sam2")
     return problems
+
+
+def _contract_model_only(
+    fn: Callable[[dict[str, Any]], list[str]],
+) -> Callable[[dict[str, Any], str], list[str]]:
+    def run(model: dict[str, Any], _where: str) -> list[str]:
+        return fn(model)
+    return run
+
+
+_ID_CONTRACTS: dict[str, Callable[[dict[str, Any], str], list[str]]] = {
+    LFM_AGENTIC_ID: _contract_model_only(_lfm_contract),
+    MINICPM5_ID: _contract_model_only(_minicpm5_contract),
+    "sam2:hiera-tiny": _contract_model_only(_sam2_contract),
+}
+for _muse_id in MUSE_IDS:
+    _ID_CONTRACTS[_muse_id] = _muse_contract
+for _lightning_id in LIGHTNING_IDS:
+    _ID_CONTRACTS[_lightning_id] = _lightning_contract
+
+
+def _run_id_contract(model: dict[str, Any], where: str) -> list[str]:
+    """Dispatch per-id catalog contracts from one table."""
+    fn = _ID_CONTRACTS.get(where)
+    if fn is None:
+        return []
+    return fn(model, where)
 
 
 def _check_pre_2025_keep(by_id: dict[str, Any]) -> list[str]:
