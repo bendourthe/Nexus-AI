@@ -15,8 +15,8 @@ function weightsRoot(): string {
   const root = mkdtempSync(path.join(tmpdir(), "nexus-tripo-"));
   roots.push(root);
   const dir = path.join(root, "triposplat");
-  mkdirSync(dir);
-  writeFileSync(path.join(dir, "model.safetensors"), "weights");
+  mkdirSync(path.join(dir, "diffusion_models"), { recursive: true });
+  writeFileSync(path.join(dir, "diffusion_models", "triposplat_fp16.safetensors"), "weights");
   writeFileSync(path.join(dir, "infer.py"), "print('local')\n");
   return root;
 }

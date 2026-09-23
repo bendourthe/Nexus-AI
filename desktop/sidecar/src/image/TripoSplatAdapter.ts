@@ -29,11 +29,13 @@ export interface ProcessRunner {
   run(command: string, args: readonly string[], signal: AbortSignal): Promise<ProcessRun>;
 }
 
+const TRIPOSPLAT_WEIGHT = path.join("diffusion_models", "triposplat_fp16.safetensors");
+
 export function resolveTripoSplatWeights(modelsRoot: string): string | null {
   const dir = path.resolve(modelsRoot, TRIPOSPLAT_MODEL_ID);
   const relative = path.relative(path.resolve(modelsRoot), dir);
   if (relative.startsWith("..") || path.isAbsolute(relative)) return null;
-  const marker = path.join(dir, "model.safetensors");
+  const marker = path.join(dir, TRIPOSPLAT_WEIGHT);
   const script = path.join(dir, "infer.py");
   if (!fs.existsSync(marker) || !fs.existsSync(script)) return null;
   return dir;
