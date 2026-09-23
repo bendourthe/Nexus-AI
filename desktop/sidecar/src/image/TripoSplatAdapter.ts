@@ -7,7 +7,7 @@
 import { spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { MAX_GAUSSIANS } from "../../../../core/image/GaussianSplat.js";
+import { MAX_GAUSSIANS, isRemoteSplatLocation } from "../../../../core/image/GaussianSplat.js";
 
 export const TRIPOSPLAT_MODEL_ID = "triposplat";
 
@@ -84,10 +84,10 @@ export async function runTripoSplatAdapter(input: {
   if (!weights) {
     throw new TripoSplatUnavailable("TripoSplat weights are not installed. Generate did not start.");
   }
-  const source = path.resolve(input.sourcePngPath);
-  if (/^(?:https?:|ftp:|\/\/)/i.test(source) || source.toLowerCase().includes("3daistudio.com")) {
+  if (isRemoteSplatLocation(input.sourcePngPath)) {
     throw new TripoSplatUnavailable("Splat generate accepts only a local source image.");
   }
+  const source = path.resolve(input.sourcePngPath);
   const seed = Number.isFinite(input.seed) ? Math.trunc(input.seed as number) : 0;
   const args = [
     path.join(weights, "infer.py"),

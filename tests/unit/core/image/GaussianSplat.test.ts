@@ -52,6 +52,7 @@ describe("GaussianSplat", () => {
     expect(() => assertLocalSplatPath("https://example.com/a.splat")).toThrow(GaussianSplatError);
     expect(() => assertLocalSplatPath("//cdn.example/a.ply")).toThrow(GaussianSplatError);
     expect(() => assertLocalSplatPath("https://3daistudio.com/a.splat")).toThrow(GaussianSplatError);
+    expect(() => assertLocalSplatPath("3daistudio.com/a.splat")).toThrow(GaussianSplatError);
     expect(() => assertLocalSplatPath("C:/models/scene.obj")).toThrow(GaussianSplatError);
     expect(assertLocalSplatPath("C:/models/scene.splat")).toBe("splat");
   });
