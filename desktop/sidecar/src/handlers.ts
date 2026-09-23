@@ -225,8 +225,9 @@ import {
 import type { GenerationEnhancementMetadata } from "../../../core/generations/GenerationDatabase.js";
 import { contentHashFile } from "../../../core/generations/contentHash.js";
 import { pumpOnce } from "../../../core/generations/queuePump.js";
-import { SPLAT_GENERATE_JOB_TYPE, prepareSplatGenerate, stubSplatBytes } from "../../../core/image/SplatGenerate.js";
+import { SPLAT_GENERATE_JOB_TYPE, prepareSplatGenerate } from "../../../core/image/SplatGenerate.js";
 import { probeSplatHost, promotePreparedSplat, splatJobPaths } from "./image/GaussianSplatRuntime.js";
+import { runTripoSplatAdapter } from "./image/TripoSplatAdapter.js";
 import {
   createStudioRuntime,
   recordCompletion,
@@ -847,7 +848,12 @@ async function pumpStudio(ctx: HandlerContext): Promise<void> {
                 signal,
                 timeoutMs: 30_000,
                 now: Date.now,
-                backend: async () => stubSplatBytes(),
+                backend: (backendSignal) =>
+                  runTripoSplatAdapter({
+                    modelsRoot: path.join(nexusHome(), "models"),
+                    sourcePngPath: sourcePath,
+                    signal: backendSignal,
+                  }),
                 stages: ["preflight", "scheduled"],
               });
               if (!written.ok) throw new Error(`${written.code}: ${written.message}`);
