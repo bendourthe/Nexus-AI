@@ -18,7 +18,8 @@ import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const RETIRED = ["docs/versions", "docs/archive/versions"];
-const EXPECTED = ["docs/v1", "docs/archive/v0"]; // canonical trees must be present
+// v2.4.11 archived v1 and v2.0-v2.4. Active plans stay under docs/v2.
+const EXPECTED = ["docs/v2", "docs/archive/v0", "docs/archive/v1", "docs/archive/v2"];
 
 const problems = [];
 for (const dir of RETIRED) {
@@ -30,7 +31,7 @@ for (const dir of EXPECTED) {
 
 // Also fail if any docs/v<MAJOR>/ contains a three-segment vX.Y.Z minor dir
 // (the patch level should be collapsed into the vX.Y minor bucket).
-for (const major of ["docs/v1"]) {
+for (const major of ["docs/v2", "docs/archive/v0", "docs/archive/v1", "docs/archive/v2"]) {
   if (!existsSync(major)) continue;
   for (const entry of readdirSync(major, { withFileTypes: true })) {
     if (entry.isDirectory() && /^v\d+\.\d+\.\d+$/.test(entry.name)) {

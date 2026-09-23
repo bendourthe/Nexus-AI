@@ -334,6 +334,7 @@ class TestRequiredEmbedderPolicy:
         decision = (
             repo
             / "docs"
+            / "archive"
             / "v2"
             / "v2.3"
             / "development"
