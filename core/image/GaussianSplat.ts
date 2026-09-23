@@ -79,7 +79,7 @@ export function decodeSplatBytes(bytes: Uint8Array): GaussianCloud {
     for (let k = 0; k < 3; k++) positions[i * 3 + k] = view.getFloat32(base + k * 4, true);
     for (let k = 0; k < 3; k++) scales[i * 3 + k] = view.getFloat32(base + 12 + k * 4, true);
     colors.set(bytes.subarray(base + 24, base + 28), i * 4);
-    for (let k = 0; k < 4; k++) rotations[i * 4 + k] = bytes[base + 28 + k] / 255;
+    for (let k = 0; k < 4; k++) rotations[i * 4 + k] = view.getUint8(base + 28 + k) / 255;
   }
   return { format: "splat", count, positions, scales, rotations, colors };
 }
