@@ -4,6 +4,21 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-22] v2.4.0 Phase 2 - Local splat viewer core
+
+Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [contract](v2/v2.4/development/gaussian-splat-contract.md), history [P2](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-2-viewer.md).
+
+### What Changed
+
+- **Local WebGL2 splat canvas.** Image Studio does not open it yet. The canvas decodes an in-memory cloud or a caller-supplied local path, rejects remote URLs, and rasterizes with inline shaders. A missing or lost WebGL2 context shows a still frame and a typed message. Screenshot export is a canvas PNG data URL.
+- **Viewport cap named.** The Phase 1 contract required a cap and did not give a pixel size. Each edge is now 2048 CSS pixels, and the Gaussian cap stays 262144.
+
+### Verification
+
+Desktop Vitest: `tests/splatCamera.test.ts` and `tests/SplatViewerCanvas.test.tsx`, 15 passed. Desktop `tsc --noEmit` exited 0. A real GPU framebuffer was not exercised; that check remains Phase 6.
+
+---
+
 ## [2026-09-10] v2.4.9 - Installer rebuild, with BG-21 fixed first
 
 Index: [gaps](v2/v2.4/known-gaps.md) BG-21. Artifact `dist/NexusSetup.exe`, 254,476,060 bytes, sha256 `e7a35f1c45ed...` (gitignored, not committed).
