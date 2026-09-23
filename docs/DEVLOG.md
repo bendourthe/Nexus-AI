@@ -4,13 +4,28 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-22] v2.4.0 Phase 3 - Image Studio 3D preview
+
+Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), history [P3](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-3-preview.md).
+
+### What Changed
+
+- **3D preview sits beside Download.** A finished image can open a local `.splat` or `.ply`. The panel shows the honesty sentence. Generate stays disabled until the queue phase wires a backend. The original PNG download is unchanged.
+- **Provenance is a sidecar record.** Names for the splat download and the screenshot are distinct from the source PNG. Splat bytes are not stuffed into a PNG text chunk.
+
+### Verification
+
+Preview panel tests: 5 passed. Provenance unit tests: 2 passed. One Image Studio page test opened the panel from a finished image. Desktop `tsc --noEmit` exited 0.
+
+---
+
 ## [2026-09-22] v2.4.0 Phase 2 - Local splat viewer core
 
 Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [contract](v2/v2.4/development/gaussian-splat-contract.md), history [P2](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-2-viewer.md).
 
 ### What Changed
 
-- **Local WebGL2 splat canvas.** Image Studio does not open it yet. The canvas decodes an in-memory cloud or a caller-supplied local path, rejects remote URLs, and rasterizes with inline shaders. A missing or lost WebGL2 context shows a still frame and a typed message. Screenshot export is a canvas PNG data URL.
+- **Local WebGL2 splat canvas.** The canvas decodes an in-memory cloud or a caller-supplied local path, rejects remote URLs, and rasterizes with inline shaders. A missing or lost WebGL2 context shows a still frame and a typed message. Screenshot export is a canvas PNG data URL.
 - **Viewport cap named.** The Phase 1 contract required a cap and did not give a pixel size. Each edge is now 2048 CSS pixels, and the Gaussian cap stays 262144.
 
 ### Verification
