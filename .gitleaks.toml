@@ -73,5 +73,6 @@ paths = ['''^tests/unit/core/generations/studioStore\.test\.ts$''']
 description = "v1.9.0 UI design doc. The generic-api-key rule matches a sentence listing CSS font-weight constants as 'weight tokens'. They are numeric style constants, not credentials. Both the historical and current paths are listed because the file moved in the docs-layout refactor and history is scanned."
 paths = [
   '''^docs/v1/v1\.9/ui-rework-design\.md$''',
+  '''^docs/archive/v1/v1\.9/ui-rework-design\.md$''',
   '''^docs/versions/v1/v1\.9\.0/ui-rework-design\.md$''',
 ]

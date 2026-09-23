@@ -305,3 +305,6 @@ scripts/installer/build/hub-snapshot/
 docs/v2/v2.4/development/field-installer-repair-result.json
 docs/v2/v2.4/development/installed-media-smoke-report.json
 docs/v2/v2.4/development/artifacts/
+docs/archive/v2/v2.4/development/field-installer-repair-result.json
+docs/archive/v2/v2.4/development/installed-media-smoke-report.json
+docs/archive/v2/v2.4/development/artifacts/
