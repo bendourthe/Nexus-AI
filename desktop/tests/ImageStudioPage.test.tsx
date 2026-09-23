@@ -1369,4 +1369,82 @@ describe("ImageStudioPage (chat)", () => {
       ].map((option) => option.value),
     ).toEqual(["realvisxl-v5", "juggernaut-xl-v9", GET_MORE_MODELS_ID]);
   });
+
+  it("opens a 3D preview for a finished image and leaves the 2D download in place", async () => {
+    const client = new InMemoryDiffusionClient();
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("offline"));
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+        openLocalSplat={async () => ({
+          path: "C:/studio/preview.splat",
+          bytes: new Uint8Array(32),
+          format: "splat",
+          sourceImageHash: "abc",
+        })}
+      />,
+    );
+    expect(screen.queryByRole("button", { name: "3D preview" })).toBeNull();
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "PNGB64==" },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a fox" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(60);
+      await Promise.resolve();
+    });
+    const preview = await screen.findByRole("button", { name: "3D preview" });
+    expect(screen.getByRole("button", { name: "Download" })).toBeTruthy();
+    fireEvent.click(preview);
+    expect(screen.getByRole("dialog")).toHaveTextContent(
+      "This is a generated 3D preview. Unseen sides are invented. It is not a measured property tour.",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Open local splat" }));
+    expect(await screen.findByText(/\.splat$/)).toBeTruthy();
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Download" })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Close 3D preview" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("queues a splat generate on a ready host and cancels it without a remote call", async () => {
+    const client = new InMemoryDiffusionClient();
+    const queue = new InMemoryGenerationQueueClient();
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("offline"));
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        queueClient={queue}
+        drainIntervalMs={20}
+        splatHost={{ platform: "win32", nvidia: true, cuda: true }}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [{ kind: "complete", jobId: "mem-job-1", png: "PNGB64==" }]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "a fox" } });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(60);
+      await Promise.resolve();
+    });
+    fireEvent.click(await screen.findByRole("button", { name: "3D preview" }));
+    fireEvent.click(screen.getByRole("button", { name: "3D generate coming from local backend" }));
+    expect(await screen.findByText(/Splat generate queued as/)).toBeTruthy();
+    expect(queue.jobs[0]?.jobType).toBe("splat_generate");
+    expect(queue.jobs[0]?.pillar).toBe("image");
+    expect(queue.jobs[0]?.parentId).not.toBe(queue.jobs[0]?.id);
+    fireEvent.click(screen.getByRole("button", { name: "Cancel splat generate" }));
+    expect(await screen.findByText(/Splat generate was cancelled/)).toBeTruthy();
+    expect(queue.jobs[0]?.error).toBe("cancelled");
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
 });

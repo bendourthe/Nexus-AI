@@ -225,6 +225,9 @@ import {
 import type { GenerationEnhancementMetadata } from "../../../core/generations/GenerationDatabase.js";
 import { contentHashFile } from "../../../core/generations/contentHash.js";
 import { pumpOnce } from "../../../core/generations/queuePump.js";
+import { SPLAT_GENERATE_JOB_TYPE, prepareSplatGenerate } from "../../../core/image/SplatGenerate.js";
+import { probeSplatHost, promotePreparedSplat, splatJobPaths } from "./image/GaussianSplatRuntime.js";
+import { runTripoSplatAdapter } from "./image/TripoSplatAdapter.js";
 import {
   createStudioRuntime,
   recordCompletion,
@@ -780,6 +783,19 @@ async function pumpStudio(ctx: HandlerContext): Promise<void> {
           }
           continue;
         }
+        if (next.jobType === SPLAT_GENERATE_JOB_TYPE) {
+          const prepared = prepareSplatGenerate(next.parameters, probeSplatHost());
+          if (!prepared.ok) {
+            const claimed = studio.queue.claimNext();
+            if (!claimed || claimed.id !== next.id) {
+              throw new Error("Splat queue claim lost its selected child.");
+            }
+            const message = `${prepared.code}: ${prepared.message}`;
+            studio.queue.markFailed(claimed.id, message);
+            recordCompletion(studio, { kind: "error", jobId: claimed.id, message });
+            continue;
+          }
+        }
         const ran = await pumpOnce(studio.queue, {
           scheduler: studio.scheduler,
           index: studio.index,
@@ -813,7 +829,36 @@ async function pumpStudio(ctx: HandlerContext): Promise<void> {
             }
           },
           onError: (event) => recordCompletion(studio, event),
-          run: async (job) => {
+          run: async (job, signal) => {
+            if (job.jobType === SPLAT_GENERATE_JOB_TYPE) {
+              const prepared = prepareSplatGenerate(job.parameters, probeSplatHost());
+              if (!prepared.ok) {
+                throw new Error(`${prepared.code}: ${prepared.message}`);
+              }
+              const root = path.join(nexusHome(), "generations", "splats");
+              const paths = splatJobPaths(root, prepared.parameters.outputId);
+              const sourcePath = path.resolve(prepared.parameters.sourcePngPath);
+              const sourceBefore = readFileSync(sourcePath);
+              const written = await promotePreparedSplat({
+                sourcePath,
+                sourceBefore,
+                jobDir: paths.jobDir,
+                outputPath: paths.outputPath,
+                sourceMessageId: prepared.parameters.sourceMessageId,
+                signal,
+                timeoutMs: 30_000,
+                now: Date.now,
+                backend: (backendSignal) =>
+                  runTripoSplatAdapter({
+                    modelsRoot: path.join(nexusHome(), "models"),
+                    sourcePngPath: sourcePath,
+                    signal: backendSignal,
+                  }),
+                stages: ["preflight", "scheduled"],
+              });
+              if (!written.ok) throw new Error(`${written.code}: ${written.message}`);
+              return { outputPath: written.outputPath, workflow: written.workflow };
+            }
             // v2.4.8 follow-up: hand the GPU over. With the chat model still
             // resident the diffusion runtime lands in CPU offload and an image
             // takes minutes instead of seconds, so evict Ollama's residents
@@ -1923,6 +1968,12 @@ export const handlers: Record<Method, HandlerFn> = {
   },
   "generation.queue.enqueue": async (params, ctx) => {
     const req = GenerationQueueEnqueueRequest.parse(params ?? {});
+    if (req.jobType === SPLAT_GENERATE_JOB_TYPE) {
+      const parsed = prepareSplatGenerate(req.parameters, probeSplatHost());
+      if (!parsed.ok && (parsed.code === "malformed" || parsed.code === "remote-url")) {
+        throw new Error(`${parsed.code}: ${parsed.message}`);
+      }
+    }
     const studio = resolveStudio(ctx);
     const id = req.id ?? `gen-${Date.now().toString(36)}`;
     const jobs = req.batchSpec
@@ -1943,6 +1994,7 @@ export const handlers: Record<Method, HandlerFn> = {
             parameters: req.parameters,
             priority: req.priority ?? "interactive",
             threadId: req.threadId,
+            parentId: req.parentId,
           }),
         ];
     void pumpStudio(ctx);

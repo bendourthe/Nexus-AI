@@ -78,6 +78,7 @@ That distinction carries most of the weight in this document. The bar for taking
 | SANA canny conditioning | `sana-controlnet-canny` |
 | SANA depth conditioning | `sana-controlnet-depth` |
 | SANA pose conditioning | `sana-controlnet-pose` |
+| optional NVIDIA CUDA single-image splat generate | `triposplat` |
 
 ### Runtime jobs
 

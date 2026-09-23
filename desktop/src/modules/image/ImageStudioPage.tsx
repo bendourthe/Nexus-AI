@@ -12,7 +12,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Copy, Download, FileJson, ImagePlus, Settings } from "lucide-react";
+import { Copy, Box, Download, FileJson, ImagePlus, Settings } from "lucide-react";
 import { SidecarDownBanner } from "../../components/SidecarDownBanner";
 import { Button, Select, Switch, TextField } from "../../components/ui";
 import { formatInferenceError } from "../../lib/inferenceRpcError";
@@ -100,6 +100,14 @@ import {
 } from "./ImagePromptForm";
 import { inferImageIntent } from "./intent";
 import { MaskEditor } from "./MaskEditor";
+import { SplatPreviewPanel, type OpenLocalSplat } from "./SplatPreviewPanel";
+import {
+  SPLAT_GENERATE_JOB_TYPE,
+  classifySplatHost,
+  parseSplatGenerateParameters,
+  splatHostMessage,
+  type SplatHostProbe,
+} from "../../../../core/image/SplatGenerate";
 import {
   parseReplaceIntent,
   inpaintPromptFor,
@@ -220,6 +228,10 @@ export interface ImageStudioPageProps {
   /** Test seam: probe whether a last-output path still exists on disk. */
   readonly outputExists?: (path: string) => boolean;
   readonly mediaRuntimeClient?: MediaRuntimeClient;
+  /** Opens a local .splat or .ply for this message. Tests inject the reader. */
+  readonly openLocalSplat?: OpenLocalSplat;
+  /** Host facts for splat generate. Absent means the generator is unavailable. */
+  readonly splatHost?: SplatHostProbe;
 }
 
 let messageSeq = 0;
@@ -259,6 +271,8 @@ export function ImageStudioPage({
   initialSessionId,
   outputExists,
   mediaRuntimeClient: mediaRuntimeOverride,
+  openLocalSplat,
+  splatHost,
 }: ImageStudioPageProps = {}): JSX.Element {
   const [client] = useState<DiffusionClient>(
     () => clientOverride ?? createIpcDiffusionClient(),
@@ -308,6 +322,7 @@ export function ImageStudioPage({
   );
   const [values, setValues] = useState<PromptFormValues>(DEFAULT_FORM_VALUES);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [splatPreviewId, setSplatPreviewId] = useState<string | null>(null);
   const lastStudioMessage = messages[messages.length - 1];
   const { scrollRef, onScroll, stickNow } = useStickToBottom(
     `${messages.length}:${lastStudioMessage?.id ?? ""}:${lastStudioMessage?.content?.length ?? 0}:${lastStudioMessage?.pending ? 1 : 0}`,
@@ -1652,6 +1667,16 @@ export function ImageStudioPage({
                     <button
                       type="button"
                       className="nx-icon-btn-bare"
+                      aria-label="3D preview"
+                      title="3D preview"
+                      data-testid={`image-splat-${m.id}`}
+                      onClick={() => setSplatPreviewId(m.id)}
+                    >
+                      <Box size={16} aria-hidden="true" />
+                    </button>
+                    <button
+                      type="button"
+                      className="nx-icon-btn-bare"
                       aria-label="Copy image"
                       title="Copy image"
                       data-testid={`image-copyimage-${m.id}`}
@@ -1937,6 +1962,40 @@ export function ImageStudioPage({
           ) : null}
         </div>
       </div>
+      {splatPreviewId ? (
+        <SplatPreviewPanel
+          sourceMessageId={splatPreviewId}
+          sourcePngName={`nexus-image-${splatPreviewId}.png`}
+          openLocalSplat={openLocalSplat}
+          onGenerate={async () => {
+            const verdict = classifySplatHost(
+              splatHost ?? { platform: "win32", nvidia: false, cuda: false },
+            );
+            if (verdict !== "ready") return { ok: false, message: splatHostMessage(verdict) };
+            const outputId = `${splatPreviewId}-${Date.now().toString(36)}`;
+            const parameters = {
+              sourceMessageId: splatPreviewId,
+              sourcePngPath: `nexus-image-${splatPreviewId}.png`,
+              outputId,
+            };
+            const parsed = parseSplatGenerateParameters(parameters);
+            if (!parsed.ok) return { ok: false, message: parsed.message };
+            const jobs = await queueClient.enqueue({
+              pillar: "image",
+              jobType: SPLAT_GENERATE_JOB_TYPE,
+              parentId: splatPreviewId,
+              parameters,
+            });
+            const job = jobs[0];
+            if (!job) return { ok: false, message: "Splat generate did not start." };
+            return { ok: true, jobId: job.id };
+          }}
+          onCancelGenerate={async (jobId) => {
+            await queueClient.cancel(jobId);
+          }}
+          onClose={() => setSplatPreviewId(null)}
+        />
+      ) : null}
     </section>
   );
 }
