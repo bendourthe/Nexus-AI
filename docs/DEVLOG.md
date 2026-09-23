@@ -4,6 +4,66 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-22] v2.4.0 Phase 5 - Optional TripoSplat adapter
+
+Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [benchmark](v2/v2.4/benchmarks/gaussian-splat-baseline.md), history [P5](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-5-adapter.md).
+
+### What Changed
+
+- **TripoSplat is an opt-in local process, not a download.** The adapter spawns Python with the shell off and only when `model.safetensors` and `infer.py` are already under the models root. The catalog row is not recommended and has no weight hash, because those hashes were not observed.
+- **The benchmark separates a fake row from a live GPU run.** The fake mode passed one Gaussian. The real mode is recorded as not proven here.
+
+### Verification
+
+Adapter tests: 2 passed. Catalog, packaging, and model-acceptance tests: 61 passed. Desktop `tsc --noEmit` exited 0.
+
+---
+
+## [2026-09-22] v2.4.0 Phase 4 - Splat generate queue and preflight
+
+Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), history [P4](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-4-generate.md).
+
+### What Changed
+
+- **Splat generate is a child of the existing queue.** It has its own job id and output directory. macOS, a host without NVIDIA, and NVIDIA without CUDA fail closed before the GPU scheduler runs. The writer is a one-row stub. The source PNG is checked before and after, and a failed attempt deletes the staged splat.
+- **Image Studio can queue and cancel that job** when a host probe says CUDA is ready. Otherwise the panel states that generate did not start.
+
+### Verification
+
+Preflight unit tests: 3 passed. Runtime filesystem tests: 5 passed. One Image Studio test queued and cancelled a job. Desktop `tsc --noEmit` exited 0. The SQLite queue test was not executed in this shell because `better-sqlite3` is built for a different Node ABI. A live CUDA device was not probed.
+
+---
+
+## [2026-09-22] v2.4.0 Phase 3 - Image Studio 3D preview
+
+Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), history [P3](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-3-preview.md).
+
+### What Changed
+
+- **3D preview sits beside Download.** A finished image can open a local `.splat` or `.ply`. The panel shows the honesty sentence. Generate stays disabled until the queue phase wires a backend. The original PNG download is unchanged.
+- **Provenance is a sidecar record.** Names for the splat download and the screenshot are distinct from the source PNG. Splat bytes are not stuffed into a PNG text chunk.
+
+### Verification
+
+Preview panel tests: 5 passed. Provenance unit tests: 2 passed. One Image Studio page test opened the panel from a finished image. Desktop `tsc --noEmit` exited 0.
+
+---
+
+## [2026-09-22] v2.4.0 Phase 2 - Local splat viewer core
+
+Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [contract](v2/v2.4/development/gaussian-splat-contract.md), history [P2](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-2-viewer.md).
+
+### What Changed
+
+- **Local WebGL2 splat canvas.** The canvas decodes an in-memory cloud or a caller-supplied local path, rejects remote URLs, and rasterizes with inline shaders. A missing or lost WebGL2 context shows a still frame and a typed message. Screenshot export is a canvas PNG data URL.
+- **Viewport cap named.** The Phase 1 contract required a cap and did not give a pixel size. Each edge is now 2048 CSS pixels, and the Gaussian cap stays 262144.
+
+### Verification
+
+Desktop Vitest: `tests/splatCamera.test.ts` and `tests/SplatViewerCanvas.test.tsx`, 15 passed. Desktop `tsc --noEmit` exited 0. A real GPU framebuffer was not exercised; that check remains Phase 6.
+
+---
+
 ## [2026-09-10] v2.4.9 - Installer rebuild, with BG-21 fixed first
 
 Index: [gaps](v2/v2.4/known-gaps.md) BG-21. Artifact `dist/NexusSetup.exe`, 254,476,060 bytes, sha256 `e7a35f1c45ed...` (gitignored, not committed).

@@ -1780,6 +1780,7 @@ export const GenerationQueueListResponse = z
 export const GenerationQueueEnqueueRequest = z
   .object({
     id: z.string().min(1).optional(),
+    parentId: z.string().min(1).optional(),
     pillar: GenerationPillar,
     jobType: z.string().min(1),
     parameters: z.record(z.string(), z.unknown()),

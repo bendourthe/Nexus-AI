@@ -2178,6 +2178,48 @@
       "modalities": [
         "image"
       ]
+    },
+    {
+      "id": "triposplat",
+      "family": "triposplat",
+      "name": "triposplat",
+      "tag": "mit",
+      "type": "image",
+      "task": "image",
+      "displayName": "TripoSplat",
+      "origin": "Community",
+      "description": "Optional MIT weights from the Community for a local single-image splat preview on NVIDIA CUDA. This entry is not a default, and Nexus has not measured it on local hardware.",
+      "strengths": [
+        "Local optional splat preview weights",
+        "MIT license",
+        "Stays out of the recommended image defaults"
+      ],
+      "differentiators": "A separate opt-in NVIDIA CUDA splat job. It does not replace the 2D image models.",
+      "license": "MIT",
+      "licenseNote": "Opt-in NVIDIA CUDA generate only. Not pre-ticked. source.sha256 is the all-zero placeholder the digest contract requires. File SHA-256 pins were not downloaded. source.revision is the Hugging Face repo commit observed on 2026-09-23.",
+      "releaseDate": "2026-05-31",
+      "uncensored": false,
+      "multimodal": false,
+      "contextWindow": null,
+      "visualTokenBudget": {
+        "maxImages": 1,
+        "maxPixels": 1048576
+      },
+      "source": {
+        "protocol": "huggingface",
+        "repo": "VAST-AI/TripoSplat",
+        "url": "https://huggingface.co/VAST-AI/TripoSplat",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "revision": "56a96e603204ec410c4da60c13ea4fa09a2169a9"
+      },
+      "tags": [
+        "opt-in",
+        "image",
+        "3d-preview"
+      ],
+      "modalities": [
+        "image"
+      ]
     }
   ]
 }

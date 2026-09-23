@@ -315,6 +315,22 @@ const BY_MODEL_ID: Readonly<Record<string, ModelCapabilities>> = {
   "sana-1.6b-2k": SANA_2K,
   "sana-1.6b-4k": SANA_4K,
   "sana-sprint-1024": SANA_SPRINT,
+  triposplat: {
+    kind: "image",
+    resolutions: [SQUARE_1024],
+    dimension: { min: SIDECAR_MIN_IMAGE_DIMENSION, max: 1024, step: 8 },
+    steps: { min: 1, max: 1, step: 1 },
+    cfgScale: null,
+    samplers: [],
+    supportsFastPreview: false,
+    supportsNegativePrompt: false,
+    supportsLoras: false,
+    supportsControlNet: false,
+    supportsImageInput: true,
+    notes: {
+      generate: "Optional NVIDIA CUDA splat preview. Not a 2D diffusion model.",
+    },
+  },
   // Video
   "wan2.1-t2v-1.3b": WAN_21_T2V,
   "wan2.2-ti2v-5b": WAN_22_TI2V,
