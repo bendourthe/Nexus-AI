@@ -4,6 +4,21 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-22] v2.4.0 Phase 4 - Splat generate queue and preflight
+
+Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), history [P4](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-4-generate.md).
+
+### What Changed
+
+- **Splat generate is a child of the existing queue.** It has its own job id and output directory. macOS, a host without NVIDIA, and NVIDIA without CUDA fail closed before the GPU scheduler runs. The writer is a one-row stub. The source PNG is checked before and after, and a failed attempt deletes the staged splat.
+- **Image Studio can queue and cancel that job** when a host probe says CUDA is ready. Otherwise the panel states that generate did not start.
+
+### Verification
+
+Preflight unit tests: 3 passed. Runtime filesystem tests: 5 passed. One Image Studio test queued and cancelled a job. Desktop `tsc --noEmit` exited 0. The SQLite queue test was not executed in this shell because `better-sqlite3` is built for a different Node ABI. A live CUDA device was not probed.
+
+---
+
 ## [2026-09-22] v2.4.0 Phase 3 - Image Studio 3D preview
 
 Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), history [P3](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-3-preview.md).

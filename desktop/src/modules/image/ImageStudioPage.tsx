@@ -102,6 +102,13 @@ import { inferImageIntent } from "./intent";
 import { MaskEditor } from "./MaskEditor";
 import { SplatPreviewPanel, type OpenLocalSplat } from "./SplatPreviewPanel";
 import {
+  SPLAT_GENERATE_JOB_TYPE,
+  classifySplatHost,
+  parseSplatGenerateParameters,
+  splatHostMessage,
+  type SplatHostProbe,
+} from "../../../../core/image/SplatGenerate";
+import {
   parseReplaceIntent,
   inpaintPromptFor,
   restylePromptFor,
@@ -223,6 +230,8 @@ export interface ImageStudioPageProps {
   readonly mediaRuntimeClient?: MediaRuntimeClient;
   /** Opens a local .splat or .ply for this message. Tests inject the reader. */
   readonly openLocalSplat?: OpenLocalSplat;
+  /** Host facts for splat generate. Absent means the generator is unavailable. */
+  readonly splatHost?: SplatHostProbe;
 }
 
 let messageSeq = 0;
@@ -263,6 +272,7 @@ export function ImageStudioPage({
   outputExists,
   mediaRuntimeClient: mediaRuntimeOverride,
   openLocalSplat,
+  splatHost,
 }: ImageStudioPageProps = {}): JSX.Element {
   const [client] = useState<DiffusionClient>(
     () => clientOverride ?? createIpcDiffusionClient(),
@@ -1957,6 +1967,32 @@ export function ImageStudioPage({
           sourceMessageId={splatPreviewId}
           sourcePngName={`nexus-image-${splatPreviewId}.png`}
           openLocalSplat={openLocalSplat}
+          onGenerate={async () => {
+            const verdict = classifySplatHost(
+              splatHost ?? { platform: "win32", nvidia: false, cuda: false },
+            );
+            if (verdict !== "ready") return { ok: false, message: splatHostMessage(verdict) };
+            const outputId = `${splatPreviewId}-${Date.now().toString(36)}`;
+            const parameters = {
+              sourceMessageId: splatPreviewId,
+              sourcePngPath: `nexus-image-${splatPreviewId}.png`,
+              outputId,
+            };
+            const parsed = parseSplatGenerateParameters(parameters);
+            if (!parsed.ok) return { ok: false, message: parsed.message };
+            const jobs = await queueClient.enqueue({
+              pillar: "image",
+              jobType: SPLAT_GENERATE_JOB_TYPE,
+              parentId: splatPreviewId,
+              parameters,
+            });
+            const job = jobs[0];
+            if (!job) return { ok: false, message: "Splat generate did not start." };
+            return { ok: true, jobId: job.id };
+          }}
+          onCancelGenerate={async (jobId) => {
+            await queueClient.cancel(jobId);
+          }}
           onClose={() => setSplatPreviewId(null)}
         />
       ) : null}
