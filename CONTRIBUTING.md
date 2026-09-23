@@ -7,7 +7,7 @@ Thanks for your interest in improving Nexus. This document covers the minimum yo
 ## Project tour
 
 - v1.0.0 shared core under [core/](./core) (`ModelRegistry`, `MemoryHub`, `TelemetryBus`, `SkillCatalog`, `StorageMigration`).
-- Per-pillar modules under [modules/](./modules). The Coding pillar currently lives under [src/](./src) during the one-cycle compat window; wholesale move to [modules/coding/](./modules/coding/) is tracked in [docs/versions/v1/v1.0.0/known-gaps.md](docs/v1/v1.0/known-gaps.md) under code `MV`.
+- Per-pillar modules under [modules/](./modules). The Coding pillar currently lives under [src/](./src) during the one-cycle compat window; wholesale move to [modules/coding/](./modules/coding/) is tracked in [docs/versions/v1/v1.0.0/known-gaps.md](docs/archive/v1/v1.0/known-gaps.md) under code `MV`.
 - Composition root: [src/extension.ts](./src/extension.ts) -> [src/runtime/NexusCodingRuntime.ts](./src/runtime/NexusCodingRuntime.ts) -> [src/panels/NexusCodingPanel.ts](./src/panels/NexusCodingPanel.ts).
 - Vendor-neutral LLM port at [src/llm/types.ts](./src/llm/types.ts); the Ollama adapter at [src/llm/OllamaClient.ts](./src/llm/OllamaClient.ts).
 - Pre-execution safety layer at [src/guardrails/](./src/guardrails) (action classification, loop detection, git checkpoints, permission tiers).
@@ -17,7 +17,7 @@ Thanks for your interest in improving Nexus. This document covers the minimum yo
 - Deterministic-checks CLI at [bin/nexus-check.mjs](./bin/nexus-check.mjs) (renamed from `gemma-check` in Phase 2.4; legacy alias kept for one cycle).
 - Tests mirror source layout under [tests/unit/](./tests/unit), [tests/integration/](./tests/integration), and [tests/golden/](./tests/golden).
 
-For deeper architecture see [ARCHITECTURE.md](./ARCHITECTURE.md) and [docs/versions/v1/v1.0.0/architecture.md](docs/v1/v1.0/architecture.md). The canonical agent directive is [AGENTS.md](./AGENTS.md).
+For deeper architecture see [ARCHITECTURE.md](./ARCHITECTURE.md) and [docs/versions/v1/v1.0.0/architecture.md](docs/archive/v1/v1.0/architecture.md). The canonical agent directive is [AGENTS.md](./AGENTS.md).
 
 ## One-command setup
 

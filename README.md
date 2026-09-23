@@ -6,7 +6,7 @@
 
 Nexus is a local-first, native desktop AI Studio that bundles four generative AI pillars behind one cohesive UI: agentic coding, organized local chat, image generation and editing, and short-form video synthesis. Everything runs on the host machine against optimized open-source models (Gemma 4, Llama 3, Qwen 2.5 Coder, SDXL / SANA-class diffusion, video-synthesis architectures), with real-time GPU / VRAM telemetry built into the dashboard. No API keys, no data leaving your machine, no per-token billing.
 
-> **Renamed from Gemma Code at v1.0.0** to reflect the four-pillar pivot. The v0.1.0 - v0.22.x line shipped as a single-purpose local agentic coding VS Code extension; v1.0.0 folded that engine into the "Agentic AI Coding" pillar of a wider desktop app. The VS Code surface is preserved as an optional thin adapter that proxies to the desktop daemon. Historical Gemma Code docs remain under `docs/archive/versions/v0/v0.1.0/` - `docs/archive/versions/v0/v0.9.0/`; v1 milestones live under `docs/v1/v1.<MINOR>/`, v2.1.0 lives under `docs/v2/v2.1/`, v2.2.9 lives under `docs/v2/v2.2/`, and the current **v2.3.1** cycle lives under `docs/v2/v2.3/`. See [Project Status](#project-status-august-2026).
+> **Renamed from Gemma Code at v1.0.0** to reflect the four-pillar pivot. The v0.1.0 - v0.22.x line shipped as a single-purpose local agentic coding VS Code extension; v1.0.0 folded that engine into the "Agentic AI Coding" pillar of a wider desktop app. The VS Code surface is preserved as an optional thin adapter that proxies to the desktop daemon. Historical Gemma Code docs remain under `docs/archive/versions/v0/v0.1.0/` - `docs/archive/versions/v0/v0.9.0/`; v1 milestones live under `docs/archive/v1/v1.<MINOR>/`, v2.1.0 lives under `docs/archive/v2/v2.1/`, v2.2.9 lives under `docs/archive/v2/v2.2/`, and the current **v2.3.1** cycle lives under `docs/archive/v2/v2.3/`. See [Project Status](#project-status-august-2026).
 
 ---
 
@@ -43,7 +43,7 @@ Text-to-image, image-to-image, inpainting, and outpainting against local diffusi
 
 ### 4. Video Lab
 
-Short-form video synthesis via text prompts or static reference images, with a timeline previewer and granular generation controls. v1.1.0 Phase 13 adds SANA-Video 2B as the "Fast 720p" tier between LTX-Video and CogVideoX. Targets local video-synthesis architectures sized for a single consumer GPU. Optional local enhancement can upscale or interpolate a completed clip through a user-installed Video2X 6.4.0 executable (`NEXUS_VIDEO2X_PATH` or Settings > Video). Nexus does not download or bundle Video2X. The clip picker uses the same this-install allowlist as Chat and Image. Real GPU and packaged support remain candidate until measured; see [docs/v2/v2.3/benchmarks/video-enhancement-baseline.md](docs/v2/v2.3/benchmarks/video-enhancement-baseline.md).
+Short-form video synthesis via text prompts or static reference images, with a timeline previewer and granular generation controls. v1.1.0 Phase 13 adds SANA-Video 2B as the "Fast 720p" tier between LTX-Video and CogVideoX. Targets local video-synthesis architectures sized for a single consumer GPU. Optional local enhancement can upscale or interpolate a completed clip through a user-installed Video2X 6.4.0 executable (`NEXUS_VIDEO2X_PATH` or Settings > Video). Nexus does not download or bundle Video2X. The clip picker uses the same this-install allowlist as Chat and Image. Real GPU and packaged support remain candidate until measured; see [docs/archive/v2/v2.3/benchmarks/video-enhancement-baseline.md](docs/archive/v2/v2.3/benchmarks/video-enhancement-baseline.md).
 
 ### Document parsing (OCR)
 
@@ -61,11 +61,11 @@ Headless and scheduled agent runs no longer die on the 60s confirmation timeout.
 
 ### MLX on Apple Silicon (via local adapters)
 
-Nexus does not bundle an MLX runtime. Apple Silicon users who already run an OpenAI-compatible MLX server (mlx-vlm, LM Studio in MLX mode, or nativ) can register it as a loopback `nexus.llm.localAdapters` manifest and select it with `nexus.llm.backend`. The how-to is [docs/v1/v1.16/guides/mlx-via-local-adapters.md](docs/v1/v1.16/guides/mlx-via-local-adapters.md); the on-device smoke checklist is [docs/v1/v1.16/testing/macos-mlx-smoke.md](docs/v1/v1.16/testing/macos-mlx-smoke.md). Added in v1.16.0 Phase 5.
+Nexus does not bundle an MLX runtime. Apple Silicon users who already run an OpenAI-compatible MLX server (mlx-vlm, LM Studio in MLX mode, or nativ) can register it as a loopback `nexus.llm.localAdapters` manifest and select it with `nexus.llm.backend`. The how-to is [docs/archive/v1/v1.16/guides/mlx-via-local-adapters.md](docs/archive/v1/v1.16/guides/mlx-via-local-adapters.md); the on-device smoke checklist is [docs/archive/v1/v1.16/testing/macos-mlx-smoke.md](docs/archive/v1/v1.16/testing/macos-mlx-smoke.md). Added in v1.16.0 Phase 5.
 
 ### llama.cpp on loopback (via local adapters)
 
-Nexus does not bundle llama.cpp. If you already run `llama-server` on loopback (including large-MoE CPU-expert or mmap offload), register it as a `nexus.llm.localAdapters` manifest with `protocol: "openai"` and select it with `nexus.llm.backend`. The recipe is [docs/reference/llamacpp-loopback-adapter.md](docs/reference/llamacpp-loopback-adapter.md). This does not open the patient-tier gate ([EM.P4.A](docs/v1/v1.12/known-gaps.md)). Added in v1.18.0 Phase 1.
+Nexus does not bundle llama.cpp. If you already run `llama-server` on loopback (including large-MoE CPU-expert or mmap offload), register it as a `nexus.llm.localAdapters` manifest with `protocol: "openai"` and select it with `nexus.llm.backend`. The recipe is [docs/reference/llamacpp-loopback-adapter.md](docs/reference/llamacpp-loopback-adapter.md). This does not open the patient-tier gate ([EM.P4.A](docs/archive/v1/v1.12/known-gaps.md)). Added in v1.18.0 Phase 1.
 
 ### Always-on telemetry
 
@@ -75,7 +75,7 @@ A persistent `Local Model Status` panel reports the active model architecture, p
 
 ## Project Status (August 2026)
 
-Nexus uses a single, convergent version line: git tags and `package.json` carry the same numbers as the milestone docs (`docs/v1/v1.<MINOR>/` through v1.20.0, then `docs/v2/v2.0/` for v2.0.0, `docs/v2/v2.1/` for v2.1.0, `docs/v2/v2.2/` for v2.2.9, and `docs/v2/v2.3/` for **v2.3.1**).
+Nexus uses a single, convergent version line: git tags and `package.json` carry the same numbers as the milestone docs (`docs/archive/v1/v1.<MINOR>/` through v1.20.0, then `docs/archive/v2/v2.0/` for v2.0.0, `docs/archive/v2/v2.1/` for v2.1.0, `docs/archive/v2/v2.2/` for v2.2.9, and `docs/archive/v2/v2.3/` for **v2.3.1**).
 
 Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" cut five semantic-release versions numbered ahead of the milestones. Those tags were renumbered onto the milestone line on 2026-08-05: the old `v2.0.0` tag became `v1.6.0`, `v2.1.0` -> `v1.7.0`, `v2.2.0` -> `v1.12.0`, `v2.3.0` -> `v1.13.0`, and `v2.4.0` -> `v1.14.0`. This **v2.0.0** cut is the reserved convergence release (v1.18 plan + v1.19.x subplans + this adoption plan).
 
@@ -83,41 +83,52 @@ Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" c
 
 | Milestone | Theme | Status | Docs |
 |---|---|---|---|
-| v1.0.0 | Four-pillar pivot: Gemma Code -> Nexus desktop AI Studio (Tauri shell + Node sidecar) | Landed | [docs/v1/v1.0/](docs/v1/v1.0/) |
-| v1.1.0 | Stabilization + expansion: hybrid retrieval, session replay, SANA image / video tiers | Landed | [docs/v1/v1.1/](docs/v1/v1.1/) |
-| v1.2.0 | 2026-05 ecosystem adoption: code-graph MCP, LEANN-derived pruned dense index, command-output compression | Landed | [docs/v1/v1.2/](docs/v1/v1.2/) |
-| v1.3.0 | skill-cleaner adoption: `nexus skills audit` token-budget report | Landed | [docs/v1/v1.3/](docs/v1/v1.3/) |
-| v1.4.0 | claude-code-harness adoption (A1-A12) + `src/` -> `modules/coding/` move + carryforward closure | Landed | [docs/v1/v1.4/](docs/v1/v1.4/) |
-| v1.5.0 | Local Agent Maturity: Gemma 4 quant ladder, credential vault, energy telemetry, planner / critic / worker DAG | Landed | [docs/v1/v1.5/](docs/v1/v1.5/) |
-| v1.6.0 | aisuite harness + the offline Nexus-AI interactive guide + opt-in local panel / judge fusion | Landed | [docs/v1/v1.6/](docs/v1/v1.6/) |
-| v1.7.0 | Local skill self-optimization loop (golden-task runner, bounded-edit optimizer, Pareto frontier) | Landed | [docs/v1/v1.7/](docs/v1/v1.7/) |
-| v1.8.0 | One-shot end-user installer: desktop bundles, Hugging Face weights puller, per-VRAM catalog curation | Landed | [docs/v1/v1.8/](docs/v1/v1.8/) |
-| v1.9.0 | Installer + Nexus AI Studio experience overhaul (single-artifact branded wizard + full UI / UX rework) | Landed | [docs/v1/v1.9/](docs/v1/v1.9/) |
-| v1.10.0 | Nexus-Hub consumption re-architecture: single-home `~/.nexus-ai/catalog/` + live first-launch fetch | Landed | [docs/v1/v1.10/](docs/v1/v1.10/) |
-| v1.11.0 | Installer overhaul: one-shot reliability, clean-machine harness, embedded desktop bundle, background continuation | Landed | [docs/v1/v1.11/](docs/v1/v1.11/) |
-| v1.12.0 | Local model-execution scaling (per-model harness, extreme-low-bit + disk-offload tiers) + surface the skill optimizer + exec-sandbox audit | Landed | [docs/v1/v1.12/](docs/v1/v1.12/) |
-| v1.13.0 | Installer reliability + UX polish: fix the fresh-install model failures (registry routing + Ollama pin + pull/load preflight), gradient "AI Studio" wordmark, and the mockup-matched installing UI | Landed | [docs/v1/v1.13/](docs/v1/v1.13/) |
-| v1.14.0 | Installer catalog curation + install reliability: best-of-family model collapse with release-date pills, gated-model auth flow (token discovery + guided license step), live reachability, and installing-page polish (uniform dependency bars, footer Cancel) | Landed | [docs/v1/v1.14/](docs/v1/v1.14/) |
-| v1.15.0 | Post-reinstall fixes + chat-style studios: window controls / open maximized, installer relaunch starts at Welcome, catalog invariant guard + gated-token UX + post-install retry, real `models.*` registry reconciled with Ollama and the installer's weights tree, Image Studio and Video Lab rebuilt as chat, and a crash-proof "Nexus Code" VS Code extension | Landed | [docs/v1/v1.15/](docs/v1/v1.15/) |
-| v1.16.0 | Local serving gateway + document OCR: opt-in loopback OpenAI/Anthropic API in front of installed models, per-model tokens/sec and TTFT on Traces, RapidOCR (CPU) + Unlimited-OCR (NVIDIA) in the catalog, a governed `parse_document` tool, MLX-via-adapters how-to, and a searchable Models page with Chat/Coding quick switcher | Landed | [docs/v1/v1.16/](docs/v1/v1.16/) |
-| v1.17.0 | Agent-state motion identity: internal orbs, surface-liveness beam, and hero-action metal ring (no new npm packages), one primary motion per surface, recede-when-active ambient glow, halt-not-slow reduced-motion | Landed | [docs/v1/v1.17/](docs/v1/v1.17/) |
-| v1.18.0 | Agent harness and governance: skill-native mappings, llama.cpp loopback recipe, live harness selector, catalog/registry governance, ask inbox + scheduler, ACP surface, OS process sandbox | Landed | [docs/v1/v1.18/](docs/v1/v1.18/) |
-| v1.19.0 | Low-VRAM Agentic catalog: LFM2.5-2.6B CPU / sub-4 GB tool-calling pick, LFM Open License v1.0 use-restriction label, harness profile, 8B-A1B bake-off declined | Landed | [docs/v1/v1.19/](docs/v1/v1.19/) |
-| v1.19.1 | Agent-loop and guardrail hardening: Hub skill-native wins, hard denials, LoopGuards, security-posture dial, provenance screening, DNS-pinned fetches | Landed | [docs/v1/v1.19/](docs/v1/v1.19/) |
-| v1.19.2 | Catalog and model expansion: modalities + audioConditioning, official-only weight variants, Hermes 3 family, Inkling-Small patient-tier GGUF, calibrated patient-tier copy | Landed | [docs/v1/v1.19/](docs/v1/v1.19/) |
-| v1.20.0 | Document ingest: wire `parse_document`, magic-byte Office routing, Chat and Coding attach, Docling layout engine deferred | Landed | [docs/v1/v1.20/](docs/v1/v1.20/) |
-| v2.0.0 | Convergence: multimodal Chat + local voice loop, DANGEROUS isolated-profile browser tools, Video Lab continuation + gated avatar, ProjectScope stretch | Landed | [docs/v2/v2.0/](docs/v2/v2.0/) |
-| v2.1.0 | Open local-AI wave: Muse Glimmer + Nemotron Lightning catalog/harness, adaptive routing, Image Studio depth, multimodal chat + SAM2, local fine-tuning, hardening | Landed | [docs/v2/v2.1/](docs/v2/v2.1/) |
-| v2.2.5 | First successful generation: alias-fold chat ids, fail-closed diffusion bytes, Settings Models installer parity, chat explorer chrome, Hub latest (not 3.12.0) | Landed | [docs/v2/v2.2/](docs/v2/v2.2/) |
-| v2.2.6 | Session memory: named Image/Video history, last-output follow-up, Agents resume hydrate, Chatbot remount proof | Landed | [docs/v2/v2.2/](docs/v2/v2.2/) |
-| v2.2.7 | Context meter and transcript chrome: catalog `<val>k` chips, composer Context pill plus picker, date/time/token bubbles | Landed | [docs/v2/v2.2/](docs/v2/v2.2/) |
-| v2.2.8 | Working local studio: minutes-class chat/generate RPCs, shared FolderTree, installer Models sort, Hub latest with quarantine | Landed | [docs/v2/v2.2/](docs/v2/v2.2/) |
-| v2.2.9 | Field chrome and catalog identity: finished Chatbot/studio chrome, typed diffusion readiness errors, installer/Settings model parity, truthful Hub sync | Landed at automated-test tier; packaged field QA remains DF-36 | [docs/v2/v2.2/](docs/v2/v2.2/) |
-| v2.3.0 | Optional local video enhancement, Qwen3.8 stays out, Hub security-audit handoff | Landed at automated/internal-compatible evidence; real Video2X/GPU/packaged measurement remains DF-3 | [docs/v2/v2.3/](docs/v2/v2.3/) |
-| v2.3.1 | Windows installer field repair: honest RAM, crash containment, card chrome, VS Code 1.135, Unsloth on Configuration | Landed at automated evidence; packaged wizard screenshots remain human QA; host_detect coverage remains MT-1 | [docs/v2/v2.3/](docs/v2/v2.3/) |
-| v2.4.1 | Field reliability, transcript reasoning, chat archives, unified models, and multi-root Agents workspaces | Implemented at automated/internal-compatible evidence; packaged Windows and live-GPU operator checks remain open | [docs/v2/v2.4/](docs/v2/v2.4/) |
+| v1.0.0 | Four-pillar pivot: Gemma Code -> Nexus desktop AI Studio (Tauri shell + Node sidecar) | Landed | [docs/archive/v1/v1.0/](docs/archive/v1/v1.0/) |
+| v1.1.0 | Stabilization + expansion: hybrid retrieval, session replay, SANA image / video tiers | Landed | [docs/archive/v1/v1.1/](docs/archive/v1/v1.1/) |
+| v1.2.0 | 2026-05 ecosystem adoption: code-graph MCP, LEANN-derived pruned dense index, command-output compression | Landed | [docs/archive/v1/v1.2/](docs/archive/v1/v1.2/) |
+| v1.3.0 | skill-cleaner adoption: `nexus skills audit` token-budget report | Landed | [docs/archive/v1/v1.3/](docs/archive/v1/v1.3/) |
+| v1.4.0 | claude-code-harness adoption (A1-A12) + `src/` -> `modules/coding/` move + carryforward closure | Landed | [docs/archive/v1/v1.4/](docs/archive/v1/v1.4/) |
+| v1.5.0 | Local Agent Maturity: Gemma 4 quant ladder, credential vault, energy telemetry, planner / critic / worker DAG | Landed | [docs/archive/v1/v1.5/](docs/archive/v1/v1.5/) |
+| v1.6.0 | aisuite harness + the offline Nexus-AI interactive guide + opt-in local panel / judge fusion | Landed | [docs/archive/v1/v1.6/](docs/archive/v1/v1.6/) |
+| v1.7.0 | Local skill self-optimization loop (golden-task runner, bounded-edit optimizer, Pareto frontier) | Landed | [docs/archive/v1/v1.7/](docs/archive/v1/v1.7/) |
+| v1.8.0 | One-shot end-user installer: desktop bundles, Hugging Face weights puller, per-VRAM catalog curation | Landed | [docs/archive/v1/v1.8/](docs/archive/v1/v1.8/) |
+| v1.9.0 | Installer + Nexus AI Studio experience overhaul (single-artifact branded wizard + full UI / UX rework) | Landed | [docs/archive/v1/v1.9/](docs/archive/v1/v1.9/) |
+| v1.10.0 | Nexus-Hub consumption re-architecture: single-home `~/.nexus-ai/catalog/` + live first-launch fetch | Landed | [docs/archive/v1/v1.10/](docs/archive/v1/v1.10/) |
+| v1.11.0 | Installer overhaul: one-shot reliability, clean-machine harness, embedded desktop bundle, background continuation | Landed | [docs/archive/v1/v1.11/](docs/archive/v1/v1.11/) |
+| v1.12.0 | Local model-execution scaling (per-model harness, extreme-low-bit + disk-offload tiers) + surface the skill optimizer + exec-sandbox audit | Landed | [docs/archive/v1/v1.12/](docs/archive/v1/v1.12/) |
+| v1.13.0 | Installer reliability + UX polish: fix the fresh-install model failures (registry routing + Ollama pin + pull/load preflight), gradient "AI Studio" wordmark, and the mockup-matched installing UI | Landed | [docs/archive/v1/v1.13/](docs/archive/v1/v1.13/) |
+| v1.14.0 | Installer catalog curation + install reliability: best-of-family model collapse with release-date pills, gated-model auth flow (token discovery + guided license step), live reachability, and installing-page polish (uniform dependency bars, footer Cancel) | Landed | [docs/archive/v1/v1.14/](docs/archive/v1/v1.14/) |
+| v1.15.0 | Post-reinstall fixes + chat-style studios: window controls / open maximized, installer relaunch starts at Welcome, catalog invariant guard + gated-token UX + post-install retry, real `models.*` registry reconciled with Ollama and the installer's weights tree, Image Studio and Video Lab rebuilt as chat, and a crash-proof "Nexus Code" VS Code extension | Landed | [docs/archive/v1/v1.15/](docs/archive/v1/v1.15/) |
+| v1.16.0 | Local serving gateway + document OCR: opt-in loopback OpenAI/Anthropic API in front of installed models, per-model tokens/sec and TTFT on Traces, RapidOCR (CPU) + Unlimited-OCR (NVIDIA) in the catalog, a governed `parse_document` tool, MLX-via-adapters how-to, and a searchable Models page with Chat/Coding quick switcher | Landed | [docs/archive/v1/v1.16/](docs/archive/v1/v1.16/) |
+| v1.17.0 | Agent-state motion identity: internal orbs, surface-liveness beam, and hero-action metal ring (no new npm packages), one primary motion per surface, recede-when-active ambient glow, halt-not-slow reduced-motion | Landed | [docs/archive/v1/v1.17/](docs/archive/v1/v1.17/) |
+| v1.18.0 | Agent harness and governance: skill-native mappings, llama.cpp loopback recipe, live harness selector, catalog/registry governance, ask inbox + scheduler, ACP surface, OS process sandbox | Landed | [docs/archive/v1/v1.18/](docs/archive/v1/v1.18/) |
+| v1.19.0 | Low-VRAM Agentic catalog: LFM2.5-2.6B CPU / sub-4 GB tool-calling pick, LFM Open License v1.0 use-restriction label, harness profile, 8B-A1B bake-off declined | Landed | [docs/archive/v1/v1.19/](docs/archive/v1/v1.19/) |
+| v1.19.1 | Agent-loop and guardrail hardening: Hub skill-native wins, hard denials, LoopGuards, security-posture dial, provenance screening, DNS-pinned fetches | Landed | [docs/archive/v1/v1.19/](docs/archive/v1/v1.19/) |
+| v1.19.2 | Catalog and model expansion: modalities + audioConditioning, official-only weight variants, Hermes 3 family, Inkling-Small patient-tier GGUF, calibrated patient-tier copy | Landed | [docs/archive/v1/v1.19/](docs/archive/v1/v1.19/) |
+| v1.20.0 | Document ingest: wire `parse_document`, magic-byte Office routing, Chat and Coding attach, Docling layout engine deferred | Landed | [docs/archive/v1/v1.20/](docs/archive/v1/v1.20/) |
+| v2.0.0 | Convergence: multimodal Chat + local voice loop, DANGEROUS isolated-profile browser tools, Video Lab continuation + gated avatar, ProjectScope stretch | Landed | [docs/archive/v2/v2.0/](docs/archive/v2/v2.0/) |
+| v2.1.0 | Open local-AI wave: Muse Glimmer + Nemotron Lightning catalog/harness, adaptive routing, Image Studio depth, multimodal chat + SAM2, local fine-tuning, hardening | Landed | [docs/archive/v2/v2.1/](docs/archive/v2/v2.1/) |
+| v2.2.5 | First successful generation: alias-fold chat ids, fail-closed diffusion bytes, Settings Models installer parity, chat explorer chrome, Hub latest (not 3.12.0) | Landed | [docs/archive/v2/v2.2/](docs/archive/v2/v2.2/) |
+| v2.2.6 | Session memory: named Image/Video history, last-output follow-up, Agents resume hydrate, Chatbot remount proof | Landed | [docs/archive/v2/v2.2/](docs/archive/v2/v2.2/) |
+| v2.2.7 | Context meter and transcript chrome: catalog `<val>k` chips, composer Context pill plus picker, date/time/token bubbles | Landed | [docs/archive/v2/v2.2/](docs/archive/v2/v2.2/) |
+| v2.2.8 | Working local studio: minutes-class chat/generate RPCs, shared FolderTree, installer Models sort, Hub latest with quarantine | Landed | [docs/archive/v2/v2.2/](docs/archive/v2/v2.2/) |
+| v2.2.9 | Field chrome and catalog identity: finished Chatbot/studio chrome, typed diffusion readiness errors, installer/Settings model parity, truthful Hub sync | Landed at automated-test tier; packaged field QA remains DF-36 | [docs/archive/v2/v2.2/](docs/archive/v2/v2.2/) |
+| v2.3.0 | Optional local video enhancement, Qwen3.8 stays out, Hub security-audit handoff | Landed at automated/internal-compatible evidence; real Video2X/GPU/packaged measurement remains DF-3 | [docs/archive/v2/v2.3/](docs/archive/v2/v2.3/) |
+| v2.3.1 | Windows installer field repair: honest RAM, crash containment, card chrome, VS Code 1.135, Unsloth on Configuration | Landed at automated evidence; packaged wizard screenshots remain human QA; host_detect coverage remains MT-1 | [docs/archive/v2/v2.3/](docs/archive/v2/v2.3/) |
+| v2.4.1 | Field reliability, transcript reasoning, chat archives, unified models, and multi-root Agents workspaces | Tagged. Packaged Windows and live-GPU operator checks remain open in the archived gap log | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
+| v2.4.11 | Local splat viewer, optional CUDA generate, and the untagged 2.4.2-2.4.10 field work | Tagged from develop. Live NVIDIA generate and weight hashes remain open | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
 
-Each v1 cycle's plan lives under `docs/v1/v1.<MINOR>/plans/`. v2 plans live under `docs/v2/v2.<MINOR>/plans/`. Deferred work is in that version's `known-gaps.md`.
+Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.4 live under `docs/archive/v2/`. v2.5 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.5/known-gaps.md](docs/v2/v2.5/known-gaps.md).
+
+### What's new in v2.4.11
+
+Image Studio can open a local `.splat` or `.ply` beside a finished image, with the honesty sentence that unseen sides are invented. Optional generate is a queued child job that fails closed without NVIDIA CUDA. TripoSplat is not pre-ticked and is not downloaded by the installer.
+
+- **Local viewer** - WebGL2 orbit, zoom, and pan, with a still frame when WebGL2 is missing. Remote URLs are rejected.
+- **Source image stays** - A splat download is a different file from the PNG.
+- **Optional generate** - Set `NEXUS_SPLAT_NVIDIA=1` and `NEXUS_SPLAT_CUDA=1` only on a machine that actually has them, and place the MIT weights yourself. The fake benchmark is `node scripts/bench-gaussian-splat.mjs`.
+
+Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/v2/v2.5/known-gaps.md).
 
 ### What's new in v2.4.1
 
@@ -130,7 +141,7 @@ The complete v2.4.1 implementation is locally code-complete. Automated and inter
 - **Model library** - Installer and Settings share order and display policy. Cards use restrained downloaded color, always-visible summaries, size pills, VRAM beside compatibility, honest external entries, and a live disk-use meter.
 - **Multi-root Agents** - Agents defaults to the OS home directory, supports a primary folder plus additions, snapshots roots per session, enforces every selected root, and groups history by durable workspace. The top tabs are Chat, Memory, and Activity.
 
-Support details: [release notes](docs/v2/v2.4/release-notes.md). Open field evidence: [known gaps](docs/v2/v2.4/known-gaps.md). Operator steps: [v2.4.1 checklist](docs/v2/v2.4/development/v2.4.1-operator-checklist.md).
+Support details: [release notes](docs/archive/v2/v2.4/release-notes.md). Open field evidence: [known gaps](docs/archive/v2/v2.4/known-gaps.md). Operator steps: [v2.4.1 checklist](docs/archive/v2/v2.4/development/v2.4.1-operator-checklist.md).
 
 ### What's new in v2.3.1
 
@@ -146,11 +157,11 @@ Activation: Optional VS Code extension: tick the wizard checkbox when Microsoft 
 Validation: VS Code: `code --version` is 1.134.x or 1.135.0 and the checkbox is enabled; after install, `code --list-extensions` includes `nexus-coding.nexus-coding`. Unsloth: the toggle is on Configuration, not the VS Code page. Embedder: Nomic stays Required; EmbeddingGemma copy says 300M.
 Rollback: Untick the VS Code checkbox or uninstall the extension. Turn Unsloth off on Configuration. Leave EmbeddingGemma unselected; Nomic remains the required embedder. None of these uninstall VS Code, CUDA, or existing models.
 Authority: The VS Code checkbox does not install VS Code, does not enable 1.136+, and does not change the desktop app. Unsloth does not grant network training or Hub writes. Selecting EmbeddingGemma does not reindex existing memory.
-Docs: [docs/install.md](docs/install.md), [vscode-host-policy.md](docs/v2/v2.3/development/vscode-host-policy.md), [embedder-default-decision.md](docs/v2/v2.3/development/embedder-default-decision.md).
+Docs: [docs/install.md](docs/install.md), [vscode-host-policy.md](docs/archive/v2/v2.3/development/vscode-host-policy.md), [embedder-default-decision.md](docs/archive/v2/v2.3/development/embedder-default-decision.md).
 
 The packaged desktop application remains Windows-only; raw Tauri bundles stay withheld (DF-38).
 
-Known gaps: [docs/v2/v2.3/known-gaps.md](docs/v2/v2.3/known-gaps.md). Plan: [docs/v2/v2.3/plans/v2.3.1-installer-field-repair.md](docs/v2/v2.3/plans/v2.3.1-installer-field-repair.md).
+Known gaps: [docs/archive/v2/v2.3/known-gaps.md](docs/archive/v2/v2.3/known-gaps.md). Plan: [docs/archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md](docs/archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md).
 
 ### What's new in v2.3.0
 
@@ -166,11 +177,11 @@ Activation: Install Video2X 6.4.0 yourself, then set `NEXUS_VIDEO2X_PATH` or Set
 Validation: In Video Lab, Recheck capability; Enhance is enabled only when capability is ready. Contract check: `node scripts/bench-video-enhancement.mjs --backend fake`.
 Rollback: Clear Settings > Video > Video2X executable and unset `NEXUS_VIDEO2X_PATH`. That does not uninstall Video2X. Original clips remain.
 Authority: Configuring a path does not install or download Video2X, does not search PATH, does not replace originals, does not grant network or Hub writes, and does not add Qwen3.8.
-Docs: [video-enhancement-baseline.md](docs/v2/v2.3/benchmarks/video-enhancement-baseline.md).
+Docs: [video-enhancement-baseline.md](docs/archive/v2/v2.3/benchmarks/video-enhancement-baseline.md).
 
 The optional VS Code extension still requires VS Code 1.134.0 exactly. The packaged desktop application remains Windows-only; raw Tauri bundles stay withheld (DF-38).
 
-Known gaps: [docs/v2/v2.3/known-gaps.md](docs/v2/v2.3/known-gaps.md). Plan: [docs/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md](docs/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md).
+Known gaps: [docs/archive/v2/v2.3/known-gaps.md](docs/archive/v2/v2.3/known-gaps.md). Plan: [docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md](docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md).
 
 ### What's new in v2.2.9
 
@@ -185,7 +196,7 @@ Finished Chatbot and studio field chrome, made local generation failures truthfu
 
 This release changes no opt-in capability or installer flag. The optional VS Code extension requires VS Code 1.134.0 exactly because its bundled `better-sqlite3` 12.11.1 native module targets that host's Electron 42.8.1 runtime; other VS Code versions are not supported by this release artifact.
 
-Known gaps: [docs/v2/v2.2/known-gaps.md](docs/v2/v2.2/known-gaps.md). Plan: [docs/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md](docs/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md).
+Known gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md). Plan: [docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md](docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md).
 
 ### What's new in v2.2.8
 
@@ -197,7 +208,7 @@ Minutes-class local inference, one history chrome on all four tabs, installer-id
 - **Models identity** - Settings Models and the installer Models tab share collapse/sort (family collapse, hideBelowVram, over-budget last). Compact cards, highlighted Downloaded, picker order from that list.
 - **Hub latest** - High-severity skills quarantine; clean skills apply; Active moves to the fetched tag. `PromptInjectionScanner` stays on. Pack-time snapshots still refuse a stale 3.12.0 catalog.
 
-Known gaps: [docs/v2/v2.2/known-gaps.md](docs/v2/v2.2/known-gaps.md). Plan: [docs/v2/v2.2/plans/v2.2.8-working-local-studio.md](docs/v2/v2.2/plans/v2.2.8-working-local-studio.md).
+Known gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md). Plan: [docs/archive/v2/v2.2/plans/v2.2.8-working-local-studio.md](docs/archive/v2/v2.2/plans/v2.2.8-working-local-studio.md).
 
 ### What's new in v2.2.7
 
@@ -208,7 +219,7 @@ Catalog context on both Models tabs, a shared composer Context meter with an 80%
 - **Header cleanup** - Chatbot no longer shows a lone `/` breadcrumb or a unicode gear. Persona stays as a labeled footer control.
 - **Transcript chrome** - One date heading per local day, a discrete clock on each bubble, user `N in`, assistant think+out (or an em dash when unknown). Missing timestamps skip the clock rather than showing Unix epoch.
 
-Known gaps: [docs/v2/v2.2/known-gaps.md](docs/v2/v2.2/known-gaps.md). Plan: [docs/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md](docs/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md).
+Known gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md). Plan: [docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md](docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md).
 
 ### What's new in v2.2.6
 
@@ -219,7 +230,7 @@ Named sessions and last-output memory for the studio pillars, plus Agents transc
 - **Agents resume** - Opening a previous session hydrates user and assistant token text. Sessions list can rename and delete. Tool-call cards are not restored.
 - **Chatbot remount** - Append-then-remount shows both bubbles and attachment `src`. A failed append keeps the bubble visible and says it was not saved.
 
-Known gaps: [docs/v2/v2.2/known-gaps.md](docs/v2/v2.2/known-gaps.md). Plan: [docs/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md](docs/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md).
+Known gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md). Plan: [docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md](docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md).
 
 ### What's new in v2.2.5
 
@@ -231,7 +242,7 @@ Field follow-on after v2.2.4 honesty: generation and catalog parity on a machine
 - **Chat explorer chrome** - rename and delete icons on chat rows, reclick-to-rename, chats-pane collapse pill (24px expand target). Right-click stays.
 - **Hub latest** - pack-time snapshot refuses a frozen 3.12.0 catalog when GitHub latest differs. Tests inject `NEXUS_HUB_LATEST_TAG`. Scanner allowlist reviewed against Hub v3.19.2; `PromptInjectionScanner` stays on.
 
-Known gaps: [docs/v2/v2.2/known-gaps.md](docs/v2/v2.2/known-gaps.md). Plan: [docs/v2/v2.2/plans/v2.2.5-first-successful-generation.md](docs/v2/v2.2/plans/v2.2.5-first-successful-generation.md).
+Known gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md). Plan: [docs/archive/v2/v2.2/plans/v2.2.5-first-successful-generation.md](docs/archive/v2/v2.2/plans/v2.2.5-first-successful-generation.md).
 
 ### What's new in v2.1.0
 
@@ -246,11 +257,11 @@ Open local-AI wave. Local-only. No new outbound destination. Vendor scores do no
 - **Replace-the-X** - SAM2 Hiera Tiny (`sam2:hiera-tiny`, Apache-2.0 utility, hidden from the generator picker). "replace the car with a truck" segments then inpaints. Missing weights leave the original and ask you to install or paint a mask.
 - **Fine-tuning** - Settings > Fine-tuning. Opt-in Unsloth Core (`unsloth` Apache-2.0 + `unsloth-zoo` LGPL). Dataset builder redacts secrets and can extract PDFs through the OCR spine. QLoRA jobs queue on the GPU scheduler. Studio/CLI extras are never installed. Live GPU train is local-only (`NEXUS_TUNING_LIVE=1`).
 - **Audit log** - append-only SQLite at `~/.nexus/audit/audit.db`, Ed25519 per actor, Settings > Security viewer. Local-only. Tampered rows stay visible and untrusted. A notice appears when the OS keychain is unavailable.
-- **JSON CLI** - `nexus session|models|generate` over `/nexus/*` on the sidecar loopback listener, same bearer token. The listener binds for JSON CLI even when Local API `/v1` is off. Schema errors exit 2 before any HTTP call. See [docs/v2/v2.1/development/json-cli.md](docs/v2/v2.1/development/json-cli.md).
+- **JSON CLI** - `nexus session|models|generate` over `/nexus/*` on the sidecar loopback listener, same bearer token. The listener binds for JSON CLI even when Local API `/v1` is off. Schema errors exit 2 before any HTTP call. See [docs/archive/v2/v2.1/development/json-cli.md](docs/archive/v2/v2.1/development/json-cli.md).
 - **Diffusion VRAM knobs** - Image Studio and Video Lab Advanced: cache VRAM/RAM caps, working reserve, layer streaming. Caps below the model minimum are rejected unless streaming is on.
 - **DiffusionGemma** - watch item only (needs llama.cpp PR #24423 in a shipped Ollama release and sub-16 GB quants).
 
-v2.0.0 already shipped the convergence cut. Known gaps: [docs/v2/v2.1/known-gaps.md](docs/v2/v2.1/known-gaps.md).
+v2.0.0 already shipped the convergence cut. Known gaps: [docs/archive/v2/v2.1/known-gaps.md](docs/archive/v2/v2.1/known-gaps.md).
 
 ### What's new in v2.0.0
 
@@ -262,7 +273,7 @@ Convergence of the v1.18-v2.0 plan family. Local-only. No new outbound destinati
 - **Video Lab** - requested length longer than the tier clip chains segments. Talking-head (`audio2video`) is `diffusion-pro` only, official `longcat-video-avatar-1.5` INT8, explicit local-generation confirm. DiT inference is not vendored yet (DF-8).
 - **Stretch** - `ProjectScope` (tightening-only), durable untrusted sandbox root, lesson/procedure memory kinds. Code-as-action, command router, and VRM pane transferred (DF-10-12).
 
-v1.20.0 already shipped document ingest. Known gaps: [docs/v2/v2.0/known-gaps.md](docs/v2/v2.0/known-gaps.md).
+v1.20.0 already shipped document ingest. Known gaps: [docs/archive/v2/v2.0/known-gaps.md](docs/archive/v2/v2.0/known-gaps.md).
 
 ### What's new in v1.20.0
 
@@ -306,7 +317,7 @@ v1.19.0 already shipped LFM2.5-2.6B as the low-VRAM Agentic pick. Known gaps sta
 ## Design Principles
 
 1. **Local-first.** Inference, embeddings, image and video synthesis, and memory storage all live on the host machine. No outbound calls without explicit user opt-in.
-2. **Originality over wrappers.** When an external service or heavy framework can be reverse-engineered into a lean local module, we do that. The codebase follows this rule explicitly (see [AGENTS.md](AGENTS.md) "MCP Registry Policy" and the comparison matrices at [docs/v1/v1.1/comparison-agentmemory.md](docs/v1/v1.1/comparison-agentmemory.md) and [docs/v1/v1.1/comparison-sana.md](docs/v1/v1.1/comparison-sana.md)). The only external project we deliberately link to is [bendourthe/Nexus-Hub](https://github.com/bendourthe/Nexus-Hub), the author's own skill / hook / command catalog and the upstream feed for Nexus's skill harness.
+2. **Originality over wrappers.** When an external service or heavy framework can be reverse-engineered into a lean local module, we do that. The codebase follows this rule explicitly (see [AGENTS.md](AGENTS.md) "MCP Registry Policy" and the comparison matrices at [docs/archive/v1/v1.1/comparison-agentmemory.md](docs/archive/v1/v1.1/comparison-agentmemory.md) and [docs/archive/v1/v1.1/comparison-sana.md](docs/archive/v1/v1.1/comparison-sana.md)). The only external project we deliberately link to is [bendourthe/Nexus-Hub](https://github.com/bendourthe/Nexus-Hub), the author's own skill / hook / command catalog and the upstream feed for Nexus's skill harness.
 3. **Single-GPU ceiling.** Every pillar must run on a laptop with a single consumer GPU (e.g. RTX 3070 - 4090 class). Hardware tiers are auto-detected at install and context budgets, batch sizes, and pipeline depths adapt accordingly.
 4. **Installer carries the burden where supported.** The Windows one-file installer provisions the runtime, models, optional exact-host VSIX, and desktop app. v2.3.1 withholds raw Tauri desktop bundles because they do not embed the pinned Node 22.11.0 runtime and runtime manifest required by the sidecar; DF-1 tracks self-contained Node bundling. DF-24 separately tracks the missing Unix selected-model snapshot write. Video2X is not an installer payload.
 5. **Privacy by construction.** Memory writes pass through the [`redactSecrets`](core/observability/redactSecrets.ts) pre-index filter (AWS keys, classic + fine-grained GitHub PATs, Slack tokens, JWTs, PEM blocks, env-style assignments). Telemetry, traces, and logs are local-only by default and redact secret patterns before any opt-in export.
@@ -379,7 +390,7 @@ nexus doctor [--migration-report] [--json]             # v1.4.0 Phase 5; never m
 | **Skill harness** | Nexus-Hub catalog synced via `nexus skills sync` into a single-home `~/.nexus-ai/catalog/`; hot-reload via fs.watch on the ACTIVE pointer; weekly auto-sync worker; allowlist + prompt-injection scanner on every install. |
 | **Skill self-optimization** | Local golden-task-graded, held-out-validated, human-approved bounded edits to skills (`nexus skills optimize` / `frontier`, plus a desktop approval panel); opt-in and default-off. |
 | **Per-model harness selection** | Auto-tunes the agent scaffold profile per local model with a golden A/B; opt-in (`nexus.coding.harnessSelector.enabled`). |
-| **MLX via local adapters** | Apple Silicon: register an mlx-vlm / LM Studio MLX / nativ loopback server as `nexus.llm.localAdapters` ([how-to](docs/v1/v1.16/guides/mlx-via-local-adapters.md)). No bundled MLX runtime. |
+| **MLX via local adapters** | Apple Silicon: register an mlx-vlm / LM Studio MLX / nativ loopback server as `nexus.llm.localAdapters` ([how-to](docs/archive/v1/v1.16/guides/mlx-via-local-adapters.md)). No bundled MLX runtime. |
 | **llama.cpp via local adapters** | User-started `llama-server` on loopback as `nexus.llm.localAdapters` ([recipe](docs/reference/llamacpp-loopback-adapter.md)). No bundled runtime. Does not open the patient-tier gate. |
 | **Local API server** | Opt-in loopback OpenAI/Anthropic gateway (`nexus.serving.enabled`, default off) so other tools on this machine reuse installed models. ACP (`nexus.acp.enabled`) mounts `POST /acp` on the same listener and token. Unattended ACP confirms park in the ask inbox. |
 | **Ask inbox + scheduler** | Persistent local approval queue for headless/scheduled runs (`~/.nexus/ask-inbox.json`). Desktop `/inbox` panel, pending badge. Local cron-style scheduler; morning brief off by default; no auto-approve. |
@@ -404,7 +415,7 @@ desktop/     Tauri 2.x desktop shell + Node sidecar (v1.0.0 Phase 1+)
   src/         Vite + React 19 + TypeScript frontend (four-pillar UI)
   src-tauri/   Rust core (sidecar lifecycle, ipc_call command)
   sidecar/     Node sidecar (esbuild-bundled, JSON-RPC 2.0 over stdio)
-docs/        Per-version architecture docs and history (docs/v1/v1.<MINOR>/; the v0 line archived under docs/archive/versions/v0/)
+docs/        Per-version architecture docs and history (docs/archive/v1/v1.<MINOR>/; the v0 line archived under docs/archive/versions/v0/)
 configs/     Linter, build, dependency-cruiser, and vitest configs
 scripts/     Build, package, installer, and utility scripts
 assets/      Icons, images, fonts, banners
@@ -436,17 +447,17 @@ To report a security issue: email [benjamin.dourthe@gmail.com](mailto:benjamin.d
 
 ## Roadmap
 
-Nexus evolves in versioned slices. Each item below traces to a concrete plan or known-gaps entry under `docs/v1/v1.<MINOR>/` (the durable source) and resolves once its work lands and the next `[X.Y.Z]` block is cut into [CHANGELOG.md](CHANGELOG.md). No star gates, no sponsor tiers, no paid features.
+Nexus evolves in versioned slices. Each item below traces to a concrete plan or known-gaps entry under `docs/archive/v1/v1.<MINOR>/` (the durable source) and resolves once its work lands and the next `[X.Y.Z]` block is cut into [CHANGELOG.md](CHANGELOG.md). No star gates, no sponsor tiers, no paid features.
 
 | Focus | Status | Source |
 |-------|--------|--------|
-| OS-level process sandbox for agent code execution (Seatbelt / Landlock / seccomp / job object). Off by default; loud unconfined when off or the backend is missing. Windows is partial (job + token; filesystem and network not kernel-enforced) | Landed (v1.18.0 Phase 6; Windows remainder in DF-11) | [docs/v1/v1.18/known-gaps.md](docs/v1/v1.18/known-gaps.md) (`EM.P5.A`, `DF-11`) |
-| Live extreme-low-bit (BitNet-class) + disk-offload "patient" catalog entries, once runtime support + independent benchmarks are confirmed | Gated | [docs/v1/v1.12/known-gaps.md](docs/v1/v1.12/known-gaps.md) (`EM.P3`, `EM.P4.A`) |
-| Weak-model harness-selector enablement, pending a live A/B net-win on a low-cost model | Gated | [docs/v1/v1.12/known-gaps.md](docs/v1/v1.12/known-gaps.md) (`EM.P1`) |
-| Skill-optimizer live A/B validation (ship the default-on rollout once a net win is measured) | Gated | [docs/v1/v1.7/known-gaps.md](docs/v1/v1.7/known-gaps.md) (`SO003.P3.A`) |
-| Clean-machine installer rehearsals + on-device 3-OS visual QA (Actions freeze lifted 2026-08-01; remaining work is operator hardware) | Tracked | [docs/v1/v1.11/known-gaps.md](docs/v1/v1.11/known-gaps.md) (`IO.P2.A`) |
+| OS-level process sandbox for agent code execution (Seatbelt / Landlock / seccomp / job object). Off by default; loud unconfined when off or the backend is missing. Windows is partial (job + token; filesystem and network not kernel-enforced) | Landed (v1.18.0 Phase 6; Windows remainder in DF-11) | [docs/archive/v1/v1.18/known-gaps.md](docs/archive/v1/v1.18/known-gaps.md) (`EM.P5.A`, `DF-11`) |
+| Live extreme-low-bit (BitNet-class) + disk-offload "patient" catalog entries, once runtime support + independent benchmarks are confirmed | Gated | [docs/archive/v1/v1.12/known-gaps.md](docs/archive/v1/v1.12/known-gaps.md) (`EM.P3`, `EM.P4.A`) |
+| Weak-model harness-selector enablement, pending a live A/B net-win on a low-cost model | Gated | [docs/archive/v1/v1.12/known-gaps.md](docs/archive/v1/v1.12/known-gaps.md) (`EM.P1`) |
+| Skill-optimizer live A/B validation (ship the default-on rollout once a net win is measured) | Gated | [docs/archive/v1/v1.7/known-gaps.md](docs/archive/v1/v1.7/known-gaps.md) (`SO003.P3.A`) |
+| Clean-machine installer rehearsals + on-device 3-OS visual QA (Actions freeze lifted 2026-08-01; remaining work is operator hardware) | Tracked | [docs/archive/v1/v1.11/known-gaps.md](docs/archive/v1/v1.11/known-gaps.md) (`IO.P2.A`) |
 
-For narrative-style updates on what changed and why, see [docs/DEVLOG.md](docs/DEVLOG.md). For the formal Keep-a-Changelog log of every release, see [CHANGELOG.md](CHANGELOG.md). For the per-version unfinished-work tracker that the next plan reads to decide what carries forward, see `docs/v1/v1.<MINOR>/known-gaps.md`.
+For narrative-style updates on what changed and why, see [docs/DEVLOG.md](docs/DEVLOG.md). For the formal Keep-a-Changelog log of every release, see [CHANGELOG.md](CHANGELOG.md). For the per-version unfinished-work tracker that the next plan reads to decide what carries forward, see `docs/archive/v1/v1.<MINOR>/known-gaps.md`.
 
 ---
 

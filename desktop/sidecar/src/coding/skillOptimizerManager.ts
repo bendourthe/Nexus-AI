@@ -145,7 +145,7 @@ export class SkillOptimizerManager {
 // app + a local model -- it is not exercised by the sidecar unit tests, which
 // inject a fake runner. Skill resolution assumes the Nexus-Hub catalog layout
 // `<catalogSkillsDir>/<name>/SKILL.md`; an unresolvable skill throws (surfaced
-// to the app). See docs/v1/v1.12/known-gaps.md EM.P2.A.
+// to the app). See docs/archive/v1/v1.12/known-gaps.md EM.P2.A.
 // ---------------------------------------------------------------------------
 
 const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/;

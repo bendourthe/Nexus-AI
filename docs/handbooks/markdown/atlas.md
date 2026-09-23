@@ -19,4 +19,4 @@ This walkthrough maps the durable user flows corrected for v2.4.1 to their ownin
 4. The desktop renders truthful capability, model, transcript, archive, and workspace state from shared contracts.
 5. The packaged acceptance harness proves that the exact installer and installed runtime cross all boundaries successfully.
 
-Release-specific logs and test counts belong under `docs/v2/v2.4/development/`, not in this living atlas.
+Release-specific logs and test counts belong under `docs/archive/v2/v2.4/development/`, not in this living atlas.

@@ -1,10 +1,27 @@
-# Unreleased
+# [2.4.11](https://github.com/bendourthe/Nexus-AI/compare/v2.4.1...v2.4.11) (2026-09-23)
+
+This tag covers develop since `v2.4.1`, including the 2.4.2-2.4.10 field work that had no separate tag, and the local Gaussian splat viewer that landed in pull request 68.
+
+### Features
+
+* **Splat viewer:** orbit a local `.splat` or `.ply` in Image Studio with an internal WebGL2 canvas, a still-frame fallback, and no remote fetch.
+* **Honesty copy:** the 3D preview says unseen sides are invented and are not a measured property tour. The source PNG stays downloadable.
+* **Optional generate:** a child job on the existing queue fails closed without NVIDIA CUDA. The TripoSplat adapter spawns Python with the shell off only when local weights are already present. The catalog row is not pre-ticked and has no file hash.
+
+Activation: Viewer needs no switch. Generate needs `NEXUS_SPLAT_NVIDIA=1` and `NEXUS_SPLAT_CUDA=1`, plus `diffusion_models/triposplat_fp16.safetensors` and `infer.py` under `~/.nexus/models/triposplat/`. The installer does not download those files.
+Validation: `node scripts/bench-gaussian-splat.mjs` prints `"validation":"pass"` for the fake row. `--real` prints `not proven here`.
+Rollback: Unset `NEXUS_SPLAT_NVIDIA` and `NEXUS_SPLAT_CUDA`, and delete `~/.nexus/models/triposplat/`. That does not remove 2D image models or the source PNG.
+Authority: The env vars do not download weights, do not call a splat service, do not replace the source PNG, and do not enable generate on macOS or a non-NVIDIA host.
+Docs: [docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md)
 
 ### Bug Fixes
 
 * **Video enhancement paths:** treat Windows 8.3 and macOS `/var` tmpdir aliases as the same identity as `realpath` when the leaf is a regular file, so Shell Build Windows/macOS vitest can pass the same suite as Ubuntu. Do not retag `v2.3.1`.
 * **Windows process host:** pin the PowerShell helper PATH to System32 and .NET Framework roots so in-memory `Add-Type` can find `csc.exe`, and run desktop vitest as a single worker on Windows CI so those compiles are not starved by parallel coverage. Do not retag `v2.3.1`.
 
+Plan: [v2.4.0 splat](docs/archive/v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md). Gaps that remain open: [carried forward](docs/v2/v2.5/known-gaps.md).
+
+# Unreleased
 
 # [2.4.1](https://github.com/bendourthe/Nexus-AI/compare/v2.3.1...v2.4.1) (2026-08-29)
 
@@ -21,7 +38,7 @@ Windows installer and field-reliability candidate. Automated and packaged-smoke 
 * **Image runtime readiness:** provision and repair the pinned diffusion environment, fail closed when CUDA readiness is not observed, and retain the last known-good runtime on repair failure.
 * **Release gates:** format the inherited Rust and installer Python baselines and add an exact-count, stale-detecting repository-check baseline for intentional historical fixtures while leaving new or excess errors blocking.
 
-Plan: [v2.4.1](docs/v2/v2.4/plans/v2.4.1-field-reliability-chat-archives-models-workspaces.md). Gaps: [docs/v2/v2.4/known-gaps.md](docs/v2/v2.4/known-gaps.md).
+Plan: [v2.4.1](docs/archive/v2/v2.4/plans/v2.4.1-field-reliability-chat-archives-models-workspaces.md). Gaps: [docs/archive/v2/v2.4/known-gaps.md](docs/archive/v2/v2.4/known-gaps.md).
 
 
 # [2.3.1](https://github.com/bendourthe/Nexus-AI/compare/v2.3.0...v2.3.1) (2026-08-29)
@@ -32,7 +49,7 @@ Activation: Optional VS Code extension: tick the wizard checkbox when Microsoft 
 Validation: VS Code: `code --version` is 1.134.x or 1.135.0 and the checkbox is enabled; after install, `code --list-extensions` includes `nexus-coding.nexus-coding`. Unsloth: the toggle is on Configuration, not the VS Code page. Embedder: Nomic stays Required; EmbeddingGemma copy says 300M.
 Rollback: Untick the VS Code checkbox or uninstall the extension. Turn Unsloth off on Configuration. Leave EmbeddingGemma unselected; Nomic remains the required embedder. None of these uninstall VS Code, CUDA, or existing models.
 Authority: The VS Code checkbox does not install VS Code, does not enable 1.136+, and does not change the desktop app. Unsloth does not grant network training or Hub writes. Selecting EmbeddingGemma does not reindex existing memory.
-Docs: [docs/install.md](docs/install.md), [docs/v2/v2.3/development/vscode-host-policy.md](docs/v2/v2.3/development/vscode-host-policy.md), [docs/v2/v2.3/development/embedder-default-decision.md](docs/v2/v2.3/development/embedder-default-decision.md).
+Docs: [docs/install.md](docs/install.md), [docs/archive/v2/v2.3/development/vscode-host-policy.md](docs/archive/v2/v2.3/development/vscode-host-policy.md), [docs/archive/v2/v2.3/development/embedder-default-decision.md](docs/archive/v2/v2.3/development/embedder-default-decision.md).
 
 The packaged desktop application remains Windows-only; raw Tauri bundles stay withheld (DF-38).
 
@@ -57,7 +74,7 @@ The packaged desktop application remains Windows-only; raw Tauri bundles stay wi
 * **v2.3.1:** record last-phase evidence, VS Code host policy, embedder KEEP decision, and the integration merge ([9260c5d](https://github.com/bendourthe/Nexus-AI/commit/9260c5d), [838268f](https://github.com/bendourthe/Nexus-AI/commit/838268f))
 * **v2.3.0 follow-up:** record the first full-matrix Shell Build Windows/macOS desktop vitest miss after tag `v2.3.0` (BG-1) ([67f3640](https://github.com/bendourthe/Nexus-AI/commit/67f3640))
 
-Plan: [v2.3.1](docs/v2/v2.3/plans/v2.3.1-installer-field-repair.md). Gaps: [docs/v2/v2.3/known-gaps.md](docs/v2/v2.3/known-gaps.md).
+Plan: [v2.3.1](docs/archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md). Gaps: [docs/archive/v2/v2.3/known-gaps.md](docs/archive/v2/v2.3/known-gaps.md).
 
 # [2.3.0](https://github.com/bendourthe/Nexus-AI/compare/v2.2.9...v2.3.0) (2026-08-29)
 
@@ -67,7 +84,7 @@ Activation: Install Video2X 6.4.0 yourself, then set `NEXUS_VIDEO2X_PATH` or Set
 Validation: In Video Lab, Recheck capability; Enhance is enabled only when capability is ready. Contract check: `node scripts/bench-video-enhancement.mjs --backend fake`.
 Rollback: Clear Settings > Video > Video2X executable and unset `NEXUS_VIDEO2X_PATH`. That does not uninstall Video2X. Original clips remain.
 Authority: Configuring a path does not install or download Video2X, does not search PATH, does not replace originals, does not grant network or Hub writes, and does not add Qwen3.8.
-Docs: [docs/v2/v2.3/benchmarks/video-enhancement-baseline.md](docs/v2/v2.3/benchmarks/video-enhancement-baseline.md)
+Docs: [docs/archive/v2/v2.3/benchmarks/video-enhancement-baseline.md](docs/archive/v2/v2.3/benchmarks/video-enhancement-baseline.md)
 
 The optional VS Code extension still requires VS Code 1.134.0 exactly. The packaged desktop application remains Windows-only; raw Tauri bundles stay withheld (DF-38).
 
@@ -93,7 +110,7 @@ The optional VS Code extension still requires VS Code 1.134.0 exactly. The packa
 * **v2.3.0:** record last-phase evidence, known gaps, and the integration merge ([a0a0115](https://github.com/bendourthe/Nexus-AI/commit/a0a0115), [52d72d1](https://github.com/bendourthe/Nexus-AI/commit/52d72d1))
 * **Forward plans:** add the v2.3.1 installer field-repair plan and the v2.4.0 Unsloth Qwen / Gaussian Splatting comparison on `develop` ([39c5007](https://github.com/bendourthe/Nexus-AI/commit/39c5007), [3bea05e](https://github.com/bendourthe/Nexus-AI/commit/3bea05e))
 
-Plan: [v2.3.0](docs/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md). Gaps: [docs/v2/v2.3/known-gaps.md](docs/v2/v2.3/known-gaps.md).
+Plan: [v2.3.0](docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md). Gaps: [docs/archive/v2/v2.3/known-gaps.md](docs/archive/v2/v2.3/known-gaps.md).
 
 # [2.2.9](https://github.com/bendourthe/Nexus-AI/compare/v2.2.8...v2.2.9) (2026-08-28)
 
@@ -122,7 +139,7 @@ This release changes no opt-in capability or installer flag. The packaged deskto
 
 * **v2.2.9:** record the implementation plan, phase evidence, preserved known gaps, and unsigned installer smoke proof ([71dc6e8](https://github.com/bendourthe/Nexus-AI/commit/71dc6e8), [ecf818d](https://github.com/bendourthe/Nexus-AI/commit/ecf818d), [9f155e5](https://github.com/bendourthe/Nexus-AI/commit/9f155e5))
 
-Plan: [v2.2.9](docs/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md). Gaps: [docs/v2/v2.2/known-gaps.md](docs/v2/v2.2/known-gaps.md).
+Plan: [v2.2.9](docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md). Gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md).
 
 # [2.2.8](https://github.com/bendourthe/Nexus-AI/compare/v2.2.5...v2.2.8) (2026-08-24)
 
@@ -156,7 +173,7 @@ This release changes no opt-in capability, installer flag, or host surface.
 * **v2.2.7:** reconcile context-meter layout, known-gaps, and CI ([02616e9](https://github.com/bendourthe/Nexus-AI/commit/02616e9))
 * **v2.2.8:** reconcile studio layout, known-gaps, and CI ([86dff64](https://github.com/bendourthe/Nexus-AI/commit/86dff64))
 
-Plans: [v2.2.6](docs/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md), [v2.2.7](docs/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md), [v2.2.8](docs/v2/v2.2/plans/v2.2.8-working-local-studio.md). Gaps: [docs/v2/v2.2/known-gaps.md](docs/v2/v2.2/known-gaps.md).
+Plans: [v2.2.6](docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md), [v2.2.7](docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md), [v2.2.8](docs/archive/v2/v2.2/plans/v2.2.8-working-local-studio.md). Gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md).
 
 # [2.2.5](https://github.com/bendourthe/Nexus-AI/compare/v2.1.0...v2.2.5) (2026-08-23)
 
@@ -199,7 +216,7 @@ This release changes no opt-in capability, installer flag, or host surface.
 * **v2.2.5:** reconcile known-gaps and CI for first-successful-generation ([e07cfb5](https://github.com/bendourthe/Nexus-AI/commit/e07cfb5))
 * track v2.2.6 session-memory and v2.2.7 context-meter plans (not started) ([6f17a4e](https://github.com/bendourthe/Nexus-AI/commit/6f17a4e))
 
-Plans: [v2.2.0](docs/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md), [v2.2.4](docs/v2/v2.2/plans/v2.2.4-chatbot-first-and-runtime-honesty.md), [v2.2.5](docs/v2/v2.2/plans/v2.2.5-first-successful-generation.md). Gaps: [docs/v2/v2.2/known-gaps.md](docs/v2/v2.2/known-gaps.md).
+Plans: [v2.2.0](docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md), [v2.2.4](docs/archive/v2/v2.2/plans/v2.2.4-chatbot-first-and-runtime-honesty.md), [v2.2.5](docs/archive/v2/v2.2/plans/v2.2.5-first-successful-generation.md). Gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md).
 
 # [2.1.0](https://github.com/bendourthe/Nexus-AI/compare/v2.0.0...v2.1.0) (2026-08-20)
 
@@ -223,7 +240,7 @@ Plans: [v2.2.0](docs/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md), [v
 
 * **v2.1.0:** reconcile known-gaps and document CI hardware gates ([d22cc48](https://github.com/bendourthe/Nexus-AI/commit/d22cc48))
 
-Open local-AI wave. Local-only after weight download. `localEval.status` is `not_run`; `recommended.json` is unchanged. Plan: [v2.1.0](docs/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md).
+Open local-AI wave. Local-only after weight download. `localEval.status` is `not_run`; `recommended.json` is unchanged. Plan: [v2.1.0](docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md).
 
 
 ### Opt-in surfaces
@@ -234,7 +251,7 @@ Open local-AI wave. Local-only after weight download. `localEval.status` is `not
 - Validation: after provision, Settings shows provision status ready (or unsupported with a reason). A stub job (`--stub`) completes without a GPU. `NEXUS_TUNING_LIVE=1` is required for a real Unsloth train.
 - Rollback: do not provision. If already provisioned, leave the venv unused; jobs are cancelled from the Fine-tuning tab. Unsloth Studio/CLI extras are never installed.
 - Authority: this does not add training to the default installer, does not import GGUF into Ollama unless you opt in, does not skip `redactSecrets` on datasets, and does not make zoo AGPL (zoo is LGPL).
-- Docs: [README](README.md#whats-new-in-v210), [docs/v2/v2.1/development/unsloth-license-boundary.md](docs/v2/v2.1/development/unsloth-license-boundary.md), [docs/v2/v2.1/known-gaps.md](docs/v2/v2.1/known-gaps.md).
+- Docs: [README](README.md#whats-new-in-v210), [docs/archive/v2/v2.1/development/unsloth-license-boundary.md](docs/archive/v2/v2.1/development/unsloth-license-boundary.md), [docs/archive/v2/v2.1/known-gaps.md](docs/archive/v2/v2.1/known-gaps.md).
 
 #### JSON CLI loopback (`/nexus/*`)
 
@@ -242,7 +259,7 @@ Open local-AI wave. Local-only after weight download. `localEval.status` is `not
 - Validation: `nexus models list` returns JSON, or `curl -H "Authorization: Bearer <token>" http://127.0.0.1:11500/nexus/models`. Schema errors exit 2 with no HTTP call.
 - Rollback: quit the app (no extra port once the sidecar stops). Local API `/v1` is a separate toggle and can stay off.
 - Authority: loopback only, bearer required. This does not enable `/v1` completions, does not bind a non-loopback host, and does not skip ConfirmationGate on coding tools invoked through `nexus session send`.
-- Docs: [docs/v2/v2.1/development/json-cli.md](docs/v2/v2.1/development/json-cli.md).
+- Docs: [docs/archive/v2/v2.1/development/json-cli.md](docs/archive/v2/v2.1/development/json-cli.md).
 
 #### parse_document Settings checkbox
 
@@ -250,7 +267,7 @@ Open local-AI wave. Local-only after weight download. `localEval.status` is `not
 - Validation: with the box on, `coding.parseDocument.status` returns `{ enabled: true }` and the agent tool is registered. With it off, the tool is absent.
 - Rollback: uncheck the box or set the key to false / `NEXUS_PARSE_DOCUMENT=0`. No extra files are written.
 - Authority: this only registers the governed agent tool. It does not install Docling, does not skip CONFIRM or secret redaction, and does not ingest into a sidecar MemoryStore (VS Code ingest remains a second flag).
-- Docs: [docs/v1/v1.20/known-gaps.md](docs/v1/v1.20/known-gaps.md).
+- Docs: [docs/archive/v1/v1.20/known-gaps.md](docs/archive/v1/v1.20/known-gaps.md).
 
 # [2.0.0](https://github.com/bendourthe/Nexus-AI/compare/v1.20.0...v2.0.0) (2026-08-20)
 
@@ -267,7 +284,7 @@ Open local-AI wave. Local-only after weight download. `localEval.status` is `not
 
 * **v2.0.0:** reconcile known-gaps and document CI hardware gates ([07ec7be](https://github.com/bendourthe/Nexus-AI/commit/07ec7be))
 
-This is the convergence cut of the v1.18-v2.0 plan family. Earlier changelog sections already record [v1.18.0](#1180) (harness, ask inbox, ACP, OS sandbox), [v1.19.0](#1190) (LFM2.5-2.6B), [v1.19.1](#1191) (loop guards and posture dial), [v1.19.2](#1192) (modalities, Hermes, Inkling), and [v1.20.0](#1200) (document ingest). Plans: [v1.18.0](docs/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md), [v1.19.0](docs/v1/v1.19/plans/v1.19.0-adoption-liquid-lfm-agentic.md), [v1.19.1](docs/v1/v1.19/plans/v1.19.1-adoption-agent-loop-and-guardrail-hardening.md), [v1.19.2](docs/v1/v1.19/plans/v1.19.2-adoption-catalog-and-model-expansion.md), [v2.0.0](docs/v2/v2.0/plans/v2.0.0-adoption-governed-autonomy-multimodal.md).
+This is the convergence cut of the v1.18-v2.0 plan family. Earlier changelog sections already record [v1.18.0](#1180) (harness, ask inbox, ACP, OS sandbox), [v1.19.0](#1190) (LFM2.5-2.6B), [v1.19.1](#1191) (loop guards and posture dial), [v1.19.2](#1192) (modalities, Hermes, Inkling), and [v1.20.0](#1200) (document ingest). Plans: [v1.18.0](docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md), [v1.19.0](docs/archive/v1/v1.19/plans/v1.19.0-adoption-liquid-lfm-agentic.md), [v1.19.1](docs/archive/v1/v1.19/plans/v1.19.1-adoption-agent-loop-and-guardrail-hardening.md), [v1.19.2](docs/archive/v1/v1.19/plans/v1.19.2-adoption-catalog-and-model-expansion.md), [v2.0.0](docs/archive/v2/v2.0/plans/v2.0.0-adoption-governed-autonomy-multimodal.md).
 
 
 ### Opt-in surfaces
@@ -278,7 +295,7 @@ This is the convergence cut of the v1.18-v2.0 plan family. Earlier changelog sec
 - Validation: with the box on, the capture indicator reads "Recording -- microphone is open" while PTT or VAD is capturing. With the box off, PTT and VAD controls stay disabled.
 - Rollback: uncheck **Voice loop**. The reducer resets. Installed weights stay on disk until you remove them.
 - Authority: this only opens the local mic-to-STT-to-TTS loop. It does not send audio off-device, does not enable coding tools, does not skip secret redaction on transcripts, and does not register a network port.
-- Docs: [README](README.md#whats-new-in-v200), [docs/v2/v2.0/known-gaps.md](docs/v2/v2.0/known-gaps.md) (DF-1, DF-3, DF-4).
+- Docs: [README](README.md#whats-new-in-v200), [docs/archive/v2/v2.0/known-gaps.md](docs/archive/v2/v2.0/known-gaps.md) (DF-1, DF-3, DF-4).
 
 #### Coding browser tools (local Playwright)
 
@@ -286,7 +303,7 @@ This is the convergence cut of the v1.18-v2.0 plan family. Earlier changelog sec
 - Validation: a confirmed `browser_navigate` to a local HTML file plus `browser_aria_snapshot` returns labelled `[origin:browser_snapshot]` text. Without Playwright, CI still passes on `InMemoryBrowser`. Set `NEXUS_BROWSER_PLAYWRIGHT=1` for the live skip-gated tests.
 - Rollback: do not approve the DANGEROUS prompt. Uninstall Playwright/Chromium if you installed them. Isolated profiles live under `~/.nexus/browser-profiles/` and are not your default Chrome/Edge profile.
 - Authority: this does not grant the user's logged-in browser, does not lower PermissionTiers, does not auto-approve, and does not treat page content as instructions (snapshots are screened).
-- Docs: [docs/v2/v2.0/browser-surface-security.md](docs/v2/v2.0/browser-surface-security.md), [docs/v2/v2.0/ci-hardware-gates.md](docs/v2/v2.0/ci-hardware-gates.md).
+- Docs: [docs/archive/v2/v2.0/browser-surface-security.md](docs/archive/v2/v2.0/browser-surface-security.md), [docs/archive/v2/v2.0/ci-hardware-gates.md](docs/archive/v2/v2.0/ci-hardware-gates.md).
 
 #### Video Lab local talking-head (`longcat-video-avatar-1.5`)
 
@@ -294,7 +311,7 @@ This is the convergence cut of the v1.18-v2.0 plan family. Earlier changelog sec
 - Validation: below `diffusion-pro` the checkbox is hidden and `diffusion.video.audio2video` is refused. With confirm false the request is rejected. Workflow JSON records `provenance.neverLeftDevice`.
 - Rollback: uncheck the confirm box; do not install the weights. Delete `~/.nexus/models/weights/longcat-video-avatar-1.5/` if already pulled. Continuation (clip chaining) is separate and does not require this catalog id.
 - Authority: this does not upload photo or audio, does not enable community FP8 re-quants, does not vendor LongCat DiT Python (DF-8 stub until a scanned import), and does not skip the VRAM floor.
-- Docs: [README](README.md#whats-new-in-v200), [docs/v2/v2.0/known-gaps.md](docs/v2/v2.0/known-gaps.md) (DF-8, DF-9).
+- Docs: [README](README.md#whats-new-in-v200), [docs/archive/v2/v2.0/known-gaps.md](docs/archive/v2/v2.0/known-gaps.md) (DF-8, DF-9).
 
 # [1.20.0](https://github.com/bendourthe/Nexus-AI/compare/v1.19.2...v1.20.0) (2026-08-19)
 
@@ -327,7 +344,7 @@ This is the convergence cut of the v1.18-v2.0 plan family. Earlier changelog sec
 - Validation: with the tool flag on, a coding agent can call `parse_document` on a workspace PDF, image, or Office file and the tool appears in the catalog. With the flag off, `get_tool_schema` / the tool list omit it. Chat and Coding file attach still work without this flag.
 - Rollback: set the setting to false or `NEXUS_PARSE_DOCUMENT=0`. The tool is unregistered on the next session. No extra files are written. Memory rows already stored stay until you delete them.
 - Authority: this only registers the governed agent tool. It does not install Docling, does not add torch to the portable OCR venv, does not open a network port, does not auto-prompt parsed text into a model, and does not skip CONFIRM / secret redaction / inbound classification. Chat and Coding attach are separate UI paths and are not this flag.
-- Docs: [README](README.md#whats-new-in-v1200), [ARCHITECTURE.md](ARCHITECTURE.md#document-ingest-v1200), [docs/v1/v1.20/known-gaps.md](docs/v1/v1.20/known-gaps.md).
+- Docs: [README](README.md#whats-new-in-v1200), [ARCHITECTURE.md](ARCHITECTURE.md#document-ingest-v1200), [docs/archive/v1/v1.20/known-gaps.md](docs/archive/v1/v1.20/known-gaps.md).
 
 # [1.19.2](https://github.com/bendourthe/Nexus-AI/compare/v1.19.1...v1.19.2) (2026-08-19)
 
@@ -353,7 +370,7 @@ This is the convergence cut of the v1.18-v2.0 plan family. Earlier changelog sec
 - Validation: the settings description shows that preset's expected s/token. It does not change adapter config.
 - Rollback: set the setting back to `"laptop"`. No files outside settings are written.
 - Authority: this is expectation copy only. It does not bundle or configure the llama.cpp offload runtime, does not download Inkling, and does not raise permission tiers.
-- Docs: [README](README.md#whats-new-in-v1192), [docs/v1/v1.19/known-gaps.md](docs/v1/v1.19/known-gaps.md) (v1.19.2 DF-4).
+- Docs: [README](README.md#whats-new-in-v1192), [docs/archive/v1/v1.19/known-gaps.md](docs/archive/v1/v1.19/known-gaps.md) (v1.19.2 DF-4).
 
 # [1.19.1](https://github.com/bendourthe/Nexus-AI/compare/v1.19.0...v1.19.1) (2026-08-19)
 
@@ -450,7 +467,7 @@ This release changes no opt-in capability, installer flag, or host surface.
 - Validation: run a `run_terminal` command and confirm the UI or logs say `confined` (macOS with sandbox-exec, Linux with Landlock+python3) or `partial` (Windows). With the setting off, they say `unconfined`.
 - Rollback: set the setting to false or `NEXUS_EXEC_SANDBOX=0`. The next command is unconfined under the existing confirmation, denylist, and env-scrub guards. No extra artifacts to delete.
 - Authority: this confines `run_terminal` spawn only. It does not skip confirmation, denylists, or the ask inbox. Windows does not kernel-enforce filesystem or network. Off or a missing backend is loud unconfined, never silent.
-- Docs: [README](README.md#whats-new-in-v1180), [docs/v1/v1.18/known-gaps.md](docs/v1/v1.18/known-gaps.md) (DF-11).
+- Docs: [README](README.md#whats-new-in-v1180), [docs/archive/v1/v1.18/known-gaps.md](docs/archive/v1/v1.18/known-gaps.md) (DF-11).
 
 #### Scheduled agent runs (`ask.scheduler.setEnabled`)
 
@@ -503,7 +520,7 @@ This release changes no opt-in capability, installer flag, or host surface.
 - Validation: attach a PDF or image in Local Chatbot and confirm extracted text appears. RapidOCR needs no GPU; Unlimited-OCR needs a capable NVIDIA host.
 - Rollback: Remove on Settings > Models. Uninstalling the model does not delete other catalog entries or Chat history.
 - Authority: installing an OCR model does not send documents off the machine. Extracted text is not automatically forwarded to a chat/coding model; you choose what happens next. In-app HF install of these entries still fails digest verification until the all-zero `sha256` placeholders are rotated (LSO.P3.A); the Python installer puller is the working install path today.
-- Docs: [README](README.md#document-parsing-ocr), [docs/v1/v1.16/known-gaps.md](docs/v1/v1.16/known-gaps.md).
+- Docs: [README](README.md#document-parsing-ocr), [docs/archive/v1/v1.16/known-gaps.md](docs/archive/v1/v1.16/known-gaps.md).
 
 `nexus.coding.parseDocument.enabled` and `nexus.coding.parseDocument.memoryIngest.enabled` exist and default off, but no host wires `parse_document` yet (LSO.P4.B/C), so they are not a shipped user-facing switch in this release.
 
