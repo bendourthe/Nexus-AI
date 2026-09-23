@@ -4,6 +4,21 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-22] v2.4.0 Phase 5 - Optional TripoSplat adapter
+
+Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [benchmark](v2/v2.4/benchmarks/gaussian-splat-baseline.md), history [P5](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-5-adapter.md).
+
+### What Changed
+
+- **TripoSplat is an opt-in local process, not a download.** The adapter spawns Python with the shell off and only when `model.safetensors` and `infer.py` are already under the models root. The catalog row is not recommended and has no weight hash, because those hashes were not observed.
+- **The benchmark separates a fake row from a live GPU run.** The fake mode passed one Gaussian. The real mode is recorded as not proven here.
+
+### Verification
+
+Adapter tests: 2 passed. Catalog, packaging, and model-acceptance tests: 61 passed. Desktop `tsc --noEmit` exited 0.
+
+---
+
 ## [2026-09-22] v2.4.0 Phase 4 - Splat generate queue and preflight
 
 Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), history [P4](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-4-generate.md).

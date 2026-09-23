@@ -176,6 +176,9 @@ export async function promotePreparedSplat(input: {
   } catch (error) {
     quarantine(input.jobDir, input.outputPath, input.sourcePath);
     if (input.signal.aborted) return failure("cancelled", "Splat generate was cancelled.", input.stages);
+    if (isUnavailable(error)) {
+      return failure("unavailable", error.message, input.stages);
+    }
     const message = error instanceof Error ? error.message : "Splat backend failed.";
     return failure("invalid-output", message, input.stages);
   }
@@ -223,6 +226,10 @@ export async function promotePreparedSplat(input: {
     stages: input.stages,
     workflow: { ...provenance },
   };
+}
+
+function isUnavailable(error: unknown): error is Error {
+  return error instanceof Error && (error as Error & { code?: string }).code === "unavailable";
 }
 
 function quarantine(jobDir: string, outputPath: string, sourcePath: string): void {

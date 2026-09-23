@@ -21,7 +21,8 @@ export type SplatGenerateFailureCode =
   | "cancelled"
   | "invalid-output"
   | "source-missing"
-  | "source-changed";
+  | "source-changed"
+  | "unavailable";
 
 export interface SplatHostProbe {
   readonly platform: string;
