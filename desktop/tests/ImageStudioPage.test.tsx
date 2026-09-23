@@ -1369,4 +1369,48 @@ describe("ImageStudioPage (chat)", () => {
       ].map((option) => option.value),
     ).toEqual(["realvisxl-v5", "juggernaut-xl-v9", GET_MORE_MODELS_ID]);
   });
+
+  it("opens a 3D preview for a finished image and leaves the 2D download in place", async () => {
+    const client = new InMemoryDiffusionClient();
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("offline"));
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+        openLocalSplat={async () => ({
+          path: "C:/studio/preview.splat",
+          bytes: new Uint8Array(32),
+          format: "splat",
+          sourceImageHash: "abc",
+        })}
+      />,
+    );
+    expect(screen.queryByRole("button", { name: "3D preview" })).toBeNull();
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "PNGB64==" },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a fox" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(60);
+      await Promise.resolve();
+    });
+    const preview = await screen.findByRole("button", { name: "3D preview" });
+    expect(screen.getByRole("button", { name: "Download" })).toBeTruthy();
+    fireEvent.click(preview);
+    expect(screen.getByRole("dialog")).toHaveTextContent(
+      "This is a generated 3D preview. Unseen sides are invented. It is not a measured property tour.",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Open local splat" }));
+    expect(await screen.findByText(/\.splat$/)).toBeTruthy();
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Download" })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Close 3D preview" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
 });

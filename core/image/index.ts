@@ -11,3 +11,10 @@ export {
   type GaussianSplatViewRequest,
   type SplatFormat,
 } from "./GaussianSplat.js";
+export {
+  SPLAT_HONESTY_COPY,
+  buildSplatProvenance,
+  splatArtifactNames,
+  type SplatProvenance,
+  type SplatProvenanceInput,
+} from "./SplatProvenance.js";
