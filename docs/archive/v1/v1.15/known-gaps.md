@@ -1,0 +1,112 @@
+# Known Gaps - v1.15.0 (Installer, Registry, Window, and Studio-Chat Fixes)
+
+**Project**: Nexus
+**Status**: finalized
+**Last updated**: 2026-08-16
+
+Per-version tracker of unfinished work, deferrals, and follow-ups. The next `/plan` ingests this file to decide what carries forward. Classifications: `NI` not-implemented, `DF` deferred, `BG` bug/known-issue, `MT` missing-tests/coverage, `WN` warning/suppressed, `QG` bypassed-gate/CI.
+
+Plan: [plans/v1.15.0-installer-registry-fixes-and-studio-chat.md](plans/v1.15.0-installer-registry-fixes-and-studio-chat.md)
+
+## v1.15.0
+
+### Open Items (Phase 1)
+
+_No open items._ Phase 1 (desktop shell: window controls + open maximized) introduced no deviations, skipped tests, coverage gaps, suppressed warnings, or bypassed gates.
+
+| ID | Class | Source phase | Item | Reason | Suggested next step |
+|----|-------|--------------|------|--------|---------------------|
+| (none) | | Phase 1 | | | |
+
+### Open Items (Phase 2)
+
+| ID | Class | Source phase | Item | Reason | Suggested next step |
+|----|-------|--------------|------|--------|---------------------|
+| IRSC.P2.A | WN | Phase 2 | `pages/complete.py:203` trips mypy strict (`Item "None" of "QWidget | None" has no attribute "deleteLater"`) in the services-list rebuild loop | Pre-existing on HEAD (verified by stashing this phase's edits and re-running mypy -- the error is at the same untouched loop); out of scope per the change-scope rule (my edits only added an import and the `on_finish` state-clear call, both type-clean) | Guard with `w = item.widget()` + `if w is not None: w.deleteLater()` in a dedicated cleanup pass |
+| IRSC.P2.B | MT | Phase 2 | The two `state_store.clear_state` call sites -- `CompletePage.on_finish()` and the `main.py` SHOW_COMPLETE branch -- have no direct unit test | Both are thin one-line Qt / entry-point glue over the fully-unit-tested `clear_state` helper; the pure behaviour (clear -> reload None -> `interpret_startup` FRESH) is covered by `TestClearState` | Add a Qt offscreen test asserting `on_finish` clears the state file during the next Qt/on-device test pass |
+| IRSC.P2.C | DF | Phase 2 | The NSIS uninstaller additions (`RMDir /r "$LOCALAPPDATA\NexusInstaller"`) are verified by inspection, not by a NSIS build | No NSIS compiler in this environment; the change is a one-line addition mirrored in both `legacy/nexus-setup.nsi` and `legacy/setup.nsi` | Confirm during the next on-device installer/uninstaller QA pass |
+
+### Open Items (Phase 3)
+
+| ID | Class | Source phase | Item | Reason | Suggested next step |
+|----|-------|--------------|------|--------|---------------------|
+| IRSC.P3.A | MT | Phase 3 | The model-only retry re-entry (`InstallingPage.retry_models` + the `main.py` `_retry_failed_models` wiring) has no end-to-end Qt/thread integration test | The pure retry-state prep (`prepare_model_retry`) and the Complete-page button surface (visibility rules + `retry_requested` emission) are unit-tested; a real retry needs a running engine thread + a failed download to reproduce | Exercise a live retry (fail a model, click "Retry failed downloads", confirm only that model re-downloads) during the next on-device installer QA pass |
+| IRSC.P3.B | WN | Phase 3 | Pre-existing mypy-strict violations surfaced while editing (confirmed present at HEAD via a stash baseline, out of scope): `widgets/gated_auth_dialog.py` `entry: dict` bare type-args, `pages/installing.py` `request_cancel` QMessageBox StandardButton, `main.py:244/272/434` | Not on any line this phase changed; the change-scope rule keeps them out. This phase added 0 new mypy errors (new modules are strict-clean) | A dedicated installer strict-typing cleanup pass (fold in the Phase 2 `complete.py:203` item IRSC.P2.A) |
+| IRSC.P3.C | DF | Phase 3 | The spec fail-closed assertion + catalog guard are verified by the pytest invariant test and `check-catalog.py`, not by an actual PyInstaller build in this environment | Building the frozen exe needs the Windows build toolchain / desktop payload; the invariant logic itself is fully unit-tested and runs in the installer pytest CI job | Confirm the fail-closed build behaviour on the next CI / on-device build |
+
+Deviation note (Phase 3): the plan's 3.1 "hash compare the bundled catalog against the repo" was implemented as a **content-invariant regression guard** instead. The PyInstaller spec bundles `catalog.json` straight from the repo, so a literal bundle-vs-repo hash compare is a no-op; the invariant guard is higher-value (it fails when the catalog *regresses* to a broken shape, which is what actually shipped the v1.13/v1.14 defects).
+
+### Open Items (Phase 4)
+
+| ID | Class | Source phase | Item | Reason | Suggested next step |
+|----|-------|--------------|------|--------|---------------------|
+| IRSC.P4.A | MT | Phase 4 | `modelsService.createModelsRuntime` (the composition root: `ModelStorage` + `NexusModelRegistry` construction, `resolveCatalog`, the `diskUsage` `statfs` branch) is integration-only, not unit-tested (`modelsService.ts` 73.55% lines) | It wires real disk + catalog + an Ollama pull client; the reconcile / list / remove / diskUsage logic and the install job manager ARE unit-tested. Global coverage stays 92.23% lines / 84.69% branch, above the 80/70 gate | Add an integration test that builds a real runtime against a temp `~/.nexus/models` + a fake catalog during the next test pass |
+| IRSC.P4.B | BG | Phase 4 | In-app install works for Ollama-protocol models (LLM / embed) but an HTTP / diffusers model whose catalog `source.sha256` is the all-zero placeholder will fail verification in the core `Downloader` (it verifies against the pin, unlike the installer's tolerant HF puller) | Most catalog HF entries still carry placeholder pins (v1.14 IRSC.P1.C / P2.C). The reflect + Ollama-install paths -- the common "get more models" case -- are unaffected | Rotate the HF `sha256` pins (`scripts/installer/build/pin-hf-weights.py`) or teach the core `Downloader` the installer's skip-on-placeholder behaviour before relying on in-app HF install |
+| IRSC.P4.C | DF | Phase 4 | Runtime catalog resolution for the PACKAGED sidecar: `resolveCatalog` falls back to the core loader's `__dirname`-relative default, which may not sit beside `catalog.json` in the esbuild bundle. In that case `list()` still surfaces Ollama / weights-probed installs but shows no catalog-only "Available" rows | Dev + tests resolve the catalog fine (repo tree / `NEXUS_CATALOG_PATH`); the packaged-bundle path needs the desktop packaging build to stage `catalog.json` or set the override | Stage `catalog.json` for the packaged sidecar (or set `NEXUS_CATALOG_PATH`) during the Tauri packaging build and verify on-device |
+
+Note (Phase 4): the studios' Settings deep-link (`SETTINGS_MODELS_PATH = /settings?tab=models`) relies on Models being the default Settings tab; the `?tab=` query is not read live for an already-mounted Settings page. Acceptable since the studios (Phases 5-6) navigate fresh to `/settings`.
+
+### Open Items (Phase 5)
+
+| ID | Class | Source phase | Item | Reason | Suggested next step |
+|----|-------|--------------|------|--------|---------------------|
+| IRSC.P5.A | NI | Phase 5 | Inline inpaint mask-painting is not wired into the chat composer. From chat, txt2img / img2img / outpaint are fully reachable; inpaint fires only when a mask is supplied | The intent layer + diffusion client + `MaskEditor` all support inpaint, but the chat composer has no "paint a mask on this attachment" affordance yet | Add an "Add mask" action on an attachment that opens `MaskEditor` and feeds the painted mask into the next send, so inpaint is reachable from chat |
+| IRSC.P5.B | WN | Phase 5 | The ImageStudioPage tests log React `act(...)` warnings from the async installed-models load effect | Benign: the effect is cancel-guarded and settles to the fallback model; the assertions pass deterministically | Wrap the model-load settle in `act` (or await it) in the affected tests during a test-polish pass |
+| IRSC.P5.C | DF | Phase 5 | When no image model is installed, the selector shows a single fallback (the SANA default) + a "Get more models" prompt rather than hard-blocking generation | Keeps generation working in dev / on a fresh install where the bundled runtime may still have a default; the plan's "installed-only" is honored when real models are present | Confirm the desired non-technical behavior on-device (fallback vs. block-until-installed) |
+
+### Open Items (Phase 6)
+
+| ID | Class | Source phase | Item | Reason | Suggested next step |
+|----|-------|--------------|------|--------|---------------------|
+| IRSC.P6.A | NI | Phase 6 | The per-second latent thumbnail strip and the `TimelinePreviewer` frame-stepper are not rendered in the chat surface; a completed clip plays in a plain `<video>` inside the message bubble | The chat bubble renders the finished clip with native controls, which covers the non-technical flow; the strip/scrubber were tied to the retired sidebar layout. `TimelinePreviewer.tsx` is retained and still unit-tested | Render `TimelinePreviewer` inside the assistant bubble (or on click-to-expand) if frame-accurate review is wanted back |
+| IRSC.P6.B | DF | Phase 6 | `resolveMp4Url` still defaults to the identity function, so a real clip plays only once the Tauri filesystem allow-list resolves sidecar mp4 paths | Carried over from the pre-redesign page (the same default was there); tests inject a mock resolver | Wire the `file://`/asset-protocol resolver when the Tauri fs allow-list lands, then verify playback on-device |
+| IRSC.P6.C | WN | Phase 6 | Same benign React `act(...)` warnings as Phase 5, from the async installed-models load effect | Effect is cancel-guarded and settles deterministically; assertions pass | Fold into the same test-polish pass as IRSC.P5.B |
+
+### Open Items (Phase 7)
+
+| ID | Class | Source phase | Item | Reason | Suggested next step |
+|----|-------|--------------|------|--------|---------------------|
+| IRSC.P7.A | DF | Phase 7 | Sub-task 7.4 (rebuild the extension UX to match the Claude Code VS Code extension: single chat-centric panel, inline diff accept/reject, plan mode, @-mention context, slash commands, session resume) is DEFERRED to its own plan | Explicit user decision this cycle: ship the verified activation fix + packaging + rename now, and give the UX rework proper design and phasing rather than rushing it into this commit. It is comparable in size to Phases 4-6 combined and is a feature effort, not a bug fix; the reported Issue 6 defects are fully resolved without it | Author a dedicated plan (its own version) for the Claude Code-style UX, using the `claude-code-guide` capability to confirm the current extension's feature set before designing |
+| IRSC.P7.B | NI | Phase 7 | Commands + webview providers are still registered AFTER the heavy `NexusCodingPanel` construction inside `activateExtensionOnly` (the plan's 7.1 "register before heavy construction") | The user-visible symptom is fully fixed by two cheaper, verified changes: `buildMemorySubsystem` no longer throws (the actual thrower, memory is on by default), and `activate()` now contains any failure and registers safe-mode fallbacks for every declared command/view. Reordering means threading a mutable panel ref through ~170 lines of handlers -- real regression risk for marginal gain now that the surface is guaranteed | If the engine gains more constructor-time work, revisit by hoisting registration above `new NexusCodingPanel` with a lazily-resolved panel reference |
+| IRSC.P7.C | DF | Phase 7 | Command IDs, view IDs, and `nexus.*` settings keys keep the `nexus.coding.*` spelling; only user-facing strings became "Nexus Code". Marketplace identity (`name` / `publisher` = `nexus-coding`) is unchanged | IDs are invisible in the UI, while renaming them would break every existing user keybinding and silently reset settings; changing `name`/`publisher` republishes the extension and orphans installs -- an explicit product decision, not a code change. New `nexus.code.*` command aliases are registered so both spellings work | Decide the Marketplace identity question at product level; if the namespace is migrated later, add `deprecationMessage` entries for renamed config keys as the `gemma-code.*` precedent does |
+| IRSC.P7.D | DF | Phase 7 | The Electron version for the native rebuild still has a hardcoded DEFAULT (`36.4.0`), now overridable via `-ElectronVersion` / `NEXUS_ELECTRON_VERSION` | Deriving it automatically from the installed VS Code is environment-specific and unverifiable here; the parameter + release guard remove the silent-mismatch failure mode | Derive the default from the target VS Code build (or a pinned support matrix) during the next packaging pass and verify the VSIX activates on a clean install |
+
+### Summary
+
+- Open: Phase 1 = 0; Phase 2 = 3 (IRSC.P2.A pre-existing mypy WN, IRSC.P2.B two call-site MT, IRSC.P2.C NSI verify-by-inspection); Phase 3 = 3 (IRSC.P3.A retry integration-test MT, IRSC.P3.B pre-existing mypy WN, IRSC.P3.C build-verify DF); Phase 4 = 3 (IRSC.P4.A composition-root MT, IRSC.P4.B HF-install sha-placeholder BG, IRSC.P4.C packaged-catalog DF); Phase 5 = 3 (IRSC.P5.A inpaint-mask NI, IRSC.P5.B act-warning WN, IRSC.P5.C fallback-model DF); Phase 6 = 3 (IRSC.P6.A timeline/strip NI, IRSC.P6.B mp4 URL resolver DF, IRSC.P6.C act-warning WN); Phase 7 = 4 (IRSC.P7.A Claude Code-style UX deferred to its own plan, IRSC.P7.B registration-order NI, IRSC.P7.C ID/marketplace-identity DF, IRSC.P7.D Electron default DF).
+- Resolved so far:
+  - Phase 1 (Issue 4) -- the custom title bar's window controls are un-buried (gave `.nexus-titlebar` its own stacking context above the opaque backdrop) and the window opens maximized while staying resizable.
+  - Phase 2 (Issue 1) -- a normally completed/failed run no longer redirects a cold relaunch to the Complete page: `interpret_startup` routes cold terminal states to `DECISION_FRESH` (Welcome); `CompletePage.on_finish()` and the one-time SHOW_COMPLETE reopen both clear the persisted state via `state_store.clear_state`; and both NSIS uninstallers now remove `%LOCALAPPDATA%\NexusInstaller`. The crash-recovery "interrupted-but-all-done -> show-complete" promotion is preserved.
+  - Phase 3 (Issue 2) -- a catalog content-invariant guard (`catalog_invariants` + `check-catalog.py` + fail-closed spec + `test_catalog_invariants`) stops a stale/regressed catalog shipping; the gated-model dialog gained plain-language copy + a direct token-settings link; and the Complete page now shows a plain-language per-model summary (succeeded / skipped-needs-token / failed-with-reason) plus a "Retry failed downloads" button that re-runs only the failed model ids via the engine resume path.
+  - Phase 4 (Issue 3) -- the Settings > Models page now reflects the REAL installed set: the sidecar `models.list` runs `NexusModelRegistry.list()` reconciled against Ollama's `/api/tags` and the installer's `~/.nexus/models/weights/<id>/` tree (`installedProbe.markInstalledFromProbe`), so installer-downloaded models show as Installed instead of catalog-only. `models.remove` / `models.diskUsage` are real, in-app install is a streaming job (`models.install` accept -> `models.install.drainEvents` -> `models.install.cancel`), the app renders the real `createIpcModelsClient` (mock retired to tests), and a shared `installedModelsForType` + `SETTINGS_MODELS_PATH` feed the Phase 5-6 studio selectors. Resolves the long-tracked gap 5.P1.BB.
+  - Phase 7 (Issue 6, partial) -- the VS Code extension's reported defects are fixed: `activate()` no longer aborts before registration (the unguarded `buildMemorySubsystem` now degrades to disabled, activation failures are contained, and safe-mode fallbacks register every declared command + view), so `nexus.coding.newChat` always exists and the Chat/Memory/Traces views never spin forever. Packaging can no longer silently ship an ABI-mismatched native module (Electron version parameterized; `package:quick` refuses release builds), daemon discovery no longer claims a live ping it never performed, and the product reads "Nexus Code" everywhere user-facing with `nexus.code.*` command aliases. The Claude Code-style UX rework (7.4) is deferred (IRSC.P7.A).
+  - Phase 6 (Issue 5, video) -- Video Lab is now a chat too, reusing the Phase 5 scaffold: the mode `<select>` is gone (`inferVideoIntent` picks text2video with no attachment, image2video with one), the selector lists installed video models + "Get more models", generated clips play inline in the assistant bubble, parameters sit behind "Advanced settings" (with `VideoPromptForm hideMode`), and Copy Workflow / Use as Source are per-message.
+  - Phase 5 (Issue 5, image) -- Image Studio is now a chat: the four mode tabs + parameter sidebar are gone, replaced by a model selector (installed image models from Phase 4 + "Get more models"), a message history with inline generated images, and an attachment-capable composer (`MediaComposer`: + button, drag-drop, paste, removable thumbnails). `inferImageIntent` maps (prompt + attachments + mask) to txt2img / img2img / outpaint / inpaint; parameters live behind an "Advanced settings" panel; per-message Download / Copy Workflow / Use as Source. `ChatMessage` + `MessageBubble` gained optional media/attachment fields (text-only Chat / Coding paths unchanged).
+- Note: on-device confirmation of the maximized window/controls (Phase 1), the uninstaller state-dir removal (Phase 2, IRSC.P2.C), a live retry (Phase 3, IRSC.P3.A), the fail-closed build (Phase 3, IRSC.P3.C), and the packaged-sidecar catalog resolution + a live in-app install (Phase 4, IRSC.P4.B/C) fold into the standard on-device QA pass; the pure logic is unit-tested (`desktopBranding.test.ts`, `test_background_resume.py`, `test_catalog_invariants.py`, `test_install_summary.py`, `test_gated_auth_dialog.py`, `test_pages_qt.py`, `installedProbe.test.ts`, `modelsService.test.ts`, `installManager.test.ts`, `ipcModelsClient.test.ts`, `installedFeed.test.ts`).
+
+### Carried forward from v1.14.0 / v1.13.0 (still open)
+
+| ID | Class | Item | Status this cycle |
+|----|-------|------|-------------------|
+| ICR.P2.A / IR.P1.A | DF | Live pull+load preflight for the tier defaults (multi-GB) | Unchanged -- operator action on a target box; not attempted this cycle (v1.15 touched the installer's relaunch/summary paths, not the download engine's live behaviour) |
+| ICR.P1.C / ICR.P2.C | MT | HF-weight `sha256` pins are all-zero placeholders | Unchanged, and now ALSO the cause of the new IRSC.P4.B (in-app HF install fails digest verification in the core `Downloader`). Rotating the pins closes both |
+| ICR.P2.B / ICR.P3.A / ICR.P4.A / IR.P3.A / IR.P4.A | DF | On-device visual QA (gated dialog, picker, installing page, wordmark) | Unchanged, and joined by v1.15's own on-device items (maximized window + controls, uninstaller state-dir removal, live retry, packaged-sidecar catalog, a real in-app install). All fold into one on-device QA pass |
+| ICR.P2.D | WN | 3 SANA ControlNet repos probe GATED (auxiliary, excluded from the picker) | Unchanged; no offered-set impact |
+| ICR.P1.A / ICR.P1.D / ICR.P3.B | DF/NI | `sana-1.6b-int4` retained+flagged, per-tier release dates, no show-all-variants toggle | Unchanged deliberate design choices. Phase 3's gated-token UX work directly improves the ICR.P1.A experience (clearer copy + a direct token link + explicit skip) |
+| IR.P1.E | DF | Live pull+load preflight CI job | Still freeze-deferred (GitHub Actions budget) |
+| IR.P1.D / IR.P2.C / IR.P5.A | DF/NI | Ollama 400 hint, thin CLI test, section-header polish | Unchanged, low priority. Note: the v1.13 Ollama-400 class of failure is now guarded at the catalog level by Phase 3's `catalog_invariants` |
+
+### Resolved from earlier versions
+
+- **5.P1.BB** (v1.0.0, "Settings UI is wired to a mock client") -- **RESOLVED** by v1.15.0 Phase 4: real `models.*` IPC backed by `NexusModelRegistry`, a real `ipcModelsClient` injected in `App.tsx`, and Ollama/weights reconciliation so installer-downloaded models appear. Marked resolved in `docs/archive/v1/v1.0/known-gaps.md`.
+
+### Phase 8 reconciliation (terminal gate)
+
+- **Architecture**: clean. No stray `TODO`/`FIXME`/`XXX`/`HACK`/`DEVIATION` markers, no empty directories, and no non-version orphans in any v1.15-touched tree. `check:docs-layout` reports the canonical layout; `check:naming` clean. Triage of the three components orphaned by the Phase 5/6 chat redesigns (`MaskEditor`, `TimelinePreviewer`, `GenerationCanvas`) resolved as **retain, not delete** -- each is still unit-tested and is the exact asset a documented deferred gap needs (IRSC.P5.A / IRSC.P6.A / richer in-bubble progress); each now carries a "RETAINED, NOT DEAD" header stating why and when to delete it. Benchmark-fixture timing noise from the test runs was discarded, not committed.
+- **Known gaps**: 19 open across Phases 2-7 (0 in Phase 1), all non-blocking; carry-forwards from v1.13/v1.14 reconciled above; 5.P1.BB closed.
+- **CI/CD**: see the Phase 8 session history -- `shell-build.yml` already gained `core/**` in Phase 4; the installer pytest job auto-covers the new Phase 3 test files; the extension suite covers the Phase 7 activation tests. Path filters, `concurrency` cancel-in-progress, and dependency caching are in place across the workflows.
+- **Tests**: root 4646 passed / 6 skipped / **0 failed** (424 files) -- better than the v1.14 baseline (4637 + 2 load flakes); desktop 581 passed (77 files); installer pytest green (3 pre-existing skips). tsc + eslint + ruff clean.
+- **Environment note**: the local `better-sqlite3` `NODE_MODULE_VERSION` mismatch (135 vs 137) recurred once in this cycle exactly as documented in v1.14; `npm rebuild better-sqlite3` repaired it. It is a local dev-env artifact, not a project defect -- and v1.15 Phase 7 now hardens the *extension* against precisely this failure class.
+- **Release**: tagged `v1.15.0` on main 2026-08-11 (semantic-release). Finalized 2026-08-16.
+
+_Last updated: 2026-08-16 (finalized with the v1.16.0 release)._

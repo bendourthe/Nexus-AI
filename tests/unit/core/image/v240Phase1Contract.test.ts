@@ -17,8 +17,8 @@ describe("v2.4.0 phase 1 splat contract", () => {
   });
 
   it("assigns each comparison acceptance item to a later phase or an explicit drop", () => {
-    const contract = read("docs/v2/v2.4/development/gaussian-splat-contract.md");
-    const plan = read("docs/v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md");
+    const contract = read("docs/archive/v2/v2.4/development/gaussian-splat-contract.md");
+    const plan = read("docs/archive/v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md");
     for (const id of ["Q-1", "Q-2", "Q-3", "G-V", "G-G", "G-M", "G-S"]) {
       expect(contract).toContain(id);
     }

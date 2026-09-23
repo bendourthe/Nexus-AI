@@ -75,7 +75,7 @@ const ALLOWLIST = new Set([
   // vs the nested 0.34.x). npm reports the parent as high because of those
   // transitives (fixAvailable: false). Reachability: the embedder loads
   // bundled ONNX weights, never attacker-supplied zip/image archives.
-  // Tracked as ENV.CI.A in docs/v1/v1.16/known-gaps.md.
+  // Tracked as ENV.CI.A in docs/archive/v1/v1.16/known-gaps.md.
   "@huggingface/transformers",
   "onnxruntime-node",
   "adm-zip",

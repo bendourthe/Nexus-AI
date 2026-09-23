@@ -49,7 +49,7 @@ PLACEHOLDER_SHA256 = "0" * 64
 #:
 #: The exemption is deliberately a NAMED LIST rather than a softened rule: every future
 #: entry is covered, and removing an id from here is the whole fix. Tracked as BG-2 in
-#: docs/v2/v2.4/known-gaps.md with an evaluable exit condition.
+#: docs/archive/v2/v2.4/known-gaps.md with an evaluable exit condition.
 PLACEHOLDER_SHA_LEGACY_EXEMPT: frozenset[str] = frozenset(
     {
         "sana-controlnet-canny",

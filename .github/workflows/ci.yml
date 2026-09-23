@@ -25,8 +25,8 @@ concurrency:
   cancel-in-progress: true
 
 # v2.0.0 Phase 5: hardware-gated suites and skip flags are listed in
-# docs/v2/v2.0/ci-hardware-gates.md (Playwright, GPU video, live STT/TTS,
-# patient-tier adapter). v2.1.0 extends that in docs/v2/v2.1/ci-hardware-gates.md
+# docs/archive/v2/v2.0/ci-hardware-gates.md (Playwright, GPU video, live STT/TTS,
+# patient-tier adapter). v2.1.0 extends that in docs/archive/v2/v2.1/ci-hardware-gates.md
 # (Unsloth live train, diffusion layer-streaming OOM rescue). Do not install
 # those stacks in this workflow. Phase 6 audit/JSON CLI/budget units run in
 # test-ts; desktop vitest (Node 22) covers sidecar IPC; pytest tests/python
@@ -492,7 +492,7 @@ jobs:
       # `onnxruntime-web` -> `onnx-proto` -> `protobufjs`) inherited from
       # the v1.1.0 Phase 5 local-embedder shipment. The chain cannot be
       # fixed without a semver-major dependency move (tracked as
-      # `docs/v1/v1.2/known-gaps.md` entry 7.x.P1.D). The
+      # `docs/archive/v1/v1.2/known-gaps.md` entry 7.x.P1.D). The
       # allowlist script below filters that chain by name and fails only
       # on NEW non-allowlisted advisories at severity >= moderate.
       - name: npm audit (production deps, allowlisted)

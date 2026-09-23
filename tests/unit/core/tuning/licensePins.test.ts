@@ -26,7 +26,7 @@ describe("Unsloth pins", () => {
 
   it("matches the decision-record pins file", () => {
     const doc = readFileSync(
-      path.resolve("docs/v2/v2.1/development/unsloth-license-boundary.md"),
+      path.resolve("docs/archive/v2/v2.1/development/unsloth-license-boundary.md"),
       "utf8",
     );
     expect(doc).toContain("2026.8.18");

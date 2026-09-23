@@ -1,6 +1,6 @@
 # Nexus Documentation
 
-This is the living entry point for Nexus documentation. Release-bound plans and evidence live under `docs/v1/` and `docs/v2/`; closed historical material lives under `docs/archive/`.
+This is the living entry point for Nexus documentation. Release-bound plans and evidence live under `docs/archive/v1/` and `docs/v2/`; closed historical material lives under `docs/archive/`.
 
 ## Living documentation
 

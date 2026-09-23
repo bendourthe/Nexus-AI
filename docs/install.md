@@ -78,7 +78,7 @@ Everything lands under your user account (no admin rights needed for the wizard 
 
 ## After you install (v2.3.0)
 
-- **Video Lab Enhance**: after a completed clip has a durable output id, Video Lab can offer Enhance. Install Video2X 6.4.0 yourself, then set `NEXUS_VIDEO2X_PATH` or Settings > Video > Video2X executable to the absolute executable path. Recheck capability; Enhance stays disabled until capability is ready. Clearing the setting and unsetting the env var turns the surface off. That does not uninstall Video2X and does not delete originals. Configuring a path does not install Video2X, search PATH, replace originals, grant network or Hub writes, or add Qwen3.8. Details: [video-enhancement-baseline.md](v2/v2.3/benchmarks/video-enhancement-baseline.md).
+- **Video Lab Enhance**: after a completed clip has a durable output id, Video Lab can offer Enhance. Install Video2X 6.4.0 yourself, then set `NEXUS_VIDEO2X_PATH` or Settings > Video > Video2X executable to the absolute executable path. Recheck capability; Enhance stays disabled until capability is ready. Clearing the setting and unsetting the env var turns the surface off. That does not uninstall Video2X and does not delete originals. Configuring a path does not install Video2X, search PATH, replace originals, grant network or Hub writes, or add Qwen3.8. Details: [video-enhancement-baseline.md](archive/v2/v2.3/benchmarks/video-enhancement-baseline.md).
 
 ## After you install (v1.20.0)
 
@@ -120,19 +120,19 @@ Everything lands under your user account (no admin rights needed for the wizard 
 ## After you install (v2.0.0)
 
 - **Chat vision and voice**: image attach in Local Chatbot is on only for models whose catalog `modalities` include `image` (for example Gemma 4 12B IT GGUF). Audio files and the composer mic transcribe on-device after you install **faster-whisper-large-v3**. The Voice loop checkbox is off by default; turn it on for push-to-talk or VAD, and install **kokoro-82m** to hear replies. No image or audio bytes leave the machine.
-- **Coding browser tools**: `browser_navigate` / `browser_click` / `browser_type` / `browser_aria_snapshot` / `browser_close` run in an isolated `~/.nexus/browser-profiles/` directory, never your logged-in Chrome. Every call is DANGEROUS and confirms. Install a local Chromium with `npx playwright@1.55.0 install chromium` if you want live pages; CI uses HTML fixtures only. See [browser-surface-security.md](v2/v2.0/browser-surface-security.md).
+- **Coding browser tools**: `browser_navigate` / `browser_click` / `browser_type` / `browser_aria_snapshot` / `browser_close` run in an isolated `~/.nexus/browser-profiles/` directory, never your logged-in Chrome. Every call is DANGEROUS and confirms. Install a local Chromium with `npx playwright@1.55.0 install chromium` if you want live pages; CI uses HTML fixtures only. See [browser-surface-security.md](archive/v2/v2.0/browser-surface-security.md).
 - **Video Lab continuation and avatar**: a requested duration longer than the tier clip chains segments in the timeline (prototype seams; not a measured Wan 2.2 quality claim). Talking-head (`audio2video`) is `diffusion-pro` only: install **longcat-video-avatar-1.5** (official Meituan INT8, sha256-pinned), tick the local-generation checkbox, and attach a photo plus audio. Those bytes stay on the device. Below-tier hosts do not see the control.
 
 ## After you install (v1.17.0)
 
-The desktop shell now uses orbs, a surface-liveness beam, and a metal ring on Send / Generate / New session. If your OS has reduced-motion enabled, every effect **halts** (static fallbacks) instead of slowing down. Tokens: [design-tokens.md](v1/v1.17/design-tokens.md).
+The desktop shell now uses orbs, a surface-liveness beam, and a metal ring on Send / Generate / New session. If your OS has reduced-motion enabled, every effect **halts** (static fallbacks) instead of slowing down. Tokens: [design-tokens.md](archive/v1/v1.17/design-tokens.md).
 
 ## After you install (v1.16.0)
 
 - **Local API server**: off by default. In Nexus, open Settings > Local API server, turn it on, and copy the base URL plus token into Claude Code / Codex / Cursor. The server binds loopback only and serves model inference, never files or tools. See [README](../README.md#local-api-server-opt-in).
 - **ACP agent** (v1.18.0): same Settings section, separate toggle. Uses the same loopback listener and token at `POST /acp`. Off by default. Unattended confirmations park in the ask inbox (or fail-closed if no inbox is configured).
 - **Document parsing**: Settings > Models, install **RapidOCR PP-OCRv4** (CPU, every OS) and optionally **Unlimited-OCR 3B** (NVIDIA) for PDFs and images. Word, PowerPoint, and Excel (`.docx` / `.pptx` / `.xlsx`) parse with native libraries and do not require those OCR models or Docling. Attach in Local Chatbot or Agentic AI Coding. Parsed text is shown in the thread and is not auto-sent to a model. Neither OCR model is auto-installed.
-- **MLX on Apple Silicon**: Nexus does not bundle MLX. Register an existing loopback server as described in [MLX via localAdapters](v1/v1.16/guides/mlx-via-local-adapters.md).
+- **MLX on Apple Silicon**: Nexus does not bundle MLX. Register an existing loopback server as described in [MLX via localAdapters](archive/v1/v1.16/guides/mlx-via-local-adapters.md).
 
 ## Uninstalling
 

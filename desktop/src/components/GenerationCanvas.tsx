@@ -199,7 +199,7 @@ const TINT_VAR: Record<GenerationTint, string> = {
  * disables the aurora (a soft static glow fallback). An optional live latent
  * preview is overlaid and fades in with `progress` so the result reads as
  * materializing; `children` overlay arbitrary content (the Video Lab
- * per-second thumbnail strip). See docs/v1/v1.9/ui-rework-design.md
+ * per-second thumbnail strip). See docs/archive/v1/v1.9/ui-rework-design.md
  * Section 3.
  */
 export function GenerationCanvas({

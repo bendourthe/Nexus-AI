@@ -2,11 +2,13 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
+- 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.5/known-gaps.md`.
+
 ---
 
 ## [2026-09-22] v2.4.0 Phase 5 - Optional TripoSplat adapter
 
-Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [benchmark](v2/v2.4/benchmarks/gaussian-splat-baseline.md), history [P5](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-5-adapter.md).
+Index: [plan](archive/v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [benchmark](archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md), history [P5](archive/v2/v2.4/development/history/2026-09-22_v2.4.0-phase-5-adapter.md).
 
 ### What Changed
 
@@ -21,7 +23,7 @@ Adapter tests: 2 passed. Catalog, packaging, and model-acceptance tests: 61 pass
 
 ## [2026-09-22] v2.4.0 Phase 4 - Splat generate queue and preflight
 
-Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), history [P4](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-4-generate.md).
+Index: [plan](archive/v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), history [P4](archive/v2/v2.4/development/history/2026-09-22_v2.4.0-phase-4-generate.md).
 
 ### What Changed
 
@@ -36,7 +38,7 @@ Preflight unit tests: 3 passed. Runtime filesystem tests: 5 passed. One Image St
 
 ## [2026-09-22] v2.4.0 Phase 3 - Image Studio 3D preview
 
-Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), history [P3](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-3-preview.md).
+Index: [plan](archive/v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), history [P3](archive/v2/v2.4/development/history/2026-09-22_v2.4.0-phase-3-preview.md).
 
 ### What Changed
 
@@ -51,7 +53,7 @@ Preview panel tests: 5 passed. Provenance unit tests: 2 passed. One Image Studio
 
 ## [2026-09-22] v2.4.0 Phase 2 - Local splat viewer core
 
-Index: [plan](v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [contract](v2/v2.4/development/gaussian-splat-contract.md), history [P2](v2/v2.4/development/history/2026-09-22_v2.4.0-phase-2-viewer.md).
+Index: [plan](archive/v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [contract](archive/v2/v2.4/development/gaussian-splat-contract.md), history [P2](archive/v2/v2.4/development/history/2026-09-22_v2.4.0-phase-2-viewer.md).
 
 ### What Changed
 
@@ -66,7 +68,7 @@ Desktop Vitest: `tests/splatCamera.test.ts` and `tests/SplatViewerCanvas.test.ts
 
 ## [2026-09-10] v2.4.9 - Installer rebuild, with BG-21 fixed first
 
-Index: [gaps](v2/v2.4/known-gaps.md) BG-21. Artifact `dist/NexusSetup.exe`, 254,476,060 bytes, sha256 `e7a35f1c45ed...` (gitignored, not committed).
+Index: [gaps](archive/v2/v2.4/known-gaps.md) BG-21. Artifact `dist/NexusSetup.exe`, 254,476,060 bytes, sha256 `e7a35f1c45ed...` (gitignored, not committed).
 
 ### What Changed
 
@@ -91,7 +93,7 @@ The build also re-reported the known 3-of-107 unpinned weight files, which are t
 
 ## [2026-09-10] v2.4.9 Phase 5 - Terminal gate (publication pending)
 
-Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-last-phase-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P5](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-5-terminal-gate.md). Package remains **2.4.1**. **Nothing pushed; no pull request; no tag.**
+Index: [plan](archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](archive/v2/v2.4/development/v2.4.9-last-phase-evidence.md), [gaps](archive/v2/v2.4/known-gaps.md), history [P5](archive/v2/v2.4/development/history/2026-09-10_v2.4.9-phase-5-terminal-gate.md). Package remains **2.4.1**. **Nothing pushed; no pull request; no tag.**
 
 ### What Changed
 
@@ -121,7 +123,7 @@ One decision waits at the gate. Two `feat` commits in this plan compute a **mino
 
 ## [2026-09-10] v2.4.9 Phase 4 - Field feedback has a shape
 
-Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [gaps](v2/v2.4/known-gaps.md), history [P4](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-4-field-feedback.md). Package remains **2.4.1**. Committed locally, not pushed.
+Index: [plan](archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [gaps](archive/v2/v2.4/known-gaps.md), history [P4](archive/v2/v2.4/development/history/2026-09-10_v2.4.9-phase-4-field-feedback.md). Package remains **2.4.1**. Committed locally, not pushed.
 
 ### What Changed
 
@@ -147,7 +149,7 @@ The rendered New-issue page is deferred: a GitHub issue form only renders once m
 
 ## [2026-09-10] v2.4.9 Phase 3 - The inventory becomes true, then enforced
 
-Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [contract](reference/feature-inventory.md), [gaps](v2/v2.4/known-gaps.md), history [P3](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-3-inventory-enforced.md). Package remains **2.4.1**. Committed locally, not pushed.
+Index: [plan](archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [contract](reference/feature-inventory.md), [gaps](archive/v2/v2.4/known-gaps.md), history [P3](archive/v2/v2.4/development/history/2026-09-10_v2.4.9-phase-3-inventory-enforced.md). Package remains **2.4.1**. Committed locally, not pushed.
 
 ### What Changed
 
@@ -174,7 +176,7 @@ Coverage is two README regions, not the whole file; `### CLI tools (already ship
 
 ## [2026-09-10] v2.4.9 Phase 2 - Security coverage, reporting first
 
-Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-security-coverage-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P2](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-2-security-coverage.md). Package remains **2.4.1**. Committed locally, not pushed.
+Index: [plan](archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](archive/v2/v2.4/development/v2.4.9-security-coverage-evidence.md), [gaps](archive/v2/v2.4/known-gaps.md), history [P2](archive/v2/v2.4/development/history/2026-09-10_v2.4.9-phase-2-security-coverage.md). Package remains **2.4.1**. Committed locally, not pushed.
 
 ### What Changed
 
@@ -203,7 +205,7 @@ The two newly gating checks are not yet required, because neither has run once; 
 
 ## [2026-09-10] v2.4.9 - Two v2.4.8 GPU-handoff fixes (out of plan)
 
-Index: [gaps](v2/v2.4/known-gaps.md) BG-17, BG-18. Found by `nexus-standards-judge` on its first invocation, against the pinned v2.4.8 range `989107c7..f36afd9c`. Fixed out of plan by operator decision; the v2.4.9 plan's Non-Goals would otherwise have recorded them and moved on.
+Index: [gaps](archive/v2/v2.4/known-gaps.md) BG-17, BG-18. Found by `nexus-standards-judge` on its first invocation, against the pinned v2.4.8 range `989107c7..f36afd9c`. Fixed out of plan by operator decision; the v2.4.9 plan's Non-Goals would otherwise have recorded them and moved on.
 
 ### What Changed
 
@@ -227,7 +229,7 @@ Neither fix has been exercised against a live GPU. QG-1 still stands.
 
 ## [2026-09-10] v2.4.9 Phase 1 - The written bars
 
-Index: [plan](v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](v2/v2.4/development/v2.4.9-phase1-evidence.md), [gaps](v2/v2.4/known-gaps.md), history [P1](v2/v2.4/development/history/2026-09-10_v2.4.9-phase-1-written-bars.md). Package remains **2.4.1**; nothing in the 2.4 series is released. Committed locally, not pushed.
+Index: [plan](archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), [evidence](archive/v2/v2.4/development/v2.4.9-phase1-evidence.md), [gaps](archive/v2/v2.4/known-gaps.md), history [P1](archive/v2/v2.4/development/history/2026-09-10_v2.4.9-phase-1-written-bars.md). Package remains **2.4.1**; nothing in the 2.4 series is released. Committed locally, not pushed.
 
 ### What Changed
 
@@ -254,7 +256,7 @@ One limitation disclosed rather than smoothed over: `nexus-standards-judge` coul
 
 ## [2026-09-06] v2.4.7 - installer wizard density and scope (Phases 1-5)
 
-Index: [plan](v2/v2.4/plans/v2.4.7-installer-wizard-density-and-scope.md), [evidence](v2/v2.4/development/last-phase-evidence-v2.4.7-wizard-density.md), [gaps](v2/v2.4/known-gaps.md), histories [P1](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-1-selection-sizing.md), [P2](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-2-config-scope.md), [P3](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-3-page-layout.md), [P4](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-4-review-density.md), [P5](v2/v2.4/development/history/2026-09-06_v2.4.7-phase-5-last-phase.md). Package remains **2.4.1**; nothing in the 2.4 series is released.
+Index: [plan](archive/v2/v2.4/plans/v2.4.7-installer-wizard-density-and-scope.md), [evidence](archive/v2/v2.4/development/last-phase-evidence-v2.4.7-wizard-density.md), [gaps](archive/v2/v2.4/known-gaps.md), histories [P1](archive/v2/v2.4/development/history/2026-09-06_v2.4.7-phase-1-selection-sizing.md), [P2](archive/v2/v2.4/development/history/2026-09-06_v2.4.7-phase-2-config-scope.md), [P3](archive/v2/v2.4/development/history/2026-09-06_v2.4.7-phase-3-page-layout.md), [P4](archive/v2/v2.4/development/history/2026-09-06_v2.4.7-phase-4-review-density.md), [P5](archive/v2/v2.4/development/history/2026-09-06_v2.4.7-phase-5-last-phase.md). Package remains **2.4.1**; nothing in the 2.4 series is released.
 
 ### What Changed
 
@@ -280,7 +282,7 @@ Field-testing the v2.4.6 installer produced four screenshots. One was a defect: 
 
 ## [2026-09-04] v2.4.6 Phase 8 - Integration PR and merge-result fixes
 
-Index: [plan](v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](v2/v2.4/known-gaps.md), [evidence](v2/v2.4/development/last-phase-evidence-v2.4.6-field-delivery.md), PR [62](https://github.com/bendourthe/Nexus-AI/pull/62). Package remains **2.4.1**.
+Index: [plan](archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](archive/v2/v2.4/known-gaps.md), [evidence](archive/v2/v2.4/development/last-phase-evidence-v2.4.6-field-delivery.md), PR [62](https://github.com/bendourthe/Nexus-AI/pull/62). Package remains **2.4.1**.
 
 ### What Changed
 
@@ -295,7 +297,7 @@ A red required check reopens the last phase. Re-running without a local reproduc
 
 ## [2026-09-03] v2.4.6 Phase 8 - Last-phase evidence (publication pending)
 
-Index: [plan](v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](v2/v2.4/known-gaps.md), [evidence](v2/v2.4/development/last-phase-evidence-v2.4.6-field-delivery.md), history [P8](v2/v2.4/development/history/2026-09-02_v2.4.6-phase-8-evidence.md). Package remains **2.4.1**.
+Index: [plan](archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](archive/v2/v2.4/known-gaps.md), [evidence](archive/v2/v2.4/development/last-phase-evidence-v2.4.6-field-delivery.md), history [P8](archive/v2/v2.4/development/history/2026-09-02_v2.4.6-phase-8-evidence.md). Package remains **2.4.1**.
 
 ### What Changed
 
@@ -316,7 +318,7 @@ The last phase must quote proving scans before anything leaves the machine.
 
 ## [2026-09-03] v2.4.6 Phase 7 - Four-tab runtime chrome
 
-Index: [plan](v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](v2/v2.4/known-gaps.md), history [P7](v2/v2.4/development/history/2026-09-02_v2.4.6-phase-7-runtime.md). Package remains **2.4.1**.
+Index: [plan](archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](archive/v2/v2.4/known-gaps.md), history [P7](archive/v2/v2.4/development/history/2026-09-02_v2.4.6-phase-7-runtime.md). Package remains **2.4.1**.
 
 ### What Changed
 
@@ -340,7 +342,7 @@ Packaged Chat/Agents/Image/Video still showed leftover Ollama or Hugging Face id
 
 ## [2026-09-03] v2.4.6 Phase 4 - VS Code owned agentic models
 
-Index: [plan](v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](v2/v2.4/known-gaps.md), history [P4](v2/v2.4/development/history/2026-09-02_v2.4.6-phase-4-vscode-models.md). Package remains **2.4.1**.
+Index: [plan](archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](archive/v2/v2.4/known-gaps.md), history [P4](archive/v2/v2.4/development/history/2026-09-02_v2.4.6-phase-4-vscode-models.md). Package remains **2.4.1**.
 
 ### What Changed
 
@@ -362,7 +364,7 @@ Index: [plan](v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.m
 
 ## [2026-09-02] v2.4.6 Phase 3 - Configuration, VS Code 1.136, and Review groups
 
-Index: [plan](v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](v2/v2.4/known-gaps.md), history [P3](v2/v2.4/development/history/2026-09-02_v2.4.6-phase-3-configuration-review.md). Package remains **2.4.1**.
+Index: [plan](archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](archive/v2/v2.4/known-gaps.md), history [P3](archive/v2/v2.4/development/history/2026-09-02_v2.4.6-phase-3-configuration-review.md). Package remains **2.4.1**.
 
 ### What Changed
 
@@ -384,7 +386,7 @@ Screenshot 2 still showed Unsloth Compatible but unchecked, VS Code 1.136 disabl
 
 ## [2026-09-02] v2.4.6 Phase 2 - installer Setup compactness
 
-Index: [plan](v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](v2/v2.4/known-gaps.md), history [P2](v2/v2.4/development/history/2026-09-02_v2.4.6-phase-2-setup.md). Package remains **2.4.1**.
+Index: [plan](archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](archive/v2/v2.4/known-gaps.md), history [P2](archive/v2/v2.4/development/history/2026-09-02_v2.4.6-phase-2-setup.md). Package remains **2.4.1**.
 
 ### What Changed
 
@@ -406,7 +408,7 @@ Screenshot 1 still showed one-column prereqs, a full-width Re-check bar, and a t
 
 ## [2026-09-02] v2.4.6 Phase 1 - packaged delivery and installer window
 
-Index: [plan](v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](v2/v2.4/known-gaps.md), history [P1](v2/v2.4/development/history/2026-09-02_v2.4.6-phase-1-delivery.md). Package remains **2.4.1**.
+Index: [plan](archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md), [gaps](archive/v2/v2.4/known-gaps.md), history [P1](archive/v2/v2.4/development/history/2026-09-02_v2.4.6-phase-1-delivery.md). Package remains **2.4.1**.
 
 ### What Changed
 
@@ -427,7 +429,7 @@ Rebuilding only PyInstaller could ship last week's desktop while package.json st
 
 ## [2026-09-01] v2.4.5 - installer already-downloaded model detection (Phases 1-5)
 
-Index: [plan](v2/v2.4/plans/v2.4.5-installer-already-downloaded-models.md), [evidence](v2/v2.4/development/last-phase-evidence-v2.4.5-installer-downloaded.md), [gaps](v2/v2.4/known-gaps.md), histories [P1](v2/v2.4/development/history/2026-09-01_v2.4.5-phase-1-downloaded-probe.md), [P2](v2/v2.4/development/history/2026-09-01_v2.4.5-phase-2-picker-marks.md), [P3](v2/v2.4/development/history/2026-09-01_v2.4.5-phase-3-review-page.md), [P4](v2/v2.4/development/history/2026-09-01_v2.4.5-phase-4-guard.md), [P5](v2/v2.4/development/history/2026-09-01_v2.4.5-phase-5-last-phase.md). Package remains **2.4.1**; nothing in the 2.4 series is released.
+Index: [plan](archive/v2/v2.4/plans/v2.4.5-installer-already-downloaded-models.md), [evidence](archive/v2/v2.4/development/last-phase-evidence-v2.4.5-installer-downloaded.md), [gaps](archive/v2/v2.4/known-gaps.md), histories [P1](archive/v2/v2.4/development/history/2026-09-01_v2.4.5-phase-1-downloaded-probe.md), [P2](archive/v2/v2.4/development/history/2026-09-01_v2.4.5-phase-2-picker-marks.md), [P3](archive/v2/v2.4/development/history/2026-09-01_v2.4.5-phase-3-review-page.md), [P4](archive/v2/v2.4/development/history/2026-09-01_v2.4.5-phase-4-guard.md), [P5](archive/v2/v2.4/development/history/2026-09-01_v2.4.5-phase-5-last-phase.md). Package remains **2.4.1**; nothing in the 2.4 series is released.
 
 ### What Changed
 
@@ -452,7 +454,7 @@ The v2.4.4 installer rebuild could not be installed. The Review step refused wit
 
 ## [2026-08-31] v2.4.4 - field chrome, restyle, SANA, and density (Phases 1-7)
 
-Index: [plan](v2/v2.4/plans/v2.4.4-field-chrome-restyle-sana-and-density.md), [evidence](v2/v2.4/development/last-phase-evidence-v2.4.4-field-chrome.md), [gaps](v2/v2.4/known-gaps.md), histories [P1](v2/v2.4/development/history/2026-08-31_v2.4.4-phase-1-transcript-gutters.md), [P2](v2/v2.4/development/history/2026-08-31_v2.4.4-phase-2-history-chrome.md), [P3](v2/v2.4/development/history/2026-08-31_v2.4.4-phase-3-image-restyle.md), [P4](v2/v2.4/development/history/2026-08-31_v2.4.4-phase-4-sana-diffusers-pin.md), [P5](v2/v2.4/development/history/2026-08-31_v2.4.4-phase-5-generation-liveness.md), [P6](v2/v2.4/development/history/2026-08-31_v2.4.4-phase-6-settings-density.md), [P7](v2/v2.4/development/history/2026-08-31_v2.4.4-phase-7-last-phase.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.4-field-chrome-restyle-sana-and-density.md), [evidence](archive/v2/v2.4/development/last-phase-evidence-v2.4.4-field-chrome.md), [gaps](archive/v2/v2.4/known-gaps.md), histories [P1](archive/v2/v2.4/development/history/2026-08-31_v2.4.4-phase-1-transcript-gutters.md), [P2](archive/v2/v2.4/development/history/2026-08-31_v2.4.4-phase-2-history-chrome.md), [P3](archive/v2/v2.4/development/history/2026-08-31_v2.4.4-phase-3-image-restyle.md), [P4](archive/v2/v2.4/development/history/2026-08-31_v2.4.4-phase-4-sana-diffusers-pin.md), [P5](archive/v2/v2.4/development/history/2026-08-31_v2.4.4-phase-5-generation-liveness.md), [P6](archive/v2/v2.4/development/history/2026-08-31_v2.4.4-phase-6-settings-density.md), [P7](archive/v2/v2.4/development/history/2026-08-31_v2.4.4-phase-7-last-phase.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -479,7 +481,7 @@ Six packaged post-v2.4.3 operator screenshots showed the previous cycle's fixes 
 
 ## [2026-08-31] v2.4.3 - field density Phase 8 last-phase evidence
 
-Index: [plan](v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](v2/v2.4/development/history/2026-08-31_v2.4.3-phase-8-last-phase.md), [evidence](v2/v2.4/development/last-phase-evidence-v2.4.3-field-density.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](archive/v2/v2.4/development/history/2026-08-31_v2.4.3-phase-8-last-phase.md), [evidence](archive/v2/v2.4/development/last-phase-evidence-v2.4.3-field-density.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -498,7 +500,7 @@ The plan's final phase must prove the Goal landed in code and stop at explicit p
 
 ## [2026-08-31] v2.4.3 - field density Phase 7 SANA-Video layout and executor
 
-Index: [plan](v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](v2/v2.4/development/history/2026-08-31_v2.4.3-phase-7-sana-video.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](archive/v2/v2.4/development/history/2026-08-31_v2.4.3-phase-7-sana-video.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -517,7 +519,7 @@ Screenshot 7 reported `sana-video-2b-720p is missing model_index.json and comple
 
 ## [2026-08-31] v2.4.3 - field density Phase 6 image restyle identity
 
-Index: [plan](v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](v2/v2.4/development/history/2026-08-31_v2.4.3-phase-6-image-restyle.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](archive/v2/v2.4/development/history/2026-08-31_v2.4.3-phase-6-image-restyle.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -536,7 +538,7 @@ Screenshot 4 reprinted the tan puppy at strength 0.45.
 
 ## [2026-08-31] v2.4.3 - field density Phase 5 picker rank and default
 
-Index: [plan](v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](v2/v2.4/development/history/2026-08-31_v2.4.3-phase-5-picker-order.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](archive/v2/v2.4/development/history/2026-08-31_v2.4.3-phase-5-picker-order.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -555,7 +557,7 @@ Screenshot 9 listed Agents models out of recommend order and selected gpt-oss 20
 
 ## [2026-08-31] v2.4.3 - field density Phase 4 Settings compact cards
 
-Index: [plan](v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](v2/v2.4/development/history/2026-08-31_v2.4.3-phase-4-settings-cards.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](archive/v2/v2.4/development/history/2026-08-31_v2.4.3-phase-4-settings-cards.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -574,7 +576,7 @@ Screenshot 8 wrapped Company/Country/Context pills and used gray text buttons.
 
 ## [2026-08-31] v2.4.3 - field density Phase 3 thinking pill
 
-Index: [plan](v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](v2/v2.4/development/history/2026-08-31_v2.4.3-phase-3-thinking-pill.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](archive/v2/v2.4/development/history/2026-08-31_v2.4.3-phase-3-thinking-pill.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -593,7 +595,7 @@ Screenshot 5 cropped the Searching glow and jumped width versus Thinking.
 
 ## [2026-08-31] v2.4.3 - field density Phase 2 history chrome
 
-Index: [plan](v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](v2/v2.4/development/history/2026-08-31_v2.4.3-phase-2-history-chrome.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](archive/v2/v2.4/development/history/2026-08-31_v2.4.3-phase-2-history-chrome.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -614,7 +616,7 @@ Screenshot 3 left Image chats titled "New chat". Screenshot 6 cropped the delete
 
 ## [2026-08-31] v2.4.3 - field density Phase 1 installer layout and Unsloth lock
 
-Index: [plan](v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](v2/v2.4/development/history/2026-08-31_v2.4.3-phase-1-installer-layout.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md), [history](archive/v2/v2.4/development/history/2026-08-31_v2.4.3-phase-1-installer-layout.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -635,7 +637,7 @@ Screenshot 1 still allowed ticking Unsloth under Incompatible because the badge 
 
 ## [2026-08-31] v2.4.2 - field UI Phase 7 last-phase evidence
 
-Index: [plan](v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [evidence](v2/v2.4/development/last-phase-evidence-v2.4.2-field-ui.md), [history](v2/v2.4/development/history/2026-08-30_v2.4.2-phase-7-last-phase.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [evidence](archive/v2/v2.4/development/last-phase-evidence-v2.4.2-field-ui.md), [history](archive/v2/v2.4/development/history/2026-08-30_v2.4.2-phase-7-last-phase.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -656,7 +658,7 @@ The plan's final phase is fail-closed: a missing evidence section or an unresolv
 
 ## [2026-08-31] v2.4.2 - field UI Phase 6 installer VRAM, Unsloth, and VS Code
 
-Index: [plan](v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](v2/v2.4/development/history/2026-08-30_v2.4.2-phase-6-installer-display.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](archive/v2/v2.4/development/history/2026-08-30_v2.4.2-phase-6-installer-display.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -678,7 +680,7 @@ Packaged 2.4.1 truncated VRAM, hid Unsloth fit behind a post-check warning, and 
 
 ## [2026-08-31] v2.4.2 - field UI Phase 5 Settings Models density
 
-Index: [plan](v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](v2/v2.4/development/history/2026-08-30_v2.4.2-phase-5-settings-density.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](archive/v2/v2.4/development/history/2026-08-30_v2.4.2-phase-5-settings-density.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -699,7 +701,7 @@ Packaged 2.4.1 spent a tall header and card stack on a fingerprint the operator 
 
 ## [2026-08-31] v2.4.2 - field UI Phase 4 video fail-closed output
 
-Index: [plan](v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](v2/v2.4/development/history/2026-08-30_v2.4.2-phase-4-video-fail-closed.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](archive/v2/v2.4/development/history/2026-08-30_v2.4.2-phase-4-video-fail-closed.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -720,7 +722,7 @@ Packaged 2.4.1 could finish a first puppy-in-grass turn as `pending: false` plus
 
 ## [2026-08-31] v2.4.2 - field UI Phase 3 image follow-up identity
 
-Index: [plan](v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](v2/v2.4/development/history/2026-08-30_v2.4.2-phase-3-image-followup.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](archive/v2/v2.4/development/history/2026-08-30_v2.4.2-phase-3-image-followup.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -743,7 +745,7 @@ Packaged 2.4.1 treated "Make that puppy black" as a new txt2img identity and dea
 
 ## [2026-08-31] v2.4.2 - field UI Phase 2 transcript honesty
 
-Index: [plan](v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](v2/v2.4/development/history/2026-08-30_v2.4.2-phase-2-transcript-honesty.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](archive/v2/v2.4/development/history/2026-08-30_v2.4.2-phase-2-transcript-honesty.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -767,7 +769,7 @@ Packaged 2.4.1 hid follow-up turns under the composer, jumped Image context to 1
 
 ## [2026-08-30] v2.4.2 - field UI Phase 1 sidebar history host
 
-Index: [plan](v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](v2/v2.4/development/history/2026-08-30_v2.4.2-phase-1-sidebar-chrome.md), [gaps](v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
+Index: [plan](archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md), [history](archive/v2/v2.4/development/history/2026-08-30_v2.4.2-phase-1-sidebar-chrome.md), [gaps](archive/v2/v2.4/known-gaps.md). Package remains **2.4.1** until release.
 
 ### What Changed
 
@@ -789,7 +791,7 @@ Packaged 2.4.1 still spent a second history column (or an Agents History band) a
 
 ## [2026-08-30] v2.4.1 - generation recovery Phase 7 local gates
 
-Index: [plan](v2/v2.4/plans/v2.4.1-generation-recovery-and-ui-corrections.md), [history](v2/v2.4/development/history/2026-08-30_v2.4.1-correction-phase-7-release.md), [gaps](v2/v2.4/known-gaps.md), [evidence](v2/v2.4/development/last-phase-evidence-generation-recovery.md). Package remains **2.4.1**.
+Index: [plan](archive/v2/v2.4/plans/v2.4.1-generation-recovery-and-ui-corrections.md), [history](archive/v2/v2.4/development/history/2026-08-30_v2.4.1-correction-phase-7-release.md), [gaps](archive/v2/v2.4/known-gaps.md), [evidence](archive/v2/v2.4/development/last-phase-evidence-generation-recovery.md). Package remains **2.4.1**.
 
 ### What Changed
 
@@ -812,7 +814,7 @@ The Codex Phase 7 session stopped during live repair. Remaining work was the fai
 
 ## [2026-08-29] v2.3.1 - Windows installer field repair (release preparation)
 
-Index: [plan](v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](v2/v2.3/development/history/), [gaps](v2/v2.3/known-gaps.md), [evidence](v2/v2.3/development/v2.3.1-last-phase-evidence.md). Changelog is authoritative. Package **2.3.1**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](archive/v2/v2.3/development/history/), [gaps](archive/v2/v2.3/known-gaps.md), [evidence](archive/v2/v2.3/development/v2.3.1-last-phase-evidence.md). Changelog is authoritative. Package **2.3.1**.
 
 ### What Changed
 
@@ -834,7 +836,7 @@ Index: [plan](v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](v2/v2.3
 
 ## [2026-08-29] v2.3.1 Phase 6 reopen - vsce-legal engines.vscode
 
-Index: [plan](v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](v2/v2.3/development/history/2026-08-29_v2.3.1-phase-6-last-phase.md), [policy](v2/v2.3/development/vscode-host-policy.md), [evidence](v2/v2.3/development/v2.3.1-last-phase-evidence.md). Package remains **2.3.0**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](archive/v2/v2.3/development/history/2026-08-29_v2.3.1-phase-6-last-phase.md), [policy](archive/v2/v2.3/development/vscode-host-policy.md), [evidence](archive/v2/v2.3/development/v2.3.1-last-phase-evidence.md). Package remains **2.3.0**.
 
 ### What Changed
 
@@ -854,7 +856,7 @@ PR 53 Package VSIX (smoke) failed: `Invalid vscode engine compatibility version 
 
 ## [2026-08-29] v2.3.1 Phase 6 - Architecture refactor, known-gaps, and CI/CD
 
-Index: [plan](v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](v2/v2.3/development/history/2026-08-29_v2.3.1-phase-6-last-phase.md), [gaps](v2/v2.3/known-gaps.md), [evidence](v2/v2.3/development/v2.3.1-last-phase-evidence.md). Package remains **2.3.0**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](archive/v2/v2.3/development/history/2026-08-29_v2.3.1-phase-6-last-phase.md), [gaps](archive/v2/v2.3/known-gaps.md), [evidence](archive/v2/v2.3/development/v2.3.1-last-phase-evidence.md). Package remains **2.3.0**.
 
 ### What Changed
 
@@ -877,7 +879,7 @@ Phase 6 of the v2.3.1 installer field-repair plan. Fail-closed last-phase duties
 
 ## [2026-08-29] v2.3.1 Phase 5 - Required embedder policy
 
-Index: [plan](v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](v2/v2.3/development/history/2026-08-29_v2.3.1-phase-5-embedder-policy.md), [gaps](v2/v2.3/known-gaps.md), [policy](v2/v2.3/development/embedder-default-decision.md). Package remains **2.3.0**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](archive/v2/v2.3/development/history/2026-08-29_v2.3.1-phase-5-embedder-policy.md), [gaps](archive/v2/v2.3/known-gaps.md), [policy](archive/v2/v2.3/development/embedder-default-decision.md). Package remains **2.3.0**.
 
 ### What Changed
 
@@ -899,7 +901,7 @@ Phase 5 of the v2.3.1 installer field-repair plan. The operator asked about "Gem
 
 ## [2026-08-29] v2.3.1 Phase 4 - VS Code step and Unsloth placement
 
-Index: [plan](v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](v2/v2.3/development/history/2026-08-29_v2.3.1-phase-4-vscode-unsloth.md), [gaps](v2/v2.3/known-gaps.md), [policy](v2/v2.3/development/vscode-host-policy.md). Package remains **2.3.0**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](archive/v2/v2.3/development/history/2026-08-29_v2.3.1-phase-4-vscode-unsloth.md), [gaps](archive/v2/v2.3/known-gaps.md), [policy](archive/v2/v2.3/development/vscode-host-policy.md). Package remains **2.3.0**.
 
 ### What Changed
 
@@ -923,7 +925,7 @@ Phase 4 of the v2.3.1 installer field-repair plan. Operator host was VS Code 1.1
 
 ## [2026-08-29] v2.3.1 Phase 3 - Catalog and progress chrome
 
-Index: [plan](v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](v2/v2.3/development/history/2026-08-29_v2.3.1-phase-3-catalog-progress-chrome.md), [gaps](v2/v2.3/known-gaps.md). Package remains **2.3.0**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](archive/v2/v2.3/development/history/2026-08-29_v2.3.1-phase-3-catalog-progress-chrome.md), [gaps](archive/v2/v2.3/known-gaps.md). Package remains **2.3.0**.
 
 ### What Changed
 
@@ -944,7 +946,7 @@ Phase 3 of the v2.3.1 installer field-repair plan. Field screenshots showed cata
 
 ## [2026-08-29] v2.3.1 Phase 2 - Install thread crash containment
 
-Index: [plan](v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](v2/v2.3/development/history/2026-08-29_v2.3.1-phase-2-install-thread-crash.md), [gaps](v2/v2.3/known-gaps.md). Package remains **2.3.0**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](archive/v2/v2.3/development/history/2026-08-29_v2.3.1-phase-2-install-thread-crash.md), [gaps](archive/v2/v2.3/known-gaps.md). Package remains **2.3.0**.
 
 ### What Changed
 
@@ -966,7 +968,7 @@ Phase 2 of the v2.3.1 installer field-repair plan. Windowed PyInstaller has no u
 
 ## [2026-08-29] v2.3.1 Phase 1 - Honest host RAM and disk fields
 
-Index: [plan](v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](v2/v2.3/development/history/2026-08-29_v2.3.1-phase-1-honest-host-ram.md), [gaps](v2/v2.3/known-gaps.md). Package remains **2.3.0**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md), [history](archive/v2/v2.3/development/history/2026-08-29_v2.3.1-phase-1-honest-host-ram.md), [gaps](archive/v2/v2.3/known-gaps.md). Package remains **2.3.0**.
 
 ### What Changed
 
@@ -988,7 +990,7 @@ Phase 1 of the v2.3.1 installer field-repair plan. The 2026-08-28 field review s
 
 ## [2026-08-29] v2.3.0 - Optional local video enhancement (release preparation)
 
-Index: [plan](v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md), [history](v2/v2.3/development/history/), [gaps](v2/v2.3/known-gaps.md), [evidence](v2/v2.3/development/last-phase-evidence.md). Changelog is authoritative. Package **2.3.0**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md), [history](archive/v2/v2.3/development/history/), [gaps](archive/v2/v2.3/known-gaps.md), [evidence](archive/v2/v2.3/development/last-phase-evidence.md). Changelog is authoritative. Package **2.3.0**.
 
 ### What Changed
 
@@ -1010,7 +1012,7 @@ Index: [plan](v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md), [histor
 
 ## [2026-08-28] v2.3.0 Phase 6 - Architecture, known gaps, and last-phase local gate
 
-Index: [plan](v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md), [history](v2/v2.3/development/history/2026-08-28_v2.3.0-phase-6-architecture-gaps-ci.md), [gaps](v2/v2.3/known-gaps.md), [evidence](v2/v2.3/development/last-phase-evidence.md). Package remains **2.2.9**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md), [history](archive/v2/v2.3/development/history/2026-08-28_v2.3.0-phase-6-architecture-gaps-ci.md), [gaps](archive/v2/v2.3/known-gaps.md), [evidence](archive/v2/v2.3/development/last-phase-evidence.md). Package remains **2.2.9**.
 
 ### What Changed
 
@@ -1032,7 +1034,7 @@ Phase 6 of the v2.3.0 adoption plan. Phases 1-5 shipped the product path; the fa
 
 ## [2026-08-28] v2.3.0 Phase 5 - Quality, performance, and packaging evidence
 
-Index: [plan](v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md), [history](v2/v2.3/development/history/2026-08-28_v2.3.0-phase-5-quality-performance-packaging.md), [gaps](v2/v2.3/known-gaps.md), [baseline](v2/v2.3/benchmarks/video-enhancement-baseline.md). Package remains **2.2.9**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md), [history](archive/v2/v2.3/development/history/2026-08-28_v2.3.0-phase-5-quality-performance-packaging.md), [gaps](archive/v2/v2.3/known-gaps.md), [baseline](archive/v2/v2.3/benchmarks/video-enhancement-baseline.md). Package remains **2.2.9**.
 
 ### What Changed
 
@@ -1055,7 +1057,7 @@ Phase 5 of the v2.3.0 adoption plan. Phase 4 shipped the Enhance UI; support cla
 
 ## [2026-08-28] v2.3.0 Phase 4 - Video Lab Enhance experience
 
-Index: [plan](v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md), [history](v2/v2.3/development/history/2026-08-28_v2.3.0-phase-4-video-lab-enhance-experience.md), [gaps](v2/v2.3/known-gaps.md). Package remains **2.2.9**.
+Index: [plan](archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md), [history](archive/v2/v2.3/development/history/2026-08-28_v2.3.0-phase-4-video-lab-enhance-experience.md), [gaps](archive/v2/v2.3/known-gaps.md). Package remains **2.2.9**.
 
 ### What Changed
 
@@ -1077,7 +1079,7 @@ Phase 4 of the v2.3.0 adoption plan. The queue and provenance path existed; the 
 
 ## [2026-08-28] v2.2.9 - Field chrome, catalog identity, and honest generation (release preparation)
 
-Index: [plan](v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md), [history](v2/v2.2/development/history/), [gaps](v2/v2.2/known-gaps.md). Changelog is authoritative.
+Index: [plan](archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md), [history](archive/v2/v2.2/development/history/), [gaps](archive/v2/v2.2/known-gaps.md). Changelog is authoritative.
 
 ### What Changed
 
@@ -1107,7 +1109,7 @@ Index: [plan](v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md), [histo
 
 ## [2026-08-24] v2.2.8 - Working local studio (release)
 
-Index: [plan](v2/v2.2/plans/v2.2.8-working-local-studio.md), [history](v2/v2.2/development/history/), [gaps](v2/v2.2/known-gaps.md). Changelog is authoritative.
+Index: [plan](archive/v2/v2.2/plans/v2.2.8-working-local-studio.md), [history](archive/v2/v2.2/development/history/), [gaps](archive/v2/v2.2/known-gaps.md). Changelog is authoritative.
 
 ### What Changed
 
@@ -1129,7 +1131,7 @@ Index: [plan](v2/v2.2/plans/v2.2.8-working-local-studio.md), [history](v2/v2.2/d
 
 ## [2026-08-23] v2.2.5 - First successful generation (release)
 
-Index: [plan](v2/v2.2/plans/v2.2.5-first-successful-generation.md), [history](v2/v2.2/development/history/), [gaps](v2/v2.2/known-gaps.md). Changelog is authoritative.
+Index: [plan](archive/v2/v2.2/plans/v2.2.5-first-successful-generation.md), [history](archive/v2/v2.2/development/history/), [gaps](archive/v2/v2.2/known-gaps.md). Changelog is authoritative.
 
 ### What Changed
 
@@ -1468,7 +1470,7 @@ Phase 7 - Settings modernization, profile retirement, and data transfer.
 
 ### Goal
 
-Make the Local Chatbot persistent and modern: conversations that survive a reload, chats that name themselves, and one composer surface instead of a textarea flanked by loose buttons (plan `docs/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md`, Phase 5).
+Make the Local Chatbot persistent and modern: conversations that survive a reload, chats that name themselves, and one composer surface instead of a textarea flanked by loose buttons (plan `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md`, Phase 5).
 
 ### What Changed
 
@@ -1498,7 +1500,7 @@ No workflow changes: `shell-build.yml` already path-filters `desktop/**`, `core/
 
 ### Known Issues
 
-See `docs/v2/v2.2/known-gaps.md` (DF-12 rail not rebuilt, DF-13 titling not triggered on send, DF-14 CodingInput composer not shared).
+See `docs/archive/v2/v2.2/known-gaps.md` (DF-12 rail not rebuilt, DF-13 titling not triggered on send, DF-14 CodingInput composer not shared).
 
 ### Next
 
@@ -1510,7 +1512,7 @@ Phase 6 - Shell UI Modernization.
 
 ### Goal
 
-Make model switching on one GPU predictable: never on a tab click, automatic when nothing is at stake, and a confirmation only when something the user is running would be evicted (plan `docs/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md`, Phase 4).
+Make model switching on one GPU predictable: never on a tab click, automatic when nothing is at stake, and a confirmation only when something the user is running would be evicted (plan `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md`, Phase 4).
 
 ### What Changed
 
@@ -1540,7 +1542,7 @@ No workflow changes: `shell-build.yml` already path-filters `core/**` and `deskt
 
 ### Known Issues
 
-See `docs/v2/v2.2/known-gaps.md` (DF-9 one surface wired, DF-10 no live scheduler feed, DF-11 agent tools not calling the orchestrator).
+See `docs/archive/v2/v2.2/known-gaps.md` (DF-9 one surface wired, DF-10 no live scheduler feed, DF-11 agent tools not calling the orchestrator).
 
 ### Next
 
@@ -1552,7 +1554,7 @@ Phase 5 - Local Chatbot Rebuild.
 
 ### Goal
 
-Put the harness on disk at install time and make it visible in the app (plan `docs/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md`, Phase 3).
+Put the harness on disk at install time and make it visible in the app (plan `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md`, Phase 3).
 
 ### What Changed
 
@@ -1580,7 +1582,7 @@ No workflow changes needed: `shell-build.yml` and `installer-tests.yml` already 
 
 ### Known Issues
 
-See `docs/v2/v2.2/known-gaps.md` (DF-7 no snapshot produced by the release build yet, DF-8 minimal tar reader; BG-1/BG-2 resolved this phase).
+See `docs/archive/v2/v2.2/known-gaps.md` (DF-7 no snapshot produced by the release build yet, DF-8 minimal tar reader; BG-1/BG-2 resolved this phase).
 
 ### Next
 
@@ -1592,7 +1594,7 @@ Phase 4 - Smart Single-GPU Model Orchestration.
 
 ### Goal
 
-Make every downloaded model visible and runnable, and make every empty/error state tell the truth (plan `docs/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md`, Phase 2).
+Make every downloaded model visible and runnable, and make every empty/error state tell the truth (plan `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md`, Phase 2).
 
 ### What Changed
 
@@ -1622,7 +1624,7 @@ No workflow changes needed - `shell-build.yml` and `installer-tests.yml` already
 
 ### Known Issues
 
-See `docs/v2/v2.2/known-gaps.md` (DF-4 live smoke unrun, DF-5 telemetry has no queue/active-model feed until Phase 4, DF-6 private-helper reach-through, MT-3 studio banner page-level test).
+See `docs/archive/v2/v2.2/known-gaps.md` (DF-4 live smoke unrun, DF-5 telemetry has no queue/active-model feed until Phase 4, DF-6 private-helper reach-through, MT-3 studio banner page-level test).
 
 ### Next
 
@@ -1634,7 +1636,7 @@ Phase 3 - Nexus-Hub Harness Provisioning and Skills Surface.
 
 ### Goal
 
-Make a fresh install functional: the packaged app must spawn its Node sidecar, see the model catalog, reach the diffusion runtime, and the installer health check must prove it (plan `docs/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md`, Phase 1).
+Make a fresh install functional: the packaged app must spawn its Node sidecar, see the model catalog, reach the diffusion runtime, and the installer health check must prove it (plan `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md`, Phase 1).
 
 ### What Changed
 
@@ -1663,7 +1665,7 @@ No workflow changes needed: `shell-build.yml` already runs cargo check/clippy/te
 
 ### Known Issues
 
-See `docs/v2/v2.2/known-gaps.md` (3 DF, 2 MT; no bugs, no bypassed gates).
+See `docs/archive/v2/v2.2/known-gaps.md` (3 DF, 2 MT; no bugs, no bypassed gates).
 
 ### Next
 
@@ -1725,7 +1727,7 @@ Leave the v2.1 tree organized, gaps reconciled, CI covering the plan without ext
 
 ### What was done
 
-- Layout audit: canonical `docs/v2/v2.1/` already. SkillLoader empty catalog dirs kept. No archive moves.
+- Layout audit: canonical `docs/archive/v2/v2.1/` already. SkillLoader empty catalog dirs kept. No archive moves.
 - Known-gaps: recorded A13 mask canvas (DF-23) and A14 video comments (DF-24). DiffusionGemma flip conditions already on DF-1. Status still in-progress until the version bump.
 - CI: comments on `ci.yml` for v2.1 hardware gates and Phase 6 surfaces. Existing concurrency, caches, Node 22 desktop vitest, path-filtered installer/sandbox kept. No new OS matrix.
 
@@ -1932,9 +1934,9 @@ Leave the tree organized, ingest v1.15+ gaps into v2.0, and document hardware-ga
 
 ### What was done
 
-- **Layout**: propose-then-apply found nothing to move. Version docs already use `docs/v2/v2.0/{plans,comparisons}`. Skill-catalog empty dirs stay as test placeholders.
+- **Layout**: propose-then-apply found nothing to move. Version docs already use `docs/archive/v2/v2.0/{plans,comparisons}`. Skill-catalog empty dirs stay as test placeholders.
 - **Known-gaps**: carry-forward index for v1.15-v1.20. DF-13 Inkling GGUF multimodal, DF-14 Kimi K3 catalog wait. OpenWorker scheduler marked resolved (v1.18).
-- **CI**: `docs/v2/v2.0/ci-hardware-gates.md`; pytest `NEXUS_AUDIO_STUB=1`; existing caches and concurrency kept.
+- **CI**: `docs/archive/v2/v2.0/ci-hardware-gates.md`; pytest `NEXUS_AUDIO_STUB=1`; existing caches and concurrency kept.
 
 ### Next
 
@@ -1995,7 +1997,7 @@ Give the coding agent navigate / click / type / ARIA-snapshot / close tools at D
 
 ### What was done
 
-- **Security design**: `docs/v2/v2.0/browser-surface-security.md` (isolated `~/.nexus/browser-profiles/`, ConfirmationGate, `browser_snapshot` screening, loop-guard budget, no browser-as-a-service).
+- **Security design**: `docs/archive/v2/v2.0/browser-surface-security.md` (isolated `~/.nexus/browser-profiles/`, ConfirmationGate, `browser_snapshot` screening, loop-guard budget, no browser-as-a-service).
 - **Tools**: `browser_navigate`, `browser_click`, `browser_type`, `browser_aria_snapshot`, `browser_close`. vscode-free session in `modules/coding/browser/`. VS Code lazy handlers. Sidecar headless always registers the family.
 - **Tests**: InMemory + HTML fixtures in CI. Live Playwright skipped unless `NEXUS_BROWSER_PLAYWRIGHT=1`.
 - **Gaps**: DF-6 (Playwright not in lockfile), DF-7 (15-tool cap may trim the family from the VS Code prompt).
@@ -2021,7 +2023,7 @@ Chat accepts images against vision-capable local models, transcribes audio on-de
 - **Vision**: image attach gated on catalog `modalities` including `image`. Bytes go to `chat.session.sendMessage` as raw base64. Image Studio unchanged.
 - **STT**: `audio.transcribe` sidecar + `runtimes/audio` (faster-whisper catalog id). Transcripts labelled `stt_transcript` and scrubbed with `redactSecrets`. CI uses `NEXUS_AUDIO_STUB=1`.
 - **Voice loop**: off by default. PTT + button VAD, capture indicator, barge-in stops TTS, Kokoro `audio.speak`.
-- **Gaps**: DF-1..DF-5 and MT-1 in `docs/v2/v2.0/known-gaps.md`.
+- **Gaps**: DF-1..DF-5 and MT-1 in `docs/archive/v2/v2.0/known-gaps.md`.
 
 ### Tests
 
@@ -2353,7 +2355,7 @@ Close LFM2.5-8B-A1B with a pre-committed rule: catalog row only on a golden-task
 - **Rule**: `pass_rate / vramGB` on the same local golden split. Tie is not a win. Vendor tok/s / ToolSandbox / BFCL are not evidence.
 - **Run**: not completed. This host had Qwen 14B installed; DeepSeek 16B and the official 8B-A1B Q4_K_M GGUF (5.16 GB) were not local. No pass_rate table. `not_observed != absent`.
 - **Verdict**: **DECLINE**. No catalog / recommended / ModelCatalog row. Absence guards in catalog tests + installer invariants.
-- **Watchlist**: LFM2.5-VL deferred (existing multimodal coverage); PII-extract Nano deferred (possible future `redactSecrets` aid). Note: [`docs/v1/v1.19/development/2026-08-18_lfm25-8b-a1b-bake-off.md`](v1/v1.19/development/2026-08-18_lfm25-8b-a1b-bake-off.md).
+- **Watchlist**: LFM2.5-VL deferred (existing multimodal coverage); PII-extract Nano deferred (possible future `redactSecrets` aid). Note: [`docs/archive/v1/v1.19/development/2026-08-18_lfm25-8b-a1b-bake-off.md`](archive/v1/v1.19/development/2026-08-18_lfm25-8b-a1b-bake-off.md).
 
 ### Tests
 
@@ -2426,7 +2428,7 @@ Ship v1.18.0 on the convergent milestone line (package.json + CHANGELOG + README
 - **gitignore**: no change. `coverage/` already ignored. Ask-inbox and schedule JSON live under `~/.nexus/` (outside the repo). No LFS candidates.
 - **version**: `package.json` and `package-lock.json` 1.17.0 -> 1.18.0. `scripts/sync-tauri-version.mjs` rewrites `desktop/src-tauri/tauri.conf.json`. This repo has no `scripts/check_version_sync.py` (Nexus-Hub catalog guard); the local SSOT is root `package.json`. `desktop/package.json` and `desktop/src-tauri/Cargo.toml` remain at 1.5.0 (not in the sync script; left alone).
 - **changelog**: `[1.18.0]` prepended above `[1.17.0]`. Opt-in surfaces: harness selector, ACP agent, exec sandbox, scheduled agent runs (each with Activation / Validation / Rollback / Authority / Docs).
-- **refactor**: `docs/v1/v1.18/` already has `plans/` and `comparisons/`. No file moves. `check:docs-layout` and `check:naming` re-run. docs-cleanup-report updated for Phase 4 history.
+- **refactor**: `docs/archive/v1/v1.18/` already has `plans/` and `comparisons/`. No file moves. `check:docs-layout` and `check:naming` re-run. docs-cleanup-report updated for Phase 4 history.
 - **Hub self-gates**: `platform-read-contracts`, installer-parity checker, model-prompting freshness, and `generate_manifest.py` are no-ops (this is not a Nexus-Hub catalog repo).
 
 ### Tests
@@ -2471,7 +2473,7 @@ Close-out of landed v1.18 work: layout, known-gaps reconciliation, CI optimizati
 
 ### What was done
 
-- **Layout**: no file moves. Empty/duplicate/orphan detectors clean on v1.18 trees. `docs/v1/v1.18/` complete except Phase 4 history (phase not built). `check:docs-layout` and `check:naming` clean.
+- **Layout**: no file moves. Empty/duplicate/orphan detectors clean on v1.18 trees. `docs/archive/v1/v1.18/` complete except Phase 4 history (phase not built). `check:docs-layout` and `check:naming` clean.
 - **Known gaps**: DF-12..15 recorded (LG-A1, LG-A4, OI-A4-native, harness default-off). EM.P1.A / EM.P5.A remain resolved; EM.P3 / EM.P4 stay closed. Shared transport recorded as resolved. Status stays in-progress (DF-9).
 - **CI/CD**: three-OS sandbox matrix moved to [`.github/workflows/sandbox.yml`](../.github/workflows/sandbox.yml) with path filters. `ci.yml` `test-ts` still covers those files on PRs. Actions freeze does not apply.
 - **Release**: `/update release` not handed off (`is_final_phase` false).
@@ -2500,7 +2502,7 @@ Wrap `run_terminal` in OS-level confinement (OI-A1, closes EM.P5.A). Open Interp
 - **Windows**: job object + best-effort restricted token. Mode is **partial**. Filesystem and network are not kernel-enforced. AppContainer not applied (DF-11). Matrix in [`windowsMatrix.ts`](../modules/coding/sandbox/windowsMatrix.ts).
 - **Wiring**: `run_terminal` and headless sidecar share `spawnSandboxed`. Setting `nexus.coding.execSandbox` default **off**; sidecar `NEXUS_EXEC_SANDBOX`. Additive JSON `sandbox` key. Classifier raises enhanced confirmation when the setting is on but mode is not confined.
 - **CI/CD**: added push-only `test-sandbox` job (ubuntu / macos / windows, path-scoped vitest includes). `test-ts` already runs these files on PRs. Proposed (not applied): add a `paths:` filter on the job so it does not run on unrelated pushes.
-- **Known gaps**: EM.P5.A resolved per OS in [docs/v1/v1.18/known-gaps.md](v1/v1.18/known-gaps.md). New DF-11 (Windows FS/network). EM.P3 / EM.P4 stay closed.
+- **Known gaps**: EM.P5.A resolved per OS in [docs/archive/v1/v1.18/known-gaps.md](archive/v1/v1.18/known-gaps.md). New DF-11 (Windows FS/network). EM.P3 / EM.P4 stay closed.
 
 ### Tests
 
@@ -2576,7 +2578,7 @@ Turn the dormant per-model harness selector on behind `nexus.coding.harnessSelec
 - **Desktop badge**: optional `harnessLabel` on [`ModelSelector`](../desktop/src/shared/chat/ModelSelector.tsx); Coding page shows the auto-selected profile id.
 - **A/B**: `liveHarnessKnobs` in `HarnessSelectorAb.ts` covers the same overlay seam. `HARNESS_SELECTOR_SHIPPED_DEFAULT` remains `false` (no live weak-model A/B; EM.P1.B).
 - **CI/CD**: no rewrite. `ci.yml` `test-ts` is unfiltered. `shell-build.yml` already watches `desktop/**` and `modules/**`.
-- **Known gaps**: EM.P1.A resolved in [docs/v1/v1.18/known-gaps.md](v1/v1.18/known-gaps.md). New DF-3 (sidecar overlay), DF-4 (badge vs setting), DF-5 (EM.P1.C remainder).
+- **Known gaps**: EM.P1.A resolved in [docs/archive/v1/v1.18/known-gaps.md](archive/v1/v1.18/known-gaps.md). New DF-3 (sidecar overlay), DF-4 (badge vs setting), DF-5 (EM.P1.C remainder).
 
 ### Tests
 
@@ -2600,7 +2602,7 @@ Ship the zero-code wins first: document that OpenWorker's morning-brief *content
 - **llama.cpp recipe**: [docs/reference/llamacpp-loopback-adapter.md](reference/llamacpp-loopback-adapter.md) plus [examples/llamacpp-loopback-adapter.json](reference/examples/llamacpp-loopback-adapter.json). `protocol: "openai"`, loopback host only, no trailing `/v1`. llama-server flags: `--host 127.0.0.1`, `--n-cpu-moe` / `--cpu-moe`, `--load-mode mmap` for the disk-streamed path. Patient tier stays closed.
 - **Tests**: [tests/unit/docs/v1.18-phase-1-reference.test.ts](../tests/unit/docs/v1.18-phase-1-reference.test.ts) -- example parses against `validateLocalAdapterManifest`; LAN/remote/`0.0.0.0` mutations rejected with MCP Registry Policy citation; guide fences stay valid; internal links resolve; builtin catalog has no duplicate of the two Hub skills.
 - **CI/CD**: no rewrite. `ci.yml` `test-ts` is unfiltered, so the new docs tests run there. There is no dedicated docs-link job; the unit test is the link check. Path-filter proposal: none.
-- **Known gaps**: [docs/v1/v1.18/known-gaps.md](v1/v1.18/known-gaps.md) created (in-progress). DF-1 live llama-server smoke not proven here; DF-2 Hub catalog not present in CI.
+- **Known gaps**: [docs/archive/v1/v1.18/known-gaps.md](archive/v1/v1.18/known-gaps.md) created (in-progress). DF-1 live llama-server smoke not proven here; DF-2 Hub catalog not present in CI.
 - **User docs**: README, `docs/install.md`, `ARCHITECTURE.md`, ADR-0019, `docs/todos.md`.
 
 ### Tests
@@ -2732,7 +2734,7 @@ Replace ad-hoc loaders with one internal Canvas orb that expresses agent activit
 - **Adoption**: Coding busy row, chat pending composing bubble (then patch), image/video pending shaping, LocalModelStatus loading/active, GenerationCanvas hero overlay (retained canvas; aurora kept, DF-4). "Generating..." text removed from `MessageBubble`.
 - **Tests**: desktop 878 passed / 0 failed (101 files). Coverage 92.73% lines / 85.74% branches / 84.8% functions. Lint and `tsc --noEmit` clean for `@nexus/desktop`.
 - **CI/CD**: no rewrite. `shell-build.yml` already watches `desktop/**` with cancel-in-progress, npm cache, and PR ubuntu-only matrix.
-- **Docs**: mapping table in `docs/v1/v1.17/design-tokens.md`, known-gaps DF-4/5/6 plus DF-2 update, session history, this entry.
+- **Docs**: mapping table in `docs/archive/v1/v1.17/design-tokens.md`, known-gaps DF-4/5/6 plus DF-2 update, session history, this entry.
 
 ### Next
 
@@ -2753,7 +2755,7 @@ Give every later motion effect (orbs, beam, metal) shared primitives: motion tok
 - **Recede**: `MotionActivityProvider` + `useActiveMotionSurface`. App backdrop and constellation dim via opacity when any surface is active. Styleguide toggle is the Phase 1 reference integration; production surfaces wait for Phase 5 (DF-2).
 - **Tests**: desktop 849 passed / 0 failed (98 files). Coverage 92.57% lines / 85.77% branches / 84.62% functions. Lint and `tsc --noEmit` clean for `@nexus/desktop`.
 - **CI/CD**: no rewrite. `shell-build.yml` already watches `desktop/**` with concurrency cancel-in-progress and npm cache.
-- **Docs**: `docs/v1/v1.17/design-tokens.md`, known-gaps (DF-1/2/3), session history, this entry.
+- **Docs**: `docs/archive/v1/v1.17/design-tokens.md`, known-gaps (DF-1/2/3), session history, this entry.
 
 ### Next
 
@@ -2771,7 +2773,7 @@ Ship v1.16.0 on the convergent milestone line (git tag + `package.json` + CHANGE
 
 - **docs**: README current-cycle + ledger + What's New rewritten for v1.16.0 (serving, OCR, analytics, model library, MLX). Featured-capabilities rows added. Install guide gained an after-install section. Root ARCHITECTURE.md names `desktop/sidecar/src/serving/` and `core/documents/`. Known-gaps for v1.16 and v1.15 flipped to finalized. Plan header no longer says "next 2.x semantic-release".
 - **devlog**: this entry.
-- **gitignore**: no new patterns. `.nexus/` already covers `settings.json` (serving token). Python/OCR caches already ignored. `docs/v2/v2.1/` was left untracked at the release cut (next-cycle comparison) and is committed separately after CI recovery.
+- **gitignore**: no new patterns. `.nexus/` already covers `settings.json` (serving token). Python/OCR caches already ignored. `docs/archive/v2/v2.1/` was left untracked at the release cut (next-cycle comparison) and is committed separately after CI recovery.
 - **version**: `package.json` and `package-lock.json` 1.14.0 -> 1.16.0 (merged with the `main` 1.15.0 bump). `scripts/sync-tauri-version.mjs` rewrites `desktop/src-tauri/tauri.conf.json`. This repo has no `scripts/check_version_sync.py` (Nexus-Hub catalog guard); the local SSOT is root `package.json`. `desktop/package.json` and `desktop/src-tauri/Cargo.toml` remain at 1.5.0 (not in the sync script; left alone).
 - **changelog**: `[1.16.0]` prepended above the existing `[1.15.0]` block, with Activation/Validation/Rollback/Authority/Docs for the Local API server and the OCR catalog entries. `parse_document` settings called out as unwired (LSO.P4.B/C), not as a shipped switch.
 - **refactor**: propose-only, no moves. Phase 6 already audited layout. Dual vscode/headless clients stay as LSO.P1.B.
@@ -2796,7 +2798,7 @@ Turn merge-commit CI #362 / #363 green without retagging `v1.16.0`. Two jobs fai
 - Regenerated `docs/index.md` (`npm run catalog`) and added the missing `activation` one-liner in `scripts/generate-catalog.mjs`.
 - In-range `overrides` bumps in root `package.json` (`hono`, `dompurify`, `undici`, `@hono/node-server`, `fast-uri`, `ip-address`, `react-router`) plus desktop `react-router-dom` `^7.18.2`. No semver-major moves.
 - Allowlisted the optional `@huggingface/transformers` -> `onnxruntime-node` -> `adm-zip` / `sharp` chain (no in-range fix) in `scripts/check-prod-audit.mjs`; recorded as ENV.CI.A in v1.16 known-gaps.
-- `docs/v2/v2.1/` comparison + adoption plan committed as next-cycle docs (not part of the 1.16.0 tag).
+- `docs/archive/v2/v2.1/` comparison + adoption plan committed as next-cycle docs (not part of the 1.16.0 tag).
 
 ### Next
 
@@ -2812,7 +2814,7 @@ Close the v1.16.0 cycle: verify the layout, reconcile known gaps (including the 
 
 ### What was done (verification + reconciliation; no feature code)
 
-**6.1 Architecture.** Detectors clean: no empty dirs in v1.16-touched trees, `check:docs-layout` and `check:naming` clean. Dual vscode/headless LLM clients and `serving/adapters.ts` vs `LocalAdapterRegistry` stay as LSO.P1.B (sidecar cannot import vscode-bound clients). Unwired-but-tested surfaces got RETAINED-NOT-DEAD headers rather than deletion: `parse_document` / memory ingest (LSO.P4.B/C), `createTelemetryMetricPublisher` (LSO.P2.B), `panelData` PLACEHOLDER_TRACE (LSO.P2.A). `docs/v1/v1.16/` is complete.
+**6.1 Architecture.** Detectors clean: no empty dirs in v1.16-touched trees, `check:docs-layout` and `check:naming` clean. Dual vscode/headless LLM clients and `serving/adapters.ts` vs `LocalAdapterRegistry` stay as LSO.P1.B (sidecar cannot import vscode-bound clients). Unwired-but-tested surfaces got RETAINED-NOT-DEAD headers rather than deletion: `parse_document` / memory ingest (LSO.P4.B/C), `createTelemetryMetricPublisher` (LSO.P2.B), `panelData` PLACEHOLDER_TRACE (LSO.P2.A). `docs/archive/v1/v1.16/` is complete.
 
 **6.2 Known gaps.** 19 open across Phases 1-5, 0 new in Phase 6, all non-blocking. v1.15 IRSC.P4.B is the same HF-placeholder pin that causes LSO.P3.A. Terminal reconciliation block written. File not version-bumped (that is `/update release`).
 
@@ -2834,9 +2836,9 @@ Make the existing loopback-adapter path to MLX discoverable without shipping a r
 
 ### 5.1 MLX via localAdapters (A3)
 
-Nexus still does not bundle MLX (v1.12 D4, v1.16 N3). The how-to at [docs/v1/v1.16/guides/mlx-via-local-adapters.md](v1/v1.16/guides/mlx-via-local-adapters.md) shows how to register an mlx-vlm / LM Studio MLX / nativ loopback server as `nexus.llm.localAdapters` with `protocol: "openai"`, then select it with `nexus.llm.backend`. Endpoints must not carry a trailing `/v1` (the OpenAI client appends `/v1/chat/completions`). Linked from README, [docs/install.md](install.md) (macOS), and [docs/adr/0019-local-adapter-registry.md](adr/0019-local-adapter-registry.md).
+Nexus still does not bundle MLX (v1.12 D4, v1.16 N3). The how-to at [docs/archive/v1/v1.16/guides/mlx-via-local-adapters.md](archive/v1/v1.16/guides/mlx-via-local-adapters.md) shows how to register an mlx-vlm / LM Studio MLX / nativ loopback server as `nexus.llm.localAdapters` with `protocol: "openai"`, then select it with `nexus.llm.backend`. Endpoints must not carry a trailing `/v1` (the OpenAI client appends `/v1/chat/completions`). Linked from README, [docs/install.md](install.md) (macOS), and [docs/adr/0019-local-adapter-registry.md](adr/0019-local-adapter-registry.md).
 
-The on-device smoke note is [docs/v1/v1.16/testing/macos-mlx-smoke.md](v1/v1.16/testing/macos-mlx-smoke.md): a blank checklist, same pattern as the v1.11 macOS install checklist. Windows cannot virtualize macOS, so a live chat against mlx-vlm is `internal-compatible` until an operator fills section D (LSO.P5.A). `tests/unit/docs/mlx-local-adapter-example.test.ts` extracts every JSON fence from the how-to, runs `validateLocalAdapterManifest`, and rejects a trailing `/v1`.
+The on-device smoke note is [docs/archive/v1/v1.16/testing/macos-mlx-smoke.md](archive/v1/v1.16/testing/macos-mlx-smoke.md): a blank checklist, same pattern as the v1.11 macOS install checklist. Windows cannot virtualize macOS, so a live chat against mlx-vlm is `internal-compatible` until an operator fills section D (LSO.P5.A). `tests/unit/docs/mlx-local-adapter-example.test.ts` extracts every JSON fence from the how-to, runs `validateLocalAdapterManifest`, and rejects a trailing `/v1`.
 
 ### 5.2 Model-library UX (A4)
 
@@ -2944,7 +2946,7 @@ The suite rejected `multimodal: true` on the OCR VLM, correctly: `multimodal` me
 
 ### Known issues
 
-6 new deferrals in [v1/v1.16/known-gaps.md](v1/v1.16/known-gaps.md). The headline one, LSO.P3.A, is inherited rather than new: the in-app install path cannot install *any* HuggingFace model because every entry carries a placeholder digest and `Downloader.ts` fails closed. The new revision pins improve integrity meanwhile. LSO.P3.C records that neither engine has been run against real weights -- deliberately, since weights stay out of CI.
+6 new deferrals in [v1/v1.16/known-gaps.md](archive/v1/v1.16/known-gaps.md). The headline one, LSO.P3.A, is inherited rather than new: the in-app install path cannot install *any* HuggingFace model because every entry carries a placeholder digest and `Downloader.ts` fails closed. The new revision pins improve integrity meanwhile. LSO.P3.C records that neither engine has been run against real weights -- deliberately, since weights stay out of CI.
 
 ---
 
@@ -2977,7 +2979,7 @@ Capture per-request inference metrics (tokens/sec, time-to-first-token, token co
 
 ### Known issues
 
-5 new open items in [v1/v1.16/known-gaps.md](v1/v1.16/known-gaps.md), all deferrals with concrete next steps. The notable one is LSO.P2.A: `traceSubscribe()` still returns hardcoded placeholder events, so the per-request event list below the new analytics section is still fake - the sidecar has no `TraceStore` at all, which makes that a design decision rather than a query change.
+5 new open items in [v1/v1.16/known-gaps.md](archive/v1/v1.16/known-gaps.md), all deferrals with concrete next steps. The notable one is LSO.P2.A: `traceSubscribe()` still returns hardcoded placeholder events, so the per-request event list below the new analytics section is still fake - the sidecar has no `TraceStore` at all, which makes that a design decision rather than a query change.
 
 ---
 
@@ -3005,7 +3007,7 @@ The plan called for routing through `LocalAdapterRegistry.createClient`. That mo
 
 ### Known issues
 
-5 open items in [v1/v1.16/known-gaps.md](v1/v1.16/known-gaps.md) - the headline one is LSO.P1.A: `usage` token counts are emitted as zeros because the `LLMClient` port carries none, and Phase 2.1 captures exactly those numbers at exactly this boundary.
+5 open items in [v1/v1.16/known-gaps.md](archive/v1/v1.16/known-gaps.md) - the headline one is LSO.P1.A: `usage` token counts are emitted as zeros because the `LLMClient` port carries none, and Phase 2.1 captures exactly those numbers at exactly this boundary.
 
 ---
 
@@ -3196,7 +3198,7 @@ Close the v1.14.0 cycle: verify the layout, reconcile known gaps, confirm CI/CD,
 
 ### What happened (verification + reconciliation; no feature code changed)
 
-- **Architecture**: no-op -- the cycle's new modules (`engine/hf_auth.py`, `engine/gated_auth.py`, `widgets/gated_auth_dialog.py`) + `scripts/installer/README.md` + tests are correctly placed; no empty/duplicate/orphan artifacts, no stray markers; `docs/v1/v1.14/` canonical.
+- **Architecture**: no-op -- the cycle's new modules (`engine/hf_auth.py`, `engine/gated_auth.py`, `widgets/gated_auth_dialog.py`) + `scripts/installer/README.md` + tests are correctly placed; no empty/duplicate/orphan artifacts, no stray markers; `docs/archive/v1/v1.14/` canonical.
 - **Known-gaps**: v1.13 carry-forwards reconciled (`IR.P1.C` + `IR.P2.B` resolved; `IR.P1.A`/`IR.P2.A` partial via the live reachability leg; the rest freeze-deferred / QA); the v1.14 terminal reconciliation block added.
 - **CI/CD**: the installer pytest job (`ci.yml`) auto-covers the new tests; the reachability job (`installer-smoke.yml`) is freeze-safe; concurrency + caching present. No new job.
 - **Tests**: static gates green (tsc, eslint, check-architecture 0 errors / 10 pre-existing warnings, check:tampering 0, security:check in sync); installer pytest green; root vitest 4637 passed / 6 skipped / 2 load-flakes (`memory-auto-archive`, `memory-consolidator-large`) that PASS in isolation -- the v1.13 baseline, not v1.14 regressions.
@@ -3233,7 +3235,7 @@ Fix the three installing-page defects from the v2.3.0 test screenshots: the depe
 
 ### Known gaps
 
-`docs/v1/v1.14/known-gaps.md`: ICR.P4.A (on-device visual QA of the installing-page polish).
+`docs/archive/v1/v1.14/known-gaps.md`: ICR.P4.A (on-device visual QA of the installing-page polish).
 
 ---
 
@@ -3257,7 +3259,7 @@ Fix the "too many models, unclear which to pick" clutter on the Models page: sho
 
 ### Known gaps
 
-`docs/v1/v1.14/known-gaps.md`: ICR.P3.A (on-device picker QA), ICR.P3.B (no in-installer show-all-variants toggle -- deliberate).
+`docs/archive/v1/v1.14/known-gaps.md`: ICR.P3.A (on-device picker QA), ICR.P3.B (no in-installer show-all-variants toggle -- deliberate).
 
 ---
 
@@ -3271,7 +3273,7 @@ Deliver the "every offered model installs, never silently fails" guarantee for t
 
 - **Token discovery** (`engine/hf_auth.py`, new): `discover_hf_token(state)` resolves a Hugging Face token in precedence order -- `InstallerState.hf_token` (guided step) -> env (`HF_TOKEN` / `HUGGING_FACE_HUB_TOKEN`) -> the `huggingface-cli login` cache (`$HF_TOKEN_PATH` / `$HF_HOME/token` / `~/.cache/huggingface/token`). Plus `mask_token` (log/UI-safe) and `validate_token_for_repo` (authenticated model-info check). The puller now uses `discover_hf_token(state)` (env-only `hf_token_from_env` kept + re-exported for back-compat); `InstallerState` gained an `hf_token` field.
 - **Guided step** (`widgets/gated_auth_dialog.py` + `engine/gated_auth.py`, new): when a gated model is selected and no token is found, a one-time dialog opens the model's license page, takes a free read token, validates it against the repo, and proceeds; declining removes the model from the install queue (never a silent mid-download failure). The coordinator (`ensure_gated_auth`) is UI-independent and fully unit-tested; it is wired into the installing page BEFORE the engine reads the selection, and a discovered token covers every gated selection with no prompt.
-- **Live reachability** (2.3): ran the probe LIVE against HF + the Ollama registry -- **0 dead references**; `sd1.5` now resolves OK via the Phase 1 mirror re-point; the 3 offered gated opt-ins are correctly flagged and unlockable. Evidence in `docs/v1/v1.14/development/reachability-2026-07-19.md`. Added `scripts/installer/README.md` documenting `--preflight` / `--reachability` and the gated-model flow (closes IR.P2.B).
+- **Live reachability** (2.3): ran the probe LIVE against HF + the Ollama registry -- **0 dead references**; `sd1.5` now resolves OK via the Phase 1 mirror re-point; the 3 offered gated opt-ins are correctly flagged and unlockable. Evidence in `docs/archive/v1/v1.14/development/reachability-2026-07-19.md`. Added `scripts/installer/README.md` documenting `--preflight` / `--reachability` and the gated-model flow (closes IR.P2.B).
 
 ### Deferred (honest, operator/freeze-bound)
 
@@ -3284,7 +3286,7 @@ Deliver the "every offered model installs, never silently fails" guarantee for t
 
 ### Known gaps
 
-`docs/v1/v1.14/known-gaps.md`: ICR.P1.B resolved; ICR.P2.A-D opened (live run, on-device QA, pin rotation, auxiliary ControlNet gating).
+`docs/archive/v1/v1.14/known-gaps.md`: ICR.P1.B resolved; ICR.P2.A-D opened (live run, on-device QA, pin rotation, auxiliary ControlNet gating).
 
 ---
 
@@ -3308,7 +3310,7 @@ Clean the model catalog and set up the "every offered model installs" guarantee:
 
 ### Known gaps
 
-See `docs/v1/v1.14/known-gaps.md` (ICR.P1.A-D): the guided-auth flow + pin rotation are sequenced into Phase 2 by design.
+See `docs/archive/v1/v1.14/known-gaps.md` (ICR.P1.A-D): the guided-auth flow + pin rotation are sequenced into Phase 2 by design.
 
 ---
 
@@ -3320,7 +3322,7 @@ Close the v1.13.0 cycle: verify the layout, reconcile known gaps, confirm CI/CD,
 
 ### What happened (verification + reconciliation; no feature code changed)
 
-- **Architecture**: near-no-op -- the cycle's new modules + tests are in the right trees, no deprecated/empty/duplicate/orphan artifacts, no stray markers; `docs/v1/v1.13/` is canonical.
+- **Architecture**: near-no-op -- the cycle's new modules + tests are in the right trees, no deprecated/empty/duplicate/orphan artifacts, no stray markers; `docs/archive/v1/v1.13/` is canonical.
 - **Known-gaps**: all 11 items triaged/kept with accurate reasons (freeze-blocked live runs, on-device QA, polish); none block code. Phase 6 reconciliation block added.
 - **CI/CD**: installer pytest job auto-covers the new tests; the Phase-2 reachability job is freeze-safe. No new job.
 - **Tests**: static gates green (tsc, lint, check-architecture 0 errors, check:tampering 0, security:check in sync); installer pytest + desktop Sidebar green; root suite 4637 passed / 6 skipped. The 2 full-suite failures are `golden-runner-end-to-end` timeouts that PASS in isolation (load-induced flakiness in the coding pillar, unrelated to this cycle).
@@ -3352,7 +3354,7 @@ Release (version bump / changelog / tag / GitHub Release) is semantic-release-ow
 
 ### Deferrals
 
-Section icons are font-glyph approximations (not the exact logos), the active spinner is static, and the help-card icon is unadded (IR.P5.A - polish). See [v1/v1.13/known-gaps.md](v1/v1.13/known-gaps.md).
+Section icons are font-glyph approximations (not the exact logos), the active spinner is static, and the help-card icon is unadded (IR.P5.A - polish). See [v1/v1.13/known-gaps.md](archive/v1/v1.13/known-gaps.md).
 
 ---
 
@@ -3370,7 +3372,7 @@ Section icons are font-glyph approximations (not the exact logos), the active sp
 
 ### Deferrals
 
-`BASE_INSTALL_GB` is an estimate + the picker interactions want on-device QA (IR.P4.A). See [v1/v1.13/known-gaps.md](v1/v1.13/known-gaps.md).
+`BASE_INSTALL_GB` is an estimate + the picker interactions want on-device QA (IR.P4.A). See [v1/v1.13/known-gaps.md](archive/v1/v1.13/known-gaps.md).
 
 ---
 
@@ -3391,7 +3393,7 @@ Render "Nexus AI Studio" in full (the sidebar clipped the "o") with the brand bl
 
 ### Deferrals
 
-On-device visual confirmation of the wordmark (IR.P3.A) is cosmetic and deferred to the next on-device QA pass (offscreen renders are verified). See [v1/v1.13/known-gaps.md](v1/v1.13/known-gaps.md).
+On-device visual confirmation of the wordmark (IR.P3.A) is cosmetic and deferred to the next on-device QA pass (offscreen renders are verified). See [v1/v1.13/known-gaps.md](archive/v1/v1.13/known-gaps.md).
 
 ---
 
@@ -3413,7 +3415,7 @@ Prove every default model pulls **and** loads before a user hits it - the live g
 
 ### Deferrals
 
-The live `nexus-installer --preflight` run (IR.P2.A, the gate for IR.P1.A) needs a real Gemma-4-capable Ollama + downloads; its CI leg is freeze-deferred (IR.P1.E). No installer README yet (IR.P2.B). See [v1/v1.13/known-gaps.md](v1/v1.13/known-gaps.md).
+The live `nexus-installer --preflight` run (IR.P2.A, the gate for IR.P1.A) needs a real Gemma-4-capable Ollama + downloads; its CI leg is freeze-deferred (IR.P1.E). No installer README yet (IR.P2.B). See [v1/v1.13/known-gaps.md](archive/v1/v1.13/known-gaps.md).
 
 ---
 
@@ -3436,7 +3438,7 @@ Installer pytest green (new gated / token / permanent-error / version-gate / cat
 
 ### Deferrals
 
-Live pull+load verification (IR.P1.A) is the Phase 2 preflight's job, whose CI leg is freeze-deferred (IR.P1.E, continuing v1.11 `IO.P2.A`); real SHA pins for placeholder-pinned defaults deferred (needs downloads). See [v1/v1.13/known-gaps.md](v1/v1.13/known-gaps.md).
+Live pull+load verification (IR.P1.A) is the Phase 2 preflight's job, whose CI leg is freeze-deferred (IR.P1.E, continuing v1.11 `IO.P2.A`); real SHA pins for placeholder-pinned defaults deferred (needs downloads). See [v1/v1.13/known-gaps.md](archive/v1/v1.13/known-gaps.md).
 
 ---
 
@@ -3456,7 +3458,7 @@ Verify the whole-plan definition-of-pass, reconcile architecture + known-gaps (t
 
 ### v1.12.0 summary (6 phases)
 
-H1 per-model harness selector (opt-in) + H2 guidance; L1 the v1.7 skill optimizer surfaced via `nexus skills optimize`/`frontier` CLIs + a desktop preview/apply approval UI (+ the vscode decoupling that unblocked it); Q1 an extreme-low-bit (BitNet-class) tier gate (fail-closed); E1/E3 a disk-offload "patient" tier mechanism (E2 deferred -- Ollama `/api/chat` has no persistable KV); H3 an exec-sandbox audit + a `run_terminal` secret-path gate (OS sandbox recorded as a roadmap item). Every net-new capability is local-only and ships gated/off by default per the reverse-engineer-first, no-degradation discipline; the honest deferrals are all recorded in the [known-gaps ledger](v1/v1.12/known-gaps.md).
+H1 per-model harness selector (opt-in) + H2 guidance; L1 the v1.7 skill optimizer surfaced via `nexus skills optimize`/`frontier` CLIs + a desktop preview/apply approval UI (+ the vscode decoupling that unblocked it); Q1 an extreme-low-bit (BitNet-class) tier gate (fail-closed); E1/E3 a disk-offload "patient" tier mechanism (E2 deferred -- Ollama `/api/chat` has no persistable KV); H3 an exec-sandbox audit + a `run_terminal` secret-path gate (OS sandbox recorded as a roadmap item). Every net-new capability is local-only and ships gated/off by default per the reverse-engineer-first, no-degradation discipline; the honest deferrals are all recorded in the [known-gaps ledger](archive/v1/v1.12/known-gaps.md).
 
 ### Release
 
@@ -3476,7 +3478,7 @@ Audit Nexus's isolation for agent-run commands against the OS-level process sand
 
 ### The audit (primary deliverable)
 
-[docs/v1/v1.12/exec-sandbox-audit.md](v1/v1.12/exec-sandbox-audit.md). Verdict: Nexus has **NO OS process sandbox** -- `run_terminal` uses `spawn(shell:true)` at the app user's full privilege; isolation is tool-layer command-string filtering (a ~14-entry literal blocklist, an advisory allowlist, an operator-authored touched-path denylist that is dormant by default) + a DANGEROUS-tier confirmation gate + env-var scrubbing + a cwd/worktree re-root. None of it confines the process. For the "confine an approved-but-harmful command" threat (incl. `python -c "..."`, unrestricted `curl`, reading `~/.ssh`), Nexus is **materially weaker** than an OS sandbox.
+[docs/archive/v1/v1.12/exec-sandbox-audit.md](archive/v1/v1.12/exec-sandbox-audit.md). Verdict: Nexus has **NO OS process sandbox** -- `run_terminal` uses `spawn(shell:true)` at the app user's full privilege; isolation is tool-layer command-string filtering (a ~14-entry literal blocklist, an advisory allowlist, an operator-authored touched-path denylist that is dormant by default) + a DANGEROUS-tier confirmation gate + env-var scrubbing + a cwd/worktree re-root. None of it confines the process. For the "confine an approved-but-harmful command" threat (incl. `python -c "..."`, unrestricted `curl`, reading `~/.ssh`), Nexus is **materially weaker** than an OS sandbox.
 
 ### What changed (bounded hardening)
 
@@ -3612,7 +3614,7 @@ Make the skill self-optimization loop that shipped in v1.7.0 -- but was never re
 
 ### Honest scope (partial phase)
 
-Two Phase-2 items are **deferred with rationale**, not done: **`nexus skills frontier`** (`EM.P2.B` -- needs the `CandidateFrontier` composition root + `WorktreeCandidateManager` git wiring) and the **desktop-sidecar method** (`EM.P2.A` -- the sidecar transport is one-shot request/response with no server-push channel, so the interactive approval round-trip needs a multi-call protocol + a React approval UI; deferred to preserve the guardrail rather than ship a half-built approval path). Both in [v1.12 known-gaps](v1/v1.12/known-gaps.md). The composition root they will both reuse now exists.
+Two Phase-2 items are **deferred with rationale**, not done: **`nexus skills frontier`** (`EM.P2.B` -- needs the `CandidateFrontier` composition root + `WorktreeCandidateManager` git wiring) and the **desktop-sidecar method** (`EM.P2.A` -- the sidecar transport is one-shot request/response with no server-push channel, so the interactive approval round-trip needs a multi-call protocol + a React approval UI; deferred to preserve the guardrail rather than ship a half-built approval path). Both in [v1.12 known-gaps](archive/v1/v1.12/known-gaps.md). The composition root they will both reuse now exists.
 
 ### Verification
 
@@ -3628,7 +3630,7 @@ Two Phase-2 items are **deferred with rationale**, not done: **`nexus skills fro
 
 ### Goal
 
-Open the v1.12.0 ecosystem-adoption cycle (from the four-source comparison [comparison-ecosystem-2026-07.md](v1/v1.12/comparison-ecosystem-2026-07.md)) with its highest-value net-new item: reverse-engineer the Open Interpreter / Codex-fork "get the best out of low-cost models" thesis into a lean, local-only per-model harness selector, so the small / quantized models the single-GPU ceiling forces are driven with a scaffold tuned to their capability tier.
+Open the v1.12.0 ecosystem-adoption cycle (from the four-source comparison [comparison-ecosystem-2026-07.md](archive/v1/v1.12/comparison-ecosystem-2026-07.md)) with its highest-value net-new item: reverse-engineer the Open Interpreter / Codex-fork "get the best out of low-cost models" thesis into a lean, local-only per-model harness selector, so the small / quantized models the single-GPU ceiling forces are driven with a scaffold tuned to their capability tier.
 
 ### What changed
 
@@ -3639,7 +3641,7 @@ Open the v1.12.0 ecosystem-adoption cycle (from the four-source comparison [comp
 
 ### Honest scope
 
-The feature ships **opt-in / off**: the per-tier profile values are heuristic and the article's "demonstrably lifts a weak model" claim needs a LIVE Ollama-backed golden A/B not runnable in CI, so `decideHarnessDefault` gates default-on until that measurement shows a net win (`EM.P1.B`, the SO003.P3.A discipline). Wiring the overlay into the live prompt at the composition root is deferred (`EM.P1.A`, the SO001.P1.A precedent). Both are in [v1.12 known-gaps](v1/v1.12/known-gaps.md).
+The feature ships **opt-in / off**: the per-tier profile values are heuristic and the article's "demonstrably lifts a weak model" claim needs a LIVE Ollama-backed golden A/B not runnable in CI, so `decideHarnessDefault` gates default-on until that measurement shows a net win (`EM.P1.B`, the SO003.P3.A discipline). Wiring the overlay into the live prompt at the composition root is deferred (`EM.P1.A`, the SO001.P1.A precedent). Both are in [v1.12 known-gaps](archive/v1/v1.12/known-gaps.md).
 
 ### Verification
 
@@ -3660,7 +3662,7 @@ Close the v1.11.0 installer overhaul: a refactor/hygiene pass over the tree grow
 ### What changed
 
 - **T801 architecture refactor** (verification pass): the release-fetch dead code was already removed in P4 (only a historical docstring mention remains in [desktop_provisioner.py](../scripts/installer/src/nexus_installer/engine/desktop_provisioner.py)); no empty dirs; `__pycache__` gitignored with zero committed `.pyc`; the P7 [background/](../scripts/installer/src/nexus_installer/background/) package has a clean Qt-free-logic / thin-Qt-wiring boundary and spawns no subprocesses (spawn discipline already unified via `no_window_kwargs()`). **Decision (IO.P3.A):** RETAIN the unwired `provisioner_dispatch` chain -- wire+bundle (a multi-GB artifact) vs. retire is a product decision beyond an installer-overhaul cleanup, not a dead-code deletion.
-- **T802 known-gaps reconciliation** ([known-gaps.md](v1/v1.11/known-gaps.md) section 3): every open v1.11.0 gap adjudicated -- 4 RESOLVED (Ollama pin, spawn sweep, spinner-log, BOM profiles), 3 TRANSFERRED (the gated-models catalog-UI decision IO.P1.A/P5.C/P6.E merged into one v1.12 catalog pass), the rest DEFERRED (operator verification actions + the standing NHC.P5.A lint baseline). **Zero P0/P1 blockers open.**
+- **T802 known-gaps reconciliation** ([known-gaps.md](archive/v1/v1.11/known-gaps.md) section 3): every open v1.11.0 gap adjudicated -- 4 RESOLVED (Ollama pin, spawn sweep, spinner-log, BOM profiles), 3 TRANSFERRED (the gated-models catalog-UI decision IO.P1.A/P5.C/P6.E merged into one v1.12 catalog pass), the rest DEFERRED (operator verification actions + the standing NHC.P5.A lint baseline). **Zero P0/P1 blockers open.**
 - **T803 CI/CD** ([ci.yml](../.github/workflows/ci.yml) `test-installer` job + new [ci-linux.json](../scripts/installer/testing/profiles/ci-linux.json) profile): the job now runs (a) pytest (hard gate), (b) a **network-free headless-smoke result-JSON contract gate** -- runs the T202 `--headless-smoke` path on a clean Linux runner with a venv-only profile (a no-op since ADR-0001) and asserts `schema` / `success` / `steps_failed` (hard gate), and (c) ruff + mypy as **advisory** visibility steps over the deferred NHC.P5.A baseline (mypy's baseline is platform-conditional -- the `ctypes.windll` type-ignore flips between Windows and Linux -- so it cannot be a clean cross-platform hard gate). The advisory steps carry `nexus-check-allow: no-disabled-ci-check` annotations; `check:tampering` is green. The full multi-component clean-machine run stays the operator Windows Sandbox action until the Actions freeze lifts (2026-08-01, IO.P2.A).
 - **T804 final gate + docs**: installer suite green (821 passed, 2 skipped); `check:docs-layout` + `check:tampering` green; no TypeScript touched (root/desktop suites unaffected). The plan's top status flipped to COMPLETE; this DEVLOG entry added; README stays product-level.
 
@@ -3785,7 +3787,7 @@ Make every dependency step work from absolute scratch -- no Ollama, no Python, n
 
 ### What changed
 
-- **T301 audit** (full table in [known-gaps 1c](v1/v1.11/known-gaps.md)): the live engine's five steps + detection surfaces were audited from-scratch. Headline findings: the venv step is a no-op stub since v0.4.0 (no system-Python assumption exists); the payload provisioner chain (`provisioner_dispatch` cuda/python/node/ffmpeg) is UNWIRED scaffolding with zero live callers and no bundled payload -- the desktop app owns its own diffusion runtime (`IO.P3.A`); GPU-less detection degrades cleanly (code-verified).
+- **T301 audit** (full table in [known-gaps 1c](archive/v1/v1.11/known-gaps.md)): the live engine's five steps + detection surfaces were audited from-scratch. Headline findings: the venv step is a no-op stub since v0.4.0 (no system-Python assumption exists); the payload provisioner chain (`provisioner_dispatch` cuda/python/node/ffmpeg) is UNWIRED scaffolding with zero live callers and no bundled payload -- the desktop app owns its own diffusion runtime (`IO.P3.A`); GPU-less detection degrades cleanly (code-verified).
 - **T302 Ollama pins are real (closes `IO.P1.B`)** ([ollama_installer.py](../scripts/installer/src/nexus_installer/engine/ollama_installer.py)): `v0.32.0` with the GitHub-published asset digests for both platforms (the old v0.3.6 + all-zero sha256 could NEVER verify -- a clean machine always aborted). Windows keeps Authenticode fail-closed on top. **Linux moved off `install.sh` entirely** (unpinnable: the script drifts with every upstream release) to the immutable `ollama-linux-amd64.tar.zst` release asset, installed user-locally (no sudo; we manage `ollama serve` ourselves since P1), extracted with path-traversal filtering (`filter="data"`), and PATH-prepended for every child spawn. [check-ollama-pin.py](../scripts/installer/build/check-ollama-pin.py) is the advisory freshness check (prints rotation digests; `--strict` for CI).
 - **T302 VS Code absent = clean skip**: a machine without VS Code is a normal user machine, not an error -- the extension step now SKIPS with guidance (`state.skipped_steps`), while real failures (missing VSIX, install error) carry structured reasons.
 - **T303 structured failure surfaces**: `InstallerState.record_step_failure(step, summary, suggestion)` -- one plain-language sentence + a suggested next action per failure -- populated across the ollama (5 modes) and extension paths, included in the smoke result (`step_failures`, `skipped_steps`), and ready for the P5 UI to render beside View/Copy/Save log.
@@ -3812,7 +3814,7 @@ One-command install verification on machines with NONE of the prerequisites -- t
 - **T202 headless-smoke contract** ([smoke.py](../scripts/installer/src/nexus_installer/smoke.py) + [main.py](../scripts/installer/src/nexus_installer/main.py)): `NexusSetup.exe --headless-smoke <profile.json> --smoke-output <result.json>` drives the existing Qt-free headless engine from a validated profile (components, model selection, paths; BOM-tolerant after local validation caught PowerShell's `Out-File` BOM breaking loads) and writes a versioned `nexus-smoke-result/v1` JSON (success, steps, failed models, leveled logs). Exit 0 only when every step succeeded; exit 2 on a bad profile.
 - **T201 Windows Sandbox harness** ([testing/](../scripts/installer/testing/)): `run-sandbox-test.ps1` generates a `.wsb` from a template (dist/ + testing/ mapped read-only, temp output writable), boots a factory-fresh Windows, and polls for the result the in-sandbox [sandbox-bootstrap.ps1](../scripts/installer/testing/sandbox-bootstrap.ps1) writes (`Start-Process -Wait` -- a windowed exe returns immediately under `&`, which local validation caught). Profiles: `sandbox-minimal` (deps only) and `sandbox-default` (+ a small real model).
 - **T203 Docker Linux harness**: a no-deps `python:3.12-slim` image (the headless path needs only httpx -- PyQt5 imports are lazy) running the engine in source mode with the same result contract via `run-docker-test.sh`.
-- **T204** [macOS manual checklist](v1/v1.11/testing/macos-install-checklist.md) mirroring the harness assertions.
+- **T204** [macOS manual checklist](archive/v1/v1.11/testing/macos-install-checklist.md) mirroring the harness assertions.
 - **T205** 14 harness self-tests (profile validation incl. the BOM regression, result schema, shipped-artifact consistency: template placeholders, runner/bootstrap contract references) + the [runbook README](../scripts/installer/testing/README.md).
 
 ### Validated / deferred
@@ -3854,7 +3856,7 @@ Installer suite green (full run, incl. 47 reworked/new model tests: decode-bomb 
 
 ### Gaps opened
 
-`IO.P1.A` (6 gated models: UI-flag-or-remove decision in P5/P6), `IO.P1.B` (clean-machine Ollama install broken by v0.3.6 + all-zero checksum pin -- P3 target), `IO.P1.D`-(telemetry estimates), `IO.P1.E` (frozen-exe end-to-end re-run pending the P2 harness). See [v1/v1.11/known-gaps.md](v1/v1.11/known-gaps.md).
+`IO.P1.A` (6 gated models: UI-flag-or-remove decision in P5/P6), `IO.P1.B` (clean-machine Ollama install broken by v0.3.6 + all-zero checksum pin -- P3 target), `IO.P1.D`-(telemetry estimates), `IO.P1.E` (frozen-exe end-to-end re-run pending the P2 harness). See [v1/v1.11/known-gaps.md](archive/v1/v1.11/known-gaps.md).
 
 ### Branch
 
@@ -3870,10 +3872,10 @@ Canonicalize the docs tree to the `docs-layout-refactor` skill's version-first s
 
 ### What changed
 
-- **T041 version-dir canonicalization**: `docs/versions/v1/v1.<m>.0/` -> `docs/v1/v1.<m>/` (11 minors) and `docs/archive/versions/v0/v0.<m>.0/` -> `docs/archive/v0/v0.<m>/` (9 minors), dropping the `versions/` wrapper and collapsing the single-patch segment. 328 files moved via `git mv` (history preserved); the emptied wrappers removed. No merge collisions (every minor shipped exactly one patch).
+- **T041 version-dir canonicalization**: `docs/versions/v1/v1.<m>.0/` -> `docs/archive/v1/v1.<m>/` (11 minors) and `docs/archive/versions/v0/v0.<m>.0/` -> `docs/archive/v0/v0.<m>/` (9 minors), dropping the `versions/` wrapper and collapsing the single-patch segment. 328 files moved via `git mv` (history preserved); the emptied wrappers removed. No merge collisions (every minor shipped exactly one patch).
 - **T043 known-gaps fold**: v1.6's two deliberately-separate plan ledgers folded into one `known-gaps.md` (companion `known-gaps-openrouter-fusion.md` content preserved verbatim under a merge note; 3 referrers repointed). All other minors already had one.
 - **T045 reference repair (verified)**: non-`.md` files (source comments, CI, `package.json`, `.toml`) got repo-root path swaps; every `.md` link was recomputed against the move table (resolve-from-old-dir -> map -> recompute-from-new-dir), correctly handling both the wrapper-drop depth change and moved targets. Verified against the pre-move HEAD baseline: relative-link breakage is flat (3,549 -> 3,553, noise); the ~3.5k residual broken links are pre-existing rot in frozen historical docs (broken at HEAD), tracked as `NHC.P8.C`, out of scope.
-- **T046** [docs-cleanup-report.md](v1/v1.10/docs-cleanup-report.md) (audit trail) + a refreshed [archive/README.md](archive/README.md).
+- **T046** [docs-cleanup-report.md](archive/v1/v1.10/docs-cleanup-report.md) (audit trail) + a refreshed [archive/README.md](archive/README.md).
 - **T047** known-gaps reconciled into the canonical location + a v1.10.0 Phase 8 section (`NHC.P8.A`-`D`).
 - **T048 CI gate**: [scripts/check-docs-layout.mjs](../scripts/check-docs-layout.mjs) (`npm run check:docs-layout`) fails if the retired wrappers or a patch-level dir reappear; wired into the `nexus-check` CI job next to the T039 naming gate. The T013 syncer subtree-scope test and T025 app-data-preservation test run in CI's existing root + desktop test jobs.
 
@@ -4055,7 +4057,7 @@ Full root suite **4583 passed / 6 skipped / 0 failed**; `tsc -b` clean; eslint c
 
 ### Goal
 
-Lay the foundation for consuming the Nexus-Hub catalog from a single, standardized, isolated on-disk subtree -- `~/.nexus-ai/catalog/`, read the same way Claude Code reads `~/.claude/` -- replacing the version-scoped `~/.nexus/skills/devai-hub/<tag>/` path plus the broken bundled-baseline payload. Phase 1 ships only the shared resolver; nothing consumes it yet (the syncer retarget is Phase 2, the reader reroute is Phase 3). See the [plan](v1/v1.10/plans/nexus-hub-consumption-rearchitecture.md).
+Lay the foundation for consuming the Nexus-Hub catalog from a single, standardized, isolated on-disk subtree -- `~/.nexus-ai/catalog/`, read the same way Claude Code reads `~/.claude/` -- replacing the version-scoped `~/.nexus/skills/devai-hub/<tag>/` path plus the broken bundled-baseline payload. Phase 1 ships only the shared resolver; nothing consumes it yet (the syncer retarget is Phase 2, the reader reroute is Phase 3). See the [plan](archive/v1/v1.10/plans/nexus-hub-consumption-rearchitecture.md).
 
 ### What changed
 
@@ -4065,7 +4067,7 @@ Lay the foundation for consuming the Nexus-Hub catalog from a single, standardiz
 
 ### Verification
 
-24 new unit tests across [hubCatalogPaths.test.ts](../tests/unit/core/storage/hubCatalogPaths.test.ts) (10: root/catalog resolution, layout override + partial fallback, frozen+complete `HUB_LAYOUT`, and a CI invariant asserting `paths.ts` performs no filesystem I/O) and [hubVersionManifest.test.ts](../tests/unit/core/storage/hubVersionManifest.test.ts) (14: contract shape, byte-deterministic serialization, no timestamps/abs-paths, write+read round-trip + idempotency, read tolerance, layout resolution). Full `tests/unit/core/storage` suite **64 passed / 0 failed**; `tsc -b` clean (exit 0). Changes are additive; `paths.ts` is outside the `eslint src modules` scope by project design (0 errors). New deferrals recorded in [known-gaps](v1/v1.10/known-gaps.md): `NHC.P1.A` (`NEXUS_AI_HOME` override applied at the CLI/composition layer, not `paths.ts`), `NHC.P1.B` (resolver not yet consumed -- Phase 2/3), plus the cross-repo `COORD-1`/`COORD-2` items.
+24 new unit tests across [hubCatalogPaths.test.ts](../tests/unit/core/storage/hubCatalogPaths.test.ts) (10: root/catalog resolution, layout override + partial fallback, frozen+complete `HUB_LAYOUT`, and a CI invariant asserting `paths.ts` performs no filesystem I/O) and [hubVersionManifest.test.ts](../tests/unit/core/storage/hubVersionManifest.test.ts) (14: contract shape, byte-deterministic serialization, no timestamps/abs-paths, write+read round-trip + idempotency, read tolerance, layout resolution). Full `tests/unit/core/storage` suite **64 passed / 0 failed**; `tsc -b` clean (exit 0). Changes are additive; `paths.ts` is outside the `eslint src modules` scope by project design (0 errors). New deferrals recorded in [known-gaps](archive/v1/v1.10/known-gaps.md): `NHC.P1.A` (`NEXUS_AI_HOME` override applied at the CLI/composition layer, not `paths.ts`), `NHC.P1.B` (resolver not yet consumed -- Phase 2/3), plus the cross-repo `COORD-1`/`COORD-2` items.
 
 ### Branch
 
@@ -4246,7 +4248,7 @@ Continues on the v1.9.0 installer line (`feat/v1.9.0-installer-phase-1`). This s
 
 ### Goal
 
-Rewrite the model copy in the shared [catalog.json](../core/registry/catalog.json) so descriptions read as plain language per the Phase-1 [T004 template](v1/v1.9/ui-rework-design.md), without breaking any of its three readers (the TS validator, the Python installer loader, and the app's Settings->Models).
+Rewrite the model copy in the shared [catalog.json](../core/registry/catalog.json) so descriptions read as plain language per the Phase-1 [T004 template](archive/v1/v1.9/ui-rework-design.md), without breaking any of its three readers (the TS validator, the Python installer loader, and the app's Settings->Models).
 
 ### What changed
 
@@ -4269,13 +4271,13 @@ Continues on the v1.9.0 installer line (`feat/v1.9.0-installer-phase-1`); Phase 
 
 ### Goal
 
-Decide, once, the four design primitives every later phase of the [installer-and-app-ui-rework](v1/v1.9/plans/installer-and-app-ui-rework.md) plan consumes: the installer type scale (T001), the per-provider color palette (T002), the aurora/shimmer animation spec (T003), and the plain-language model-copy template (T004). Foundations only -- no page/widget wiring yet (that is Phases 3/6/8).
+Decide, once, the four design primitives every later phase of the [installer-and-app-ui-rework](archive/v1/v1.9/plans/installer-and-app-ui-rework.md) plan consumes: the installer type scale (T001), the per-provider color palette (T002), the aurora/shimmer animation spec (T003), and the plain-language model-copy template (T004). Foundations only -- no page/widget wiring yet (that is Phases 3/6/8).
 
 ### What changed
 
 - **T001 -- type scale** ([constants.py](../scripts/installer/src/nexus_installer/constants.py)): added a strictly-descending pixel scale `FS_DISPLAY 34 / FS_H1 28 / FS_H2 20 / FS_H3 17 / FS_BODY 16 / FS_BODY_STRONG 16 / FS_CAPTION 14` (hard 14px floor, retiring the 8pt/11pt lows), a `TYPE_SCALE` tuple for the descent check, and weight tokens `FW_REGULAR/MEDIUM/SEMIBOLD/BOLD`. Operator-confirmed values. Emphasis is a weight, not a larger size (`FS_BODY_STRONG == FS_BODY`). Phase 3 wires these into `theme.py` scale-classes.
 - **T002 -- provider palette** ([constants.py](../scripts/installer/src/nexus_installer/constants.py)): added `PROVIDER_COLORS` (11 publishers + a neutral `PROVIDER_FALLBACK #94a3b8`), `FAMILY_TO_PUBLISHER` (every one of the catalog's 17 families -> publisher), and pure resolvers `publisher_for_family()` / `provider_color()`. Operator decision: **derive the publisher from the existing `family` field** (the catalog's `origin` is a country, not a publisher) -- zero catalog-schema change, so the plan's top risk (shared-reader churn) is avoided. Tabs will render neutral (Phase 6) so the per-provider color is the only card color signal (DoD #7).
-- **T003 + T004 -- design spec** (new [ui-rework-design.md](v1/v1.9/ui-rework-design.md)): the aurora + shimmer animation contract for Phase 8 (transform-driven oversized blurred radial layers on staggered 9-11s loops + a signature-gradient shimmer bar, coupled to job progress, reduced-motion static-glow fallback) built **only on existing app tokens** (`--glow-cyan`, `--grad-signature`, `--accent-image/-video`, `--glow-lg`, ...); and the plain-language model-copy template for Phase 2 (sentence 1 = "{Publisher}'s {model} is a {size/kind} {modality} model from {country}"; sentence 2 = plain "best at"; quant-ladder/MoE jargon relocates to `differentiators`), with a real before/after worked from `gemma-4-12b-it-gguf`.
+- **T003 + T004 -- design spec** (new [ui-rework-design.md](archive/v1/v1.9/ui-rework-design.md)): the aurora + shimmer animation contract for Phase 8 (transform-driven oversized blurred radial layers on staggered 9-11s loops + a signature-gradient shimmer bar, coupled to job progress, reduced-motion static-glow fallback) built **only on existing app tokens** (`--glow-cyan`, `--grad-signature`, `--accent-image/-video`, `--glow-lg`, ...); and the plain-language model-copy template for Phase 2 (sentence 1 = "{Publisher}'s {model} is a {size/kind} {modality} model from {country}"; sentence 2 = plain "best at"; quant-ladder/MoE jargon relocates to `differentiators`), with a real before/after worked from `gemma-4-12b-it-gguf`.
 
 ### Verification
 
@@ -4291,18 +4293,18 @@ Continues on the v1.9.0 installer line (`feat/v1.9.0-installer-phase-1`); Phases
 
 ### Goal
 
-Close the v1.9.0 cycle ([plan](v1/v1.9/plans/installer-and-app-experience-overhaul.md) Phase 6): re-prove the single-artifact installer build, disposition every "-> Phase 6" known gap, defer the environmentally-blocked legs, and land the whole-plan close-out. Verification + close-out only -- no feature code.
+Close the v1.9.0 cycle ([plan](archive/v1/v1.9/plans/installer-and-app-experience-overhaul.md) Phase 6): re-prove the single-artifact installer build, disposition every "-> Phase 6" known gap, defer the environmentally-blocked legs, and land the whole-plan close-out. Verification + close-out only -- no feature code.
 
 ### What changed
 
 - **T601 -- Windows build re-proof**: a from-scratch PyInstaller onefile rebuild (`uv run pyinstaller build/nexus-installer.spec --distpath dist --workpath build/work --clean --noconfirm`) produced exactly one `dist/NexusSetup.exe` (75,624,237 bytes / ~72.1 MB; the delta vs. Phase 1's ~65 MB is normal onefile variance from the freshly `uv sync`'d deps + UPX). `smoke-windows-exe.ps1` all-green: single artifact, no leftover `nexus-installer.exe`, `--version` exit 0, `--check-registry` exit 0 (bundled `catalog.json`/`recommended.json` resolve inside the frozen bundle). Second independent Windows proof (Phase 1 + Phase 6). The local rebuild bundled no VSIX (none in the working tree; the extension is packaged by the root workspace in CI) -- a release-pipeline step, not a build-proof concern. `build-windows.ps1` was **not modified**: its `2>&1 | Select-String` under `ErrorActionPreference=Stop` is correct under `pwsh` (CI + Phase 1); this sandbox lacks `pwsh` on PATH, so PyInstaller was invoked directly to get an authoritative exit code.
 - **T602 -- CI legs deferred**: the rewritten installer workflows + release upload paths + desktop-bundle build are wired (Phases 1/5), but the runs, the audio-weights pin rotation, and the spaced-`productName` bundle verification are dispatch-gated post-freeze -- the Actions freeze runs until 2026-08-01 (today 2026-07-04) and the sandbox has no HF egress (`IAE.P4.C` / `IAE.P5.D`).
-- **T603 -- docs + close-out**: [plan](v1/v1.9/plans/installer-and-app-experience-overhaul.md) status -> COMPLETE (Phases 1-6) with T601/T602/T603 dispositioned and the DoD annotated observable-by-observable; [known-gaps](v1/v1.9/known-gaps.md) header -> COMPLETE with a Phase 6 section sorting every open item into operator-on-device / post-freeze-CI / deliberate-deferral buckets (summary now 6/6); [install.md](install.md) release-provenance line freshened to v1.9.0; the v1.9.0 row added to the [todos.md](todos.md) v1.x line table. README/CHANGELOG narrative + the npm version tag stay semantic-release-owned (cut on merge to `main`).
+- **T603 -- docs + close-out**: [plan](archive/v1/v1.9/plans/installer-and-app-experience-overhaul.md) status -> COMPLETE (Phases 1-6) with T601/T602/T603 dispositioned and the DoD annotated observable-by-observable; [known-gaps](archive/v1/v1.9/known-gaps.md) header -> COMPLETE with a Phase 6 section sorting every open item into operator-on-device / post-freeze-CI / deliberate-deferral buckets (summary now 6/6); [install.md](install.md) release-provenance line freshened to v1.9.0; the v1.9.0 row added to the [todos.md](todos.md) v1.x line table. README/CHANGELOG narrative + the npm version tag stay semantic-release-owned (cut on merge to `main`).
 - **Build-structure flatten + cleanup (operator request, 2026-07-05)**: removed 131 MB of stale gitignored installer output (the deep-path `pyqt/dist/NexusSetup.exe` + the pre-Phase-1 two-artifact `nexus-installer.exe`) and flattened the wizard tree -- `scripts/installer/pyqt/{src,tests,build/*,pyproject,VERSIONS}` moved up to `scripts/installer/`, merging the two `build/` dirs into one (no more `pyqt/` layer; one intuitive `scripts/installer/build/`). ~120 `git mv` renames (history preserved); depth-encoded paths corrected (spec `REPO_ROOT` -> `INSTALLER_ROOT.parent.parent`, the build + smoke scripts one fewer `..`, test helpers `parents[4]` -> `parents[3]`); references updated across the 7 CI workflows + dependabot pip `directory` + `.gitignore` + smoke/integration tests + `ARCHITECTURE`/`AGENTS`/`SECURITY`/`CONTRIBUTING`. Re-verified at the new root: installer pytest **651 passed / 2 skipped / 0 failed**, clean PyInstaller rebuild + `smoke-windows-exe.ps1` 4/4 green (incl. `--check-registry`).
 
 ### Verification
 
-Build: one `dist/NexusSetup.exe` (75,624,237 bytes) from a clean tree. Smoke: `smoke-windows-exe.ps1` 4/4 PASS. Installer pytest: **651 passed / 2 skipped / 0 failed / 0 errors** (653 collected; JUnit XML `tests=653 failures=0 errors=0 skipped=2`) -- unchanged from Phase 4 (Phases 5/6 touched no installer code). TS/desktop suites unchanged since their last green runs (Phase 6 changed only docs). No new known gaps opened. Whole-plan DoD (Section 0's 7 observables) met locally + by construction; the 3-OS on-device rehearsal + post-freeze CI legs are recorded operator/dispatch rehearsals. See the [phase history](v1/v1.9/development/history/2026-07_phase-6-rehearsal-and-closeout.md).
+Build: one `dist/NexusSetup.exe` (75,624,237 bytes) from a clean tree. Smoke: `smoke-windows-exe.ps1` 4/4 PASS. Installer pytest: **651 passed / 2 skipped / 0 failed / 0 errors** (653 collected; JUnit XML `tests=653 failures=0 errors=0 skipped=2`) -- unchanged from Phase 4 (Phases 5/6 touched no installer code). TS/desktop suites unchanged since their last green runs (Phase 6 changed only docs). No new known gaps opened. Whole-plan DoD (Section 0's 7 observables) met locally + by construction; the 3-OS on-device rehearsal + post-freeze CI legs are recorded operator/dispatch rehearsals. See the [phase history](archive/v1/v1.9/development/history/2026-07_phase-6-rehearsal-and-closeout.md).
 
 ### Branch
 
@@ -4314,7 +4316,7 @@ Continues on the v1.9.0 line (`feat/v1.9.0-installer-phase-1`). v1.9.0 complete 
 
 ### Goal
 
-Bring the Tauri desktop app to visual parity with the rebuilt installer so the two read as one product ([plan](v1/v1.9/plans/installer-and-app-experience-overhaul.md) Phase 5): a frameless custom dark title bar, the shared constellation + radial-glow backdrop, the "Nexus AI Studio" rebrand, the transparent floating mark, and a cohesive glow/gradient restyle across the shell.
+Bring the Tauri desktop app to visual parity with the rebuilt installer so the two read as one product ([plan](archive/v1/v1.9/plans/installer-and-app-experience-overhaul.md) Phase 5): a frameless custom dark title bar, the shared constellation + radial-glow backdrop, the "Nexus AI Studio" rebrand, the transparent floating mark, and a cohesive glow/gradient restyle across the shell.
 
 ### What changed
 
@@ -4327,7 +4329,7 @@ Bring the Tauri desktop app to visual parity with the rebuilt installer so the t
 
 ### Verification
 
-Desktop Vitest **515 passed / 0 failed** (+19); coverage lines 93.83% / branches 85.51% / functions 83.43% (>= the 80/70/80 gate) with TitleBar 100% and Sidebar / Dashboard 100% lines. `tsc --noEmit` + `eslint` (0 warnings) clean; `cargo check` + `cargo clippy` clean (the new capability + config validate through `tauri-build`). CI/CD check: `release.yml`'s `desktop-bundle` staging copies by wildcard (`bundle/nsis/*-setup.exe`, `*.dmg`, `*.AppImage`, `*.deb`), so the `productName` rename does not break the upload globs. New gaps `IAE.P5.A` (frameless per-OS move/resize/snap not on-device verified -> Phase 6), `IAE.P5.B` (Tauri edge-resize with `decorations:false` relies on the webview; native-decorations fallback available), `IAE.P5.C` (pillar-page internal component polish deferred), `IAE.P5.D` (macOS/Linux reduced-motion still `matchMedia`, native app parity is exact). See the [phase history](v1/v1.9/development/history/2026-07_phase-5-desktop-app-overhaul.md).
+Desktop Vitest **515 passed / 0 failed** (+19); coverage lines 93.83% / branches 85.51% / functions 83.43% (>= the 80/70/80 gate) with TitleBar 100% and Sidebar / Dashboard 100% lines. `tsc --noEmit` + `eslint` (0 warnings) clean; `cargo check` + `cargo clippy` clean (the new capability + config validate through `tauri-build`). CI/CD check: `release.yml`'s `desktop-bundle` staging copies by wildcard (`bundle/nsis/*-setup.exe`, `*.dmg`, `*.AppImage`, `*.deb`), so the `productName` rename does not break the upload globs. New gaps `IAE.P5.A` (frameless per-OS move/resize/snap not on-device verified -> Phase 6), `IAE.P5.B` (Tauri edge-resize with `decorations:false` relies on the webview; native-decorations fallback available), `IAE.P5.C` (pillar-page internal component polish deferred), `IAE.P5.D` (macOS/Linux reduced-motion still `matchMedia`, native app parity is exact). See the [phase history](archive/v1/v1.9/development/history/2026-07_phase-5-desktop-app-overhaul.md).
 
 ### Branch
 
@@ -4339,7 +4341,7 @@ Continues on the v1.9.0 line (`feat/v1.9.0-installer-phase-1`).
 
 ### Goal
 
-Make the installer's model catalog scannable and complete ([plan](v1/v1.9/plans/installer-and-app-experience-overhaul.md) Phase 4). The v1.8.0 catalog was text-dense, carried no country/guardrails metadata users need to choose, excluded the flagship Gemma 4 from the Agentic tab, and had an empty Audio tab.
+Make the installer's model catalog scannable and complete ([plan](archive/v1/v1.9/plans/installer-and-app-experience-overhaul.md) Phase 4). The v1.8.0 catalog was text-dense, carried no country/guardrails metadata users need to choose, excluded the flagship Gemma 4 from the Agentic tab, and had an empty Audio tab.
 
 ### What changed
 
@@ -4353,7 +4355,7 @@ Make the installer's model catalog scannable and complete ([plan](v1/v1.9/plans/
 
 ### Verification
 
-Installer pytest **651 passed / 2 skipped / 0 failed**; changed-module coverage typed_catalog 96% / tier_defaults 94% / review 94% lines. Root Vitest **4573 passed / 6 skipped / 0 failed** (+4). `tsc -b` + `eslint src modules` + `ruff check`/`format` clean on changed files. New gaps `IAE.P4.A` (audio runtime not implemented -- download-only), `IAE.P4.B` (desktop DTO mirror needs `"audio"` -> Phase 5), `IAE.P4.C` (audio weights pins are placeholders -> Phase 6). See the [phase history](v1/v1.9/development/history/2026-07_phase-4-model-selector-metadata-audio.md).
+Installer pytest **651 passed / 2 skipped / 0 failed**; changed-module coverage typed_catalog 96% / tier_defaults 94% / review 94% lines. Root Vitest **4573 passed / 6 skipped / 0 failed** (+4). `tsc -b` + `eslint src modules` + `ruff check`/`format` clean on changed files. New gaps `IAE.P4.A` (audio runtime not implemented -- download-only), `IAE.P4.B` (desktop DTO mirror needs `"audio"` -> Phase 5), `IAE.P4.C` (audio weights pins are placeholders -> Phase 6). See the [phase history](archive/v1/v1.9/development/history/2026-07_phase-4-model-selector-metadata-audio.md).
 
 ### Branch
 
@@ -4365,18 +4367,18 @@ Continues on the v1.9.0 line (`feat/v1.9.0-installer-phase-1`).
 
 ### Goal
 
-Make the installer and the desktop app read as one product by fixing the brand assets and building the shared visual primitives both will consume ([plan](v1/v1.9/plans/installer-and-app-experience-overhaul.md) Phase 2). The v1.8.0 icon set was opaque black (the logo read as a black box in the header/taskbar/dock) even though the designer source was transparent, and neither stack had the guide's glow layer, constellation background, or floating-logo treatment.
+Make the installer and the desktop app read as one product by fixing the brand assets and building the shared visual primitives both will consume ([plan](archive/v1/v1.9/plans/installer-and-app-experience-overhaul.md) Phase 2). The v1.8.0 icon set was opaque black (the logo read as a black box in the header/taskbar/dock) even though the designer source was transparent, and neither stack had the guide's glow layer, constellation background, or floating-logo treatment.
 
 ### What changed
 
 - **T201 -- icons** ([generate-icons.py](../scripts/desktop/generate-icons.py)): the generator already resized straight from the transparent source (the committed black icons were stale from an older opaque-source run). Added a superellipse (squircle) alpha mask (`_superellipse_alpha_mask` per-row span fill, supersampled + LANCZOS-smoothed, cached) + `_apply_rounded_corners` (multiplies the mask into existing alpha -- only ever removes corner opacity), and `render_square(..., rounded=True)` rounds every frame. Re-ran it: `assets/icon.{png,ico,svg}`, `sidebar-icon.svg`, and the whole `desktop/src-tauri/icons/` set are now transparent + squircle-rounded (corner alpha 0, opaque ratio ~0.19 vs. the previous 1.00). The source is a near-full-bleed emblem, so the rounding is genuinely visible.
-- **T202 -- tokens** ([tokens.css](../desktop/src/styles/tokens.css) + [constants.py](../scripts/installer/pyqt/src/nexus_installer/constants.py)): added the guide's glow layer to both palettes, additively -- `--bg-deep`, constellation node/link colors, `--glow-sm/md/lg` drop-shadows, the signature gradient, and the radial-glow background (with the `GLOW_RGBA` / `SIGNATURE_GRADIENT_STOPS` / `RADIAL_GLOW_POOLS` Python mirrors). Recorded in [design-tokens.md](v1/v1.9/design-tokens.md).
+- **T202 -- tokens** ([tokens.css](../desktop/src/styles/tokens.css) + [constants.py](../scripts/installer/pyqt/src/nexus_installer/constants.py)): added the guide's glow layer to both palettes, additively -- `--bg-deep`, constellation node/link colors, `--glow-sm/md/lg` drop-shadows, the signature gradient, and the radial-glow background (with the `GLOW_RGBA` / `SIGNATURE_GRADIENT_STOPS` / `RADIAL_GLOW_POOLS` Python mirrors). Recorded in [design-tokens.md](archive/v1/v1.9/design-tokens.md).
 - **T203 -- primitives**: ported the guide's canvas routine to a pure engine ([constellation.ts](../desktop/src/components/constellation.ts): node count max(18,min(46,w/34)), dpr cap 2, `#38bdf8` links <=150px at `(1-d/maxd)*0.45`, `#7dd3fc` r=1.5 nodes) wired into a React [`<ConstellationBackground/>`](../desktop/src/components/ConstellationBackground.tsx) (reduced-motion static frame, visibility pause, `pointer-events:none`) and a PyQt [`ConstellationBackground`](../scripts/installer/pyqt/src/nexus_installer/widgets/constellation.py) (QTimer + QPainter, cap 46, hide/show pause, `NEXUS_REDUCED_MOTION`). Floating-glow logo: React [FloatingLogo.tsx](../desktop/src/components/FloatingLogo.tsx) (`--glow-*` drop-shadow + `@keyframes nexus-float`) and PyQt [float_logo.py](../scripts/installer/pyqt/src/nexus_installer/widgets/float_logo.py) (`QGraphicsDropShadowEffect` + `QPropertyAnimation` +/-9px / 7s InOutSine), both fed the transparent mark, both reduced-motion aware.
 - **T204 -- tests**: installer `test_icon_generation.py` (mask shape + rounding + committed-icon alpha), `test_constellation.py`, `test_float_logo.py`, `test_brand_tokens.py`; desktop `constellation.test.ts`, `ConstellationBackground.test.tsx` (mocked ctx + rAF), `FloatingLogo.test.tsx`, `brandTokens.test.ts`. Added `Pillow>=10.0` to the installer dev deps so the icon assertions run in CI.
 
 ### Verification
 
-Installer pytest **632 passed / 2 skipped / 0 failed** (+41), new widgets 97% lines. Desktop vitest **496 passed / 0 failed** (+34), new files 100% lines, suite 93.75% / 85.31% / 82.96% (>= 80/80/70/80 gate), `tsc --noEmit` + eslint clean. Icon probe confirms transparent + rounded corners on the regenerated set. `ruff` clean on changed files. New known-gaps `IAE.P2.A` (PyQt reduced-motion env-var signal -> wire in Phase 3) + `IAE.P2.B` (on-device icon rendering visual check -> Phase 6). The primitives are built + unit-tested but not yet mounted (Phase 3 T302/T303 + Phase 5 T501/T502). See the [phase history](v1/v1.9/development/history/2026-07_phase-2-shared-brand-foundation.md).
+Installer pytest **632 passed / 2 skipped / 0 failed** (+41), new widgets 97% lines. Desktop vitest **496 passed / 0 failed** (+34), new files 100% lines, suite 93.75% / 85.31% / 82.96% (>= 80/80/70/80 gate), `tsc --noEmit` + eslint clean. Icon probe confirms transparent + rounded corners on the regenerated set. `ruff` clean on changed files. New known-gaps `IAE.P2.A` (PyQt reduced-motion env-var signal -> wire in Phase 3) + `IAE.P2.B` (on-device icon rendering visual check -> Phase 6). The primitives are built + unit-tested but not yet mounted (Phase 3 T302/T303 + Phase 5 T501/T502). See the [phase history](archive/v1/v1.9/development/history/2026-07_phase-2-shared-brand-foundation.md).
 
 ### Branch
 
@@ -4388,7 +4390,7 @@ Phase 1 landed on `feat/v1.9.0-installer-phase-1`. Phase 2 continues on the v1.9
 
 ### Goal
 
-Eliminate the two-installer experience and the two-artifact/deep-path build ([plan](v1/v1.9/plans/installer-and-app-experience-overhaul.md) Phase 1). The v1.8.0 `NexusSetup.exe` was an NSIS MUI2 outer shell that extracted and launched the PyQt wizard (`nexus-installer.exe`), so users saw a generic old-style NSIS dialog first and only then the modern wizard -- two installers -- and the Windows build emitted two `.exe` files into a deep `pyqt/dist/` folder plus a hand-copy. Phase 1 makes the PyInstaller onefile the distributable directly: one modern window, one artifact per OS, one easy location.
+Eliminate the two-installer experience and the two-artifact/deep-path build ([plan](archive/v1/v1.9/plans/installer-and-app-experience-overhaul.md) Phase 1). The v1.8.0 `NexusSetup.exe` was an NSIS MUI2 outer shell that extracted and launched the PyQt wizard (`nexus-installer.exe`), so users saw a generic old-style NSIS dialog first and only then the modern wizard -- two installers -- and the Windows build emitted two `.exe` files into a deep `pyqt/dist/` folder plus a hand-copy. Phase 1 makes the PyInstaller onefile the distributable directly: one modern window, one artifact per OS, one easy location.
 
 ### What changed
 
@@ -4400,7 +4402,7 @@ Eliminate the two-installer experience and the two-artifact/deep-path build ([pl
 
 ### Verification
 
-Local DoD proof on the dev box: `pyinstaller nexus-installer.spec --distpath dist` produced exactly one artifact, `dist/NexusSetup.exe` (**65.3 MB**, 68,506,718 bytes), exit 0 -- no NSIS, no second exe. Packaging smoke all-green against the frozen exe (single artifact, no leftover `nexus-installer.exe`, `--version` exit 0, `--check-registry` exit 0). Installer pytest suite **591 passed / 2 skipped / 0 failed**; ruff on `test_packaging.py` clean (0 new findings); no TypeScript changed so `tsc -b` / root Vitest unaffected. New known-gaps `IAE.P1.A` (offline payload embed dropped -- NSIS-only, supersedes v1.8.0 `OSI006.P6.D`) and `IAE.P1.B` (mac/linux + clean-VM build proof -> Phase 6). The `--version`/`QApplication` naming ("gemma-code-installer" / "Nexus Installer") is unchanged -- the rebrand is scheduled in Phase 3 (T304). See the [phase history](v1/v1.9/development/history/2026-07_phase-1-single-artifact-installer.md).
+Local DoD proof on the dev box: `pyinstaller nexus-installer.spec --distpath dist` produced exactly one artifact, `dist/NexusSetup.exe` (**65.3 MB**, 68,506,718 bytes), exit 0 -- no NSIS, no second exe. Packaging smoke all-green against the frozen exe (single artifact, no leftover `nexus-installer.exe`, `--version` exit 0, `--check-registry` exit 0). Installer pytest suite **591 passed / 2 skipped / 0 failed**; ruff on `test_packaging.py` clean (0 new findings); no TypeScript changed so `tsc -b` / root Vitest unaffected. New known-gaps `IAE.P1.A` (offline payload embed dropped -- NSIS-only, supersedes v1.8.0 `OSI006.P6.D`) and `IAE.P1.B` (mac/linux + clean-VM build proof -> Phase 6). The `--version`/`QApplication` naming ("gemma-code-installer" / "Nexus Installer") is unchanged -- the rebrand is scheduled in Phase 3 (T304). See the [phase history](archive/v1/v1.9/development/history/2026-07_phase-1-single-artifact-installer.md).
 
 ### Branch
 
@@ -4412,7 +4414,7 @@ Currently on `feat/v1.8.0-installer-phase-6` (where the v1.9.0 plan was authored
 
 ### Goal
 
-Close gap G5's buildable half ([plan](v1/v1.8/plans/one-shot-installer.md) Phase 6): `installer-build.yml` was still the v1.0.0 TODO skeleton (six echo steps), the NSIS outer was a stale v1.1.0 template invoking a wizard flag that never existed, and no end-to-end `NexusSetup.exe` had ever been built. The phase's rehearsal legs (T602 clean-VM, T603 CI under the Actions freeze, T604 mac/linux hardware) cannot run in this environment and are recorded as operator / post-freeze actions per the plan's own local-first design.
+Close gap G5's buildable half ([plan](archive/v1/v1.8/plans/one-shot-installer.md) Phase 6): `installer-build.yml` was still the v1.0.0 TODO skeleton (six echo steps), the NSIS outer was a stale v1.1.0 template invoking a wizard flag that never existed, and no end-to-end `NexusSetup.exe` had ever been built. The phase's rehearsal legs (T602 clean-VM, T603 CI under the Actions freeze, T604 mac/linux hardware) cannot run in this environment and are recorded as operator / post-freeze actions per the plan's own local-first design.
 
 ### What changed
 
@@ -4422,7 +4424,7 @@ Close gap G5's buildable half ([plan](v1/v1.8/plans/one-shot-installer.md) Phase
 
 ### Verification
 
-Local DoD proof on the dev box: `NexusSetup.exe` **64.7 MB** built end-to-end (PyInstaller wizard 65.2 MB -> NSIS lzma outer), then the packaging smoke all-green -- silent install exit 0, wizard extracted, `--version` boot probe exit 0, `--check-registry` exit 0 (bundled registry resolves inside the frozen exe), silent uninstall clean with HKCU + Start Menu verified absent. Installer pytest suite **590 passed / 2 skipped / 0 failed** (+26); `registry_paths` 100% lines; ruff 0 new findings; `tsc -b` clean; root Vitest **4569 / 6 / 0** unchanged. Known-gaps: `OSI004.P4.C` resolved; new `OSI006.P6.A-D` (T602/T603/T604 rehearsals + the pin-rotation-blocked payload path); dispositions on `OSI001.P1.B`, `OSI002.P2.D`, `OSI005.P5.A/B`. See the [phase history](v1/v1.8/development/history/2026-07_phase-6-windows-exe-completion.md).
+Local DoD proof on the dev box: `NexusSetup.exe` **64.7 MB** built end-to-end (PyInstaller wizard 65.2 MB -> NSIS lzma outer), then the packaging smoke all-green -- silent install exit 0, wizard extracted, `--version` boot probe exit 0, `--check-registry` exit 0 (bundled registry resolves inside the frozen exe), silent uninstall clean with HKCU + Start Menu verified absent. Installer pytest suite **590 passed / 2 skipped / 0 failed** (+26); `registry_paths` 100% lines; ruff 0 new findings; `tsc -b` clean; root Vitest **4569 / 6 / 0** unchanged. Known-gaps: `OSI004.P4.C` resolved; new `OSI006.P6.A-D` (T602/T603/T604 rehearsals + the pin-rotation-blocked payload path); dispositions on `OSI001.P1.B`, `OSI002.P2.D`, `OSI005.P5.A/B`. See the [phase history](archive/v1/v1.8/development/history/2026-07_phase-6-windows-exe-completion.md).
 
 ### Branch
 
@@ -4434,17 +4436,17 @@ Local DoD proof on the dev box: `NexusSetup.exe` **64.7 MB** built end-to-end (P
 
 ### Goal
 
-Close gap G4 ([plan](v1/v1.8/plans/one-shot-installer.md) Phase 5): the installer still wore the legacy single-accent teal `#0ABFBF` on `#0f1318` while the desktop app it installs uses the darker `#0a0d14` surface stack with four per-module accents, and the installing page showed one indeterminate bar over one big log. Make the installer read as the same product family and show clear per-phase progress.
+Close gap G4 ([plan](archive/v1/v1.8/plans/one-shot-installer.md) Phase 5): the installer still wore the legacy single-accent teal `#0ABFBF` on `#0f1318` while the desktop app it installs uses the darker `#0a0d14` surface stack with four per-module accents, and the installing page showed one indeterminate bar over one big log. Make the installer read as the same product family and show clear per-phase progress.
 
 ### What changed
 
 - **T501 -- design-token port + restyle**: [constants.py](../scripts/installer/pyqt/src/nexus_installer/constants.py) is now a direct port of [desktop/src/styles/tokens.css](../desktop/src/styles/tokens.css) and documented as the single palette source: bg `#0a0d14`/`#11151f`/`#181d2a` (+ elevated), a four-tier foreground scale (new `TEXT_BODY #d6dbe7` for body copy), the desktop's white-alpha borders composited to solid `#191c22`/`#272a30`, lead accent moved to the chatbot cyan `#22d3ee`, and the module accents (`ACCENT_CHAT/CODING/IMAGE/VIDEO` + `SECTION_ACCENTS`, audio on the info blue). [theme.py](../scripts/installer/pyqt/src/nexus_installer/theme.py) consumes the tokens, adds QTabWidget/QTabBar styling for the catalog, and switches primary-button text + step-indicator checkmarks to dark-on-bright (the desktop treatment); its mojibake comment rules are ASCII again. The typed catalog gets per-section accents (tab accent rule; per-card pill, size, "Why this one", and checkbox accents) and the `_ModelCard` unqualified-stylesheet wart (every child label rendered as a boxed pill) is fixed with a scoped `QWidget#modelCard` selector. Stray hardcoded hexes in window / disk footer / log panel aligned to constants.
 - **T502 -- per-phase progress**: new [widgets/phase_group.py](../scripts/installer/pyqt/src/nexus_installer/widgets/phase_group.py) (status icon, per-group progress bar, collapsible Details log) and a regrouped [pages/installing.py](../scripts/installer/pyqt/src/nexus_installer/pages/installing.py): overall bar on top, then **Dependencies** (ollama + venv) -> **VS Code Extension** -> **Models** -> **Nexus Desktop**, built from the selected components and rebuilt at start. [engine/installer.py](../scripts/installer/pyqt/src/nexus_installer/engine/installer.py) gains `step_started` / `step_progress` / `step_failed` signals (existing signals untouched); model + desktop steps stream real within-step progress, and log lines route to the active group's log while `get_log_text()` keeps the full aggregate.
-- **T503 -- welcome/complete polish + archives**: the welcome page gets a product lockup (the desktop app's own icon + "Welcome to Nexus"), product copy replacing the stale "Gemma Code ... 5-15 minutes" text, and four pillar chips in the module accents; the complete page reads "Nexus is installed and ready to use." / "Managing Nexus" and saves `nexus-install.log`. Fixed en route: the header brand mark never rendered from the source tree (fixed-depth path landed on the nonexistent `scripts/assets/`) -- both lookups now walk up, matching the PyInstaller bundle layout too. Eight before/after captures archived under [assets/2026-07_phase-5/](v1/v1.8/development/history/assets/2026-07_phase-5).
+- **T503 -- welcome/complete polish + archives**: the welcome page gets a product lockup (the desktop app's own icon + "Welcome to Nexus"), product copy replacing the stale "Gemma Code ... 5-15 minutes" text, and four pillar chips in the module accents; the complete page reads "Nexus is installed and ready to use." / "Managing Nexus" and saves `nexus-install.log`. Fixed en route: the header brand mark never rendered from the source tree (fixed-depth path landed on the nonexistent `scripts/assets/`) -- both lookups now walk up, matching the PyInstaller bundle layout too. Eight before/after captures archived under [assets/2026-07_phase-5/](archive/v1/v1.8/development/history/assets/2026-07_phase-5).
 
 ### Verification
 
-Installer pytest suite **564 passed / 2 skipped / 0 failed** (+26: `test_phase_group.py` widget lifecycle + signal routing, engine step-signal ordering/failure/forwarding, palette/section-accent/tab-selector theme assertions, welcome/complete copy checks); `phase_group` 96% / `engine/installer` 93% / `installing` 82% lines; ruff 0 new findings; `tsc -b` clean; root Vitest **4569 passed / 6 skipped / 0 failed** (unchanged -- no TS surface touched). DoD evidence: the archived after-installing capture shows the four phase groups progressing (deps done, extension done, models 55%, desktop waiting) in the desktop palette; group-card background pixel-verified `#181d2a`. Known-gaps: new `OSI005.P5.A/B` (dependency-step bars completion-quantized; font faces not bundled), dispositions recorded on `OSI002.P2.D` + `OSI004.P4.D`. See the [phase history](v1/v1.8/development/history/2026-07_phase-5-desktop-restyle.md).
+Installer pytest suite **564 passed / 2 skipped / 0 failed** (+26: `test_phase_group.py` widget lifecycle + signal routing, engine step-signal ordering/failure/forwarding, palette/section-accent/tab-selector theme assertions, welcome/complete copy checks); `phase_group` 96% / `engine/installer` 93% / `installing` 82% lines; ruff 0 new findings; `tsc -b` clean; root Vitest **4569 passed / 6 skipped / 0 failed** (unchanged -- no TS surface touched). DoD evidence: the archived after-installing capture shows the four phase groups progressing (deps done, extension done, models 55%, desktop waiting) in the desktop palette; group-card background pixel-verified `#181d2a`. Known-gaps: new `OSI005.P5.A/B` (dependency-step bars completion-quantized; font faces not bundled), dispositions recorded on `OSI002.P2.D` + `OSI004.P4.D`. See the [phase history](archive/v1/v1.8/development/history/2026-07_phase-5-desktop-restyle.md).
 
 ### Branch
 
@@ -4456,7 +4458,7 @@ Installer pytest suite **564 passed / 2 skipped / 0 failed** (+26: `test_phase_g
 
 ### Goal
 
-Close gap G3 ([plan](v1/v1.8/plans/one-shot-installer.md) Phase 4): the catalog UX had one undifferentiated Text tab, thin per-model copy, and zero uncensored image/video entries despite the product decision that uncensored image + video are the defaults where hardware fits -- and the typed catalog page itself was still unwired, leaving the Phase 3 multi-select surface without a producer (`OSI003.P3.D`).
+Close gap G3 ([plan](archive/v1/v1.8/plans/one-shot-installer.md) Phase 4): the catalog UX had one undifferentiated Text tab, thin per-model copy, and zero uncensored image/video entries despite the product decision that uncensored image + video are the defaults where hardware fits -- and the typed catalog page itself was still unwired, leaving the Phase 3 multi-select surface without a producer (`OSI003.P3.D`).
 
 ### What changed
 
@@ -4468,7 +4470,7 @@ Close gap G3 ([plan](v1/v1.8/plans/one-shot-installer.md) Phase 4): the catalog 
 
 ### Verification
 
-Installer pytest suite **538 passed / 2 skipped / 0 failed** (540 collected, +46); `tier_defaults` 94% / `typed_catalog` 93% / `review` 91% line coverage; ruff 0 new findings; `tsc -b` clean; root Vitest suite (`npm test`) **4569 passed / 6 skipped / 0 failed** (+4 schema tests). Offscreen smoke: all five hardware tiers produce the designed default matrix from the real registry files. Known-gaps: `OSI003.P3.D` resolved; new `OSI004.P4.A-E` (pin rotation + manifest enumeration for the new entries, GPU-box load verification, PyInstaller registry-file packaging for Phase 6, legacy page retirement, size/VRAM true-up). See the [phase history](v1/v1.8/development/history/2026-07_phase-4-catalog-curation.md).
+Installer pytest suite **538 passed / 2 skipped / 0 failed** (540 collected, +46); `tier_defaults` 94% / `typed_catalog` 93% / `review` 91% line coverage; ruff 0 new findings; `tsc -b` clean; root Vitest suite (`npm test`) **4569 passed / 6 skipped / 0 failed** (+4 schema tests). Offscreen smoke: all five hardware tiers produce the designed default matrix from the real registry files. Known-gaps: `OSI003.P3.D` resolved; new `OSI004.P4.A-E` (pin rotation + manifest enumeration for the new entries, GPU-box load verification, PyInstaller registry-file packaging for Phase 6, legacy page retirement, size/VRAM true-up). See the [phase history](archive/v1/v1.8/development/history/2026-07_phase-4-catalog-curation.md).
 
 ### Branch
 
@@ -4480,7 +4482,7 @@ Installer pytest suite **538 passed / 2 skipped / 0 failed** (540 collected, +46
 
 ### Goal
 
-Close gap G2 ([plan](v1/v1.8/plans/one-shot-installer.md) Phase 3): HF-protocol catalog entries (SANA, SDXL, FLUX, LTX-Video, SVD) were selectable dead ends -- the model step only ran `ollama pull`. Give every `source.protocol: "huggingface"` entry a real, resumable, SHA-256-verified download path into a documented runtime layout, and route the model step by protocol with per-model failure isolation.
+Close gap G2 ([plan](archive/v1/v1.8/plans/one-shot-installer.md) Phase 3): HF-protocol catalog entries (SANA, SDXL, FLUX, LTX-Video, SVD) were selectable dead ends -- the model step only ran `ollama pull`. Give every `source.protocol: "huggingface"` entry a real, resumable, SHA-256-verified download path into a documented runtime layout, and route the model step by protocol with per-model failure isolation.
 
 ### What changed
 
@@ -4491,7 +4493,7 @@ Close gap G2 ([plan](v1/v1.8/plans/one-shot-installer.md) Phase 3): HF-protocol 
 
 ### Verification
 
-Installer pytest suite **494 passed / 2 skipped / 0 failed** (+61; the new skip is the env-gated HF smoke); `hf_weights_puller` 94% / `model_router` 98% line coverage; ruff 0 new findings; `tsc -b` clean; root Vitest suite (`npm test`) **4565 passed / 6 skipped / 0 failed** (unchanged). Known-gaps: new `OSI003.P3.A-D` (pin rotation, full multi-file manifests for Phase 4/T403, GPU-box smoke, wizard multi-select wiring). See the [phase history](v1/v1.8/development/history/2026-07_phase-3-hf-weights-downloader.md).
+Installer pytest suite **494 passed / 2 skipped / 0 failed** (+61; the new skip is the env-gated HF smoke); `hf_weights_puller` 94% / `model_router` 98% line coverage; ruff 0 new findings; `tsc -b` clean; root Vitest suite (`npm test`) **4565 passed / 6 skipped / 0 failed** (unchanged). Known-gaps: new `OSI003.P3.A-D` (pin rotation, full multi-file manifests for Phase 4/T403, GPU-box smoke, wizard multi-select wiring). See the [phase history](archive/v1/v1.8/development/history/2026-07_phase-3-hf-weights-downloader.md).
 
 ### Branch
 
@@ -4503,7 +4505,7 @@ Installer pytest suite **494 passed / 2 skipped / 0 failed** (+61; the new skip 
 
 ### Goal
 
-Close gap G1's installer half ([plan](v1/v1.8/plans/one-shot-installer.md) Phase 2): the wizard gains a fifth step that fetches the Nexus desktop bundle from the pinned GitHub release (SHA-256-verified, fail closed), installs it per-OS, health-checks the first launch, and offers "Launch Nexus" on Finish. Local-first under the Actions freeze: the release-fetch path is fully unit-tested, and the end-to-end proof runs the T104 fixture bundle through the real engine.
+Close gap G1's installer half ([plan](archive/v1/v1.8/plans/one-shot-installer.md) Phase 2): the wizard gains a fifth step that fetches the Nexus desktop bundle from the pinned GitHub release (SHA-256-verified, fail closed), installs it per-OS, health-checks the first launch, and offers "Launch Nexus" on Finish. Local-first under the Actions freeze: the release-fetch path is fully unit-tested, and the end-to-end proof runs the T104 fixture bundle through the real engine.
 
 ### What changed
 
@@ -4514,7 +4516,7 @@ Close gap G1's installer half ([plan](v1/v1.8/plans/one-shot-installer.md) Phase
 
 ### Verification
 
-Installer pytest suite **433 passed / 1 skipped / 0 failed** (+42 new; the skip is the env-gated fixture test, run green separately); `desktop_provisioner.py` 89% line coverage; ruff 0 new findings on changed files; root Vitest suite **4565 passed / 6 skipped / 0 failed** (unchanged). Known-gaps: `OSI001.P1.B` amended with the Phase 2 outcome; new `OSI002.P2.A-D` (live release-fetch rehearsal, sidecar-ping tier, mac/linux hardware legs, unwired wizard pages). See the [phase history](v1/v1.8/development/history/2026-07_phase-2-desktop-provisioner.md).
+Installer pytest suite **433 passed / 1 skipped / 0 failed** (+42 new; the skip is the env-gated fixture test, run green separately); `desktop_provisioner.py` 89% line coverage; ruff 0 new findings on changed files; root Vitest suite **4565 passed / 6 skipped / 0 failed** (unchanged). Known-gaps: `OSI001.P1.B` amended with the Phase 2 outcome; new `OSI002.P2.A-D` (live release-fetch rehearsal, sidecar-ping tier, mac/linux hardware legs, unwired wizard pages). See the [phase history](archive/v1/v1.8/development/history/2026-07_phase-2-desktop-provisioner.md).
 
 ### Branch
 
@@ -4526,14 +4528,14 @@ Installer pytest suite **433 passed / 1 skipped / 0 failed** (+42 new; the skip 
 
 ### Goal
 
-Open the v1.8.0 "one-shot end-user installer" cycle ([plan](v1/v1.8/plans/one-shot-installer.md)) by closing its fetch-from-release prerequisite (gap G1): the installer will download the Nexus desktop app from the GitHub release at install time, so the release pipeline must first publish versioned, checksummed Tauri bundles for all three platforms -- and stop referencing artifact names that no longer exist. All proofs are local per the Actions freeze ($0 until 2026-08-01).
+Open the v1.8.0 "one-shot end-user installer" cycle ([plan](archive/v1/v1.8/plans/one-shot-installer.md)) by closing its fetch-from-release prerequisite (gap G1): the installer will download the Nexus desktop app from the GitHub release at install time, so the release pipeline must first publish versioned, checksummed Tauri bundles for all three platforms -- and stop referencing artifact names that no longer exist. All proofs are local per the Actions freeze ($0 until 2026-08-01).
 
 ### What changed
 
 - **T101 -- `desktop-bundle` job set** in [release.yml](../.github/workflows/release.yml): a 3-OS matrix (windows/macos/ubuntu, `fail-fast: false`, 90-min cap) building `npm ci` -> version sync -> fail-fast `build:sidecar` -> `tauri build` (macOS as `--target universal-apple-darwin`), staging bundles under canonical names `Nexus-Desktop_{version}_x64-setup.exe` / `_universal.dmg` / `_amd64.AppImage` / `_amd64.deb`. Tag-triggered by construction (`release.yml`'s only trigger is version tags). Conventions (pinned `dtolnay/rust-toolchain` SHA, Linux webkit2gtk-4.1 prereqs, cargo cache) mirror `shell-build.yml`; zero new third-party actions.
 - **Build-time version sync** ([scripts/sync-tauri-version.mjs](../scripts/sync-tauri-version.mjs) + 7 tests): `tauri.conf.json`'s `version` (found stale at 1.5.0, the G1 symptom) now syncs from the semantic-release-owned root package.json before every bundle build; pure exported functions + `--check` mode; committed conf bumped to 2.1.0.
 - **T102 -- `SHA256SUMS.txt`**: `create-release` generates one checksum file over an explicit fail-loud list of every attached asset (VSIX + 3 wizard installers + 4 desktop bundles) and attaches it -- the Phase 2 `desktop_provisioner`'s fail-closed verification source.
-- **T103 -- rename (grep-audited)**: the PyQt build scripts already emit `NexusSetup.*`, so `release.yml`'s `GemmaCodeSetup.*` upload paths were dead-broken, not merely stale. Fixed all artifact paths + the `gemma-code-*.vsix` asset name (vsce emits `nexus-coding-*.vsix`) + the "Gemma Code v..." release title; renamed the wizard's `setApplicationName` / argparse description and an integration-test banner to "Nexus Installer". The other three installer workflows carried no old names. Residual repo-wide `gemma-code` references are classified in [known-gaps `NAME.P1.A`](v1/v1.8/known-gaps.md) -- the actionable class is the v1.0.0 compat shim surface whose removal was promised "until v1.2.0" and is now ~5 majors overdue (operator-raised).
+- **T103 -- rename (grep-audited)**: the PyQt build scripts already emit `NexusSetup.*`, so `release.yml`'s `GemmaCodeSetup.*` upload paths were dead-broken, not merely stale. Fixed all artifact paths + the `gemma-code-*.vsix` asset name (vsce emits `nexus-coding-*.vsix`) + the "Gemma Code v..." release title; renamed the wizard's `setApplicationName` / argparse description and an integration-test banner to "Nexus Installer". The other three installer workflows carried no old names. Residual repo-wide `gemma-code` references are classified in [known-gaps `NAME.P1.A`](archive/v1/v1.8/known-gaps.md) -- the actionable class is the v1.0.0 compat shim surface whose removal was promised "until v1.2.0" and is now ~5 majors overdue (operator-raised).
 - **T104 -- local Windows proof**: installed rustup (stable-msvc 1.96.1; MSVC + NSIS already present), built `Nexus_2.1.0_x64-setup.exe` (NSIS, 1.6 MB) + `Nexus_2.1.0_x64_en-US.msi` (2.1 MB) in 2m27s, verified the silent install/uninstall round-trip (`/S /D=<scratch>` -> `nexus-shell.exe` + uninstaller -> clean removal), and stashed the NSIS bundle at `.local-fixtures/` (new gitignored dir) as the Phase 2 / T204 fixture. SmartScreen is untestable locally (no Mark-of-the-Web on a local build); the unsigned-download warning is a recorded gap, signing stays out of scope per plan.
 - **Finding for Phase 2** (`OSI001.P1.B`): the bundle ships the Tauri shell only -- no sidecar dist is packaged, so the installed app cannot serve the Coding pillar until the v1.7.0 `RT.P7.A`/`RT.P7.B` carryover is resolved; pinned to Phase 2's DoD.
 
@@ -4551,7 +4553,7 @@ Root suite **4565 passed / 6 skipped / 0 failed** (+7 new); `tsc -b` clean; lint
 
 ### Goal
 
-Act on the Nexus-Hub v3.10.0 adoption evaluation ([docs/versions/v1/v1.7.0/plans/adoption-nexus-hub-v3.10.0.md](v1/v1.7/plans/adoption-nexus-hub-v3.10.0.md)). The evaluation found the six Hub consumption surfaces already wired (v1.5.0 Phase 7), so "adopting v3.10.0" is a runtime sync plus a small, policy-clean hardening phase -- not new plumbing. **Phase 0 compatibility gate** (a cross-repo sweep of v3.10.0 content against the six wired parsers) came back **CLEAN**: no consumer patch needed. This closes **Phase 1** (the code phase).
+Act on the Nexus-Hub v3.10.0 adoption evaluation ([docs/versions/v1/v1.7.0/plans/adoption-nexus-hub-v3.10.0.md](archive/v1/v1.7/plans/adoption-nexus-hub-v3.10.0.md)). The evaluation found the six Hub consumption surfaces already wired (v1.5.0 Phase 7), so "adopting v3.10.0" is a runtime sync plus a small, policy-clean hardening phase -- not new plumbing. **Phase 0 compatibility gate** (a cross-repo sweep of v3.10.0 content against the six wired parsers) came back **CLEAN**: no consumer patch needed. This closes **Phase 1** (the code phase).
 
 ### What changed (all local-only, zero new outbound calls / credentials)
 
@@ -4619,7 +4621,7 @@ Close the v1.7.0 "local skill self-optimization loop + opencode harness hardenin
 
 ### What changed (SO008 -- docs) and what did not
 
-- **Finalized**: this DEVLOG entry, the [v1.7.0 known-gaps ledger](v1/v1.7/known-gaps.md) (Phase 6 row added, status flipped to COMPLETE, summary recomputed to 6/6 phases + 17 forward-tier follow-ups, demand-gated backlog recorded), [todos.md](todos.md), the [plan](v1/v1.7/plans/adoption-self-optimizing-skills.md) (Definition-of-pass item 7 + Phase 6 sub-tasks SO007-SO009 checked off, Phase 6 status COMPLETE), and a Phase 6 history file under [versions/v1/v1.7.0/development/history/](v1/v1.7/development/history).
+- **Finalized**: this DEVLOG entry, the [v1.7.0 known-gaps ledger](archive/v1/v1.7/known-gaps.md) (Phase 6 row added, status flipped to COMPLETE, summary recomputed to 6/6 phases + 17 forward-tier follow-ups, demand-gated backlog recorded), [todos.md](todos.md), the [plan](archive/v1/v1.7/plans/adoption-self-optimizing-skills.md) (Definition-of-pass item 7 + Phase 6 sub-tasks SO007-SO009 checked off, Phase 6 status COMPLETE), and a Phase 6 history file under [versions/v1/v1.7.0/development/history/](archive/v1/v1.7/development/history).
 - **Not touched (by policy)**: README.md and ARCHITECTURE.md carry no per-version content, and the CHANGELOG narrative + the npm version tag are semantic-release-owned and cut on merge to `main` -- so no manual edit to those three (same posture as the v1.6.0 FINAL close).
 - **Demand-gated backlog recorded**: S5 (background autonomous self-optimization routine, off by default) and opencode O-B / O-D / O-E remain in the plan's Out-of-Scope appendix, none implemented this cycle; the load-bearing guardrail "the loop proposes; the human accepts" is preserved by S5's deferral.
 
@@ -4654,7 +4656,7 @@ Adopt the one clearly-worthwhile local item from the opencode scan: parse a shel
 - `npm run check-architecture`: **0 errors**, 10 pre-existing warnings (no new orphan/circular; +1 module). `npm run check:tampering`: **0 findings**. `npm run security:check`: in sync (no permission-tier change -- `run_terminal` stays DANGEROUS; the gate is a tightening layer).
 - New-module coverage: `shellIntrospection.ts` **100% lines / 92.59% branches / 100% functions** (above the 80/75/80 gate).
 - Local-first / MCP Registry Policy clean: no new dependency, no new outbound call or credential; the introspector is a pure local parse and only tightens the permission surface. README/ARCHITECTURE/CHANGELOG narrative + the npm version tag remain semantic-release-owned and are cut on merge to `main`.
-- Carryovers recorded in [versions/v1/v1.7.0/known-gaps.md](v1/v1.7/known-gaps.md): `SO006.P5.A` (tree-sitter-bash AST upgrade over the structural parser), `SO006.P5.B` (opt-in workspace-escape hard-block), `SO006.P5.C` (glob-expansion / read-scope precision).
+- Carryovers recorded in [versions/v1/v1.7.0/known-gaps.md](archive/v1/v1.7/known-gaps.md): `SO006.P5.A` (tree-sitter-bash AST upgrade over the structural parser), `SO006.P5.B` (opt-in workspace-escape hard-block), `SO006.P5.C` (glob-expansion / read-scope precision).
 
 ---
 
@@ -4678,7 +4680,7 @@ Land the evolutionary layer (GEPA/EvoSkill) on top of the Phase 3 single-file lo
 - `npm run check-architecture`: **0 errors**, 10 pre-existing warnings (no new orphan/circular; +3 modules). `npm run check:tampering`: **0 findings**. `npm run security:check`: in sync.
 - New-module coverage: pareto 100/100/100, CandidateFrontier 100/94.11/100, frontierWorktree 96.61/90/100 (the `modules/coding/skilloptimizer/` subtree at 99.47% lines / 91.51% branches / 100% functions, above the 80/75/80 gate).
 - Local-first / MCP Registry Policy clean: no new dependency, no new outbound call or credential (the scorer/producer are seams over the resident runner). README/ARCHITECTURE/CHANGELOG narrative + the npm version tag remain semantic-release-owned and are cut on merge to `main`.
-- Carryovers recorded in [versions/v1/v1.7.0/known-gaps.md](v1/v1.7/known-gaps.md): `SO005.P4.A` (production candidate producer + scorer over the real agent, deferred behind `SO001.P1.A`/`SO003.P3.B`), `SO005.P4.B` (live branch->catalog promoter over `GitSafetyNet`), `SO005.P4.C` (no frontier CLI + auto tier-cap wiring).
+- Carryovers recorded in [versions/v1/v1.7.0/known-gaps.md](archive/v1/v1.7/known-gaps.md): `SO005.P4.A` (production candidate producer + scorer over the real agent, deferred behind `SO001.P1.A`/`SO003.P3.B`), `SO005.P4.B` (live branch->catalog promoter over `GitSafetyNet`), `SO005.P4.C` (no frontier CLI + auto tier-cap wiring).
 
 ---
 
@@ -4702,7 +4704,7 @@ Land the headline capability of the cycle: a SkillOpt/GEPA-style loop that refle
 - `npm run check-architecture`: **0 errors**, 10 pre-existing warnings (no new orphan/circular). `npm run check:tampering`: **0 findings**. `npm run security:check`: in sync.
 - New-module coverage: the `modules/coding/skilloptimizer/` subtree at **99.62% lines / 89.61% branches / 100% functions** (above the 80/75/80 gate); global coverage 88.05 / 83.85 / 91.25.
 - Local-first / MCP Registry Policy clean: no new dependency, no new outbound call or credential (the optimizer model is the resident `OllamaClient`). README/ARCHITECTURE/CHANGELOG narrative + the npm version tag remain semantic-release-owned and are cut on merge to `main`.
-- Carryovers recorded in [versions/v1/v1.7.0/known-gaps.md](v1/v1.7/known-gaps.md): `SO003.P3.A` (opt-in default-off pending a live A/B), `SO003.P3.B` (production rollout over the real `AgentLoop` deferred behind `SO001.P1.A`), `SO003.P3.C` (live `ConfirmationGate`/`pathGuard` adapters deferred), `SO003.P3.D` (no `nexus skills optimize` CLI yet).
+- Carryovers recorded in [versions/v1/v1.7.0/known-gaps.md](archive/v1/v1.7/known-gaps.md): `SO003.P3.A` (opt-in default-off pending a live A/B), `SO003.P3.B` (production rollout over the real `AgentLoop` deferred behind `SO001.P1.A`), `SO003.P3.C` (live `ConfirmationGate`/`pathGuard` adapters deferred), `SO003.P3.D` (no `nexus skills optimize` CLI yet).
 
 ---
 
@@ -4725,7 +4727,7 @@ Build the regression-safety scaffolding the Phase 3 skill optimizer cannot be tr
 - `npm run check-architecture`: **0 errors**, 10 pre-existing warnings (no new orphan/circular -- the split module depends one-directionally on the loader). `npm run check:tampering`: **0 findings**. `npm run security:check`: in sync.
 - New-module coverage: `goldenSplit.ts` **100/100/100**, `validationGate.ts` **100/100/100**, `RejectedEditBuffer.ts` **100/100/100** (lines/branches/functions); the added `goldenTaskLoader` split-parse is covered, its residual uncovered lines are pre-existing parser branches.
 - Local-first / MCP Registry Policy clean: no new dependency, no new outbound call or credential. README/ARCHITECTURE/CHANGELOG narrative + the npm version tag remain semantic-release-owned and are cut on merge to `main`.
-- Carryovers recorded in [versions/v1/v1.7.0/known-gaps.md](v1/v1.7/known-gaps.md): `SO002.P2.A` (pass-rate-only gate; latency/token regression gating deferred to a Phase 3 consumer), `SO002.P2.B` (buffer is append-only; orphan GC deferred, mirrors `AS005.P3.A`), `SO002.P2.C` (corpus splits are defaulted by category, not difficulty-stratified).
+- Carryovers recorded in [versions/v1/v1.7.0/known-gaps.md](archive/v1/v1.7/known-gaps.md): `SO002.P2.A` (pass-rate-only gate; latency/token regression gating deferred to a Phase 3 consumer), `SO002.P2.B` (buffer is append-only; orphan GC deferred, mirrors `AS005.P3.A`), `SO002.P2.C` (corpus splits are defaulted by category, not difficulty-stratified).
 
 ---
 
@@ -4733,7 +4735,7 @@ Build the regression-safety scaffolding the Phase 3 skill optimizer cannot be tr
 
 ### Goal
 
-Open the [local skill self-optimization plan](v1/v1.7/plans/adoption-self-optimizing-skills.md) by landing its hard prerequisite (S1): a TS-native golden-task **live runner** so the optimization loop (Phases 2-4) has a verifiable feedback signal. This also restores the live golden runs that broke when the Python FastAPI backend was deleted by [ADR-0001](adr/0001-python-backend-disposition.md) (the Python `_run_live()` has returned "backend call failed" for every task since v0.4.0).
+Open the [local skill self-optimization plan](archive/v1/v1.7/plans/adoption-self-optimizing-skills.md) by landing its hard prerequisite (S1): a TS-native golden-task **live runner** so the optimization loop (Phases 2-4) has a verifiable feedback signal. This also restores the live golden runs that broke when the Python FastAPI backend was deleted by [ADR-0001](adr/0001-python-backend-disposition.md) (the Python `_run_live()` has returned "backend call failed" for every task since v0.4.0).
 
 ### What changed
 
@@ -4748,7 +4750,7 @@ Open the [local skill self-optimization plan](v1/v1.7/plans/adoption-self-optimi
 - `npm run check-architecture`: **0 errors**, 10 pre-existing warnings (no new orphan/circular; `dep-cruiser-clean` integration test green). `npm run check:tampering`: **0 findings**. `npm run security:check`: in sync.
 - New-module coverage: **97.11% lines / 83.25% branches / 100% functions** (GoldenTaskRunner 100/96.4/100, goldenCriteria 100/82.5/100, goldenSnapshot 100/87.5/100, goldenTaskLoader 93.9/79.5/100), all above the 80/75/80 gate.
 - Local-first / MCP Registry Policy clean: no new dependency (the YAML subset is hand-parsed, consistent with the existing `generate-golden-tasks` regex extractor), no new outbound call or credential.
-- Carryovers recorded in [versions/v1/v1.7.0/known-gaps.md](v1/v1.7/known-gaps.md): `SO001.P1.A` (production full-`AgentLoop` driver, deferred), `SO001.P1.B` (no `nexus golden run` CLI yet), `SO001.P1.C` (Windows-native shell-command criteria). README/ARCHITECTURE/CHANGELOG narrative + the npm version tag remain semantic-release-owned and are cut on merge to `main`.
+- Carryovers recorded in [versions/v1/v1.7.0/known-gaps.md](archive/v1/v1.7/known-gaps.md): `SO001.P1.A` (production full-`AgentLoop` driver, deferred), `SO001.P1.B` (no `nexus golden run` CLI yet), `SO001.P1.C` (Windows-native shell-command criteria). README/ARCHITECTURE/CHANGELOG narrative + the npm version tag remain semantic-release-owned and are cut on merge to `main`.
 
 ---
 
@@ -4779,11 +4781,11 @@ Resolve the optional forward-tier carryovers left open after the v1.6.0 cycles a
 
 ### Goal
 
-Close the [local panel + judge-fusion plan](v1/v1.6/plans/adoption-openrouter-fusion.md): verify all six definition-of-pass items, run the full gate matrix, finalize the per-plan known-gaps, and assess the Nexus-Hub touchpoint. No feature code changes -- verification + close-out over the Phases 1-4 builds.
+Close the [local panel + judge-fusion plan](archive/v1/v1.6/plans/adoption-openrouter-fusion.md): verify all six definition-of-pass items, run the full gate matrix, finalize the per-plan known-gaps, and assess the Nexus-Hub touchpoint. No feature code changes -- verification + close-out over the Phases 1-4 builds.
 
 ### What changed
 
-- **Whole-plan acceptance gate (OF013).** All six definition-of-pass items verified PASS (the evidence matrix is in [versions/v1/v1.6.0/known-gaps.md](v1/v1.6/known-gaps.md) Section 4): F1 fuse skill + council upgrade; F2 PanelExecutor/FusionAgent distinct-model fan-out (now parallel via the F3 backend); F5 judge untrusted-input boundary + no per-panelist tools + documented SPOF; F3 VRAM-gated co-residency with degrade-to-sequential; F4 A/B harness + opt-in routing (default off, recorded); and the testing/docs item.
+- **Whole-plan acceptance gate (OF013).** All six definition-of-pass items verified PASS (the evidence matrix is in [versions/v1/v1.6.0/known-gaps.md](archive/v1/v1.6/known-gaps.md) Section 4): F1 fuse skill + council upgrade; F2 PanelExecutor/FusionAgent distinct-model fan-out (now parallel via the F3 backend); F5 judge untrusted-input boundary + no per-panelist tools + documented SPOF; F3 VRAM-gated co-residency with degrade-to-sequential; F4 A/B harness + opt-in routing (default off, recorded); and the testing/docs item.
 - **Docs (OF014).** The per-plan known-gaps ledger is finalized (acceptance-gate matrix, `ENV.P5.A`, `OF015.P5.A`, summary marked 5/5 COMPLETE). README/ARCHITECTURE/CHANGELOG narrative + the npm version tag remain **semantic-release-owned** and cut on merge to `main` from the conventional commits (P1-P5) -- not hand-edited (manual edits would fight the generator), matching the sibling aisuite-harness Phase 6 FINAL and every P1-P4 note. The plan, this DEVLOG, and `docs/todos.md` carry the per-phase narrative.
 - **Nexus-Hub touchpoint (OF015).** Assessed -- **not warranted** (`OF015.P5.A`). The local panel-fusion capability is internal Nexus-AI code, not a portable Hub skill/command; the Hub's `agent-orchestration-primitives` + `competitive-generation` skills already describe the multi-candidate/judge pattern at the orchestration-primitive altitude. Same disposition as the sibling plan's `AS010.P6.A`. No change pushed to the separate `bendourthe/Nexus-Hub` repo.
 
@@ -4802,7 +4804,7 @@ The plan is **COMPLETE** (all 5 phases). The whole v1.4.0 + v1.5.0 + v1.6.0 line
 
 ### Goal
 
-Operationalise Fusion's core economic claim for Nexus -- *escalate to a small-model panel instead of a VRAM-heavy single model* -- but only behind a local A/B and an opt-in switch, per the [local panel + judge-fusion plan](v1/v1.6/plans/adoption-openrouter-fusion.md). The budget-panel-within-1%-of-frontier claim is `vendor-reported` and unproven for small *local* models on coding tasks, so the routing default may flip on **only** on a measured net win at acceptable latency; otherwise it ships opt-in. This phase also closes Phase 3's `OF007.P3.A` by wiring the `GpuScheduler.enqueuePanel` co-residency primitive into the `PanelExecutor` fan-out.
+Operationalise Fusion's core economic claim for Nexus -- *escalate to a small-model panel instead of a VRAM-heavy single model* -- but only behind a local A/B and an opt-in switch, per the [local panel + judge-fusion plan](archive/v1/v1.6/plans/adoption-openrouter-fusion.md). The budget-panel-within-1%-of-frontier claim is `vendor-reported` and unproven for small *local* models on coding tasks, so the routing default may flip on **only** on a measured net win at acceptable latency; otherwise it ships opt-in. This phase also closes Phase 3's `OF007.P3.A` by wiring the `GpuScheduler.enqueuePanel` co-residency primitive into the `PanelExecutor` fan-out.
 
 ### What changed
 
@@ -4827,7 +4829,7 @@ Operationalise Fusion's core economic claim for Nexus -- *escalate to a small-mo
 
 ### Goal
 
-Turn Phase 2's sequential panel latency into parallel by letting a small panel be co-resident within a VRAM budget -- the genuinely new infrastructure of the [local panel + judge-fusion plan](v1/v1.6/plans/adoption-openrouter-fusion.md), and the only hard enabler that did not already exist. The hard constraint is single-GPU resource safety: a panel must run concurrently only when it fits free VRAM, degrade to sequential fan-out when it does not (never OOM, never an unbounded loader), and never change the behavior of single-model sessions or the other pillars.
+Turn Phase 2's sequential panel latency into parallel by letting a small panel be co-resident within a VRAM budget -- the genuinely new infrastructure of the [local panel + judge-fusion plan](archive/v1/v1.6/plans/adoption-openrouter-fusion.md), and the only hard enabler that did not already exist. The hard constraint is single-GPU resource safety: a panel must run concurrently only when it fits free VRAM, degrade to sequential fan-out when it does not (never OOM, never an unbounded loader), and never change the behavior of single-model sessions or the other pillars.
 
 ### What changed
 
@@ -4843,7 +4845,7 @@ Turn Phase 2's sequential panel latency into parallel by letting a small panel b
 - `npm run check:tampering`: **0 findings**. `npm run check-architecture`: **0 errors**, 10 pre-existing warnings (no new orphan/circular -- the panel methods sit on the already-consumed GpuScheduler + ModelPinRegistry). `core/` + `tests/` are outside the `eslint src modules` scope by project config; `tsc -b` typechecks them.
 - No new dependency, credential, or outbound call (local-first / MCP Registry Policy clean). README/ARCHITECTURE/CHANGELOG narrative + version tag remain semantic-release-owned and deferred to the plan's Phase 5 FINAL.
 
-Known gaps for this plan are tracked in [versions/v1/v1.6.0/known-gaps.md](v1/v1.6/known-gaps.md). One forward-tier follow-up was recorded (P3, by plan design): `OF007.P3.A` -- the panel co-residency primitive + keep-alive are built and tested but not yet wired into a consumer (`PanelExecutor.run` still fans out sequentially in-process); the Phase 4 budget-panel routing heuristic (OF010-OF012) constructs the `PanelExecutor` and routes its fan-out through `enqueuePanel`. The remaining phases: F4 budget-panel routing + A/B (Phase 4), FINAL acceptance gate (Phase 5).
+Known gaps for this plan are tracked in [versions/v1/v1.6.0/known-gaps.md](archive/v1/v1.6/known-gaps.md). One forward-tier follow-up was recorded (P3, by plan design): `OF007.P3.A` -- the panel co-residency primitive + keep-alive are built and tested but not yet wired into a consumer (`PanelExecutor.run` still fans out sequentially in-process); the Phase 4 budget-panel routing heuristic (OF010-OF012) constructs the `PanelExecutor` and routes its fan-out through `enqueuePanel`. The remaining phases: F4 budget-panel routing + A/B (Phase 4), FINAL acceptance gate (Phase 5).
 
 ---
 
@@ -4851,7 +4853,7 @@ Known gaps for this plan are tracked in [versions/v1/v1.6.0/known-gaps.md](v1/v1
 
 ### Goal
 
-Build the headline capability of the [local panel + judge-fusion plan](v1/v1.6/plans/adoption-openrouter-fusion.md): a `PanelExecutor` / `FusionAgent` that fans one prompt across N **distinct** registry models and fuses their candidates through the Phase 1 `fuse` judge -- with the judge hardened as an untrusted-input boundary from day one (comparison item F5 folded into F2). Sequential fan-out is the honest single-GPU MVP; concurrent VRAM residency (F3) is Phase 3. No new outbound call, credential, or dependency.
+Build the headline capability of the [local panel + judge-fusion plan](archive/v1/v1.6/plans/adoption-openrouter-fusion.md): a `PanelExecutor` / `FusionAgent` that fans one prompt across N **distinct** registry models and fuses their candidates through the Phase 1 `fuse` judge -- with the judge hardened as an untrusted-input boundary from day one (comparison item F5 folded into F2). Sequential fan-out is the honest single-GPU MVP; concurrent VRAM residency (F3) is Phase 3. No new outbound call, credential, or dependency.
 
 ### What changed
 
@@ -4868,7 +4870,7 @@ Build the headline capability of the [local panel + judge-fusion plan](v1/v1.6/p
 - `npm run check:tampering`: **0 findings**. `npm run check:prompts`: exits **0** (two pre-existing non-gating warnings, `review-pr` ~811 and `council` ~881 = `OF002.P1.A`; no prompt touched this phase). `npm run check-architecture`: **0 errors**, 10 pre-existing warnings (no new orphan/circular -- `PanelExecutor` has outgoing deps so it is not flagged).
 - No new dependency, credential, or outbound call (local-first / MCP Registry Policy clean). README/ARCHITECTURE/CHANGELOG narrative + version tag remain semantic-release-owned and deferred to the plan's Phase 5 FINAL.
 
-Known gaps for this plan are tracked in [versions/v1/v1.6.0/known-gaps.md](v1/v1.6/known-gaps.md). Two forward-tier follow-ups were recorded (both P3, both by plan design): `OF004.P2.A` (the panel capability is built + tested but not yet wired into a user-facing route -- the F4 routing heuristic in Phase 4 invokes it) and `OF005.P2.A` (the MVP runs panelists as single completions, so the no-per-panelist-tool contract should be re-verified if panelists ever gain gated-tool access). The remaining phases: F3 concurrent VRAM residency (Phase 3), F4 budget-panel routing + A/B (Phase 4), FINAL acceptance gate (Phase 5).
+Known gaps for this plan are tracked in [versions/v1/v1.6.0/known-gaps.md](archive/v1/v1.6/known-gaps.md). Two forward-tier follow-ups were recorded (both P3, both by plan design): `OF004.P2.A` (the panel capability is built + tested but not yet wired into a user-facing route -- the F4 routing heuristic in Phase 4 invokes it) and `OF005.P2.A` (the MVP runs panelists as single completions, so the no-per-panelist-tool contract should be re-verified if panelists ever gain gated-tool access). The remaining phases: F3 concurrent VRAM residency (Phase 3), F4 budget-panel routing + A/B (Phase 4), FINAL acceptance gate (Phase 5).
 
 ---
 
@@ -4876,7 +4878,7 @@ Known gaps for this plan are tracked in [versions/v1/v1.6.0/known-gaps.md](v1/v1
 
 ### Goal
 
-Open the [local panel + judge-fusion adoption plan](v1/v1.6/plans/adoption-openrouter-fusion.md) (the companion plan to the now-closed aisuite-harness cycle, derived from [comparison-openrouter-fusion.md](v1/v1.6/comparison-openrouter-fusion.md)). Phase 1 ships F1: define the judge-fusion synthesis as a reusable skill so it is usable immediately (even over three passes of one model) and provides the exact schema the later F2 panel executor will consume. No infrastructure; prompt + schema authoring only.
+Open the [local panel + judge-fusion adoption plan](archive/v1/v1.6/plans/adoption-openrouter-fusion.md) (the companion plan to the now-closed aisuite-harness cycle, derived from [comparison-openrouter-fusion.md](archive/v1/v1.6/comparison-openrouter-fusion.md)). Phase 1 ships F1: define the judge-fusion synthesis as a reusable skill so it is usable immediately (even over three passes of one model) and provides the exact schema the later F2 panel executor will consume. No infrastructure; prompt + schema authoring only.
 
 ### What changed
 
@@ -4892,7 +4894,7 @@ Open the [local panel + judge-fusion adoption plan](v1/v1.6/plans/adoption-openr
 - `npm run check:prompts`: exits **0**; two non-gating `prompt-oversized` warnings -- the pre-existing `review-pr` (~811 tokens) and `council` (~881, pushed over the soft 800 budget by the OF002-required additions, recorded as `OF002.P1.A`).
 - No new `.ts` source, dependency, credential, or outbound call (local-first / MCP Registry Policy clean). README/ARCHITECTURE/CHANGELOG narrative + version tag remain semantic-release-owned and deferred to the plan's Phase 5 FINAL.
 
-Known gaps for this plan are tracked separately in [versions/v1/v1.6.0/known-gaps.md](v1/v1.6/known-gaps.md) (`OF002.P1.A` soft warning, `ENV.P1.A` pre-existing `docs/index.md` `src/panels` LOC drift, both P3). The `fuse` skill is the judge half of the technique; the diverse-model panel that produces the candidates (`PanelExecutor` / `FusionAgent`) is Phase 2.
+Known gaps for this plan are tracked separately in [versions/v1/v1.6.0/known-gaps.md](archive/v1/v1.6/known-gaps.md) (`OF002.P1.A` soft warning, `ENV.P1.A` pre-existing `docs/index.md` `src/panels` LOC drift, both P3). The `fuse` skill is the judge half of the technique; the diverse-model panel that produces the candidates (`PanelExecutor` / `FusionAgent`) is Phase 2.
 
 ---
 
@@ -4900,14 +4902,14 @@ Known gaps for this plan are tracked separately in [versions/v1/v1.6.0/known-gap
 
 ### Goal
 
-Run the FINAL phase of the [aisuite-harness adoption plan](v1/v1.6/plans/adoption-aisuite-harness.md): verify the whole-plan definition-of-pass, assess any Nexus-Hub touchpoint, and close the v1.6.0 cycle. This phase ships no feature code -- it is a verification + bookkeeping sweep over the five delivered phases (H1 interactive guide, A4 session/trace viewer, A1 session-state dehydration, A2 trace nesting, A3 adapter registry).
+Run the FINAL phase of the [aisuite-harness adoption plan](archive/v1/v1.6/plans/adoption-aisuite-harness.md): verify the whole-plan definition-of-pass, assess any Nexus-Hub touchpoint, and close the v1.6.0 cycle. This phase ships no feature code -- it is a verification + bookkeeping sweep over the five delivered phases (H1 interactive guide, A4 session/trace viewer, A1 session-state dehydration, A2 trace nesting, A3 adapter registry).
 
 ### What changed
 
 **No source changes.** Phase 6 is verification + cycle closure only. The documentation surfaces were closed out:
 
-- **Known-gaps ledger ([versions/v1/v1.6.0/known-gaps.md](v1/v1.6/known-gaps.md)).** Status moved to "complete (all 6 phases closed)"; a Phase 6 row added to the Adoption Ledger (AS008-AS010); two Phase 6 carryover follow-ups recorded -- `AS004.P2.B` (the in-dashboard "Export trace" button, intentionally not folded into this verification-only sweep) and `AS010.P6.A` (the optional future Nexus-Hub cross-link); summary recomputed to 6 of 6 phases, 11 open items (all P3 / forward-tier), 0 defects.
-- **Plan ([plans/adoption-aisuite-harness.md](v1/v1.6/plans/adoption-aisuite-harness.md)).** Phase 6 sub-tasks checked off with a Status block; definition-of-pass item 6 marked `[DELIVERED 2026-06-16]`; the Phases-at-a-Glance row marked complete.
+- **Known-gaps ledger ([versions/v1/v1.6.0/known-gaps.md](archive/v1/v1.6/known-gaps.md)).** Status moved to "complete (all 6 phases closed)"; a Phase 6 row added to the Adoption Ledger (AS008-AS010); two Phase 6 carryover follow-ups recorded -- `AS004.P2.B` (the in-dashboard "Export trace" button, intentionally not folded into this verification-only sweep) and `AS010.P6.A` (the optional future Nexus-Hub cross-link); summary recomputed to 6 of 6 phases, 11 open items (all P3 / forward-tier), 0 defects.
+- **Plan ([plans/adoption-aisuite-harness.md](archive/v1/v1.6/plans/adoption-aisuite-harness.md)).** Phase 6 sub-tasks checked off with a Status block; definition-of-pass item 6 marked `[DELIVERED 2026-06-16]`; the Phases-at-a-Glance row marked complete.
 - **Progress tracker ([todos.md](todos.md)).** Current-state lead + the v1.x-line cycle row updated to "v1.6.0 complete (Phases 1-6)".
 
 **Release mechanics (not hand-edited here).** README/ARCHITECTURE narrative sync, the CHANGELOG, and the npm version tag are owned by the **semantic-release** pipeline (`.releaserc`: `tagFormat: v${version}`, commit-analyzer + release-notes generator + changelog plugin), cut automatically on merge to `main` from the conventional-commit history. There is no `scripts/check_version_sync.py` in this repo, so no manual CHANGELOG / `package.json` version edit is performed.
@@ -4934,7 +4936,7 @@ Definition-of-pass artifacts 1-5 confirmed present on disk (H1 guide + offline t
 
 ### Goal
 
-Implement Phase 5 of the [aisuite-harness adoption plan](v1/v1.6/plans/adoption-aisuite-harness.md): make local-runtime adapter registration manifest-driven instead of a hand-edited `if/else` switch (comparison item A3), restricted to local runtimes only. This is the demand-gated backlog phase, built as a forward-looking guarded refactor on explicit user confirmation (`/implement phase 5`) -- no third runtime ships this cycle, so the discovery path is exercised by tests until concrete demand lands. The prior wiring (ADR-0016) selected between Ollama and LM Studio via a 4-line switch in `NexusCodingRuntime._resolveBackend`; each new local runtime meant another branch, a settings-enum value, and a runtime edit. Additive, local-only, zero-outbound, no new dependency.
+Implement Phase 5 of the [aisuite-harness adoption plan](archive/v1/v1.6/plans/adoption-aisuite-harness.md): make local-runtime adapter registration manifest-driven instead of a hand-edited `if/else` switch (comparison item A3), restricted to local runtimes only. This is the demand-gated backlog phase, built as a forward-looking guarded refactor on explicit user confirmation (`/implement phase 5`) -- no third runtime ships this cycle, so the discovery path is exercised by tests until concrete demand lands. The prior wiring (ADR-0016) selected between Ollama and LM Studio via a 4-line switch in `NexusCodingRuntime._resolveBackend`; each new local runtime meant another branch, a settings-enum value, and a runtime edit. Additive, local-only, zero-outbound, no new dependency.
 
 ### What changed
 
@@ -4956,7 +4958,7 @@ Implement Phase 5 of the [aisuite-harness adoption plan](v1/v1.6/plans/adoption-
 
 ### Goal
 
-Implement Phase 4 of the [aisuite-harness adoption plan](v1/v1.6/plans/adoption-aisuite-harness.md): make the v1.5.0 swarm topology legible by rendering planner -> worker -> critic sub-runs as a nested tree in the Trace Dashboard and in the Phase 2 A4 export (comparison item A2). The pieces existed but were disconnected -- `SubAgentManager.run` accepted a `parentTraceId`/`parentSpanId` that no swarm caller ever passed, so each worker dispatched its own standalone single-span trace, and both renderers laid spans out as a flat start-time list. The swarm was invisible. Additive, local-only, falls back to the flat timeline for any trace lacking the new fields.
+Implement Phase 4 of the [aisuite-harness adoption plan](archive/v1/v1.6/plans/adoption-aisuite-harness.md): make the v1.5.0 swarm topology legible by rendering planner -> worker -> critic sub-runs as a nested tree in the Trace Dashboard and in the Phase 2 A4 export (comparison item A2). The pieces existed but were disconnected -- `SubAgentManager.run` accepted a `parentTraceId`/`parentSpanId` that no swarm caller ever passed, so each worker dispatched its own standalone single-span trace, and both renderers laid spans out as a flat start-time list. The swarm was invisible. Additive, local-only, falls back to the flat timeline for any trace lacking the new fields.
 
 ### What changed
 
@@ -4980,7 +4982,7 @@ Implement Phase 4 of the [aisuite-harness adoption plan](v1/v1.6/plans/adoption-
 
 ### Goal
 
-Implement Phase 3 of the [aisuite-harness adoption plan](v1/v1.6/plans/adoption-aisuite-harness.md): store large session message fields out-of-line and rehydrate them on resume, the local-only analogue of aisuite's artifact-store dehydration (comparison Section 3.5: "large message fields (>20KB) are dehydrated to an artifact store and rehydrated on load"). Nexus already had the byte-cap + command-output compressor pieces but kept every captured stdout / diff / patch inline in the persisted session, so resumed sessions carried the full weight of every field. Local-only, zero-outbound, no new dependency.
+Implement Phase 3 of the [aisuite-harness adoption plan](archive/v1/v1.6/plans/adoption-aisuite-harness.md): store large session message fields out-of-line and rehydrate them on resume, the local-only analogue of aisuite's artifact-store dehydration (comparison Section 3.5: "large message fields (>20KB) are dehydrated to an artifact store and rehydrated on load"). Nexus already had the byte-cap + command-output compressor pieces but kept every captured stdout / diff / patch inline in the persisted session, so resumed sessions carried the full weight of every field. Local-only, zero-outbound, no new dependency.
 
 ### What changed
 
@@ -5004,7 +5006,7 @@ Implement Phase 3 of the [aisuite-harness adoption plan](v1/v1.6/plans/adoption-
 
 ### Goal
 
-Implement Phase 2 of the [aisuite-harness adoption plan](v1/v1.6/plans/adoption-aisuite-harness.md): turn a session trace into a portable, self-contained HTML artifact that opens offline -- the local-only analogue of aisuite's served trace viewer. The export must reuse the Phase 1 guide's design tokens and the `desktop/src/components/InteractiveArtifact.tsx` sanitisation rules, embed all trace data inline, and make zero network requests.
+Implement Phase 2 of the [aisuite-harness adoption plan](archive/v1/v1.6/plans/adoption-aisuite-harness.md): turn a session trace into a portable, self-contained HTML artifact that opens offline -- the local-only analogue of aisuite's served trace viewer. The export must reuse the Phase 1 guide's design tokens and the `desktop/src/components/InteractiveArtifact.tsx` sanitisation rules, embed all trace data inline, and make zero network requests.
 
 ### What changed
 
@@ -5031,7 +5033,7 @@ Implement Phase 2 of the [aisuite-harness adoption plan](v1/v1.6/plans/adoption-
 
 ### Goal
 
-Close Phase 1 of the [aisuite-harness adoption plan](v1/v1.6/plans/adoption-aisuite-harness.md). The H1 interactive guide ([guides/interactive-guide/nexus-ai-guide.html](../guides/interactive-guide/nexus-ai-guide.html)) shipped earlier (AS001 + AS002): a single self-contained 7-page user guide with the shared `:root` design tokens and the constellation canvas. The one open item was AS003 -- a CI guard for the Phase 1 Stability Gate (opens offline, zero outbound requests, reduced motion renders a static frame).
+Close Phase 1 of the [aisuite-harness adoption plan](archive/v1/v1.6/plans/adoption-aisuite-harness.md). The H1 interactive guide ([guides/interactive-guide/nexus-ai-guide.html](../guides/interactive-guide/nexus-ai-guide.html)) shipped earlier (AS001 + AS002): a single self-contained 7-page user guide with the shared `:root` design tokens and the constellation canvas. The one open item was AS003 -- a CI guard for the Phase 1 Stability Gate (opens offline, zero outbound requests, reduced motion renders a static frame).
 
 ### What changed
 
@@ -5045,7 +5047,7 @@ AS003 runs in CI through the existing `test-ts` job (the `tests/unit/**` glob); 
 
 ### Verification
 
-`npm run lint` 0 errors; `npm run check:tampering` 0 findings; root suite **4098 passed / 5 skipped / 0 failed** (+18); coverage **87.18% lines / 83.02% branches / 90.6% functions**, above the 80 / 75 / 80 gates. The test file imports no covered source, so coverage is unchanged by construction. One transparency note recorded in the new [v1.6.0 known-gaps](v1/v1.6/known-gaps.md) (`AS003.P1.A`): the reduced-motion guarantee is verified by static analysis of the boot script rather than a live browser render, because the project ships no browser-e2e harness and adding Playwright for one static file is disproportionate. No outbound call introduced.
+`npm run lint` 0 errors; `npm run check:tampering` 0 findings; root suite **4098 passed / 5 skipped / 0 failed** (+18); coverage **87.18% lines / 83.02% branches / 90.6% functions**, above the 80 / 75 / 80 gates. The test file imports no covered source, so coverage is unchanged by construction. One transparency note recorded in the new [v1.6.0 known-gaps](archive/v1/v1.6/known-gaps.md) (`AS003.P1.A`): the reduced-motion guarantee is verified by static analysis of the boot script rather than a live browser render, because the project ships no browser-e2e harness and adding Playwright for one static file is disproportionate. No outbound call introduced.
 
 ---
 
@@ -5053,7 +5055,7 @@ AS003 runs in CI through the existing `test-ts` job (the `tests/unit/**` glob); 
 
 ### Goal
 
-Close the v1.5.0 cycle ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](v1/v1.5/plans/adoption-ecosystem-2026-06.md), T023-T024): publish the two Phase 2 skills to Nexus-Hub, integrate every net-new Hub surface the v1.4.0 delta had routed to v1.5.0 as `HUB.P3.*`, and verify the whole-plan acceptance gate. Mid-phase the operator also flagged the v1.5.0 CI workflows red and asked for them fixed before release.
+Close the v1.5.0 cycle ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](archive/v1/v1.5/plans/adoption-ecosystem-2026-06.md), T023-T024): publish the two Phase 2 skills to Nexus-Hub, integrate every net-new Hub surface the v1.4.0 delta had routed to v1.5.0 as `HUB.P3.*`, and verify the whole-plan acceptance gate. Mid-phase the operator also flagged the v1.5.0 CI workflows red and asked for them fixed before release.
 
 ### CI / workflow fixes (prerequisite)
 
@@ -5070,11 +5072,11 @@ The two Phase 2 skills were published onto Hub `develop` (`fe8eb68`, no release 
 - **`HUB.P3.HOOK`** -- `catalog/hooks` added to the sparse-checkout; `HubHookInstaller` lists + installs hook scripts (path-traversal-safe, shell hooks chmod 0o755).
 - **`HUB.P3.MCPCFG`** -- `HubRegistryPolicyFilter` enforces the MCP Registry Policy on `mcp-servers.json` (default-deny: keep only `already-local` + audited `vendor-intrinsic`); `McpManager.policyFilterHubRegistry` is filter-only and never auto-connects.
 
-Full per-surface detail + carryforward dispositions in [versions/v1/v1.5.0/development/nexus-hub-integration-delta.md](v1/v1.5/development/nexus-hub-integration-delta.md).
+Full per-surface detail + carryforward dispositions in [versions/v1/v1.5.0/development/nexus-hub-integration-delta.md](archive/v1/v1.5/development/nexus-hub-integration-delta.md).
 
 ### Verification (T024 acceptance gate)
 
-`npm run lint` 0 errors; root suite **4080 passed / 5 skipped / 0 failed** (+43); desktop suite **445 passed / 0 failed**; `tsc -b` clean; `check-architecture` 0 errors; `check:tampering` 0 findings; `check:prompts` 0 errors (1 pre-existing warning); `security:check` in sync; `check:audit-prod` 0 blocking. Whole-plan Definition of pass satisfied (all Bucket 1-3 items, the planned Bucket 4 re-partials, and the four v1.4.0 deferrals). Four forward-tier follow-ups recorded in the [v1.5.0 known-gaps](v1/v1.5/known-gaps.md) (`T023.P3.A` sync-on-next-Hub-release; `HUB.P3.EXT.*` / `HUB.P3.NS` future; the two Hub-validator gaps remain Hub-owned). No outbound call introduced; MCP consumption is policy-gated and connection-free.
+`npm run lint` 0 errors; root suite **4080 passed / 5 skipped / 0 failed** (+43); desktop suite **445 passed / 0 failed**; `tsc -b` clean; `check-architecture` 0 errors; `check:tampering` 0 findings; `check:prompts` 0 errors (1 pre-existing warning); `security:check` in sync; `check:audit-prod` 0 blocking. Whole-plan Definition of pass satisfied (all Bucket 1-3 items, the planned Bucket 4 re-partials, and the four v1.4.0 deferrals). Four forward-tier follow-ups recorded in the [v1.5.0 known-gaps](archive/v1/v1.5/known-gaps.md) (`T023.P3.A` sync-on-next-Hub-release; `HUB.P3.EXT.*` / `HUB.P3.NS` future; the two Hub-validator gaps remain Hub-owned). No outbound call introduced; MCP consumption is policy-gated and connection-free.
 
 ---
 
@@ -5082,7 +5084,7 @@ Full per-surface detail + carryforward dispositions in [versions/v1/v1.5.0/devel
 
 ### Goal
 
-Close the last v1.4.0 P3 packaging deferral ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](v1/v1.5/plans/adoption-ecosystem-2026-06.md), `T022.P3.A`): a packaged install fell back to the regex symbol extractor because the Tree-sitter grammar `.wasm` (and the `web-tree-sitter` runtime `.wasm`) were not bundled. The v1.4.0 scanner resolves grammars via `require.resolve("tree-sitter-wasms")`, which works in dev and in the VSIX (it ships `node_modules`) but not in the esbuild-bundled desktop sidecar, which runs with no `node_modules` tree.
+Close the last v1.4.0 P3 packaging deferral ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](archive/v1/v1.5/plans/adoption-ecosystem-2026-06.md), `T022.P3.A`): a packaged install fell back to the regex symbol extractor because the Tree-sitter grammar `.wasm` (and the `web-tree-sitter` runtime `.wasm`) were not bundled. The v1.4.0 scanner resolves grammars via `require.resolve("tree-sitter-wasms")`, which works in dev and in the VSIX (it ships `node_modules`) but not in the esbuild-bundled desktop sidecar, which runs with no `node_modules` tree.
 
 ### What changed
 
@@ -5096,7 +5098,7 @@ Close the last v1.4.0 P3 packaging deferral ([docs/versions/v1/v1.5.0/plans/adop
 
 ### Verification
 
-Root suite **4037 passed / 5 skipped / 0 failed**; `npm run build:sidecar` + `npm run build:web` clean; `tsc -b`, desktop `tsc --noEmit`, `npm run lint`, `npm run lint:shell`, `npm run check-architecture` (0 errors, 10 pre-existing warnings), `npm run check:tampering` (0 findings), desktop coverage suite all clean. The full Tauri `npm run build:shell` was not run in this environment (`cargo` absent); the bundled-sidecar readiness was verified directly by spawning the built bundle. `T022.P3.A` raised candidate -> supported. One forward-tier follow-up recorded in [the v1.5.0 known-gaps](v1/v1.5/known-gaps.md) (`T021.P3.A` -- run the full `tauri build` on a host with the Rust toolchain). No outbound call introduced. Session history at [versions/v1/v1.5.0/development/history/2026-06_phase-6-tree-sitter-packaging.md](v1/v1.5/development/history/2026-06_phase-6-tree-sitter-packaging.md).
+Root suite **4037 passed / 5 skipped / 0 failed**; `npm run build:sidecar` + `npm run build:web` clean; `tsc -b`, desktop `tsc --noEmit`, `npm run lint`, `npm run lint:shell`, `npm run check-architecture` (0 errors, 10 pre-existing warnings), `npm run check:tampering` (0 findings), desktop coverage suite all clean. The full Tauri `npm run build:shell` was not run in this environment (`cargo` absent); the bundled-sidecar readiness was verified directly by spawning the built bundle. `T022.P3.A` raised candidate -> supported. One forward-tier follow-up recorded in [the v1.5.0 known-gaps](archive/v1/v1.5/known-gaps.md) (`T021.P3.A` -- run the full `tauri build` on a host with the Rust toolchain). No outbound call introduced. Session history at [versions/v1/v1.5.0/development/history/2026-06_phase-6-tree-sitter-packaging.md](archive/v1/v1.5/development/history/2026-06_phase-6-tree-sitter-packaging.md).
 
 ---
 
@@ -5104,7 +5106,7 @@ Root suite **4037 passed / 5 skipped / 0 failed**; `npm run build:sidecar` + `np
 
 ### Goal
 
-Ship the Bucket 3 `re-full` adoption ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](v1/v1.5/plans/adoption-ecosystem-2026-06.md), item 36): a planner/critic/worker orchestration layer over the worktree-isolated sub-agents Nexus already ships, GPU-concurrency bounded and behind an opt-in flag (default off). Because this phase touches session/bootstrap construction and the DAG dispatch path, it also closes the three v1.4.0 P3 deferrals it naturally subsumes: live worktree wiring (`T018.P3.A`), the orchestration layer + read-tool worktree rooting (`T018.P3.B`), and the live PreCompact WIP hook (`T016.P3.A`).
+Ship the Bucket 3 `re-full` adoption ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](archive/v1/v1.5/plans/adoption-ecosystem-2026-06.md), item 36): a planner/critic/worker orchestration layer over the worktree-isolated sub-agents Nexus already ships, GPU-concurrency bounded and behind an opt-in flag (default off). Because this phase touches session/bootstrap construction and the DAG dispatch path, it also closes the three v1.4.0 P3 deferrals it naturally subsumes: live worktree wiring (`T018.P3.A`), the orchestration layer + read-tool worktree rooting (`T018.P3.B`), and the live PreCompact WIP hook (`T016.P3.A`).
 
 ### What changed
 
@@ -5120,7 +5122,7 @@ Ship the Bucket 3 `re-full` adoption ([docs/versions/v1/v1.5.0/plans/adoption-ec
 
 ### Verification
 
-Full suite **4020 passed / 5 skipped / 0 failed**; `tsc -b` exit 0; `npm run lint` 0; `npm run check-architecture` 0 errors (10 pre-existing warnings); `npm run security:check` in sync; `npm run check:tampering` 0 findings. No outbound call introduced; the swarm path is local-only and opt-in (default off). `T018.P3.A`, `T018.P3.B`, `T016.P3.A` raised candidate -> supported. Two forward-tier follow-ups recorded in [the v1.5.0 known-gaps](v1/v1.5/known-gaps.md) (`T011.P3.A` -- live multi-worker smoke test; `T012.P3.A` -- grep findFiles-fallback rooting). Session history at [versions/v1/v1.5.0/development/history/2026-06_phase-4-swarm-orchestration.md](v1/v1.5/development/history/2026-06_phase-4-swarm-orchestration.md).
+Full suite **4020 passed / 5 skipped / 0 failed**; `tsc -b` exit 0; `npm run lint` 0; `npm run check-architecture` 0 errors (10 pre-existing warnings); `npm run security:check` in sync; `npm run check:tampering` 0 findings. No outbound call introduced; the swarm path is local-only and opt-in (default off). `T018.P3.A`, `T018.P3.B`, `T016.P3.A` raised candidate -> supported. Two forward-tier follow-ups recorded in [the v1.5.0 known-gaps](archive/v1/v1.5/known-gaps.md) (`T011.P3.A` -- live multi-worker smoke test; `T012.P3.A` -- grep findFiles-fallback rooting). Session history at [versions/v1/v1.5.0/development/history/2026-06_phase-4-swarm-orchestration.md](archive/v1/v1.5/development/history/2026-06_phase-4-swarm-orchestration.md).
 
 ---
 
@@ -5128,7 +5130,7 @@ Full suite **4020 passed / 5 skipped / 0 failed**; `tsc -b` exit 0; `npm run lin
 
 ### Goal
 
-Ship the Bucket 3 `re-full` adoption ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](v1/v1.5/plans/adoption-ecosystem-2026-06.md), item 3): an inbound prompt-injection classifier that screens content returned by external-data tools before it enters the agent's reasoning context. The hard constraint from the source comparison (Viktor S1 + GrepSeek S2 "do not pre-filter what the agent sees") is warn-then-allow: flagged content is annotated and surfaced, never hard-blocked or silently dropped.
+Ship the Bucket 3 `re-full` adoption ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](archive/v1/v1.5/plans/adoption-ecosystem-2026-06.md), item 3): an inbound prompt-injection classifier that screens content returned by external-data tools before it enters the agent's reasoning context. The hard constraint from the source comparison (Viktor S1 + GrepSeek S2 "do not pre-filter what the agent sees") is warn-then-allow: flagged content is annotated and surfaced, never hard-blocked or silently dropped.
 
 ### What changed
 
@@ -5140,7 +5142,7 @@ Ship the Bucket 3 `re-full` adoption ([docs/versions/v1/v1.5.0/plans/adoption-ec
 
 ### Verification
 
-Full suite **3988 passed / 5 skipped / 0 failed**; `tsc -b` exit 0; `npm run lint` 0; `npm run check-architecture` 0 errors; `npm run check:prompts` exit 0 (one pre-existing unrelated `review-pr` oversize warning); `npm run security:check` in sync. No outbound call introduced -- the heuristic is pure-local and the optional deep-scan reuses the already-loaded local model. One forward-tier follow-up recorded in [the v1.5.0 known-gaps](v1/v1.5/known-gaps.md) (`T008.P3.A` -- a live-model smoke test for the deep-scan path). Session history at [versions/v1/v1.5.0/development/history/2026-06_phase-3-inbound-security.md](v1/v1.5/development/history/2026-06_phase-3-inbound-security.md).
+Full suite **3988 passed / 5 skipped / 0 failed**; `tsc -b` exit 0; `npm run lint` 0; `npm run check-architecture` 0 errors; `npm run check:prompts` exit 0 (one pre-existing unrelated `review-pr` oversize warning); `npm run security:check` in sync. No outbound call introduced -- the heuristic is pure-local and the optional deep-scan reuses the already-loaded local model. One forward-tier follow-up recorded in [the v1.5.0 known-gaps](archive/v1/v1.5/known-gaps.md) (`T008.P3.A` -- a live-model smoke test for the deep-scan path). Session history at [versions/v1/v1.5.0/development/history/2026-06_phase-3-inbound-security.md](archive/v1/v1.5/development/history/2026-06_phase-3-inbound-security.md).
 
 ---
 
@@ -5148,7 +5150,7 @@ Full suite **3988 passed / 5 skipped / 0 failed**; `tsc -b` exit 0; `npm run lin
 
 ### Goal
 
-Ship the two Bucket 2 `skill-native` adoptions ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](v1/v1.5/plans/adoption-ecosystem-2026-06.md), items 11 and 21) as Nexus-Hub catalog skills, with zero Nexus-AI `core/` or `modules/` source change. The deliverables live in the separate Nexus-Hub repo; the Nexus-AI side is documentation only.
+Ship the two Bucket 2 `skill-native` adoptions ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](archive/v1/v1.5/plans/adoption-ecosystem-2026-06.md), items 11 and 21) as Nexus-Hub catalog skills, with zero Nexus-AI `core/` or `modules/` source change. The deliverables live in the separate Nexus-Hub repo; the Nexus-AI side is documentation only.
 
 ### What changed
 
@@ -5160,7 +5162,7 @@ Ship the two Bucket 2 `skill-native` adoptions ([docs/versions/v1/v1.5.0/plans/a
 
 ### Verification
 
-Hub `scripts/validate_skills.py` on both skills: PASS (0 errors; 5 optional-field warnings each, matching the catalog norm); `--quality` PASS (0 warnings -- Common Rationalizations, binary Verification, Related Skills cross-links, Tier-1 word budgets all satisfied; descriptions trimmed to <=250 chars for the hard limit). Nexus-AI regression: `node bin/nexus-check.mjs --rule skill-duplicate-name` -> 0 findings; `npm run check:prompts` -> exit 0 (one pre-existing `review-pr` oversize warning, unrelated to this phase); working tree clean -- **no `core/` or `modules/` source changed**. One forward-tier follow-up recorded in [the v1.5.0 known-gaps](v1/v1.5/known-gaps.md) (`T005.P3.A`); session history at [versions/v1/v1.5.0/development/history/2026-06_phase-2-skill-native.md](v1/v1.5/development/history/2026-06_phase-2-skill-native.md).
+Hub `scripts/validate_skills.py` on both skills: PASS (0 errors; 5 optional-field warnings each, matching the catalog norm); `--quality` PASS (0 warnings -- Common Rationalizations, binary Verification, Related Skills cross-links, Tier-1 word budgets all satisfied; descriptions trimmed to <=250 chars for the hard limit). Nexus-AI regression: `node bin/nexus-check.mjs --rule skill-duplicate-name` -> 0 findings; `npm run check:prompts` -> exit 0 (one pre-existing `review-pr` oversize warning, unrelated to this phase); working tree clean -- **no `core/` or `modules/` source changed**. One forward-tier follow-up recorded in [the v1.5.0 known-gaps](archive/v1/v1.5/known-gaps.md) (`T005.P3.A`); session history at [versions/v1/v1.5.0/development/history/2026-06_phase-2-skill-native.md](archive/v1/v1.5/development/history/2026-06_phase-2-skill-native.md).
 
 ---
 
@@ -5168,7 +5170,7 @@ Hub `scripts/validate_skills.py` on both skills: PASS (0 errors; 5 optional-fiel
 
 ### Goal
 
-Open the v1.5.0 "Local Agent Maturity" cycle ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](v1/v1.5/plans/adoption-ecosystem-2026-06.md), derived from the [2026-06 ecosystem comparison](v1/v1.5/comparison-ecosystem-2026-06.md)) by shipping the three Bucket 1 `local-only` adoptions with zero outbound calls and zero new heavy dependency. New branch `feat/v1.5.0-phase-1-local-only-foundations` off the v1.4.0 line (v1.4.0 not yet merged to `main`).
+Open the v1.5.0 "Local Agent Maturity" cycle ([docs/versions/v1/v1.5.0/plans/adoption-ecosystem-2026-06.md](archive/v1/v1.5/plans/adoption-ecosystem-2026-06.md), derived from the [2026-06 ecosystem comparison](archive/v1/v1.5/comparison-ecosystem-2026-06.md)) by shipping the three Bucket 1 `local-only` adoptions with zero outbound calls and zero new heavy dependency. New branch `feat/v1.5.0-phase-1-local-only-foundations` off the v1.4.0 line (v1.4.0 not yet merged to `main`).
 
 ### What changed
 
@@ -5180,7 +5182,7 @@ Open the v1.5.0 "Local Agent Maturity" cycle ([docs/versions/v1/v1.5.0/plans/ado
 
 ### Verification
 
-`tsc -b` clean (fixed 3 execFile-callback typing errors); `eslint src modules` clean; `check-architecture` 0 errors / 10 pre-existing warnings; `security:check` in sync; `npm test` 3962 passed / 5 skipped / 0 failed; desktop suite 422 passed; installer `test_recommended_models.py` 29 passed; `catalog:check` regenerated `docs/index.md`. No outbound call introduced. Two forward-tier follow-ups recorded in [the v1.5.0 known-gaps](v1/v1.5/known-gaps.md) (`T001.P3.A`, `T003.P3.B`); session history at [versions/v1/v1.5.0/development/history/2026-06_phase-1-local-only-foundations.md](v1/v1.5/development/history/2026-06_phase-1-local-only-foundations.md).
+`tsc -b` clean (fixed 3 execFile-callback typing errors); `eslint src modules` clean; `check-architecture` 0 errors / 10 pre-existing warnings; `security:check` in sync; `npm test` 3962 passed / 5 skipped / 0 failed; desktop suite 422 passed; installer `test_recommended_models.py` 29 passed; `catalog:check` regenerated `docs/index.md`. No outbound call introduced. Two forward-tier follow-ups recorded in [the v1.5.0 known-gaps](archive/v1/v1.5/known-gaps.md) (`T001.P3.A`, `T003.P3.B`); session history at [versions/v1/v1.5.0/development/history/2026-06_phase-1-local-only-foundations.md](archive/v1/v1.5/development/history/2026-06_phase-1-local-only-foundations.md).
 
 ---
 
@@ -5188,17 +5190,17 @@ Open the v1.5.0 "Local Agent Maturity" cycle ([docs/versions/v1/v1.5.0/plans/ado
 
 ### Goal
 
-Bring Nexus-AI into lock-step with the parallel Nexus-Hub upgrade, close the Nexus-Hub-dependent gaps, and verify the whole-plan definition of pass ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](v1/v1.4/plans/adoption-claude-code-harness.md), T032-T035). The user directed a read-only posture on the Nexus-Hub repo (it is under active concurrent development -- HEAD moved from `v3.0.0 Phase 2` to a clean `v3.2.0` with v3.0.0 / v3.1.0 / v3.1.1 tags cut during this phase's inspection), an offline approach (no GitHub calls; verify against the local clone), and a prepare-only release (no git tag, no semantic-release).
+Bring Nexus-AI into lock-step with the parallel Nexus-Hub upgrade, close the Nexus-Hub-dependent gaps, and verify the whole-plan definition of pass ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](archive/v1/v1.4/plans/adoption-claude-code-harness.md), T032-T035). The user directed a read-only posture on the Nexus-Hub repo (it is under active concurrent development -- HEAD moved from `v3.0.0 Phase 2` to a clean `v3.2.0` with v3.0.0 / v3.1.0 / v3.1.1 tags cut during this phase's inspection), an offline approach (no GitHub calls; verify against the local clone), and a prepare-only release (no git tag, no semantic-release).
 
 ### What changed
 
-**T032 -- integration delta ([development/nexus-hub-integration-delta.md](v1/v1.4/development/nexus-hub-integration-delta.md)).** Enumerated every Nexus-Hub functionality (skills, commands, agents, hooks, rules, MCP configs, 6 internal extensions, data artifacts) against what Nexus-AI consumes. Verdict: Nexus-AI integrates the **skills catalog** only (via `DevAIHubSyncer` sparse-clone + `SkillLoader`); commands/agents/rules/extensions are pulled-but-unused. Every not-integrated item carries a file-path-cited integration step; the Hub's v3.x non-skill expansion is routed to the in-flight v1.5.0 ecosystem cycle.
+**T032 -- integration delta ([development/nexus-hub-integration-delta.md](archive/v1/v1.4/development/nexus-hub-integration-delta.md)).** Enumerated every Nexus-Hub functionality (skills, commands, agents, hooks, rules, MCP configs, 6 internal extensions, data artifacts) against what Nexus-AI consumes. Verdict: Nexus-AI integrates the **skills catalog** only (via `DevAIHubSyncer` sparse-clone + `SkillLoader`); commands/agents/rules/extensions are pulled-but-unused. Every not-integrated item carries a file-path-cited integration step; the Hub's v3.x non-skill expansion is routed to the in-flight v1.5.0 ecosystem cycle.
 
 **T033 -- consumer wiring + Hub-dependent gaps.** Fixed the documented `nexus skills sync` blocker: `DEFAULT_UPSTREAM` in [core/skills/DevAIHubSyncer.ts](core/skills/DevAIHubSyncer.ts) corrected from the renamed `bendourthe/DevAI-Hub` to `bendourthe/Nexus-Hub` (+2 regression tests). The local `devai-hub` on-disk namespace was deliberately preserved (on-disk contract; rename deferred as `HUB.P3.NS`). Offline `buildManifest` over the local Hub catalog enumerates 251 skills including the two originally-imported targets -- the gap's own accepted faithful verification. `1.1.P2.A` + `1.1.P3.B` resolved (the Hub's own v3.x cycle ran build-catalog + cut release tags containing the skills); `T017.P3.E` + `T002.P2.A` re-justified as Hub-owned (they live in the Nexus-Hub repo and cannot be closed from Nexus-AI).
 
 **T034 -- whole-plan acceptance gate.** All four pass criteria hold with fresh evidence (below). One regression surfaced and was fixed in-phase: `check:audit-prod` flagged a newly-published `hono` moderate advisory (a transitive of `@modelcontextprotocol/sdk`, lockfile untouched since Phase 8). Fixed at root cause via an `overrides` pin (`"hono": "^4.12.21"`) resolving 4.12.25 -- a non-breaking patch bump within the current major, matching the existing `qs` override pattern. The 16 dev-only advisories a blanket `npm audit fix` would touch were deliberately left out of scope (recorded as `T034.P2.A`).
 
-**T035 -- finalization.** Finalized [known-gaps.md](v1/v1.4/known-gaps.md) (Status: finalized; recomputed summary -- 42 resolved this cycle); wrote [RELEASE_NOTES.md](v1/v1.4/RELEASE_NOTES.md); bumped the desktop product version 1.3.0 -> 1.4.0 across `desktop/package.json`, `tauri.conf.json`, `Cargo.toml` (root `package.json` left to semantic-release). Git tag prepared, not created (prepare-only).
+**T035 -- finalization.** Finalized [known-gaps.md](archive/v1/v1.4/known-gaps.md) (Status: finalized; recomputed summary -- 42 resolved this cycle); wrote [RELEASE_NOTES.md](archive/v1/v1.4/RELEASE_NOTES.md); bumped the desktop product version 1.3.0 -> 1.4.0 across `desktop/package.json`, `tauri.conf.json`, `Cargo.toml` (root `package.json` left to semantic-release). Git tag prepared, not created (prepare-only).
 
 ### Verification (T034 acceptance gate)
 
@@ -5210,7 +5212,7 @@ Full suite 3903 passed (+2 from the new DevAIHubSyncer tests), 5 skipped (pre-ex
 
 ### Goal
 
-Close every remaining open known-gap that is not blocked on Nexus-Hub ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](v1/v1.4/plans/adoption-claude-code-harness.md), T025-T031): the lone P1 protobufjs CVE chain, the tested-but-orphaned parsers/hooks, the documented deferrals, and the benchmarks. Stability gate: `npm run check:audit-prod` clean with no remaining inherited high/critical advisory; all referenced gap IDs marked resolved; full suite green. Two decisions were confirmed with the user up front: run the full phase committing per sub-task, and attempt the `@huggingface/transformers` migration for the CVE with a re-justified-allowlist fallback if the embedder broke.
+Close every remaining open known-gap that is not blocked on Nexus-Hub ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](archive/v1/v1.4/plans/adoption-claude-code-harness.md), T025-T031): the lone P1 protobufjs CVE chain, the tested-but-orphaned parsers/hooks, the documented deferrals, and the benchmarks. Stability gate: `npm run check:audit-prod` clean with no remaining inherited high/critical advisory; all referenced gap IDs marked resolved; full suite green. Two decisions were confirmed with the user up front: run the full phase committing per sub-task, and attempt the `@huggingface/transformers` migration for the CVE with a re-justified-allowlist fallback if the embedder broke.
 
 ### What changed
 
@@ -5224,9 +5226,9 @@ Close every remaining open known-gap that is not blocked on Nexus-Hub ([docs/ver
 
 **T029 (`2.4.P2.E`, `2.4.P3.F`, `4.3.P3.M`, `4.x.P3.N`, `3.4.P3.H`, `3.5.P3.I`, `6.1.P3.U`) hygiene deferrals (commit `0672871`).** Deleted the dead `preToolHook` module + test; implemented the codegraph-trim system-prompt notice (`computeToolActivation` -> `trimmedCodegraph` -> `PromptContext.toolCapNotice`); closed five items with documented rationale (keep tee footer on result; keep `.mjs` migration wrapper; `ingestFile` is the canonical code-aware entry; codegraph stays in-process; keep `fs.watch`).
 
-**T030 (`4.4.P2.L`, `7.1.P2.A`, `T012.P2.C`, `T013.P3.D`) benchmarks + audit (commit `dcd843f`).** Published the 100k memory-tier sweep ([docs/versions/v1/v1.4.0/benchmarks/memory-storage-size-2026-06-02.md](v1/v1.4/benchmarks/memory-storage-size-2026-06-02.md)) -- `lastBuildMethod: hnsw`, recall 96.5%, unblocked by the Phase 7 HNSW build (the ~61s compact is why it exceeds the 60s CI gate). Widened `scanUsage` to accept multiple skill roots. Closed the token-benchmark (deterministic-synthesis-canonical) and MinHash (not-a-cost-driver at ~230 skills) items with rationale.
+**T030 (`4.4.P2.L`, `7.1.P2.A`, `T012.P2.C`, `T013.P3.D`) benchmarks + audit (commit `dcd843f`).** Published the 100k memory-tier sweep ([docs/versions/v1/v1.4.0/benchmarks/memory-storage-size-2026-06-02.md](archive/v1/v1.4/benchmarks/memory-storage-size-2026-06-02.md)) -- `lastBuildMethod: hnsw`, recall 96.5%, unblocked by the Phase 7 HNSW build (the ~61s compact is why it exceeds the 60s CI gate). Widened `scanUsage` to accept multiple skill roots. Closed the token-benchmark (deterministic-synthesis-canonical) and MinHash (not-a-cost-driver at ~230 skills) items with rationale.
 
-**Verification (T031).** Full suite 3901 passed (+13), 0 failed; desktop suite 418 passed; `check:audit-prod` 0 high/critical; `tsc -b` clean; `eslint src modules` + desktop lint clean; `check-architecture` 0 errors / 10 warnings; `check:tampering` 0 findings; `security:check` in sync. See [known-gaps.md](v1/v1.4/known-gaps.md): 22 carryforward gaps resolved (40 total this cycle), **0 new gaps**, only the 4 Nexus-Hub-dependent items remain for Phase 9.
+**Verification (T031).** Full suite 3901 passed (+13), 0 failed; desktop suite 418 passed; `check:audit-prod` 0 high/critical; `tsc -b` clean; `eslint src modules` + desktop lint clean; `check-architecture` 0 errors / 10 warnings; `check:tampering` 0 findings; `security:check` in sync. See [known-gaps.md](archive/v1/v1.4/known-gaps.md): 22 carryforward gaps resolved (40 total this cycle), **0 new gaps**, only the 4 Nexus-Hub-dependent items remain for Phase 9.
 
 ---
 
@@ -5234,7 +5236,7 @@ Close every remaining open known-gap that is not blocked on Nexus-Hub ([docs/ver
 
 ### Goal
 
-Close the heavy structural deferrals carried from v1.1.0 / v1.2.0 ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](v1/v1.4/plans/adoption-claude-code-harness.md)): `1.4.P1.B` (the wholesale `src/` -> `modules/coding/` move), `1.1.P1.A` (the `tsc -b` project-references build), `3.3.P2.G` (the Tree-sitter scanner swap, which cascades to `4.1.P2.J` AstChunker and `6.1.P3.V` WatchedRepoScanner), and `4.2.P3.K` (multi-layer HNSW for PrunedDenseIndex). Stability gate: `tsc -b` builds in dependency order with no double-emit; `check-architecture` clean; full suite green. Two decisions were confirmed with the user up front: run the full phase committing per sub-task, and use web-tree-sitter (WASM) rather than the native tree-sitter bindings.
+Close the heavy structural deferrals carried from v1.1.0 / v1.2.0 ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](archive/v1/v1.4/plans/adoption-claude-code-harness.md)): `1.4.P1.B` (the wholesale `src/` -> `modules/coding/` move), `1.1.P1.A` (the `tsc -b` project-references build), `3.3.P2.G` (the Tree-sitter scanner swap, which cascades to `4.1.P2.J` AstChunker and `6.1.P3.V` WatchedRepoScanner), and `4.2.P3.K` (multi-layer HNSW for PrunedDenseIndex). Stability gate: `tsc -b` builds in dependency order with no double-emit; `check-architecture` clean; full suite green. Two decisions were confirmed with the user up front: run the full phase committing per sub-task, and use web-tree-sitter (WASM) rather than the native tree-sitter bindings.
 
 ### What changed
 
@@ -5248,7 +5250,7 @@ Close the heavy structural deferrals carried from v1.1.0 / v1.2.0 ([docs/version
 
 **Deviations / scope.** D1: `src/llm` merged into `modules/coding/llm` (not the plan's `core/llm`, which does not exist and would violate the core-cannot-import-modules boundary). D2: T020 is one atomic commit, not 12. D3: desktop excluded from the `tsc -b` graph (bundler-built). D4: Python/Rust functions tagged uniformly as `function` (the distinction is untested and irrelevant to caller attribution). One new follow-up gap `T022.P3.A`: bundle the grammar `.wasm` into the packaged extension/sidecar + add a sidecar warm-up (the scanner works from source today and degrades gracefully when the `.wasm` is absent).
 
-**Verification.** Full suite 3888 passed (+12: 9 Tree-sitter + 3 HNSW), 0 failed; `tsc -b` clean + dependency-ordered + no double-emit; `eslint src modules` clean; check-architecture 0 errors / 11 pre-existing warnings; check:tampering 0; security:check in sync. Dependencies added: web-tree-sitter, tree-sitter-wasms (pure WASM/JS). See [known-gaps.md](v1/v1.4/known-gaps.md): 6 carryforward gaps resolved (18 total this cycle), 30 carryforward remaining, 1 new P3/DF (`T022.P3.A`).
+**Verification.** Full suite 3888 passed (+12: 9 Tree-sitter + 3 HNSW), 0 failed; `tsc -b` clean + dependency-ordered + no double-emit; `eslint src modules` clean; check-architecture 0 errors / 11 pre-existing warnings; check:tampering 0; security:check in sync. Dependencies added: web-tree-sitter, tree-sitter-wasms (pure WASM/JS). See [known-gaps.md](archive/v1/v1.4/known-gaps.md): 6 carryforward gaps resolved (18 total this cycle), 30 carryforward remaining, 1 new P3/DF (`T022.P3.A`).
 
 ---
 
@@ -5256,7 +5258,7 @@ Close the heavy structural deferrals carried from v1.1.0 / v1.2.0 ([docs/version
 
 ### Goal
 
-Land A10, the last of the twelve v1.4.0 adoptions ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](v1/v1.4/plans/adoption-claude-code-harness.md)): the harness `agents/worker.md` + `go/internal/breezing/` worktree-isolated parallel execution, reimplemented (re-partial) as optional git-worktree isolation for concurrently-dispatched, file-mutating sub-agents. Isolation is opt-in and default off, given the disk/orchestration cost flagged as the only Medium-risk item in the comparison; the full Breezing-style Planner/Critic/Worker team-orchestration layer is deferred. Stability gate: parallel sub-agents run in isolated worktrees without file conflicts; isolation is opt-in and defaults off; the worktree is cleaned up when unchanged.
+Land A10, the last of the twelve v1.4.0 adoptions ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](archive/v1/v1.4/plans/adoption-claude-code-harness.md)): the harness `agents/worker.md` + `go/internal/breezing/` worktree-isolated parallel execution, reimplemented (re-partial) as optional git-worktree isolation for concurrently-dispatched, file-mutating sub-agents. Isolation is opt-in and default off, given the disk/orchestration cost flagged as the only Medium-risk item in the comparison; the full Breezing-style Planner/Critic/Worker team-orchestration layer is deferred. Stability gate: parallel sub-agents run in isolated worktrees without file conflicts; isolation is opt-in and defaults off; the worktree is cleaned up when unchanged.
 
 ### What changed
 
@@ -5268,7 +5270,7 @@ A key scope finding drove the design: per [ADR-0004](../docs/adr/0004-sub-agent-
 
 **Deviations.** (1) The plan cites `src/agents/SubAgentManager.ts`; that path is still live (the `src/`->`modules/coding/` move is Phase 7), so no path adjustment was needed. (2) Per the confirmed scope decision, isolation roots only `run_terminal` (the mutation surface); the read tools keep reading the shared workspace (a HEAD checkout, so reads of unmodified files are equivalent) -- recorded as `T018.P3.B`. (3) A10 ships attachable + opt-in but the runtime bootstrap does not yet call `setWorktreeManager` nor enable `isolate` in the DAG dispatch path -- exactly parallel to the A8-hook wiring gap `T016.P3.A`; recorded as `T018.P3.A` for Phase 8 (T027) to wire alongside it.
 
-**Scope.** One new module + two new test files; four modified (`SubAgentManager.ts`, `types.ts`, `pathGuard.ts`, `terminal.ts`). No new outbound call, dependency, runtime env var, or CI change. All twelve adoption items (A1-A12) now landed. See [known-gaps.md](v1/v1.4/known-gaps.md) (two new P3/DF items, `T018.P3.A` and `T018.P3.B`).
+**Scope.** One new module + two new test files; four modified (`SubAgentManager.ts`, `types.ts`, `pathGuard.ts`, `terminal.ts`). No new outbound call, dependency, runtime env var, or CI change. All twelve adoption items (A1-A12) now landed. See [known-gaps.md](archive/v1/v1.4/known-gaps.md) (two new P3/DF items, `T018.P3.A` and `T018.P3.B`).
 
 ---
 
@@ -5276,7 +5278,7 @@ A key scope finding drove the design: per [ADR-0004](../docs/adr/0004-sub-agent-
 
 ### Goal
 
-Land the two operator-tooling / lifecycle adoptions of the v1.4.0 cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](v1/v1.4/plans/adoption-claude-code-harness.md)): A6, the harness `bin/harness doctor --migration-report` non-destructive stale-state inventory, reimplemented in TS/Node; and A8, the harness `hooks.json` PreCompact handler -- warn on in-flight work before context compaction, with a restorable checkpoint. Both are local workflow tooling with zero new outbound calls. Stability gate: `nexus doctor --migration-report` runs read-only; the PreCompact hook fires on the lifecycle bus and warns on WIP without blocking compaction.
+Land the two operator-tooling / lifecycle adoptions of the v1.4.0 cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](archive/v1/v1.4/plans/adoption-claude-code-harness.md)): A6, the harness `bin/harness doctor --migration-report` non-destructive stale-state inventory, reimplemented in TS/Node; and A8, the harness `hooks.json` PreCompact handler -- warn on in-flight work before context compaction, with a restorable checkpoint. Both are local workflow tooling with zero new outbound calls. Stability gate: `nexus doctor --migration-report` runs read-only; the PreCompact hook fires on the lifecycle bus and warns on WIP without blocking compaction.
 
 ### What changed
 
@@ -5288,7 +5290,7 @@ Land the two operator-tooling / lifecycle adoptions of the v1.4.0 cycle ([docs/v
 
 **Deviations.** (1) A8's "state checkpoint that PostCompact can restore" is satisfied without a `postCompact` event (the bus has only `preCompact`, which already carries before+after tokens); restore is the persisted checkpoint + `readCompactionCheckpoint`. (2) A8 ships as an attachable, unit-tested hook not yet called at daemon session construction -- the same shape as the open reflection-hook wiring gap `5.4.P3.T`; recorded as `T016.P3.A` (P3/DF) for Phase 8 (T027) to live-wire both together. (3) Hook test placed at `tests/unit/core/lifecycle/` (alongside `HookBus.test.ts`) rather than the plan's suggested `tests/unit/lifecycle/`.
 
-**Scope.** Two new `core` modules + three new test files; one modified file ([bin/nexus.mjs](../bin/nexus.mjs): HELP, `runDoctor`, the doctor loader, and the `main()` switch). No new outbound call, dependency, runtime env var, or CI change. Eleven of twelve adoption items now landed (A1-A9, A11, A12); only A10 (Phase 6, worktree isolation) remains. See [known-gaps.md](v1/v1.4/known-gaps.md) (one new P3/DF item, `T016.P3.A`).
+**Scope.** Two new `core` modules + three new test files; one modified file ([bin/nexus.mjs](../bin/nexus.mjs): HELP, `runDoctor`, the doctor loader, and the `main()` switch). No new outbound call, dependency, runtime env var, or CI change. Eleven of twelve adoption items now landed (A1-A9, A11, A12); only A10 (Phase 6, worktree isolation) remains. See [known-gaps.md](archive/v1/v1.4/known-gaps.md) (one new P3/DF item, `T016.P3.A`).
 
 ---
 
@@ -5296,7 +5298,7 @@ Land the two operator-tooling / lifecycle adoptions of the v1.4.0 cycle ([docs/v
 
 ### Goal
 
-Land A1 of the v1.4.0 cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](v1/v1.4/plans/adoption-claude-code-harness.md)): adopt the harness `harness.toml` + `bin/harness sync` "one config SSOT regenerates the safety files" pattern as `nexus.security.toml` + an extended generator, so the egress denylist, permission table, and secret-path denylist cannot drift apart, with a CI drift gate. Stability gate: the generator is idempotent; the drift gate fails on hand-edits; generated surfaces match the runtime guards.
+Land A1 of the v1.4.0 cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](archive/v1/v1.4/plans/adoption-claude-code-harness.md)): adopt the harness `harness.toml` + `bin/harness sync` "one config SSOT regenerates the safety files" pattern as `nexus.security.toml` + an extended generator, so the egress denylist, permission table, and secret-path denylist cannot drift apart, with a CI drift gate. Stability gate: the generator is idempotent; the drift gate fails on hand-edits; generated surfaces match the runtime guards.
 
 ### What changed
 
@@ -5308,7 +5310,7 @@ Land A1 of the v1.4.0 cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code
 
 **Deviations.** (1) The plan cites `src/utils/ssrf.ts`; implemented at the live `modules/coding/utils/ssrf.ts` (the `1.4.P1.B` partial-move state). (2) The permissions-source either/or was resolved per Section 13 -- `PermissionTiers.ts` canonical, TOML mirror generated (confirmed with the user before coding). (3) `redactSecrets.ts` secret *value* regexes are intentionally outside the SSOT (regexes do not round-trip through TOML). (4) Kept the generator filename to avoid breaking `perm-tier` / CI references; added `security:*` aliases.
 
-**Scope.** Two new files (the SSOT + the generated module) plus one new test; five modified (the generator, ssrf.ts, secretPaths.ts, secret-paths.mjs, package.json) plus the ci.yml step relabel. No new outbound call, dependency, or runtime env var. Nine of twelve adoption items now landed (A1, A2, A3, A4, A5, A7, A9, A11, A12); Phases 5-6 carry A6, A8, A10. See [known-gaps.md](v1/v1.4/known-gaps.md) (no new gap this phase).
+**Scope.** Two new files (the SSOT + the generated module) plus one new test; five modified (the generator, ssrf.ts, secretPaths.ts, secret-paths.mjs, package.json) plus the ci.yml step relabel. No new outbound call, dependency, or runtime env var. Nine of twelve adoption items now landed (A1, A2, A3, A4, A5, A7, A9, A11, A12); Phases 5-6 carry A6, A8, A10. See [known-gaps.md](archive/v1/v1.4/known-gaps.md) (no new gap this phase).
 
 ---
 
@@ -5316,7 +5318,7 @@ Land A1 of the v1.4.0 cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code
 
 ### Goal
 
-Land the two code-shaped static-analysis / supply-chain adoptions of the v1.4.0 cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](v1/v1.4/plans/adoption-claude-code-harness.md)): A2, the harness's T01-T12 "Beagle" anti-tampering family reimplemented as deterministic, LLM-free `nexus-check` rules; and A9, an OpenSSF Scorecard CI workflow alongside the existing CodeQL scan. Both reduce trust surface with zero new outbound calls. Stability gate: `--list-rules` shows the new rules, they fire on tampered fixtures and pass on clean code, and the Scorecard workflow validates.
+Land the two code-shaped static-analysis / supply-chain adoptions of the v1.4.0 cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](archive/v1/v1.4/plans/adoption-claude-code-harness.md)): A2, the harness's T01-T12 "Beagle" anti-tampering family reimplemented as deterministic, LLM-free `nexus-check` rules; and A9, an OpenSSF Scorecard CI workflow alongside the existing CodeQL scan. Both reduce trust surface with zero new outbound calls. Stability gate: `--list-rules` shows the new rules, they fire on tampered fixtures and pass on clean code, and the Scorecard workflow validates.
 
 ### What changed
 
@@ -5332,7 +5334,7 @@ Land the two code-shaped static-analysis / supply-chain adoptions of the v1.4.0 
 
 **Deviations.** (1) Rule tests placed under `tests/unit/lib/` (matching `checks-prompt-rules.test.ts`) rather than the plan's `tests/unit/checks/`, to use the proven-safe location for the historical cli-dir parse bug. (2) CI wiring added as a step on the existing `nexus-check` job rather than a new job (dependency-free, smaller footprint). (3) An IMPL fix during stabilization: `hasJustification` was made case-sensitive for `TODO`/`FIXME` so the lowercase vitest `.todo(` marker is not mistaken for its own justification.
 
-**Scope.** Six new files (five rules + the test) and one new workflow; five modified (helpers.mjs, index.mjs, bin/nexus-check.mjs, package.json, .husky/pre-push) plus three CI workflow annotations. No new outbound call, dependency, or runtime env var. Eight of twelve adoption items now landed (A2, A3, A4, A5, A7, A9, A11, A12); Phases 4-6 carry A1, A6, A8, A10. See [known-gaps.md](v1/v1.4/known-gaps.md) (no new gap this phase).
+**Scope.** Six new files (five rules + the test) and one new workflow; five modified (helpers.mjs, index.mjs, bin/nexus-check.mjs, package.json, .husky/pre-push) plus three CI workflow annotations. No new outbound call, dependency, or runtime env var. Eight of twelve adoption items now landed (A2, A3, A4, A5, A7, A9, A11, A12); Phases 4-6 carry A1, A6, A8, A10. See [known-gaps.md](archive/v1/v1.4/known-gaps.md) (no new gap this phase).
 
 ---
 
@@ -5340,7 +5342,7 @@ Land the two code-shaped static-analysis / supply-chain adoptions of the v1.4.0 
 
 ### Goal
 
-Land the two code-shaped hardening adoptions of the v1.4.0 cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](v1/v1.4/plans/adoption-claude-code-harness.md)): A4, a named outbound-egress denylist layered onto the existing SSRF guard, and A5, secret-bearing environment-variable scrubbing for `run_terminal` child processes. Both reimplement harness behaviors in Nexus's TS/Node stack and reduce trust surface without adding any outbound call. Stability gate: `npm run test`, `npm run lint`, `npm run check-architecture` clean; new SSRF and terminal tests pass; existing terminal behavior preserved.
+Land the two code-shaped hardening adoptions of the v1.4.0 cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](archive/v1/v1.4/plans/adoption-claude-code-harness.md)): A4, a named outbound-egress denylist layered onto the existing SSRF guard, and A5, secret-bearing environment-variable scrubbing for `run_terminal` child processes. Both reimplement harness behaviors in Nexus's TS/Node stack and reduce trust surface without adding any outbound call. Stability gate: `npm run test`, `npm run lint`, `npm run check-architecture` clean; new SSRF and terminal tests pass; existing terminal behavior preserved.
 
 ### What changed
 
@@ -5352,7 +5354,7 @@ Land the two code-shaped hardening adoptions of the v1.4.0 cycle ([docs/versions
 
 **Deviations.** (1) The plan prompts cite `src/utils/ssrf.ts`, but that sub-tree was migrated to `modules/coding/utils/ssrf.ts` in v1.1.0 Phase 3 (the partial-move state tracked by gap `1.4.P1.B`, due to close in Phase 7); implemented at the live path. (2) The A4 "apply to fetch_page / web_search / OTLP" requirement was met structurally (denylist inside the shared guard functions) rather than by editing each consumer. (3) An unrelated benchmark fixture (`tests/fixtures/memory-tier-benchmark-results/.../results.json`) rewritten with host-dependent timing values during the suite run was reverted to keep the commit scoped.
 
-**Scope.** Two new files (`scrubEnv.ts` + its test), five modified (ssrf.ts, terminal.ts, settings.ts, NexusCodingRuntime.ts, package.json) plus two test files. No new outbound call, dependency, or runtime env var. Six of twelve adoption items now landed (A3, A4, A5, A7, A11, A12); Phases 3-6 carry the remaining code-shaped items. See [known-gaps.md](v1/v1.4/known-gaps.md) for the structured gap list (no new gap this phase).
+**Scope.** Two new files (`scrubEnv.ts` + its test), five modified (ssrf.ts, terminal.ts, settings.ts, NexusCodingRuntime.ts, package.json) plus two test files. No new outbound call, dependency, or runtime env var. Six of twelve adoption items now landed (A3, A4, A5, A7, A11, A12); Phases 3-6 carry the remaining code-shaped items. See [known-gaps.md](archive/v1/v1.4/known-gaps.md) for the structured gap list (no new gap this phase).
 
 ---
 
@@ -5360,19 +5362,19 @@ Land the two code-shaped hardening adoptions of the v1.4.0 cycle ([docs/versions
 
 ### Goal
 
-Open the v1.4.0 claude-code-harness adoption cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](v1/v1.4/plans/adoption-claude-code-harness.md), from [comparison-claude-code-harness.md](v1/v1.3/comparison-claude-code-harness.md)) by shipping the four skill-native adoption items (A3, A7, A12, A11) as documentation conventions with zero runtime code change. Stability gate: each convention documented and discoverable, `nexus-check --rule skill-duplicate-name` clean, no `core/` or `modules/` source touched. Per the Phase 0 decision the deliverables are docs-only (no Nexus-Hub catalog skill this phase).
+Open the v1.4.0 claude-code-harness adoption cycle ([docs/versions/v1/v1.4.0/plans/adoption-claude-code-harness.md](archive/v1/v1.4/plans/adoption-claude-code-harness.md), from [comparison-claude-code-harness.md](archive/v1/v1.3/comparison-claude-code-harness.md)) by shipping the four skill-native adoption items (A3, A7, A12, A11) as documentation conventions with zero runtime code change. Stability gate: each convention documented and discoverable, `nexus-check --rule skill-duplicate-name` clean, no `core/` or `modules/` source touched. Per the Phase 0 decision the deliverables are docs-only (no Nexus-Hub catalog skill this phase).
 
 ### What changed
 
-**T001 (A3) Self-review checklist.** New [docs/versions/v1/v1.4.0/development/self-review-checklist.md](v1/v1.4/development/self-review-checklist.md): a pre-commit/pre-PR gate of five checks (G1-G5: dry-violation-none, all-declared-symbols-called, dod-items-verified-with-evidence, no-existing-test-regression, tdd-red-evidence-attached) re-expressed for Nexus's TS/Node stack from the harness `[worker.self_review]` rules. Referenced from the [PR template](../.github/PULL_REQUEST_TEMPLATE.md) Submission Checklist (the non-behavioral surface, so the push gate is unchanged).
+**T001 (A3) Self-review checklist.** New [docs/versions/v1/v1.4.0/development/self-review-checklist.md](archive/v1/v1.4/development/self-review-checklist.md): a pre-commit/pre-PR gate of five checks (G1-G5: dry-violation-none, all-declared-symbols-called, dod-items-verified-with-evidence, no-existing-test-regression, tdd-red-evidence-attached) re-expressed for Nexus's TS/Node stack from the harness `[worker.self_review]` rules. Referenced from the [PR template](../.github/PULL_REQUEST_TEMPLATE.md) Submission Checklist (the non-behavioral surface, so the push gate is unchanged).
 
-**T002 (A7) Evidence + support tiers.** New [docs/versions/v1/v1.4.0/development/evidence-and-support-tiers.md](v1/v1.4/development/evidence-and-support-tiers.md): codifies "not_observed != absent" (unproven-locally is "not proven here", never "impossible" or a silent pass) and a four-tier capability vocabulary (supported / internal-compatible / candidate / future) with a per-tier evidence bar, tied into the known-gaps wording. Anchored from [AGENTS.md](../AGENTS.md) Critical Rules.
+**T002 (A7) Evidence + support tiers.** New [docs/versions/v1/v1.4.0/development/evidence-and-support-tiers.md](archive/v1/v1.4/development/evidence-and-support-tiers.md): codifies "not_observed != absent" (unproven-locally is "not proven here", never "impossible" or a silent pass) and a four-tier capability vocabulary (supported / internal-compatible / candidate / future) with a per-tier evidence bar, tied into the known-gaps wording. Anchored from [AGENTS.md](../AGENTS.md) Critical Rules.
 
-**T003 (A12) Evidence-pack discipline.** New [docs/versions/v1/v1.4.0/development/evidence-pack.md](v1/v1.4/development/evidence-pack.md): verified-only packaging for PR/release ("PR ready is not release ready"), a PR-ready vs release-ready evidence-bar table, the thread through the Phase 9 release-readiness workflow + semantic-release, and the A2 anti-tampering link. Upstream gate is the A3 checklist. Referenced from the PR template.
+**T003 (A12) Evidence-pack discipline.** New [docs/versions/v1/v1.4.0/development/evidence-pack.md](archive/v1/v1.4/development/evidence-pack.md): verified-only packaging for PR/release ("PR ready is not release ready"), a PR-ready vs release-ready evidence-bar table, the thread through the Phase 9 release-readiness workflow + semantic-release, and the A2 anti-tampering link. Upstream gate is the A3 checklist. Referenced from the PR template.
 
-**T004 (A11) Stakeholder HTML surfaces.** New [docs/versions/v1/v1.4.0/development/stakeholder-surfaces.md](v1/v1.4/development/stakeholder-surfaces.md): a reporting convention with three self-contained, zero-outbound HTML templates (plan brief / progress / acceptance-handoff), inline CSS + system font stack, no external resource, plus an explicit zero-outbound contract and verification step.
+**T004 (A11) Stakeholder HTML surfaces.** New [docs/versions/v1/v1.4.0/development/stakeholder-surfaces.md](archive/v1/v1.4/development/stakeholder-surfaces.md): a reporting convention with three self-contained, zero-outbound HTML templates (plan brief / progress / acceptance-handoff), inline CSS + system font stack, no external resource, plus an explicit zero-outbound contract and verification step.
 
-**T005 Stabilization.** `node bin/nexus-check.mjs --rule skill-duplicate-name src/skills/catalog` -> 0 findings (exit 0); `npm run check:prompts` -> 0 errors (1 pre-existing unrelated `review-pr/SKILL.md` oversized warning); non-ASCII scan of the four docs -> no matches; `git diff --stat` confirms only the PR template (+2) and AGENTS.md (+1) modified, no `core/` or `modules/` change. The v1.4.0 [known-gaps.md](v1/v1.4/known-gaps.md) was created (adoption ledger + carryforward pointer to the 36 prior-cycle items + Phase 1 resolved rows).
+**T005 Stabilization.** `node bin/nexus-check.mjs --rule skill-duplicate-name src/skills/catalog` -> 0 findings (exit 0); `npm run check:prompts` -> 0 errors (1 pre-existing unrelated `review-pr/SKILL.md` oversized warning); non-ASCII scan of the four docs -> no matches; `git diff --stat` confirms only the PR template (+2) and AGENTS.md (+1) modified, no `core/` or `modules/` change. The v1.4.0 [known-gaps.md](archive/v1/v1.4/known-gaps.md) was created (adoption ledger + carryforward pointer to the 36 prior-cycle items + Phase 1 resolved rows).
 
 **Deviations.** (1) Docs-only scope per the Phase 0 user decision: no `catalog/skills/` entry, so `validate_skills.py` was not needed. (2) T001 wired into the PR template rather than husky pre-push to keep the push gate's behaviour unchanged. (3) A11's live per-cycle HTML instances are deferred to the Phase 9 acceptance gate; the templates themselves are complete.
 
@@ -5384,15 +5386,15 @@ Open the v1.4.0 claude-code-harness adoption cycle ([docs/versions/v1/v1.4.0/pla
 
 ### Goal
 
-Close the skill-cleaner adoption track ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](v1/v1.3/plans/adoption-skill-cleaner.md)): benchmark `skills audit` against the live catalog (T020), refresh the three top-level docs for the new audit surface (T021), append the full per-sub-task adoption ledger (T022), and run the final end-to-end integration gate (T023). As the plan's final phase, Phase 7 also triggers the release-readiness workflow (version bump to v1.3.0).
+Close the skill-cleaner adoption track ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](archive/v1/v1.3/plans/adoption-skill-cleaner.md)): benchmark `skills audit` against the live catalog (T020), refresh the three top-level docs for the new audit surface (T021), append the full per-sub-task adoption ledger (T022), and run the final end-to-end integration gate (T023). As the plan's final phase, Phase 7 also triggers the release-readiness workflow (version bump to v1.3.0).
 
 ### What changed
 
-**T020 Skills-audit runtime benchmark.** New [docs/versions/v1/v1.3.0/benchmarks/skills-audit-2026-05-28.md](v1/v1.3/benchmarks/skills-audit-2026-05-28.md), modeled on the v1.2.0 token-usage and storage-size benchmarks. A reproducible harness ([tests/fixtures/skills-audit-benchmark-results/2026-05-28/run-benchmark.mjs](../tests/fixtures/skills-audit-benchmark-results/2026-05-28/run-benchmark.mjs)) plus an audit-only RSS probe (`rss-probe.mjs`), a `results.json` fixture, and a fixtures `README.md` capture four measurement families: (a) wall-clock of `node bin/nexus.mjs skills audit` as a child process (1 warmup + 10 timed runs -> median 118.6 ms, p95 159.7 ms); (b) peak RSS of an audit-only child via `process.resourceUsage().maxRSS` (51.5 MB); (c) the isolated O(N^2) `findSimilarPairs` pass (4.4 ms median over 120 comparisons, 0 pairs >= 0.85) recorded separately so a future cycle can decide on MinHash/LSH (`T013.P3.D`); and (d) deterministic report contents (34.8% budget pressure at the default 2% envelope, 12 of 16 description candidates, top-5 compaction candidates by potential token savings). Timing/RSS fields are informational and never gated; the report-content fields reproduce exactly.
+**T020 Skills-audit runtime benchmark.** New [docs/versions/v1/v1.3.0/benchmarks/skills-audit-2026-05-28.md](archive/v1/v1.3/benchmarks/skills-audit-2026-05-28.md), modeled on the v1.2.0 token-usage and storage-size benchmarks. A reproducible harness ([tests/fixtures/skills-audit-benchmark-results/2026-05-28/run-benchmark.mjs](../tests/fixtures/skills-audit-benchmark-results/2026-05-28/run-benchmark.mjs)) plus an audit-only RSS probe (`rss-probe.mjs`), a `results.json` fixture, and a fixtures `README.md` capture four measurement families: (a) wall-clock of `node bin/nexus.mjs skills audit` as a child process (1 warmup + 10 timed runs -> median 118.6 ms, p95 159.7 ms); (b) peak RSS of an audit-only child via `process.resourceUsage().maxRSS` (51.5 MB); (c) the isolated O(N^2) `findSimilarPairs` pass (4.4 ms median over 120 comparisons, 0 pairs >= 0.85) recorded separately so a future cycle can decide on MinHash/LSH (`T013.P3.D`); and (d) deterministic report contents (34.8% budget pressure at the default 2% envelope, 12 of 16 description candidates, top-5 compaction candidates by potential token savings). Timing/RSS fields are informational and never gated; the report-content fields reproduce exactly.
 
 **T021 Documentation refresh.** [AGENTS.md](../AGENTS.md) gains a `### Skills audit (v1.3.0 adoption-skill-cleaner track)` subsection under Non-Obvious Tooling (the command, its five report sections, the full flag set, and the "suggest first" framing). [README.md](../README.md) gains a `### v1.3.0 cycle status` table (seven phases, all Landed) mirroring the v1.2.0 table's shape, with a one-paragraph intro and links to the plan, known-gaps, and benchmark. [ARCHITECTURE.md](../ARCHITECTURE.md) lists `SkillRenderLine.ts`, `SkillAuditor.ts`, `SkillSimilarity.ts`, and `SkillUsageScanner.ts` in the `core/skills/` tree with one-line summaries.
 
-**T022 Adoption-ledger closure.** [known-gaps.md](v1/v1.3/known-gaps.md) gains ledger rows T020-T023 (all Resolved for Phase 7); `T013.P3.D` gains a Phase 7 update note (the similarity runtime is now captured in the benchmark, but the item stays open because the MinHash/LSH pre-filter itself is unimplemented); the summary is recomputed to 23 of 23 sub-tasks resolved. The file pre-existed (seeded Phase 1), so T022 appended rather than created.
+**T022 Adoption-ledger closure.** [known-gaps.md](archive/v1/v1.3/known-gaps.md) gains ledger rows T020-T023 (all Resolved for Phase 7); `T013.P3.D` gains a Phase 7 update note (the similarity runtime is now captured in the benchmark, but the item stays open because the MinHash/LSH pre-filter itself is unimplemented); the summary is recomputed to 23 of 23 sub-tasks resolved. The file pre-existed (seeded Phase 1), so T022 appended rather than created.
 
 **T023 Final exit gate.** `npm run build` (tsc) clean; `npm run lint` (`eslint src`) 0 errors; `npm run check-architecture` 0 errors (11 pre-existing orphan/circular warnings, none on touched files); `npm run test` 3,704 passed / 0 failed / 5 skipped (332 files) -- including the v1.2.0 token-usage and storage-size benchmark tests, both reproducing within tolerance (storage ratio 18.68% unchanged). `node bin/nexus.mjs skills audit` renders all five sections.
 
@@ -5406,7 +5408,7 @@ Close the skill-cleaner adoption track ([docs/versions/v1/v1.3.0/plans/adoption-
 
 ### Goal
 
-Land the lowest-priority bucket of the skill-cleaner adoption track ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](v1/v1.3/plans/adoption-skill-cleaner.md)): the P2 upstream Nexus-Hub validator extension (insight I-03) and the two P3 CLI backlog flags (`--deep-logs`, `--by-root`). Stability gate: the Nexus-Hub validator rejects malformed frontmatter, and both P3 flags pass through `bin/nexus.mjs` end-to-end.
+Land the lowest-priority bucket of the skill-cleaner adoption track ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](archive/v1/v1.3/plans/adoption-skill-cleaner.md)): the P2 upstream Nexus-Hub validator extension (insight I-03) and the two P3 CLI backlog flags (`--deep-logs`, `--by-root`). Stability gate: the Nexus-Hub validator rejects malformed frontmatter, and both P3 flags pass through `bin/nexus.mjs` end-to-end.
 
 ### What changed
 
@@ -5418,7 +5420,7 @@ Land the lowest-priority bucket of the skill-cleaner adoption track ([docs/versi
 
 **Deviations.** (1) The 7 pre-existing secret-scan false positives in unrelated Nexus-Hub skills still fail the unflagged upstream validator; they are out of scope for T017 (which adds single-line rules only) and remain tracked by `T002.P2.A`. (2) The 137 grandfathered over-long descriptions are a transitional allowlist; draining them is a new Nexus-Hub-side follow-up (`T017.P3.E`). (3) Tests follow the repo's `tests/unit/core/skills/` + `tests/integration/` layout rather than the plan's illustrative `tests/skills/` path (consistent with Phases 2-5). (4) An unrelated benchmark fixture (`tests/fixtures/memory-tier-benchmark-results/.../results.json`) rewritten by the test run was reverted to keep the commit scoped.
 
-**Scope.** README / AGENTS.md / ARCHITECTURE.md doc refresh remains the plan's Phase 7 (T021) task; the new flags are already in the CLI help text. [known-gaps.md](v1/v1.3/known-gaps.md) gains T017-T019 ledger rows and one new open item (`T017.P3.E`); `T002.P2.A` is updated (the `--allow-existing` mechanism now exists, format-scoped) and `T012.P2.C` gains a Phase 6 status note (still open). Upstream changes are committed separately in the Nexus-Hub repo.
+**Scope.** README / AGENTS.md / ARCHITECTURE.md doc refresh remains the plan's Phase 7 (T021) task; the new flags are already in the CLI help text. [known-gaps.md](archive/v1/v1.3/known-gaps.md) gains T017-T019 ledger rows and one new open item (`T017.P3.E`); `T002.P2.A` is updated (the `--allow-existing` mechanism now exists, format-scoped) and `T012.P2.C` gains a Phase 6 status note (still open). Upstream changes are committed separately in the Nexus-Hub repo.
 
 ---
 
@@ -5426,7 +5428,7 @@ Land the lowest-priority bucket of the skill-cleaner adoption track ([docs/versi
 
 ### Goal
 
-Add the render fallback ladder from insight I-06 (full descriptions -> equal truncation -> omitted-minimum-lines) to [core/skills/SkillRenderLine.ts](../core/skills/SkillRenderLine.ts) ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](v1/v1.3/plans/adoption-skill-cleaner.md)), so a loaded skill set that exceeds the budget envelope degrades gracefully instead of silently overflowing. `SkillAuditor` reports which rung the catalog would land on. Stability gate: unit tests cover all three rungs; the auditor surfaces the rung diagnostic without changing live agent-loop behavior.
+Add the render fallback ladder from insight I-06 (full descriptions -> equal truncation -> omitted-minimum-lines) to [core/skills/SkillRenderLine.ts](../core/skills/SkillRenderLine.ts) ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](archive/v1/v1.3/plans/adoption-skill-cleaner.md)), so a loaded skill set that exceeds the budget envelope degrades gracefully instead of silently overflowing. `SkillAuditor` reports which rung the catalog would land on. Stability gate: unit tests cover all three rungs; the auditor surfaces the rung diagnostic without changing live agent-loop behavior.
 
 ### What changed
 
@@ -5436,7 +5438,7 @@ Add the render fallback ladder from insight I-06 (full descriptions -> equal tru
 
 **Deviations.** (1) On this host the live catalog is the 16-skill builtin-only `src/skills/catalog` (the ~213 Nexus-Hub skills await the upstream-release sync tracked by carryforward `1.1.P3.B`), so at the default 2% envelope 891 used tokens fit comfortably -> rung `full` rather than the `truncated`/`omitted` the plan anticipated for the full catalog; the transition is verified via `--budget-percent 0.1` and the synthetic mixed-source unit test instead. (2) The test follows the repo's `tests/unit/core/skills/` layout rather than the plan's illustrative `tests/skills/` path (consistent with Phases 2-4).
 
-**Scope.** Wiring the ladder into the live agent-loop render path is explicitly deferred out of v1.3.0 (avoids a behavior change); only the auditor consumes it. README / AGENTS.md / ARCHITECTURE.md updates remain deferred to Phase 7 (T021). [known-gaps.md](v1/v1.3/known-gaps.md) gains two T015-T016 ledger rows; no new open items (Phase 5 had no deviations revealing defects, skipped sub-tasks, coverage shortfalls, suppressed lints, or bypassed gates). Only `SkillRenderLine.ts`, `SkillAuditor.ts`, the new fallback test, the modified auditor test, plan checkboxes, the gap ledger, and the Phase 5 session history changed.
+**Scope.** Wiring the ladder into the live agent-loop render path is explicitly deferred out of v1.3.0 (avoids a behavior change); only the auditor consumes it. README / AGENTS.md / ARCHITECTURE.md updates remain deferred to Phase 7 (T021). [known-gaps.md](archive/v1/v1.3/known-gaps.md) gains two T015-T016 ledger rows; no new open items (Phase 5 had no deviations revealing defects, skipped sub-tasks, coverage shortfalls, suppressed lints, or bypassed gates). Only `SkillRenderLine.ts`, `SkillAuditor.ts`, the new fallback test, the modified auditor test, plan checkboxes, the gap ledger, and the Phase 5 session history changed.
 
 ---
 
@@ -5444,7 +5446,7 @@ Add the render fallback ladder from insight I-06 (full descriptions -> equal tru
 
 ### Goal
 
-Complete the five-report shape of `nexus skills audit` by adding the two detectors Phase 3 left as labelled placeholders ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](v1/v1.3/plans/adoption-skill-cleaner.md)): content-similarity duplicate detection (insight I-08) and heuristic usage-evidence scanning over session logs (insight I-10). Both are independent modules wired into the existing `SkillAuditor`. Stability gate: the `By similarity` and `Unused candidates` sections populate with real data, and no part of the output recommends a destructive action (audit stays "suggest first", insight I-12).
+Complete the five-report shape of `nexus skills audit` by adding the two detectors Phase 3 left as labelled placeholders ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](archive/v1/v1.3/plans/adoption-skill-cleaner.md)): content-similarity duplicate detection (insight I-08) and heuristic usage-evidence scanning over session logs (insight I-10). Both are independent modules wired into the existing `SkillAuditor`. Stability gate: the `By similarity` and `Unused candidates` sections populate with real data, and no part of the output recommends a destructive action (audit stays "suggest first", insight I-12).
 
 ### What changed
 
@@ -5458,7 +5460,7 @@ Complete the five-report shape of `nexus skills audit` by adding the two detecto
 
 **Deviations.** (1) `--sessions-root` was added to the CLI (not named in the plan) so the integration test scans a controlled, empty log root rather than the host's real `~/.nexus/sessions/`, which would make the Unused output non-deterministic (common words like "beta") and potentially slow; it mirrors the existing `--skills-root` testing seam. (2) Test files follow the repo's actual `tests/unit/core/skills/` + `tests/integration/` layout rather than the plan's illustrative `tests/skills/` paths (consistent with Phases 2-3).
 
-**Scope.** README / AGENTS.md / ARCHITECTURE.md updates remain deferred to Phase 7 (T021). [known-gaps.md](v1/v1.3/known-gaps.md) gains four T011-T014 ledger rows and two new deferred open items (`T012.P2.C` single-root usage scan; `T013.P3.D` O(N^2) similarity). Only the two new modules, their tests, `SkillAuditor.ts`, `bin/nexus.mjs`, the two modified tests, plan checkboxes, the gap ledger, and the Phase 4 session history changed.
+**Scope.** README / AGENTS.md / ARCHITECTURE.md updates remain deferred to Phase 7 (T021). [known-gaps.md](archive/v1/v1.3/known-gaps.md) gains four T011-T014 ledger rows and two new deferred open items (`T012.P2.C` single-root usage scan; `T013.P3.D` O(N^2) similarity). Only the two new modules, their tests, `SkillAuditor.ts`, `bin/nexus.mjs`, the two modified tests, plan checkboxes, the gap ledger, and the Phase 4 session history changed.
 
 ---
 
@@ -5466,7 +5468,7 @@ Complete the five-report shape of `nexus skills audit` by adding the two detecto
 
 ### Goal
 
-Wire the four Phase-2 foundational utilities into a working `nexus skills audit` CLI command ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](v1/v1.3/plans/adoption-skill-cleaner.md)). Phase 3 produces four of the five report sections from insight I-01 -- Budget, Description candidates, name-Duplicates, and the Root summary -- leaving content-similarity duplicates and unused-candidates as labelled Phase 4 placeholders. Stability gate: the command runs cleanly against the live catalog and emits a non-empty, well-formatted report.
+Wire the four Phase-2 foundational utilities into a working `nexus skills audit` CLI command ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](archive/v1/v1.3/plans/adoption-skill-cleaner.md)). Phase 3 produces four of the five report sections from insight I-01 -- Budget, Description candidates, name-Duplicates, and the Root summary -- leaving content-similarity duplicates and unused-candidates as labelled Phase 4 placeholders. Stability gate: the command runs cleanly against the live catalog and emits a non-empty, well-formatted report.
 
 ### What changed
 
@@ -5476,7 +5478,7 @@ Wire the four Phase-2 foundational utilities into a working `nexus skills audit`
 
 **T010 Phase 3 gate + smoke run.** `npm run build` (tsc) clean; `npm run test` 3,666 passed / 0 failed / 5 skipped (326 files); `eslint src` 0 errors; `npm run check-architecture` 0 errors. Live smoke run (`node bin/nexus.mjs skills audit`) against this host's catalog (16 builtin skills; `~/.nexus/skills` is empty) emits all five sections: Budget 891 / 2,560 tokens (34.8% pressure on gemma4:e4b's 128K window), 12 Description candidates, name-Duplicates "none found", and the Root summary listing the builtin root. This output is the Phase 7 (T020) benchmark baseline.
 
-**Scope.** README / AGENTS.md / ARCHITECTURE.md updates remain deferred to Phase 7 (T021). Phase 3 wiring resolved the Phase-2 known-gap `T007.P2.B` (TokenCost orphan), now moved to `## 2. Resolved` in [known-gaps.md](v1/v1.3/known-gaps.md) alongside three new T008-T010 ledger rows. Only `core/skills/SkillAuditor.ts`, the two new tests, `bin/nexus.mjs`, the `descriptionOf` export, plan checkboxes, the gap ledger, and the Phase 3 session history changed.
+**Scope.** README / AGENTS.md / ARCHITECTURE.md updates remain deferred to Phase 7 (T021). Phase 3 wiring resolved the Phase-2 known-gap `T007.P2.B` (TokenCost orphan), now moved to `## 2. Resolved` in [known-gaps.md](archive/v1/v1.3/known-gaps.md) alongside three new T008-T010 ledger rows. Only `core/skills/SkillAuditor.ts`, the two new tests, `bin/nexus.mjs`, the `descriptionOf` export, plan checkboxes, the gap ledger, and the Phase 3 session history changed.
 
 ---
 
@@ -5484,7 +5486,7 @@ Wire the four Phase-2 foundational utilities into a working `nexus skills audit`
 
 ### Goal
 
-Land the four small, independent modules the Phase 3 `nexus skills audit` command will compose ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](v1/v1.3/plans/adoption-skill-cleaner.md)). All four touch separate files with no inter-dependencies, so they were authored together behind one build + test + lint + architecture gate. Stability gate: all four ship with unit tests; `npm run build` and `npm run test` pass; no new lints.
+Land the four small, independent modules the Phase 3 `nexus skills audit` command will compose ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](archive/v1/v1.3/plans/adoption-skill-cleaner.md)). All four touch separate files with no inter-dependencies, so they were authored together behind one build + test + lint + architecture gate. Stability gate: all four ship with unit tests; `npm run build` and `npm run test` pass; no new lints.
 
 ### What changed
 
@@ -5498,7 +5500,7 @@ Land the four small, independent modules the Phase 3 `nexus skills audit` comman
 
 **T007 Phase 2 gate.** `npm run build` (tsc) clean; `npm run test` 3,655 passed / 0 failed / 5 skipped (324 files); `npm run lint` (eslint src) 0 errors; `npm run check-architecture` 0 errors (the `core/** -> modules/**` boundary holds). One new dependency-cruiser `no-orphans` warning for `TokenCost.ts` is by design (its consumer lands in Phase 3) and is recorded as known-gap `T007.P2.B`.
 
-**Scope.** README / AGENTS.md / ARCHITECTURE.md updates remain deferred to Phase 7 (T021) per the plan; only the new modules, their tests, plan checkboxes, [known-gaps.md](v1/v1.3/known-gaps.md) (5 new ledger rows + 1 open `WN` item), and the Phase 2 session history changed.
+**Scope.** README / AGENTS.md / ARCHITECTURE.md updates remain deferred to Phase 7 (T021) per the plan; only the new modules, their tests, plan checkboxes, [known-gaps.md](archive/v1/v1.3/known-gaps.md) (5 new ledger rows + 1 open `WN` item), and the Phase 2 session history changed.
 
 ---
 
@@ -5506,7 +5508,7 @@ Land the four small, independent modules the Phase 3 `nexus skills audit` comman
 
 ### Goal
 
-Open the v1.3.0 cycle's skill-cleaner adoption track ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](v1/v1.3/plans/adoption-skill-cleaner.md), derived from [comparison-skill-cleaner.md](v1/v1.3/comparison-skill-cleaner.md)) by shipping its one zero-code item first: a Nexus-Hub skill that codifies the description-authoring rule (insight I-15). Shipping it before any description-compaction work (Phase 3 onward) means the trigger-noun preservation rule is in force when the `nexus skills audit` command later reports on long descriptions.
+Open the v1.3.0 cycle's skill-cleaner adoption track ([docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](archive/v1/v1.3/plans/adoption-skill-cleaner.md), derived from [comparison-skill-cleaner.md](archive/v1/v1.3/comparison-skill-cleaner.md)) by shipping its one zero-code item first: a Nexus-Hub skill that codifies the description-authoring rule (insight I-15). Shipping it before any description-compaction work (Phase 3 onward) means the trigger-noun preservation rule is in force when the `nexus skills audit` command later reports on long descriptions.
 
 ### What changed
 
@@ -5514,7 +5516,7 @@ Open the v1.3.0 cycle's skill-cleaner adoption track ([docs/versions/v1/v1.3.0/p
 
 **T002 Validation + manifest walk.** `python scripts/validate_skills.py` PASS (0 errors); the quality heuristics pass also PASS (0 warnings, after trimming `overview_l1` from 151 to <=150 words). A direct `buildManifest` walk over the local Hub catalog reports 219 skills with `skill-description-authoring` present. The plan's `nexus skills sync --dry-run` instruction was adapted: that subcommand has no `--dry-run` flag and fetches a release tag (so an unreleased local skill cannot appear -- carryforward known-gap `1.1.P3.B`); the `buildManifest` walk is the faithful local equivalent.
 
-**Scope.** The deliverable lives entirely in Nexus-Hub (committed there on a feature branch). This Nexus repo gets only bookkeeping: the new [docs/versions/v1/v1.3.0/known-gaps.md](v1/v1.3/known-gaps.md) (seeded for the cycle, plus one open item `T002.P2.A` routing 7 pre-existing Hub validator secret-scan false positives to Phase 6 / T017), plan checkboxes, and the per-phase session history at [docs/versions/v1/v1.3.0/development/history/2026-05_phase-1-skill-native-authoring-rule.md](v1/v1.3/development/history/2026-05_phase-1-skill-native-authoring-rule.md). README / AGENTS.md / ARCHITECTURE.md updates are deferred to Phase 7 (T021) per the plan. Catalog size note: the plan assumed 213 skills (214 post-add); the live catalog is at 218 (219 post-add).
+**Scope.** The deliverable lives entirely in Nexus-Hub (committed there on a feature branch). This Nexus repo gets only bookkeeping: the new [docs/versions/v1/v1.3.0/known-gaps.md](archive/v1/v1.3/known-gaps.md) (seeded for the cycle, plus one open item `T002.P2.A` routing 7 pre-existing Hub validator secret-scan false positives to Phase 6 / T017), plan checkboxes, and the per-phase session history at [docs/versions/v1/v1.3.0/development/history/2026-05_phase-1-skill-native-authoring-rule.md](archive/v1/v1.3/development/history/2026-05_phase-1-skill-native-authoring-rule.md). README / AGENTS.md / ARCHITECTURE.md updates are deferred to Phase 7 (T021) per the plan. Catalog size note: the plan assumed 213 skills (214 post-add); the live catalog is at 218 (219 post-add).
 
 ---
 
@@ -5526,15 +5528,15 @@ Close the 2026-05 ecosystem-adoption track by publishing end-to-end benchmarks t
 
 ### What changed
 
-**7.1 End-to-end token-usage benchmark.** New integration test at [tests/integration/coding-pillar/phase-7-token-usage.test.ts](../tests/integration/coding-pillar/phase-7-token-usage.test.ts) drives a deterministic 5-step Coding-pillar workload ("Find all callers of `redactSecrets` -> run the test suite -> inspect one failing test -> propose a fix and edit the file -> re-run the test suite"). The post-adoption arm runs through the production `CodeGraphMcpServer + SqliteGraphStore + RepoScanner + CommandCompressor` wiring with no mocks; the pre-adoption arm simulates the grep-shaped path the agent would take against a pre-Phase-1 checkout using the same fixture bytes. The plan asked for a literal `git worktree` replay against a tagged pre-Phase-1 checkout, which would require a stable local-model fixture not available in CI -- the deterministic synthesis exercises the same byte-shaping code paths (tracked as known-gaps `7.1.P2.A`). The plan's file-path `tests/benchmarks/coding-pillar-token-usage.ts` was forward-looking; `.bench.ts` files only run under `vitest bench`, so the CI-enforceable integration-test convention from Phases 2.5 + 3.6 + 4.4 was preserved (tracked as `7.x.P3.C`). Published report: [docs/versions/v1/v1.2.0/benchmarks/coding-pillar-token-usage-2026-05-26.md](v1/v1.2/benchmarks/coding-pillar-token-usage-2026-05-26.md). Headline numbers: tokens -93.76% (34,430 -> 2,147 bytes), tool calls -45.45% (11 -> 6). The token-side win is dominated by `CommandCompressor.dedupe` collapsing 599 repeated pytest `PASSED` lines into one with an `(xN)` suffix; the tool-call-side win comes from `codegraph_callers + codegraph_context` replacing the grep + per-caller-read sequence on step 1.
+**7.1 End-to-end token-usage benchmark.** New integration test at [tests/integration/coding-pillar/phase-7-token-usage.test.ts](../tests/integration/coding-pillar/phase-7-token-usage.test.ts) drives a deterministic 5-step Coding-pillar workload ("Find all callers of `redactSecrets` -> run the test suite -> inspect one failing test -> propose a fix and edit the file -> re-run the test suite"). The post-adoption arm runs through the production `CodeGraphMcpServer + SqliteGraphStore + RepoScanner + CommandCompressor` wiring with no mocks; the pre-adoption arm simulates the grep-shaped path the agent would take against a pre-Phase-1 checkout using the same fixture bytes. The plan asked for a literal `git worktree` replay against a tagged pre-Phase-1 checkout, which would require a stable local-model fixture not available in CI -- the deterministic synthesis exercises the same byte-shaping code paths (tracked as known-gaps `7.1.P2.A`). The plan's file-path `tests/benchmarks/coding-pillar-token-usage.ts` was forward-looking; `.bench.ts` files only run under `vitest bench`, so the CI-enforceable integration-test convention from Phases 2.5 + 3.6 + 4.4 was preserved (tracked as `7.x.P3.C`). Published report: [docs/versions/v1/v1.2.0/benchmarks/coding-pillar-token-usage-2026-05-26.md](archive/v1/v1.2/benchmarks/coding-pillar-token-usage-2026-05-26.md). Headline numbers: tokens -93.76% (34,430 -> 2,147 bytes), tool calls -45.45% (11 -> 6). The token-side win is dominated by `CommandCompressor.dedupe` collapsing 599 repeated pytest `PASSED` lines into one with an `(xN)` suffix; the tool-call-side win comes from `codegraph_callers + codegraph_context` replacing the grep + per-caller-read sequence on step 1.
 
-**7.2 End-to-end storage-size benchmark (extended scope).** New integration test at [tests/integration/memory-tier/phase-7-storage-size-extended.test.ts](../tests/integration/memory-tier/phase-7-storage-size-extended.test.ts) extends Phase 4.4's dense-only benchmark to the cycle-end aggregate: `DenseIndex` vs `PrunedDenseIndex` on the same 2k-chunk corpus + `Bm25Index` serialized footprint + `SqliteGraphStore` codegraph DB built from the Phase 3 fixture. Both arms see the same BM25 + codegraph bytes; only the dense tier differs. Published report: [docs/versions/v1/v1.2.0/benchmarks/memory-storage-size-2026-05-26.md](v1/v1.2/benchmarks/memory-storage-size-2026-05-26.md). Headline numbers: dense-only Pruned/Standard 18.68% (matches Phase 4.4 byte-for-byte), combined 20.58%. The plan's literal path `docs/versions/v1/v1.1.0/benchmarks/...` was a typo from the plan-authoring cycle; published under the active `docs/versions/v1/v1.2.0/benchmarks/` (tracked as `7.x.P3.B`). The CI gate (Pruned dense-only ratio <=20%) carries over from Phase 4.4 and passes at 18.68%.
+**7.2 End-to-end storage-size benchmark (extended scope).** New integration test at [tests/integration/memory-tier/phase-7-storage-size-extended.test.ts](../tests/integration/memory-tier/phase-7-storage-size-extended.test.ts) extends Phase 4.4's dense-only benchmark to the cycle-end aggregate: `DenseIndex` vs `PrunedDenseIndex` on the same 2k-chunk corpus + `Bm25Index` serialized footprint + `SqliteGraphStore` codegraph DB built from the Phase 3 fixture. Both arms see the same BM25 + codegraph bytes; only the dense tier differs. Published report: [docs/versions/v1/v1.2.0/benchmarks/memory-storage-size-2026-05-26.md](archive/v1/v1.2/benchmarks/memory-storage-size-2026-05-26.md). Headline numbers: dense-only Pruned/Standard 18.68% (matches Phase 4.4 byte-for-byte), combined 20.58%. The plan's literal path `docs/versions/v1/v1.1.0/benchmarks/...` was a typo from the plan-authoring cycle; published under the active `docs/versions/v1/v1.2.0/benchmarks/` (tracked as `7.x.P3.B`). The CI gate (Pruned dense-only ratio <=20%) carries over from Phase 4.4 and passes at 18.68%.
 
 **7.3 Documentation refresh.** [README.md](../README.md) Project Status section now distinguishes v1.0.0 / v1.1.0 / v1.2.0 cycles and adds a v1.2.0 cycle status table listing all seven phases as Landed. [AGENTS.md](../AGENTS.md) Non-Obvious Tooling gained three new subsections -- "Code-graph MCP (v1.2.0 Phase 3)", "MemoryStorageTier policy (v1.2.0 Phase 4)", "Sub-agent intent restrictions (v1.2.0 Phase 5)" -- each citing the implementing module path so future readers land on the right file. [ARCHITECTURE.md](../ARCHITECTURE.md) replaced the ASCII data-flow diagram for the code-graph subsystem with a Mermaid flowchart showing the full path (repo -> walker -> RepoScanner / WatchedRepoScanner -> SqliteGraphStore -> CodeGraphMcpServer -> CodeGraphToolHandler -> Coding pillar agent loop) and added a new "Stabilization and benchmarks (v1.2.0 Phase 7)" subsection summarising both benchmarks.
 
-**7.4 Adoption ledger.** New `## 0. Adoption Ledger (Phase 7.4)` section at the top of [docs/versions/v1/v1.2.0/known-gaps.md](v1/v1.2/known-gaps.md) maps every plan sub-task (1.1 -> 7.5) to its implementing phase, sub-task ID, and current Resolved / Open status. The forward-reference placeholder `1.x.P3.D` (reserved in Phase 1 for this ledger) is moved to `## 2. Resolved` and three new Phase 7 entries are added to `## 1. Open Items`: `7.1.P2.A` (deterministic-synthesis methodology), `7.x.P3.B` (benchmark publish-path deviation), `7.x.P3.C` (benchmark file-path deviation). All P2 / P3; no release blockers. The status header flipped from `live` to `closed`. The Summary table now reads `Open items (Phase 7 entries) | 3`, `Resolved in Phase 7 | 1`, `Severity breakdown (Open, all phases) | P1: 0  P2: 12  P3: 17`.
+**7.4 Adoption ledger.** New `## 0. Adoption Ledger (Phase 7.4)` section at the top of [docs/versions/v1/v1.2.0/known-gaps.md](archive/v1/v1.2/known-gaps.md) maps every plan sub-task (1.1 -> 7.5) to its implementing phase, sub-task ID, and current Resolved / Open status. The forward-reference placeholder `1.x.P3.D` (reserved in Phase 1 for this ledger) is moved to `## 2. Resolved` and three new Phase 7 entries are added to `## 1. Open Items`: `7.1.P2.A` (deterministic-synthesis methodology), `7.x.P3.B` (benchmark publish-path deviation), `7.x.P3.C` (benchmark file-path deviation). All P2 / P3; no release blockers. The status header flipped from `live` to `closed`. The Summary table now reads `Open items (Phase 7 entries) | 3`, `Resolved in Phase 7 | 1`, `Severity breakdown (Open, all phases) | P1: 0  P2: 12  P3: 17`.
 
-**7.5 Phase 7 testing and stabilization.** `npm run lint` clean. `npm run test`: 3,629 passed + 5 skipped (320 files). `npm --workspace=@nexus/desktop run test`: 418 / 418 pass. `npm --workspace=@nexus/desktop run typecheck`: 0 errors. One pre-existing Phase 6 lint break surfaced in [desktop/src/components/InteractiveArtifact.tsx](../desktop/src/components/InteractiveArtifact.tsx) -- the `eslint-disable-next-line react/no-danger` directive referenced an unconfigured rule, causing eslint's parity check to fail. The `react/no-danger` rule was never loaded in the desktop config; removed the dead suppression directive (kept the explanatory comment documenting the sanitiser as the trust boundary). Phase 7 final session history at [docs/versions/v1/v1.2.0/development/history/2026-05_phase-7-stabilization-benchmarks.md](v1/v1.2/development/history/2026-05_phase-7-stabilization-benchmarks.md) covers Phase 7 specifically; Phases 1-6 each have their own under the same directory.
+**7.5 Phase 7 testing and stabilization.** `npm run lint` clean. `npm run test`: 3,629 passed + 5 skipped (320 files). `npm --workspace=@nexus/desktop run test`: 418 / 418 pass. `npm --workspace=@nexus/desktop run typecheck`: 0 errors. One pre-existing Phase 6 lint break surfaced in [desktop/src/components/InteractiveArtifact.tsx](../desktop/src/components/InteractiveArtifact.tsx) -- the `eslint-disable-next-line react/no-danger` directive referenced an unconfigured rule, causing eslint's parity check to fail. The `react/no-danger` rule was never loaded in the desktop config; removed the dead suppression directive (kept the explanatory comment documenting the sanitiser as the trust boundary). Phase 7 final session history at [docs/versions/v1/v1.2.0/development/history/2026-05_phase-7-stabilization-benchmarks.md](archive/v1/v1.2/development/history/2026-05_phase-7-stabilization-benchmarks.md) covers Phase 7 specifically; Phases 1-6 each have their own under the same directory.
 
 ### Cycle exit signals
 
@@ -5552,7 +5554,7 @@ The v1.2.0 cycle's first adoption track is complete.
 
 ### Goal
 
-Ship the three bounded-scope re-partial items from the [2026-05 ecosystem-adoption plan](v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 6: lift the file-watching responsibility out of the Phase 3 code-graph scanner into a reusable abstraction; wire a Language Server Protocol client for TS / Python / Rust so the Coding pillar can ask for symbol-precise definitions and references instead of falling back to grep text matches; and ship the desktop-side interactive HTML artifact host with a "Copy as JSON" round-trip that lets users tune values in the rendered output and feed the JSON back into the agent. Stability gate: (a) code-graph re-uses the watcher without behavior change; (b) the LSP-backed references tool returns symbol-precise hits, not text matches; (c) the Tauri shell renders an interactive HTML artifact whose "Copy as JSON" button serialises form state and copies it to the clipboard.
+Ship the three bounded-scope re-partial items from the [2026-05 ecosystem-adoption plan](archive/v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 6: lift the file-watching responsibility out of the Phase 3 code-graph scanner into a reusable abstraction; wire a Language Server Protocol client for TS / Python / Rust so the Coding pillar can ask for symbol-precise definitions and references instead of falling back to grep text matches; and ship the desktop-side interactive HTML artifact host with a "Copy as JSON" round-trip that lets users tune values in the rendered output and feed the JSON back into the agent. Stability gate: (a) code-graph re-uses the watcher without behavior change; (b) the LSP-backed references tool returns symbol-precise hits, not text matches; (c) the Tauri shell renders an interactive HTML artifact whose "Copy as JSON" button serialises form state and copies it to the clipboard.
 
 ### What changed
 
@@ -5594,7 +5596,7 @@ No CI workflow edits required. The active CI (GitHub Actions, `.github/workflows
 
 ### Known gaps
 
-See [docs/versions/v1/v1.2.0/known-gaps.md](v1/v1.2/known-gaps.md) Phase 6 entries (`6.1.P3.U` / `6.1.P3.V` / `6.1.P3.W` / `6.2.P2.X` / `6.2.P3.Y` / `6.3.P2.Z` / `6.3.NI.Hub`). The Phase 1 / 2 / 3 / 4 / 5 carryforward items and the v1.1.0 architectural carryforward map remain as recorded -- Phase 6 closes the `6.3.NI.Hub` entry (Hub reference template was already shipped in Phase 1.2).
+See [docs/versions/v1/v1.2.0/known-gaps.md](archive/v1/v1.2/known-gaps.md) Phase 6 entries (`6.1.P3.U` / `6.1.P3.V` / `6.1.P3.W` / `6.2.P2.X` / `6.2.P3.Y` / `6.3.P2.Z` / `6.3.NI.Hub`). The Phase 1 / 2 / 3 / 4 / 5 carryforward items and the v1.1.0 architectural carryforward map remain as recorded -- Phase 6 closes the `6.3.NI.Hub` entry (Hub reference template was already shipped in Phase 1.2).
 
 ---
 
@@ -5602,7 +5604,7 @@ See [docs/versions/v1/v1.2.0/known-gaps.md](v1/v1.2/known-gaps.md) Phase 6 entri
 
 ### Goal
 
-Codify and enforce four agent-loop policies derived from the Anthropic "best practices in large codebases" article (S3): a read-only intent that locks exploration sub-agents out of write tools, an optional path predicate on skill manifests so skills auto-load only inside their relevant subtree, a shared `.nexusignore` parser (plus a sibling per-tool `permissions.deny` parser) consumed by memory ingest and the code-graph scanner, and a 13th lifecycle hook position fired at session end so a stop-hook can mine the transcript for AGENTS.md / skill update candidates while context is fresh. Plan reference: [docs/versions/v1/v1.2.0/plans/adoption-ecosystem-2026-05.md](v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 5. Stability gate: (a) explore sub-agent cannot edit; (b) path-scoped skills load only when CWD matches; (c) `.nexusignore` exclusion at memory ingest; (d) `session-reflection` hook fires at session end with the transcript + files-written payload.
+Codify and enforce four agent-loop policies derived from the Anthropic "best practices in large codebases" article (S3): a read-only intent that locks exploration sub-agents out of write tools, an optional path predicate on skill manifests so skills auto-load only inside their relevant subtree, a shared `.nexusignore` parser (plus a sibling per-tool `permissions.deny` parser) consumed by memory ingest and the code-graph scanner, and a 13th lifecycle hook position fired at session end so a stop-hook can mine the transcript for AGENTS.md / skill update candidates while context is fresh. Plan reference: [docs/versions/v1/v1.2.0/plans/adoption-ecosystem-2026-05.md](archive/v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 5. Stability gate: (a) explore sub-agent cannot edit; (b) path-scoped skills load only when CWD matches; (c) `.nexusignore` exclusion at memory ingest; (d) `session-reflection` hook fires at session end with the transcript + files-written payload.
 
 ### What changed
 
@@ -5646,7 +5648,7 @@ Codify and enforce four agent-loop policies derived from the Anthropic "best pra
 
 ### Known issues / deferrals
 
-Six new known-gaps entries (no P0 / P1 release-blockers); full text in [docs/versions/v1/v1.2.0/known-gaps.md](v1/v1.2/known-gaps.md):
+Six new known-gaps entries (no P0 / P1 release-blockers); full text in [docs/versions/v1/v1.2.0/known-gaps.md](archive/v1/v1.2/known-gaps.md):
 
 - `5.1.P2.O` (DF/P2) -- explore-intent wiring is at `src/agents/SubAgentManager.ts` only; future `modules/coding/` dispatcher must pick up the same policy module.
 - `5.1.P2.P` (DF/P2) -- MCP tools are not auto-classified for the explore allowlist (safer default; addressed in a future cycle by an "is-read-only" annotation on the tool descriptor).
@@ -5665,7 +5667,7 @@ Phase 6 -- Re-Partial Integrations (file-watcher abstraction, LSP client for TS/
 
 ### Goal
 
-Ship two memory-subsystem improvements derived from LEANN's algorithmic ideas: an AST-aware chunker that aligns memory ingest with semantic units (functions, classes), and a graph-pruned dense index that stores only the kNN graph + chunk text on disk while recomputing embeddings on the query path. Gate both behind a `MemoryStorageTier` policy so the existing full-vector path stays the default until the cycle-end benchmark decides whether to promote `Pruned`. Plan reference: [docs/versions/v1/v1.2.0/plans/adoption-ecosystem-2026-05.md](v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 4. Stability gate: `PrunedDenseIndex` on-disk bytes at most 20% of `DenseIndex` with recall@10 within 5pp on a 100k-chunk workload.
+Ship two memory-subsystem improvements derived from LEANN's algorithmic ideas: an AST-aware chunker that aligns memory ingest with semantic units (functions, classes), and a graph-pruned dense index that stores only the kNN graph + chunk text on disk while recomputing embeddings on the query path. Gate both behind a `MemoryStorageTier` policy so the existing full-vector path stays the default until the cycle-end benchmark decides whether to promote `Pruned`. Plan reference: [docs/versions/v1/v1.2.0/plans/adoption-ecosystem-2026-05.md](archive/v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 4. Stability gate: `PrunedDenseIndex` on-disk bytes at most 20% of `DenseIndex` with recall@10 within 5pp on a 100k-chunk workload.
 
 ### What changed
 
@@ -5712,7 +5714,7 @@ The AST-aware chunker is the lower-level building block that makes Phase 5's cod
 
 ### Goal
 
-Ship `core/codegraph/`, a SQLite-backed symbol + call-edge graph plus internal MCP server exposing 8 tools so the Coding pillar can answer "callers of X", "callees of Y", "impact radius of Z" in one tool call instead of spawning discovery sub-agents that scan files repeatedly. Plan reference: [docs/versions/v1/v1.2.0/plans/adoption-ecosystem-2026-05.md](v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 3. Stability gate: on the reference task "Find all callers of `redactSecrets` and assess whether changing its signature would break call sites", total tool calls with codegraph available must be at most 30% of the grep-shaped baseline.
+Ship `core/codegraph/`, a SQLite-backed symbol + call-edge graph plus internal MCP server exposing 8 tools so the Coding pillar can answer "callers of X", "callees of Y", "impact radius of Z" in one tool call instead of spawning discovery sub-agents that scan files repeatedly. Plan reference: [docs/versions/v1/v1.2.0/plans/adoption-ecosystem-2026-05.md](archive/v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 3. Stability gate: on the reference task "Find all callers of `redactSecrets` and assess whether changing its signature would break call sites", total tool calls with codegraph available must be at most 30% of the grep-shaped baseline.
 
 ### What changed
 
@@ -5720,7 +5722,7 @@ Ship `core/codegraph/`, a SQLite-backed symbol + call-edge graph plus internal M
 
 **3.2 `core/codegraph/store/SqliteGraphStore.ts`.** Persistence layer on `better-sqlite3` (already a Nexus dep, no new package added). Schema: `files(id, path UNIQUE, language, last_indexed_at, content_hash)` + `symbols(id, file_id, name, kind, line_start, line_end, signature_text)` + `call_edges(caller_symbol_id, callee_symbol_id, line, kind, PK on all four)` + an FTS5 virtual table `symbols_fts(name, signature_text)` with `rowid = symbols.id`. WAL mode + `synchronous = NORMAL` so concurrent reads from the MCP tools never block the scanner's writes. Prepared statements cached on first use to keep the hot path allocation-free. FTS5 insertion indexes both the original name AND a tokenized form (camelCase / snake_case split into lowercased sub-tokens) so a query like `token` matches `validateToken`. A 12-test suite covers all CRUD paths, FTS sub-50ms latency on a 10k-symbol fixture, and cross-process persistence by re-opening the DB after close.
 
-**3.3 `core/codegraph/scanner/RepoScanner.ts`.** Per-language regex matchers for TypeScript / Python / Rust / Go extract symbol declarations (functions, classes, methods, structs, traits, enums, interfaces, type aliases) plus best-effort call-edge extraction (filtered against per-language keyword sets so `if(...)`, `for(...)`, `return(...)` etc. do not become false-positive edges). Two-pass scan: pass 1 upserts symbols across every reindexed file, pass 2 resolves call edges so cross-file edges land regardless of directory walk order. Innermost-symbol selection for the caller resolves "class body contains method body contains call" by choosing the tightest enclosing range. SHA-256 content hash per file short-circuits unchanged-file re-parses. `.gitignore` AND `.nexusignore` honored at scan-entry; default exclusion list (`node_modules`, `.git`, `out`, `dist`, `build`, `target`, `coverage`, `.nyc_output`, `__pycache__`, `.venv`, `venv`). Per-file size cap (default 1 MB) skips outliers. **DEVIATION from plan**: the plan called for Tree-sitter; Nexus does not bundle the four per-language tree-sitter native packages, so a regex-based extractor ships instead. The deviation is documented in [docs/versions/v1/v1.2.0/known-gaps.md](v1/v1.2/known-gaps.md) `3.3.P2.G` with the upgrade path. The 8-test suite covers each of the four languages, content-hash short-circuit, `.nexusignore`, size-cap, and file-pruning.
+**3.3 `core/codegraph/scanner/RepoScanner.ts`.** Per-language regex matchers for TypeScript / Python / Rust / Go extract symbol declarations (functions, classes, methods, structs, traits, enums, interfaces, type aliases) plus best-effort call-edge extraction (filtered against per-language keyword sets so `if(...)`, `for(...)`, `return(...)` etc. do not become false-positive edges). Two-pass scan: pass 1 upserts symbols across every reindexed file, pass 2 resolves call edges so cross-file edges land regardless of directory walk order. Innermost-symbol selection for the caller resolves "class body contains method body contains call" by choosing the tightest enclosing range. SHA-256 content hash per file short-circuits unchanged-file re-parses. `.gitignore` AND `.nexusignore` honored at scan-entry; default exclusion list (`node_modules`, `.git`, `out`, `dist`, `build`, `target`, `coverage`, `.nyc_output`, `__pycache__`, `.venv`, `venv`). Per-file size cap (default 1 MB) skips outliers. **DEVIATION from plan**: the plan called for Tree-sitter; Nexus does not bundle the four per-language tree-sitter native packages, so a regex-based extractor ships instead. The deviation is documented in [docs/versions/v1/v1.2.0/known-gaps.md](archive/v1/v1.2/known-gaps.md) `3.3.P2.G` with the upgrade path. The 8-test suite covers each of the four languages, content-hash short-circuit, `.nexusignore`, size-cap, and file-pruning.
 
 **3.4 `core/codegraph/mcp/CodeGraphMcpServer.ts`.** In-process MCP server implementing `McpHarnessAdapter` from [core/coding/McpBridge.ts](../core/coding/McpBridge.ts) -- never spawns a child, never opens a socket, never binds a port. Exposes the 8 tools the plan enumerates: `codegraph_search` (FTS), `codegraph_context` (definition + callers + callees), `codegraph_trace` (BFS path between two symbols), `codegraph_callers` / `codegraph_callees`, `codegraph_impact` (transitive caller closure), `codegraph_node` (raw metadata), `codegraph_explore` (bulk context), `codegraph_files` (graph contents). Bareword search queries get auto-prefix-matching (`token` -> `token*`) so the agent's natural queries surface symbols with longer names. The 12-test suite drives every tool end-to-end against a seeded graph and asserts the JSON-Schema payload shape, the unknown-tool error path, and missing-required-arg rejections.
 
@@ -5751,7 +5753,7 @@ Ship `core/codegraph/`, a SQLite-backed symbol + call-edge graph plus internal M
 
 ### Goal
 
-Wrap every Coding-pillar Bash tool call through a per-command compression layer so the local model sees a filtered / grouped / truncated / deduped view of stdout while raw output is preserved on disk for retry inspection. Plan reference: [docs/versions/v1/v1.2.0/plans/adoption-ecosystem-2026-05.md](v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 2. Stability gate: a fixed-seed Coding-pillar transcript consumes at most 50% of the bytes it would consume without the compressor.
+Wrap every Coding-pillar Bash tool call through a per-command compression layer so the local model sees a filtered / grouped / truncated / deduped view of stdout while raw output is preserved on disk for retry inspection. Plan reference: [docs/versions/v1/v1.2.0/plans/adoption-ecosystem-2026-05.md](archive/v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 2. Stability gate: a fixed-seed Coding-pillar transcript consumes at most 50% of the bytes it would consume without the compressor.
 
 ### What changed
 
@@ -5778,7 +5780,7 @@ Wrap every Coding-pillar Bash tool call through a per-command compression layer 
 
 ### Deviations
 
-- **Tee footer location.** The plan describes injecting the footer into the next-turn *system prompt* via `PromptBuilder`. The shipped wiring embeds the footer in the `run_terminal` tool-result JSON instead; the model still sees the tee path on the next reasoning step because the tool result is part of the next-turn conversation context. The PromptBuilder hook is a larger surface that belongs alongside Phase 5's agent-loop policy work. Recorded as `2.4.P3.F` in [docs/versions/v1/v1.2.0/known-gaps.md](v1/v1.2/known-gaps.md).
+- **Tee footer location.** The plan describes injecting the footer into the next-turn *system prompt* via `PromptBuilder`. The shipped wiring embeds the footer in the `run_terminal` tool-result JSON instead; the model still sees the tee path on the next reasoning step because the tool result is part of the next-turn conversation context. The PromptBuilder hook is a larger surface that belongs alongside Phase 5's agent-loop policy work. Recorded as `2.4.P3.F` in [docs/versions/v1/v1.2.0/known-gaps.md](archive/v1/v1.2/known-gaps.md).
 - **Legacy `preToolHook.ts`.** Per the scope rule, the now-dead v0.8.0 compressor module and its unit tests were left in place rather than deleted alongside the wiring switch. Recorded as `2.4.P2.E` for a follow-up cleanup commit.
 
 ### Why this matters
@@ -5795,11 +5797,11 @@ Phase 3 of the adoption track: `core/codegraph/` -- SQLite-backed symbol-and-cal
 
 ### Goal
 
-Open the v1.2.0 cycle's first adoption track from [docs/versions/v1/v1.2.0/comparison-ecosystem-2026-05.md](v1/v1.2/comparison-ecosystem-2026-05.md) (Sources S5 Hallmark + S7 HTML article + S3 best-practices item 21 + S3 item 20). Phase 1 is skill-native + policy only -- ship the four zero-code skill / policy items first to frame the conventions that the subsequent code-shaped phases (2-7) will follow. Plan reference: [docs/versions/v1/v1.2.0/plans/adoption-ecosystem-2026-05.md](v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 1.
+Open the v1.2.0 cycle's first adoption track from [docs/versions/v1/v1.2.0/comparison-ecosystem-2026-05.md](archive/v1/v1.2/comparison-ecosystem-2026-05.md) (Sources S5 Hallmark + S7 HTML article + S3 best-practices item 21 + S3 item 20). Phase 1 is skill-native + policy only -- ship the four zero-code skill / policy items first to frame the conventions that the subsequent code-shaped phases (2-7) will follow. Plan reference: [docs/versions/v1/v1.2.0/plans/adoption-ecosystem-2026-05.md](archive/v1/v1.2/plans/adoption-ecosystem-2026-05.md) Phase 1.
 
 ### What changed
 
-**1.1 Hallmark skill imported into Nexus-Hub.** New skill in the sibling [Nexus-Hub](https://github.com/bendourthe/Nexus-Hub) repo at `catalog/skills/developer-experience/hallmark-design/SKILL.md`. Preserves Hallmark's anti-slop gate catalog (organized by layout / color / typography / spacing / components / motion / content) and the four verbs (default `build` / `audit` / `redesign` / `study`). Attribution to Hallmark + Together AI is recorded in the skill front matter. The upstream 22-theme catalog is explicitly excluded (Scope Excluded section); Nexus is a single product with one shell theme per [comparison Section 9.4 N6](v1/v1.2/comparison-ecosystem-2026-05.md#94-items-explicitly-not-recommended-for-adoption-security--policy-reasons). Skill cross-references the new `html-output-conventions` skill so the two compose.
+**1.1 Hallmark skill imported into Nexus-Hub.** New skill in the sibling [Nexus-Hub](https://github.com/bendourthe/Nexus-Hub) repo at `catalog/skills/developer-experience/hallmark-design/SKILL.md`. Preserves Hallmark's anti-slop gate catalog (organized by layout / color / typography / spacing / components / motion / content) and the four verbs (default `build` / `audit` / `redesign` / `study`). Attribution to Hallmark + Together AI is recorded in the skill front matter. The upstream 22-theme catalog is explicitly excluded (Scope Excluded section); Nexus is a single product with one shell theme per [comparison Section 9.4 N6](archive/v1/v1.2/comparison-ecosystem-2026-05.md#94-items-explicitly-not-recommended-for-adoption-security--policy-reasons). Skill cross-references the new `html-output-conventions` skill so the two compose.
 
 **1.2 HTML-output convention skill in Nexus-Hub.** New skill at `catalog/skills/developer-experience/html-output-conventions/SKILL.md` codifying the actionable S7 conventions. Ships a HTML-vs-Markdown decision table (HTML for N-way comparisons, code-review diffs, design prototypes, incident reports, artifacts over ~100 lines; Markdown for short notes, README front matter, commit messages), four anti-patterns (no ASCII diagrams -- use SVG; no defaulting to Markdown when an HTML artifact would be read; no color-only meaning; no external dependencies in shared artifacts), and a privacy note citing [README.md Design Principle 5 "Privacy by construction"](../README.md). The skill cross-references `hallmark-design` so the chosen HTML is also well-designed.
 
@@ -5819,11 +5821,11 @@ Open the v1.2.0 cycle's first adoption track from [docs/versions/v1/v1.2.0/compa
 - **Nexus-AI desktop workspace**: 411 / 411 tests pass (was 409 + 2 failed before the sidecar IPC fix). Typecheck clean (`tsc --noEmit`, exit 0; was 4 errors before the strict-null fix). Lint clean (`npm run lint:shell`, exit 0). Sidecar bundle builds clean (`build:sidecar`, esbuild exit 0).
 - **Nexus-Hub validation**: `python scripts/validate_skills.py --path catalog/skills/developer-experience/hallmark-design` PASS (0 errors / 0 warnings); same for `html-output-conventions` PASS (0 / 0). The bundled-resources orphan audit confirms all four template basenames are referenced from `html-output-conventions/SKILL.md`.
 - **Sync manifest proof**: `buildManifest` (the exact function `nexus skills list` renders from) over `../Nexus-Hub/catalog/skills` enumerates 213 skills with both `hallmark-design` and `html-output-conventions` present.
-- **Live `nexus skills sync`**: blocked in this environment because the upstream `bendourthe/DevAI-Hub` API call returns no `tag_name` (no resolvable latest release). Recorded as 1.1.P3.B in [docs/versions/v1/v1.2.0/known-gaps.md](v1/v1.2/known-gaps.md); the new skills will flow through sync once a Nexus-Hub release containing them is cut.
+- **Live `nexus skills sync`**: blocked in this environment because the upstream `bendourthe/DevAI-Hub` API call returns no `tag_name` (no resolvable latest release). Recorded as 1.1.P3.B in [docs/versions/v1/v1.2.0/known-gaps.md](archive/v1/v1.2/known-gaps.md); the new skills will flow through sync once a Nexus-Hub release containing them is cut.
 
 ### Known gaps + deferrals
 
-Four open entries in the new [docs/versions/v1/v1.2.0/known-gaps.md](v1/v1.2/known-gaps.md):
+Four open entries in the new [docs/versions/v1/v1.2.0/known-gaps.md](archive/v1/v1.2/known-gaps.md):
 
 - **1.1.P2.A** (WN, P2) -- Nexus-Hub `data/skills.json` + `data/SKILL_INDEX.md` rebuild deferred; a full rebuild produced a 2528-line diff because the committed catalog index carried pre-existing drift (5 prior skills + many description edits never rebuilt). Reverted the regenerated catalog so the Phase 1 commit stays scoped to the two new skills. A Nexus-Hub maintainer should land `make build-catalog` as a standalone hygiene commit there.
 - **1.1.P3.B** (DF, P3) -- The new Nexus-Hub skills require an upstream release tag before `nexus skills sync` / `list` can surface them; the local `buildManifest` proof stands.
@@ -5832,7 +5834,7 @@ Four open entries in the new [docs/versions/v1/v1.2.0/known-gaps.md](v1/v1.2/kno
 
 Two closures recorded under `## 2. Resolved`: 1.5.R1 (sidecar IPC handlers wired for the v1.1.0 Phase 11 surface) and 1.5.R2 (desktop tsc strict-null errors in slashCommands.test.ts).
 
-The v1.1.0 -> v1.2.0 carryforward map is brief-listed by code reference (full text remains in [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md)).
+The v1.1.0 -> v1.2.0 carryforward map is brief-listed by code reference (full text remains in [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md)).
 
 ---
 
@@ -5840,21 +5842,21 @@ The v1.1.0 -> v1.2.0 carryforward map is brief-listed by code reference (full te
 
 ### Goal
 
-Run the full deep-review chain across the v1.1.0 deltas, exercise live operator actions (signing, notarization, AppImage, golden tasks, GPU bench, DevAI-Hub baseline rotation), finalize the v1.1.0 known-gaps file. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-15-hardening-and-release.md](v1/v1.1/plans/phase-15-hardening-and-release.md). The static-portion landing of Phase 15 ships in this commit (the parts the static-review host can complete on its own); the live operator-action chain (signing key material, real-GPU bench, three fresh-VM RTMs, live `/run-deep-review` chain) carries forward as a consolidated operator-action ledger in [docs/versions/v1/v1.1.0/operator-actions.md](v1/v1.1/operator-actions.md).
+Run the full deep-review chain across the v1.1.0 deltas, exercise live operator actions (signing, notarization, AppImage, golden tasks, GPU bench, DevAI-Hub baseline rotation), finalize the v1.1.0 known-gaps file. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-15-hardening-and-release.md](archive/v1/v1.1/plans/phase-15-hardening-and-release.md). The static-portion landing of Phase 15 ships in this commit (the parts the static-review host can complete on its own); the live operator-action chain (signing key material, real-GPU bench, three fresh-VM RTMs, live `/run-deep-review` chain) carries forward as a consolidated operator-action ledger in [docs/versions/v1/v1.1.0/operator-actions.md](archive/v1/v1.1/operator-actions.md).
 
 ### What changed
 
-**15.1 Deep review synthesis (static portion).** New [docs/versions/v1/v1.1.0/review/synthesis.md](v1/v1.1/review/synthesis.md) -- the v1.1.0 release-gate synthesis mirroring the v1.0.0 structure across 10 sections (executive summary, health gates, dependency scan, docs/git/CI hygiene, cross-cutting findings, P0/P1/P2 status, inputs and artifacts, static-only review findings, live-review carryforwards, sign-off). Section 8 documents the four static-only findings derivable from the running known-gaps + history files; Section 9 records the four live carryforward IDs (OA-V1.1.0-15-DR-A through DR-D) that overlay this synthesis once the operator host runs `/run-deep-review` + `/run-security-audit` + `/run-penetration-test --depth=deep` + `npx semantic-release --dry-run`.
+**15.1 Deep review synthesis (static portion).** New [docs/versions/v1/v1.1.0/review/synthesis.md](archive/v1/v1.1/review/synthesis.md) -- the v1.1.0 release-gate synthesis mirroring the v1.0.0 structure across 10 sections (executive summary, health gates, dependency scan, docs/git/CI hygiene, cross-cutting findings, P0/P1/P2 status, inputs and artifacts, static-only review findings, live-review carryforwards, sign-off). Section 8 documents the four static-only findings derivable from the running known-gaps + history files; Section 9 records the four live carryforward IDs (OA-V1.1.0-15-DR-A through DR-D) that overlay this synthesis once the operator host runs `/run-deep-review` + `/run-security-audit` + `/run-penetration-test --depth=deep` + `npx semantic-release --dry-run`.
 
 **15.6 Version bump across all version-carrying files.** Bumped from `1.0.0` to `1.1.0` across [package.json](../package.json) (and `package-lock.json` top + the `desktop/` workspace entry), [desktop/package.json](../desktop/package.json), [desktop/src-tauri/Cargo.toml](../desktop/src-tauri/Cargo.toml), [desktop/src-tauri/tauri.conf.json](../desktop/src-tauri/tauri.conf.json), [scripts/installer/pyqt/pyproject.toml](../scripts/installer/pyqt/pyproject.toml), [scripts/installer/pyqt/src/nexus_installer/__init__.py](../scripts/installer/pyqt/src/nexus_installer/__init__.py), and [scripts/installer/build/nsis/nexus-setup.nsi](../scripts/installer/build/nsis/nexus-setup.nsi) (header banner + APP_VERSION literal + `Nexus-1.1.0-Setup.exe` OutFile path). The root `package.json` flipped from the semantic-release-managed `0.41.0` to the product-aligned `1.1.0` per Phase 15.6's explicit instruction; the dry-run verification under Phase 15.8 confirms semantic-release's behaviour against the new baseline.
 
-**15.7 CHANGELOG.md + release-notes.md.** Hand-authored the v1.1.0 entry in [CHANGELOG.md](../CHANGELOG.md), prepended above the `v0.41.0` semantic-release block per the plan's "append above v1.0.0 block without overwriting" requirement. Sectioned-bullet structure: one section per Phase 1-15 plus `### Changed`, `### Deferred to v1.2.0`, `### Operator-action carryforwards`. New [docs/versions/v1/v1.1.0/release-notes.md](v1/v1.1/release-notes.md) ships as the user-facing release content: six highlight sections (Cross-OS installer; Hardware-aware multi-model picker; Nexus VS Code extension multi-model agentic add-on; SANA family image upgrade; SANA-Video Fast 720p tier; Hybrid memory + session replay + slash commands), Compatibility notes (upgrade from v1.0.0, legacy `gemma-code` rename, default image model swap, settings keys compat, macOS Gatekeeper + Linux AppImage trust), Known limitations, What is next (v1.2.0 teaser), Acknowledgements, and the Get Nexus link block (the three OS installers + the renamed Marketplace listing).
+**15.7 CHANGELOG.md + release-notes.md.** Hand-authored the v1.1.0 entry in [CHANGELOG.md](../CHANGELOG.md), prepended above the `v0.41.0` semantic-release block per the plan's "append above v1.0.0 block without overwriting" requirement. Sectioned-bullet structure: one section per Phase 1-15 plus `### Changed`, `### Deferred to v1.2.0`, `### Operator-action carryforwards`. New [docs/versions/v1/v1.1.0/release-notes.md](archive/v1/v1.1/release-notes.md) ships as the user-facing release content: six highlight sections (Cross-OS installer; Hardware-aware multi-model picker; Nexus VS Code extension multi-model agentic add-on; SANA family image upgrade; SANA-Video Fast 720p tier; Hybrid memory + session replay + slash commands), Compatibility notes (upgrade from v1.0.0, legacy `gemma-code` rename, default image model swap, settings keys compat, macOS Gatekeeper + Linux AppImage trust), Known limitations, What is next (v1.2.0 teaser), Acknowledgements, and the Get Nexus link block (the three OS installers + the renamed Marketplace listing).
 
-**15.9 Known-gaps finalization.** Updated [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md): status header flipped from `live` to `finalized at v1.1.0 release (Phase 15.9, 2026-05-26)`; four new Phase 15 open items appended to `## 1. Open Items` (15.1.P1.KK live deep-review chain, 15.8.P1.LL semantic-release dry-run, 15.11.P2.MM final gate, 15.2-5.P1.NN consolidated live operator-action set); six Phase 15 closures appended to `## 2. Resolved`; Section 3 summary table recomputed (now 37 open / 72 resolved / 109 total: 0 P0 + 11 P1 + 25 P2 + 1 P3 open); by-category + by-phase rollups updated; new Section 4b populated with the v1.1.0 -> v1.2.0 architectural + operator-driven carryforward maps; references section extended with the Phase 15 artifacts.
+**15.9 Known-gaps finalization.** Updated [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md): status header flipped from `live` to `finalized at v1.1.0 release (Phase 15.9, 2026-05-26)`; four new Phase 15 open items appended to `## 1. Open Items` (15.1.P1.KK live deep-review chain, 15.8.P1.LL semantic-release dry-run, 15.11.P2.MM final gate, 15.2-5.P1.NN consolidated live operator-action set); six Phase 15 closures appended to `## 2. Resolved`; Section 3 summary table recomputed (now 37 open / 72 resolved / 109 total: 0 P0 + 11 P1 + 25 P2 + 1 P3 open); by-category + by-phase rollups updated; new Section 4b populated with the v1.1.0 -> v1.2.0 architectural + operator-driven carryforward maps; references section extended with the Phase 15 artifacts.
 
-**15.10 Distribution channels.** New [docs/versions/v1/v1.1.0/distribution.md](v1/v1.1/distribution.md) mirroring the v1.0.0 structure across three OS surfaces: Section 1 (GitHub Releases as the primary surface with the three installers + the SHA manifest + the consolidated checksums file; tag-push triggers `release.yml` -> `installer-build.yml` + `installer-macos.yml` + `installer-linux.yml`), Section 2 (VS Code Marketplace with the renamed `nexus-coding` listing + the legacy `gemma-code` transition note), Section 3 (direct-download landing page deferred to v1.1.1 per OA-05), Section 4 (Ollama-style direct-download deferred to v1.2.0+), Section 5 (the seven-item validation checklist).
+**15.10 Distribution channels.** New [docs/versions/v1/v1.1.0/distribution.md](archive/v1/v1.1/distribution.md) mirroring the v1.0.0 structure across three OS surfaces: Section 1 (GitHub Releases as the primary surface with the three installers + the SHA manifest + the consolidated checksums file; tag-push triggers `release.yml` -> `installer-build.yml` + `installer-macos.yml` + `installer-linux.yml`), Section 2 (VS Code Marketplace with the renamed `nexus-coding` listing + the legacy `gemma-code` transition note), Section 3 (direct-download landing page deferred to v1.1.1 per OA-05), Section 4 (Ollama-style direct-download deferred to v1.2.0+), Section 5 (the seven-item validation checklist).
 
-**15.2 / 15.3 / 15.4 / 15.5 / 15.8 Operator-action carryforward ledger.** Extended [docs/versions/v1/v1.1.0/operator-actions.md](v1/v1.1/operator-actions.md) with six new Phase 15 OA-V1.1.0-15* entries: OA-V1.1.0-15A (live `/run-deep-review` chain), OA-V1.1.0-15B (signing + notarization + AppImage smoke -- rolls up OA-01 + OA-11 + OA-12), OA-V1.1.0-15C (SHA rotations + final brand icons -- rolls up OA-06 + OA-07), OA-V1.1.0-15D (golden task + GPU bench + live DevAI-Hub sync -- rolls up OA-08 + OA-09 + OA-10), OA-V1.1.0-15E (RTM smoke per OS), OA-V1.1.0-15F (semantic-release dry-run verification). Each entry carries acceptance criteria + blocked-by + status.
+**15.2 / 15.3 / 15.4 / 15.5 / 15.8 Operator-action carryforward ledger.** Extended [docs/versions/v1/v1.1.0/operator-actions.md](archive/v1/v1.1/operator-actions.md) with six new Phase 15 OA-V1.1.0-15* entries: OA-V1.1.0-15A (live `/run-deep-review` chain), OA-V1.1.0-15B (signing + notarization + AppImage smoke -- rolls up OA-01 + OA-11 + OA-12), OA-V1.1.0-15C (SHA rotations + final brand icons -- rolls up OA-06 + OA-07), OA-V1.1.0-15D (golden task + GPU bench + live DevAI-Hub sync -- rolls up OA-08 + OA-09 + OA-10), OA-V1.1.0-15E (RTM smoke per OS), OA-V1.1.0-15F (semantic-release dry-run verification). Each entry carries acceptance criteria + blocked-by + status.
 
 **15.11 Final gate (static-portion).** Best-effort static-review gate on this host: every Phase 15 doc artifact lands; every modified JSON file (`package.json`, `package-lock.json`, `desktop/package.json`, `desktop/src-tauri/tauri.conf.json`) parses cleanly via `python -m json.tool`; every version literal across the 7 product-version files plus the NSIS literal verifies at `1.1.0`. The full lint / build / test gate on each OS leg carries forward to OA-V1.1.0-15E (RTM smoke per OS); the Phase 1-14 implementation sessions each shipped a green CI run at their landing commit.
 
@@ -5868,7 +5870,7 @@ Run the full deep-review chain across the v1.1.0 deltas, exercise live operator 
 
 ### Known gaps + deferrals
 
-Four new entries opened in [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md): 15.1.P1.KK (live deep-review chain -> OA-V1.1.0-15A), 15.8.P1.LL (semantic-release dry-run -> OA-V1.1.0-15F), 15.11.P2.MM (final lint/build/test gate end-to-end -> OA-V1.1.0-15E), 15.2-5.P1.NN (consolidated live operator-action set -> OA-V1.1.0-15B + 15C + 15D + 15E). The remaining v1.1.0 open items are unchanged; the cycle-close carryforward to v1.2.0 is captured in `## 4b. Carryforward map (v1.1.0 -> v1.2.0)`.
+Four new entries opened in [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md): 15.1.P1.KK (live deep-review chain -> OA-V1.1.0-15A), 15.8.P1.LL (semantic-release dry-run -> OA-V1.1.0-15F), 15.11.P2.MM (final lint/build/test gate end-to-end -> OA-V1.1.0-15E), 15.2-5.P1.NN (consolidated live operator-action set -> OA-V1.1.0-15B + 15C + 15D + 15E). The remaining v1.1.0 open items are unchanged; the cycle-close carryforward to v1.2.0 is captured in `## 4b. Carryforward map (v1.1.0 -> v1.2.0)`.
 
 ### Release gate status
 
@@ -5885,7 +5887,7 @@ The v1.1.0 tag stays unpushed until the OA-V1.1.0-15A through 15F operator-actio
 
 ### Goal
 
-Turn the v1.0.0 Windows-only installer into the canonical cross-platform installer. Auto-detect host OS at first launch, provision platform-correct tooling (CUDA on Windows + Linux-NVIDIA, Metal Performance Shaders on Apple Silicon, ROCm-aware fallback on Linux-AMD, CPU-only fallback elsewhere), offer the Nexus VS Code extension as an opt-in add-on, and deliver the hardware-aware multi-model picker with free-disk-space awareness. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-14-cross-os-installer.md](v1/v1.1/plans/phase-14-cross-os-installer.md). Closes v1.0.0 carryforwards 9.P1.ZZ, 9.P1.AAA, 9.P2.BBB, 9.P1.CCC, 9.P2.DDD, 9.P2.EEE, 6.P1.HH, 7.P1.NN, 7.P1.OO.
+Turn the v1.0.0 Windows-only installer into the canonical cross-platform installer. Auto-detect host OS at first launch, provision platform-correct tooling (CUDA on Windows + Linux-NVIDIA, Metal Performance Shaders on Apple Silicon, ROCm-aware fallback on Linux-AMD, CPU-only fallback elsewhere), offer the Nexus VS Code extension as an opt-in add-on, and deliver the hardware-aware multi-model picker with free-disk-space awareness. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-14-cross-os-installer.md](archive/v1/v1.1/plans/phase-14-cross-os-installer.md). Closes v1.0.0 carryforwards 9.P1.ZZ, 9.P1.AAA, 9.P2.BBB, 9.P1.CCC, 9.P2.DDD, 9.P2.EEE, 6.P1.HH, 7.P1.NN, 7.P1.OO.
 
 ### What changed
 
@@ -5913,7 +5915,7 @@ Turn the v1.0.0 Windows-only installer into the canonical cross-platform install
 
 **14.12 First-launch storage migration.** New [scripts/installer/pyqt/src/nexus_installer/engine/storage_migration.py](../scripts/installer/pyqt/src/nexus_installer/engine/storage_migration.py) re-implements the v1.0.0 TS `StorageMigration` shape in Python so the launch shim can run idempotently (POSIX -> symlink the legacy directory; Windows -> write `MOVED-TO-NEXUS.txt`).
 
-**14.13 RTM smoke checklists.** Three new ~30-step checklists at [docs/versions/v1/v1.1.0/installer-smoke-windows.md](v1/v1.1/installer-smoke-windows.md), [docs/versions/v1/v1.1.0/installer-smoke-macos.md](v1/v1.1/installer-smoke-macos.md), [docs/versions/v1/v1.1.0/installer-smoke-linux.md](v1/v1.1/installer-smoke-linux.md). Phase 15 sign-off.
+**14.13 RTM smoke checklists.** Three new ~30-step checklists at [docs/versions/v1/v1.1.0/installer-smoke-windows.md](archive/v1/v1.1/installer-smoke-windows.md), [docs/versions/v1/v1.1.0/installer-smoke-macos.md](archive/v1/v1.1/installer-smoke-macos.md), [docs/versions/v1/v1.1.0/installer-smoke-linux.md](archive/v1/v1.1/installer-smoke-linux.md). Phase 15 sign-off.
 
 **14.14 Lint, build, test gate.** Ruff clean across every Phase 14 file; the full installer pytest suite passes (374 / 374 cases).
 
@@ -5925,7 +5927,7 @@ Turn the v1.0.0 Windows-only installer into the canonical cross-platform install
 
 ### Known gaps + deferrals
 
-See [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) Phase 14 closures (10 rows). No new open items: every Phase 14 sub-task landed in scope. Signing + notarization remain the existing OA-11 operator action; the macOS / Linux workflows degrade gracefully around it.
+See [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) Phase 14 closures (10 rows). No new open items: every Phase 14 sub-task landed in scope. Signing + notarization remain the existing OA-11 operator action; the macOS / Linux workflows degrade gracefully around it.
 
 ### Operator-action handoff
 
@@ -5937,7 +5939,7 @@ OA-11 (Authenticode + Apple Developer ID + notarization) remains the Phase 15 cl
 
 ### Goal
 
-Surface SANA-Video 2B as the "Fast 720p" tier in the Video Lab, sitting between LTX-Video (default) and CogVideoX (longer clips). Plan reference: [docs/versions/v1/v1.1.0/plans/phase-13-video-lab-sana-video.md](v1/v1.1/plans/phase-13-video-lab-sana-video.md). The Phase 12 catalog already registers `sana-video-2b-720p` and [runtimes/diffusion/pipelines/sana_video.py](../runtimes/diffusion/pipelines/sana_video.py) already provides the stub-mode executor; Phase 13 makes the tier user-visible in the Video Lab UI, dedicates an integration test that drives the IPC round-trip, and reshapes the installer recommended-models picker so SANA-Video appears as an opt-in checkbox in Light + Recommended (unchecked by default) and ticks by default only in Full.
+Surface SANA-Video 2B as the "Fast 720p" tier in the Video Lab, sitting between LTX-Video (default) and CogVideoX (longer clips). Plan reference: [docs/versions/v1/v1.1.0/plans/phase-13-video-lab-sana-video.md](archive/v1/v1.1/plans/phase-13-video-lab-sana-video.md). The Phase 12 catalog already registers `sana-video-2b-720p` and [runtimes/diffusion/pipelines/sana_video.py](../runtimes/diffusion/pipelines/sana_video.py) already provides the stub-mode executor; Phase 13 makes the tier user-visible in the Video Lab UI, dedicates an integration test that drives the IPC round-trip, and reshapes the installer recommended-models picker so SANA-Video appears as an opt-in checkbox in Light + Recommended (unchecked by default) and ticks by default only in Full.
 
 ### What changed
 
@@ -5957,7 +5959,7 @@ Surface SANA-Video 2B as the "Fast 720p" tier in the Video Lab, sitting between 
 
 ### Known gaps + deferrals
 
-See [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) Phase 13 closures + Section 1 (open items). Two new open items:
+See [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) Phase 13 closures + Section 1 (open items). Two new open items:
 
 - **13.2.P3.II** -- the dedicated `test_sana_video.py` lives under [tests/python/diffusion/](../tests/python/diffusion/) instead of the plan's literal `runtimes/diffusion/tests/` path because every other Python diffusion test lives under `tests/python/diffusion/`. The acceptance ("mirror the structure of `test_video_base.py`") is met at the test-shape level rather than the directory level; the deviation is recorded for future-cycle planning.
 - **13.1.P2.JJ** -- [desktop/src/modules/video/VideoLabPage.tsx](../desktop/src/modules/video/VideoLabPage.tsx)'s `DEFAULT_VIDEO_MODELS` is still a static array; the live `videoClient.listModels()` wiring clusters with the Phase 2 IPC widening (10.1.P1.Z) and the Image Studio model dropdown (11.1.P2.CC).
@@ -5972,7 +5974,7 @@ OA-09 already carries the SANA-Video 4 s 720p <= 60 s timing target on the RTX 4
 
 ### Goal
 
-Adopt the NVIDIA SANA family as the new default image stack across Image Studio and Video Lab. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-12-image-studio-sana.md](v1/v1.1/plans/phase-12-image-studio-sana.md). Phase 12 lands the catalog registrations (SANA-1.6B 1024px + 2K + 4K + INT4, Sana-Sprint, SANA-Video 2B 720p, DC-AE VAE, three SANA-ControlNet weights), the diffusers-backed pipeline modules behind the deterministic CI stub, the Image Studio UX (Fast Preview toggle, multi-lang prompt hint, Flow-DPM-Solver sampler, 2K/4K resolutions gated by `DiffusionTier`), the SANA-ControlNet pose / depth / canny preprocessor wiring, the installer preset rewire to auto-tick SANA-1.6B + Sana-Sprint, and the catalog-digests recognition test surface. Operator-action OA-09 in the new [docs/versions/v1/v1.1.0/operator-actions.md](v1/v1.1/operator-actions.md) captures the real-GPU timing handoff on the RTX 4070 baseline rig.
+Adopt the NVIDIA SANA family as the new default image stack across Image Studio and Video Lab. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-12-image-studio-sana.md](archive/v1/v1.1/plans/phase-12-image-studio-sana.md). Phase 12 lands the catalog registrations (SANA-1.6B 1024px + 2K + 4K + INT4, Sana-Sprint, SANA-Video 2B 720p, DC-AE VAE, three SANA-ControlNet weights), the diffusers-backed pipeline modules behind the deterministic CI stub, the Image Studio UX (Fast Preview toggle, multi-lang prompt hint, Flow-DPM-Solver sampler, 2K/4K resolutions gated by `DiffusionTier`), the SANA-ControlNet pose / depth / canny preprocessor wiring, the installer preset rewire to auto-tick SANA-1.6B + Sana-Sprint, and the catalog-digests recognition test surface. Operator-action OA-09 in the new [docs/versions/v1/v1.1.0/operator-actions.md](archive/v1/v1.1/operator-actions.md) captures the real-GPU timing handoff on the RTX 4070 baseline rig.
 
 ### What changed
 
@@ -5990,7 +5992,7 @@ Adopt the NVIDIA SANA family as the new default image stack across Image Studio 
 
 **12.1 / 12.9 Test surface.** [tests/unit/core/registry/catalog-digests.test.ts](../tests/unit/core/registry/catalog-digests.test.ts) lands the test surface promised by v1.0.0 OA-03: every non-Ollama entry must declare a 64-hex `sha256` (placeholder or real); every Phase 12 SANA entry id is enumerated and recognized; the placeholder list is reported separately so OA-V1.1.0-12A can track closure. [tests/unit/core/registry/catalog.test.ts](../tests/unit/core/registry/catalog.test.ts) gains two cases: `validateSpec` accepts the new `controlnet` + `vae` types; the bundled catalog carries the full SANA family from Phase 12. [tests/python/diffusion/test_pipelines_sana.py](../tests/python/diffusion/test_pipelines_sana.py) lands 17 cases covering each module's registration shape, the txt2img + img2img round-trip with the SANA payload + `sampler: "flow-dpm-solver"`, the SANA-ControlNet round-trip with the embedded workflow assertion, the VAE resolution helper, the family classifier, the Sprint `overrides_for_sprint` shape, the INT4 `has_nunchaku` probe-without-crash invariant, and the full `register_pipeline_handlers` smoke. [desktop/tests/ImagePromptForm.test.tsx](../desktop/tests/ImagePromptForm.test.tsx) gains 8 cases covering the multi-lang hint, the sampler dropdown, the Fast Preview toggle persistence, the `valuesToBaseRequest` swap behaviour with `fastPreview` on / off, the `visibleResolutions(tier)` filter, the `tierMeets(actual, required)` predicate, and the dropdown-hides-2K-on-low + tier-hint-on-too-high-resolution assertions. [scripts/installer/pyqt/tests/test_recommended_models.py](../scripts/installer/pyqt/tests/test_recommended_models.py) gains 3 cases (the SANA auto-tick assertion across all three presets + SDXL Turbo removal from Light / Recommended + the new `gemma4:e4b + sana-1.6b-1024` total-GB sum).
 
-**12.9 Operator-action handoff.** [docs/versions/v1/v1.1.0/operator-actions.md](v1/v1.1/operator-actions.md) lands as the v1.1.0 operator-actions ledger. OA-09 (carried forward from v1.0.0) is extended with the seven SANA timing targets from the Phase 12 plan's Stability Gate: SANA-1.6B 1024x1024 <= 1.5 s; Sana-Sprint 1024x1024 <= 0.5 s; SANA 2K (2048x2048) <= 8 s on `diffusion-mid`; SANA 4K (4096x4096) <= 30 s on `diffusion-high`; SANA INT4 ~2 s on RTX 3060 8 GB; SANA-ControlNet pose / depth / canny preview cards render; SANA-Video 2B 4 s @ 720p <= 60 s. OA-V1.1.0-12A opens for the SHA-256 placeholder rotation across the ten Phase 12 SANA catalog entries.
+**12.9 Operator-action handoff.** [docs/versions/v1/v1.1.0/operator-actions.md](archive/v1/v1.1/operator-actions.md) lands as the v1.1.0 operator-actions ledger. OA-09 (carried forward from v1.0.0) is extended with the seven SANA timing targets from the Phase 12 plan's Stability Gate: SANA-1.6B 1024x1024 <= 1.5 s; Sana-Sprint 1024x1024 <= 0.5 s; SANA 2K (2048x2048) <= 8 s on `diffusion-mid`; SANA 4K (4096x4096) <= 30 s on `diffusion-high`; SANA INT4 ~2 s on RTX 3060 8 GB; SANA-ControlNet pose / depth / canny preview cards render; SANA-Video 2B 4 s @ 720p <= 60 s. OA-V1.1.0-12A opens for the SHA-256 placeholder rotation across the ten Phase 12 SANA catalog entries.
 
 ### Quality gate
 
@@ -6006,13 +6008,13 @@ Adopt the NVIDIA SANA family as the new default image stack across Image Studio 
 - 12.4.P2.GG -- nunchaku wheel + license verification on the diffusion-low 8 GB rig defers to Phase 14's CI installer-build job.
 - 12.7.P2.HH -- The `<ImageStudioPage diffusionTier={...}>` page-level wire-up to a future `useDiffusionTier()` hook is the remaining plumbing; the form-level gating works correctly today with the conservative `diffusion-low` default.
 
-See [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) for the canonical list; the Phase 12 closures table records every Adopts-SANA-Sn entry plus the operator-action handoff.
+See [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) for the canonical list; the Phase 12 closures table records every Adopts-SANA-Sn entry plus the operator-action handoff.
 
 ### Outcome
 
-- New files: [runtimes/diffusion/pipelines/sana.py](../runtimes/diffusion/pipelines/sana.py), [runtimes/diffusion/pipelines/sana_sprint.py](../runtimes/diffusion/pipelines/sana_sprint.py), [runtimes/diffusion/pipelines/sana_int4.py](../runtimes/diffusion/pipelines/sana_int4.py), [runtimes/diffusion/pipelines/sana_video.py](../runtimes/diffusion/pipelines/sana_video.py), [runtimes/diffusion/requirements.txt](../runtimes/diffusion/requirements.txt), [tests/python/diffusion/test_pipelines_sana.py](../tests/python/diffusion/test_pipelines_sana.py), [tests/unit/core/registry/catalog-digests.test.ts](../tests/unit/core/registry/catalog-digests.test.ts), [docs/versions/v1/v1.1.0/operator-actions.md](v1/v1.1/operator-actions.md).
+- New files: [runtimes/diffusion/pipelines/sana.py](../runtimes/diffusion/pipelines/sana.py), [runtimes/diffusion/pipelines/sana_sprint.py](../runtimes/diffusion/pipelines/sana_sprint.py), [runtimes/diffusion/pipelines/sana_int4.py](../runtimes/diffusion/pipelines/sana_int4.py), [runtimes/diffusion/pipelines/sana_video.py](../runtimes/diffusion/pipelines/sana_video.py), [runtimes/diffusion/requirements.txt](../runtimes/diffusion/requirements.txt), [tests/python/diffusion/test_pipelines_sana.py](../tests/python/diffusion/test_pipelines_sana.py), [tests/unit/core/registry/catalog-digests.test.ts](../tests/unit/core/registry/catalog-digests.test.ts), [docs/versions/v1/v1.1.0/operator-actions.md](archive/v1/v1.1/operator-actions.md).
 - Updated files: [core/registry/catalog.json](../core/registry/catalog.json), [core/registry/catalog.ts](../core/registry/catalog.ts), [core/registry/ModelStorage.ts](../core/registry/ModelStorage.ts), [core/registry/NexusModelRegistry.ts](../core/registry/NexusModelRegistry.ts), [desktop/src/pages/settings/modelsTypes.ts](../desktop/src/pages/settings/modelsTypes.ts), [desktop/src/pages/settings/ModelsSettings.tsx](../desktop/src/pages/settings/ModelsSettings.tsx), [desktop/src/modules/image/ImagePromptForm.tsx](../desktop/src/modules/image/ImagePromptForm.tsx), [desktop/src/modules/image/ImageStudioPage.tsx](../desktop/src/modules/image/ImageStudioPage.tsx), [desktop/tests/ImagePromptForm.test.tsx](../desktop/tests/ImagePromptForm.test.tsx), [runtimes/diffusion/pipelines/params.py](../runtimes/diffusion/pipelines/params.py), [runtimes/diffusion/registry.py](../runtimes/diffusion/registry.py), [scripts/installer/pyqt/src/nexus_installer/engine/diffusion_venv_provisioner.py](../scripts/installer/pyqt/src/nexus_installer/engine/diffusion_venv_provisioner.py), [scripts/installer/pyqt/src/nexus_installer/pages/recommended_models.py](../scripts/installer/pyqt/src/nexus_installer/pages/recommended_models.py), [scripts/installer/pyqt/tests/test_recommended_models.py](../scripts/installer/pyqt/tests/test_recommended_models.py), [tests/unit/core/registry/catalog.test.ts](../tests/unit/core/registry/catalog.test.ts).
-- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) (Phase 12 closures table added; three new deferrals -- 12.2.P1.FF, 12.4.P2.GG, 12.7.P2.HH; `## 3. Summary` + per-phase breakdown recomputed), [docs/versions/v1/v1.1.0/operator-actions.md](v1/v1.1/operator-actions.md) (new file).
+- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) (Phase 12 closures table added; three new deferrals -- 12.2.P1.FF, 12.4.P2.GG, 12.7.P2.HH; `## 3. Summary` + per-phase breakdown recomputed), [docs/versions/v1/v1.1.0/operator-actions.md](archive/v1/v1.1/operator-actions.md) (new file).
 
 ---
 
@@ -6020,7 +6022,7 @@ See [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) for the canon
 
 ### Goal
 
-Extend the Phase 10 thin adapter into a full agentic surface inside VS Code -- the spiritual successor to Gemma Code, but selectable across all installed local models (not just Gemma 4), with the same surfaces as the desktop Coding module: plan mode, auto mode, memory, skills, sub-agent handling, sessions, slash commands, MCP tools, settings. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-11-nexus-vscode-extension.md](v1/v1.1/plans/phase-11-nexus-vscode-extension.md). Phase 11 lands the seven sub-surfaces as pure projectors / reducers under [core/coding/](../core/coding/) with structural ports and full unit-test coverage, widens the daemon protocol with five new IPC method schemas (`models.list`, `coding.chat.autocomplete`, `mcp.list`, `mcp.invoke`, `settings.get`, `settings.set`), registers the three Phase 11 panel view providers in the proxy branch, and ships the structural `IpcClient` interface that the cross-process transport (deferred under known-gap 10.1.P1.Z) will satisfy. The webview shells render an "open the desktop app" placeholder today; the projectors / handlers / parity tests are all production-ready and the swap to live bundles is a one-file change per panel once the transport lands.
+Extend the Phase 10 thin adapter into a full agentic surface inside VS Code -- the spiritual successor to Gemma Code, but selectable across all installed local models (not just Gemma 4), with the same surfaces as the desktop Coding module: plan mode, auto mode, memory, skills, sub-agent handling, sessions, slash commands, MCP tools, settings. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-11-nexus-vscode-extension.md](archive/v1/v1.1/plans/phase-11-nexus-vscode-extension.md). Phase 11 lands the seven sub-surfaces as pure projectors / reducers under [core/coding/](../core/coding/) with structural ports and full unit-test coverage, widens the daemon protocol with five new IPC method schemas (`models.list`, `coding.chat.autocomplete`, `mcp.list`, `mcp.invoke`, `settings.get`, `settings.set`), registers the three Phase 11 panel view providers in the proxy branch, and ships the structural `IpcClient` interface that the cross-process transport (deferred under known-gap 10.1.P1.Z) will satisfy. The webview shells render an "open the desktop app" placeholder today; the projectors / handlers / parity tests are all production-ready and the swap to live bundles is a one-file change per panel once the transport lands.
 
 ### What changed
 
@@ -6058,7 +6060,7 @@ Extend the Phase 10 thin adapter into a full agentic surface inside VS Code -- t
 
 - New files: [core/coding/ModelDropdown.ts](../core/coding/ModelDropdown.ts), [core/coding/PlanArtifact.ts](../core/coding/PlanArtifact.ts), [core/coding/AutoModeStream.ts](../core/coding/AutoModeStream.ts), [core/coding/MemorySnapshotView.ts](../core/coding/MemorySnapshotView.ts), [core/coding/SlashAutocomplete.ts](../core/coding/SlashAutocomplete.ts), [core/coding/SessionList.ts](../core/coding/SessionList.ts), [core/coding/McpBridge.ts](../core/coding/McpBridge.ts), [core/coding/SettingsBridge.ts](../core/coding/SettingsBridge.ts), [src/desktop/ipcClient.ts](../src/desktop/ipcClient.ts), plus 9 new test files under `tests/unit/core/coding/`, `tests/unit/desktop/`, and `tests/integration/`.
 - Updated files: [src/activation/proxy.ts](../src/activation/proxy.ts) (IPC client install + Phase 11 view-provider registration + status / logging surface widening), [desktop/sidecar/src/protocol.ts](../desktop/sidecar/src/protocol.ts) (five new method schemas + `models.list` flipped to implemented), [tests/unit/activation/proxy.test.ts](../tests/unit/activation/proxy.test.ts) (Phase 11 surface assertions + updated disposable count).
-- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) (Phase 11 closures table added; three new P2 deferrals -- 11.1.P2.CC / 11.8.P2.DD / 11.9.P2.EE; `## 3. Summary` + per-phase breakdown recomputed).
+- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) (Phase 11 closures table added; three new P2 deferrals -- 11.1.P2.CC / 11.8.P2.DD / 11.9.P2.EE; `## 3. Summary` + per-phase breakdown recomputed).
 
 ### Known gaps recap
 
@@ -6070,7 +6072,7 @@ After Phase 11 the v1.1.0 known-gaps file has 28 open items + 43 resolved (was 2
 
 ### Goal
 
-Reduce `src/extension.ts` from 478 lines to a thin activator (~200 lines target) that decides between proxy mode (when the desktop daemon is reachable) and extension-only mode (the legacy v0.X.0 / v1.0.0 in-process engine, kept for compatibility through v1.2.0). Tighten the legacy `gemma-code.<cmd>` keybinding compat shim so the deprecation log fires exactly once per session per legacy ID. Document the Marketplace operator-action steps so the renamed `nexus-coding` listing can be published and the legacy `gemma-code` listing carries a transition note. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-10-vscode-thin-adapter-and-republish.md](v1/v1.1/plans/phase-10-vscode-thin-adapter-and-republish.md). Closes v1.0.0 carryforward items 3.P1.O + 11.P1.LLL and finalizes the publish-surface portion of 2.P1.J / 2.P2.K (whose code-level rename landed in Phase 1.6 commit `de219a5`).
+Reduce `src/extension.ts` from 478 lines to a thin activator (~200 lines target) that decides between proxy mode (when the desktop daemon is reachable) and extension-only mode (the legacy v0.X.0 / v1.0.0 in-process engine, kept for compatibility through v1.2.0). Tighten the legacy `gemma-code.<cmd>` keybinding compat shim so the deprecation log fires exactly once per session per legacy ID. Document the Marketplace operator-action steps so the renamed `nexus-coding` listing can be published and the legacy `gemma-code` listing carries a transition note. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-10-vscode-thin-adapter-and-republish.md](archive/v1/v1.1/plans/phase-10-vscode-thin-adapter-and-republish.md). Closes v1.0.0 carryforward items 3.P1.O + 11.P1.LLL and finalizes the publish-surface portion of 2.P1.J / 2.P2.K (whose code-level rename landed in Phase 1.6 commit `de219a5`).
 
 ### What changed
 
@@ -6078,7 +6080,7 @@ Reduce `src/extension.ts` from 478 lines to a thin activator (~200 lines target)
 
 **10.2 Keybinding compat shim with once-per-session deprecation log.** New [src/activation/compatShim.ts](../src/activation/compatShim.ts) hosts the `COMPAT_COMMAND_MAP` (six legacy `gemma-code.<cmd>` IDs paired with their `nexus.coding.<cmd>` replacements) and the `installCompatShim(context, channel)` function. The shim is registered programmatically (not via `contributes.commands` in the manifest) so the legacy IDs do not surface in the Command Palette; previously-bound user keybindings continue to fire. The new tighter contract: each legacy ID emits `[deprecation] <legacy-id> -> <new-id>` to the "Nexus Coding" output channel exactly once per session (tracked per-id via a `Set<string>` in the closure scope) regardless of how many times the user triggers the keybinding; subsequent invocations forward silently. Previously the per-invocation deprecation line shipped under Phase 2's rebrand commit `de219a5`; Phase 10 narrows the contract to once-per-session per the plan acceptance criterion ("a manual test with a `keybindings.json` entry bound to `gemma-code.openChat` fires the new handler and shows the deprecation log once"). The shim is installed by `extension.ts` after the dispatch into the proxy or extension-only branch so both branches share the same legacy-keybinding behaviour.
 
-**10.3 Marketplace listing transition documentation.** [docs/versions/v1/v1.1.0/marketplace-transition.md](v1/v1.1/marketplace-transition.md) hosts the two operator-action checklist items (OA-V1.1.0-10A: publish the renamed `nexus-coding` VSIX via `vsce publish --packagePath <file>`; OA-V1.1.0-10B: edit the legacy `gemma-code` listing description on the publisher dashboard to prepend the transition banner pointing users to the new listing). The document captures the verbatim banner text, the exact build commands (`npm run package` -> `nexus-coding-<version>.vsix` via `scripts/build-vsix.ps1`), the smoke-test steps against a clean VS Code, and the long-term policy that the legacy listing is not unpublished (so existing keybindings continue to resolve via the in-extension compat shim). The code-level rename portion (manifest IDs, npm `name` + `publisher`, command IDs, view-container ID, settings keys) already landed in Phase 1.6 (commit `de219a5`); the operator-action portion is necessarily deferred to Phase 15 RTM because publishing requires the publisher PAT.
+**10.3 Marketplace listing transition documentation.** [docs/versions/v1/v1.1.0/marketplace-transition.md](archive/v1/v1.1/marketplace-transition.md) hosts the two operator-action checklist items (OA-V1.1.0-10A: publish the renamed `nexus-coding` VSIX via `vsce publish --packagePath <file>`; OA-V1.1.0-10B: edit the legacy `gemma-code` listing description on the publisher dashboard to prepend the transition banner pointing users to the new listing). The document captures the verbatim banner text, the exact build commands (`npm run package` -> `nexus-coding-<version>.vsix` via `scripts/build-vsix.ps1`), the smoke-test steps against a clean VS Code, and the long-term policy that the legacy listing is not unpublished (so existing keybindings continue to resolve via the in-extension compat shim). The code-level rename portion (manifest IDs, npm `name` + `publisher`, command IDs, view-container ID, settings keys) already landed in Phase 1.6 (commit `de219a5`); the operator-action portion is necessarily deferred to Phase 15 RTM because publishing requires the publisher PAT.
 
 **Tests.** Two new test files: [tests/unit/activation/compatShim.test.ts](../tests/unit/activation/compatShim.test.ts) (6 tests covering ID registration, the legacy-id-to-new-id mapping shape, the once-per-session log contract, per-id independence so each legacy ID logs on its own first invocation, disposable accounting against `context.subscriptions`, and positional arg forwarding to `executeCommand`) and [tests/unit/activation/proxy.test.ts](../tests/unit/activation/proxy.test.ts) (5 tests covering the six `nexus.coding.<cmd>` ID registrations, the proxy mode + daemon path log lines, the status bar item that points to `nexus.coding.focusSidebar`, the disposable count, and the structural guarantee that no webview view providers are registered in proxy mode). The existing [tests/unit/extension.test.ts](../tests/unit/extension.test.ts) still passes unchanged: in the test environment `discoverDesktopDaemon()` falls through to extension-only mode (no daemon socket on the developer host) and the legacy assertions about command registration + webview view providers continue to hold.
 
@@ -6091,13 +6093,13 @@ Reduce `src/extension.ts` from 478 lines to a thin activator (~200 lines target)
 
 ### Outcome
 
-- New files: [src/activation/compatShim.ts](../src/activation/compatShim.ts), [src/activation/proxy.ts](../src/activation/proxy.ts), [src/activation/extensionOnly.ts](../src/activation/extensionOnly.ts), [tests/unit/activation/compatShim.test.ts](../tests/unit/activation/compatShim.test.ts), [tests/unit/activation/proxy.test.ts](../tests/unit/activation/proxy.test.ts), [docs/versions/v1/v1.1.0/marketplace-transition.md](v1/v1.1/marketplace-transition.md), [docs/versions/v1/v1.1.0/development/history/2026-05_phase-10-vscode-thin-adapter-and-republish.md](v1/v1.1/development/history/2026-05_phase-10-vscode-thin-adapter-and-republish.md).
+- New files: [src/activation/compatShim.ts](../src/activation/compatShim.ts), [src/activation/proxy.ts](../src/activation/proxy.ts), [src/activation/extensionOnly.ts](../src/activation/extensionOnly.ts), [tests/unit/activation/compatShim.test.ts](../tests/unit/activation/compatShim.test.ts), [tests/unit/activation/proxy.test.ts](../tests/unit/activation/proxy.test.ts), [docs/versions/v1/v1.1.0/marketplace-transition.md](archive/v1/v1.1/marketplace-transition.md), [docs/versions/v1/v1.1.0/development/history/2026-05_phase-10-vscode-thin-adapter-and-republish.md](archive/v1/v1.1/development/history/2026-05_phase-10-vscode-thin-adapter-and-republish.md).
 - Rewritten files: [src/extension.ts](../src/extension.ts) (478 -> 64 lines).
-- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) (Phase 10 closures recorded, three new P-level deferrals added, `## 3. Summary` + per-phase breakdown + carryforward map refreshed).
+- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) (Phase 10 closures recorded, three new P-level deferrals added, `## 3. Summary` + per-phase breakdown + carryforward map refreshed).
 
 ### Known gaps recap
 
-After Phase 10 the v1.1.0 known-gaps file has 25 open items + 39 resolved (was 22 + 37 after Phase 9). Phase 10 closes v1.0.0 carryforward items 3.P1.O (thin-adapter rewrite) + 11.P1.LLL (bundled with 3.P1.O) and finalizes the publish-surface portion of 2.P1.J / 2.P2.K. Three new deferrals open: 10.1.P1.Z (proxy-branch daemon IPC client awaits the upstream Phase 2 sidecar widening), 10.1.P2.AA (thin-webview-shell rewrites of `NexusCodingPanel` / `MemoryPanel` / `TraceDashboardPanel` follow once 10.1.P1.Z lands), 10.3.P2.BB (Marketplace publish + legacy listing transition note are operator actions surfacing in Phase 15 RTM per [marketplace-transition.md](v1/v1.1/marketplace-transition.md)).
+After Phase 10 the v1.1.0 known-gaps file has 25 open items + 39 resolved (was 22 + 37 after Phase 9). Phase 10 closes v1.0.0 carryforward items 3.P1.O (thin-adapter rewrite) + 11.P1.LLL (bundled with 3.P1.O) and finalizes the publish-surface portion of 2.P1.J / 2.P2.K. Three new deferrals open: 10.1.P1.Z (proxy-branch daemon IPC client awaits the upstream Phase 2 sidecar widening), 10.1.P2.AA (thin-webview-shell rewrites of `NexusCodingPanel` / `MemoryPanel` / `TraceDashboardPanel` follow once 10.1.P1.Z lands), 10.3.P2.BB (Marketplace publish + legacy listing transition note are operator actions surfacing in Phase 15 RTM per [marketplace-transition.md](archive/v1/v1.1/marketplace-transition.md)).
 
 ---
 
@@ -6105,7 +6107,7 @@ After Phase 10 the v1.1.0 known-gaps file has 25 open items + 39 resolved (was 2
 
 ### Goal
 
-Ship the two opt-in memory consolidation surfaces that adopt agentmemory A4 + A9, both gated entirely on Settings toggles that default off so no LLM call is ever made unless the user opts in. Surface 1: a `ContradictionResolver` that finds semantic-tier rows whose dense embeddings agree but whose textual content disagrees, and adjudicates each pair via a small local Ollama model. Surface 2: a `FileCompressor` that summarizes a long file into a structured `{summary, key_facts, code_patterns}` semantic observation via the same local Ollama, exposed as both a `nexus memory compress --file <path>` CLI subcommand and a `/memory-compress <path>` slash command. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-09-memory-consolidation-optin.md](v1/v1.1/plans/phase-09-memory-consolidation-optin.md).
+Ship the two opt-in memory consolidation surfaces that adopt agentmemory A4 + A9, both gated entirely on Settings toggles that default off so no LLM call is ever made unless the user opts in. Surface 1: a `ContradictionResolver` that finds semantic-tier rows whose dense embeddings agree but whose textual content disagrees, and adjudicates each pair via a small local Ollama model. Surface 2: a `FileCompressor` that summarizes a long file into a structured `{summary, key_facts, code_patterns}` semantic observation via the same local Ollama, exposed as both a `nexus memory compress --file <path>` CLI subcommand and a `/memory-compress <path>` slash command. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-09-memory-consolidation-optin.md](archive/v1/v1.1/plans/phase-09-memory-consolidation-optin.md).
 
 ### What changed
 
@@ -6131,10 +6133,10 @@ Ship the two opt-in memory consolidation surfaces that adopt agentmemory A4 + A9
 
 ### Outcome
 
-- New files: [core/memory/ContradictionResolver.ts](../core/memory/ContradictionResolver.ts), [core/memory/FileCompressor.ts](../core/memory/FileCompressor.ts), [tests/unit/core/memory/ContradictionResolver.test.ts](../tests/unit/core/memory/ContradictionResolver.test.ts), [tests/unit/core/memory/FileCompressor.test.ts](../tests/unit/core/memory/FileCompressor.test.ts), [tests/integration/memory-consolidation-optin.test.ts](../tests/integration/memory-consolidation-optin.test.ts), [docs/versions/v1/v1.1.0/development/history/2026-05_phase-09-memory-consolidation-optin.md](v1/v1.1/development/history/2026-05_phase-09-memory-consolidation-optin.md).
+- New files: [core/memory/ContradictionResolver.ts](../core/memory/ContradictionResolver.ts), [core/memory/FileCompressor.ts](../core/memory/FileCompressor.ts), [tests/unit/core/memory/ContradictionResolver.test.ts](../tests/unit/core/memory/ContradictionResolver.test.ts), [tests/unit/core/memory/FileCompressor.test.ts](../tests/unit/core/memory/FileCompressor.test.ts), [tests/integration/memory-consolidation-optin.test.ts](../tests/integration/memory-consolidation-optin.test.ts), [docs/versions/v1/v1.1.0/development/history/2026-05_phase-09-memory-consolidation-optin.md](archive/v1/v1.1/development/history/2026-05_phase-09-memory-consolidation-optin.md).
 - Updated source files: [core/memory/MemorySlashCommands.ts](../core/memory/MemorySlashCommands.ts), [bin/nexus.mjs](../bin/nexus.mjs), [desktop/src/modules/coding/slashCommands.ts](../desktop/src/modules/coding/slashCommands.ts), [package.json](../package.json).
 - Updated tests: [tests/unit/core/memory/MemorySlashCommands.test.ts](../tests/unit/core/memory/MemorySlashCommands.test.ts).
-- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) (three Phase 9 closures recorded, three new P2 deferrals added, `## 3. Summary` and per-phase breakdown refreshed).
+- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) (three Phase 9 closures recorded, three new P2 deferrals added, `## 3. Summary` and per-phase breakdown refreshed).
 
 ### Known gaps recap
 
@@ -6146,7 +6148,7 @@ After Phase 9 the v1.1.0 known-gaps file has 22 open items + 37 resolved (was 19
 
 ### Goal
 
-Close the remaining v1.0.0 DevAI-Hub items in one phase: hot-reload the skill catalog when `nexus skills sync --apply` rotates the ACTIVE pointer; register a weekly auto-sync worker on the `IdleTimeScheduler`; ship real `nexus skills install/remove` subcommands with an allowlist + prompt-injection scanner gating the writes; have the slash-command autocomplete consult `nexus.skills.preferUpstream` when two skills share a name; have the AgentLoop attach skill provenance to every tool span (and emit `lifecycle.skill.entry`) when a slash-command-triggered skill body runs. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-08-devai-hub-closures.md](v1/v1.1/plans/phase-08-devai-hub-closures.md). Closes five v1.0.0 carryforward items (10.P1.GGG, 10.P1.HHH, 10.P2.III, 10.P2.JJJ, 10.P2.KKK).
+Close the remaining v1.0.0 DevAI-Hub items in one phase: hot-reload the skill catalog when `nexus skills sync --apply` rotates the ACTIVE pointer; register a weekly auto-sync worker on the `IdleTimeScheduler`; ship real `nexus skills install/remove` subcommands with an allowlist + prompt-injection scanner gating the writes; have the slash-command autocomplete consult `nexus.skills.preferUpstream` when two skills share a name; have the AgentLoop attach skill provenance to every tool span (and emit `lifecycle.skill.entry`) when a slash-command-triggered skill body runs. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-08-devai-hub-closures.md](archive/v1/v1.1/plans/phase-08-devai-hub-closures.md). Closes five v1.0.0 carryforward items (10.P1.GGG, 10.P1.HHH, 10.P2.III, 10.P2.JJJ, 10.P2.KKK).
 
 ### What changed
 
@@ -6174,10 +6176,10 @@ Close the remaining v1.0.0 DevAI-Hub items in one phase: hot-reload the skill ca
 
 ### Outcome
 
-- New files: [core/skills/SkillsReloader.ts](../core/skills/SkillsReloader.ts), [core/skills/DevAIHubAutoSync.ts](../core/skills/DevAIHubAutoSync.ts), [core/skills/SkillInstaller.ts](../core/skills/SkillInstaller.ts), [core/skills/installAllowlist.ts](../core/skills/installAllowlist.ts), [tests/unit/core/skills/SkillsReloader.test.ts](../tests/unit/core/skills/SkillsReloader.test.ts), [tests/unit/core/skills/DevAIHubAutoSync.test.ts](../tests/unit/core/skills/DevAIHubAutoSync.test.ts), [tests/unit/core/skills/SkillInstaller.test.ts](../tests/unit/core/skills/SkillInstaller.test.ts), [tests/unit/core/skills/installAllowlist.test.ts](../tests/unit/core/skills/installAllowlist.test.ts), [tests/unit/tools/AgentLoop.setCurrentSkill.test.ts](../tests/unit/tools/AgentLoop.setCurrentSkill.test.ts), [docs/versions/v1/v1.1.0/development/history/2026-05_phase-08-devai-hub-closures.md](v1/v1.1/development/history/2026-05_phase-08-devai-hub-closures.md).
+- New files: [core/skills/SkillsReloader.ts](../core/skills/SkillsReloader.ts), [core/skills/DevAIHubAutoSync.ts](../core/skills/DevAIHubAutoSync.ts), [core/skills/SkillInstaller.ts](../core/skills/SkillInstaller.ts), [core/skills/installAllowlist.ts](../core/skills/installAllowlist.ts), [tests/unit/core/skills/SkillsReloader.test.ts](../tests/unit/core/skills/SkillsReloader.test.ts), [tests/unit/core/skills/DevAIHubAutoSync.test.ts](../tests/unit/core/skills/DevAIHubAutoSync.test.ts), [tests/unit/core/skills/SkillInstaller.test.ts](../tests/unit/core/skills/SkillInstaller.test.ts), [tests/unit/core/skills/installAllowlist.test.ts](../tests/unit/core/skills/installAllowlist.test.ts), [tests/unit/tools/AgentLoop.setCurrentSkill.test.ts](../tests/unit/tools/AgentLoop.setCurrentSkill.test.ts), [docs/versions/v1/v1.1.0/development/history/2026-05_phase-08-devai-hub-closures.md](archive/v1/v1.1/development/history/2026-05_phase-08-devai-hub-closures.md).
 - Updated source files: [desktop/sidecar/src/runtime/codingBootstrap.ts](../desktop/sidecar/src/runtime/codingBootstrap.ts), [bin/nexus.mjs](../bin/nexus.mjs), [src/tools/AgentLoop.ts](../src/tools/AgentLoop.ts), [src/panels/ChatController.ts](../src/panels/ChatController.ts), [desktop/src/modules/coding/slashCommands.ts](../desktop/src/modules/coding/slashCommands.ts), [package.json](../package.json).
 - Updated tests: [tests/unit/cli/nexus-cli.test.ts](../tests/unit/cli/nexus-cli.test.ts), [tests/unit/panels/ChatController.test.ts](../tests/unit/panels/ChatController.test.ts), [desktop/tests/slashCommands.test.ts](../desktop/tests/slashCommands.test.ts), [desktop/tests/codingBootstrap.test.ts](../desktop/tests/codingBootstrap.test.ts).
-- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) (Phase 8 closures recorded, three new P2 deferrals added, `## 3. Summary` and carryforward map refreshed), this DEVLOG.
+- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) (Phase 8 closures recorded, three new P2 deferrals added, `## 3. Summary` and carryforward map refreshed), this DEVLOG.
 
 ### Known gaps recap
 
@@ -6189,7 +6191,7 @@ After Phase 8 the v1.1.0 known-gaps file has 19 open items + 34 resolved (was 16
 
 ### Goal
 
-Surface a scrubbable replay of any recorded coding session inside the TraceDashboard, plus a side-by-side "compare two sessions" mode that diffs event streams at the linked playhead. Adopts agentmemory A6 ([docs/versions/v1/v1.1.0/comparison-agentmemory.md](v1/v1.1/comparison-agentmemory.md) Section 11.2). Plan reference: [docs/versions/v1/v1.1.0/plans/phase-07-session-replay-timeline.md](v1/v1.1/plans/phase-07-session-replay-timeline.md).
+Surface a scrubbable replay of any recorded coding session inside the TraceDashboard, plus a side-by-side "compare two sessions" mode that diffs event streams at the linked playhead. Adopts agentmemory A6 ([docs/versions/v1/v1.1.0/comparison-agentmemory.md](archive/v1/v1.1/comparison-agentmemory.md) Section 11.2). Plan reference: [docs/versions/v1/v1.1.0/plans/phase-07-session-replay-timeline.md](archive/v1/v1.1/plans/phase-07-session-replay-timeline.md).
 
 ### What changed
 
@@ -6207,9 +6209,9 @@ The Phase 6 push left `package-lock.json` out of sync with `package.json` after 
 
 ### Outcome
 
-- New files: [desktop/src/modules/coding/panels/TimelineScrubber.tsx](../desktop/src/modules/coding/panels/TimelineScrubber.tsx), [desktop/src/modules/coding/panels/SessionCompareView.tsx](../desktop/src/modules/coding/panels/SessionCompareView.tsx), [desktop/tests/TimelineScrubber.test.tsx](../desktop/tests/TimelineScrubber.test.tsx), [desktop/tests/SessionCompareView.test.tsx](../desktop/tests/SessionCompareView.test.tsx), [docs/versions/v1/v1.1.0/development/history/2026-05_phase-07-session-replay-timeline.md](v1/v1.1/development/history/2026-05_phase-07-session-replay-timeline.md).
+- New files: [desktop/src/modules/coding/panels/TimelineScrubber.tsx](../desktop/src/modules/coding/panels/TimelineScrubber.tsx), [desktop/src/modules/coding/panels/SessionCompareView.tsx](../desktop/src/modules/coding/panels/SessionCompareView.tsx), [desktop/tests/TimelineScrubber.test.tsx](../desktop/tests/TimelineScrubber.test.tsx), [desktop/tests/SessionCompareView.test.tsx](../desktop/tests/SessionCompareView.test.tsx), [docs/versions/v1/v1.1.0/development/history/2026-05_phase-07-session-replay-timeline.md](archive/v1/v1.1/development/history/2026-05_phase-07-session-replay-timeline.md).
 - Updated source files: [desktop/src/modules/coding/panels/TraceDashboardPanel.tsx](../desktop/src/modules/coding/panels/TraceDashboardPanel.tsx) (left-rail session list, compare picker, compare-mode switch), [desktop/src/modules/coding/CodingPage.tsx](../desktop/src/modules/coding/CodingPage.tsx) (session-replay + compare state and IPC fan-out), [desktop/tests/panels.test.tsx](../desktop/tests/panels.test.tsx) (3 new TraceDashboard cases), [package-lock.json](../package-lock.json) (lockfile sync for `@xenova/transformers` and its 43 transitive deps), [docs/index.md](index.md) (catalog regen).
-- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) (Phase 7 closure recorded; `## 3. Summary` recomputed), this DEVLOG.
+- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) (Phase 7 closure recorded; `## 3. Summary` recomputed), this DEVLOG.
 - Test status: 13 new tests (9 `TimelineScrubber` + 4 `SessionCompareView`) plus 3 new `TraceDashboardPanel` cases; full desktop suite 384/384 green. Build clean; lint clean.
 
 ### Known gaps recap
@@ -6222,7 +6224,7 @@ After Phase 7 the v1.1.0 known-gaps file has 16 open items + 29 resolved (was 16
 
 ### Goal
 
-Surface user-facing memory commands and run the decay sweep on idle. The plan ([docs/versions/v1/v1.1.0/plans/phase-06-memory-cli-decay-and-slash-commands.md](v1/v1.1/plans/phase-06-memory-cli-decay-and-slash-commands.md)) adopts four agentmemory items in one phase: A11 (`nexus memory audit` CLI), A10 (`nexus memory export` CLI), A12 (`/forget` slash command), and A3 (Ebbinghaus decay sweep). The two new chat-side surfaces `/recall` and `/remember` round out the user-driven retrieval / write surface that the Phase 5 hybrid retriever made possible.
+Surface user-facing memory commands and run the decay sweep on idle. The plan ([docs/versions/v1/v1.1.0/plans/phase-06-memory-cli-decay-and-slash-commands.md](archive/v1/v1.1/plans/phase-06-memory-cli-decay-and-slash-commands.md)) adopts four agentmemory items in one phase: A11 (`nexus memory audit` CLI), A10 (`nexus memory export` CLI), A12 (`/forget` slash command), and A3 (Ebbinghaus decay sweep). The two new chat-side surfaces `/recall` and `/remember` round out the user-driven retrieval / write surface that the Phase 5 hybrid retriever made possible.
 
 ### What changed
 
@@ -6242,9 +6244,9 @@ Surface user-facing memory commands and run the decay sweep on idle. The plan ([
 
 ### Outcome
 
-- New files: [core/memory/MemoryAuditLog.ts](../core/memory/MemoryAuditLog.ts), [core/memory/MemoryAudit.ts](../core/memory/MemoryAudit.ts), [core/memory/MemoryExport.ts](../core/memory/MemoryExport.ts), [core/memory/MemorySlashCommands.ts](../core/memory/MemorySlashCommands.ts), [core/memory/DecaySweep.ts](../core/memory/DecaySweep.ts), [tests/unit/core/memory/MemoryAuditLog.test.ts](../tests/unit/core/memory/MemoryAuditLog.test.ts), [tests/unit/core/memory/MemoryAudit.test.ts](../tests/unit/core/memory/MemoryAudit.test.ts), [tests/unit/core/memory/MemoryExport.test.ts](../tests/unit/core/memory/MemoryExport.test.ts), [tests/unit/core/memory/DecaySweep.test.ts](../tests/unit/core/memory/DecaySweep.test.ts), [tests/unit/core/memory/MemorySlashCommands.test.ts](../tests/unit/core/memory/MemorySlashCommands.test.ts), [docs/versions/v1/v1.1.0/development/history/2026-05_phase-06-memory-cli-decay-and-slash-commands.md](v1/v1.1/development/history/2026-05_phase-06-memory-cli-decay-and-slash-commands.md).
+- New files: [core/memory/MemoryAuditLog.ts](../core/memory/MemoryAuditLog.ts), [core/memory/MemoryAudit.ts](../core/memory/MemoryAudit.ts), [core/memory/MemoryExport.ts](../core/memory/MemoryExport.ts), [core/memory/MemorySlashCommands.ts](../core/memory/MemorySlashCommands.ts), [core/memory/DecaySweep.ts](../core/memory/DecaySweep.ts), [tests/unit/core/memory/MemoryAuditLog.test.ts](../tests/unit/core/memory/MemoryAuditLog.test.ts), [tests/unit/core/memory/MemoryAudit.test.ts](../tests/unit/core/memory/MemoryAudit.test.ts), [tests/unit/core/memory/MemoryExport.test.ts](../tests/unit/core/memory/MemoryExport.test.ts), [tests/unit/core/memory/DecaySweep.test.ts](../tests/unit/core/memory/DecaySweep.test.ts), [tests/unit/core/memory/MemorySlashCommands.test.ts](../tests/unit/core/memory/MemorySlashCommands.test.ts), [docs/versions/v1/v1.1.0/development/history/2026-05_phase-06-memory-cli-decay-and-slash-commands.md](archive/v1/v1.1/development/history/2026-05_phase-06-memory-cli-decay-and-slash-commands.md).
 - Updated source files: [bin/nexus.mjs](../bin/nexus.mjs) (new `memory` subcommand with `audit` / `export` / `import` / `decay` dispatchers; HELP banner extended), [desktop/src/modules/coding/slashCommands.ts](../desktop/src/modules/coding/slashCommands.ts) (3 new catalog entries: `recall`, `remember`, `forget`), [desktop/src/modules/coding/panels/MemoryPanel.tsx](../desktop/src/modules/coding/panels/MemoryPanel.tsx) (optional `onForget` prop + per-row Forget button), [desktop/tests/slashCommands.test.ts](../desktop/tests/slashCommands.test.ts) (assertion updated to include `recall` / `remember` / `forget`), [desktop/tests/panels.test.tsx](../desktop/tests/panels.test.tsx) (2 new MemoryPanel cases for the Forget button), [tests/unit/cli/nexus-cli.test.ts](../tests/unit/cli/nexus-cli.test.ts) (3 new parseArgs cases for `memory audit/export/decay`).
-- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) (Phase 6 closures recorded as 7 line items; 4 new open items at 6.1.P2.P, 6.2.P2.Q, 6.5.P2.R, 6.6.P2.S; `## 3. Summary` recomputed to 16 open / 28 resolved / 44 total), this DEVLOG.
+- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) (Phase 6 closures recorded as 7 line items; 4 new open items at 6.1.P2.P, 6.2.P2.Q, 6.5.P2.R, 6.6.P2.S; `## 3. Summary` recomputed to 16 open / 28 resolved / 44 total), this DEVLOG.
 - Test status: New Phase 6 modules contribute 58 tests; all green. Build clean; lint clean.
 
 ### Known gaps recap
@@ -6257,7 +6259,7 @@ After Phase 6 the v1.1.0 known-gaps file has 16 open items + 28 resolved (was 12
 
 ### Goal
 
-Land the agentmemory A1 + A2 adoptions from [docs/versions/v1/v1.1.0/comparison-agentmemory.md](v1/v1.1/comparison-agentmemory.md) Section 11.2 P1: replace the in-memory hub's substring retrieval with a hybrid path that fuses BM25, dense cosine, and graph traversal rankings via Reciprocal Rank Fusion (RRF), and bundle the local embedder (`all-MiniLM-L6-v2`, 384-dim ONNX weights) that the dense path needs. The pipeline is corpus-agnostic: it operates on opaque `entryId` strings plus a caller-supplied resolver, so the same primitives plug into the four-layer in-memory `MemoryHub` today (Phase 5) and the SQLite-backed `MemoryStore` in Phase 6/9. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-05-hybrid-retrieval-and-local-embedder.md](v1/v1.1/plans/phase-05-hybrid-retrieval-and-local-embedder.md).
+Land the agentmemory A1 + A2 adoptions from [docs/versions/v1/v1.1.0/comparison-agentmemory.md](archive/v1/v1.1/comparison-agentmemory.md) Section 11.2 P1: replace the in-memory hub's substring retrieval with a hybrid path that fuses BM25, dense cosine, and graph traversal rankings via Reciprocal Rank Fusion (RRF), and bundle the local embedder (`all-MiniLM-L6-v2`, 384-dim ONNX weights) that the dense path needs. The pipeline is corpus-agnostic: it operates on opaque `entryId` strings plus a caller-supplied resolver, so the same primitives plug into the four-layer in-memory `MemoryHub` today (Phase 5) and the SQLite-backed `MemoryStore` in Phase 6/9. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-05-hybrid-retrieval-and-local-embedder.md](archive/v1/v1.1/plans/phase-05-hybrid-retrieval-and-local-embedder.md).
 
 ### What changed
 
@@ -6279,7 +6281,7 @@ Land the agentmemory A1 + A2 adoptions from [docs/versions/v1/v1.1.0/comparison-
 
 - New files: [core/memory/LocalEmbedder.ts](../core/memory/LocalEmbedder.ts), [core/memory/stopwords.ts](../core/memory/stopwords.ts), [core/memory/Bm25Index.ts](../core/memory/Bm25Index.ts), [core/memory/DenseIndex.ts](../core/memory/DenseIndex.ts), [core/memory/RrfFuser.ts](../core/memory/RrfFuser.ts), [core/memory/HybridRetriever.ts](../core/memory/HybridRetriever.ts), [core/memory/WarmRebuildWorker.ts](../core/memory/WarmRebuildWorker.ts), [tests/unit/core/memory/LocalEmbedder.test.ts](../tests/unit/core/memory/LocalEmbedder.test.ts), [tests/unit/core/memory/Bm25Index.test.ts](../tests/unit/core/memory/Bm25Index.test.ts), [tests/unit/core/memory/DenseIndex.test.ts](../tests/unit/core/memory/DenseIndex.test.ts), [tests/unit/core/memory/RrfFuser.test.ts](../tests/unit/core/memory/RrfFuser.test.ts), [tests/unit/core/memory/HybridRetriever.test.ts](../tests/unit/core/memory/HybridRetriever.test.ts), [tests/unit/core/memory/MemoryHub.hybrid.test.ts](../tests/unit/core/memory/MemoryHub.hybrid.test.ts), [tests/unit/core/memory/WarmRebuildWorker.test.ts](../tests/unit/core/memory/WarmRebuildWorker.test.ts), [tests/benchmarks/hybrid-retrieval.bench.ts](../tests/benchmarks/hybrid-retrieval.bench.ts).
 - Updated source files: [core/memory/MemoryHub.ts](../core/memory/MemoryHub.ts) (`HybridRetrieverLike` structural interface, optional `hybridRetriever` + `hybridMinCorpus` constructor options, `setHybridRetriever()` runtime setter, `size` getters on the in-memory semantic / episodic layers), [package.json](../package.json) (4 new `nexus.memory.*` settings keys + `@xenova/transformers ^2.17.2` under `optionalDependencies`).
-- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) (Phase 5 closures recorded as 7 line items; 3 new open items at 5.1.P1.M, 5.5.P1.N, 5.6.P2.O; `## 3. Summary` recomputed to 12 open / 21 resolved / 33 total), this DEVLOG.
+- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) (Phase 5 closures recorded as 7 line items; 3 new open items at 5.1.P1.M, 5.5.P1.N, 5.6.P2.O; `## 3. Summary` recomputed to 12 open / 21 resolved / 33 total), this DEVLOG.
 - Test status: 3132 root tests passed / 0 failed / 5 skipped (no desktop-side changes in this phase, so desktop suite untouched). Architecture: `npm run check-architecture` clean (the would-be `MemoryHub <-> HybridRetriever` cycle was broken by inlining the structural `HybridRetrieverLike` interface in `MemoryHub.ts`).
 - Build / typecheck: root `tsc` clean; root `eslint src` clean. Benchmark: `npx vitest bench --run tests/benchmarks/hybrid-retrieval.bench.ts` produces the latency distribution table.
 
@@ -6289,11 +6291,11 @@ After Phase 5 the v1.1.0 known-gaps file has 12 open items + 21 resolved (was 9 
 
 ### Why this scope
 
-Phase 5 is the second of three "memory upgrade lens" phases. A1 (hybrid retrieval) and A2 (local embedder) are the cluster's high-fanout adoptions per [docs/versions/v1/v1.1.0/comparison-agentmemory.md](v1/v1.1/comparison-agentmemory.md) Section 11.2: every subsequent agentmemory adoption (A3 decay, A11/A10 CLI surfaces, A6 replay, A4/A9 consolidation) reads from the hybrid path. Building the BM25 / Dense / RRF / Hybrid primitives as corpus-agnostic modules under `core/memory/` -- keyed by opaque `entryId` strings plus a caller-supplied `entryProvider` -- means the SQLite-backed wiring in Phase 6/9 reuses the same building blocks without rewriting them. The decision to keep the substring fast-path for corpora below `nexus.memory.hybridMinCorpus` (default 100) preserves correctness for unit tests and small dev sessions while letting real workloads cross over into the hybrid ranking automatically. The hash-fallback embedder is the necessary compromise that lets the rest of the pipeline ship with full test coverage without forcing every CI host to download the 80 MB ONNX payload; the real pipeline lights up at Phase 14 installer time.
+Phase 5 is the second of three "memory upgrade lens" phases. A1 (hybrid retrieval) and A2 (local embedder) are the cluster's high-fanout adoptions per [docs/versions/v1/v1.1.0/comparison-agentmemory.md](archive/v1/v1.1/comparison-agentmemory.md) Section 11.2: every subsequent agentmemory adoption (A3 decay, A11/A10 CLI surfaces, A6 replay, A4/A9 consolidation) reads from the hybrid path. Building the BM25 / Dense / RRF / Hybrid primitives as corpus-agnostic modules under `core/memory/` -- keyed by opaque `entryId` strings plus a caller-supplied `entryProvider` -- means the SQLite-backed wiring in Phase 6/9 reuses the same building blocks without rewriting them. The decision to keep the substring fast-path for corpora below `nexus.memory.hybridMinCorpus` (default 100) preserves correctness for unit tests and small dev sessions while letting real workloads cross over into the hybrid ranking automatically. The hash-fallback embedder is the necessary compromise that lets the rest of the pipeline ship with full test coverage without forcing every CI host to download the 80 MB ONNX payload; the real pipeline lights up at Phase 14 installer time.
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.1.0/plans/phase-05-hybrid-retrieval-and-local-embedder.md](v1/v1.1/plans/phase-05-hybrid-retrieval-and-local-embedder.md), [docs/versions/v1/v1.1.0/comparison-agentmemory.md](v1/v1.1/comparison-agentmemory.md) Section 11.2 P1, [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md), [core/memory/HybridRetriever.ts](../core/memory/HybridRetriever.ts), [core/memory/Bm25Index.ts](../core/memory/Bm25Index.ts), [core/memory/DenseIndex.ts](../core/memory/DenseIndex.ts), [core/memory/RrfFuser.ts](../core/memory/RrfFuser.ts), [core/memory/LocalEmbedder.ts](../core/memory/LocalEmbedder.ts), [core/memory/WarmRebuildWorker.ts](../core/memory/WarmRebuildWorker.ts).
+[docs/versions/v1/v1.1.0/plans/phase-05-hybrid-retrieval-and-local-embedder.md](archive/v1/v1.1/plans/phase-05-hybrid-retrieval-and-local-embedder.md), [docs/versions/v1/v1.1.0/comparison-agentmemory.md](archive/v1/v1.1/comparison-agentmemory.md) Section 11.2 P1, [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md), [core/memory/HybridRetriever.ts](../core/memory/HybridRetriever.ts), [core/memory/Bm25Index.ts](../core/memory/Bm25Index.ts), [core/memory/DenseIndex.ts](../core/memory/DenseIndex.ts), [core/memory/RrfFuser.ts](../core/memory/RrfFuser.ts), [core/memory/LocalEmbedder.ts](../core/memory/LocalEmbedder.ts), [core/memory/WarmRebuildWorker.ts](../core/memory/WarmRebuildWorker.ts).
 
 ---
 
@@ -6301,7 +6303,7 @@ Phase 5 is the second of three "memory upgrade lens" phases. A1 (hybrid retrieva
 
 ### Goal
 
-Land the agentmemory A8 + A5 + A7 adoptions from [docs/versions/v1/v1.1.0/comparison-agentmemory.md](v1/v1.1/comparison-agentmemory.md) Section 11.2 P0 plus the v1.0.0 4.P1.X scope_id closure: (a) every memory row carries a structured `LifecycleProvenance` blob tying it back to the lifecycle event that produced it, (b) a typed `HookBus` surfaces 12 lifecycle events that internal consumers (Memory panel, audit CLI, trace replay) get with compile-time payloads, and (c) every memory write is scrubbed through a consolidated `redactSecrets()` function before SQLite insert so AWS keys / GitHub PATs / Slack tokens / JWTs / PEM private-key blocks never reach the index. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-04-memory-provenance-and-hooks.md](v1/v1.1/plans/phase-04-memory-provenance-and-hooks.md).
+Land the agentmemory A8 + A5 + A7 adoptions from [docs/versions/v1/v1.1.0/comparison-agentmemory.md](archive/v1/v1.1/comparison-agentmemory.md) Section 11.2 P0 plus the v1.0.0 4.P1.X scope_id closure: (a) every memory row carries a structured `LifecycleProvenance` blob tying it back to the lifecycle event that produced it, (b) a typed `HookBus` surfaces 12 lifecycle events that internal consumers (Memory panel, audit CLI, trace replay) get with compile-time payloads, and (c) every memory write is scrubbed through a consolidated `redactSecrets()` function before SQLite insert so AWS keys / GitHub PATs / Slack tokens / JWTs / PEM private-key blocks never reach the index. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-04-memory-provenance-and-hooks.md](archive/v1/v1.1/plans/phase-04-memory-provenance-and-hooks.md).
 
 ### What changed
 
@@ -6321,7 +6323,7 @@ Land the agentmemory A8 + A5 + A7 adoptions from [docs/versions/v1/v1.1.0/compar
 
 - New files: [core/memory/types.ts](../core/memory/types.ts), [core/storage/migrations/v1.1.0_provenance.sql](../core/storage/migrations/v1.1.0_provenance.sql), [core/lifecycle/HookBus.ts](../core/lifecycle/HookBus.ts), [core/observability/redactSecrets.ts](../core/observability/redactSecrets.ts), [tests/unit/core/lifecycle/HookBus.test.ts](../tests/unit/core/lifecycle/HookBus.test.ts), [tests/unit/core/observability/redactSecrets.test.ts](../tests/unit/core/observability/redactSecrets.test.ts), [tests/unit/storage/MemoryStore.provenance.test.ts](../tests/unit/storage/MemoryStore.provenance.test.ts), [tests/unit/tools/AgentLoop.hookBus.test.ts](../tests/unit/tools/AgentLoop.hookBus.test.ts).
 - Updated source files: [src/storage/MemoryStore.ts](../src/storage/MemoryStore.ts) (+ provenance / scope_id columns, schema v3 migration, `save(...)` options, `_rowToEntry` projection, `MemoryRow` shape), [src/storage/EpisodicMemory.ts](../src/storage/EpisodicMemory.ts) + [src/storage/GraphMemory.ts](../src/storage/GraphMemory.ts) (same migration pattern), [src/storage/MemoryShared.types.ts](../src/storage/MemoryShared.types.ts) (`MemoryEntry.lifecycleProvenance` + `.scopeId`), [src/tools/AgentLoop.ts](../src/tools/AgentLoop.ts) (HookBus option + 5 emit sites + `redactSecrets` import), [core/memory/MemoryHub.ts](../core/memory/MemoryHub.ts) (provenance propagation through all four in-memory layers), [desktop/sidecar/src/protocol.ts](../desktop/sidecar/src/protocol.ts) (optional `MemorySnapshot.provenance` + `TraceEvent.hookKind`), [desktop/src/modules/coding/panels/MemoryPanel.tsx](../desktop/src/modules/coding/panels/MemoryPanel.tsx) ("Show provenance" toggle + chips), [desktop/src/modules/coding/panels/TraceDashboardPanel.tsx](../desktop/src/modules/coding/panels/TraceDashboardPanel.tsx) (`hookKind` filter), [desktop/tests/panels.test.tsx](../desktop/tests/panels.test.tsx) (+ 2 tests).
-- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) (Phase 4 closures recorded; 3 new open items at 4.3.P1.J / 4.1.P2.K / 4.5.P2.L; `## 3. Summary` recomputed to 9 open / 15 resolved / 24 total), this DEVLOG.
+- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) (Phase 4 closures recorded; 3 new open items at 4.3.P1.J / 4.1.P2.K / 4.5.P2.L; `## 3. Summary` recomputed to 9 open / 15 resolved / 24 total), this DEVLOG.
 - Test status: 3042 root tests passed / 0 failed / 5 skipped; 366 desktop tests passed / 0 failed. Architecture: `npm run check-architecture` clean.
 - Build / typecheck: root `tsc` clean, root `eslint src` clean, desktop tests pass against the new optional schema fields.
 
@@ -6331,11 +6333,11 @@ After Phase 4 the v1.1.0 known-gaps file has 9 open items + 15 resolved (was 6 +
 
 ### Why this scope
 
-Phase 4 is one of three "memory upgrade lens" phases in the agentmemory cluster (the others are Phase 5 hybrid retrieval + local embedder and Phase 6 decay + CLI). A8 (schema) is the foundation every other agentmemory adoption depends on -- the [docs/versions/v1/v1.1.0/comparison-agentmemory.md](v1/v1.1/comparison-agentmemory.md) cluster diagram has A8 fan out to A5 / A7 / A11 / A6 / A3 / A10 / A12. Landing A8 + A5 + A7 together gives Phase 5 / 6 / 7 a stable typed surface to consume; landing them as separate sub-phases would force two rounds of `MemoryStore.save(...)` signature churn. The deferred 4 emit sites (4.3.P1.J) were not in the critical path -- the 5 wired sites cover the highest-event-rate surfaces (every tool call brackets two events; every session bookends two) -- so the consumer-side surfaces (Memory panel chips, TraceDashboard filter) have enough live data to verify against without the missing four.
+Phase 4 is one of three "memory upgrade lens" phases in the agentmemory cluster (the others are Phase 5 hybrid retrieval + local embedder and Phase 6 decay + CLI). A8 (schema) is the foundation every other agentmemory adoption depends on -- the [docs/versions/v1/v1.1.0/comparison-agentmemory.md](archive/v1/v1.1/comparison-agentmemory.md) cluster diagram has A8 fan out to A5 / A7 / A11 / A6 / A3 / A10 / A12. Landing A8 + A5 + A7 together gives Phase 5 / 6 / 7 a stable typed surface to consume; landing them as separate sub-phases would force two rounds of `MemoryStore.save(...)` signature churn. The deferred 4 emit sites (4.3.P1.J) were not in the critical path -- the 5 wired sites cover the highest-event-rate surfaces (every tool call brackets two events; every session bookends two) -- so the consumer-side surfaces (Memory panel chips, TraceDashboard filter) have enough live data to verify against without the missing four.
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.1.0/plans/phase-04-memory-provenance-and-hooks.md](v1/v1.1/plans/phase-04-memory-provenance-and-hooks.md), [docs/versions/v1/v1.1.0/comparison-agentmemory.md](v1/v1.1/comparison-agentmemory.md) Section 11.2 P0, [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md), [core/lifecycle/HookBus.ts](../core/lifecycle/HookBus.ts), [core/observability/redactSecrets.ts](../core/observability/redactSecrets.ts), [core/memory/types.ts](../core/memory/types.ts), [core/storage/migrations/v1.1.0_provenance.sql](../core/storage/migrations/v1.1.0_provenance.sql).
+[docs/versions/v1/v1.1.0/plans/phase-04-memory-provenance-and-hooks.md](archive/v1/v1.1/plans/phase-04-memory-provenance-and-hooks.md), [docs/versions/v1/v1.1.0/comparison-agentmemory.md](archive/v1/v1.1/comparison-agentmemory.md) Section 11.2 P0, [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md), [core/lifecycle/HookBus.ts](../core/lifecycle/HookBus.ts), [core/observability/redactSecrets.ts](../core/observability/redactSecrets.ts), [core/memory/types.ts](../core/memory/types.ts), [core/storage/migrations/v1.1.0_provenance.sql](../core/storage/migrations/v1.1.0_provenance.sql).
 
 ---
 
@@ -6343,7 +6345,7 @@ Phase 4 is one of three "memory upgrade lens" phases in the agentmemory cluster 
 
 ### Goal
 
-Land the cycle's `src/` -> `modules/coding/` migration pipeline by (a) shipping the generic import-rewriting codemod that v1.1.0 Phase 1 sub-task 1.4 specified, and (b) executing the first end-to-end sub-tree migration as a forcing function on the codemod's correctness across every relative-path depth a future sub-tree move will encounter. The pick is `src/utils/` because it is the smallest true leaf in `src/` (6 files, zero intra-`src/` imports -- it only consumes node builtins + external npm packages), and it has ~63 importers spanning `src/` itself plus `tests/{unit,integration,benchmarks}/...`. After Phase 3, the remaining 12 sub-tree moves under 1.4.P1.B are mechanical: each future phase that touches the rename consumes `node scripts/dev/rewrite-imports.mjs --moves <manifest.json>`. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-03-coding-module.md](v1/v1.1/plans/phase-03-coding-module.md).
+Land the cycle's `src/` -> `modules/coding/` migration pipeline by (a) shipping the generic import-rewriting codemod that v1.1.0 Phase 1 sub-task 1.4 specified, and (b) executing the first end-to-end sub-tree migration as a forcing function on the codemod's correctness across every relative-path depth a future sub-tree move will encounter. The pick is `src/utils/` because it is the smallest true leaf in `src/` (6 files, zero intra-`src/` imports -- it only consumes node builtins + external npm packages), and it has ~63 importers spanning `src/` itself plus `tests/{unit,integration,benchmarks}/...`. After Phase 3, the remaining 12 sub-tree moves under 1.4.P1.B are mechanical: each future phase that touches the rename consumes `node scripts/dev/rewrite-imports.mjs --moves <manifest.json>`. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-03-coding-module.md](archive/v1/v1.1/plans/phase-03-coding-module.md).
 
 ### What changed
 
@@ -6359,8 +6361,8 @@ Land the cycle's `src/` -> `modules/coding/` migration pipeline by (a) shipping 
 - Files rewritten by codemod: 65 (48 sources in `src/<subtree>/` + 1 in `src/extension.ts` + 12 unit tests + 3 integration tests + 1 benchmark).
 - Manual edit: [configs/vitest.config.ts](../configs/vitest.config.ts) coverage `exclude` flipped to the new path.
 - New scripts: [scripts/dev/rewrite-imports.mjs](../scripts/dev/rewrite-imports.mjs).
-- New documents: [docs/versions/v1/v1.1.0/plans/phase-03-coding-module.md](v1/v1.1/plans/phase-03-coding-module.md).
-- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) -- new entry `Phase 3 closures (this commit)` recording 3.P1.A (codemod, new) + the first row of 1.4.P1.B's per-sub-tree status table (`src/utils/` closed); the 1.4.P1.B body was rewritten as a status table tracking all 13 sub-trees; the `## 3. Summary` totals shifted to 6 open / 10 resolved (one new resolved P1 from 3.P1.A) and 16 total. This DEVLOG.
+- New documents: [docs/versions/v1/v1.1.0/plans/phase-03-coding-module.md](archive/v1/v1.1/plans/phase-03-coding-module.md).
+- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) -- new entry `Phase 3 closures (this commit)` recording 3.P1.A (codemod, new) + the first row of 1.4.P1.B's per-sub-tree status table (`src/utils/` closed); the 1.4.P1.B body was rewritten as a status table tracking all 13 sub-trees; the `## 3. Summary` totals shifted to 6 open / 10 resolved (one new resolved P1 from 3.P1.A) and 16 total. This DEVLOG.
 - Test status: 3019 root tests passed / 0 failed / 5 skipped; 364 desktop tests passed / 0 failed. Coverage gate unchanged.
 - Build / typecheck: root `tsc` clean, desktop `tsc --noEmit` clean, root `eslint src` clean, root `depcruise` 0 errors / 5 orphan warnings (pre-existing baseline).
 
@@ -6374,7 +6376,7 @@ The original Phase 1 sub-task 1.4 enumerated all 13 sub-tree moves in a single b
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.1.0/plans/phase-03-coding-module.md](v1/v1.1/plans/phase-03-coding-module.md), [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md), [scripts/dev/rewrite-imports.mjs](../scripts/dev/rewrite-imports.mjs).
+[docs/versions/v1/v1.1.0/plans/phase-03-coding-module.md](archive/v1/v1.1/plans/phase-03-coding-module.md), [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md), [scripts/dev/rewrite-imports.mjs](../scripts/dev/rewrite-imports.mjs).
 
 ---
 
@@ -6382,7 +6384,7 @@ The original Phase 1 sub-task 1.4 enumerated all 13 sub-tree moves in a single b
 
 ### Goal
 
-Close the bounded "rebrand" and "core extraction" sub-tasks that Phase 1 (commit `ec3ff0e`) deferred: VS Code extension manifest ID rename (`gemma-code.*` -> `nexus.coding.*`), npm package + publisher rename (`gemma-code` -> `nexus-coding`), and sidecar duplicate model catalog unification (re-derive from `core/registry/ModelCatalog` instead of inlining a copy). The heavier deferred items (TypeScript project-references wiring, wholesale `src/` -> `modules/coding/` move, `NexusCodingRuntime` wiring, Tailwind v4) stay queued for a future Phase 1c follow-up because each requires its own `git mv` cluster with per-step CI runs. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-02-rebrand-and-core-extraction.md](v1/v1.1/plans/phase-02-rebrand-and-core-extraction.md).
+Close the bounded "rebrand" and "core extraction" sub-tasks that Phase 1 (commit `ec3ff0e`) deferred: VS Code extension manifest ID rename (`gemma-code.*` -> `nexus.coding.*`), npm package + publisher rename (`gemma-code` -> `nexus-coding`), and sidecar duplicate model catalog unification (re-derive from `core/registry/ModelCatalog` instead of inlining a copy). The heavier deferred items (TypeScript project-references wiring, wholesale `src/` -> `modules/coding/` move, `NexusCodingRuntime` wiring, Tailwind v4) stay queued for a future Phase 1c follow-up because each requires its own `git mv` cluster with per-step CI runs. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-02-rebrand-and-core-extraction.md](archive/v1/v1.1/plans/phase-02-rebrand-and-core-extraction.md).
 
 ### What changed
 
@@ -6396,8 +6398,8 @@ Close the bounded "rebrand" and "core extraction" sub-tasks that Phase 1 (commit
 
 - Source files renamed / edited: `package.json` (manifest IDs + name + publisher + displayName + description), `package-lock.json` (name fields), `src/extension.ts` (8 command/view literals + new `COMPAT_COMMAND_MAP` + compat-shim loop), 4 panel files (`SessionListPanel.ts`, `TraceDashboardPanel.ts`, `MemoryPanel.ts`, `NexusCodingPanel.ts` VIEW_ID constants), `desktop/sidecar/src/coding/models.ts` (rewritten as derived view), `desktop/src/modules/coding/models.ts` (rewritten as derived view), `desktop/tsconfig.json` (`include` array), `desktop/tests/coding-models.test.ts` (rewritten parity test), `scripts/installer/pyqt/src/nexus_installer/engine/extension_installer.py` (+`LEGACY_EXTENSION_ID` + dual-name `_find_vsix` glob), `scripts/installer/pyqt/src/nexus_installer/pages/complete.py`, `scripts/installer/pyqt/tests/test_extension_installer.py`, `scripts/installer/legacy/setup.nsi`.
 - Test files updated: `tests/unit/extension.test.ts` (+1 new test asserting the 6 legacy compat-shim IDs are registered programmatically), `tests/unit/panels/NexusCodingPanel.test.ts`, `tests/unit/panels/SessionListPanel.test.ts`, `tests/e2e/extension-load.test.ts`.
-- New files: [.npmignore](../.npmignore), [docs/versions/v1/v1.1.0/plans/phase-02-rebrand-and-core-extraction.md](v1/v1.1/plans/phase-02-rebrand-and-core-extraction.md).
-- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md) (3 open items moved to `## 2. Resolved`, `## 3. Summary` recomputed: P1 open is now 3 / resolved 3, totals 6 open / 9 resolved), this DEVLOG.
+- New files: [.npmignore](../.npmignore), [docs/versions/v1/v1.1.0/plans/phase-02-rebrand-and-core-extraction.md](archive/v1/v1.1/plans/phase-02-rebrand-and-core-extraction.md).
+- Updated documents: [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md) (3 open items moved to `## 2. Resolved`, `## 3. Summary` recomputed: P1 open is now 3 / resolved 3, totals 6 open / 9 resolved), this DEVLOG.
 - Test status: 3019 root tests passed / 0 failed / 5 skipped (one more than the Phase 1 baseline because of the new compat-shim test in `extension.test.ts`); 364 desktop tests passed / 0 failed. Architecture: `npm run check-architecture` -- 0 errors, 5 pre-existing orphan warnings unchanged.
 - Build / typecheck: root `tsc` clean, root `eslint src` clean, desktop `tsc --noEmit` clean, desktop `eslint src sidecar/src tests --max-warnings=0` clean, desktop `esbuild sidecar/src/main.ts --bundle ...` produces a 155.7 kB sidecar bundle, `npm pack --dry-run` reports `nexus-coding-0.32.1.tgz` with 99 files at 2.4 MB.
 
@@ -6422,11 +6424,11 @@ The original Phase 1 commit grouped seven deferrals under a single "Phase 1b" la
 
 ### Goal
 
-Open the v1.1.0 cycle by closing the bounded carryforward items from v1.0.0's Section 4.2 cluster -- storage-path rename, settings deprecation injection, curator-cadence fallback delete, CRLF snapshot normalization -- and land the shared-core build decision document. The heavier sub-tasks (1.4 wholesale `src/` -> `modules/coding/` move, 1.5/1.6 manifest + npm rename, 1.9 sidecar import unification, 1.10 NexusCodingRuntime wiring, 1.11 Tailwind v4) are split off into a follow-up commit cluster ("Phase 1b") so each `git mv` + import rewrite can land with its own CI cycle. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-01-shared-core-and-carryforward-closure.md](v1/v1.1/plans/phase-01-shared-core-and-carryforward-closure.md).
+Open the v1.1.0 cycle by closing the bounded carryforward items from v1.0.0's Section 4.2 cluster -- storage-path rename, settings deprecation injection, curator-cadence fallback delete, CRLF snapshot normalization -- and land the shared-core build decision document. The heavier sub-tasks (1.4 wholesale `src/` -> `modules/coding/` move, 1.5/1.6 manifest + npm rename, 1.9 sidecar import unification, 1.10 NexusCodingRuntime wiring, 1.11 Tailwind v4) are split off into a follow-up commit cluster ("Phase 1b") so each `git mv` + import rewrite can land with its own CI cycle. Plan reference: [docs/versions/v1/v1.1.0/plans/phase-01-shared-core-and-carryforward-closure.md](archive/v1/v1.1/plans/phase-01-shared-core-and-carryforward-closure.md).
 
 ### What changed
 
-**1.1 Shared-core build decision document.** [docs/versions/v1/v1.1.0/development/decisions/shared-core-build.md](v1/v1.1/development/decisions/shared-core-build.md) records the strategy: TypeScript project references with `composite: true` on `core/` (option (a) over the `@nexus/core` workspace-package alternative), chosen because it preserves the existing import paths, is reversible, and only requires wiring `tsc -b` into the build / typecheck scripts. The actual `core/tsconfig.json` + root `references` array does not land in this commit because it interacts with the sub-task 1.4 wholesale `src/` move -- both want to control the `out/core` emit path, and landing the project-references graph before 1.4 would force `tsc` to double-emit. The wiring is queued for "Phase 1b" as open item 1.1.P1.A in [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md).
+**1.1 Shared-core build decision document.** [docs/versions/v1/v1.1.0/development/decisions/shared-core-build.md](archive/v1/v1.1/development/decisions/shared-core-build.md) records the strategy: TypeScript project references with `composite: true` on `core/` (option (a) over the `@nexus/core` workspace-package alternative), chosen because it preserves the existing import paths, is reversible, and only requires wiring `tsc -b` into the build / typecheck scripts. The actual `core/tsconfig.json` + root `references` array does not land in this commit because it interacts with the sub-task 1.4 wholesale `src/` move -- both want to control the `out/core` emit path, and landing the project-references graph before 1.4 would force `tsc` to double-emit. The wiring is queued for "Phase 1b" as open item 1.1.P1.A in [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md).
 
 **1.2 Storage-path call-site rename.** Every literal `~/.gemma-code/` and `.gemma-code/` in `src/`, `scripts/`, and the affected test fixtures was replaced with the canonical `~/.nexus/` / `.nexus/`. 23 source files in `src/` touched: `storage/MemoryFiles.ts` (memory base dir), `storage/PlanArchive.ts` (plan archive root), `storage/MemoryHealthCheck.ts` (workspace report dir), `storage/dbPermissions.ts` (comment), `storage/ToolOutputCache.ts` (`CACHE_DIRNAME` constant + comments), `skills/SkillLoader.ts` (user skills dir), `skills/SkillMetrics.ts` (metrics path), `skills/CurationLoop.ts` (curator dir), `skills/WorkflowDetector.ts` (comments), `skills/catalog/build-second-brain/SKILL.md` (user-facing description), `mcp/McpManager.ts` (global + workspace mcp.json), `mcp/McpTypes.ts` (comment), `chat/ImprovementHook.ts` (hooks dir), `observability/TraceFile.ts` (trace path), `observability/OperationLog.ts` (`OPERATION_LOG_DIRNAME` + comments), `agents/SpecialistLoader.ts` (workspace override), `tools/OutputRedirector.ts` (`OUTPUT_SUBDIR = ".nexus-output"`), `tools/handlers/webCache.ts` (`WEB_CACHE_DIRNAME`), `utils/secretPaths.ts` (denylist pattern), `panels/webview/render/quickLabels.ts` (custom labels path), `panels/ChatPanelInit.ts` / `ChatMessageRouter.ts` / `ChatPanelBootstrap.ts` / `MemoryPanel.ts` (comments), `commands/memoryLintCommand.ts` (user-facing advice). 5 script files updated: `scripts/cleanup-scanner.mjs`, `scripts/generate-catalog.mjs`, `scripts/hooks/check-prompt-policy.mjs`, `scripts/hooks/check-tool-permission.mjs`, `scripts/hooks/lib/secret-paths.mjs`. The `core/storage/StorageMigration.ts` migration is unchanged -- it already runs idempotently at app launch and copies `~/.gemma-code/` -> `~/.nexus/` on existing installs. The installer scripts (`scripts/installer/pyqt/...`, `scripts/installer/legacy/setup.nsi`) still reference the legacy extension ID `gemma-code.gemma-code`; those flip when sub-task 1.6 lands.
 
@@ -6452,11 +6454,11 @@ Open the v1.1.0 cycle by closing the bounded carryforward items from v1.0.0's Se
 
 ### Known gaps added
 
-See [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md): the document opens with 9 open items + 6 resolved closures. Open items (all DF / MT, P1 / P2): `1.1.P1.A` (TypeScript project-references wiring deferred to "Phase 1b"), `1.4.P1.B` (`src/` -> `modules/coding/` wholesale move deferred), `1.5.P1.C` (VS Code manifest IDs rename deferred), `1.6.P1.D` (npm package + publisher rename deferred), `1.9.P1.E` (sidecar duplicate model catalog mirrors deferred), `1.10.P1.F` (NexusCodingRuntime wiring deferred), `1.11.P1.G` (Tailwind v4 wiring deferred), `1.12.P2.H` (regression test for curator IdleTimeScheduler-exclusivity deferred), `1.12.P2.I` (12 v1.0.0 operator-action items inherited). All 7 P1 deferrals are queued for "Phase 1b" -- a follow-up commit cluster that lands each `git mv` sub-tree with its own CI run, then wires the project-references graph, then re-runs the rename + sidecar import unification + NexusCodingRuntime wiring + manifest/npm renames. The 6 closures: `2.P1.G` storage paths, `2.P1.H` deprecationMessage, `2.P3.L` + `5.P3.FF` CRLF/SHA-pin, `3.P1.P` curator fallback, plus the 1.1 decision document.
+See [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md): the document opens with 9 open items + 6 resolved closures. Open items (all DF / MT, P1 / P2): `1.1.P1.A` (TypeScript project-references wiring deferred to "Phase 1b"), `1.4.P1.B` (`src/` -> `modules/coding/` wholesale move deferred), `1.5.P1.C` (VS Code manifest IDs rename deferred), `1.6.P1.D` (npm package + publisher rename deferred), `1.9.P1.E` (sidecar duplicate model catalog mirrors deferred), `1.10.P1.F` (NexusCodingRuntime wiring deferred), `1.11.P1.G` (Tailwind v4 wiring deferred), `1.12.P2.H` (regression test for curator IdleTimeScheduler-exclusivity deferred), `1.12.P2.I` (12 v1.0.0 operator-action items inherited). All 7 P1 deferrals are queued for "Phase 1b" -- a follow-up commit cluster that lands each `git mv` sub-tree with its own CI run, then wires the project-references graph, then re-runs the rename + sidecar import unification + NexusCodingRuntime wiring + manifest/npm renames. The 6 closures: `2.P1.G` storage paths, `2.P1.H` deprecationMessage, `2.P3.L` + `5.P3.FF` CRLF/SHA-pin, `3.P1.P` curator fallback, plus the 1.1 decision document.
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.1.0/plans/phase-01-shared-core-and-carryforward-closure.md](v1/v1.1/plans/phase-01-shared-core-and-carryforward-closure.md), [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md), [docs/versions/v1/v1.1.0/development/decisions/shared-core-build.md](v1/v1.1/development/decisions/shared-core-build.md).
+[docs/versions/v1/v1.1.0/plans/phase-01-shared-core-and-carryforward-closure.md](archive/v1/v1.1/plans/phase-01-shared-core-and-carryforward-closure.md), [docs/versions/v1/v1.1.0/known-gaps.md](archive/v1/v1.1/known-gaps.md), [docs/versions/v1/v1.1.0/development/decisions/shared-core-build.md](archive/v1/v1.1/development/decisions/shared-core-build.md).
 
 ---
 
@@ -6464,25 +6466,25 @@ See [docs/versions/v1/v1.1.0/known-gaps.md](v1/v1.1/known-gaps.md): the document
 
 ### Goal
 
-Close the v1.0.0 cycle: deep review of every prior phase, security audit + pen-test, Authenticode signing workflow, CHANGELOG + release notes covering every Phase 1-10 deliverable, version bump across all version-carrying files, RTM smoke checklist, distribution channels, finalize the v1.0.0 known-gaps file, flip the v0.9.0 known-gaps file to `finalized`. Plan reference: [docs/versions/v1/v1.0.0/plans/phase-11-hardening-and-release.md](v1/v1.0/plans/phase-11-hardening-and-release.md).
+Close the v1.0.0 cycle: deep review of every prior phase, security audit + pen-test, Authenticode signing workflow, CHANGELOG + release notes covering every Phase 1-10 deliverable, version bump across all version-carrying files, RTM smoke checklist, distribution channels, finalize the v1.0.0 known-gaps file, flip the v0.9.0 known-gaps file to `finalized`. Plan reference: [docs/versions/v1/v1.0.0/plans/phase-11-hardening-and-release.md](archive/v1/v1.0/plans/phase-11-hardening-and-release.md).
 
 ### What changed
 
-**11.1 Deep review synthesis.** [docs/versions/v1/v1.0.0/review/synthesis.md](v1/v1.0/review/synthesis.md) consolidates every Phase 1-10 review artifact into a single sign-off document. The synthesis identifies three architectural choke points behind the 47-item carryforward to v1.1.0: (a) the shared-core build (Node16 module resolution cannot cross the workspace boundary into `core/` without TypeScript project references), (b) the real-GPU + real-PyTorch wiring (the Python sidecar's `_execute(ctx)` defaults to stubs without a CUDA host), and (c) the VS Code thin-adapter rewrite (gated on the shared-core build + the Marketplace re-publish under `nexus-coding`). All three are scheduled for v1.1.0; the v1.0.0 surface works end-to-end via placeholder paths in every affected module.
+**11.1 Deep review synthesis.** [docs/versions/v1/v1.0.0/review/synthesis.md](archive/v1/v1.0/review/synthesis.md) consolidates every Phase 1-10 review artifact into a single sign-off document. The synthesis identifies three architectural choke points behind the 47-item carryforward to v1.1.0: (a) the shared-core build (Node16 module resolution cannot cross the workspace boundary into `core/` without TypeScript project references), (b) the real-GPU + real-PyTorch wiring (the Python sidecar's `_execute(ctx)` defaults to stubs without a CUDA host), and (c) the VS Code thin-adapter rewrite (gated on the shared-core build + the Marketplace re-publish under `nexus-coding`). All three are scheduled for v1.1.0; the v1.0.0 surface works end-to-end via placeholder paths in every affected module.
 
-**11.2 Security audit + pen-test.** [docs/versions/v1/v1.0.0/review/security-audit.md](v1/v1.0/review/security-audit.md) runs the OWASP ASVS L1 + SECURITY.md threat-model sweep: exposed-secrets grep clean; IPC payloads Zod-validated end-to-end; installer privilege boundary at install-time only (sidecars run as user); model downloader rejects `file://`, `localhost`, RFC1918 ranges; ffmpeg shell-out is argv-only (no shell interpolation); `~/.nexus/` permissions OS-defaulted (P2 hardening for v1.0.1: explicit `chmod 700` on POSIX). [docs/versions/v1/v1.0.0/review/penetration-test.md](v1/v1.0/review/penetration-test.md) runs the depth=deep six-specialist OWASP WSTG pass: prompt-injection corpus blocked by `PromptInjectionScanner`, no subprocess-spawn surface reachable from renderer-controlled payloads, `tauri.conf.json` CSP restricted (script-src no inline; img-src data + blob for diffusion previews), `GpuScheduler` queue-cap defends against job-flood DoS, race-free skill rotation via atomic `ACTIVE`-pointer write-then-rename. Zero P0 / P1 findings across both reports.
+**11.2 Security audit + pen-test.** [docs/versions/v1/v1.0.0/review/security-audit.md](archive/v1/v1.0/review/security-audit.md) runs the OWASP ASVS L1 + SECURITY.md threat-model sweep: exposed-secrets grep clean; IPC payloads Zod-validated end-to-end; installer privilege boundary at install-time only (sidecars run as user); model downloader rejects `file://`, `localhost`, RFC1918 ranges; ffmpeg shell-out is argv-only (no shell interpolation); `~/.nexus/` permissions OS-defaulted (P2 hardening for v1.0.1: explicit `chmod 700` on POSIX). [docs/versions/v1/v1.0.0/review/penetration-test.md](archive/v1/v1.0/review/penetration-test.md) runs the depth=deep six-specialist OWASP WSTG pass: prompt-injection corpus blocked by `PromptInjectionScanner`, no subprocess-spawn surface reachable from renderer-controlled payloads, `tauri.conf.json` CSP restricted (script-src no inline; img-src data + blob for diffusion previews), `GpuScheduler` queue-cap defends against job-flood DoS, race-free skill rotation via atomic `ACTIVE`-pointer write-then-rename. Zero P0 / P1 findings across both reports.
 
-**11.3 Authenticode signing + macOS notarization.** [docs/versions/v1/v1.0.0/release-signing.md](v1/v1.0/release-signing.md) Section 1 captures the Windows EV-cert + HSM + `signtool sign /tr http://timestamp.digicert.com /td sha256 /fd sha256 /sha1 $THUMBPRINT /a` workflow with sign-order (inner binaries first, NSIS outer last), CI integration gated on tag-push, and verification via `signtool verify /pa /v`. Section 2 captures the macOS Developer ID Application + Installer cert workflow, hardened-runtime + JIT entitlements, `xcrun notarytool submit --wait`, `xcrun stapler staple`, `spctl --assess --type install` verification. EV cert procurement is operator-driven (5-10 business day lead time at typical CAs) and tracked as OA-01; macOS notarization is deferred to v1.0.1 per Phase 9.8 and tracked as OA-11.
+**11.3 Authenticode signing + macOS notarization.** [docs/versions/v1/v1.0.0/release-signing.md](archive/v1/v1.0/release-signing.md) Section 1 captures the Windows EV-cert + HSM + `signtool sign /tr http://timestamp.digicert.com /td sha256 /fd sha256 /sha1 $THUMBPRINT /a` workflow with sign-order (inner binaries first, NSIS outer last), CI integration gated on tag-push, and verification via `signtool verify /pa /v`. Section 2 captures the macOS Developer ID Application + Installer cert workflow, hardened-runtime + JIT entitlements, `xcrun notarytool submit --wait`, `xcrun stapler staple`, `spctl --assess --type install` verification. EV cert procurement is operator-driven (5-10 business day lead time at typical CAs) and tracked as OA-01; macOS notarization is deferred to v1.0.1 per Phase 9.8 and tracked as OA-11.
 
-**11.4 CHANGELOG + release notes.** [CHANGELOG.md](../CHANGELOG.md) gains a v1.0.0 entry above the existing 0.30.1 entry. Sections: Added (every greenfield Phase 1-10 feature -- Tauri shell, four modules, ModelRegistry, DiffusionRuntime, GpuScheduler, nexus skills sync, single-binary installer, DiffusionTier, multi-LLM Coding); Changed (rebrand summary, settings-key migration, storage-path migration with one-cycle compat window, VS Code adapter scoping, CLI rename); Deprecated (legacy `gemma-code.*` settings keys, `gemma-check` CLI alias, `~/.gemma-code/` storage path, VS Code extension manifest IDs + npm package name -- all removed in v1.1.0); Removed (pre-rebrand identifier set); Fixed (v0.9.0 known-gaps 10.N.A / 10.N.Q / 10.N.R / 10.N.T closed in v1.0.0); Security (Authenticode signing, prompt-injection scanner, URL validation, ffmpeg argv-only shell-out, Tracer redaction). [docs/versions/v1/v1.0.0/release-notes.md](v1/v1.0/release-notes.md) is the user-facing release announcement with module screenshots, upgrade-from-Gemma-Code compat notes, an explicit known-limitations section, and a v1.1.0 teaser (audio pillar, macOS DMG, Linux AppImage, node-graph advanced tab, thin-adapter VS Code extension).
+**11.4 CHANGELOG + release notes.** [CHANGELOG.md](../CHANGELOG.md) gains a v1.0.0 entry above the existing 0.30.1 entry. Sections: Added (every greenfield Phase 1-10 feature -- Tauri shell, four modules, ModelRegistry, DiffusionRuntime, GpuScheduler, nexus skills sync, single-binary installer, DiffusionTier, multi-LLM Coding); Changed (rebrand summary, settings-key migration, storage-path migration with one-cycle compat window, VS Code adapter scoping, CLI rename); Deprecated (legacy `gemma-code.*` settings keys, `gemma-check` CLI alias, `~/.gemma-code/` storage path, VS Code extension manifest IDs + npm package name -- all removed in v1.1.0); Removed (pre-rebrand identifier set); Fixed (v0.9.0 known-gaps 10.N.A / 10.N.Q / 10.N.R / 10.N.T closed in v1.0.0); Security (Authenticode signing, prompt-injection scanner, URL validation, ffmpeg argv-only shell-out, Tracer redaction). [docs/versions/v1/v1.0.0/release-notes.md](archive/v1/v1.0/release-notes.md) is the user-facing release announcement with module screenshots, upgrade-from-Gemma-Code compat notes, an explicit known-limitations section, and a v1.1.0 teaser (audio pillar, macOS DMG, Linux AppImage, node-graph advanced tab, thin-adapter VS Code extension).
 
 **11.5 Version bump across all version-carrying files.** [package.json](../package.json) 0.30.1 -> 1.0.0. [desktop/package.json](../desktop/package.json), [desktop/src-tauri/Cargo.toml](../desktop/src-tauri/Cargo.toml), [desktop/src-tauri/tauri.conf.json](../desktop/src-tauri/tauri.conf.json) all 1.0.0-alpha.0 -> 1.0.0. [scripts/installer/pyqt/pyproject.toml](../scripts/installer/pyqt/pyproject.toml) 1.0.0a0 -> 1.0.0. [scripts/installer/pyqt/src/nexus_installer/__init__.py](../scripts/installer/pyqt/src/nexus_installer/__init__.py) 0.3.0 -> 1.0.0 (docstring also renamed from "Gemma Code cross-platform installer" to "Nexus cross-platform installer (PyQt5 wizard, formerly Gemma Code)"). [scripts/installer/build/nsis/nexus-setup.nsi](../scripts/installer/build/nsis/nexus-setup.nsi) already at 1.0.0 per Phase 9.
 
-**11.6 RTM smoke checklist.** [docs/versions/v1/v1.0.0/rtm-smoke.md](v1/v1.0/rtm-smoke.md) is the 12-step operator procedure: provision a clean Win 11 VM with a 12 GB+ NVIDIA GPU; run the signed `Nexus-1.0.0-Setup.exe`; verify the four-module dashboard; exercise Coding (`/create hello.py`), Chat (folder + 2+2 round-trip), Image Studio (SDXL Turbo 1024x1024 in <= 30s), Video Lab (LTX 4s @ 24fps @ 480p in <= 5 min), Settings -> Skills sync; restart + persistence; uninstall with data-preservation prompt (both YES and NO paths). Target: <= 90 min full / <= 20 min if recommended models pre-cached. Recording template appended for [docs/versions/v1/v1.0.0/operator-actions.md](v1/v1.0/operator-actions.md) OA-04.
+**11.6 RTM smoke checklist.** [docs/versions/v1/v1.0.0/rtm-smoke.md](archive/v1/v1.0/rtm-smoke.md) is the 12-step operator procedure: provision a clean Win 11 VM with a 12 GB+ NVIDIA GPU; run the signed `Nexus-1.0.0-Setup.exe`; verify the four-module dashboard; exercise Coding (`/create hello.py`), Chat (folder + 2+2 round-trip), Image Studio (SDXL Turbo 1024x1024 in <= 30s), Video Lab (LTX 4s @ 24fps @ 480p in <= 5 min), Settings -> Skills sync; restart + persistence; uninstall with data-preservation prompt (both YES and NO paths). Target: <= 90 min full / <= 20 min if recommended models pre-cached. Recording template appended for [docs/versions/v1/v1.0.0/operator-actions.md](archive/v1/v1.0/operator-actions.md) OA-04.
 
-**11.7 Distribution channels.** [docs/versions/v1/v1.0.0/distribution.md](v1/v1.0/distribution.md) covers GitHub Releases (primary surface; tag push `v1.0.0` triggers `installer-build.yml`; artifact `Nexus-1.0.0-Setup.exe` + companion `.sha256`), VS Code Marketplace (v1.0.0 update keeps the existing `gemma-code` publisher; listing description updated to mention the desktop product + graceful fallback; full Marketplace re-publish under `nexus-coding` deferred to v1.1.0 per known-gap 2.P1.J / 2.P2.K), and a direct-download landing page (deferred to v1.0.1 / OA-05). Ollama-style direct binary explicitly out of scope.
+**11.7 Distribution channels.** [docs/versions/v1/v1.0.0/distribution.md](archive/v1/v1.0/distribution.md) covers GitHub Releases (primary surface; tag push `v1.0.0` triggers `installer-build.yml`; artifact `Nexus-1.0.0-Setup.exe` + companion `.sha256`), VS Code Marketplace (v1.0.0 update keeps the existing `gemma-code` publisher; listing description updated to mention the desktop product + graceful fallback; full Marketplace re-publish under `nexus-coding` deferred to v1.1.0 per known-gap 2.P1.J / 2.P2.K), and a direct-download landing page (deferred to v1.0.1 / OA-05). Ollama-style direct binary explicitly out of scope.
 
-**11.8 Finalize known-gaps.** [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) flipped to `finalized at v1.0.0 release (Phase 11.8, 2026-05-18)`. Added 6 new Phase 11 entries (11.P1.LLL VS Code thin-adapter deferral, 11.P1.MMM EV-cert pending, 11.P2.NNN macOS notarization deferred, 11.P2.OOO landing page deferred, 11.P2.PPP semantic-release dry-run verification, 11.P1.QQQ v0.9.0 flip). Resolved table extended with 4 Phase 11 closures (11.P1.QQQ, 11.P0.RRR version bumps + CHANGELOG, 11.P0.SSS review artifacts, and an explicit 10.N.T row). Summary table recomputed (0 P0 open, 30 P1 open carryforward, 36 P2 open, 3 P3 open; resolved: 2 P0, 6 P1, 1 P2, 1 P3). New `## 4. Phase 11 carryforward map` triages every open item into three buckets: operator-actions (15 items mapped to OA-01 through OA-12 in [operator-actions.md](v1/v1.0/operator-actions.md)), v1.1.0 shared-core build (47 items behind a single architectural unlock), specific future cycles (4 items). [docs/archive/versions/v0/v0.9.0/known-gaps.md](archive/v0/v0.9/known-gaps.md) flipped to `finalized at v1.0.0 release (Phase 11.8, 2026-05-18)`; closure note cross-references the four v0.9.0 items closed in the v1.0.0 cycle.
+**11.8 Finalize known-gaps.** [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md) flipped to `finalized at v1.0.0 release (Phase 11.8, 2026-05-18)`. Added 6 new Phase 11 entries (11.P1.LLL VS Code thin-adapter deferral, 11.P1.MMM EV-cert pending, 11.P2.NNN macOS notarization deferred, 11.P2.OOO landing page deferred, 11.P2.PPP semantic-release dry-run verification, 11.P1.QQQ v0.9.0 flip). Resolved table extended with 4 Phase 11 closures (11.P1.QQQ, 11.P0.RRR version bumps + CHANGELOG, 11.P0.SSS review artifacts, and an explicit 10.N.T row). Summary table recomputed (0 P0 open, 30 P1 open carryforward, 36 P2 open, 3 P3 open; resolved: 2 P0, 6 P1, 1 P2, 1 P3). New `## 4. Phase 11 carryforward map` triages every open item into three buckets: operator-actions (15 items mapped to OA-01 through OA-12 in [operator-actions.md](archive/v1/v1.0/operator-actions.md)), v1.1.0 shared-core build (47 items behind a single architectural unlock), specific future cycles (4 items). [docs/archive/versions/v0/v0.9.0/known-gaps.md](archive/v0/v0.9/known-gaps.md) flipped to `finalized at v1.0.0 release (Phase 11.8, 2026-05-18)`; closure note cross-references the four v0.9.0 items closed in the v1.0.0 cycle.
 
 **11.9 Final stabilization pass.** Root vitest: 3014 / 4 fail / 5 skip -- the 4 failures are the pre-existing 2.P3.L CRLF/LF snapshot baseline (better than the documented 5; one workflow-discipline failure resolved in an earlier phase). Desktop vitest: 362 / 362 green. Python diffusion pytest: 100 / 100 green. TypeScript root build clean. ESLint clean. `npm audit` clean. Cargo validated via `shell-build.yml` CI matrix (Win + Linux + macOS) per known-gap 1.P1.A. v1.0.0 health gate: green light to release subject to OA-01 + OA-04.
 
@@ -6496,11 +6498,11 @@ Close the v1.0.0 cycle: deep review of every prior phase, security audit + pen-t
 
 ### Known gaps added
 
-See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) section 1: `11.P1.LLL` (VS Code thin-adapter rewrite, bundled with v1.1.0 shared-core unlock), `11.P1.MMM` (Authenticode signing pending OA-01), `11.P2.NNN` (macOS notarization deferred to v1.0.1 / OA-11), `11.P2.OOO` (direct-download landing page deferred to v1.0.1 / OA-05), `11.P2.PPP` (semantic-release dry-run verification post-v1.0.0), `11.P1.QQQ` (v0.9.0 known-gaps flip -- resolved same-phase).
+See [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md) section 1: `11.P1.LLL` (VS Code thin-adapter rewrite, bundled with v1.1.0 shared-core unlock), `11.P1.MMM` (Authenticode signing pending OA-01), `11.P2.NNN` (macOS notarization deferred to v1.0.1 / OA-11), `11.P2.OOO` (direct-download landing page deferred to v1.0.1 / OA-05), `11.P2.PPP` (semantic-release dry-run verification post-v1.0.0), `11.P1.QQQ` (v0.9.0 known-gaps flip -- resolved same-phase).
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.0.0/plans/phase-11-hardening-and-release.md](v1/v1.0/plans/phase-11-hardening-and-release.md), [docs/versions/v1/v1.0.0/development/history/2026-05-18_phase-11-hardening-and-release.md](v1/v1.0/development/history/2026-05-18_phase-11-hardening-and-release.md).
+[docs/versions/v1/v1.0.0/plans/phase-11-hardening-and-release.md](archive/v1/v1.0/plans/phase-11-hardening-and-release.md), [docs/versions/v1/v1.0.0/development/history/2026-05-18_phase-11-hardening-and-release.md](archive/v1/v1.0/development/history/2026-05-18_phase-11-hardening-and-release.md).
 
 ---
 
@@ -6508,7 +6510,7 @@ See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) section 1: `1
 
 ### Goal
 
-Open the upstream link to `bendourthe/DevAI-Hub` cleanly: a `nexus skills sync` CLI subcommand and matching Settings UI that sparse-clones a pinned tag into `~/.nexus/skills/devai-hub/<tag>/`, scans every SKILL.md with a built-in prompt-injection detector before activation, namespaces skills under `devai-hub/<name>` to avoid collisions with user-authored skills, threads provenance through the existing trace dashboard, and ships a "diverged" badge so the user can pick a side when a local skill and a DevAI-Hub skill share a display name. Plan reference: [docs/versions/v1/v1.0.0/plans/phase-10-devai-hub-sync.md](v1/v1.0/plans/phase-10-devai-hub-sync.md).
+Open the upstream link to `bendourthe/DevAI-Hub` cleanly: a `nexus skills sync` CLI subcommand and matching Settings UI that sparse-clones a pinned tag into `~/.nexus/skills/devai-hub/<tag>/`, scans every SKILL.md with a built-in prompt-injection detector before activation, namespaces skills under `devai-hub/<name>` to avoid collisions with user-authored skills, threads provenance through the existing trace dashboard, and ships a "diverged" badge so the user can pick a side when a local skill and a DevAI-Hub skill share a display name. Plan reference: [docs/versions/v1/v1.0.0/plans/phase-10-devai-hub-sync.md](archive/v1/v1.0/plans/phase-10-devai-hub-sync.md).
 
 ### What changed
 
@@ -6535,11 +6537,11 @@ Open the upstream link to `bendourthe/DevAI-Hub` cleanly: a `nexus skills sync` 
 
 ### Known gaps added
 
-See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md): `10.P1.FFF` (production network/git helpers covered by smoke only), `10.P1.GGG` (SkillLoader hot-reload not yet driven by the active-tag pointer), `10.P1.HHH` (auto-sync-weekly worker not yet registered with IdleTimeScheduler), `10.P2.III` (`nexus skills install/remove` are stubs), `10.P2.JJJ` (`nexus.skills.preferUpstream` setting not yet read by slash-command autocomplete), `10.P2.KKK` (skill-context attribution into AgentLoop tool spans not yet wired).
+See [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md): `10.P1.FFF` (production network/git helpers covered by smoke only), `10.P1.GGG` (SkillLoader hot-reload not yet driven by the active-tag pointer), `10.P1.HHH` (auto-sync-weekly worker not yet registered with IdleTimeScheduler), `10.P2.III` (`nexus skills install/remove` are stubs), `10.P2.JJJ` (`nexus.skills.preferUpstream` setting not yet read by slash-command autocomplete), `10.P2.KKK` (skill-context attribution into AgentLoop tool spans not yet wired).
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.0.0/plans/phase-10-devai-hub-sync.md](v1/v1.0/plans/phase-10-devai-hub-sync.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-10-devai-hub-sync.md](v1/v1.0/development/history/2026-05-17_phase-10-devai-hub-sync.md).
+[docs/versions/v1/v1.0.0/plans/phase-10-devai-hub-sync.md](archive/v1/v1.0/plans/phase-10-devai-hub-sync.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-10-devai-hub-sync.md](archive/v1/v1.0/development/history/2026-05-17_phase-10-devai-hub-sync.md).
 
 ---
 
@@ -6547,7 +6549,7 @@ See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md): `10.P1.FFF` 
 
 ### Goal
 
-Lay the v1.0.0 installer foundation: a two-layer `Nexus-1.0.0-Setup.exe` (NSIS outer shell handling UAC / registry / Start Menu / file association / URL handler; PyQt5 wizard inner provisioning CUDA 12.1 runtime, an offline Python venv with the diffusion stack, Node 22, Ollama, recommended models, and the frozen DevAI-Hub skill baseline). macOS DMG + Linux AppImage scoped and CI-stubbed for v1.0.1 / v1.0.2. Plan reference: [docs/versions/v1/v1.0.0/plans/phase-09-installer.md](v1/v1.0/plans/phase-09-installer.md).
+Lay the v1.0.0 installer foundation: a two-layer `Nexus-1.0.0-Setup.exe` (NSIS outer shell handling UAC / registry / Start Menu / file association / URL handler; PyQt5 wizard inner provisioning CUDA 12.1 runtime, an offline Python venv with the diffusion stack, Node 22, Ollama, recommended models, and the frozen DevAI-Hub skill baseline). macOS DMG + Linux AppImage scoped and CI-stubbed for v1.0.1 / v1.0.2. Plan reference: [docs/versions/v1/v1.0.0/plans/phase-09-installer.md](archive/v1/v1.0/plans/phase-09-installer.md).
 
 ### CI-blocker fix that opens the phase
 
@@ -6555,7 +6557,7 @@ The previous push left `shell-build.yml` red on all three legs (Windows / Linux 
 
 ### What changed
 
-**9.1 Architecture decision -- NSIS outer + PyQt wizard inner.** New [docs/versions/v1/v1.0.0/installer-architecture.md](v1/v1.0/installer-architecture.md) is the canonical decision doc. Two layers: an outer NSIS-compiled `.exe` (~200 KB) that handles UAC elevation, payload extraction to `%TEMP%\Nexus-Setup\`, manifest verification, wizard launch, and the standard Windows shell registrations (HKLM Uninstall entry, Start Menu shortcut, optional Desktop shortcut, `.nexus-workflow.json` association, `nexus://` URL handler); and the existing cross-platform PyQt5 wizard at [scripts/installer/pyqt/](../scripts/installer/pyqt/) (renamed from gemma_installer in Phase 2.5) doing every per-OS provisioning step. The wizard is PyInstaller-frozen into a single `nexus-installer.exe` shipped inside the payload tree. Decision matrix covers NSIS vs WiX/MSI/Inno (payload-size and scripting flexibility wins for NSIS); pre-bundled CUDA 12.1 runtime libraries (~1.5 GB compressed) vs full CUDA toolkit installer (runtime is all the app needs); pre-bundled wheels + `pip install --no-index` vs live PyPI (offline-first; deterministic); bundled Node 22 portable vs system Node (avoid major-version conflicts); bundled Ollama installer + `OllamaSetup.exe /S` vs manual install; network-download models via the registry's resumable downloader vs bundle models in the .exe (12-70 GB models would balloon the installer past the shareable size); frozen DevAI-Hub baseline tarball vs live `git clone` at install time. New [scripts/installer/build/windows-pipeline.md](../scripts/installer/build/windows-pipeline.md) sketches the Windows build pipeline (pin versions, hydrate `build/payload/`, compute SHA-256 manifest, PyInstaller-freeze wizard, `makensis` outer, sign, upload artifact); the 5.5-6.5 GB payload budget is documented per-component. New [.github/workflows/installer-build.yml](../.github/workflows/installer-build.yml) is the Windows installer-build CI job, currently gated behind `workflow_dispatch` until the payload-fetch script lands.
+**9.1 Architecture decision -- NSIS outer + PyQt wizard inner.** New [docs/versions/v1/v1.0.0/installer-architecture.md](archive/v1/v1.0/installer-architecture.md) is the canonical decision doc. Two layers: an outer NSIS-compiled `.exe` (~200 KB) that handles UAC elevation, payload extraction to `%TEMP%\Nexus-Setup\`, manifest verification, wizard launch, and the standard Windows shell registrations (HKLM Uninstall entry, Start Menu shortcut, optional Desktop shortcut, `.nexus-workflow.json` association, `nexus://` URL handler); and the existing cross-platform PyQt5 wizard at [scripts/installer/pyqt/](../scripts/installer/pyqt/) (renamed from gemma_installer in Phase 2.5) doing every per-OS provisioning step. The wizard is PyInstaller-frozen into a single `nexus-installer.exe` shipped inside the payload tree. Decision matrix covers NSIS vs WiX/MSI/Inno (payload-size and scripting flexibility wins for NSIS); pre-bundled CUDA 12.1 runtime libraries (~1.5 GB compressed) vs full CUDA toolkit installer (runtime is all the app needs); pre-bundled wheels + `pip install --no-index` vs live PyPI (offline-first; deterministic); bundled Node 22 portable vs system Node (avoid major-version conflicts); bundled Ollama installer + `OllamaSetup.exe /S` vs manual install; network-download models via the registry's resumable downloader vs bundle models in the .exe (12-70 GB models would balloon the installer past the shareable size); frozen DevAI-Hub baseline tarball vs live `git clone` at install time. New [scripts/installer/build/windows-pipeline.md](../scripts/installer/build/windows-pipeline.md) sketches the Windows build pipeline (pin versions, hydrate `build/payload/`, compute SHA-256 manifest, PyInstaller-freeze wizard, `makensis` outer, sign, upload artifact); the 5.5-6.5 GB payload budget is documented per-component. New [.github/workflows/installer-build.yml](../.github/workflows/installer-build.yml) is the Windows installer-build CI job, currently gated behind `workflow_dispatch` until the payload-fetch script lands.
 
 **9.2 CUDA 12.1 runtime detection + provisioner.** New [scripts/installer/pyqt/src/nexus_installer/engine/cuda_provisioner.py](../scripts/installer/pyqt/src/nexus_installer/engine/cuda_provisioner.py) -- `detect_driver_version()` probes `nvidia-smi --query-gpu=driver_version --format=csv,noheader` (falls back to `C:\Windows\System32\nvidia-smi.exe` on Windows when PATH misses); `is_cuda_12_1_supported(driver_major)` gates at `>= 530`; `decide_install_mode(driver_major, has_payload)` returns one of `"gpu"` / `"cpu-fallback"` / `"missing-payload"` ; `cpu_fallback_dialog_text()` is the user-facing copy when the host has no GPU. `CudaProvisioner(payload_dir).install(log)` copies `payload/cuda-12.1-runtime/*` into `%LOCALAPPDATA%\Nexus\runtime\cuda\` (or the platform equivalent), replacing any prior target. The Python `LD_LIBRARY_PATH` / `PATH` hint helper is exposed for the caller to log.
 
@@ -6569,9 +6571,9 @@ The previous push left `shell-build.yml` red on all three legs (Windows / Linux 
 
 **9.7 NSIS outer installer template.** New [scripts/installer/build/nsis/nexus-setup.nsi](../scripts/installer/build/nsis/nexus-setup.nsi) -- MUI2 wizard pages, `RequestExecutionLevel admin`, payload `File /r` extraction, manifest verification step (`nexus-installer.exe --verify-only`), wizard launch with `--install-dir`, HKLM Uninstall registry entry with full metadata (DisplayName / DisplayVersion / Publisher / URLInfoAbout / InstallLocation / UninstallString / EstimatedSize / NoModify / NoRepair), Start Menu shortcut, optional Desktop shortcut, `.nexus-workflow.json` -> `Nexus.Workflow` ProgID with `shell\open\command`, `nexus://` URL handler under `HKCR\nexus\shell\open\command`, and an uninstaller that prompts whether to preserve `~\.nexus\` (models + skills + settings; default keep) before removing the program runtime and every registry entry. End-to-end `makensis` build is not yet exercised in CI (known gap `9.P1.CCC`).
 
-**9.8 macOS + Linux scope.** New [docs/versions/v1/v1.0.0/installer-macos-and-linux.md](v1/v1.0/installer-macos-and-linux.md) scopes the cross-platform installers: macOS DMG (Universal binary; Apple Developer ID + notarization; MPS path on Apple Silicon; CPU fallback on Intel) for v1.0.1; Linux AppImage (statically linked to glibc 2.31+; same CUDA detection as Windows; ROCm deferred to v1.1.0+) for v1.0.2. The cross-platform PyQt wizard is reused unchanged; only the outer-shell packaging and the GPU-detection per-platform branches differ. New [.github/workflows/installer-macos.yml](../.github/workflows/installer-macos.yml) and [.github/workflows/installer-linux.yml](../.github/workflows/installer-linux.yml) are workflow_dispatch CI placeholders.
+**9.8 macOS + Linux scope.** New [docs/versions/v1/v1.0.0/installer-macos-and-linux.md](archive/v1/v1.0/installer-macos-and-linux.md) scopes the cross-platform installers: macOS DMG (Universal binary; Apple Developer ID + notarization; MPS path on Apple Silicon; CPU fallback on Intel) for v1.0.1; Linux AppImage (statically linked to glibc 2.31+; same CUDA detection as Windows; ROCm deferred to v1.1.0+) for v1.0.2. The cross-platform PyQt wizard is reused unchanged; only the outer-shell packaging and the GPU-detection per-platform branches differ. New [.github/workflows/installer-macos.yml](../.github/workflows/installer-macos.yml) and [.github/workflows/installer-linux.yml](../.github/workflows/installer-linux.yml) are workflow_dispatch CI placeholders.
 
-**9.9 Tests + smoke checklist.** Added 59 new installer unit tests across [test_cuda_provisioner.py](../scripts/installer/pyqt/tests/test_cuda_provisioner.py) (15 tests: driver-version parsing, CUDA 12.1 driver gate, decision-table, dialog copy, no-payload path, happy-path copy, replace-existing-target), [test_diffusion_venv_provisioner.py](../scripts/installer/pyqt/tests/test_diffusion_venv_provisioner.py) (9 tests: missing-wheels detection with prefix-collision guard, preflight pass/fail, venv-create subprocess plumbing, install-wheels failure, smoke-test command), [test_node_provisioner.py](../scripts/installer/pyqt/tests/test_node_provisioner.py) (12 tests: runtime root, platform-specific executable suffix, install + replace, verify failure, PATH non-Windows short-circuit, Ollama helper guards), [test_recommended_models.py](../scripts/installer/pyqt/tests/test_recommended_models.py) (16 tests: preset data integrity, increasing VRAM, default-preset picker across the spectrum, download-time estimator, total-GB summation, page renders for high + low VRAM), [test_devai_hub_provisioner.py](../scripts/installer/pyqt/tests/test_devai_hub_provisioner.py) (7 tests: manifest parsing, no-tarball warning, happy-path extract + log, replace-existing target, content-hash mismatch is fatal, correct-hash succeeds, **path-traversal evil-tarball rejected before any file is written**). New [docs/versions/v1/v1.0.0/installer-smoke-checklist.md](v1/v1.0/installer-smoke-checklist.md) is the operator-facing manual checklist for the fresh-Windows-11-VM install gate; the v1.0.0-rc1 build is the first scheduled run.
+**9.9 Tests + smoke checklist.** Added 59 new installer unit tests across [test_cuda_provisioner.py](../scripts/installer/pyqt/tests/test_cuda_provisioner.py) (15 tests: driver-version parsing, CUDA 12.1 driver gate, decision-table, dialog copy, no-payload path, happy-path copy, replace-existing-target), [test_diffusion_venv_provisioner.py](../scripts/installer/pyqt/tests/test_diffusion_venv_provisioner.py) (9 tests: missing-wheels detection with prefix-collision guard, preflight pass/fail, venv-create subprocess plumbing, install-wheels failure, smoke-test command), [test_node_provisioner.py](../scripts/installer/pyqt/tests/test_node_provisioner.py) (12 tests: runtime root, platform-specific executable suffix, install + replace, verify failure, PATH non-Windows short-circuit, Ollama helper guards), [test_recommended_models.py](../scripts/installer/pyqt/tests/test_recommended_models.py) (16 tests: preset data integrity, increasing VRAM, default-preset picker across the spectrum, download-time estimator, total-GB summation, page renders for high + low VRAM), [test_devai_hub_provisioner.py](../scripts/installer/pyqt/tests/test_devai_hub_provisioner.py) (7 tests: manifest parsing, no-tarball warning, happy-path extract + log, replace-existing target, content-hash mismatch is fatal, correct-hash succeeds, **path-traversal evil-tarball rejected before any file is written**). New [docs/versions/v1/v1.0.0/installer-smoke-checklist.md](archive/v1/v1.0/installer-smoke-checklist.md) is the operator-facing manual checklist for the fresh-Windows-11-VM install gate; the v1.0.0-rc1 build is the first scheduled run.
 
 ### Brand assets
 
@@ -6587,11 +6589,11 @@ User supplied [assets/nexus_primary.png](../assets/nexus_primary.png) + [assets/
 
 ### Known gaps added
 
-See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md): `9.P1.ZZ` (installer payload-fetch script not yet implemented), `9.P1.AAA` (DevAI-Hub + Ollama pinned SHAs are placeholder zeros), `9.P2.BBB` (Tauri icons are functional placeholders derived from the brand mark; final designer-authored art pending), `9.P1.CCC` (NSIS outer installer not yet built end-to-end), `9.P2.DDD` (recommended-models picker not yet wired into the wizard step flow), `9.P2.EEE` (macOS + Linux installers deferred to v1.0.1 / v1.0.2). Resolved: `1.P2.E` (Tauri icons placeholder).
+See [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md): `9.P1.ZZ` (installer payload-fetch script not yet implemented), `9.P1.AAA` (DevAI-Hub + Ollama pinned SHAs are placeholder zeros), `9.P2.BBB` (Tauri icons are functional placeholders derived from the brand mark; final designer-authored art pending), `9.P1.CCC` (NSIS outer installer not yet built end-to-end), `9.P2.DDD` (recommended-models picker not yet wired into the wizard step flow), `9.P2.EEE` (macOS + Linux installers deferred to v1.0.1 / v1.0.2). Resolved: `1.P2.E` (Tauri icons placeholder).
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.0.0/plans/phase-09-installer.md](v1/v1.0/plans/phase-09-installer.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-09-installer.md](v1/v1.0/development/history/2026-05-17_phase-09-installer.md).
+[docs/versions/v1/v1.0.0/plans/phase-09-installer.md](archive/v1/v1.0/plans/phase-09-installer.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-09-installer.md](archive/v1/v1.0/development/history/2026-05-17_phase-09-installer.md).
 
 ---
 
@@ -6599,7 +6601,7 @@ See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md): `9.P1.ZZ` (i
 
 ### Goal
 
-Resolve four-pillars-on-one-GPU contention with a cross-module FIFO scheduler that enforces foreground-module-wins ordering and per-job VRAM gating; ship a 2 Hz GPU telemetry source that publishes `gpu.sample` events on the existing `TelemetryBus`; light up the Phase 1.6 `<LocalModelStatus>` widget against the real telemetry stream with hover tooltip + click-to-open queue modal + idle state + floating placement on every module page; and extend the existing 3-tier `HardwareTier` LLM classification with a parallel four-tier `DiffusionTier` that gates Image Studio + Video Lab defaults by VRAM. The Phase 8 stability gate is "a Video Lab job, then Image Studio img2img, then Chatbot long generation queue without overlap and the dashboard reflects live GPU% / free VRAM without OOM". Plan reference: [docs/versions/v1/v1.0.0/plans/phase-08-gpu-scheduler-and-telemetry.md](v1/v1.0/plans/phase-08-gpu-scheduler-and-telemetry.md).
+Resolve four-pillars-on-one-GPU contention with a cross-module FIFO scheduler that enforces foreground-module-wins ordering and per-job VRAM gating; ship a 2 Hz GPU telemetry source that publishes `gpu.sample` events on the existing `TelemetryBus`; light up the Phase 1.6 `<LocalModelStatus>` widget against the real telemetry stream with hover tooltip + click-to-open queue modal + idle state + floating placement on every module page; and extend the existing 3-tier `HardwareTier` LLM classification with a parallel four-tier `DiffusionTier` that gates Image Studio + Video Lab defaults by VRAM. The Phase 8 stability gate is "a Video Lab job, then Image Studio img2img, then Chatbot long generation queue without overlap and the dashboard reflects live GPU% / free VRAM without OOM". Plan reference: [docs/versions/v1/v1.0.0/plans/phase-08-gpu-scheduler-and-telemetry.md](archive/v1/v1.0/plans/phase-08-gpu-scheduler-and-telemetry.md).
 
 ### What changed
 
@@ -6625,11 +6627,11 @@ Resolve four-pillars-on-one-GPU contention with a cross-module FIFO scheduler th
 
 ### Known gaps added
 
-See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `8.P1.UU` ... `8.P2.YY` (five new entries). Headline gaps: sidecar-side `nvidia-smi -lms 500` long-lived spawn deferred to Phase 9 installer follow-on (`8.P1.UU`); `GpuScheduler` call-site wiring at the four pillar runtimes deferred (`8.P1.VV`); Settings -> Hardware page with tier readout + override dropdown deferred (`8.P2.WW`); Image Studio / Video Lab form defaults not yet read from the resolved DiffusionTier (`8.P2.XX`); `TelemetryEventKind` union widening to include `job.cancelled` deferred (`8.P2.YY`). One gap resolved: `1.P3.F` (real telemetry source wired in Phase 8) moved to Resolved.
+See [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md) sections `8.P1.UU` ... `8.P2.YY` (five new entries). Headline gaps: sidecar-side `nvidia-smi -lms 500` long-lived spawn deferred to Phase 9 installer follow-on (`8.P1.UU`); `GpuScheduler` call-site wiring at the four pillar runtimes deferred (`8.P1.VV`); Settings -> Hardware page with tier readout + override dropdown deferred (`8.P2.WW`); Image Studio / Video Lab form defaults not yet read from the resolved DiffusionTier (`8.P2.XX`); `TelemetryEventKind` union widening to include `job.cancelled` deferred (`8.P2.YY`). One gap resolved: `1.P3.F` (real telemetry source wired in Phase 8) moved to Resolved.
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.0.0/plans/phase-08-gpu-scheduler-and-telemetry.md](v1/v1.0/plans/phase-08-gpu-scheduler-and-telemetry.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-08-gpu-scheduler-and-telemetry.md](v1/v1.0/development/history/2026-05-17_phase-08-gpu-scheduler-and-telemetry.md).
+[docs/versions/v1/v1.0.0/plans/phase-08-gpu-scheduler-and-telemetry.md](archive/v1/v1.0/plans/phase-08-gpu-scheduler-and-telemetry.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-08-gpu-scheduler-and-telemetry.md](archive/v1/v1.0/development/history/2026-05-17_phase-08-gpu-scheduler-and-telemetry.md).
 
 ---
 
@@ -6637,7 +6639,7 @@ See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `8.P
 
 ### Goal
 
-Ship the fourth pillar: extend the Python diffusion sidecar with three video pipelines (LTX-Video for text-to-video default, SVD for image+text-to-video default, CogVideoX opt-in for both modes); embed a workflow JSON in the produced MP4 via ffmpeg metadata so generated clips round-trip through "Copy Workflow"; wrap every video job in a VRAM lifecycle scope that publishes acquire / release telemetry events and runs `del pipe; torch.cuda.empty_cache(); gc.collect()` between jobs so the GPU is freed for the next image / video / LLM job; and ship the `VideoLabPage` frontend with a generation form, live thumbnail strip, HTML5 timeline previewer with frame-accurate stepping, and Outputs gallery. The Phase 7 stability gate is "on an RTX 4070, a 4-second LTX-Video clip generates in <= 5 minutes; an SVD image+prompt -> 4-second clip works; CogVideoX runs when explicitly enabled". Plan reference: [docs/versions/v1/v1.0.0/plans/phase-07-video-lab.md](v1/v1.0/plans/phase-07-video-lab.md).
+Ship the fourth pillar: extend the Python diffusion sidecar with three video pipelines (LTX-Video for text-to-video default, SVD for image+text-to-video default, CogVideoX opt-in for both modes); embed a workflow JSON in the produced MP4 via ffmpeg metadata so generated clips round-trip through "Copy Workflow"; wrap every video job in a VRAM lifecycle scope that publishes acquire / release telemetry events and runs `del pipe; torch.cuda.empty_cache(); gc.collect()` between jobs so the GPU is freed for the next image / video / LLM job; and ship the `VideoLabPage` frontend with a generation form, live thumbnail strip, HTML5 timeline previewer with frame-accurate stepping, and Outputs gallery. The Phase 7 stability gate is "on an RTX 4070, a 4-second LTX-Video clip generates in <= 5 minutes; an SVD image+prompt -> 4-second clip works; CogVideoX runs when explicitly enabled". Plan reference: [docs/versions/v1/v1.0.0/plans/phase-07-video-lab.md](archive/v1/v1.0/plans/phase-07-video-lab.md).
 
 ### What changed
 
@@ -6661,11 +6663,11 @@ Ship the fourth pillar: extend the Python diffusion sidecar with three video pip
 
 ### Known gaps added
 
-See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `7.P1.MM` ... `7.P3.TT` (eight new entries). Headline gaps: video pipelines run stub executors until torch / diffusers / imageio land on host (`7.P1.MM`); ffmpeg / ffprobe binaries bundled by Phase 9 installer (`7.P1.NN`); Tauri Rust spawn of Python sidecar still pending (`7.P1.OO`, same blocker as `6.P1.HH`); model catalog hard-coded until `models.list` IPC bridges (`7.P2.PP`); MP4-as-URL resolution via Tauri allow-list deferred to Phase 9 (`7.P2.QQ`); Save As / Use Last Frame gallery actions deferred to Phase 8 polish (`7.P2.RR`); progress event channel polling replaces Tauri Channel (`7.P2.SS`, same blocker as `6.P2.KK`); operator acceptance on real GPU rig deferred (`7.P3.TT`).
+See [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md) sections `7.P1.MM` ... `7.P3.TT` (eight new entries). Headline gaps: video pipelines run stub executors until torch / diffusers / imageio land on host (`7.P1.MM`); ffmpeg / ffprobe binaries bundled by Phase 9 installer (`7.P1.NN`); Tauri Rust spawn of Python sidecar still pending (`7.P1.OO`, same blocker as `6.P1.HH`); model catalog hard-coded until `models.list` IPC bridges (`7.P2.PP`); MP4-as-URL resolution via Tauri allow-list deferred to Phase 9 (`7.P2.QQ`); Save As / Use Last Frame gallery actions deferred to Phase 8 polish (`7.P2.RR`); progress event channel polling replaces Tauri Channel (`7.P2.SS`, same blocker as `6.P2.KK`); operator acceptance on real GPU rig deferred (`7.P3.TT`).
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.0.0/plans/phase-07-video-lab.md](v1/v1.0/plans/phase-07-video-lab.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-07-video-lab.md](v1/v1.0/development/history/2026-05-17_phase-07-video-lab.md).
+[docs/versions/v1/v1.0.0/plans/phase-07-video-lab.md](archive/v1/v1.0/plans/phase-07-video-lab.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-07-video-lab.md](archive/v1/v1.0/development/history/2026-05-17_phase-07-video-lab.md).
 
 ---
 
@@ -6673,7 +6675,7 @@ See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `7.P
 
 ### Goal
 
-Ship the third pillar: a native Python diffusion sidecar with smart VRAM offload, the txt2img / img2img / inpaint / outpaint pipelines, LoRA + ControlNet (pose / depth / canny) support, the forms-driven Image Studio frontend with mask editor + outputs gallery, and the workflow-in-PNG read/write that lets generated outputs round-trip through the "Copy Workflow" action and a `nexus-image extract-workflow` CLI subcommand. The Phase 6 stability gate is "on an RTX 4070 (12 GB VRAM), a 1024x1024 SDXL Turbo txt2img completes in <= 30 seconds; img2img + inpaint + outpaint work end-to-end; saved PNG carries embedded workflow metadata". Plan reference: [docs/versions/v1/v1.0.0/plans/phase-06-image-studio.md](v1/v1.0/plans/phase-06-image-studio.md).
+Ship the third pillar: a native Python diffusion sidecar with smart VRAM offload, the txt2img / img2img / inpaint / outpaint pipelines, LoRA + ControlNet (pose / depth / canny) support, the forms-driven Image Studio frontend with mask editor + outputs gallery, and the workflow-in-PNG read/write that lets generated outputs round-trip through the "Copy Workflow" action and a `nexus-image extract-workflow` CLI subcommand. The Phase 6 stability gate is "on an RTX 4070 (12 GB VRAM), a 1024x1024 SDXL Turbo txt2img completes in <= 30 seconds; img2img + inpaint + outpaint work end-to-end; saved PNG carries embedded workflow metadata". Plan reference: [docs/versions/v1/v1.0.0/plans/phase-06-image-studio.md](archive/v1/v1.0/plans/phase-06-image-studio.md).
 
 ### What changed
 
@@ -6701,11 +6703,11 @@ Ship the third pillar: a native Python diffusion sidecar with smart VRAM offload
 
 ### Known gaps added
 
-See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `6.P1.GG` ... `6.P2.LL` (six new entries). Headline gaps: pipelines run stub executors until torch / diffusers land on host (`6.P1.GG`); Tauri Rust core does not yet spawn the Python sidecar (`6.P1.HH`); ControlNet preprocessors stubbed in CI (`6.P1.II`); model / LoRA / ControlNet dropdowns hard-coded until models.list IPC lands (`6.P2.JJ`); polling replaces the deferred Tauri Channel for diffusion progress (`6.P2.KK`).
+See [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md) sections `6.P1.GG` ... `6.P2.LL` (six new entries). Headline gaps: pipelines run stub executors until torch / diffusers land on host (`6.P1.GG`); Tauri Rust core does not yet spawn the Python sidecar (`6.P1.HH`); ControlNet preprocessors stubbed in CI (`6.P1.II`); model / LoRA / ControlNet dropdowns hard-coded until models.list IPC lands (`6.P2.JJ`); polling replaces the deferred Tauri Channel for diffusion progress (`6.P2.KK`).
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.0.0/plans/phase-06-image-studio.md](v1/v1.0/plans/phase-06-image-studio.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-06-image-studio.md](v1/v1.0/development/history/2026-05-17_phase-06-image-studio.md).
+[docs/versions/v1/v1.0.0/plans/phase-06-image-studio.md](archive/v1/v1.0/plans/phase-06-image-studio.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-06-image-studio.md](archive/v1/v1.0/development/history/2026-05-17_phase-06-image-studio.md).
 
 ---
 
@@ -6713,7 +6715,7 @@ See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `6.P
 
 ### Goal
 
-Ship the shared-core `ModelRegistry` with content-addressed storage, resumable SHA-256-verified downloads, ComfyUI `extra_model_paths.yaml` compatibility, a Settings UI for browsing / installing / removing models, and the `ModelPinRegistry` wiring that closes `[v0.9.0:10.N.A]`. The Phase 5 stability gate is "a fresh `~/.nexus/models/` directory is populated by `nexus models install gemma4:e4b` via the registry; an interrupted download resumes cleanly; SHA-256 mismatch is rejected". Plan reference: [docs/versions/v1/v1.0.0/plans/phase-05-model-registry.md](v1/v1.0/plans/phase-05-model-registry.md).
+Ship the shared-core `ModelRegistry` with content-addressed storage, resumable SHA-256-verified downloads, ComfyUI `extra_model_paths.yaml` compatibility, a Settings UI for browsing / installing / removing models, and the `ModelPinRegistry` wiring that closes `[v0.9.0:10.N.A]`. The Phase 5 stability gate is "a fresh `~/.nexus/models/` directory is populated by `nexus models install gemma4:e4b` via the registry; an interrupted download resumes cleanly; SHA-256 mismatch is rejected". Plan reference: [docs/versions/v1/v1.0.0/plans/phase-05-model-registry.md](archive/v1/v1.0/plans/phase-05-model-registry.md).
 
 ### What changed
 
@@ -6741,11 +6743,11 @@ Ship the shared-core `ModelRegistry` with content-addressed storage, resumable S
 
 ### Known gaps added
 
-See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `5.P1.BB` ... `5.P3.FF` (six new entries; one entry moved to the Resolved table for `[v0.9.0:10.N.A]` ModelPinRegistry wiring). Headline gaps: Settings UI bound to mock client until sidecar IPC handlers land (`5.P1.BB`); HuggingFace catalog SHA-256 digests are placeholders (`5.P2.CC`); StreamingPipeline keep-alive resolver hand-wiring still passes through the VS Code adapter (`5.P2.DD`); per-model VRAM-pin checkbox not yet rendered (`5.P2.EE`).
+See [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md) sections `5.P1.BB` ... `5.P3.FF` (six new entries; one entry moved to the Resolved table for `[v0.9.0:10.N.A]` ModelPinRegistry wiring). Headline gaps: Settings UI bound to mock client until sidecar IPC handlers land (`5.P1.BB`); HuggingFace catalog SHA-256 digests are placeholders (`5.P2.CC`); StreamingPipeline keep-alive resolver hand-wiring still passes through the VS Code adapter (`5.P2.DD`); per-model VRAM-pin checkbox not yet rendered (`5.P2.EE`).
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.0.0/plans/phase-05-model-registry.md](v1/v1.0/plans/phase-05-model-registry.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-05-model-registry.md](v1/v1.0/development/history/2026-05-17_phase-05-model-registry.md).
+[docs/versions/v1/v1.0.0/plans/phase-05-model-registry.md](archive/v1/v1.0/plans/phase-05-model-registry.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-05-model-registry.md](archive/v1/v1.0/development/history/2026-05-17_phase-05-model-registry.md).
 
 ---
 
@@ -6753,7 +6755,7 @@ See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `5.P
 
 ### Goal
 
-Ship the second pillar: a folder-organized chat browser with nested folders, drag-drop chats, per-folder context isolation, breadcrumb navigation, a functional dashboard top-bar search, and a shared chat shell that the Coding module now composes against. The Phase 4 stability gate is "a user can create `Projects/Work/Q3-roadmap/`, drag two chats into it, switch between them, and the per-folder context isolation is verifiable". Plan reference: [docs/versions/v1/v1.0.0/plans/phase-04-chat-module.md](v1/v1.0/plans/phase-04-chat-module.md).
+Ship the second pillar: a folder-organized chat browser with nested folders, drag-drop chats, per-folder context isolation, breadcrumb navigation, a functional dashboard top-bar search, and a shared chat shell that the Coding module now composes against. The Phase 4 stability gate is "a user can create `Projects/Work/Q3-roadmap/`, drag two chats into it, switch between them, and the per-folder context isolation is verifiable". Plan reference: [docs/versions/v1/v1.0.0/plans/phase-04-chat-module.md](archive/v1/v1.0/plans/phase-04-chat-module.md).
 
 ### What changed
 
@@ -6779,11 +6781,11 @@ Ship the second pillar: a folder-organized chat browser with nested folders, dra
 
 ### Known gaps added
 
-See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `4.P1.V` ... `4.P2.AA` (seven new entries). Headline gaps: HTML5 dnd in place of `@dnd-kit/core` (`4.P1.V`), sidecar IPC wiring for the chat store deferred to Phase 5 (`4.P1.W`), SQLite memory tables don't yet carry the `scope_id` column (`4.P1.X`).
+See [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md) sections `4.P1.V` ... `4.P2.AA` (seven new entries). Headline gaps: HTML5 dnd in place of `@dnd-kit/core` (`4.P1.V`), sidecar IPC wiring for the chat store deferred to Phase 5 (`4.P1.W`), SQLite memory tables don't yet carry the `scope_id` column (`4.P1.X`).
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.0.0/plans/phase-04-chat-module.md](v1/v1.0/plans/phase-04-chat-module.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-04-chat-module.md](v1/v1.0/development/history/2026-05-17_phase-04-chat-module.md).
+[docs/versions/v1/v1.0.0/plans/phase-04-chat-module.md](archive/v1/v1.0/plans/phase-04-chat-module.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-04-chat-module.md](archive/v1/v1.0/development/history/2026-05-17_phase-04-chat-module.md).
 
 ---
 
@@ -6791,7 +6793,7 @@ See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `4.P
 
 ### Goal
 
-Run the engine as the desktop Coding module via shell IPC, expose Gemma 4 / Llama 3 / Qwen 2.5 / DeepSeek Coder as selectable backends with family-specific prompt + tool-call formats, ship the thin VS Code adapter's daemon-discovery + fallback decision logic, wire `IdleTimeScheduler` into the sidecar bootstrap (closes `[v0.9.0:10.N.Q]`), port the Memory / Trace / Sessions panels into the desktop module, and bring the twelve canonical slash commands into the desktop chat input. Plan reference: [docs/versions/v1/v1.0.0/plans/phase-03-coding-module.md](v1/v1.0/plans/phase-03-coding-module.md).
+Run the engine as the desktop Coding module via shell IPC, expose Gemma 4 / Llama 3 / Qwen 2.5 / DeepSeek Coder as selectable backends with family-specific prompt + tool-call formats, ship the thin VS Code adapter's daemon-discovery + fallback decision logic, wire `IdleTimeScheduler` into the sidecar bootstrap (closes `[v0.9.0:10.N.Q]`), port the Memory / Trace / Sessions panels into the desktop module, and bring the twelve canonical slash commands into the desktop chat input. Plan reference: [docs/versions/v1/v1.0.0/plans/phase-03-coding-module.md](archive/v1/v1.0/plans/phase-03-coding-module.md).
 
 ### What changed
 
@@ -6819,11 +6821,11 @@ Run the engine as the desktop Coding module via shell IPC, expose Gemma 4 / Llam
 
 ### Known gaps added
 
-See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `3.P1.M` ... `3.P2.U` (nine new entries; one entry moved to the Resolved table for `[v0.9.0:10.N.Q]`).
+See [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md) sections `3.P1.M` ... `3.P2.U` (nine new entries; one entry moved to the Resolved table for `[v0.9.0:10.N.Q]`).
 
 ### Plan reference + history
 
-[docs/versions/v1/v1.0.0/plans/phase-03-coding-module.md](v1/v1.0/plans/phase-03-coding-module.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-03-coding-module.md](v1/v1.0/development/history/2026-05-17_phase-03-coding-module.md).
+[docs/versions/v1/v1.0.0/plans/phase-03-coding-module.md](archive/v1/v1.0/plans/phase-03-coding-module.md), [docs/versions/v1/v1.0.0/development/history/2026-05-17_phase-03-coding-module.md](archive/v1/v1.0/development/history/2026-05-17_phase-03-coding-module.md).
 
 ---
 
@@ -6831,7 +6833,7 @@ See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md) sections `3.P
 
 ### Goal
 
-Rename every forward-facing identifier (settings keys, storage paths, code namespaces, CLI binary, Python installer package) from `gemma-code.*` / `Gemma*` to `nexus.*` / `Nexus*` with a one-cycle compatibility shim, and establish the `core/` + `modules/coding/` directory layout that the rest of the v1.0.0 cycle plugs into. Plan reference: [docs/versions/v1/v1.0.0/plans/phase-02-rebrand-and-core-extraction.md](v1/v1.0/plans/phase-02-rebrand-and-core-extraction.md).
+Rename every forward-facing identifier (settings keys, storage paths, code namespaces, CLI binary, Python installer package) from `gemma-code.*` / `Gemma*` to `nexus.*` / `Nexus*` with a one-cycle compatibility shim, and establish the `core/` + `modules/coding/` directory layout that the rest of the v1.0.0 cycle plugs into. Plan reference: [docs/versions/v1/v1.0.0/plans/phase-02-rebrand-and-core-extraction.md](archive/v1/v1.0/plans/phase-02-rebrand-and-core-extraction.md).
 
 ### What changed
 
@@ -6849,7 +6851,7 @@ Rename every forward-facing identifier (settings keys, storage paths, code names
 
 **2.7 Code identifiers.** Bulk-renamed via PowerShell across 23 files in `src/`, `tests/`, `configs/`, `package.json`: `GemmaCodePanel` -> `NexusCodingPanel`, `GemmaRuntime` -> `NexusCodingRuntime`, `gemmaCodeSidebar` -> `nexusCodingSidebar`. The actual source files were renamed (`GemmaCodePanel.ts` -> `NexusCodingPanel.ts`, `GemmaRuntime.ts` -> `NexusCodingRuntime.ts`) and their matching test files followed. The Gemma 4 *model* identifiers (`Gemma4ToolFormat`, `gemma4`, `Gemma 4`, `gemma4:e4b`) are intentionally preserved -- they correctly name the Google model. VS Code extension manifest IDs (`gemma-code-sidebar` viewContainer, `gemma-code.<command>` command ids) stay for one cycle to avoid breaking user keybindings; tracked as `2.P1.J` for v1.1.0.
 
-**2.8 Docs.** Updated [ARCHITECTURE.md](../ARCHITECTURE.md) with a `## Layout (v1.0.0)` section. [AGENTS.md](../AGENTS.md) Tech Stack + Project Layout sections list `core/`, `modules/`, `desktop/`, `scripts/installer/pyqt/`, `bin/nexus-check.mjs` and the boundary rule. [CONTRIBUTING.md](../CONTRIBUTING.md) "Project tour" points at the renamed composition root (`extension.ts -> NexusCodingRuntime -> NexusCodingPanel`). Created [docs/versions/v1/v1.0.0/architecture.md](v1/v1.0/architecture.md) describing the four shared-core surfaces, the boundary rule, the rebrand sweep summary, and the cross-cutting v1.0.0 constraints (local-first, single-GPU ceiling, no-telemetry, one-cycle compat-shim expiry). [docs/versions/v1/v1.0.0/pivot-brief.md](v1/v1.0/pivot-brief.md) Section 7 moved Phase 2 deliverables from "deferred" to "completed".
+**2.8 Docs.** Updated [ARCHITECTURE.md](../ARCHITECTURE.md) with a `## Layout (v1.0.0)` section. [AGENTS.md](../AGENTS.md) Tech Stack + Project Layout sections list `core/`, `modules/`, `desktop/`, `scripts/installer/pyqt/`, `bin/nexus-check.mjs` and the boundary rule. [CONTRIBUTING.md](../CONTRIBUTING.md) "Project tour" points at the renamed composition root (`extension.ts -> NexusCodingRuntime -> NexusCodingPanel`). Created [docs/versions/v1/v1.0.0/architecture.md](archive/v1/v1.0/architecture.md) describing the four shared-core surfaces, the boundary rule, the rebrand sweep summary, and the cross-cutting v1.0.0 constraints (local-first, single-GPU ceiling, no-telemetry, one-cycle compat-shim expiry). [docs/versions/v1/v1.0.0/pivot-brief.md](archive/v1/v1.0/pivot-brief.md) Section 7 moved Phase 2 deliverables from "deferred" to "completed".
 
 **2.9 Tests and stabilization.** 58 new unit tests added across the four shared-core surfaces (`ModelRegistry` 9, `MemoryHub` 8, `TelemetryBus` 7, `SkillCatalog` 7, plus `SettingsCompat` 10, `settings.ts` rewrite 7, `StorageMigration` 10). All pass. The `tests/setup.ts` `getConfiguration` mock was extended to provide `inspect()` and `update()` by default so existing tests continue to pass against the new shim. `tests/integration/config-reload.test.ts` updated to use section-aware `mockImplementation` (the previous `mockImplementationOnce` pattern only fed the first of ~50 per-key reads). `SettingsCompat._readExplicit` gracefully falls back to `config.get(leaf)` when the mock doesn't expose `inspect()` -- preserves backwards compatibility with older test fixtures.
 
@@ -6862,11 +6864,11 @@ Rename every forward-facing identifier (settings keys, storage paths, code names
 
 ### Known gaps added
 
-See [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md): `2.P1.G` (storage call-site rename), `2.P1.H` (package.json `deprecationMessage` injection), `2.P2.I` (src/ -> modules/coding/ wholesale move), `2.P1.J` (VS Code extension manifest IDs), `2.P2.K` (npm package name), `2.P3.L` (pre-existing Windows test failures).
+See [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md): `2.P1.G` (storage call-site rename), `2.P1.H` (package.json `deprecationMessage` injection), `2.P2.I` (src/ -> modules/coding/ wholesale move), `2.P1.J` (VS Code extension manifest IDs), `2.P2.K` (npm package name), `2.P3.L` (pre-existing Windows test failures).
 
 ### Next phase
 
-Phase 3 -- Agentic AI Coding module + multi-LLM + thin VS Code adapter ([phase-03-coding-module.md](v1/v1.0/plans/phase-03-coding-module.md)).
+Phase 3 -- Agentic AI Coding module + multi-LLM + thin VS Code adapter ([phase-03-coding-module.md](archive/v1/v1.0/plans/phase-03-coding-module.md)).
 
 ---
 
@@ -6874,13 +6876,13 @@ Phase 3 -- Agentic AI Coding module + multi-LLM + thin VS Code adapter ([phase-0
 
 ### Goal
 
-Open the v1.0.0 "Nexus pivot" cycle by standing up the desktop application shell that the next ten phases will fill with the four pillars (Agentic AI Coding, Local Chatbot Explorer, Image Studio, Video Lab). Plan reference: [docs/versions/v1/v1.0.0/plans/phase-01-shell-foundation.md](v1/v1.0/plans/phase-01-shell-foundation.md) and the [v1.0.0-cycle.md](v1/v1.0/plans/v1.0.0-cycle.md) overview. The brief from [docs/versions/v1/v1.0.0/pivot-brief.md](v1/v1.0/pivot-brief.md) Section 3 set the visual spec; this phase delivers the structural scaffold and proves the IPC contract that subsequent phases plug their modules into.
+Open the v1.0.0 "Nexus pivot" cycle by standing up the desktop application shell that the next ten phases will fill with the four pillars (Agentic AI Coding, Local Chatbot Explorer, Image Studio, Video Lab). Plan reference: [docs/versions/v1/v1.0.0/plans/phase-01-shell-foundation.md](archive/v1/v1.0/plans/phase-01-shell-foundation.md) and the [v1.0.0-cycle.md](archive/v1/v1.0/plans/v1.0.0-cycle.md) overview. The brief from [docs/versions/v1/v1.0.0/pivot-brief.md](archive/v1/v1.0/pivot-brief.md) Section 3 set the visual spec; this phase delivers the structural scaffold and proves the IPC contract that subsequent phases plug their modules into.
 
 ### What changed
 
 **1.1 Tauri 2.x workspace at `desktop/`.** New npm workspace under `desktop/` with three sibling trees: `src-tauri/` (Rust 2021 core, `nexus-shell` crate), `src/` (Vite + React 19 + TypeScript frontend), and `sidecar/` (Node 20+ process bundled with esbuild). Root `package.json` registers the workspace and exposes `npm run dev:shell` / `build:shell` / `build:sidecar` / `lint:shell` / `test:shell` / `test:shell:coverage`. `desktop/src-tauri/tauri.conf.json` configures a 1440x900 / 1280x800-min "Nexus - Local AI Studio" window, force-dark theme, identifier `ai.nexus.shell`, CSP `default-src 'self'`. `desktop/vite.config.ts` pins port 1420 (strict-port) so the Tauri dev runner attaches reliably. `desktop/tsconfig.json` enables `strict`, `noUncheckedIndexedAccess`, `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`. Vite pinned to v5 to dedupe with vitest's vite-node (avoids a TypeScript variance error from two PluginOption type definitions).
 
-**1.2 Design tokens.** [desktop/src/styles/tokens.css](../desktop/src/styles/tokens.css) codifies the dark-theme base (`--bg-0` / `--bg-1` / `--bg-2` / `--bg-elevated`, four foreground tones, two border tones), the four module accents (Chatbot cyan `#22d3ee`, Coding pink `#ec4899`, Image orange `#f97316`, Video green `#22c55e`, each with a 16%-opacity soft variant), four semantic colors, eight-stop spacing (4 px base), four typography scales, four radius tokens, three shadow tokens. The system is dark-only for v1.0.0 (light theme is in the explicit `NOT in scope` list). [docs/versions/v1/v1.0.0/design-tokens.md](v1/v1.0/design-tokens.md) documents every token with hex values, intended use, and a pointer to the `<StyleguidePage>` route at `/_styleguide` that renders them visually.
+**1.2 Design tokens.** [desktop/src/styles/tokens.css](../desktop/src/styles/tokens.css) codifies the dark-theme base (`--bg-0` / `--bg-1` / `--bg-2` / `--bg-elevated`, four foreground tones, two border tones), the four module accents (Chatbot cyan `#22d3ee`, Coding pink `#ec4899`, Image orange `#f97316`, Video green `#22c55e`, each with a 16%-opacity soft variant), four semantic colors, eight-stop spacing (4 px base), four typography scales, four radius tokens, three shadow tokens. The system is dark-only for v1.0.0 (light theme is in the explicit `NOT in scope` list). [docs/versions/v1/v1.0.0/design-tokens.md](archive/v1/v1.0/design-tokens.md) documents every token with hex values, intended use, and a pointer to the `<StyleguidePage>` route at `/_styleguide` that renders them visually.
 
 **1.3 Sidebar.** [desktop/src/components/Sidebar.tsx](../desktop/src/components/Sidebar.tsx) implements the permanent left rail: Sparkles logo + "Nexus" wordmark at top, four primary nav entries (Chatbot / Agentic AI Coding / Images / Videos) with module-accent left borders when active, a thin divider, then Settings + User Profile visually isolated at the bottom. Keyboard shortcuts `Ctrl+1..4` switch modules and `Ctrl+,` opens settings (ignored when focus is on a text input). Active route is persisted to `localStorage` and restored on launch by `desktop/src/main.tsx`.
 
@@ -6921,7 +6923,7 @@ The Tauri-over-Electron choice locks in originality-over-wrappers (single-binary
 
 ### Known gaps
 
-All six Phase 1 deferrals (one P1, four P2, one P3) are recorded in [docs/versions/v1/v1.0.0/known-gaps.md](v1/v1.0/known-gaps.md). The P1 (`1.P1.A`) is the live `npm run dev:shell` smoke on each OS -- closed by the first green CI run on `shell-build.yml`. No P0 / release-blocking items.
+All six Phase 1 deferrals (one P1, four P2, one P3) are recorded in [docs/versions/v1/v1.0.0/known-gaps.md](archive/v1/v1.0/known-gaps.md). The P1 (`1.P1.A`) is the live `npm run dev:shell` smoke on each OS -- closed by the first green CI run on `shell-build.yml`. No P0 / release-blocking items.
 
 ---
 
