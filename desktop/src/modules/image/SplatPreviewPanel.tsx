@@ -26,6 +26,8 @@ export interface SplatPreviewPanelProps {
   readonly onClose: () => void;
   readonly onSaveSplat?: (fileName: string, bytes: Uint8Array) => void;
   readonly onSaveScreenshot?: (fileName: string, pngDataUrl: string) => void;
+  readonly onGenerate?: () => Promise<{ ok: true; jobId: string } | { ok: false; message: string }>;
+  readonly onCancelGenerate?: (jobId: string) => Promise<void>;
 }
 
 export function SplatPreviewPanel({
@@ -35,12 +37,15 @@ export function SplatPreviewPanel({
   onClose,
   onSaveSplat,
   onSaveScreenshot,
+  onGenerate,
+  onCancelGenerate,
 }: SplatPreviewPanelProps): JSX.Element {
   const [cloud, setCloud] = useState<GaussianCloud | null>(null);
   const [bytes, setBytes] = useState<Uint8Array | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [provenance, setProvenance] = useState<SplatProvenance | null>(null);
   const [busy, setBusy] = useState(false);
+  const [generateJobId, setGenerateJobId] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   async function applyOpened(opened: OpenLocalSplatResult): Promise<void> {
@@ -119,6 +124,27 @@ export function SplatPreviewPanel({
     onSaveSplat?.(provenance.splatFileName, bytes);
   }
 
+  async function generate(): Promise<void> {
+    if (!onGenerate) return;
+    setBusy(true);
+    setNotice(null);
+    try {
+      const result = await onGenerate();
+      if (!result.ok) {
+        setGenerateJobId(null);
+        setNotice(result.message);
+        return;
+      }
+      setGenerateJobId(result.jobId);
+      setNotice(`Splat generate queued as ${result.jobId}.`);
+    } catch (error) {
+      setGenerateJobId(null);
+      setNotice(error instanceof Error ? error.message : "Splat generate did not start.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <section
       role="dialog"
@@ -143,9 +169,28 @@ export function SplatPreviewPanel({
           if (file) void openPickedFile(file);
         }}
       />
-      <button type="button" disabled title="generator not wired">
+      <button
+        type="button"
+        disabled={!onGenerate || busy}
+        title={onGenerate ? "Queue a local splat generate job" : "generator not wired"}
+        onClick={() => void generate()}
+      >
         3D generate coming from local backend
       </button>
+      {generateJobId ? (
+        <button
+          type="button"
+          onClick={() => {
+            const jobId = generateJobId;
+            void onCancelGenerate?.(jobId).then(() => {
+              setGenerateJobId(null);
+              setNotice("Splat generate was cancelled.");
+            });
+          }}
+        >
+          Cancel splat generate
+        </button>
+      ) : null}
       <button type="button" onClick={onClose}>
         Close 3D preview
       </button>
