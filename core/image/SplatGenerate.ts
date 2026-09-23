@@ -3,7 +3,7 @@
  * falls back to CPU. A later phase replaces the stub writer.
  */
 
-import { assertLocalSplatPath } from "./GaussianSplat.js";
+import { assertLocalSplatPath, isRemoteSplatLocation } from "./GaussianSplat.js";
 
 export const SPLAT_GENERATE_JOB_TYPE = "splat_generate";
 export const SPLAT_GENERATE_TIMEOUT_MS = 30_000;
@@ -41,7 +41,6 @@ export type SplatPrepareResult =
   | { readonly ok: false; readonly code: SplatGenerateFailureCode; readonly message: string; readonly stages: ["preflight"] };
 
 const TOKEN = /^[A-Za-z0-9_-]{1,80}$/;
-const REMOTE_RE = /^(?:https?:|ftp:|\/\/)/i;
 
 export function classifySplatHost(probe: SplatHostProbe): SplatPreflightCode {
   const platform = probe.platform.toLowerCase();
@@ -67,7 +66,7 @@ export function parseSplatGenerateParameters(
   if (!TOKEN.test(sourceMessageId) || !TOKEN.test(outputId)) {
     return { ok: false, code: "malformed", message: "Splat generate needs a message id and a distinct output id." };
   }
-  if (REMOTE_RE.test(sourcePngPath) || sourcePngPath.toLowerCase().includes("3daistudio.com")) {
+  if (isRemoteSplatLocation(sourcePngPath)) {
     return { ok: false, code: "remote-url", message: "Splat generate accepts only a local source image." };
   }
   if (!sourcePngPath.toLowerCase().endsWith(".png") || sourcePngPath.includes("..")) {

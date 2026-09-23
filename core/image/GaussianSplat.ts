@@ -46,13 +46,28 @@ export interface GaussianSplatViewRequest {
 }
 
 const REMOTE_RE = /^(?:https?:|ftp:|\/\/)/i;
+const BLOCKED_SPLAT_HOST = "3daistudio.com";
+
+/** True for a remote scheme or a URL whose host is the blocked splat service. */
+export function isRemoteSplatLocation(value: string): boolean {
+  const trimmed = value.trim();
+  if (REMOTE_RE.test(trimmed)) return true;
+  if (/^[a-zA-Z]:[\\/]/.test(trimmed)) return false;
+  const candidate = trimmed.startsWith("//") ? `https:${trimmed}` : `https://${trimmed}`;
+  try {
+    const host = new URL(candidate).hostname.toLowerCase().replace(/\.$/, "");
+    return host === BLOCKED_SPLAT_HOST || host.endsWith(`.${BLOCKED_SPLAT_HOST}`);
+  } catch {
+    return false;
+  }
+}
 
 export function assertLocalSplatPath(filePath: string): SplatFormat {
   const trimmed = filePath.trim();
   if (trimmed.length === 0) {
     throw new GaussianSplatError("malformed", "Splat path is empty.");
   }
-  if (REMOTE_RE.test(trimmed) || trimmed.toLowerCase().includes("3daistudio.com")) {
+  if (isRemoteSplatLocation(trimmed)) {
     throw new GaussianSplatError("remote-url", "Splat view accepts only a local file.");
   }
   const lower = trimmed.toLowerCase();
