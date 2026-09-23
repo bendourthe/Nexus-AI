@@ -34,7 +34,7 @@ The 2D original stays downloadable. A splat job must not replace or delete that 
 
 `GaussianSplatViewRequest` accepts a canonical local filesystem path or an `ArrayBuffer` the sidecar already read. It rejects `http:`, `https:`, `ftp:`, protocol-relative URLs, and any URL whose host is `3daistudio.com`. `blob:` fetches of untrusted hosts are forbidden. The core decoder does not open the network.
 
-Supported view formats are `.splat` and `.ply` only. Malformed magic bytes, a truncated file, or a Gaussian count above the contract maximum return a typed validation error and do not allocate an unbounded array.
+Supported view formats are `.splat` and `.ply` only. Malformed magic bytes, a truncated file, or a Gaussian count above 262144 return a typed validation error and do not allocate an unbounded array. The viewer caps each viewport edge at 2048 CSS pixels.
 
 ## Generate rules
 
