@@ -2,11 +2,34 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-09-11
+**Last updated**: 2026-09-22
 
 Per-version tracker of unfinished work, deferrals, and follow-ups. The next plan ingests this file to decide what carries forward. Classifications: `NI` not-implemented, `DF` deferred, `BG` bug/known-issue, `MT` missing-tests/coverage, `WN` warning/suppressed, `QG` bypassed-gate/CI.
 
 Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [v2.4.1 field reliability](plans/v2.4.1-field-reliability-chat-archives-models-workspaces.md), [v2.4.1 generation recovery](plans/v2.4.1-generation-recovery-and-ui-corrections.md), [v2.4.2 field UI and generation](plans/v2.4.2-field-ui-history-and-generation.md), [v2.4.3 field density](plans/v2.4.3-field-density-identity-and-runtime.md), [v2.4.4 field chrome, restyle, SANA, density](plans/v2.4.4-field-chrome-restyle-sana-and-density.md), [v2.4.5 installer already-downloaded models](plans/v2.4.5-installer-already-downloaded-models.md), [v2.4.6 field delivery, density, and session identity](plans/v2.4.6-field-delivery-density-and-session-identity.md), [v2.4.7 installer wizard density and scope](plans/v2.4.7-installer-wizard-density-and-scope.md), [v2.4.8 desktop token split, persona, and model order](plans/v2.4.8-desktop-token-split-persona-and-model-order.md), [v2.4.9 VoiceStudio field-discipline adoption](plans/v2.4.9-adoption-voicestudio-field-discipline.md), [v2.4.10 MiniCPM5-2B catalog and runtime adoption](plans/v2.4.10-adoption-minicpm5-mistral-models.md)
+
+## v2.4.0
+
+### Summary
+
+| Category | Open | Resolved |
+|---|---:|---:|
+| Not implemented (NI) | 0 | 0 |
+| Deferred (DF) | 3 | 0 |
+| Bugs / regressions (BG) | 0 | 0 |
+| Warnings (WN) | 0 | 0 |
+| Missing tests / coverage gaps (MT) | 1 | 0 |
+| Quality-gate gaps (QG) | 1 | 0 |
+
+Gaussian splat viewer and optional generate. The viewer, honesty copy, queue, and mocked adapter are in the tree. Live GPU pixels, live CUDA generate, and TripoSplat file hashes are not observed.
+
+### Open Items
+
+- **DF-v240-1** - Live NVIDIA splat generate is not proven. Source phase: 4 and 5. Plan reference: T013, T015. Reason: the adapter is mocked and `--real` records `not proven here`. Suggested next step: run the adapter on a CUDA host with installed weights and record the benchmark row.
+- **DF-v240-2** - TripoSplat weight SHA-256 pins are not in the catalog. Source phase: 5. Plan reference: T014. Reason: the hashes were not observed, so the row has no `weights.files` instead of an all-zero pin. Suggested next step: pin the files with `scripts/installer/build/pin-hf-weights.py` after a successful authenticated fetch.
+- **DF-v240-3** - Older `docs/**/known-gaps.md` files still have open operator and hardware items. Source phase: 6. Plan reference: T018. Reason: those items were not re-tested in this pass, so they stay open. Suggested next step: close each one only with its own evidence.
+- **MT-v240-1** - A real WebGL2 framebuffer was not captured. Source phase: 2. Plan reference: T005, T023. Reason: jsdom proves the fallback and the camera bounds. Suggested next step: orbit a fixture on a GPU canvas and save the PNG.
+- **QG-v240-1** - The full local `npm test` suite was not run in this shell. Source phase: 6. Plan reference: T024. Reason: `better-sqlite3` is NODE_MODULE_VERSION 146 and this Node expects 137. Suggested next step: let CI's Node 22 job run the suite. Do not `npm rebuild` the shared module.
 
 ## v2.4.10
 
