@@ -5,6 +5,23 @@
 
 export const JSON_CLI_PREFIX = "/nexus";
 
+/** True when argv carried a bare `--json` / `--json=true` output flag. A string body is request input, not this flag. */
+export function isJsonOutputFlag(value: unknown): boolean {
+  return value === true || value === "true";
+}
+
+/** One JSON value plus a trailing newline. */
+export function renderJsonValue(value: unknown): string {
+  return JSON.stringify(value) + "\n";
+}
+
+/** JSON Lines. An empty collection is an empty string (zero lines). */
+export function renderJsonLines(rows: readonly unknown[]): string {
+  let out = "";
+  for (const row of rows) out += JSON.stringify(row) + "\n";
+  return out;
+}
+
 export type JsonCliFetch = (
   url: string,
   init: { method: string; headers: Record<string, string>; body?: string },

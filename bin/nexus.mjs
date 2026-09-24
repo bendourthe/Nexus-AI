@@ -28,6 +28,18 @@ import { createInterface } from "node:readline";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Mirrors core/cli/jsonCli.ts (isJsonOutputFlag / renderJsonValue / renderJsonLines).
+// bin/nexus.mjs runs as plain Node and cannot import the TypeScript source.
+function wantsJsonOutput(flags) {
+  return flags.json === true || flags.json === "true";
+}
+function writeJsonValue(stdout, value) {
+  stdout.write(JSON.stringify(value) + "\n");
+}
+function writeJsonLines(stdout, rows) {
+  for (const row of rows) stdout.write(JSON.stringify(row) + "\n");
+}
+
 const HELP = `nexus -- Nexus desktop CLI
 
 Usage:
@@ -55,6 +67,9 @@ Usage:
   nexus check [...]                     deterministic source-code checks
   nexus image [...]                     image-pipeline helpers
   nexus video [...]                     video-pipeline helpers
+
+Output:
+  --json   stdout is one JSON value, or JSON Lines for a collection. See docs/reference/cli/contract.md.
 
 Exit codes:
   0  success
@@ -115,12 +130,25 @@ export async function runSkillsSync(flags, stdout = process.stdout, stderr = pro
     tag: typeof flags.tag === "string" ? flags.tag : undefined,
     apply: flags.apply === true || flags.apply === "true",
   });
+  const json = wantsJsonOutput(flags);
   if (result.alreadyUpToDate) {
-    stdout.write(`nexus skills sync: already up to date at ${result.tag}\n`);
+    if (json) {
+      writeJsonValue(stdout, {
+        tag: result.tag,
+        alreadyUpToDate: true,
+        applied: false,
+        diff: null,
+        quarantined: [],
+      });
+    } else {
+      stdout.write(`nexus skills sync: already up to date at ${result.tag}\n`);
+    }
     return 0;
   }
-  stdout.write(`nexus skills sync: fetched ${result.tag}\n`);
-  stdout.write(`  diff: ${mod.summarizeDiff(result.diff)}\n`);
+  if (!json) {
+    stdout.write(`nexus skills sync: fetched ${result.tag}\n`);
+    stdout.write(`  diff: ${mod.summarizeDiff(result.diff)}\n`);
+  }
   const quarantined = result.quarantined ?? [];
   if (quarantined.length > 0) {
     stderr.write(
@@ -142,15 +170,17 @@ export async function runSkillsSync(flags, stdout = process.stdout, stderr = pro
     stderr.write(
       `nexus skills sync: MANIFEST.sha256 verification is advisory -- ${mv.mismatched.length}/${mv.checked} file(s) differ (upstream manifest not EOL-deterministic; not blocking)\n`,
     );
-  } else if (mv.present) {
+  } else if (mv.present && !json) {
     stdout.write(`  verified ${mv.checked} file(s) against MANIFEST.sha256\n`);
   }
-  if (result.applied) {
-    stdout.write(`nexus skills sync: applied ${result.tag} -> ${result.activeDir}\n`);
-  } else {
-    stdout.write(
-      `nexus skills sync: preview written to ${result.tmpDir}. Re-run with --apply to activate.\n`,
-    );
+  if (!json) {
+    if (result.applied) {
+      stdout.write(`nexus skills sync: applied ${result.tag} -> ${result.activeDir}\n`);
+    } else {
+      stdout.write(
+        `nexus skills sync: preview written to ${result.tmpDir}. Re-run with --apply to activate.\n`,
+      );
+    }
   }
   if (
     (flags.apply === true || flags.apply === "true") &&
@@ -160,10 +190,21 @@ export async function runSkillsSync(flags, stdout = process.stdout, stderr = pro
     stderr.write("nexus skills sync: apply failed closed\n");
     return 1;
   }
+  if (json) {
+    writeJsonValue(stdout, {
+      tag: result.tag,
+      alreadyUpToDate: false,
+      applied: Boolean(result.applied),
+      diff: mod.summarizeDiff(result.diff),
+      quarantined,
+      activeDir: result.activeDir ?? null,
+      tmpDir: result.tmpDir ?? null,
+    });
+  }
   return 0;
 }
 
-export async function runSkillsList(_flags, stdout = process.stdout) {
+export async function runSkillsList(flags = {}, stdout = process.stdout, stderr = process.stderr) {
   // Thin wrapper over the installed catalog subtree (~/.nexus-ai/catalog).
   const mod = await loadSyncer();
   const syncer = new mod.NexusHubSyncer({});
@@ -175,10 +216,27 @@ export async function runSkillsList(_flags, stdout = process.stdout) {
     version = null;
   }
   if (!version) {
-    stdout.write("nexus skills list: catalog not yet synced. Run `nexus skills sync --apply`.\n");
+    const message = "nexus skills list: catalog not yet synced. Run `nexus skills sync --apply`.\n";
+    if (wantsJsonOutput(flags)) {
+      stderr.write(message);
+      stdout.write("null\n");
+    } else {
+      stdout.write(message);
+    }
     return 0;
   }
   const manifest = mod.buildManifest(joinPath(root, "skills"), version, "");
+  if (wantsJsonOutput(flags)) {
+    writeJsonLines(
+      stdout,
+      manifest.skills.map((skill) => ({
+        name: skill.name,
+        namespace: "nexus-hub",
+        contentHash: skill.contentHash,
+      })),
+    );
+    return 0;
+  }
   stdout.write(`Installed catalog version: ${version}\n`);
   for (const skill of manifest.skills) {
     stdout.write(`  nexus-hub/${skill.name}\t${skill.contentHash.slice(0, 12)}\n`);
@@ -230,9 +288,17 @@ export async function runSkillsInstall(args, stdout = process.stdout, stderr = p
     overwrite,
   });
   if (result.ok) {
-    stdout.write(`nexus skills install: wrote ${result.writtenTo}\n`);
-    if (result.contentHash) {
-      stdout.write(`  sha256: ${result.contentHash}\n`);
+    if (wantsJsonOutput(args.flags)) {
+      writeJsonValue(stdout, {
+        ok: true,
+        writtenTo: result.writtenTo,
+        contentHash: result.contentHash ?? null,
+      });
+    } else {
+      stdout.write(`nexus skills install: wrote ${result.writtenTo}\n`);
+      if (result.contentHash) {
+        stdout.write(`  sha256: ${result.contentHash}\n`);
+      }
     }
     if (result.scan && result.scan.decision === "warn") {
       stderr.write(
@@ -272,7 +338,11 @@ export async function runSkillsRemove(args, stdout = process.stdout, stderr = pr
   }
   const result = mod.removeSkill(spec);
   if (result.ok) {
-    stdout.write(`nexus skills remove: deleted ${result.removed}\n`);
+    if (wantsJsonOutput(args.flags)) {
+      writeJsonValue(stdout, { ok: true, removed: result.removed });
+    } else {
+      stdout.write(`nexus skills remove: deleted ${result.removed}\n`);
+    }
     return 0;
   }
   stderr.write(`nexus skills remove: ${result.reason ?? "failed"}: ${result.message ?? ""}\n`);
@@ -667,9 +737,9 @@ export async function runSkillsOptimize(args, stdout = process.stdout, stderr = 
   });
 
   const modeLabel = !apply ? "dry-run" : autoYes ? "apply --yes" : "apply (will prompt)";
-  stdout.write(
-    `nexus skills optimize: ${skillId} [${modeLabel}] model=${model} rounds<=${maxRounds} (${train.length} train / ${validation.length} validation)\n`,
-  );
+  const optimizeBanner = `nexus skills optimize: ${skillId} [${modeLabel}] model=${model} rounds<=${maxRounds} (${train.length} train / ${validation.length} validation)\n`;
+  if (wantsJsonOutput(flags)) stderr.write(optimizeBanner);
+  else stdout.write(optimizeBanner);
 
   let result;
   try {
@@ -679,8 +749,8 @@ export async function runSkillsOptimize(args, stdout = process.stdout, stderr = 
     return 1;
   }
 
-  if (flags.json) {
-    stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+  if (wantsJsonOutput(flags)) {
+    writeJsonValue(stdout, result);
     return 0;
   }
   for (const r of result.rounds) {
@@ -761,9 +831,9 @@ export async function runSkillsFrontier(args, stdout = process.stdout, stderr = 
   else approvalGate = makeReadlineApprovalGate(process.stdin, stdout);
 
   const modeLabel = !apply ? "dry-run" : autoYes ? "apply --yes" : "apply (will prompt)";
-  stdout.write(
-    `nexus skills frontier: ${skillId} [${modeLabel}] model=${model} candidates<=${maxCandidates} (${train.length} train / ${validation.length} validation)\n`,
-  );
+  const frontierBanner = `nexus skills frontier: ${skillId} [${modeLabel}] model=${model} candidates<=${maxCandidates} (${train.length} train / ${validation.length} validation)\n`;
+  if (wantsJsonOutput(flags)) stderr.write(frontierBanner);
+  else stdout.write(frontierBanner);
 
   let result;
   try {
@@ -785,8 +855,8 @@ export async function runSkillsFrontier(args, stdout = process.stdout, stderr = 
     return 1;
   }
 
-  if (flags.json) {
-    stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+  if (wantsJsonOutput(flags)) {
+    writeJsonValue(stdout, result);
     return 0;
   }
   stdout.write(
@@ -849,13 +919,22 @@ export async function runGoldenRun(flags, stdout = process.stdout, stderr = proc
   }
 
   let passed = 0;
+  const rows = [];
   for (const spec of tasks) {
     const result = await runnerMod.runGoldenTask(spec, options);
     if (result.passed) passed += 1;
-    const detail = result.failures.length > 0 ? ` -- ${result.failures[0]}` : "";
-    stdout.write(`${result.passed ? "PASS" : "FAIL"} ${spec.id}${detail}\n`);
+    rows.push({ id: spec.id, passed: result.passed, failures: result.failures });
+    if (!wantsJsonOutput(flags)) {
+      const detail = result.failures.length > 0 ? ` -- ${result.failures[0]}` : "";
+      stdout.write(`${result.passed ? "PASS" : "FAIL"} ${spec.id}${detail}\n`);
+    }
   }
-  stdout.write(`nexus golden run: ${passed}/${tasks.length} passed (${mode} mode)\n`);
+  if (wantsJsonOutput(flags)) {
+    writeJsonLines(stdout, rows);
+    stderr.write(`nexus golden run: ${passed}/${tasks.length} passed (${mode} mode)\n`);
+  } else {
+    stdout.write(`nexus golden run: ${passed}/${tasks.length} passed (${mode} mode)\n`);
+  }
   return passed === tasks.length ? 0 : 1;
 }
 
@@ -901,7 +980,11 @@ export async function runTraceExport(flags, stdout = process.stdout, stderr = pr
   const absolute = isAbsolute(out) ? out : resolvePath(process.cwd(), out);
   mkdirSync(dirname(absolute), { recursive: true });
   writeFileSync(absolute, html, "utf8");
-  stdout.write(`nexus trace export: wrote ${trace.spanCount} span(s) to ${absolute}\n`);
+  if (wantsJsonOutput(flags)) {
+    writeJsonValue(stdout, { ok: true, spanCount: trace.spanCount, path: absolute });
+  } else {
+    stdout.write(`nexus trace export: wrote ${trace.spanCount} span(s) to ${absolute}\n`);
+  }
   return 0;
 }
 
@@ -1050,8 +1133,14 @@ export async function runMemoryAudit(flags, stdout = process.stdout, stderr = pr
   }
 
   const filtered = log.query(filter);
-  const format = typeof flags.format === "string" ? flags.format : "table";
-  if (format === "json" || format === "jsonl") {
+  const explicitFormat = typeof flags.format === "string" ? flags.format : null;
+  const json = wantsJsonOutput(flags);
+  if (json && explicitFormat && explicitFormat !== "json" && explicitFormat !== "jsonl") {
+    stderr.write(`nexus memory audit: --format ${explicitFormat} overrides --json\n`);
+    stdout.write(formatAuditTable(filtered) + (filtered.length > 0 ? "\n" : ""));
+    return 0;
+  }
+  if (json || explicitFormat === "json" || explicitFormat === "jsonl") {
     stdout.write(formatAuditJsonl(filtered));
   } else {
     stdout.write(formatAuditTable(filtered) + (filtered.length > 0 ? "\n" : ""));
@@ -1111,7 +1200,11 @@ export async function runMemoryExport(flags, stdout = process.stdout, stderr = p
   const result = exportToJsonl(inMemorySource, filter);
   mkdirSync(dirname(absolute), { recursive: true });
   writeFileSync(absolute, result.text, "utf8");
-  stdout.write(`nexus memory export: wrote ${result.rowCount} row(s) to ${absolute}\n`);
+  if (wantsJsonOutput(flags)) {
+    writeJsonValue(stdout, { ok: true, rowCount: result.rowCount, path: absolute });
+  } else {
+    stdout.write(`nexus memory export: wrote ${result.rowCount} row(s) to ${absolute}\n`);
+  }
   return 0;
 }
 
@@ -1134,9 +1227,17 @@ export async function runMemoryImport(flags, stdout = process.stdout, stderr = p
     },
   };
   const result = importFromJsonl(text, sink);
-  stdout.write(
-    `nexus memory import: imported ${result.imported} row(s), skipped ${result.skipped}, errors ${result.errors.length}\n`,
-  );
+  if (wantsJsonOutput(flags)) {
+    writeJsonValue(stdout, {
+      imported: result.imported,
+      skipped: result.skipped,
+      errors: result.errors.length,
+    });
+  } else {
+    stdout.write(
+      `nexus memory import: imported ${result.imported} row(s), skipped ${result.skipped}, errors ${result.errors.length}\n`,
+    );
+  }
   for (const err of result.errors) {
     stderr.write(`  line ${err.line}: ${err.reason}\n`);
   }
@@ -1177,11 +1278,19 @@ export async function runMemoryDecay(flags, stdout = process.stdout, stderr = pr
   };
   const sweep = new DecaySweep(provider);
   const result = sweep.sweep();
-  stdout.write(
-    `nexus memory decay: scanned=${result.scanned} kept=${result.kept} evicted=${result.evicted.length}\n`,
-  );
-  for (const e of result.evicted) {
-    stdout.write(`  evicted ${e.tier}/${e.id} (retention=${e.retention.toExponential(2)})\n`);
+  if (wantsJsonOutput(flags)) {
+    writeJsonValue(stdout, {
+      scanned: result.scanned,
+      kept: result.kept,
+      evicted: result.evicted,
+    });
+  } else {
+    stdout.write(
+      `nexus memory decay: scanned=${result.scanned} kept=${result.kept} evicted=${result.evicted.length}\n`,
+    );
+    for (const e of result.evicted) {
+      stdout.write(`  evicted ${e.tier}/${e.id} (retention=${e.retention.toExponential(2)})\n`);
+    }
   }
   return 0;
 }
@@ -1202,7 +1311,7 @@ export async function runMemoryCompress(flags, stdout = process.stdout, stderr =
       : flags.enabled === false || flags.enabled === "false"
         ? false
         : true;
-  if (!enabled) {
+  if (!enabled && !wantsJsonOutput(flags)) {
     stdout.write(
       `nexus memory compress: dry-run mode -- no LLM call will be made.\n`,
     );
@@ -1258,8 +1367,21 @@ export async function runMemoryCompress(flags, stdout = process.stdout, stderr =
     toolName: "memory.compress",
   });
   if (result.kind !== "compressed") {
+    if (wantsJsonOutput(flags) && result.kind === "disabled") {
+      writeJsonValue(stdout, { kind: result.kind, message: result.message ?? "" });
+    }
     stderr.write(`nexus memory compress: ${result.kind}: ${result.message ?? ""}\n`);
     return result.kind === "disabled" ? 0 : 1;
+  }
+  if (wantsJsonOutput(flags)) {
+    writeJsonValue(stdout, {
+      kind: result.kind,
+      entryId: result.entryId,
+      chunkCount: result.observation?.chunkCount ?? 0,
+      model,
+      llmCalls: calls.length,
+    });
+    return 0;
   }
   stdout.write(
     `nexus memory compress: wrote semantic-tier id=${result.entryId} chunks=${result.observation?.chunkCount ?? 0} model=${model} llmCalls=${calls.length}\n`,
@@ -1542,6 +1664,14 @@ export async function main(argv) {
   // subprocess; we just import their module and call main().
   if (args.command === "check") {
     const mod = await import(pathToFileURL(resolvePath(__dirname, "nexus-check.mjs")).href);
+    return mod.main(argv.slice(1));
+  }
+  if (args.command === "image") {
+    const mod = await import(pathToFileURL(resolvePath(__dirname, "nexus-image.mjs")).href);
+    return mod.main(argv.slice(1));
+  }
+  if (args.command === "video") {
+    const mod = await import(pathToFileURL(resolvePath(__dirname, "nexus-video.mjs")).href);
     return mod.main(argv.slice(1));
   }
 
