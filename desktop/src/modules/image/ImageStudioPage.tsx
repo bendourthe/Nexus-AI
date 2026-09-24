@@ -12,7 +12,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Box, Copy, Download, FileJson, ImagePlus, Pencil, Save, Settings } from "lucide-react";
+import { Box, Copy, Pencil, Save, Settings } from "lucide-react";
 import { SidecarDownBanner } from "../../components/SidecarDownBanner";
 import { Button, Select, Switch, TextField } from "../../components/ui";
 import { formatInferenceError } from "../../lib/inferenceRpcError";
