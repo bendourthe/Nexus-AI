@@ -1048,6 +1048,9 @@
     ],
     "modules/**/*.ts": [
       "eslint --max-warnings=0"
+    ],
+    "desktop/src/**/*.{ts,tsx}": [
+      "npm --prefix desktop exec -- eslint --max-warnings=0"
     ]
   },
   "devDependencies": {
