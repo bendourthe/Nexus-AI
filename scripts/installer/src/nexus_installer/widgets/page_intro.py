@@ -16,6 +16,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QFrame,
     QGridLayout,
+    QHBoxLayout,
     QLabel,
     QSizePolicy,
     QVBoxLayout,
@@ -23,13 +24,15 @@ from PyQt5.QtWidgets import (
 )
 
 from nexus_installer.constants import (
+    BG_CARD,
+    BORDER_STRONG,
     FS_BODY,
     FS_H2,
     FS_H3,
     FW_SEMIBOLD,
     TEXT_BODY,
+    TEXT_PRIMARY,
     TEXT_SECONDARY,
-    rgba_css,
 )
 
 #: Columns per capability row before wrapping to a second row.
@@ -61,7 +64,23 @@ class PageNote(QLabel):
 
 
 class CapabilityCard(QFrame):
-    """One accent-coded capability: name over a one-line description."""
+    """One capability: a name over a one-line description.
+
+    v2.4.11 operator report: the four pillar cards "look flashy and like AI
+    slop". They were four saturated tinted panels -- a coloured wash, a
+    coloured border, a 3px coloured rule and a coloured heading, each in a
+    different hue, stacked four across. Four full-strength accents competing
+    on the first screen is what read as decoration rather than product.
+
+    The card now uses the same surface as every other card in the wizard (the
+    prerequisite rows directly beneath it, the Complete page's service list),
+    and the module's colour survives as ONE small mark: a dot beside the name.
+    The colour still tells you which pillar you are reading; it no longer
+    shouts it.
+    """
+
+    #: Diameter of the accent dot, in px.
+    DOT_PX = 8
 
     def __init__(
         self,
@@ -72,32 +91,45 @@ class CapabilityCard(QFrame):
     ) -> None:
         super().__init__(parent)
         self.setObjectName("capabilityCard")
-        # The accent is per-card, so the tint and left rule are set here rather
-        # than in the shared stylesheet.
         self.setStyleSheet(
-            f"QFrame#capabilityCard {{ background-color: {rgba_css(accent, 0.07)};"
-            f" border: 1px solid {rgba_css(accent, 0.35)};"
-            f" border-left: 3px solid {accent};"
+            f"QFrame#capabilityCard {{ background-color: {BG_CARD};"
+            f" border: 1px solid {BORDER_STRONG};"
             f" border-radius: 10px; }}"
             "QFrame#capabilityCard QLabel { background: transparent; border: none; }"
         )
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(12, 10, 12, 10)
-        layout.setSpacing(3)
+        layout.setContentsMargins(14, 12, 14, 12)
+        layout.setSpacing(6)
+
+        head = QHBoxLayout()
+        head.setContentsMargins(0, 0, 0, 0)
+        head.setSpacing(8)
+
+        dot = QLabel()
+        dot.setObjectName("capabilityDot")
+        dot.setFixedSize(self.DOT_PX, self.DOT_PX)
+        dot.setStyleSheet(
+            f"background-color: {accent}; border: none;"
+            f" border-radius: {self.DOT_PX // 2}px;"
+        )
+        head.addWidget(dot, alignment=Qt.AlignmentFlag.AlignVCenter)
 
         title = QLabel(name)
+        title.setObjectName("capabilityTitle")
         title.setStyleSheet(
-            f"color: {accent}; font-size: {FS_H3}px; "
+            f"color: {TEXT_PRIMARY}; font-size: {FS_H3}px; "
             f"font-weight: {FW_SEMIBOLD}; background: transparent;"
         )
-        layout.addWidget(title)
+        head.addWidget(title, alignment=Qt.AlignmentFlag.AlignVCenter)
+        head.addStretch()
+        layout.addLayout(head)
 
         body = QLabel(description)
         body.setWordWrap(True)
         body.setStyleSheet(
-            f"color: {TEXT_BODY}; font-size: {FS_BODY}px; background: transparent;"
+            f"color: {TEXT_SECONDARY}; font-size: {FS_BODY}px; background: transparent;"
         )
         layout.addWidget(body)
 

@@ -111,6 +111,22 @@ export function formatElapsed(seconds: number): string {
 }
 
 /**
+ * "00:23" / "01:30" / "1:05:00" -- the remaining time as a clock.
+ *
+ * v2.4.11 operator instruction: "instead of 'about 23 seconds left', replace
+ * with '00:23 left'". A clock beside a clock compares at a glance; a sentence
+ * beside a clock does not.
+ */
+export function formatClock(seconds: number): string {
+  const total = Math.max(0, Math.round(seconds));
+  const s = String(total % 60).padStart(2, "0");
+  const minutes = Math.floor(total / 60);
+  if (minutes < 60) return `${String(minutes).padStart(2, "0")}:${s}`;
+  const h = Math.floor(minutes / 60);
+  return `${h}:${String(minutes % 60).padStart(2, "0")}:${s}`;
+}
+
+/**
  * The four phases a pending job moves through, in order. A job may skip any
  * of the first three, but it never slides back to an earlier one.
  */
@@ -178,6 +194,58 @@ export function loadEtaSeconds(
   if (fraction === null || fraction <= 0 || fraction >= 1) return null;
   if (elapsedSeconds === null || elapsedSeconds <= 0) return null;
   return Math.max(0, Math.round(elapsedSeconds / fraction - elapsedSeconds));
+}
+
+/**
+ * An estimate that refuses to promise zero while the work is still running.
+ *
+ * v2.4.11 operator report: the loading bar counted down to "about 2 seconds
+ * left", then sat there while the model kept loading, and finally jumped to a
+ * full bar with a fresh counter under it. The cost model was simply short for
+ * this model, and a countdown that reaches zero mid-load is worse than a
+ * vaguer one: it says the wait is over when it is not.
+ *
+ * Once the clock nears the estimate, the estimate grows with it, so the
+ * remaining figure keeps shrinking toward -- and only reaches -- the end of
+ * the real work. It never shrinks below the original estimate.
+ */
+export function adaptiveEstimateSeconds(estimate: number, elapsed: number): number {
+  if (!Number.isFinite(estimate) || estimate <= 0) return 0;
+  if (elapsed < estimate * 0.85) return estimate;
+  return Math.max(estimate, Math.round(elapsed * 1.3 + 5));
+}
+
+/**
+ * Fill for the loading bar: measured where the runtime counts bytes, and the
+ * clock against the estimate where it does not.
+ *
+ * An unmeasured load is capped below full, because a bar that shows 100% while
+ * the model is still loading is the same lie as a countdown at zero. The phase
+ * ending is what completes it.
+ */
+export const UNMEASURED_LOAD_CEILING = 0.95;
+
+export function loadFraction(
+  progress: Progress | undefined,
+  phaseElapsed: number | null,
+  estimateSeconds: number | undefined,
+  /** Highest fill shown so far, so the bar can never walk backwards. */
+  floor = 0,
+): number | null {
+  const measured = phaseFraction(progress);
+  if (measured !== null) return Math.max(floor, measured);
+  if (!estimateSeconds || estimateSeconds <= 0) return null;
+  const elapsed = Math.max(0, phaseElapsed ?? 0);
+  const estimate = adaptiveEstimateSeconds(estimateSeconds, elapsed);
+  if (estimate <= 0) return null;
+  /*
+   * v2.4.11 operator report: "the progress kept regressing backward as the
+   * expected completion time changed". It did: the fill is elapsed/estimate,
+   * and the estimate grows when a load outruns it, so the quotient fell. A
+   * bar that goes backwards is worse than a bar that stalls -- it says work
+   * was undone. The caller keeps the high-water mark and passes it here.
+   */
+  return Math.max(floor, Math.min(UNMEASURED_LOAD_CEILING, elapsed / estimate));
 }
 
 /** The counter fields a runtime `progress` notification may carry. */
@@ -323,67 +391,52 @@ export function progressLines(input: {
   readonly estimateSeconds?: number | undefined;
 }): ProgressLines {
   const { progress, phase, phaseElapsed, estimateSeconds } = input;
-  const parts: string[] = [];
-  let measured = false;
-  let position: string | null = null;
+  const elapsedSeconds = phaseElapsed ?? 0;
   let remaining: string | null = null;
 
   if (phase === "generating") {
-    if (progress && progress.total > 0 && progress.step > 0) {
-      position = `Step ${Math.min(progress.step, progress.total)} of ${progress.total}`;
-      parts.push(position);
-      const eta = stepEtaSeconds(progress, phaseElapsed ?? 0);
-      if (eta !== null && eta > 0) {
-        remaining = `about ${formatDuration(eta)} left`;
-        parts.push(remaining);
-        measured = true;
-      } else if (eta === 0) {
-        remaining = "finishing";
-        parts.push(remaining);
-        measured = true;
-      }
+    // Sampling steps are the best rate there is, so they still drive the
+    // figure -- they are just no longer PRINTED (v2.4.11: "no indication of
+    // steps or anything else", only the clock and the time left).
+    const eta = stepEtaSeconds(progress, elapsedSeconds);
+    if (eta !== null && eta > 0) {
+      remaining = `${formatClock(eta)} left`;
+    } else if (eta === 0) {
+      remaining = "finishing";
+    } else if (estimateSeconds && estimateSeconds > 0) {
+      const left = adaptiveEstimateSeconds(estimateSeconds, elapsedSeconds) - elapsedSeconds;
+      remaining = left > 0 ? `${formatClock(left)} left` : "finishing";
     }
   } else if (phase === "loading") {
-    // The runtime's own estimate first; the load's measured rate second.
+    /*
+     * v2.4.11: the figure is derived from the very fraction and clock shown
+     * beside it, so the three numbers on screen always agree. The runtime's
+     * own etaS measures from its first counted byte -- a shorter, faster
+     * window than the clock -- so it is only the fallback for a load that
+     * reports a time but no fraction.
+     */
     const runtimeEta =
       typeof progress?.etaS === "number" && progress.etaS > 0 ? progress.etaS : null;
-    const eta = runtimeEta ?? loadEtaSeconds(phaseFraction(progress), phaseElapsed);
-    if (eta !== null && eta > 0) {
-      remaining = `about ${formatDuration(eta)} left`;
-      parts.push(remaining);
-      measured = true;
+    const measured = loadEtaSeconds(phaseFraction(progress), phaseElapsed) ?? runtimeEta;
+    if (measured !== null && measured > 0) {
+      remaining = `${formatClock(measured)} left`;
+    } else if (phaseFraction(progress) === null && estimateSeconds && estimateSeconds > 0) {
+      // Unmeasured load: the same adaptive estimate that fills the bar, so
+      // the countdown cannot reach zero while the bar is still short of full.
+      const left = adaptiveEstimateSeconds(estimateSeconds, elapsedSeconds) - elapsedSeconds;
+      if (left > 0) remaining = `${formatClock(left)} left`;
     }
   }
 
-  const clock: string[] = [];
-  const elapsed = phaseElapsed !== null ? `${formatElapsed(phaseElapsed)} elapsed` : null;
-  if (elapsed) clock.push(elapsed);
-
-  /*
-   * v2.4.9 operator instruction: the cost-model line ("models usually load in
-   * about 25 seconds") is gone. It was a second, differently-worded line under
-   * the clock saying roughly what the right-hand figure already says, and the
-   * operator asked to "go straight to 'about 125 seconds left'".
-   *
-   * So when nothing has been measured yet, the up-front estimate becomes the
-   * REMAINING figure directly, counted down by the time already spent. That
-   * keeps one line, one wording, and one place to look -- and the moment a
-   * real measurement arrives it supersedes this without the layout shifting.
-   */
-  const hint: string | null = null;
-  if (!measured && estimateSeconds && estimateSeconds > 0 && phase !== "queued") {
-    const left = estimateSeconds - (phaseElapsed ?? 0);
-    // Past the estimate, stop promising: "about 0 seconds left" is a lie the
-    // user can see through, and a negative number is worse.
-    remaining = left > 0 ? `about ${formatDuration(left)} left` : "almost done";
-  }
-
+  // v2.4.11: "just the time" -- the position under the bar already says what
+  // it is, and "0:47 elapsed" beside "00:23 left" reads as two kinds of thing.
+  const elapsed = phaseElapsed !== null ? formatElapsed(phaseElapsed) : null;
   return {
-    primary: parts.length > 0 ? parts.join(" · ") : null,
-    secondary: clock.length > 0 ? clock.join(" · ") : null,
+    primary: remaining,
+    secondary: elapsed,
     elapsed,
     remaining,
-    position,
-    hint,
+    position: null,
+    hint: null,
   };
 }

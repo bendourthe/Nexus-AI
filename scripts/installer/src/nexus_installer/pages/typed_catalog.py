@@ -780,20 +780,110 @@ class _FlowLayout(QLayout):
         return y + line_height - rect.y()
 
 
+class _CurrentTabHeight(QTabWidget):
+    """Tab widget as tall as the tab being shown, not as the tallest tab.
+
+    QTabWidget reports the largest page it holds, so the Audio tab (two cards)
+    was framed by a panel sized for the Agentic tab (a dozen). The operator
+    asked for the box to "fit the list of models in the current tab", so the
+    hint follows the current page and the panel is re-measured on every tab
+    change.
+    """
+
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.currentChanged.connect(lambda _index: self.updateGeometry())
+
+    def _page_height(self, minimum: bool) -> int | None:
+        page = self.currentWidget()
+        if page is None:
+            return None
+        hint = page.minimumSizeHint() if minimum else page.sizeHint()
+        bar = self.tabBar()
+        chrome = (bar.sizeHint().height() if bar else 0) + 8
+        return hint.height() + chrome
+
+    def sizeHint(self) -> QSize:  # noqa: N802
+        hint = super().sizeHint()
+        height = self._page_height(minimum=False)
+        return hint if height is None else QSize(hint.width(), height)
+
+    def minimumSizeHint(self) -> QSize:  # noqa: N802
+        hint = super().minimumSizeHint()
+        height = self._page_height(minimum=True)
+        return (
+            hint if height is None else QSize(hint.width(), min(hint.height(), height))
+        )
+
+
+class _WrappedCardColumn(QWidget):
+    """Card column that reports the height its WRAPPED content really needs.
+
+    A QWidget's size hints come from its layout, which measures each
+    word-wrapped label at a guessed width. For these cards that guess is two
+    to three times the drawn height (the Audio tab hints 933px and draws
+    354px), and a scroll area sizes its inner widget by that hint -- which is
+    what left a two-card category scrolling inside a tall, mostly empty box.
+    Both hints are re-asked of the layout at the width the column actually
+    has, so the box and the scrollbar describe the cards on screen.
+    """
+
+    def _wrapped_height(self, fallback: int) -> int:
+        layout = self.layout()
+        width = self.width()
+        if layout is None or width <= 0 or not layout.hasHeightForWidth():
+            return fallback
+        return layout.totalHeightForWidth(width)
+
+    def sizeHint(self) -> QSize:  # noqa: N802
+        hint = super().sizeHint()
+        return QSize(hint.width(), self._wrapped_height(hint.height()))
+
+    def minimumSizeHint(self) -> QSize:  # noqa: N802
+        hint = super().minimumSizeHint()
+        return QSize(hint.width(), self._wrapped_height(hint.height()))
+
+
 class _FillScrollArea(QScrollArea):
-    """Inner card list that does not inflate the outer wizard scroll.
+    """Inner card list sized to the cards it holds.
 
     QScrollArea's default sizeHint is the full inner-widget height. Nested
     inside the window content scroll, that grows the Models page until the
-    tab bar (and Reset) sit below the fold. Report a compact hint so the
-    category list scrolls in place.
+    tab bar (and Reset) sit below the fold. Report the content height instead,
+    paired with a Maximum vertical policy so a short tab (Audio: two cards)
+    shrinks to its cards rather than stretching into an empty scrolling box,
+    while a long tab still stops at the space the page can give it.
     """
 
+    #: Floor so a single-card or empty tab keeps a usable box.
+    MIN_CONTENT_HEIGHT = 160
+
+    def _content_height(self) -> int:
+        inner = self.widget()
+        if inner is None:
+            return self.MIN_CONTENT_HEIGHT
+        width = self.viewport().width()
+        # Cards word-wrap, so the height they actually occupy depends on the
+        # width they get. `sizeHint` measures each wrapped label at a guessed
+        # narrow width and comes out two to three times the rendered height
+        # (the Audio tab: 933px hinted, 354px drawn), so the wrapped
+        # measurement wins wherever the layout can supply one.
+        if width > 0 and inner.hasHeightForWidth():
+            hint = inner.heightForWidth(width)
+        else:
+            hint = inner.sizeHint().height()
+        return max(self.MIN_CONTENT_HEIGHT, hint + 2 * self.frameWidth())
+
     def sizeHint(self) -> QSize:
-        return QSize(400, 280)
+        return QSize(400, self._content_height())
 
     def minimumSizeHint(self) -> QSize:
-        return QSize(200, 160)
+        return QSize(200, min(self.MIN_CONTENT_HEIGHT, self._content_height()))
+
+    def resizeEvent(self, event: object) -> None:  # noqa: N802
+        super().resizeEvent(event)  # type: ignore[arg-type]
+        # Width changes re-wrap the cards, which changes the content height.
+        self.updateGeometry()
 
 
 def _section_label(text: str) -> QLabel:
@@ -1115,9 +1205,12 @@ class TypedCatalogPage(QWidget):
         self._legend.setVisible(bool(legend_html))
         layout.addWidget(self._legend)
 
-        self._tabs = QTabWidget()
+        self._tabs = _CurrentTabHeight()
+        # Maximum: the panel may shrink to the current tab's cards but never
+        # stretches past them (v2.4.11 -- "fit the box containing the models to
+        # the list of models in the current tab").
         self._tabs.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum
         )
         self._tabs.tabBar().setExpanding(False)
         self._refresh_button = QPushButton("Reset to recommended")
@@ -1148,6 +1241,8 @@ class TypedCatalogPage(QWidget):
         )
         reassurance.setWordWrap(True)
         layout.addWidget(reassurance)
+        # Space a short category no longer fills collects here, at the bottom.
+        layout.addStretch()
 
         # Ids not in the catalog are kept: the model router sends unknown
         # ids to `ollama pull` verbatim (the --model override contract).
@@ -1400,7 +1495,7 @@ class TypedCatalogPage(QWidget):
         scroll = _FillScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        inner = QWidget()
+        inner = _WrappedCardColumn()
         layout = QVBoxLayout(inner)
         layout.setSpacing(8)
 
@@ -1481,6 +1576,9 @@ class TypedCatalogPage(QWidget):
 
         layout.addStretch()
         scroll.setWidget(inner)
+        # Maximum: the box may shrink below the page height but never grows
+        # past its own content, so short categories lose the empty scroll run.
+        scroll.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
         outer.addWidget(scroll, stretch=1)
 
         # v1.11.0 Phase 6 (T603): an explicit "Skip this category" control. The
@@ -1500,6 +1598,9 @@ class TypedCatalogPage(QWidget):
         self._skip_buttons[section_key] = skip_btn
         skip_row.addWidget(skip_btn)
         outer.addLayout(skip_row)
+        # Absorb the space a short category no longer fills so the card box and
+        # the Skip row stay together at the top of the tab.
+        outer.addStretch()
         return container
 
     # -----------------------------------------------------------------

@@ -26,7 +26,7 @@ import { modelAvailabilityBucket } from "../../../../core/registry/modelDisplayP
 import { Button, SearchInput } from "../../components/ui";
 import { SidecarDownBanner } from "../../components/SidecarDownBanner";
 import {
-  isBackendDownMessage,
+  reportsBackendDown,
   useSidecarStatus,
 } from "../../lib/sidecarStatus";
 
@@ -102,7 +102,7 @@ export function ModelsSettings({
     Record<string, boolean>
   >({});
   const sidecar = useSidecarStatus();
-  const backendDown = sidecar.isDown || isBackendDownMessage(error);
+  const backendDown = sidecar.isDown || reportsBackendDown(error, sidecar.status);
 
   const refreshDisk = useCallback(async (): Promise<void> => {
     const request = ++diskRequest.current;

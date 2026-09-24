@@ -7,7 +7,7 @@
  */
 
 import type { ReactNode } from "react";
-import { MessageBubble } from "./MessageBubble";
+import { MessageBubble, type MessageBubbleActionApi } from "./MessageBubble";
 import type { ChatMessage } from "./types";
 import {
   calendarDayKey,
@@ -27,7 +27,11 @@ export interface MessageListProps {
   /** v2.2.4 Phase 4 -- extra studio actions inside the media lightbox. */
   renderPreviewExtra?: (message: ChatMessage) => ReactNode;
   /** v2.4.9 -- per-message actions rendered on the bubble's timestamp row. */
-  renderMetaActions?: (message: ChatMessage) => ReactNode;
+  /**
+   * Per-message actions on the timestamp row. `api` carries the bubble's own
+   * controls (v2.4.11), so an action can open that message's image editor.
+   */
+  renderMetaActions?: (message: ChatMessage, api: MessageBubbleActionApi) => ReactNode;
   /** v2.2.7 Phase 4 -- tests pin `en-US`; production uses the host locale. */
   locale?: string;
   onRepairMediaRuntime?: (message: ChatMessage) => void;
@@ -127,10 +131,12 @@ export function MessageList({
           locale={locale}
           {...(onMediaError ? { onMediaError } : {})}
           {...(renderPreviewExtra ? { renderPreviewExtra } : {})}
-          {...(() => {
-            const actions = renderMetaActions?.(msg);
-            return actions ? { metaActions: actions } : {};
-          })()}
+          {...(renderMetaActions
+            ? {
+                metaActions: (api: MessageBubbleActionApi) =>
+                  renderMetaActions(msg, api),
+              }
+            : {})}
           {...(onRepairMediaRuntime ? { onRepairMediaRuntime } : {})}
           {...(onCancelMediaRepair ? { onCancelMediaRepair } : {})}
           {...(onOpenMediaRepairLog ? { onOpenMediaRepairLog } : {})}

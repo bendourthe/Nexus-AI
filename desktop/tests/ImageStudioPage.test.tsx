@@ -269,23 +269,33 @@ describe("ImageStudioPage (chat)", () => {
       });
     };
     await drain();
-    // Loading: the caption states the phase and the bar reports weight bytes.
+    // Loading: the caption states the phase, the bar reports weight bytes.
     await waitFor(() =>
       expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
-        "Loading model 25%",
+        "Loading model",
       ),
     );
+    expect(
+      screen
+        .getAllByTestId(/^model-load-progress-/)[0]
+        ?.querySelector('[role="progressbar"]'),
+    ).toHaveAttribute("aria-valuenow", "25");
 
     client.scriptEvents("mem-job-1", [
       { kind: "progress", jobId: "mem-job-1", stage: "generating", step: 4, totalSteps: 14 },
     ]);
     await drain();
-    const stepLine = (): string => {
-      const [line] = screen.getAllByTestId(/^model-load-progress-.*-position$/);
-      return line?.textContent ?? "";
-    };
-    await waitFor(() => expect(stepLine()).toContain("Step 4 of 14"));
-    // Generating: the pill animation, the studio pool, and a step bar.
+    // v2.4.11: sampling shows the animation and the clock row -- no bar and
+    // no step line. The counted step still drives the time left.
+    await waitFor(() =>
+      expect(screen.queryAllByTestId(/^model-load-progress-/)).toHaveLength(0),
+    );
+    expect(screen.queryByText(/Step 4 of 14/)).toBeNull();
+    const clock = (): string =>
+      screen.getAllByTestId(/^generation-clock-/)[0]?.textContent ?? "";
+    // v2.4.11: the row is "0:00" on the left and "MM:SS left" on the right.
+    expect(clock()).toMatch(/^\d+:\d\d/);
+    // Generating: the pill animation and the studio pool.
     const orb = screen.getByTestId("agent-state-orb");
     expect(orb).toHaveAttribute("data-orb-pill", "true");
     expect(STUDIO_PENDING_CAPTIONS).toContain(
@@ -297,7 +307,8 @@ describe("ImageStudioPage (chat)", () => {
       { kind: "progress", jobId: "mem-job-1" },
     ]);
     await drain();
-    expect(stepLine()).toContain("Step 4 of 14");
+    // The heartbeat must not send it back to the loading bar.
+    expect(screen.queryAllByTestId(/^model-load-progress-/)).toHaveLength(0);
     expect(screen.getByTestId("agent-state-orb")).toHaveAttribute(
       "data-orb-pill",
       "true",
@@ -307,7 +318,14 @@ describe("ImageStudioPage (chat)", () => {
       { kind: "progress", jobId: "mem-job-1", step: 9, totalSteps: 14 },
     ]);
     await drain();
-    await waitFor(() => expect(stepLine()).toContain("Step 9 of 14"));
+    // A later counted step still lands (it drives the time left), and it
+    // still does not bring a bar back.
+    await waitFor(() => expect(clock()).toMatch(/^\d+:\d\d/));
+    expect(screen.queryAllByTestId(/^model-load-progress-/)).toHaveLength(0);
+    expect(screen.getByTestId("agent-state-orb")).toHaveAttribute(
+      "data-orb-pill",
+      "true",
+    );
   });
 
   it("repairs an unavailable runtime and retries the same image turn exactly once", async () => {
@@ -436,7 +454,11 @@ describe("ImageStudioPage (chat)", () => {
     // the body names what is on the GPU and what switching does to it.
     expect(dialog.textContent).toContain("Switch to Image model:");
     expect(dialog.textContent).toContain("A task in Images is currently running on the GPU.");
-    expect(dialog.textContent).toContain("Switching will stop it, clear the GPU");
+    // v2.4.11: the prompt states the one-model-at-a-time rule and the cost of
+    // the switch, so the choice is informed.
+    expect(dialog.textContent).toContain("holds one model at a time");
+    expect(dialog.textContent).toContain("stops it, clears the GPU");
+    expect(dialog.textContent).toMatch(/takes about .*(second|minute)/);
     expect(screen.getByTestId("image-gpu-busy-confirm-checkbox")).toBeInTheDocument();
     expect(client.lastRequest).toBeNull();
     fireEvent.click(screen.getByTestId("image-gpu-busy-confirm-cancel"));
@@ -489,45 +511,6 @@ describe("ImageStudioPage (chat)", () => {
     ).toContain("data:image/png");
   });
 
-  it("Copy Workflow forwards extracted JSON to the clipboard adapter", async () => {
-    const client = new InMemoryDiffusionClient();
-    client.extractResult = { prompt: "fox" };
-    const clipboard = { writeText: vi.fn().mockResolvedValue(undefined) };
-    const { container } = render(
-      <ImageStudioPage
-        client={client}
-        modelsClient={imageModels()}
-        drainIntervalMs={20}
-        clipboard={clipboard}
-      />,
-    );
-    client.scriptEvents("mem-job-1", [
-      { kind: "complete", jobId: "mem-job-1", png: "PNG==" },
-    ]);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
-      target: { value: "fox" },
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId("media-composer-submit"));
-    });
-    await act(async () => {
-      vi.advanceTimersByTime(40);
-      await Promise.resolve();
-    });
-    await waitFor(() =>
-      expect(screen.getByAltText("Generated image")).toBeInTheDocument(),
-    );
-    fireEvent.click(screen.getByAltText("Generated image"));
-    const copyBtn = container.querySelector(
-      '[data-testid^="image-copyworkflow-"]',
-    ) as HTMLButtonElement;
-    await act(async () => {
-      fireEvent.click(copyBtn);
-      await Promise.resolve();
-    });
-    await waitFor(() => expect(clipboard.writeText).toHaveBeenCalled());
-  });
-
   it("the selector's 'Get more models' entry fires the callback", () => {
     const onGetMoreModels = vi.fn();
     render(
@@ -559,7 +542,7 @@ describe("ImageStudioPage (chat)", () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
     });
     // v2.4.8 Phase 8: before the runtime reports a stage or a counted step the
-    // orb reads "Loading model..." (weights moving onto the GPU are not
+    // orb reads "Loading model" (weights moving onto the GPU are not
     // creation); once sampling starts it rotates the studio captions.
     const orb = await screen.findByRole("img", {
       name: /loading model|generating media/i,
@@ -572,7 +555,7 @@ describe("ImageStudioPage (chat)", () => {
     // v2.4.4 Phase 5.3: one of Creating / Crafting / Generating, never Shaping.
     expect(screen.queryByText("Shaping...")).toBeNull();
     expect(
-      screen.queryByText("Loading model...") !== null ||
+      screen.queryByText("Loading model") !== null ||
         STUDIO_PENDING_CAPTIONS.some(
           (caption) => screen.queryByText(caption) !== null,
         ),
@@ -612,7 +595,7 @@ describe("ImageStudioPage (chat)", () => {
     await waitFor(() =>
       expect(screen.getByText(/Generation failed/)).toBeInTheDocument(),
     );
-    expect(screen.queryByTestId(/^image-download-/)).toBeNull();
+    expect(screen.queryByTestId(/^image-save-/)).toBeNull();
     expect(screen.queryByTestId(/^message-media-/)).toBeNull();
   });
 
@@ -639,14 +622,13 @@ describe("ImageStudioPage (chat)", () => {
     const media = await screen.findByTestId(/^message-media-/);
     fireEvent.error(media);
     await waitFor(() =>
-      expect(screen.queryByTestId(/^image-download-/)).toBeNull(),
+      expect(screen.queryByTestId(/^image-save-/)).toBeNull(),
     );
     expect(screen.getByText(/could not be displayed/)).toBeInTheDocument();
   });
 
-  it("hides recall actions when extract returns no workflow", async () => {
+  it("offers exactly Edit, Copy and Save on a generated image", async () => {
     const client = new InMemoryDiffusionClient();
-    client.extractResult = null;
     render(
       <ImageStudioPage
         client={client}
@@ -667,50 +649,16 @@ describe("ImageStudioPage (chat)", () => {
       vi.advanceTimersByTime(40);
       await Promise.resolve();
     });
-    await waitFor(() =>
-      expect(screen.getByAltText("Generated image")).toBeInTheDocument(),
+    const row = await screen.findByTestId(/^image-actions-/);
+    // v2.4.11 operator instruction: "only 3 buttons should exist ... Edit,
+    // Copy, Save", in that order.
+    const labels = Array.from(row.querySelectorAll("button")).map((b) =>
+      b.getAttribute("aria-label"),
     );
-    // v2.2.3 Phase 2 (2.3): recall actions are icon buttons named by aria-label.
-    expect(screen.queryByLabelText("Use Prompt")).toBeNull();
-  });
-
-  it("Use Prompt prefills the advanced prompt from extracted workflow", async () => {
-    const client = new InMemoryDiffusionClient();
-    client.extractResult = { prompt: "watercolor fox", seed: 42 };
-    render(
-      <ImageStudioPage
-        client={client}
-        modelsClient={imageModels()}
-        drainIntervalMs={20}
-      />,
-    );
-    client.scriptEvents("mem-job-1", [
-      { kind: "complete", jobId: "mem-job-1", png: "PNG==" },
-    ]);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
-      target: { value: "fox" },
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId("media-composer-submit"));
-    });
-    await act(async () => {
-      vi.advanceTimersByTime(40);
-      await Promise.resolve();
-    });
-    fireEvent.click(await screen.findByAltText("Generated image"));
-    const usePrompt = await screen.findByLabelText("Use Prompt");
-    fireEvent.click(screen.getByTestId("image-advanced-settings"));
-    await act(async () => {
-      fireEvent.click(usePrompt);
-    });
-    await waitFor(() => {
-      expect(
-        (
-          screen.getByTestId("image-prompt") as
-            HTMLTextAreaElement | HTMLInputElement
-        ).value,
-      ).toBe("watercolor fox");
-    });
+    expect(labels).toEqual(["Edit", "Copy", "Save"]);
+    // Edit opens the editing viewer that the bubble owns.
+    fireEvent.click(screen.getByLabelText("Edit"));
+    expect(await screen.findByLabelText("Image viewer")).toBeInTheDocument();
   });
 
   it("shows queue pending count for a seed sweep", async () => {
@@ -925,7 +873,7 @@ describe("ImageStudioPage (chat)", () => {
     await waitFor(() =>
       expect(screen.getByText(/Generation failed/)).toBeInTheDocument(),
     );
-    expect(screen.queryByTestId(/^image-download-/)).toBeNull();
+    expect(screen.queryByTestId(/^image-save-/)).toBeNull();
     expect(screen.queryByTestId(/^message-media-/)).toBeNull();
   });
 

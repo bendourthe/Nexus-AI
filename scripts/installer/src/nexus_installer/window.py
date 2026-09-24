@@ -336,6 +336,7 @@ class InstallerWindow(QMainWindow):
         # The sidebar highlights the section being viewed and reflects every
         # section's progression / lock state.
         self._refresh_navigation()
+        self._refresh_page_actions()
         self._refresh_footer()
 
         # Every label on the page is selectable, so paths, versions, model
@@ -500,11 +501,33 @@ class InstallerWindow(QMainWindow):
         is_review = index == self.review_page_index
         is_last = index == total - 1
         if is_last:
-            self._footer.set_next_text("Finish")
+            # A page may name its own primary (Complete: "Launch Nexus AI").
+            page = self._pages[index]
+            label = getattr(page, "finish_button_text", None)
+            self._footer.set_next_text(label() if callable(label) else "Finish")
         elif is_review:
             self._footer.set_next_text("Install")
         else:
             self._footer.set_next_text("Next")
+
+    def _refresh_page_actions(self) -> None:
+        """Let the current page put its own buttons in the footer row."""
+        page = self._pages[self._current_index]
+        actions = getattr(page, "footer_actions", None)
+        self._footer.set_page_actions(list(actions()) if callable(actions) else [])
+
+    def refresh_page_actions(self) -> None:
+        """A page rebuilt its footer buttons (e.g. Retry became relevant)."""
+        self._refresh_page_actions()
+        self._refresh_footer()
+
+    def close_from_page(self) -> None:
+        """A page asked to end the wizard without running its finish action."""
+        page = self._pages[self._current_index]
+        acknowledge = getattr(page, "acknowledge", None)
+        if callable(acknowledge):
+            acknowledge()
+        self.close()
 
     def _on_footer_cancel(self) -> None:
         """Footer Cancel during install -> ask the installing page to abort."""

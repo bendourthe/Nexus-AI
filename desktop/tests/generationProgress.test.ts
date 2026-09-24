@@ -3,6 +3,7 @@ import {
   estimateGenerationSeconds,
   estimateModelLoadSeconds,
   formatDuration,
+  loadFraction,
   formatElapsed,
   jobPhase,
   loadEtaSeconds,
@@ -76,9 +77,12 @@ describe("generationProgress", () => {
       phaseElapsed: 100,
       estimateSeconds: 1080,
     });
-    expect(measured.primary).toBe("Step 10 of 30 · about 3 minutes left");
+    // v2.4.11: the step position is no longer printed -- sampling steps drive
+    // the estimate, they do not draw a second progress readout.
+    expect(measured.position).toBeNull();
+    expect(measured.remaining).toBe("03:20 left");
     // The cost model is gone: there is a real rate now.
-    expect(measured.secondary).toBe("1:40 elapsed");
+    expect(measured.secondary).toBe("1:40");
 
     const guessed = progressLines({
       progress: { step: 0, total: 0, stage: "generating" },
@@ -88,10 +92,44 @@ describe("generationProgress", () => {
     });
     // v2.4.9: no cost-model sentence. The up-front estimate becomes the
     // REMAINING figure directly, counted down by time already spent.
-    expect(guessed.primary).toBeNull();
     expect(guessed.hint).toBeNull();
-    expect(guessed.remaining).toBe("about 18 minutes left");
-    expect(guessed.secondary).toBe("0:08 elapsed");
+    expect(guessed.remaining).toBe("17:52 left");
+    expect(guessed.secondary).toBe("0:08");
+  });
+
+  // v2.4.11 operator report: "Loading model 17%", "0:18 elapsed" and "about 11
+  // seconds left" cannot all be true at once.
+  it("derives the load estimate from the fraction and clock beside it", () => {
+    const lines = progressLines({
+      progress: {
+        step: 0,
+        total: 0,
+        stage: "loading",
+        loadedBytes: 170,
+        totalBytes: 1000,
+        // The runtime's own figure, measured from its first counted byte: far
+        // too short for the window the user is watching.
+        etaS: 11,
+      },
+      phase: "loading",
+      phaseElapsed: 18,
+      estimateSeconds: 29,
+    });
+    // 17% in 18 seconds -> about 88 seconds more, not 11.
+    expect(lines.remaining).toBe("01:28 left");
+    expect(lines.elapsed).toBe("0:18");
+  });
+
+  it("says nothing rather than guessing once a fraction is measurable", () => {
+    const lines = progressLines({
+      progress: { step: 0, total: 0, stage: "loading", loadedBytes: 0, totalBytes: 1000 },
+      phase: "loading",
+      // No elapsed yet: no rate, and the cost model must not contradict the
+      // 0% the bar is showing.
+      phaseElapsed: 0,
+      estimateSeconds: 25,
+    });
+    expect(lines.remaining).toBeNull();
   });
 
   it("uses the runtime's own byte estimate while weights load", () => {
@@ -101,8 +139,8 @@ describe("generationProgress", () => {
       phaseElapsed: 5,
       estimateSeconds: 25,
     });
-    expect(lines.primary).toBe("about 12 seconds left");
-    expect(lines.secondary).toBe("0:05 elapsed");
+    expect(lines.primary).toBe("00:12 left");
+    expect(lines.secondary).toBe("0:05");
   });
 
   // Operator report (2026-09-08): a video read "usually about 18 min" while it
@@ -116,8 +154,8 @@ describe("generationProgress", () => {
     });
     // v2.4.9: the cost-model sentence is gone; the estimate is counted
     // down as this phase's own remaining time instead.
-    expect(loading.secondary).toBe("0:04 elapsed");
-    expect(loading.remaining).toBe("about 21 seconds left");
+    expect(loading.secondary).toBe("0:04");
+    expect(loading.remaining).toBe("00:21 left");
     expect(loading.hint).toBeNull();
     const generating = progressLines({
       progress: { step: 0, total: 0, stage: "generating" },
@@ -125,8 +163,8 @@ describe("generationProgress", () => {
       phaseElapsed: 4,
       estimateSeconds: 1080,
     });
-    expect(generating.secondary).toBe("0:04 elapsed");
-    expect(generating.remaining).toBe("about 18 minutes left");
+    expect(generating.secondary).toBe("0:04");
+    expect(generating.remaining).toBe("17:56 left");
   });
 
   it("measures the load's own remaining time when the runtime gives none", () => {
@@ -148,9 +186,9 @@ describe("generationProgress", () => {
       phaseElapsed: 20,
       estimateSeconds: 25,
     });
-    expect(lines.primary).toBe("about 30 seconds left");
+    expect(lines.primary).toBe("00:30 left");
     // Measured now, so the up-front figure is gone.
-    expect(lines.secondary).toBe("0:20 elapsed");
+    expect(lines.secondary).toBe("0:20");
   });
 
   it("says finishing on the last step rather than 0 s left", () => {
@@ -159,7 +197,43 @@ describe("generationProgress", () => {
       phase: "generating",
       phaseElapsed: 300,
     });
-    expect(lines.primary).toBe("Step 30 of 30 · finishing");
+    expect(lines.remaining).toBe("finishing");
+    expect(lines.position).toBeNull();
+  });
+
+  // v2.4.11 operator report: the loading bar counted down to "about 2 seconds
+  // left" and then sat there while the model kept loading.
+  it("never counts an unmeasured load down to zero", () => {
+    const past = progressLines({
+      progress: { step: 0, total: 0, stage: "loading" },
+      phase: "loading",
+      // Well past the 25-second cost model, with nothing measured.
+      phaseElapsed: 40,
+      estimateSeconds: 25,
+    });
+    expect(past.remaining).not.toBeNull();
+    expect(past.remaining).not.toBe("00:00 left");
+    expect(past.elapsed).toBe("0:40");
+  });
+
+  it("fills the loading bar from the clock when bytes are not counted", () => {
+    // Half-way through the estimate: half a bar.
+    expect(loadFraction({ step: 0, total: 0, stage: "loading" }, 10, 20)).toBeCloseTo(
+      0.5,
+      2,
+    );
+    // Past the estimate the bar holds below full: the load is still running.
+    const late = loadFraction({ step: 0, total: 0, stage: "loading" }, 60, 20);
+    expect(late).toBeLessThan(1);
+    expect(late).toBeGreaterThan(0.5);
+    // A counted load wins over the clock.
+    expect(
+      loadFraction(
+        { step: 0, total: 0, stage: "loading", loadedBytes: 250, totalBytes: 1000 },
+        99,
+        20,
+      ),
+    ).toBeCloseTo(0.25, 2);
   });
 
   it("costs a job from its own shape, calibrated on measured runs", () => {

@@ -211,7 +211,7 @@ describe("MessageBubble pending pill", () => {
     const loading = screen.getByRole("img", { name: "Loading model" });
     expect(loading).toHaveAttribute("data-orb-size", "hero");
     expect(loading).not.toHaveAttribute("data-orb-pill");
-    expect(captionText()).toBe("Loading model...");
+    expect(captionText()).toBe("Loading model");
 
     rerender(
       <MessageBubble

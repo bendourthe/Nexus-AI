@@ -18,6 +18,14 @@ import {
   type SpawnOptions,
   spawn,
 } from "node:child_process";
+import {
+  appendFileSync,
+  mkdirSync,
+  renameSync,
+  statSync,
+} from "node:fs";
+import { homedir } from "node:os";
+import { dirname, join } from "node:path";
 import { createInterface, type Interface } from "node:readline";
 
 export interface DiffusionProgressEvent {
@@ -162,6 +170,41 @@ export function diffusionRequestTimeoutMs(
     : DEFAULT_DIFFUSION_REQUEST_TIMEOUT_MS;
 }
 
+/**
+ * Where the diffusion runtime's own output is kept (v2.4.11).
+ *
+ * Operator report: an image load showed no percentage and a video run ended
+ * with "the backend could not start", and neither question could be answered
+ * afterwards -- the Python runtime's stderr lived in a 32 KB in-memory tail
+ * that dies with the process. A failure nobody can read is a failure nobody
+ * can fix, so everything it says is also appended to a file on disk.
+ */
+export function diffusionLogPath(): string {
+  const home = homedir();
+  return join(home, ".nexus", "logs", "diffusion-runtime.log");
+}
+
+/** Keep the log from growing without bound across sessions. */
+const LOG_MAX_BYTES = 4 * 1024 * 1024;
+
+function appendRuntimeLog(text: string): void {
+  try {
+    const path = diffusionLogPath();
+    mkdirSync(dirname(path), { recursive: true });
+    try {
+      if (statSync(path).size > LOG_MAX_BYTES) {
+        // One rotation is enough: the interesting run is the last one.
+        renameSync(path, `${path}.1`);
+      }
+    } catch {
+      // No file yet, or it cannot be stat'd: append and move on.
+    }
+    appendFileSync(path, text);
+  } catch {
+    // Logging must never break a generation.
+  }
+}
+
 export class ChildProcessDiffusionRuntime implements DiffusionRuntimeClient {
   private child: ChildProcessWithoutNullStreams | null = null;
   private rl: Interface | null = null;
@@ -191,16 +234,23 @@ export class ChildProcessDiffusionRuntime implements DiffusionRuntimeClient {
     ) as ChildProcessWithoutNullStreams;
     this.child = child;
     this.stderrTail = "";
+    appendRuntimeLog(
+      `\n=== diffusion runtime started ${new Date().toISOString()} (pid ${child.pid ?? "?"}) ===\n`,
+    );
     if (child.stderr) {
       child.stderr.setEncoding("utf8");
       child.stderr.on("data", (chunk: string) => {
         this.stderrTail = (this.stderrTail + chunk).slice(-32_768);
+        appendRuntimeLog(chunk);
       });
     }
     const rl = createInterface({ input: child.stdout, crlfDelay: Infinity });
     this.rl = rl;
     rl.on("line", (line: string) => this.handleLine(line));
-    child.on("exit", () => {
+    child.on("exit", (code, signal) => {
+      appendRuntimeLog(
+        `=== diffusion runtime exited ${new Date().toISOString()} (code ${code ?? "null"}, signal ${signal ?? "none"}) ===\n`,
+      );
       this.failPending(new Error("diffusion-runtime-exited"));
       this.child = null;
       this.rl = null;

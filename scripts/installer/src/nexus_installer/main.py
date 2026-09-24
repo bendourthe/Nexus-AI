@@ -601,6 +601,11 @@ def main() -> None:
             window.switch_page(window.installing_page_index)
 
     complete_page.retry_requested.connect(_retry_failed_models)
+    # v2.4.11: the Complete page's own buttons live in the footer row, so the
+    # window re-hosts them whenever the page rebuilds the set, and Close ends
+    # the wizard without the launch that the primary button performs.
+    complete_page.footer_actions_changed.connect(window.refresh_page_actions)
+    complete_page.close_requested.connect(window.close_from_page)
 
     controller.attach_installing_page(installing_page)
     window.background_requested.connect(controller.request_background)

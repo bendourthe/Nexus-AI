@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import contextlib
 import importlib
+import sys
 import threading
 import time
 from pathlib import Path
@@ -98,7 +99,13 @@ class LoadProgress:
         self._now = now
         self._min_interval = min_interval_s
         self._lock = threading.Lock()
-        self._started_at: Optional[float] = None
+        # v2.4.11 operator report: the shell read "Loading model 17%" beside
+        # "0:18 elapsed" and "about 11 seconds left". The clock starts when the
+        # load starts; this rate used to start at the FIRST COUNTED BYTE, which
+        # is seconds later (imports, config parsing, device setup), so the rate
+        # described a shorter window and the estimate came out far too short.
+        # Anchoring here measures the same window the user is watching.
+        self._started_at: float = self._now()
         self._last_emit_at: Optional[float] = None
 
     def add(self, nbytes: int) -> None:
@@ -107,8 +114,6 @@ class LoadProgress:
             return
         with self._lock:
             now = self._now()
-            if self._started_at is None:
-                self._started_at = now
             self.loaded += int(nbytes)
             if (
                 self._last_emit_at is not None
@@ -137,7 +142,7 @@ class LoadProgress:
         }
 
     def _eta(self, loaded: int, now: float) -> Optional[float]:
-        if self.total <= 0 or self._started_at is None or loaded <= 0:
+        if self.total <= 0 or loaded <= 0:
             return None
         if loaded < self.total * ETA_MIN_FRACTION:
             return None
@@ -198,6 +203,67 @@ class _CountingHandle:
         return getattr(self._inner, name)
 
 
+class _CountingFile:
+    """Binary file wrapper that reports what `torch.load` reads.
+
+    v2.4.11 operator report: an image model showed "Loading model..." with no
+    percentage and a countdown that expired mid-load. Its weights are a
+    `.pth` checkpoint, which `torch.load` reads directly -- none of the
+    safetensors entry points this module patches are involved, so not one byte
+    was ever counted and the shell had nothing to measure. Handing torch a
+    counting file object makes that path measurable too.
+
+    Only the methods torch's unpickler and zip reader use are wrapped; the
+    rest are delegated, so a file this does not understand still behaves
+    exactly like the one underneath.
+    """
+
+    def __init__(self, raw: Any, progress: "LoadProgress") -> None:
+        self._raw = raw
+        self._progress = progress
+
+    def read(self, size: int = -1) -> bytes:
+        chunk = self._raw.read(size)
+        self._progress.add(len(chunk))
+        return chunk
+
+    def readinto(self, buffer: Any) -> int:
+        count = self._raw.readinto(buffer)
+        self._progress.add(int(count or 0))
+        return count
+
+    def readline(self, size: int = -1) -> bytes:
+        line = self._raw.readline(size)
+        self._progress.add(len(line))
+        return line
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._raw, name)
+
+
+def counting_torch_load(real_load: Callable[..., Any], progress: LoadProgress):
+    """A `torch.load` replacement that counts the bytes it reads from disk."""
+
+    def load(f: Any, *args: Any, **kwargs: Any) -> Any:
+        # `mmap=True` needs a real path (torch maps the file itself), and a
+        # caller that already passed a file object is counting nothing new.
+        if kwargs.get("mmap") or not isinstance(f, (str, bytes, Path)):
+            return real_load(f, *args, **kwargs)
+        try:
+            handle = open(f, "rb")  # noqa: SIM115 - closed below
+        except OSError:
+            return real_load(f, *args, **kwargs)
+        try:
+            return real_load(_CountingFile(handle, progress), *args, **kwargs)
+        except Exception:  # noqa: BLE001 - counting must never break a load
+            handle.seek(0)
+            return real_load(f, *args, **kwargs)
+        finally:
+            handle.close()
+
+    return load
+
+
 def counting_safe_open(real_open: Callable[..., Any], progress: LoadProgress):
     """A `safe_open` replacement whose handles count what they read."""
 
@@ -247,6 +313,14 @@ def install_counting_readers(
 
     swap(safetensors, "safe_open", new_open)
     swap(st_torch, "load_file", new_load)
+    # `.pth` / `.bin` checkpoints never touch safetensors: count those too, so
+    # every weights layout in the catalog reports a measurable load.
+    try:
+        torch = importlib.import_module("torch")
+    except Exception:  # noqa: BLE001 - no torch, nothing else to count
+        torch = None
+    if torch is not None and hasattr(torch, "load"):
+        swap(torch, "load", counting_torch_load(torch.load, progress))
     for module_name in _REBOUND_READER_MODULES:
         try:
             module = importlib.import_module(module_name)
@@ -287,4 +361,15 @@ def track_model_load(job_id: str, weights: Path) -> Iterator[LoadProgress]:
         yield progress
     finally:
         restore_readers(patches)
+        # v2.4.11 diagnostic: an image load reported no percentage at all, and
+        # the two candidate causes -- nothing SIZED (no matching weight files)
+        # and nothing COUNTED (the loader bypassed the patched readers) -- look
+        # identical from the shell. One line in the runtime log separates them.
+        with contextlib.suppress(Exception):
+            print(
+                f"[load_progress] job={job_id} sized={total} counted={progress.loaded} "
+                f"patched={len(patches)} weights={weights}",
+                file=sys.stderr,
+                flush=True,
+            )
     progress.finish()

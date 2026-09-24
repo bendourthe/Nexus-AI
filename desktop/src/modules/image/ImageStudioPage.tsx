@@ -12,7 +12,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Copy, Box, Download, FileJson, ImagePlus, Settings } from "lucide-react";
+import { Box, Copy, Download, FileJson, ImagePlus, Pencil, Save, Settings } from "lucide-react";
 import { SidecarDownBanner } from "../../components/SidecarDownBanner";
 import { Button, Select, Switch, TextField } from "../../components/ui";
 import { formatInferenceError } from "../../lib/inferenceRpcError";
@@ -22,7 +22,7 @@ import {
 } from "../../shared/studio/generationError";
 import { setModelActivity } from "../../lib/modelActivity";
 import {
-  isBackendDownMessage,
+  reportsBackendDown,
   isSidecarFailureMessage,
   useSidecarStatus,
 } from "../../lib/sidecarStatus";
@@ -128,12 +128,9 @@ import {
   type ProgressEvent,
   createIpcDiffusionClient,
 } from "./diffusionClient";
-import {
-  RecallActions,
-  applyImageRecall,
-  type RecallMode,
-} from "../../shared/studio/RecallActions";
 import { GenerationQueueBar } from "../../shared/studio/GenerationQueueBar";
+import { useJobDrain } from "../../shared/studio/useJobDrain";
+import { estimateModelLoadSeconds } from "../../shared/chat/generationProgress";
 import {
   createIpcGenerationQueueClient,
   type GenerationQueueClient,
@@ -255,6 +252,16 @@ function imageRecoveryState(
   };
 }
 
+/** The running generation this page is polling. */
+interface ActiveJob {
+  readonly jobId: string;
+  readonly messageId: string;
+  /** v2.4.8 follow-up: the session the job belongs to (may not be visible). */
+  readonly sessionId: string | null;
+  /** v2.4.9: wall-clock start, so the bubble can report what the run cost. */
+  readonly startedAtMs: number;
+}
+
 export function ImageStudioPage({
   client: clientOverride,
   modelsClient,
@@ -310,7 +317,10 @@ export function ImageStudioPage({
     text: string;
     attachments: readonly string[];
   } | null>(null);
-  const backendDown = sidecar.isDown || isBackendDownMessage(listFailure);
+  // v2.4.11: a call that timed out behind a running generation is not a
+  // backend that could not start -- see `reportsBackendDown`.
+  const backendDown =
+    sidecar.isDown || reportsBackendDown(listFailure, sidecar.status);
   const studioClient = useMemo(() => {
     if (explorerClientOverride) return explorerClientOverride;
     if (backendDown || !tauriAvailable())
@@ -341,14 +351,7 @@ export function ImageStudioPage({
   const modelsSourceRef =
     useRef<ImageStudioPageProps["modelsClient"]>(modelsClient);
   const [historyEpoch, setHistoryEpoch] = useState(0);
-  const [activeJob, setActiveJob] = useState<{
-    jobId: string;
-    messageId: string;
-    /** v2.4.8 follow-up: the session the job belongs to (may not be visible). */
-    sessionId: string | null;
-    /** v2.4.9: wall-clock start, so the bubble can report what the run cost. */
-    startedAtMs: number;
-  } | null>(null);
+  const [activeJob, setActiveJob] = useState<ActiveJob | null>(null);
   // v2.4.8 follow-up: the pending assistant bubble of the running job, so a
   // session switch and back shows it again; and where its turns persist.
   const pendingTurnRef = useRef<{ sessionId: string | null; assistant: ChatMessage } | null>(null);
@@ -409,9 +412,6 @@ export function ImageStudioPage({
     // change, not on every keystroke the user makes in the same model.
   }, [imageCaps]);
   const [queueJobs, setQueueJobs] = useState<readonly GenerationJob[]>([]);
-  const [workflowByMessage, setWorkflowByMessage] = useState<
-    Record<string, Record<string, unknown>>
-  >({});
   const [paintedMask, setPaintedMask] = useState<string | null>(null);
   const [pendingReplace, setPendingReplace] = useState<{
     assistantId: string;
@@ -760,11 +760,6 @@ export function ImageStudioPage({
           const png = event.png ?? "";
           if (!isUsableImageBase64(png)) {
             outputs.current.delete(messageId);
-            setWorkflowByMessage((prev) => {
-              const next = { ...prev };
-              delete next[messageId];
-              return next;
-            });
             patchMessage(messageId, {
               pending: false,
               progress: undefined,
@@ -797,14 +792,6 @@ export function ImageStudioPage({
             lastOutputRef.current = `data:image/png;base64,${png}`;
             persistTurn({ role: "assistant", content: "" });
           }
-          void client.extractWorkflow(png).then((wf) => {
-            if (wf && typeof wf === "object") {
-              setWorkflowByMessage((prev) => ({
-                ...prev,
-                [messageId]: wf as Record<string, unknown>,
-              }));
-            }
-          });
           if (mediaRetryRef.current?.assistantId === messageId) {
             mediaRetryRef.current = null;
           }
@@ -844,11 +831,6 @@ export function ImageStudioPage({
   const handleMediaError = useCallback(
     (message: ChatMessage): void => {
       outputs.current.delete(message.id);
-      setWorkflowByMessage((prev) => {
-        const next = { ...prev };
-        delete next[message.id];
-        return next;
-      });
       patchMessage(message.id, {
         media: undefined,
         content: "Generation failed: generated image could not be displayed.",
@@ -857,41 +839,30 @@ export function ImageStudioPage({
     [patchMessage],
   );
 
-  useEffect(() => {
-    if (!activeJob) return;
-    let cancelled = false;
-    const timer = setInterval(() => {
-      void (async () => {
-        if (cancelled) return;
-        try {
-          const events = await client.drainEvents(activeJob.jobId);
-          if (cancelled) return;
-          jobSessionRef.current = activeJob.sessionId;
-          jobIdRef.current = activeJob.jobId;
-          const { done } = advanceFromEvents(events, activeJob.messageId);
-          jobSessionRef.current = null;
-          if (done) {
-            cancelled = true;
-            clearInterval(timer);
-            setActiveJob(null);
-          }
-        } catch (err) {
-          cancelled = true;
-          clearInterval(timer);
-          patchMessage(activeJob.messageId, {
-            pending: false,
-            content: "",
-            failure: describeGenerationFailure(err, { surface: "image" }),
-          });
-          setActiveJob(null);
-        }
-      })();
-    }, drainIntervalMs);
-    return () => {
-      cancelled = true;
-      clearInterval(timer);
-    };
-  }, [activeJob, client, advanceFromEvents, drainIntervalMs, patchMessage]);
+  // v2.4.11: the shared loop, whose contract is that a drained batch is always
+  // applied -- see `useJobDrain`. A lost batch is how a finished image left a
+  // bubble waiting forever.
+  useJobDrain<ActiveJob, ProgressEvent>({
+    job: activeJob,
+    intervalMs: drainIntervalMs,
+    drain: (job) => client.drainEvents(job.jobId),
+    apply: (events, job) => {
+      jobSessionRef.current = job.sessionId;
+      jobIdRef.current = job.jobId;
+      const { done } = advanceFromEvents(events, job.messageId);
+      jobSessionRef.current = null;
+      return { done };
+    },
+    onError: (err, job) => {
+      patchMessage(job.messageId, {
+        pending: false,
+        content: "",
+        failure: describeGenerationFailure(err, { surface: "image" }),
+      });
+    },
+    onSettled: (next) => setActiveJob(next),
+  });
+
 
   useEffect(() => {
     let cancelled = false;
@@ -1405,23 +1376,6 @@ export function ImageStudioPage({
     [client, pendingReplace, patchMessage],
   );
 
-  async function copyWorkflow(messageId: string): Promise<void> {
-    const png = outputs.current.get(messageId);
-    if (!png) return;
-    try {
-      const workflow = await client.extractWorkflow(png);
-      if (!workflow) return;
-      const adapter =
-        clipboard ??
-        (typeof navigator !== "undefined" ? navigator.clipboard : null);
-      if (adapter && typeof adapter.writeText === "function") {
-        await adapter.writeText(JSON.stringify(workflow, null, 2));
-      }
-    } catch {
-      // best-effort; failures are non-fatal for the copy action.
-    }
-  }
-
   async function copyImage(messageId: string): Promise<void> {
     const png = outputs.current.get(messageId);
     if (!png) return;
@@ -1445,18 +1399,6 @@ export function ImageStudioPage({
     a.href = `data:image/png;base64,${png}`;
     a.download = `nexus-image-${messageId}.png`;
     a.click();
-  }
-
-  function useAsSource(messageId: string): void {
-    const png = outputs.current.get(messageId);
-    if (png) setSeededAttachment(`data:image/png;base64,${png}`);
-  }
-
-  function recall(messageId: string, mode: RecallMode): void {
-    const wf = workflowByMessage[messageId];
-    if (!wf) return;
-    setValues((prev) => ({ ...prev, ...applyImageRecall(prev, wf, mode) }));
-    setFormEpoch((n) => n + 1);
   }
 
   const pickerModel = useMemo(
@@ -1519,7 +1461,13 @@ export function ImageStudioPage({
         <ConfirmDialog
           testId="image-gpu-busy-confirm"
           title={gpuSwitchTitle("image", selectedModelName)}
-          body={gpuSwitchBody(busyConfirm.holder, selectedModelName).map((line) => (
+          body={gpuSwitchBody(
+            busyConfirm.holder,
+            selectedModelName,
+            estimateModelLoadSeconds(
+              models.find((m) => m.id === selectedModelId)?.vramGB ?? null,
+            ),
+          ).map((line) => (
             <p key={line} style={{ margin: "0 0 var(--space-1)" }}>
               {line}
             </p>
@@ -1645,8 +1593,16 @@ export function ImageStudioPage({
               messages={shownMessages}
               enableTools={false}
               onMediaError={handleMediaError}
-              renderMetaActions={(m) =>
+              renderMetaActions={(m, api) =>
                 m.role === "assistant" && m.media ? (
+                  /*
+                   * v2.4.11 operator instruction: "only 3 buttons should
+                   * exist -- Edit, Copy, Save. All the others have to be
+                   * removed because they're useless." The workflow-JSON copy,
+                   * the recall menu (prompt / seed / settings / everything)
+                   * and Use-as-Source went with that; each acted on workflow
+                   * metadata the operator never used from this row.
+                   */
                   <div
                     data-testid={`image-actions-${m.id}`}
                     style={{
@@ -1657,12 +1613,12 @@ export function ImageStudioPage({
                     <button
                       type="button"
                       className="nx-icon-btn-bare"
-                      aria-label="Download"
-                      title="Download"
-                      data-testid={`image-download-${m.id}`}
-                      onClick={() => downloadImage(m.id)}
+                      aria-label="Edit"
+                      title="Edit"
+                      data-testid={`image-edit-${m.id}`}
+                      onClick={() => api.openEditor()}
                     >
-                      <Download size={16} aria-hidden="true" />
+                      <Pencil size={16} aria-hidden="true" />
                     </button>
                     <button
                       type="button"
@@ -1677,49 +1633,22 @@ export function ImageStudioPage({
                     <button
                       type="button"
                       className="nx-icon-btn-bare"
-                      aria-label="Copy image"
-                      title="Copy image"
+                      aria-label="Copy"
+                      title="Copy"
                       data-testid={`image-copyimage-${m.id}`}
                       onClick={() => void copyImage(m.id)}
                     >
                       <Copy size={16} aria-hidden="true" />
                     </button>
-                    {/*
-                      v2.4.9: these moved off the image viewer's toolbar. The
-                      operator reported the viewer's icon row "not doing
-                      anything" -- two of them DID work, but only when the
-                      image carried workflow metadata, which is indis-
-                      tinguishable from broken when it does not. They now live
-                      on the transcript row and render only when they have
-                      something to act on, so a visible button always works.
-                    */}
-                    {workflowByMessage[m.id] ? (
-                      <button
-                        type="button"
-                        className="nx-icon-btn-bare"
-                        aria-label="Copy Workflow"
-                        title="Copy Workflow"
-                        data-testid={`image-copyworkflow-${m.id}`}
-                        onClick={() => void copyWorkflow(m.id)}
-                      >
-                        <FileJson size={16} aria-hidden="true" />
-                      </button>
-                    ) : null}
-                    <RecallActions
-                      messageId={m.id}
-                      testIdPrefix="image"
-                      hasWorkflow={Boolean(workflowByMessage[m.id])}
-                      onRecall={(mode) => recall(m.id, mode)}
-                    />
                     <button
                       type="button"
                       className="nx-icon-btn-bare"
-                      aria-label="Use as Source"
-                      title="Use as Source"
-                      data-testid={`image-usesource-${m.id}`}
-                      onClick={() => useAsSource(m.id)}
+                      aria-label="Save"
+                      title="Save"
+                      data-testid={`image-save-${m.id}`}
+                      onClick={() => downloadImage(m.id)}
                     >
-                      <ImagePlus size={16} aria-hidden="true" />
+                      <Save size={16} aria-hidden="true" />
                     </button>
                   </div>
                 ) : null

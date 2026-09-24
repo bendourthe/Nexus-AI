@@ -29,7 +29,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Button, Switch } from "../../components/ui";
 import { SidecarDownBanner } from "../../components/SidecarDownBanner";
 import { AgentStateOrb } from "../../components/agentState/AgentStateOrb";
-import { isBackendDownMessage, useSidecarStatus } from "../../lib/sidecarStatus";
+import { reportsBackendDown, useSidecarStatus } from "../../lib/sidecarStatus";
 import { displayHubTag, hubTagsEqual } from "../../lib/hubTags";
 
 import type { SkillRecord, SkillNamespace } from "../../../../core/skills/SkillCatalog";
@@ -85,7 +85,7 @@ export function SkillsSettings({ client }: SkillsSettingsProps): JSX.Element {
   // call failed, telling the user to press a Sync button that the same dead
   // backend would have to service. Branch the backend-down case out.
   const sidecar = useSidecarStatus();
-  const backendDown = sidecar.isDown || isBackendDownMessage(error);
+  const backendDown = sidecar.isDown || reportsBackendDown(error, sidecar.status);
 
   useEffect(() => {
     let cancelled = false;

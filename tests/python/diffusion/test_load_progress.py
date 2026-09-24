@@ -66,6 +66,75 @@ def test_progress_throttles_emits_and_reports_eta():
     }
 
 
+def test_eta_rate_includes_the_wait_before_the_first_byte():
+    """v2.4.11: the rate is measured from the load's start, not its first byte.
+
+    The shell's clock starts when the load starts, so a rate anchored on the
+    first counted byte described a shorter, faster window -- that is how a load
+    at 17% after 18 seconds claimed 11 seconds left.
+    """
+    emitted: list[dict] = []
+    clock = {"t": 100.0}
+
+    progress = load_progress.LoadProgress(
+        "job-1",
+        1000,
+        emit=lambda job_id, stage, **extra: emitted.append(extra),
+        now=lambda: clock["t"],
+        min_interval_s=0.0,
+    )
+    # Ten seconds of imports and device setup before a single weight byte.
+    clock["t"] += 10.0
+    progress.add(500)
+    # Half the bytes in ten seconds -> ten seconds left, not zero.
+    assert emitted[-1]["etaS"] == 10.0
+
+
+def test_counting_torch_load_counts_a_checkpoint_read(tmp_path):
+    """v2.4.11: `.pth` checkpoints are measurable too.
+
+    An image model whose weights are a torch checkpoint reported no bytes at
+    all, so the shell had nothing to show but a guess.
+    """
+    payload = b"x" * 4096
+    checkpoint = tmp_path / "model.pth"
+    checkpoint.write_bytes(payload)
+
+    emitted: list[dict] = []
+    progress = load_progress.LoadProgress(
+        "job-1",
+        len(payload),
+        emit=lambda job_id, stage, **extra: emitted.append(extra),
+        min_interval_s=0.0,
+    )
+
+    def fake_torch_load(handle, *args, **kwargs):
+        # Whatever torch does internally, it reads the file it was handed.
+        return handle.read()
+
+    counted = load_progress.counting_torch_load(fake_torch_load, progress)
+    assert counted(checkpoint) == payload
+    assert progress.loaded == len(payload)
+    assert emitted[-1]["loadedBytes"] == len(payload)
+
+
+def test_counting_torch_load_passes_mmap_through_untouched(tmp_path):
+    """`mmap=True` needs the real path; counting must not break it."""
+    checkpoint = tmp_path / "model.pth"
+    checkpoint.write_bytes(b"y" * 16)
+    progress = load_progress.LoadProgress("job-1", 16, emit=lambda *a, **k: None)
+    seen: list[object] = []
+
+    def fake_torch_load(target, *args, **kwargs):
+        seen.append(target)
+        return "loaded"
+
+    counted = load_progress.counting_torch_load(fake_torch_load, progress)
+    assert counted(checkpoint, mmap=True) == "loaded"
+    assert seen == [checkpoint]
+    assert progress.loaded == 0
+
+
 def test_progress_clamps_overcount_to_total():
     emitted: list[dict] = []
     progress = load_progress.LoadProgress(

@@ -50,7 +50,7 @@ import {
   failureTranscriptText,
 } from "../../shared/studio/generationError";
 import {
-  isBackendDownMessage,
+  reportsBackendDown,
   isSidecarFailureMessage,
   useSidecarStatus,
 } from "../../lib/sidecarStatus";
@@ -134,6 +134,9 @@ import {
   type RecallMode,
 } from "../../shared/studio/RecallActions";
 import { GenerationQueueBar } from "../../shared/studio/GenerationQueueBar";
+import { useJobDrain } from "../../shared/studio/useJobDrain";
+import { clipBudgetRefusal } from "../../shared/studio/clipBudget";
+import { estimateModelLoadSeconds } from "../../shared/chat/generationProgress";
 import {
   createIpcGenerationQueueClient,
   type GenerationQueueClient,
@@ -251,6 +254,16 @@ function videoRecoveryState(
   };
 }
 
+/** The running clip this page is polling. */
+interface ActiveVideoJob {
+  readonly jobId: string;
+  readonly messageId: string;
+  /** v2.4.8 follow-up: the session the job belongs to (may not be visible). */
+  readonly sessionId: string | null;
+  /** v2.4.9: wall-clock start, so the bubble can report what the run cost. */
+  readonly startedAtMs: number;
+}
+
 export function VideoLabPage({
   client: clientOverride,
   enhancementClient: enhancementClientOverride,
@@ -295,7 +308,10 @@ export function VideoLabPage({
   // v2.2.0 Phase 2 (2.2): "backend down" is not "no models installed".
   const [listFailure, setListFailure] = useState<string | null>(null);
   const sidecar = useSidecarStatus();
-  const backendDown = sidecar.isDown || isBackendDownMessage(listFailure);
+  // v2.4.11: a call that timed out behind a running generation is not a
+  // backend that could not start -- see `reportsBackendDown`.
+  const backendDown =
+    sidecar.isDown || reportsBackendDown(listFailure, sidecar.status);
   const mediaRetryRef = useRef<{
     assistantId: string;
     text: string;
@@ -332,14 +348,7 @@ export function VideoLabPage({
   const lastOutputRef = useRef<string | null>(null);
   const lastJobIdRef = useRef<string | null>(null);
   const [historyEpoch, setHistoryEpoch] = useState(0);
-  const [activeJob, setActiveJob] = useState<{
-    jobId: string;
-    messageId: string;
-    /** v2.4.8 follow-up: the session the job belongs to (may not be visible). */
-    sessionId: string | null;
-    /** v2.4.9: wall-clock start, so the bubble can report what the run cost. */
-    startedAtMs: number;
-  } | null>(null);
+  const [activeJob, setActiveJob] = useState<ActiveVideoJob | null>(null);
   // v2.4.8 follow-up: see ImageStudioPage -- pending bubble survives a session
   // switch; completions persist to the job's own session.
   const pendingTurnRef = useRef<{ sessionId: string | null; assistant: ChatMessage } | null>(null);
@@ -1059,69 +1068,42 @@ export function VideoLabPage({
     [patchMessage],
   );
 
-  useEffect(() => {
-    if (!activeJob) return;
-    let cancelled = false;
-    const timer = setInterval(() => {
-      void (async () => {
-        if (cancelled) return;
-        try {
-          const events = await client.drainEvents(activeJob.jobId);
-          if (cancelled) return;
-          jobSessionRef.current = activeJob.sessionId;
-          jobIdRef.current = activeJob.jobId;
-          const { done, nextJobId } = await advanceFromEvents(
-            events,
-            activeJob.messageId,
-          );
-          jobSessionRef.current = null;
-          if (nextJobId) {
-            setActiveJob({
-              jobId: nextJobId,
-              messageId: activeJob.messageId,
-              sessionId: activeJob.sessionId,
-              // A continuation keeps the original start: the reported duration
-              // is the whole chained clip, not just its final segment.
-              startedAtMs: activeJob.startedAtMs,
-            });
-            return;
-          }
-          if (done) {
-            cancelled = true;
-            clearInterval(timer);
-            setActiveJob(null);
-          }
-        } catch (err) {
-          cancelled = true;
-          clearInterval(timer);
-          chainRef.current = null;
-          patchMessage(activeJob.messageId, {
-            pending: false,
-            content: "",
-            failure: describeGenerationFailure(err, { surface: "video" }),
-          });
-          persistTurn({
-            role: "assistant",
-            content: failureTranscriptText(
-              describeGenerationFailure(err, { surface: "video" }),
-            ),
-          });
-          setActiveJob(null);
-        }
-      })();
-    }, drainIntervalMs);
-    return () => {
-      cancelled = true;
-      clearInterval(timer);
-    };
-  }, [
-    activeJob,
-    client,
-    advanceFromEvents,
-    drainIntervalMs,
-    patchMessage,
-    persistTurn,
-  ]);
+  // v2.4.11: the shared loop, whose contract is that a drained batch is always
+  // applied -- see `useJobDrain`. A lost batch is how a finished clip left a
+  // bubble waiting forever.
+  useJobDrain<ActiveVideoJob, VideoProgressEvent>({
+    job: activeJob,
+    intervalMs: drainIntervalMs,
+    drain: (job) => client.drainEvents(job.jobId),
+    apply: async (events, job) => {
+      jobSessionRef.current = job.sessionId;
+      jobIdRef.current = job.jobId;
+      const { done, nextJobId } = await advanceFromEvents(events, job.messageId);
+      jobSessionRef.current = null;
+      if (nextJobId) {
+        return {
+          nextJob: {
+            ...job,
+            jobId: nextJobId,
+            // A continuation keeps the original start: the reported duration
+            // is the whole chained clip, not just its final segment.
+          },
+        };
+      }
+      return { done };
+    },
+    onError: (err, job) => {
+      chainRef.current = null;
+      const failure = describeGenerationFailure(err, { surface: "video" });
+      patchMessage(job.messageId, { pending: false, content: "", failure });
+      persistTurn({
+        role: "assistant",
+        content: failureTranscriptText(failure),
+      });
+    },
+    onSettled: (next) => setActiveJob(next),
+  });
+
 
   useEffect(() => {
     let cancelled = false;
@@ -1317,6 +1299,21 @@ export function VideoLabPage({
           pending: false,
           content: intent.blockedReason,
         });
+        return;
+      }
+
+      // v2.4.11: a clip whose own estimate outruns the request limit is
+      // refused here rather than after thirty minutes of sampling.
+      const budgetRefusal = clipBudgetRefusal({
+        width: values.width,
+        height: values.height,
+        steps: values.steps,
+        durationSeconds: values.durationSeconds,
+        fps: values.fps,
+      });
+      if (budgetRefusal) {
+        patchMessage(assistantId, { pending: false, content: budgetRefusal });
+        persistTurn({ role: "assistant", content: budgetRefusal });
         return;
       }
 
@@ -1704,7 +1701,13 @@ export function VideoLabPage({
         <ConfirmDialog
           testId="video-gpu-busy-confirm"
           title={gpuSwitchTitle("video", selectedModelName)}
-          body={gpuSwitchBody(busyConfirm.holder, selectedModelName).map((line) => (
+          body={gpuSwitchBody(
+            busyConfirm.holder,
+            selectedModelName,
+            estimateModelLoadSeconds(
+              models.find((m) => m.id === selectedModelId)?.vramGB ?? null,
+            ),
+          ).map((line) => (
             <p key={line} style={{ margin: "0 0 var(--space-1)" }}>
               {line}
             </p>

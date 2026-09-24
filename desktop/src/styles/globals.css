@@ -529,9 +529,10 @@ button {
   .nexus-genbar-fill {
     transition: none;
   }
-  .nexus-genbar[data-determinate="false"]::after {
+  .nexus-genbar[data-determinate="false"] .nexus-genbar-fill {
     animation: none;
-    opacity: 0.5;
+    transform: none;
+    opacity: 0.7;
   }
   .nx-icon-btn-bare,
   .nx-icon-btn-bare svg {
@@ -652,37 +653,29 @@ button {
 }
 
 /*
- * Indeterminate: no fraction yet. The fill covers the track at reduced opacity
- * and a brighter band sweeps through, so "working, amount unknown" is visually
- * distinct from a real 100%.
+ * Indeterminate: no fraction yet.
+ *
+ * v2.4.11 operator report: "the loading bar appears full even when it's at
+ * 0%". It was: the fill spanned the whole track at 55% opacity with a band
+ * sweeping over it, and a dimmed full bar reads as a finished bar. A short
+ * segment travels the track instead -- unmistakably "working, amount unknown"
+ * because most of the track is visibly empty at any moment.
  */
 .nexus-genbar[data-determinate="false"] .nexus-genbar-fill {
-  opacity: 0.55;
+  width: 28%;
   transition: none;
-}
-.nexus-genbar[data-determinate="false"]::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 85%, transparent) 45%,
-    color-mix(in srgb, #fff 60%, transparent) 50%,
-    color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 85%, transparent) 55%,
-    transparent 100%
-  );
-  animation: nexus-genbar-sweep 1.5s ease-in-out infinite;
-  pointer-events: none;
+  /* Travels edge to edge and back, so the segment is always ON the track: a
+     sweep that leaves the track reads as a dead bar between passes. */
+  animation: nexus-genbar-slide 1.8s ease-in-out infinite alternate;
 }
 
-@keyframes nexus-genbar-sweep {
+@keyframes nexus-genbar-slide {
   from {
-    transform: translateX(-100%);
+    transform: translateX(0);
   }
   to {
-    transform: translateX(100%);
+    /* (100 - 28) / 28 of its own width = flush with the right edge. */
+    transform: translateX(257%);
   }
 }
 

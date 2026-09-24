@@ -171,14 +171,43 @@ def test_sprint_register_installs_only_txt2img():
     assert "sana_sprint.img2img" not in handlers
 
 
-def test_sprint_overrides_force_one_step_and_flow_dpm():
+def test_sprint_overrides_force_the_supported_step_count_and_sampler():
+    """v2.4.11: the count Sprint's own scheduler accepts, and it is applied.
+
+    Verified against the real model: at any other count diffusers raises
+    "Intermediate timesteps for SCM is not supported when num_inference_steps
+    != 2", which is what a Sprint job hit because this override -- documented
+    as called by the dispatcher -- was never wired to anything.
+    """
     patched = sana_sprint.overrides_for_sprint(
         {"steps": 14, "sampler": "euler_a", "prompt": "x"},
     )
-    assert patched["steps"] == 1
+    assert patched["steps"] == 2
     assert patched["sampler"] == "flow-dpm-solver"
     # Caller's other fields are preserved.
     assert patched["prompt"] == "x"
+
+
+def test_sprint_handler_applies_the_override_to_every_request():
+    """The override must run on the handler path, not only when asked for."""
+    seen: dict = {}
+
+    class _Runner:
+        def run(self, params):
+            seen.update(params)
+            return {"ok": True}
+
+    handlers: dict = {}
+    sana_sprint.register(handlers, runner=_Runner())
+    # The handler is called with a job envelope, not a bare request: patching
+    # the envelope would set `steps` BESIDE the request instead of inside it.
+    handlers["sana_sprint.txt2img"](
+        {"jobId": "j1", "request": {"steps": 14, "sampler": "euler_a", "prompt": "x"}}
+    )
+    assert seen["request"]["steps"] == 2
+    assert seen["request"]["sampler"] == "flow-dpm-solver"
+    assert seen["request"]["prompt"] == "x"
+    assert seen["jobId"] == "j1"
 
 
 def test_int4_register_installs_txt2img_only():

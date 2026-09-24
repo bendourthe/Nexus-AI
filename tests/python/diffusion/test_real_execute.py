@@ -995,3 +995,70 @@ def test_emit_stage_forwards_through_the_installed_sink():
         {"kind": "progress", "jobId": "job-1", "stage": "generating"},
     ]
     base.emit_stage("job-2", "loading")  # no sink: silently ignored
+
+def test_decode_memory_savers_are_enabled_on_every_pipe():
+    """v2.4.11: a 2K decode ran for ten minutes at 100% GPU and never finished.
+
+    Tiling and slicing let the VAE decode in pieces that fit the card. They are
+    enabled for every run: they cost nothing on a small image, and the run that
+    needs them is the one nobody predicted.
+    """
+    calls: list[str] = []
+
+    class _Pipe:
+        def enable_vae_tiling(self):
+            calls.append("tiling")
+
+        def enable_vae_slicing(self):
+            calls.append("slicing")
+
+    assert real_execute.enable_decode_memory_savers(_Pipe()) == [
+        "enable_vae_tiling",
+        "enable_vae_slicing",
+    ]
+    assert calls == ["tiling", "slicing"]
+
+
+def test_decode_memory_savers_survive_a_pipe_that_refuses():
+    """A saver that raises must never take the generation down with it."""
+
+    class _Pipe:
+        def enable_vae_tiling(self):
+            raise RuntimeError("unsupported on this backend")
+
+        def enable_vae_slicing(self):
+            return None
+
+    assert real_execute.enable_decode_memory_savers(_Pipe()) == ["enable_vae_slicing"]
+
+
+def test_decode_memory_savers_tolerate_a_bare_pipe():
+    assert real_execute.enable_decode_memory_savers(object()) == []
+
+def test_detects_the_bf16_variant_including_sharded_weights(tmp_path: Path):
+    """v2.4.11: SANA publishes bf16, and shards its text encoder.
+
+    `_pipeline_load_kwargs` only knew `*.fp16.safetensors`, so a complete SANA
+    directory loaded with no variant at all and diffusers looked for files that
+    are not in the repo.
+    """
+    (tmp_path / "transformer").mkdir()
+    (tmp_path / "text_encoder").mkdir()
+    (tmp_path / "transformer" / "diffusion_pytorch_model.bf16.safetensors").write_bytes(b"w")
+    (tmp_path / "text_encoder" / "model.bf16-00001-of-00002.safetensors").write_bytes(b"w")
+
+    assert real_execute._detect_variant(tmp_path) == "bf16"
+
+
+def test_prefers_fp16_when_a_model_ships_both(tmp_path: Path):
+    (tmp_path / "unet").mkdir()
+    (tmp_path / "unet" / "diffusion_pytorch_model.fp16.safetensors").write_bytes(b"w")
+    (tmp_path / "unet" / "diffusion_pytorch_model.bf16.safetensors").write_bytes(b"w")
+    assert real_execute._detect_variant(tmp_path) == "fp16"
+
+
+def test_no_variant_for_plainly_named_weights(tmp_path: Path):
+    """Sana Sprint ships one precision under the default names."""
+    (tmp_path / "vae").mkdir()
+    (tmp_path / "vae" / "diffusion_pytorch_model.safetensors").write_bytes(b"w")
+    assert real_execute._detect_variant(tmp_path) is None
