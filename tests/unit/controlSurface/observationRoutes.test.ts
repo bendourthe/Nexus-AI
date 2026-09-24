@@ -1,9 +1,12 @@
 import { EventEmitter } from "node:events";
+import os from "node:os";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { createJsonCliRoute } from "../../../desktop/sidecar/src/controlSurface/jsonCliRoutes.js";
 import type { CodingSessionManager } from "../../../desktop/sidecar/src/coding/sessionManager.js";
 
-const ROOT = "C:\\work\\repo";
+const ROOT = path.join(os.tmpdir(), "nexus-obs-repo");
+const OUTSIDE = path.join(os.tmpdir(), "nexus-obs-secret", "prompt.txt");
 
 function sessions(): CodingSessionManager {
   return {
@@ -74,8 +77,8 @@ describe("observation routes", () => {
       readLogs: () => [
         { ts: "t0", level: "info", message: "keep" },
         { ts: "t1", level: "info", message: "token super-secret-token" },
-        { ts: "t2", level: "info", message: "path D:\\secret\\prompt.txt" },
-        { ts: "t3", level: "info", message: `inside ${ROOT}\\out.png` },
+        { ts: "t2", level: "info", message: `path ${OUTSIDE}` },
+        { ts: "t3", level: "info", message: `inside ${path.join(ROOT, "out.png")}` },
       ],
     });
     const { ctx: context, written } = ctx("GET", "/nexus/logs?lines=4");
@@ -86,7 +89,7 @@ describe("observation routes", () => {
     expect(lines[1]?.message).not.toContain("super-secret-token");
     expect(lines[2]?.message).toContain("<redacted-path>");
     expect(lines[3]?.message).toContain("out.png");
-    expect(JSON.stringify(written[0]?.body)).not.toContain("D:\\secret");
+    expect(JSON.stringify(written[0]?.body)).not.toContain("prompt.txt");
   });
 
   it("rejects a bad --lines value", async () => {
@@ -112,7 +115,7 @@ describe("observation routes", () => {
     const { ctx: context, written } = ctx(
       "POST",
       "/nexus/media/inspect",
-      JSON.stringify({ path: "D:\\secret\\out.png" }),
+      JSON.stringify({ path: OUTSIDE }),
     );
     await route(context as never);
     expect(written[0]?.status).toBe(403);
@@ -133,25 +136,25 @@ describe("observation routes", () => {
         return { duration: 1.5, width: 640, height: 360, streams: [{ kind: "video" }] };
       },
     });
-    const ok = ctx("POST", "/nexus/media/inspect", JSON.stringify({ path: `${ROOT}\\clip.mp4` }));
+    const ok = ctx("POST", "/nexus/media/inspect", JSON.stringify({ path: path.join(ROOT, "clip.mp4") }));
     await route(ok.ctx as never);
     expect(ok.written[0]?.status).toBe(200);
     expect(ok.written[0]?.body).toMatchObject({ width: 640, height: 360 });
 
-    const missing = ctx("POST", "/nexus/media/inspect", JSON.stringify({ path: `${ROOT}\\missing.png` }));
+    const missing = ctx("POST", "/nexus/media/inspect", JSON.stringify({ path: path.join(ROOT, "missing.png") }));
     await route(missing.ctx as never);
     expect(missing.written[0]?.status).toBe(404);
 
-    const bad = ctx("POST", "/nexus/media/inspect", JSON.stringify({ path: `${ROOT}\\bad.png` }));
+    const bad = ctx("POST", "/nexus/media/inspect", JSON.stringify({ path: path.join(ROOT, "bad.png") }));
     await route(bad.ctx as never);
     expect(bad.written[0]?.status).toBe(415);
 
-    const partial = ctx("POST", "/nexus/media/inspect", JSON.stringify({ path: `${ROOT}\\partial.png` }));
+    const partial = ctx("POST", "/nexus/media/inspect", JSON.stringify({ path: path.join(ROOT, "partial.png") }));
     await route(partial.ctx as never);
     expect(partial.written[0]?.body).toMatchObject({ incomplete: true, width: null });
 
     const bare = createJsonCliRoute({ sessions: sessions(), statMedia: () => ({ exists: true }) });
-    const down = ctx("POST", "/nexus/media/inspect", JSON.stringify({ path: `${ROOT}\\clip.mp4` }));
+    const down = ctx("POST", "/nexus/media/inspect", JSON.stringify({ path: path.join(ROOT, "clip.mp4") }));
     await bare(down.ctx as never);
     expect(down.written[0]?.status).toBe(503);
   });
