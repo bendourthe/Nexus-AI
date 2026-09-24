@@ -15,5 +15,8 @@ Index of the agent-facing command pages. Shared stdout, stderr, and exit-code ru
 | [check.md](check.md) | `nexus check` |
 | [image.md](image.md) | `nexus image` |
 | [video.md](video.md) | `nexus video` |
+| [context.md](context.md) | `nexus context` |
+| [logs.md](logs.md) | `nexus logs` |
+| [media.md](media.md) | `nexus media` |
 
 Loopback commands (`session`, `models`, `generate`) need the desktop sidecar and a bearer token. Every other group runs in the `nexus` process.
