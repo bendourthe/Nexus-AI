@@ -157,5 +157,21 @@ export async function dispatchJsonCli(input: JsonCliDispatchInput): Promise<Json
     if (!id) return errorBody("schema", "missing fields: id");
     return jsonCliRequest(client, "GET", `${JSON_CLI_PREFIX}/generate/status?id=${encodeURIComponent(id)}`);
   }
+  if (command === "context") {
+    return jsonCliRequest(client, "GET", `${JSON_CLI_PREFIX}/context`);
+  }
+  if (command === "logs") {
+    const raw = flags.lines;
+    if (raw !== undefined && raw !== true && (typeof raw !== "string" || !/^[0-9]+$/.test(raw) || Number(raw) < 1)) {
+      return errorBody("usage", "--lines must be a positive integer");
+    }
+    const lines = typeof raw === "string" ? raw : "100";
+    return jsonCliRequest(client, "GET", `${JSON_CLI_PREFIX}/logs?lines=${encodeURIComponent(lines)}`);
+  }
+  if (command === "media" && subcommand === "inspect") {
+    const mediaPath = typeof flags.path === "string" ? flags.path : "";
+    if (!mediaPath) return errorBody("usage", "missing fields: path");
+    return jsonCliRequest(client, "POST", `${JSON_CLI_PREFIX}/media/inspect`, { path: mediaPath });
+  }
   return errorBody("usage", `unknown JSON CLI command "${command} ${subcommand ?? ""}"`);
 }

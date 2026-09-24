@@ -17,3 +17,10 @@ Version directories through v2.4 moved to `docs/archive/`. The items below were 
 | QG-v240-1 | The full local suite was not run on the Electron `better-sqlite3` ABI. CI Node 22 ran it on the merge. | `docs/archive/v2/v2.4/known-gaps.md` |
 
 v2.5 plans in this directory are not started by the v2.4.11 tag.
+
+## v2.5.0
+
+| ID | Class | Source phase | Plan reference | Reason | Suggested next step |
+| --- | --- | --- | --- | --- | --- |
+| DF-v250-1 | DF | Phase 4 | `docs/v2/v2.5/plans/v2.5.0-adoption-diffusionstudio-editor.md` | `nexus screenshot` and `nexus capture` were left out on purpose. They would expose whatever is on screen, which is a different disclosure class from structured state. | A later plan should decide, with an operator, whether a loopback capture route is acceptable and what it is allowed to see. |
+| QG-v250-1 | QG | Phase 4 | `docs/v2/v2.5/plans/v2.5.0-adoption-diffusionstudio-editor.md` | `http://127.0.0.1:11500/nexus/context` was not reachable (`Unable to connect to the remote server`), so the live sidecar round trip was not observed. Route tests passed against an in-process stub. | Start the desktop with Local API server enabled and run `nexus context --json`, then `nexus media inspect` on a path outside the workspace roots. |

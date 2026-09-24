@@ -27,6 +27,9 @@ Command groups, one page each:
 - check: `docs/reference/cli/check.md`
 - image: `docs/reference/cli/image.md`
 - video: `docs/reference/cli/video.md`
+- context: `docs/reference/cli/context.md`
+- logs: `docs/reference/cli/logs.md`
+- media: `docs/reference/cli/media.md`
 
 Index: `docs/reference/cli/README.md`.
 

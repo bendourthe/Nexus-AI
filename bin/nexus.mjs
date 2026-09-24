@@ -64,6 +64,9 @@ Usage:
   nexus models list
   nexus generate queue --json <body>
   nexus generate status --id <jobId>
+  nexus context [--json] [--token t] [--host 127.0.0.1] [--port 11500]
+  nexus logs [--lines N] [--json] [--token t] [--host 127.0.0.1] [--port 11500]
+  nexus media inspect <path> [--json] [--token t] [--host 127.0.0.1] [--port 11500]
   nexus check [...]                     deterministic source-code checks
   nexus image [...]                     image-pipeline helpers
   nexus video [...]                     video-pipeline helpers
@@ -1511,6 +1514,27 @@ export async function runJsonCli(args, stdout = process.stdout, stderr = process
     const id = typeof args.flags.id === "string" ? args.flags.id : "";
     if (!id) return schemaFail("missing fields: id");
     path = `${JSON_CLI_PREFIX}/generate/status?id=${encodeURIComponent(id)}`;
+  } else if (args.command === "context") {
+    path = `${JSON_CLI_PREFIX}/context`;
+  } else if (args.command === "logs") {
+    const rawLines = args.flags.lines;
+    if (rawLines !== undefined && rawLines !== true) {
+      if (typeof rawLines !== "string" || !/^[0-9]+$/.test(rawLines) || Number(rawLines) < 1) {
+        stderr.write("nexus logs: --lines must be a positive integer\n");
+        return 2;
+      }
+    }
+    const lines = typeof rawLines === "string" ? rawLines : "100";
+    path = `${JSON_CLI_PREFIX}/logs?lines=${encodeURIComponent(lines)}`;
+  } else if (args.command === "media" && args.subcommand === "inspect") {
+    const mediaPath = Array.isArray(args.positional) ? args.positional[0] : "";
+    if (!mediaPath) {
+      stderr.write("nexus media inspect: a path is required\n");
+      return 2;
+    }
+    method = "POST";
+    path = `${JSON_CLI_PREFIX}/media/inspect`;
+    body = { path: mediaPath };
   } else {
     stderr.write(`nexus: unknown JSON CLI command "${args.command} ${args.subcommand ?? ""}"\n${HELP}`);
     return 2;
@@ -1545,17 +1569,29 @@ export async function runJsonCli(args, stdout = process.stdout, stderr = process
       return 1;
     }
     if (!res.ok) {
+      const message =
+        parsed && typeof parsed === "object" && parsed.error && typeof parsed.error.message === "string"
+          ? parsed.error.message
+          : "Sidecar returned HTTP " + res.status;
+      stderr.write(`nexus: ${message}\n`);
+      if (args.command === "logs" || args.command === "media") {
+        return 1;
+      }
       stdout.write(
         JSON.stringify({
           error: {
             code: "sidecar",
-            message: "Sidecar returned HTTP " + res.status,
+            message,
             status: res.status,
             body: parsed,
           },
         }) + "\n",
       );
       return 1;
+    }
+    if (args.command === "logs" && parsed && Array.isArray(parsed.lines)) {
+      writeJsonLines(stdout, parsed.lines);
+      return 0;
     }
     stdout.write(JSON.stringify(parsed) + "\n");
     return 0;
@@ -1655,7 +1691,14 @@ export async function main(argv) {
     return 2;
   }
 
-  if (args.command === "session" || args.command === "models" || args.command === "generate") {
+  if (
+    args.command === "session" ||
+    args.command === "models" ||
+    args.command === "generate" ||
+    args.command === "context" ||
+    args.command === "logs" ||
+    args.command === "media"
+  ) {
     if (args.help) {
       process.stdout.write(HELP);
       return 0;
