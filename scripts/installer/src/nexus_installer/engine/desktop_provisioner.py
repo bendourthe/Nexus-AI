@@ -29,6 +29,7 @@ import tempfile
 from collections.abc import Callable
 from pathlib import Path
 
+from nexus_installer.engine import shortcuts
 from nexus_installer.engine.desktop_payload import (
     StageError,
     write_desktop_payload_identity,
@@ -307,6 +308,12 @@ class DesktopProvisioner:
         )
         state.desktop_exe_path = _locate_windows_exe(install_dir)
         log(f"Desktop binary: {state.desktop_exe_path}", "info")
+        # v2.4.11: honor the two Features checkboxes. The desktop app's own
+        # setup program decides for itself what icons to drop, so the wizard
+        # reconciles afterwards -- creating what was asked for and removing
+        # what was not (operator report: an unticked Desktop icon appeared
+        # anyway, and a ticked Start Menu entry never did).
+        shortcuts.reconcile_shortcuts(state, log)
         return True
 
     def _install_macos(

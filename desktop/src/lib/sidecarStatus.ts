@@ -29,6 +29,10 @@ export interface SidecarStatus {
   scriptPath: string | null;
   failure: string | null;
   stderrTail: string[];
+  /** First lines of the run: where a crash states its reason (v2.4.11). */
+  stderrHead?: string[];
+  /** Persisted sidecar log, so the user has something to send. */
+  logPath?: string | null;
   candidatesRejected: string[];
   exitCode?: number | null;
 }
@@ -72,6 +76,29 @@ export function isBackendDownMessage(message: string | null | undefined): boolea
   return BACKEND_DOWN_TOKENS.some((token) => text.includes(token));
 }
 
+/**
+ * True when a failed call should be reported as "the backend could not start".
+ *
+ * v2.4.11 operator report: a Video Lab run showed "The Nexus backend could not
+ * start -- Video models cannot be listed" while the backend was alive and
+ * busy. `models.list` had simply timed out waiting behind a 30-minute
+ * generation, and "sidecar response timeout" is one of the tokens that mean a
+ * dead backend when it arrives on its own.
+ *
+ * The authoritative signal is the shell's own status: when it reports a
+ * running child, a timed-out call means BUSY, not dead, and offering a Restart
+ * button there would kill the very job the user is waiting for.
+ */
+export function reportsBackendDown(
+  message: string | null | undefined,
+  status: SidecarStatus | null,
+): boolean {
+  if (!isBackendDownMessage(message)) return false;
+  // Unknown status (null) keeps the old fast path: something is wrong and the
+  // message is the only evidence we have.
+  return !status?.running;
+}
+
 /** True when a `models.list` catalogStatus indicates a catalog load failure. */
 export function isCatalogFailure(catalogStatus: string | undefined): boolean {
   return typeof catalogStatus === "string" && catalogStatus.startsWith("catalog-load-failed");
@@ -89,15 +116,38 @@ export async function restartSidecar(): Promise<
   return reply.ok ? { ok: true, status: reply.value } : { ok: false, message: reply.message };
 }
 
+/**
+ * The line that says WHY the backend died, out of everything it printed.
+ *
+ * A Node crash leads with `FATAL ERROR: ...` or an uncaught `Error: ...`; the
+ * frames that follow are noise without it. Picked from the head of the run,
+ * falling back to the tail for a failure with no recognizable banner.
+ */
+export function crashCause(status: SidecarStatus | null): string | null {
+  const lines = [...(status?.stderrHead ?? []), ...(status?.stderrTail ?? [])];
+  const marked = lines.find((line) =>
+    /FATAL ERROR|out of memory|Error:|Cannot find module|MODULE_NOT_FOUND/i.test(line),
+  );
+  return marked?.trim() || null;
+}
+
 /** Human-readable one-liner for a failed status, for the banner + diagnostics. */
 export function describeSidecarFailure(status: SidecarStatus | null): string {
   if (!status) return "The Nexus backend is not reachable.";
   const parts: string[] = [];
   if (status.failure) parts.push(status.failure);
+  /*
+   * v2.4.11 operator report: a crash gave the user three V8 stack frames and
+   * nothing to act on. Node prints its REASON first and its stack after, so
+   * the cause line leads here and the tail follows it.
+   */
+  const cause = crashCause(status);
+  if (cause) parts.push(`cause: ${cause}`);
   if (status.nodePath) parts.push(`node: ${status.nodePath}`);
   if (status.scriptPath) parts.push(`script: ${status.scriptPath}`);
   const tail = status.stderrTail.slice(-3);
   if (tail.length > 0) parts.push(`stderr: ${tail.join(" / ")}`);
+  if (status.logPath) parts.push(`log: ${status.logPath}`);
   if (status.candidatesRejected.length > 0) {
     parts.push(`tried: ${status.candidatesRejected.join("; ")}`);
   }

@@ -11,11 +11,11 @@ import {
   formatDuration,
   jobPhase,
   MODEL_LOAD_SECONDS,
-  phaseFraction,
+  loadFraction,
   progressLines,
   type JobPhase,
 } from "./generationProgress";
-import { GenerationProgressBar } from "./GenerationProgressBar";
+import { GenerationClockRow, GenerationProgressBar } from "./GenerationProgressBar";
 import { GenerationFailureCard } from "../studio/GenerationFailureCard";
 import { ImageViewer } from "../studio/ImageViewer";
 import type { ChatMessage, ToolCard } from "./types";
@@ -44,6 +44,12 @@ const COMPACT_MEDIA_STYLE: CSSProperties = {
   cursor: "zoom-in",
 };
 
+/** What a meta-action renderer may drive on the bubble it sits in. */
+export interface MessageBubbleActionApi {
+  /** Open this message's image in the editing viewer. */
+  readonly openEditor: () => void;
+}
+
 export interface MessageBubbleProps {
   message: ChatMessage;
   /** When false, tool-call cards are omitted from the rendered output. */
@@ -58,8 +64,12 @@ export interface MessageBubbleProps {
    * Operator ask: "could the copy/save/enhance buttons appear on the same line
    * as the time of the response?" They used to sit on their own row below the
    * media via `renderAfter`.
+   *
+   * v2.4.11: a render function receives the bubble's own controls, so a studio
+   * button can open the image editor that only this component can open (the
+   * lightbox state lives here, not in the studio).
    */
-  metaActions?: ReactNode;
+  metaActions?: ReactNode | ((api: MessageBubbleActionApi) => ReactNode);
   /** v2.2.7 Phase 4 -- tests pin `en-US`; production uses the host locale. */
   locale?: string;
   onRepairMediaRuntime?: (message: ChatMessage) => void;
@@ -99,6 +109,12 @@ export function MessageBubble({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [previewOpen]);
+  // v2.4.11: a studio hands its Edit button the bubble's own opener, so the
+  // transcript row can raise the editing viewer that lives here.
+  const resolvedMetaActions =
+    typeof metaActions === "function"
+      ? metaActions({ openEditor: () => setPreviewOpen(true) })
+      : metaActions;
   const studioPending = isStudioPending(message);
   const caption = captionFor(message);
   const purePending = Boolean(
@@ -136,7 +152,7 @@ export function MessageBubble({
           <BubbleMeta
             message={message}
             locale={locale}
-            {...(metaActions ? { actions: metaActions } : {})}
+            {...(resolvedMetaActions ? { actions: resolvedMetaActions } : {})}
           />
         )}
         {message.mediaRecovery ? (
@@ -407,8 +423,23 @@ function PendingWork({
 }): JSX.Element {
   const phase = pendingPhase(message);
   const generating = phase === "generating";
+  /*
+   * v2.4.11 operator ask: the time left must line up with "the right edge of
+   * the animation (not so far right)". While generating, the pill and the
+   * clock row share an inline-flex column, so the row is exactly as wide as
+   * the pill above it. While loading, the bar is the reference and the row
+   * matches the bar, which is what the column does there too.
+   */
   return (
-    <>
+    <div
+      style={{
+        display: generating ? "inline-flex" : "flex",
+        flexDirection: "column",
+        alignItems: "stretch",
+        gap: "var(--space-1)",
+        maxWidth: "100%",
+      }}
+    >
       <AgentStateOrb
         activity={generating ? (message.activity ?? "chat-streaming") : "model-loading"}
         size={generating ? "bubble" : "hero"}
@@ -426,7 +457,7 @@ function PendingWork({
         surfaceId={`message-${message.id}`}
       />
       <GenerationProgress message={message} phase={phase} />
-    </>
+    </div>
   );
 }
 
@@ -471,8 +502,11 @@ export function loadingCaption(message: ChatMessage): string {
   const progress = message.progress;
   if (progress?.stage === "queued") return "Waiting for the GPU to free up...";
   if (progress?.stage === "clearing") return "Clearing the GPU...";
-  const pct = loadPercent(progress);
-  return pct === null ? "Loading model..." : `Loading model ${pct}%`;
+  // v2.4.11: one reading of the load, on the bar. The caption used to carry a
+  // percentage of its own ("Loading model 17%") beside a bar and a countdown
+  // that were computed differently, which is how three numbers on one screen
+  // came to disagree.
+  return "Loading model";
 }
 
 function loadingAccessibleName(message: ChatMessage): string {
@@ -499,20 +533,15 @@ function GenerationProgress({
 }): JSX.Element | null {
   const progress = message.progress;
   const detail = queuedDetail(progress);
-  // A plain chat reply has nothing to measure: no phase to load, no steps and
-  // no cost model. It keeps the bare pill rather than gaining a stopwatch.
-  const measurable =
-    phase !== "generating" ||
-    Boolean(progress && progress.total > 0 && progress.step > 0) ||
-    Boolean(message.estimateSeconds);
-  const phaseElapsed = usePhaseElapsed(
-    message.id,
-    phase,
-    message.timestamp,
-    measurable && !detail,
-  );
-
-  if (!measurable) return null;
+  /*
+   * v2.4.11 operator ask: "please add the elapsed timer under it" -- every
+   * pending turn now runs a clock, chat replies included. Only the REMAINING
+   * figure needs something to measure, so a chat reply shows the time it has
+   * taken and nothing it cannot know.
+   */
+  const phaseElapsed = usePhaseElapsed(message.id, phase, !detail);
+  // The high-water mark for an unmeasured load: the fill may stall, never fall.
+  const fillRef = useRef(0);
   if (detail) {
     return (
       <span
@@ -524,31 +553,56 @@ function GenerationProgress({
     );
   }
 
-  const fraction = phaseFraction(progress);
+  const estimateSeconds = phaseEstimateSeconds(message, phase);
   const lines = progressLines({
     progress,
     phase,
     phaseElapsed,
-    estimateSeconds: phaseEstimateSeconds(message, phase),
+    estimateSeconds,
   });
 
-  // v2.4.9: the bar renders from the first frame. It used to appear only once
-  // a fraction existed, which on a cold image model meant 37 seconds of bare
-  // caption and then a bar with one second left on it (operator screenshots
-  // 6 and 7). `fraction === null` is now the indeterminate sweep, not "no bar".
+  /*
+   * v2.4.11 -- one shape for every mode (chat, image, video, agents):
+   *
+   *   loading    bar, "Loading model" above it, elapsed left, time left right
+   *   generating the activity animation, elapsed left, time left right, and
+   *              NO bar, no step count
+   *
+   * The operator watched an image job show a loading bar, swap it for a
+   * second bar with a fresh counter when sampling began, and leave that one
+   * stuck full on "Step 14 of 14". Sampling steps still drive the estimate;
+   * they no longer draw a second progress bar the user has to reinterpret.
+   */
+  if (phase === "generating") {
+    return (
+      <GenerationClockRow
+        testId={`generation-clock-${message.id}`}
+        elapsed={lines.elapsed}
+        remaining={lines.remaining}
+        maxWidth="none"
+      />
+    );
+  }
+
+  const fraction = loadFraction(
+    progress,
+    phaseElapsed,
+    estimateSeconds,
+    fillRef.current,
+  );
+  fillRef.current = fraction ?? 0;
   return (
     <GenerationProgressBar
       testId={`model-load-progress-${message.id}`}
       clockTestId={`generation-clock-${message.id}`}
       fraction={fraction}
-      position={lines.position}
       elapsed={lines.elapsed}
       remaining={lines.remaining}
-      hint={lines.hint}
       accentVar={PHASE_ACCENT_VAR[phase] ?? "--accent-chatbot"}
     />
   );
 }
+
 
 /**
  * One accent per phase so the bar reads as part of the surface it sits on:
@@ -581,14 +635,21 @@ function phaseEstimateSeconds(message: ChatMessage, phase: JobPhase): number | u
  *
  * Each phase gets its own clock so a measured rate describes that phase alone:
  * the load estimate is not diluted by sampling time and the sampling estimate
- * does not carry the load. The loading clock anchors on the message timestamp
- * when there is one, so it survives a re-render; later phases anchor on the
- * moment the phase was first seen.
+ * does not carry the load.
+ *
+ * v2.4.11 operator report: "the elapsed time goes faster, a second is less
+ * than a second". The loading clock used to anchor on the MESSAGE timestamp,
+ * which is stamped when the bubble is created -- before the queue wait and the
+ * GPU clear, and formatted by the sender rather than measured here. The clock
+ * therefore opened at three or four seconds and every figure derived from it
+ * was ahead of the wall. Every phase now anchors on the first frame this
+ * bubble actually observes it, so the number counts real seconds of the phase
+ * it is labelled with. The anchor lives in a ref, so re-renders never restart
+ * it.
  */
 function usePhaseElapsed(
   messageId: string,
   phase: JobPhase,
-  startedAt: string | undefined,
   active: boolean,
 ): number | null {
   const anchorRef = useRef<{ key: string; at: number } | null>(null);
@@ -601,10 +662,7 @@ function usePhaseElapsed(
   if (!active) return null;
   const key = `${messageId}:${phase}`;
   if (anchorRef.current?.key !== key) {
-    const started = startedAt ? Date.parse(startedAt) : NaN;
-    const anchor =
-      phase === "loading" && Number.isFinite(started) ? Math.min(started, Date.now()) : Date.now();
-    anchorRef.current = { key, at: anchor };
+    anchorRef.current = { key, at: Date.now() };
   }
   return Math.max(0, (now - anchorRef.current.at) / 1000);
 }

@@ -98,3 +98,36 @@ describe("describeGenerationFailure", () => {
     expect(failure.summary).toBeNull();
   });
 });
+
+/**
+ * v2.4.11 -- a broken model download is not a broken runtime.
+ *
+ * Operator report: "Image generation with that model didn't work", with no
+ * error to copy. The runtime had said exactly what was wrong; the shell had
+ * no branch for it, and the nearest one would have blamed an unreachable
+ * runtime and told the user to restart an app that was working fine.
+ */
+describe("model layout failures", () => {
+  it("names the model's files, not the runtime", () => {
+    const failure = describeGenerationFailure(
+      new Error(
+        "image runtime is not ready: model-layout-invalid: sana-1.6b-2k does not contain a complete pipeline or one supported SDXL checkpoint",
+      ),
+      { surface: "image" },
+    );
+    expect(failure.kind).toBe("model-unusable");
+    expect(failure.summary).toContain("layout");
+    expect(failure.hint).toContain("Settings > Models");
+    // It must NOT tell the user to restart a healthy runtime.
+    expect(failure.summary).not.toContain("not reachable");
+  });
+
+  it("distinguishes weights that were never downloaded", () => {
+    const failure = describeGenerationFailure(
+      new Error("image runtime is not ready: weights-missing for realvisxl-v5"),
+      { surface: "image" },
+    );
+    expect(failure.kind).toBe("model-unusable");
+    expect(failure.summary).toContain("not on disk");
+  });
+});

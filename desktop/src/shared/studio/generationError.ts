@@ -36,6 +36,7 @@ export type GenerationFailureKind =
   | "timeout"
   | "out-of-memory"
   | "runtime-unavailable"
+  | "model-unusable"
   | "cancelled"
   | "unknown";
 
@@ -87,6 +88,17 @@ const OOM_RE = /out of memory|CUDA out of memory|OutOfMemoryError|allocat\w* \d+
 const UNAVAILABLE_RE =
   /econnrefused|enotfound|socket hang up|fetch failed|runtime (not )?(available|running)|sidecar (is )?not running/i;
 const CANCELLED_RE = /cancell?ed|aborted by user|interrupted by app restart/i;
+/*
+ * v2.4.11 operator report: an image "didn't work" with no error to copy. The
+ * runtime had answered precisely -- `model-layout-invalid: <model> does not
+ * contain a complete pipeline or one supported SDXL checkpoint` -- but that
+ * fell through to the generic branch, and the nearest specific branch would
+ * have blamed an unreachable runtime. The runtime is fine; the downloaded
+ * FILES are not in a shape it can load, which is a different problem with a
+ * different remedy.
+ */
+const MODEL_LAYOUT_RE = /model-layout-invalid|does not contain a complete pipeline/i;
+const WEIGHTS_MISSING_RE = /weights-missing|weights are missing|no weights found/i;
 
 /**
  * Classify a raw generation error into a card the transcript can render.
@@ -163,7 +175,23 @@ export function describeGenerationFailure(
     };
   }
 
-  // 4. The runtime is not there at all.
+  // 4. The model's own files, not the runtime.
+  if (MODEL_LAYOUT_RE.test(raw) || WEIGHTS_MISSING_RE.test(raw)) {
+    const missing = WEIGHTS_MISSING_RE.test(raw);
+    return {
+      headline,
+      summary: missing
+        ? "This model's files are not on disk."
+        : "This model's downloaded files are not in a layout Nexus can load.",
+      hint: missing
+        ? "Install the model again from Settings > Models, then try once more."
+        : "Reinstall this model from Settings > Models. If it fails again, pick a different model -- this one's download does not match what the image runtime expects.",
+      detail,
+      kind: "model-unusable",
+    };
+  }
+
+  // 5. The runtime is not there at all.
   if (UNAVAILABLE_RE.test(raw)) {
     return {
       headline,
@@ -174,7 +202,7 @@ export function describeGenerationFailure(
     };
   }
 
-  // 5. Deliberate stops are not failures worth alarming about.
+  // 6. Deliberate stops are not failures worth alarming about.
   if (CANCELLED_RE.test(raw)) {
     return {
       headline: `Your ${noun} was cancelled.`,

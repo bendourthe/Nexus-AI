@@ -540,6 +540,35 @@ class TestTypedCatalogPage:
         page = self._page(_gpu_state(), tmp_path)
         assert page._tabs.tabText(6).replace("\u2713 ", "") == "Audio"
 
+    def test_card_box_fits_the_current_tab(self, qt_app, tmp_path: Path) -> None:
+        """v2.4.11: a short category does not scroll inside a tall empty box.
+
+        The operator report was the Audio tab: two cards, a box sized for the
+        longest tab, and a scrollbar down its side.
+        """
+        from PyQt5.QtWidgets import QScrollArea
+
+        page = self._page(_gpu_state(), tmp_path)
+        page.resize(1300, 760)
+        page.show()
+        qt_app.processEvents()
+
+        heights: list[int] = []
+        for index in range(page._tabs.count()):
+            page._tabs.setCurrentIndex(index)
+            qt_app.processEvents()
+            scroll = page._tabs.widget(index).findChild(QScrollArea)
+            assert scroll is not None
+            inner = scroll.widget()
+            content = inner.heightForWidth(scroll.viewport().width())
+            # The box never exceeds the cards it holds.
+            assert scroll.height() <= max(content, scroll.MIN_CONTENT_HEIGHT) + 4
+            heights.append(scroll.height())
+        page.hide()
+
+        # And the boxes are not all one height: each follows its own tab.
+        assert len(set(heights)) > 1
+
     def test_gpu_tier_defaults_pre_ticked(self, qt_app, tmp_path: Path) -> None:
         page = self._page(_gpu_state(vram_mb=8192), tmp_path)
         selected = page.selection().selected

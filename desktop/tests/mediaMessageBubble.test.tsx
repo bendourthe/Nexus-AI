@@ -98,12 +98,11 @@ describe("MessageBubble media", () => {
     expect(STUDIO_PENDING_CAPTIONS).toContain(
       screen.getByTestId("agent-state-orb-caption").textContent,
     );
-    // The counted step, not a leftover load bar, is what the bar reports.
-    expect(
-      screen
-        .getByTestId("model-load-progress-studio-pending")
-        .querySelector('[role="progressbar"]'),
-    ).toHaveAttribute("aria-valuenow", "5");
+    // v2.4.11: no bar and no step count while it generates -- the animation
+    // carries the state, and the clock row carries the numbers.
+    expect(screen.queryByTestId("model-load-progress-studio-pending")).toBeNull();
+    expect(screen.queryByText(/Step 1 of 20/)).toBeNull();
+    expect(screen.getByTestId("generation-clock-studio-pending")).toBeInTheDocument();
     // v2.4.9 operator ask: "When an image or video is generated, the animation
     // should be aligned left, just like in chat and agents mode." The studio
     // pending row no longer centers itself or reserves a 12rem hero block.
@@ -132,7 +131,7 @@ describe("MessageBubble media", () => {
       "hero",
     );
     expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
-      "Loading model...",
+      "Loading model",
     );
     // A heartbeat with no stage keeps loading.
     rerender(
@@ -141,7 +140,7 @@ describe("MessageBubble media", () => {
       />,
     );
     expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
-      "Loading model...",
+      "Loading model",
     );
     // The runtime's generating stage flips to the studio captions.
     rerender(
@@ -149,7 +148,7 @@ describe("MessageBubble media", () => {
         message={{ ...base, progress: { step: 0, total: 0, stage: "generating" } }}
       />,
     );
-    expect(screen.queryByText("Loading model...")).toBeNull();
+    expect(screen.queryByText("Loading model")).toBeNull();
     expect(STUDIO_PENDING_CAPTIONS).toContain(
       screen.getByTestId("agent-state-orb-caption").textContent,
     );
@@ -159,14 +158,14 @@ describe("MessageBubble media", () => {
     );
     // So does a counted step even without a stage.
     rerender(<MessageBubble message={{ ...base, progress: { step: 2, total: 20 } }} />);
-    expect(screen.queryByText("Loading model...")).toBeNull();
+    expect(screen.queryByText("Loading model")).toBeNull();
     // Chat pending is untouched: no Loading model on a text reply.
     rerender(
       <MessageBubble
         message={{ id: "chat", role: "assistant", content: "", pending: true }}
       />,
     );
-    expect(screen.queryByText("Loading model...")).toBeNull();
+    expect(screen.queryByText("Loading model")).toBeNull();
   });
 
   // v2.4.8 follow-up (2026-09-07): a job parked behind another module used to
@@ -220,7 +219,7 @@ describe("MessageBubble media", () => {
     expect(screen.queryByTestId("model-queued-detail-studio-queued")).toBeNull();
   });
 
-  it("renders a byte-level bar with percent and time left while the model loads", () => {
+  it("renders a byte-level bar and the time left while the model loads", () => {
     const base: ChatMessage = {
       id: "studio-bytes",
       role: "assistant",
@@ -246,8 +245,9 @@ describe("MessageBubble media", () => {
         }}
       />,
     );
+    // v2.4.11: the caption names the phase; the bar carries the number.
     expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
-      "Loading model 40%",
+      "Loading model",
     );
     // v2.4.9: the bar is a styled div with the progressbar role, not a raw
     // <progress>, and its width is a fixed track that no longer depends on the
@@ -262,7 +262,7 @@ describe("MessageBubble media", () => {
     // Elapsed and time left share ONE row (operator ask).
     expect(
       screen.getByTestId("generation-clock-studio-bytes").textContent,
-    ).toContain("about 12 seconds left");
+    ).toContain("00:12 left");
     // The generation figure never describes the load: while loading, the only
     // estimate on screen is the load's own (operator report: a video read
     // "usually about 18 min" while it was still reading weights).
@@ -283,12 +283,19 @@ describe("MessageBubble media", () => {
         }}
       />,
     );
-    expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
-      "Loading model 10%",
-    );
+    // v2.4.11 operator report: "the progress kept regressing backward as the
+    // expected completion time changed". A bar that walks back says work was
+    // undone, so the fill holds its high-water mark -- here 40%, even though
+    // this frame reports a smaller count.
+    expect(
+      screen
+        .getByTestId("model-load-progress-studio-bytes")
+        .querySelector('[role="progressbar"]'),
+    ).toHaveAttribute("aria-valuenow", "40");
+    // The time left still tracks the newest reading.
     expect(
       screen.getByTestId("generation-clock-studio-bytes").textContent,
-    ).toContain("about 3 minutes left");
+    ).toContain("02:30 left");
     rerender(
       <MessageBubble
         message={{
@@ -304,14 +311,15 @@ describe("MessageBubble media", () => {
         }}
       />,
     );
-    expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
-      "Loading model 100%",
-    );
-    // The generating stage drops the load fraction: a full byte count is not a
-    // full sampling bar (operator report: a video showed a full bar the instant
-    // sampling began). The bar stays on screen, now indeterminate, because a
-    // job with nothing measured yet must still show one (operator screenshots
-    // 6 and 7: 37 seconds of bare caption, then a bar with 1 s left).
+    expect(
+      screen
+        .getByTestId("model-load-progress-studio-bytes")
+        .querySelector('[role="progressbar"]'),
+    ).toHaveAttribute("aria-valuenow", "100");
+    // v2.4.11: sampling retires the bar entirely. The operator watched a
+    // loading bar hand over to a second bar with a fresh counter, then sit
+    // full on "Step 14 of 14"; generating now shows the animation and the
+    // clock row alone.
     rerender(
       <MessageBubble
         message={{
@@ -326,17 +334,11 @@ describe("MessageBubble media", () => {
         }}
       />,
     );
-    const generatingBar = screen
-      .getByTestId("model-load-progress-studio-bytes")
-      .querySelector('[role="progressbar"]');
-    expect(generatingBar).not.toBeNull();
-    expect(generatingBar).toHaveAttribute("data-determinate", "false");
-    expect(screen.queryByText("Loading model 100%")).toBeNull();
-    // v2.4.9: no cost-model hint. The estimate is the remaining figure now.
-    expect(screen.queryByTestId("model-load-progress-studio-bytes-hint")).toBeNull();
+    expect(screen.queryByTestId("model-load-progress-studio-bytes")).toBeNull();
+    expect(screen.queryByText("Loading model")).toBeNull();
     expect(
       screen.getByTestId("generation-clock-studio-bytes").textContent,
-    ).toContain("about 1 minute left");
+    ).toContain("01:00 left");
   });
 
   it("replaces undecodable generated media with a visible failure", () => {

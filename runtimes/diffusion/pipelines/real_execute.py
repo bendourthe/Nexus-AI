@@ -110,9 +110,39 @@ def _torch_dtype():
     return torch.float32
 
 
+def enable_decode_memory_savers(pipe) -> list[str]:
+    """Decode the latent in tiles instead of all at once.
+
+    v2.4.11 operator report: a 2048x2048 image ran for over ten minutes at
+    100% GPU and never produced a picture. Sampling had finished; the VAE
+    decode had not. Decoding a 2K latent in one piece needs several gigabytes
+    of activations on top of the resident UNet, so on a 16 GB laptop card it
+    spills into shared system memory and crawls -- the GPU looks pinned
+    because it is, thrashing over PCIe.
+
+    Tiling and slicing are the standard remedy: the decode runs in pieces that
+    fit, with no visible difference in the output. They cost nothing on small
+    images, so they are on for every run rather than gated on a size guess.
+
+    Returns the names of what it managed to enable, for the log.
+    """
+    enabled: list[str] = []
+    for name in ("enable_vae_tiling", "enable_vae_slicing", "enable_attention_slicing"):
+        fn = getattr(pipe, name, None)
+        if not callable(fn):
+            continue
+        try:
+            fn()
+            enabled.append(name)
+        except Exception:  # noqa: BLE001 - a memory saver is never worth a failed run
+            continue
+    return enabled
+
+
 def _move_pipe(pipe, offload_strategy: str) -> None:
     import torch  # type: ignore[import-not-found]
 
+    enable_decode_memory_savers(pipe)
     if not gpu_ready():
         pipe.to("cpu")
         return
@@ -153,13 +183,57 @@ def _align_spatial(value: int, multiple: int = 16) -> int:
     return max(multiple, aligned)
 
 
+#: Precision variants diffusers understands, in the order we prefer them.
+#: `fp16` first because that is what the SDXL family ships; `bf16` is how the
+#: SANA repos publish their weights (v2.4.11).
+_WEIGHT_VARIANTS: tuple[str, ...] = ("fp16", "bf16")
+
+
+def _detect_variant(weights: Path) -> str | None:
+    """The precision variant these files are published under, if any.
+
+    Diffusers names a variant file `<stem>.<variant>.safetensors`, and a
+    SHARDED one `<stem>.<variant>-00001-of-0000N.safetensors` -- which is how
+    SANA ships its text encoder. Matching only the first spelling is why a
+    complete SANA directory still failed to load.
+    """
+    for variant in _WEIGHT_VARIANTS:
+        for pattern in (f"*.{variant}.safetensors", f"*.{variant}-*.safetensors"):
+            if next(weights.rglob(pattern), None) is not None:
+                return variant
+    return None
+
+
+def negative_prompt_kwargs(model_id: str, negative: str | None) -> dict[str, object]:
+    """How this family wants to be told about a negative prompt.
+
+    Three contracts, learned the hard way (v2.4.11), each of which failed only
+    AFTER the model had finished loading:
+
+    * SANA types `negative_prompt` as `str` and runs it through a caption
+      cleaner, so a `None` reaches `.lower()` -- `AttributeError: 'NoneType'
+      object has no attribute 'lower'`.
+    * SANA Sprint is guidance-distilled and has no such parameter at all;
+      passing one is a `TypeError: unexpected keyword argument`.
+    * SDXL treats `None` as "no negative conditioning", which is not the same
+      as an empty string, so it keeps `None`.
+    """
+    lowered = model_id.lower()
+    if "sprint" in lowered:
+        return {}
+    if lowered.startswith("sana"):
+        return {"negative_prompt": negative or ""}
+    return {"negative_prompt": negative or None}
+
+
 def _pipeline_load_kwargs(weights: Path) -> dict[str, object]:
     kwargs: dict[str, object] = {
         "torch_dtype": _torch_dtype(),
         "local_files_only": True,
     }
-    if next(weights.rglob("*.fp16.safetensors"), None) is not None:
-        kwargs["variant"] = "fp16"
+    variant = _detect_variant(weights)
+    if variant is not None:
+        kwargs["variant"] = variant
     return kwargs
 
 
@@ -199,7 +273,15 @@ def _load_text_pipe(weights: Path, model_id: str):
     kwargs = _pipeline_load_kwargs(weights)
     if (weights / "model_index.json").is_file():
         if model_id.lower().startswith("sana"):
-            sana = _import_diffusers_class("image", "SanaPipeline")
+            # v2.4.11: Sprint is a distilled SANA with its own scheduler and
+            # its own pipeline class; loading it as a plain SanaPipeline pairs
+            # distilled weights with the wrong sampler.
+            class_name = (
+                "SanaSprintPipeline"
+                if "sprint" in model_id.lower()
+                else "SanaPipeline"
+            )
+            sana = _import_diffusers_class("image", class_name)
             return sana.from_pretrained(str(weights), **kwargs)
         from diffusers import (
             AutoPipelineForText2Image,  # type: ignore[import-not-found]
@@ -290,7 +372,7 @@ def image_execute(ctx: ExecutionContext) -> PipelineOutput:
             )
             result = pipe(
                 prompt=ctx.params.prompt,
-                negative_prompt=ctx.params.negative_prompt or None,
+                **negative_prompt_kwargs(model_id, ctx.params.negative_prompt),
                 image=source,
                 strength=strength,
                 num_inference_steps=ctx.params.steps,
@@ -312,7 +394,7 @@ def image_execute(ctx: ExecutionContext) -> PipelineOutput:
             base.emit_stage(ctx.job_id, "generating")
             result = pipe(
                 prompt=ctx.params.prompt,
-                negative_prompt=ctx.params.negative_prompt or None,
+                **negative_prompt_kwargs(model_id, ctx.params.negative_prompt),
                 num_inference_steps=ctx.params.steps,
                 guidance_scale=ctx.params.cfg_scale,
                 width=ctx.params.width,

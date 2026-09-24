@@ -317,6 +317,31 @@ QPushButton#secondaryButton:disabled {{
     color: {TEXT_MUTED};
 }}
 
+/* -- Tertiary button (filled gray) ------------------------------------
+   A neutral action that must read as a real button beside the primary one
+   (Close next to Launch Nexus AI) without competing with it. */
+QPushButton#tertiaryButton {{
+    background-color: {BG_ELEVATED};
+    color: {TEXT_PRIMARY};
+    font-size: {FS_BODY}px;
+    border: 1px solid {BORDER_STRONG};
+    border-radius: {BUTTON_RADIUS}px;
+    min-height: {BUTTON_HEIGHT}px;
+    padding: 0 24px;
+}}
+QPushButton#tertiaryButton:hover {{
+    background-color: {BG_CARD};
+    border-color: {TEXT_SECONDARY};
+}}
+QPushButton#tertiaryButton:pressed {{
+    background-color: {BG_INPUT};
+}}
+QPushButton#tertiaryButton:disabled {{
+    background-color: {BG_CARD};
+    color: {TEXT_MUTED};
+    border-color: {BG_CARD};
+}}
+
 /* -- Browse button overlaid on the install-path field: a filled rounded
    button so it stands out from the field it sits in. ---------------------- */
 QPushButton#install-path-browse {{

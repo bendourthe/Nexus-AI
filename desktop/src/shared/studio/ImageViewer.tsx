@@ -424,16 +424,29 @@ export function ImageViewer({
         flexDirection: "column",
       }}
     >
-      {/* Toolbar */}
+      {/*
+        Toolbar.
+
+        v2.4.11 operator ask: "in editing mode, center the editing options
+        horizontally". The editing controls sit in their own centred group;
+        Copy / Save / Close are taken out of the flow (absolute, pinned right)
+        so their width cannot pull the centred group off centre.
+      */}
       <div
         onClick={(e) => e.stopPropagation()}
         data-testid={`${testId}-toolbar`}
         style={{
+          position: "relative",
           display: "flex",
           alignItems: "center",
+          justifyContent: "center",
           flexWrap: "wrap",
           gap: "var(--space-2)",
           padding: "var(--space-2) var(--space-3)",
+          // Room for the pinned group, so a wide editing row never slides
+          // under it on a narrow window.
+          paddingRight: "9rem",
+          paddingLeft: "9rem",
           background: "color-mix(in srgb, var(--bg-1) 92%, transparent)",
           borderBottom: "1px solid var(--border-1)",
         }}
@@ -558,7 +571,16 @@ export function ImageViewer({
           The prop stays on the interface so the studios keep compiling; it is
           unused here on purpose.
         */}
-        <div style={{ marginLeft: "auto", display: "flex", gap: "var(--space-1)" }}>
+        <div
+          style={{
+            position: "absolute",
+            right: "var(--space-3)",
+            top: "50%",
+            transform: "translateY(-50%)",
+            display: "flex",
+            gap: "var(--space-1)",
+          }}
+        >
           <ToolButton
             label="Copy image"
             testId={`${testId}-copy`}
@@ -602,20 +624,28 @@ export function ImageViewer({
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              display: "flex",
+              display: "inline-flex",
               flexDirection: "column",
+              alignItems: "center",
               gap: "var(--space-3)",
               padding: "var(--space-4)",
               borderRadius: "var(--radius-lg, 14px)",
               background: "var(--bg-1)",
               border: "1px solid var(--border-1)",
-              minWidth: "18rem",
+              width: "max-content",
+              maxWidth: "90vw",
             }}
           >
-            <strong style={{ color: "var(--fg-0)" }}>
+            <strong style={{ color: "var(--fg-0)", textAlign: "center" }}>
               {pendingAction === "save" ? "Save which version?" : "Copy which version?"}
             </strong>
-            <div style={{ display: "flex", gap: "var(--space-2)" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "var(--space-2)",
+              }}
+            >
               <button
                 type="button"
                 data-testid={`${testId}-choice-edited`}

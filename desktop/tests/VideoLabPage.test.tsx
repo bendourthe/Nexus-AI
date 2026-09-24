@@ -528,7 +528,7 @@ describe("VideoLabPage (chat)", () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
     });
     // v2.4.8 Phase 8: before the runtime reports a stage or a counted step the
-    // orb reads "Loading model..." (weights moving onto the GPU are not
+    // orb reads "Loading model" (weights moving onto the GPU are not
     // creation); once sampling starts it rotates the studio captions.
     const orb = await screen.findByRole("img", {
       name: /loading model|generating media/i,
@@ -541,7 +541,7 @@ describe("VideoLabPage (chat)", () => {
     // v2.4.4 Phase 5.3: one of Creating / Crafting / Generating, never Shaping.
     expect(screen.queryByText("Shaping...")).toBeNull();
     expect(
-      screen.queryByText("Loading model...") !== null ||
+      screen.queryByText("Loading model") !== null ||
         STUDIO_PENDING_CAPTIONS.some(
           (caption) => screen.queryByText(caption) !== null,
         ),

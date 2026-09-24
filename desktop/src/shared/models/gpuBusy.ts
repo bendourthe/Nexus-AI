@@ -10,6 +10,7 @@
  * and named the way the rest of the app names models, not by its raw tag.
  */
 
+import { formatDuration } from "../chat/generationProgress";
 import { ipcCall } from "../../lib/ipc";
 import type { SchedulerActiveJob } from "./schedulerResidency";
 
@@ -108,19 +109,34 @@ export function gpuSwitchTitle(pillar: GpuPillar, targetModelName: string): stri
 }
 
 /** The two body lines: what holds the GPU, then what switching does. */
+/**
+ * The body of the switch prompt.
+ *
+ * v2.4.11 operator instruction: the prompt must say that only one model fits
+ * at a time AND roughly what the switch costs, "just so they're aware ... that
+ * switching back and forth may slow things down". `loadSeconds` is the target
+ * model's own load estimate; omit it only when the size is unknown.
+ */
 export function gpuSwitchBody(
   holder: GpuHolder,
   targetModelName: string,
+  loadSeconds?: number | null,
 ): readonly string[] {
-  return holder.running
+  const lines = holder.running
     ? [
         `${holder.label} is currently running on the GPU.`,
-        `Switching will stop it, clear the GPU, and load ${targetModelName}.`,
+        `Your GPU holds one model at a time, so switching stops it, clears the GPU, and loads ${targetModelName}.`,
       ]
     : [
         `${holder.label} is the model currently loaded on the GPU.`,
-        `Switching will unload it, clear the GPU, and load ${targetModelName}.`,
+        `Your GPU holds one model at a time, so switching unloads it, clears the GPU, and loads ${targetModelName}.`,
       ];
+  if (typeof loadSeconds === "number" && loadSeconds > 0) {
+    lines.push(
+      `Loading ${targetModelName} takes about ${formatDuration(loadSeconds)}, and switching back later costs the same again.`,
+    );
+  }
+  return lines;
 }
 
 /** Clear the GPU: cancel the running scheduler job and evict Ollama residents. */

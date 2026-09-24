@@ -47,6 +47,50 @@ export interface GenerationProgressBarProps {
  * any caption: that derivation was the reported bug. It still shrinks on a
  * narrow pane through `max-width: 100%`.
  */
+/**
+ * The timing row: elapsed left, time left right.
+ *
+ * v2.4.11 -- it is a component of its own because the generating phase shows
+ * it WITHOUT a bar. Every mode then reads the same way: a bar while the model
+ * loads, the activity animation plus this row while it works.
+ */
+export function GenerationClockRow({
+  elapsed,
+  remaining,
+  testId,
+  /**
+   * Track width to line up with. The generating phase passes "none" so the row
+   * takes the width of the animation pill it sits under (v2.4.11 operator ask:
+   * the time left belongs at "the right edge of the animation").
+   */
+  maxWidth = PROGRESS_BAR_MAX_WIDTH,
+}: {
+  readonly elapsed?: string | null;
+  readonly remaining?: string | null;
+  readonly testId?: string;
+  readonly maxWidth?: string;
+}): JSX.Element | null {
+  if (!elapsed && !remaining) return null;
+  return (
+    <div
+      data-testid={testId}
+      style={{
+        display: "flex",
+        alignItems: "baseline",
+        justifyContent: "space-between",
+        gap: "var(--space-3)",
+        width: "100%",
+        maxWidth,
+        color: "var(--fg-muted)",
+        fontSize: "var(--text-xs)",
+      }}
+    >
+      <span>{elapsed ?? ""}</span>
+      <span>{remaining ?? ""}</span>
+    </div>
+  );
+}
+
 export function GenerationProgressBar({
   fraction,
   elapsed,
@@ -110,22 +154,11 @@ export function GenerationProgressBar({
         </div>
       </div>
 
-      {elapsed || remaining ? (
-        <div
-          data-testid={clockTestId}
-          style={{
-            display: "flex",
-            alignItems: "baseline",
-            justifyContent: "space-between",
-            gap: "var(--space-3)",
-            color: "var(--fg-muted)",
-            fontSize: "var(--text-xs)",
-          }}
-        >
-          <span>{elapsed ?? ""}</span>
-          <span>{remaining ?? ""}</span>
-        </div>
-      ) : null}
+      <GenerationClockRow
+        {...(clockTestId ? { testId: clockTestId } : {})}
+        elapsed={elapsed}
+        remaining={remaining}
+      />
 
       {hint ? (
         <span
