@@ -1,0 +1,594 @@
+{
+  "bindings": [
+    {
+      "command": "acp.setEnabled",
+      "exempt": true,
+      "reason": "readiness or health probe with no user-facing capability"
+    },
+    {
+      "command": "acp.status",
+      "exempt": true,
+      "reason": "readiness or health probe with no user-facing capability"
+    },
+    {
+      "command": "ask.inbox.approve",
+      "feature": "f007"
+    },
+    {
+      "command": "ask.inbox.deny",
+      "feature": "f007"
+    },
+    {
+      "command": "ask.inbox.list",
+      "feature": "f007"
+    },
+    {
+      "command": "ask.inbox.pendingCount",
+      "feature": "f007"
+    },
+    {
+      "command": "ask.scheduler.list",
+      "feature": "f007"
+    },
+    {
+      "command": "ask.scheduler.setEnabled",
+      "feature": "f007"
+    },
+    {
+      "command": "audio.health",
+      "exempt": true,
+      "reason": "readiness or health probe with no user-facing capability"
+    },
+    {
+      "command": "audio.speak",
+      "feature": "f002"
+    },
+    {
+      "command": "audio.transcribe",
+      "feature": "f002"
+    },
+    {
+      "command": "audit.list",
+      "feature": "f029"
+    },
+    {
+      "command": "audit.status",
+      "feature": "f029"
+    },
+    {
+      "command": "chat.explorer.appendMessage",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.createChat",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.createFolder",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.deleteChat",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.deleteFolder",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.listMessages",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.moveChat",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.moveFolder",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.renameChat",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.renameFolder",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.search",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.setPersona",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.tree",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.generateTitle",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.session.sendMessage",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.session.start",
+      "feature": "f002"
+    },
+    {
+      "command": "coding.chat.autocomplete",
+      "feature": "f001"
+    },
+    {
+      "command": "coding.memory.snapshot",
+      "feature": "f013"
+    },
+    {
+      "command": "coding.parseDocument.setEnabled",
+      "feature": "f005"
+    },
+    {
+      "command": "coding.parseDocument.status",
+      "feature": "f005"
+    },
+    {
+      "command": "coding.session.cancel",
+      "feature": "f001"
+    },
+    {
+      "command": "coding.session.delete",
+      "feature": "f001"
+    },
+    {
+      "command": "coding.session.list",
+      "feature": "f001"
+    },
+    {
+      "command": "coding.session.rename",
+      "feature": "f001"
+    },
+    {
+      "command": "coding.session.resume",
+      "feature": "f001"
+    },
+    {
+      "command": "coding.session.sendMessage",
+      "feature": "f001"
+    },
+    {
+      "command": "coding.session.start",
+      "feature": "f001"
+    },
+    {
+      "command": "coding.sessions.list",
+      "feature": "f001"
+    },
+    {
+      "command": "coding.startTask",
+      "feature": "f001"
+    },
+    {
+      "command": "coding.trace.subscribe",
+      "feature": "f028"
+    },
+    {
+      "command": "commands.list",
+      "feature": "f025"
+    },
+    {
+      "command": "credentials.delete",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "credentials.list",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "credentials.set",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "credentials.status",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "data.categories",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "data.export",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "data.import",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "diffusion.health",
+      "exempt": true,
+      "reason": "readiness or health probe with no user-facing capability"
+    },
+    {
+      "command": "diffusion.img2img",
+      "feature": "f003"
+    },
+    {
+      "command": "diffusion.inpaint",
+      "feature": "f003"
+    },
+    {
+      "command": "diffusion.job.drainEvents",
+      "feature": "f003"
+    },
+    {
+      "command": "diffusion.outpaint",
+      "feature": "f003"
+    },
+    {
+      "command": "diffusion.runtime.cancelRepair",
+      "feature": "f003"
+    },
+    {
+      "command": "diffusion.runtime.openLogLocation",
+      "feature": "f003"
+    },
+    {
+      "command": "diffusion.runtime.repair",
+      "feature": "f003"
+    },
+    {
+      "command": "diffusion.runtime.status",
+      "exempt": true,
+      "reason": "readiness or health probe with no user-facing capability"
+    },
+    {
+      "command": "diffusion.segment",
+      "feature": "f003"
+    },
+    {
+      "command": "diffusion.txt2img",
+      "feature": "f003"
+    },
+    {
+      "command": "diffusion.version",
+      "exempt": true,
+      "reason": "readiness or health probe with no user-facing capability"
+    },
+    {
+      "command": "diffusion.video.audio2video",
+      "feature": "f004"
+    },
+    {
+      "command": "diffusion.video.image2video",
+      "feature": "f004"
+    },
+    {
+      "command": "diffusion.video.text2video",
+      "feature": "f004"
+    },
+    {
+      "command": "diffusion.video.workflow.extract",
+      "feature": "f004"
+    },
+    {
+      "command": "diffusion.workflow.extract",
+      "feature": "f003"
+    },
+    {
+      "command": "generation.queue.cancel",
+      "feature": "f026"
+    },
+    {
+      "command": "generation.queue.enqueue",
+      "feature": "f026"
+    },
+    {
+      "command": "generation.queue.list",
+      "feature": "f026"
+    },
+    {
+      "command": "generation.queue.pendingCount",
+      "feature": "f026"
+    },
+    {
+      "command": "generation.queue.reorder",
+      "feature": "f026"
+    },
+    {
+      "command": "generation.scheduler.cancelActive",
+      "feature": "f026"
+    },
+    {
+      "command": "generation.scheduler.snapshot",
+      "feature": "f026"
+    },
+    {
+      "command": "gpu.sample",
+      "feature": "f026"
+    },
+    {
+      "command": "image.generate",
+      "feature": "f003"
+    },
+    {
+      "command": "mcp.invoke",
+      "feature": "f027"
+    },
+    {
+      "command": "mcp.list",
+      "feature": "f027"
+    },
+    {
+      "command": "mcp.registry.list",
+      "feature": "f027"
+    },
+    {
+      "command": "mcp.registry.setToolDenied",
+      "feature": "f027"
+    },
+    {
+      "command": "media.sampleVideoFrames",
+      "feature": "f002"
+    },
+    {
+      "command": "memory.episodic.record",
+      "feature": "f013"
+    },
+    {
+      "command": "memory.episodic.search",
+      "feature": "f013"
+    },
+    {
+      "command": "metrics.inference",
+      "feature": "f010"
+    },
+    {
+      "command": "models.diskUsage",
+      "feature": "f018"
+    },
+    {
+      "command": "models.install",
+      "feature": "f018"
+    },
+    {
+      "command": "models.install.cancel",
+      "feature": "f018"
+    },
+    {
+      "command": "models.install.drainEvents",
+      "feature": "f018"
+    },
+    {
+      "command": "models.list",
+      "feature": "f018"
+    },
+    {
+      "command": "models.remove",
+      "feature": "f018"
+    },
+    {
+      "command": "models.resident",
+      "feature": "f018"
+    },
+    {
+      "command": "models.warm",
+      "feature": "f018"
+    },
+    {
+      "command": "ocr.health",
+      "exempt": true,
+      "reason": "readiness or health probe with no user-facing capability"
+    },
+    {
+      "command": "ocr.job.cancel",
+      "feature": "f005"
+    },
+    {
+      "command": "ocr.job.drainEvents",
+      "feature": "f005"
+    },
+    {
+      "command": "ocr.parseDocument",
+      "feature": "f005"
+    },
+    {
+      "command": "ping",
+      "exempt": true,
+      "reason": "readiness or health probe with no user-facing capability"
+    },
+    {
+      "command": "runtime.desktopPayload",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "serving.setEnabled",
+      "feature": "f006"
+    },
+    {
+      "command": "serving.status",
+      "feature": "f006"
+    },
+    {
+      "command": "sessions.archive",
+      "feature": "f015"
+    },
+    {
+      "command": "sessions.listArchived",
+      "feature": "f015"
+    },
+    {
+      "command": "sessions.restore",
+      "feature": "f015"
+    },
+    {
+      "command": "settings.get",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "settings.set",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "skills.autoSync.get",
+      "feature": "f016"
+    },
+    {
+      "command": "skills.autoSync.set",
+      "feature": "f016"
+    },
+    {
+      "command": "skills.list",
+      "feature": "f016"
+    },
+    {
+      "command": "skills.optimize.apply",
+      "feature": "f017"
+    },
+    {
+      "command": "skills.optimize.preview",
+      "feature": "f017"
+    },
+    {
+      "command": "skills.status",
+      "feature": "f016"
+    },
+    {
+      "command": "skills.sync",
+      "feature": "f016"
+    },
+    {
+      "command": "skills.upstreamLatest",
+      "feature": "f016"
+    },
+    {
+      "command": "studio.session.appendTurn",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.session.createFolder",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.session.createSession",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.session.deleteFolder",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.session.deleteSession",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.session.listTurns",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.session.moveFolder",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.session.moveSession",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.session.renameFolder",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.session.renameSession",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.session.tree",
+      "feature": "f003"
+    },
+    {
+      "command": "telemetry.subscribe",
+      "feature": "f026"
+    },
+    {
+      "command": "tuning.dataset.build",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "tuning.job.cancel",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "tuning.job.list",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "tuning.job.start",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "tuning.models.list",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "tuning.preflight",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "tuning.provision",
+      "exempt": true,
+      "reason": "shared transport or local control with no feature-inventory id"
+    },
+    {
+      "command": "tuning.status",
+      "exempt": true,
+      "reason": "readiness or health probe with no user-facing capability"
+    },
+    {
+      "command": "video.enhancement.cancel",
+      "feature": "f004"
+    },
+    {
+      "command": "video.enhancement.capability",
+      "feature": "f004"
+    },
+    {
+      "command": "video.enhancement.enqueue",
+      "feature": "f004"
+    },
+    {
+      "command": "video.enhancement.list",
+      "feature": "f004"
+    },
+    {
+      "command": "video.generate",
+      "feature": "f004"
+    },
+    {
+      "command": "video.video2xPath.get",
+      "feature": "f004"
+    },
+    {
+      "command": "video.video2xPath.set",
+      "feature": "f004"
+    }
+  ]
+}
