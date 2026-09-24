@@ -71,6 +71,9 @@ Usage:
 Output:
   --json   stdout is one JSON value, or JSON Lines for a collection. See docs/reference/cli/contract.md.
 
+Reference:
+  docs/reference/cli/README.md    one page per command group
+
 Exit codes:
   0  success
   1  validation error (e.g. injection scan blocked the sync) or sidecar/auth error
