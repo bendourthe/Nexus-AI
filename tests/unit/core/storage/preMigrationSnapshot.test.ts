@@ -74,9 +74,9 @@ describe("pre-migration snapshots", () => {
     db.prepare("INSERT INTO t (id) VALUES (1)").run();
     db.pragma("user_version = 0");
     db.close();
-    const before = fs.readFileSync(file);
     const opened = new Database(file);
     opened.pragma("journal_mode = WAL");
+    const before = fs.readFileSync(file);
     const snap = snapshotBeforeMigration(opened, 2);
     expect(snap).toBeTruthy();
     markMigrationPending(databaseFilePath(opened));

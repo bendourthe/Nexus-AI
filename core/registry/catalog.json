@@ -1015,6 +1015,7 @@
       "license": "Apache-2.0",
       "source": {
         "protocol": "huggingface",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
         "repo": "Efficient-Large-Model/Sana_1600M_4Kpx_BF16_diffusers",
         "revision": "0f1d3414c1c45b68daf459d9063756cfcc1daee2",
         "url": "https://huggingface.co/Efficient-Large-Model/Sana_1600M_4Kpx_BF16_diffusers"
@@ -1129,6 +1130,7 @@
       "license": "Apache-2.0",
       "source": {
         "protocol": "huggingface",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
         "repo": "Efficient-Large-Model/Sana_Sprint_1.6B_1024px_diffusers",
         "revision": "19683c58b7ea290e55cedd8950ae1d86ada7ef96",
         "url": "https://huggingface.co/Efficient-Large-Model/Sana_Sprint_1.6B_1024px_diffusers"
@@ -1236,6 +1238,7 @@
       "license": "Apache-2.0",
       "source": {
         "protocol": "huggingface",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
         "repo": "Efficient-Large-Model/Sana_1600M_2Kpx_BF16_diffusers",
         "revision": "2ea71d7bdf7fe4425f22f728fc012b38c6ce3e96",
         "url": "https://huggingface.co/Efficient-Large-Model/Sana_1600M_2Kpx_BF16_diffusers"
@@ -1351,6 +1354,7 @@
       "license": "Apache-2.0",
       "source": {
         "protocol": "huggingface",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
         "repo": "Efficient-Large-Model/Sana_1600M_1024px_BF16_diffusers",
         "revision": "e2b3c0cbffebcd09d83805e88b9f5f106afc74ac",
         "url": "https://huggingface.co/Efficient-Large-Model/Sana_1600M_1024px_BF16_diffusers"
