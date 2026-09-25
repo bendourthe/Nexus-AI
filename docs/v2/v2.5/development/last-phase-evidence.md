@@ -119,6 +119,16 @@ This section is the start of the deep-pass record. It is not a finished Tier 3 r
 - `fix_rerun_cycles_used`: 0. No deep-pass fix has been applied.
 - Environments that bound the evidence: Windows host, Node v24.13.0 ABI 137, sidecar port 11500 not listening, no packaged Tauri window launched.
 
+Exercises run on 2026-09-25 against `node bin/nexus.mjs`:
+
+| Command | Exit | Stdout | Stderr |
+|---|---|---|---|
+| `nexus context --json` | 1 | one JSON object, `error.code` `sidecar-down`, message names `http://127.0.0.1:11500/nexus/context` | empty |
+| `nexus logs --json --lines 2` | 1 | one JSON object, `error.code` `sidecar-down`, message names `http://127.0.0.1:11500/nexus/logs?lines=2` | empty |
+| `nexus --bogus` | 2 | empty | `nexus: unknown command` plus the help text, including exit codes 0, 1, and 2 |
+
+That matches `docs/reference/cli/contract.md` rule 46: a loopback runtime failure may put the JSON error on stdout. It does not observe a running sidecar, so `QG-v250-1` stays open.
+
 ## Goal-vs-codebase review
 
 Reviewed against the plan headers, not against ticked boxes. Misses stay known gaps.
@@ -151,7 +161,16 @@ Test Files  9 failed | 228 passed (237)
      Tests  36 failed | 2163 passed | 1 skipped (2200)
 ```
 
-Every failure is `better-sqlite3` compiled for Node ABI 146 while this Node is ABI 137. The plan forbids `npm rebuild` to chase that mismatch. This is the same baseline as `QG-v250-2`, now counted for the desktop suite. The root suite was not run in this measurement.
+Every failure is `better-sqlite3` compiled for Node ABI 146 while this Node is ABI 137. The plan forbids `npm rebuild` to chase that mismatch. This is the same baseline as `QG-v250-2`, now counted for the desktop suite.
+
+Root vitest (`npx vitest run --config configs/vitest.config.ts` from the repo root), same host and same morning:
+
+```
+Test Files  64 failed | 487 passed | 3 skipped (554)
+     Tests  503 failed | 5403 passed | 12 skipped (5918)
+```
+
+The detailed errors are the same ABI load failure, plus one assertion in `tests/unit/workflow-discipline.test.ts` that reads `shell-build.yml` and expects LF after `pull_request:`. This checkout presents that file with CRLF, so the regex does not match. Ubuntu CI on `2b4ed3b6` already ran that test green.
 
 ## Publication and integration
 
