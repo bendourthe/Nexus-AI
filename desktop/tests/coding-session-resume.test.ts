@@ -8,7 +8,7 @@
  */
 
 import { afterEach, describe, expect, it } from "vitest";
-import { existsSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import { CodingSessionManager } from "../sidecar/src/coding/sessionManager";
@@ -21,15 +21,15 @@ import {
 const tempFiles: string[] = [];
 
 function tempStorePath(label: string): string {
-  const p = path.join(os.tmpdir(), `nexus-sessions-${label}-${process.pid}.json`);
-  tempFiles.push(p);
+  const dir = mkdtempSync(path.join(os.tmpdir(), `nexus-sessions-${label}-`));
+  const p = path.join(dir, "sessions.json");
+  tempFiles.push(dir);
   return p;
 }
 
 afterEach(() => {
-  for (const f of tempFiles.splice(0)) {
-    if (existsSync(f)) rmSync(f, { force: true });
-    if (existsSync(`${f}.tmp`)) rmSync(`${f}.tmp`, { force: true });
+  for (const dir of tempFiles.splice(0)) {
+    rmSync(dir, { recursive: true, force: true });
   }
 });
 
@@ -151,7 +151,7 @@ describe("JsonFileSessionStore", () => {
           },
         ],
       }),
-      "utf8",
+      { encoding: "utf8", mode: 0o600 },
     );
     const store = new JsonFileSessionStore(storePath);
     expect(store.get("old")?.turns?.[0]).toEqual({
@@ -176,7 +176,7 @@ describe("JsonFileSessionStore", () => {
           workspacePath: legacyRoot,
         }],
       }),
-      "utf8",
+      { encoding: "utf8", mode: 0o600 },
     );
     const manager = new CodingSessionManager({ store: new JsonFileSessionStore(storePath) });
     const summary = manager.list().sessions[0];

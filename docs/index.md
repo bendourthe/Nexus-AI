@@ -8,7 +8,7 @@ For the ADR-level architecture see [../ARCHITECTURE.md](../ARCHITECTURE.md) and 
 
 | Module | Files | LOC | Entry point | Top exports |
 |--------|------:|----:|-------------|-------------|
-| `activation` | 5 | 978 | [src/activation/extensionOnly.ts](../src/activation/extensionOnly.ts) | `activateExtensionOnly`, `activateProxy`, `COMPAT_COMMAND_MAP` |
+| `activation` | 5 | 981 | [src/activation/extensionOnly.ts](../src/activation/extensionOnly.ts) | `activateExtensionOnly`, `activateProxy`, `COMPAT_COMMAND_MAP` |
 | `desktop` | 2 | 299 | [src/desktop/ipcClient.ts](../src/desktop/ipcClient.ts) | `createInProcessIpcClient`, `DaemonDiscoveryOptions`, `DaemonDiscoveryResult` |
 | `panels` | 32 | 10335 | [src/panels/webview/index.ts](../src/panels/webview/index.ts) | `ACTION_TAG_FN_SOURCE`, `ActionClassificationMessage`, `actionLabelFor` |
 | `storage` | 37 | 8932 | [src/storage/eviction/index.ts](../src/storage/eviction/index.ts) | `ARCEvictor`, `ArchiveResult`, `BrokenPathIssue` |
