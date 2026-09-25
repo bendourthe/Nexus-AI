@@ -18,12 +18,7 @@ import {
   type SpawnOptions,
   spawn,
 } from "node:child_process";
-import {
-  appendFileSync,
-  mkdirSync,
-  renameSync,
-  statSync,
-} from "node:fs";
+import { closeSync, fstatSync, ftruncateSync, mkdirSync, openSync, writeSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { createInterface, type Interface } from "node:readline";
@@ -191,15 +186,17 @@ function appendRuntimeLog(text: string): void {
   try {
     const path = diffusionLogPath();
     mkdirSync(dirname(path), { recursive: true });
+    let fd = openSync(path, "a", 0o600);
     try {
-      if (statSync(path).size > LOG_MAX_BYTES) {
-        // One rotation is enough: the interesting run is the last one.
-        renameSync(path, `${path}.1`);
+      if (fstatSync(fd).size > LOG_MAX_BYTES) {
+        // Stay on this handle. Renaming the path after the size check is the
+        // race CodeQL reports, and the new line is the run worth keeping.
+        ftruncateSync(fd, 0);
       }
-    } catch {
-      // No file yet, or it cannot be stat'd: append and move on.
+      writeSync(fd, text);
+    } finally {
+      if (fd >= 0) closeSync(fd);
     }
-    appendFileSync(path, text);
   } catch {
     // Logging must never break a generation.
   }

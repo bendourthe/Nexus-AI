@@ -19,6 +19,16 @@ export interface MarkdownPreviewProps {
   readonly markdown: string;
 }
 
+function httpUrl(raw: string): string | null {
+  try {
+    const url = new URL(raw);
+    if (url.protocol === "http:" || url.protocol === "https:") return url.href;
+  } catch {
+    return null;
+  }
+  return null;
+}
+
 export function MarkdownPreview({ markdown }: MarkdownPreviewProps): JSX.Element {
   return (
     <div data-testid="markdown-preview" style={{ display: "flex", flexDirection: "column", gap: "0.6em" }}>
@@ -151,12 +161,9 @@ export function renderInline(text: string): ReactNode[] {
     } else {
       const link = /^\[([^\]]+)\]\(([^)\s]+)\)$/.exec(token);
       if (link) {
-        const href = link[2] ?? "";
-        // Only http(s) is linkable. A javascript: or data: URL in authored
-        // persona text is never legitimate here.
-        const safe = /^https?:\/\//i.test(href);
+        const href = httpUrl(link[2] ?? "");
         out.push(
-          safe ? (
+          href ? (
             <a key={key++} href={href} target="_blank" rel="noreferrer noopener">
               {link[1]}
             </a>

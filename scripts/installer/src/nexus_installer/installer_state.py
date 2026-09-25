@@ -4,10 +4,7 @@ from __future__ import annotations
 
 import sys
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:  # pragma: no cover - annotation only
-    from nexus_installer.engine.installed_models import InstalledReport
+from typing import Any
 
 # v1.1.0 Phase 14.5 -- the 10 GB OS reserve floor used by the disk-aware
 # selection guard. Configurable via the `--disk-reserve-gb` CLI flag.
@@ -24,7 +21,9 @@ def _default_install_path() -> str:
     return "/usr/local/share/nexus-ai"
 
 
-def _empty_installed_report() -> InstalledReport:
+def _empty_installed_report() -> Any:
+    # Imported inside the function. A module-level import here cycles through
+    # the weights puller and the model router, which both import this module.
     from nexus_installer.engine.installed_models import InstalledReport
 
     return InstalledReport()
@@ -103,11 +102,7 @@ class InstallerState:
     # per wizard session, not once per card. `selected_models_gb` deliberately
     # stays the FULL selection total so no existing consumer changes meaning;
     # `pending_models_gb` is the new quantity the disk guard should compare.
-    installed_report: InstalledReport = field(
-        # Imported lazily: `installed_models` reaches the weights puller, which
-        # imports this module back, so a module-level import here is a cycle.
-        default_factory=lambda: _empty_installed_report()
-    )
+    installed_report: Any = field(default_factory=_empty_installed_report)
     pending_models_gb: float = 0.0
 
     # v1.15.0 Phase 3 (Issue 2) -- post-install summary + retry surfaces.

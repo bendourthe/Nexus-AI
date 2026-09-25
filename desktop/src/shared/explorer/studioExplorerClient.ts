@@ -35,10 +35,7 @@ export interface StudioExplorerClient {
 }
 
 function makeId(): string {
-  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
-    return crypto.randomUUID();
-  }
-  return `id-${Math.random().toString(36).slice(2, 12)}-${Date.now().toString(36)}`;
+  return crypto.randomUUID();
 }
 
 /** In-memory client for tests and for sidecar-down (empty tree, no fake sessions). */
