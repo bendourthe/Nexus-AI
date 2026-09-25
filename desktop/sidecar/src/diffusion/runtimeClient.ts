@@ -18,7 +18,7 @@ import {
   type SpawnOptions,
   spawn,
 } from "node:child_process";
-import { closeSync, fstatSync, mkdirSync, openSync, renameSync, writeSync } from "node:fs";
+import { closeSync, fstatSync, ftruncateSync, mkdirSync, openSync, writeSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { createInterface, type Interface } from "node:readline";
@@ -189,11 +189,9 @@ function appendRuntimeLog(text: string): void {
     let fd = openSync(path, "a", 0o600);
     try {
       if (fstatSync(fd).size > LOG_MAX_BYTES) {
-        closeSync(fd);
-        fd = -1;
-        // One rotation is enough: the interesting run is the last one.
-        renameSync(path, `${path}.1`);
-        fd = openSync(path, "a", 0o600);
+        // Stay on this handle. Renaming the path after the size check is the
+        // race CodeQL reports, and the new line is the run worth keeping.
+        ftruncateSync(fd, 0);
       }
       writeSync(fd, text);
     } finally {
