@@ -30,6 +30,18 @@ describe("packaged smoke", () => {
     expect(result.findings).toContain("non-loopback connection: https://example.com/models");
   });
 
+  it("treats Tauri webview hosts as loopback", () => {
+    const result = evaluateSmoke({
+      ...full,
+      connections: [
+        "http://tauri.localhost/assets/index.js",
+        "http://ipc.localhost/sidecar_status",
+      ],
+    });
+    expect(result.ok).toBe(true);
+    expect(result.findings).toEqual([]);
+  });
+
   it("records a bundle digest", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "bundle-"));
     const file = path.join(dir, "app.bin");

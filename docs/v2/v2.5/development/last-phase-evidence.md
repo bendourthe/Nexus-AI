@@ -41,7 +41,7 @@ Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 - `QG-v250-1` live sidecar context was not observed.
 - `QG-v250-2` closed on CI. Node 22 job `108108818115` passed the byte-identical refusal test. This host still cannot load the module.
 - `MT-v251-1` closed. Desktop eslint reports 0 jsx-a11y warnings and the ceiling is 0.
-- `QG-v251-2` packaged Tauri window was not launched, and `bundle.smoke.mjs` is not a CI job.
+- `QG-v251-2` the Windows executable was launched and the four selectors were observed. The smoke passed. Launching that window is still not a CI job.
 - `CI-v251-1` pipeline profile migration was not approved and was not applied. Linux run 36153544032 and macOS run 36153548528 were dispatched and have not concluded.
 
 Archived v2.4 gaps were not closed by these plans.
@@ -117,7 +117,7 @@ This section is the start of the deep-pass record. It is not a finished Tier 3 r
 - Blast-radius verdict: `run`. The diff changes CLI output, desktop UI, persistence snapshots, and release workflows.
 - Feature inventory, per-feature exercises, rendered-surface delegates, adversarial-verifier, and implementation-convergence are `NOT COVERED` in this session. Owner: the functional-verification deep pass. Next step: walk `references/deep-pass.md` steps 3 through 8 against the plan artifacts and quote each exercise.
 - `fix_rerun_cycles_used`: 0. No deep-pass fix has been applied.
-- Environments that bound the evidence: Windows host, Node v24.13.0 ABI 137, sidecar port 11500 not listening, no packaged Tauri window launched.
+- Environments that bound the evidence: Windows host, Node v24.13.0 ABI 137, sidecar port 11500 not listening. The release executable `nexus-shell.exe` was launched after this sentence was first written; the selector and request observations are in the Goal review below.
 
 Exercises run on 2026-09-25 against `node bin/nexus.mjs`:
 
@@ -149,9 +149,9 @@ Reviewed against the plan headers, not against ticked boxes. Misses stay known g
 | 2 | Met in source | `desktop/tests/a11y-baseline.json` is `[]`. `desktop/tests/a11y.test.tsx` fails a new triple while the total count drops. |
 | 3 | Met on this tree | `node scripts/check-command-parity.mjs` printed `command-parity: PASS commands 141, exempt 26, findings 0`. `tests/unit/scripts/command-parity.test.ts` covers an unmapped command, a zero enumeration, and a below-snapshot count. |
 | 4 | Met in the workflow | `check-command-parity` in `.github/workflows/ci.yml` has no `paths` filter. The comment on that job states why. |
-| 5 | Met for the checker, not for a launched window | `tests/unit/packaged/packaged-smoke.test.ts` fails `evaluateSmoke` when `launched` is true and a route selector is missing. No packaged window produced that report (`QG-v251-2`). |
-| 6 | Not met | `bundle.smoke.mjs` can record a SHA-256 when given a bundle path. No workflow runs it. `installer-smoke.yml` still runs the older installer scripts. |
-| 7 | Measured on a fixture, not on a launched app | The same test expects `non-loopback connection: https://example.com/models`. Key Metric M3 is not measured from a running packaged window (`QG-v251-2`). |
+| 5 | Met on a launched Windows executable | `nexus-shell.exe` opened `http://tauri.localhost/chatbot`, `/coding`, `/images`, and `/videos`. Each route exposed `chat-page`, `coding-page`, `image-model-select`, or `video-lab-page`. |
+| 6 | Met locally, not as a CI launch job | `node desktop/tests/packaged/bundle.smoke.mjs` on that probe printed `ok: true` and digest `139c84eed2982d3665eda15564360d01f0bec6cc259b6e71027429c28d220e90`, the SHA-256 of `desktop/src-tauri/target/release/nexus-shell.exe`. No workflow launches the window. |
+| 7 | Measured on the launched window | The only requests observed were `tauri.localhost` and `ipc.localhost`. Those names are loopback. `https://example.com/models` still fails the checker. |
 | 8 | Gate exists; the published digest was not bound to a launched smoke | `node scripts/check-release-assets.mjs` printed `release-assets: PASS parity 3 artifacts`. It runs in `ci.yml` and before `npx semantic-release`. The v2.5.0 assets were uploaded by hand after `release.yml` rejected the lightweight tag, and no smoke digest was compared to those bytes. |
 
 NI-3 is resolved in the v2.4 archive and was not used as this plan's proving case. A11 stays deferred.
