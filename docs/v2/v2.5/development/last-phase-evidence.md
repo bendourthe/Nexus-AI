@@ -30,6 +30,79 @@ Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 
 Archived v2.4 gaps were not closed by these plans.
 
+NI-3 stays resolved. The archive records that resolution on 2026-09-21, and `desktop/sidecar/src/protocol.ts` still imports `MODEL_FAMILIES` from `core/registry/ModelCatalog`. Command parity does not detect a duplicated enum, so this plan does not treat NI-3 as closed by Phase 2.
+
+Other `docs/**/known-gaps.md` files whose status is still `in-progress` (`docs/archive/v2/v2.0`, `v2.3`, `v2.4`, and `docs/archive/v1/v1.5`, `v1.19`, `v1.20`) were not changed. Nothing observed in this cycle closes their rows.
+
+## Architecture refactor
+
+Scoped to the paths these plans added. No files were moved.
+
+`npx depcruise --config configs/dependency-cruiser.cjs src core modules --output-type err` printed:
+
+```
+x 17 dependency violations (0 errors, 17 warnings). 484 modules, 1667 dependencies cruised.
+```
+
+The warnings are pre-existing `no-orphans` hits plus two `no-circular` pairs (`modules/coding/browser/headless.ts` and `core/memory/MemoryHub.ts`). `core/cli/jsonCli.ts` is in the orphan list because the cruise roots are `src`, `core`, and `modules`, while its importer is `desktop/sidecar/src/controlSurface/jsonCliRoutes.ts`. That is a cruise-scope miss, not an unused file.
+
+## Living docs architecture
+
+`npm run check:docs-layout` printed:
+
+```
+check-docs-layout: canonical layout OK (no docs/versions|docs/archive/versions wrappers)
+```
+
+`docs/testing/` and `docs/validation/` were not created.
+
+## Git-tree hygiene
+
+`python scripts/check_release_preconditions.py --branches --repo-settings` printed:
+
+```
+[branches]
+current=develop
+head=2b4ed3b606c4
+protected_checkout=yes
+working_tree=clean
+origin=https://github.com/bendourthe/Nexus-AI.git
+upstream=origin/develop
+local_count=14
+merged_into_head_count=8
+
+[repo-settings]
+status=observed
+repository=bendourthe/Nexus-AI
+default_branch=main
+private=false
+archived=false
+issues_enabled=true
+delete_branch_on_merge=false
+default_branch_protection=observed
+```
+
+No branch was deleted.
+
+## Human and manual testing
+
+Class (a) is already asserted by the packaged smoke selectors (`chat-page`, `coding-page`, `image-model-select`, `video-lab-page`). These stay manual:
+
+- Class (b): run one GPU image generation and one GPU video generation on the host that has the weights.
+- Class (c): look at the four pillar routes and judge spacing, contrast, and motion. jsdom cannot evaluate those.
+- Class (d): install `NexusSetup.exe` on a clean Windows machine and confirm the sidecar handshake.
+- Keyboard-only and a screen reader over chatbot, agents, images, and videos. The axe baseline was taken under jsdom, which has no layout engine.
+
+## Tier 3 deep pass
+
+This section is the start of the deep-pass record. It is not a finished Tier 3 result.
+
+- Revision under review: `2b4ed3b606c429b776c7a0a7825e0fd224d14251` on `develop`. Integration base for the original publication was `develop` at the PR 69 merge, then `main` at `58b03ed2`.
+- Blast-radius verdict: `run`. The diff changes CLI output, desktop UI, persistence snapshots, and release workflows.
+- Feature inventory, per-feature exercises, rendered-surface delegates, adversarial-verifier, and implementation-convergence are `NOT COVERED` in this session. Owner: the functional-verification deep pass. Next step: walk `references/deep-pass.md` steps 3 through 8 against the plan artifacts and quote each exercise.
+- `fix_rerun_cycles_used`: 0. No deep-pass fix has been applied.
+- Environments that bound the evidence: Windows host, Node v24.13.0 ABI 137, sidecar port 11500 not listening, no packaged Tauri window launched.
+
 ## Goal-vs-codebase review
 
 The editor-plan goal (an agent can install Nexus, read one reference tree, load one skill, and drive plus observe through `nexus`) is met in source by `docs/reference/cli/`, `modules/coding/skills/catalog/nexus/SKILL.md`, and `nexus context`, `nexus logs`, and `nexus media inspect`. The live sidecar round trip is `QG-v250-1`.
