@@ -18,12 +18,34 @@ import { SIDECAR_MODELS } from "../coding/models.js";
 import type { StudioRuntime } from "../generations/studioRuntime.js";
 import { createWorkspaceScope } from "../../../../core/project/WorkspaceScope.js";
 import { WorkspaceScopeStore } from "../../../../core/project/WorkspaceScopeStore.js";
+import { redactSecrets } from "../../../../core/observability/redactSecrets.js";
+import * as nodePath from "node:path";
+
+export interface ObservationLogRecord {
+  readonly ts: string;
+  readonly level: string;
+  readonly message: string;
+}
+
+export interface MediaInspectResult {
+  readonly duration: number | null;
+  readonly width: number | null;
+  readonly height: number | null;
+  readonly streams: readonly { codec?: string; kind?: string }[];
+  readonly incomplete?: boolean;
+  readonly runtime?: string;
+}
 
 export interface JsonCliRouteDeps {
   readonly sessions: CodingSessionManager;
   readonly studio?: StudioRuntime;
   readonly listModels?: () => Promise<readonly { id: string; displayName?: string }[]>;
   readonly workspaceStore?: WorkspaceScopeStore;
+  readonly readLogs?: () => readonly ObservationLogRecord[];
+  readonly inspectMedia?: (filePath: string) => Promise<MediaInspectResult>;
+  readonly statMedia?: (filePath: string) => { exists: boolean; incomplete?: boolean };
+  /** Extra literal secrets (loopback tokens) to scrub from log lines. */
+  readonly redactLiterals?: readonly string[];
 }
 
 function queryId(path: string): string | null {
@@ -123,6 +145,53 @@ export function createJsonCliRoute(deps: JsonCliRouteDeps): ControlSurfaceRoute 
         return write(200, { jobs: [job] });
       }
 
+      if (ctx.method === "GET" && path === `${prefix}/context`) {
+        return write(200, snapshotContext(deps));
+      }
+
+      if (ctx.method === "GET" && pathOnly(ctx.path) === `${prefix}/logs`) {
+        const lines = queryLines(ctx.path);
+        if (lines === "invalid") {
+          return write(400, { error: { code: "schema", message: "--lines must be a positive integer" } });
+        }
+        const records = (deps.readLogs?.() ?? []).slice(-lines);
+        const roots = authorizedRoots(deps);
+        return write(200, {
+          lines: records.map((record) => redactLogRecord(record, roots, deps.redactLiterals ?? [])),
+        });
+      }
+
+      if (ctx.method === "POST" && path === `${prefix}/media/inspect`) {
+        const raw = await readLimitedBody(ctx.req, ctx.maxBodyBytes);
+        const body = parseJsonBody(raw) as Record<string, unknown>;
+        const requested = typeof body.path === "string" ? body.path : "";
+        if (!requested) return write(400, { error: { code: "schema", message: "missing fields: path" } });
+        const absolute = nodePath.resolve(requested);
+        if (!pathIsAuthorized(absolute, authorizedRoots(deps))) {
+          return write(403, { error: { code: "forbidden", message: `path is outside authorized workspace roots: ${absolute}` } });
+        }
+        const stat = deps.statMedia?.(absolute) ?? { exists: true };
+        if (!stat.exists) {
+          return write(404, { error: { code: "not_found", message: `not found: ${absolute}` } });
+        }
+        if (stat.incomplete) {
+          return write(200, { path: absolute, incomplete: true, duration: null, width: null, height: null, streams: [] });
+        }
+        if (!deps.inspectMedia) {
+          return write(503, { error: { code: "runtime", message: "media runtime is not provisioned" } });
+        }
+        try {
+          const facts = await deps.inspectMedia(absolute);
+          return write(200, { path: absolute, ...facts });
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          const unreadable = /unreadable|format/i.test(message);
+          return write(unreadable ? 415 : 503, {
+            error: { code: unreadable ? "unreadable" : "runtime", message },
+          });
+        }
+      }
+
       if (ctx.method === "GET" && pathOnly(ctx.path) === `${prefix}/generate/status`) {
         if (!deps.studio) {
           return write(503, { error: { code: "unavailable", message: "generation queue is not available" } });
@@ -139,4 +208,70 @@ export function createJsonCliRoute(deps: JsonCliRouteDeps): ControlSurfaceRoute 
       return write(400, { error: { code: "sidecar", message } });
     }
   };
+}
+
+const DEFAULT_LOG_LINES = 100;
+const MAX_LOG_LINES = 500;
+
+function queryLines(requestPath: string): number | "invalid" {
+  const raw = new URLSearchParams(requestPath.split("?")[1] ?? "").get("lines");
+  if (raw === null || raw === "") return DEFAULT_LOG_LINES;
+  if (!/^[0-9]+$/.test(raw)) return "invalid";
+  const n = Number.parseInt(raw, 10);
+  if (!Number.isFinite(n) || n < 1) return "invalid";
+  return Math.min(n, MAX_LOG_LINES);
+}
+
+function authorizedRoots(deps: JsonCliRouteDeps): string[] {
+  const roots = new Set<string>();
+  for (const session of deps.sessions.list().sessions) {
+    for (const root of session.workspaceRoots ?? []) roots.add(root);
+  }
+  for (const scope of deps.workspaceStore?.list() ?? []) {
+    for (const root of scope.workspaceRoots) roots.add(root);
+    if (scope.primaryRoot) roots.add(scope.primaryRoot);
+  }
+  return [...roots];
+}
+
+function pathIsAuthorized(absolute: string, roots: readonly string[]): boolean {
+  const target = nodePath.resolve(absolute);
+  return roots.some((root) => {
+    const base = nodePath.resolve(root);
+    const rel = nodePath.relative(base, target);
+    return rel === "" || (!rel.startsWith("..") && !nodePath.isAbsolute(rel));
+  });
+}
+
+function snapshotContext(deps: JsonCliRouteDeps) {
+  const sessions = deps.sessions.list().sessions;
+  const active = sessions.length > 0 ? sessions[sessions.length - 1] : undefined;
+  const queue = deps.studio?.queue as { list?: () => readonly { status?: string }[] } | undefined;
+  const jobs = queue?.list?.() ?? [];
+  const generationInFlight = jobs.some((job) => job.status === "queued" || job.status === "running");
+  return {
+    sessionId: active?.sessionId ?? null,
+    title: active?.title ?? null,
+    workspaceRoots: [...(active?.workspaceRoots ?? [])],
+    primaryRoot: active?.primaryRoot ?? null,
+    modelId: active?.modelId ?? null,
+    generationInFlight,
+  };
+}
+
+function redactLogRecord(
+  record: ObservationLogRecord,
+  roots: readonly string[],
+  literals: readonly string[],
+): ObservationLogRecord {
+  let message = redactSecrets(record.message);
+  for (const literal of literals) {
+    if (literal) message = message.split(literal).join("<redacted>");
+  }
+  message = message.replace(/[A-Za-z]:\\[^\s"']+|\/(?:[^\s"']+\/)+[^\s"']+/g, (found) => {
+    const normalized = found.replace(/[\\/]+$/, "");
+    return pathIsAuthorized(normalized, roots) ? found : "<redacted-path>";
+  });
+  if (message.length > 240) message = `${message.slice(0, 240)}...`;
+  return { ts: record.ts, level: record.level, message };
 }

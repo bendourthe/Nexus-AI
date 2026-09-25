@@ -5,6 +5,23 @@
 
 export const JSON_CLI_PREFIX = "/nexus";
 
+/** True when argv carried a bare `--json` / `--json=true` output flag. A string body is request input, not this flag. */
+export function isJsonOutputFlag(value: unknown): boolean {
+  return value === true || value === "true";
+}
+
+/** One JSON value plus a trailing newline. */
+export function renderJsonValue(value: unknown): string {
+  return JSON.stringify(value) + "\n";
+}
+
+/** JSON Lines. An empty collection is an empty string (zero lines). */
+export function renderJsonLines(rows: readonly unknown[]): string {
+  let out = "";
+  for (const row of rows) out += JSON.stringify(row) + "\n";
+  return out;
+}
+
 export type JsonCliFetch = (
   url: string,
   init: { method: string; headers: Record<string, string>; body?: string },
@@ -139,6 +156,22 @@ export async function dispatchJsonCli(input: JsonCliDispatchInput): Promise<Json
     const id = typeof flags.id === "string" ? flags.id : "";
     if (!id) return errorBody("schema", "missing fields: id");
     return jsonCliRequest(client, "GET", `${JSON_CLI_PREFIX}/generate/status?id=${encodeURIComponent(id)}`);
+  }
+  if (command === "context") {
+    return jsonCliRequest(client, "GET", `${JSON_CLI_PREFIX}/context`);
+  }
+  if (command === "logs") {
+    const raw = flags.lines;
+    if (raw !== undefined && raw !== true && (typeof raw !== "string" || !/^[0-9]+$/.test(raw) || Number(raw) < 1)) {
+      return errorBody("usage", "--lines must be a positive integer");
+    }
+    const lines = typeof raw === "string" ? raw : "100";
+    return jsonCliRequest(client, "GET", `${JSON_CLI_PREFIX}/logs?lines=${encodeURIComponent(lines)}`);
+  }
+  if (command === "media" && subcommand === "inspect") {
+    const mediaPath = typeof flags.path === "string" ? flags.path : "";
+    if (!mediaPath) return errorBody("usage", "missing fields: path");
+    return jsonCliRequest(client, "POST", `${JSON_CLI_PREFIX}/media/inspect`, { path: mediaPath });
   }
   return errorBody("usage", `unknown JSON CLI command "${command} ${subcommand ?? ""}"`);
 }

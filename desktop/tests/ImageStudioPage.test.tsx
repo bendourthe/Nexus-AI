@@ -650,12 +650,11 @@ describe("ImageStudioPage (chat)", () => {
       await Promise.resolve();
     });
     const row = await screen.findByTestId(/^image-actions-/);
-    // v2.4.11 operator instruction: "only 3 buttons should exist ... Edit,
-    // Copy, Save", in that order.
+    // The row is Edit, 3D preview, Copy, Save, in that order.
     const labels = Array.from(row.querySelectorAll("button")).map((b) =>
       b.getAttribute("aria-label"),
     );
-    expect(labels).toEqual(["Edit", "Copy", "Save"]);
+    expect(labels).toEqual(["Edit", "3D preview", "Copy", "Save"]);
     // Edit opens the editing viewer that the bubble owns.
     fireEvent.click(screen.getByLabelText("Edit"));
     expect(await screen.findByLabelText("Image viewer")).toBeInTheDocument();
@@ -1349,7 +1348,7 @@ describe("ImageStudioPage (chat)", () => {
       await Promise.resolve();
     });
     const preview = await screen.findByRole("button", { name: "3D preview" });
-    expect(screen.getByRole("button", { name: "Download" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Save" })).toBeTruthy();
     fireEvent.click(preview);
     expect(screen.getByRole("dialog")).toHaveTextContent(
       "This is a generated 3D preview. Unseen sides are invented. It is not a measured property tour.",
@@ -1357,7 +1356,7 @@ describe("ImageStudioPage (chat)", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open local splat" }));
     expect(await screen.findByText(/\.splat$/)).toBeTruthy();
     expect(fetchSpy).not.toHaveBeenCalled();
-    expect(screen.getByRole("button", { name: "Download" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Save" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Close 3D preview" }));
     expect(screen.queryByRole("dialog")).toBeNull();
   });

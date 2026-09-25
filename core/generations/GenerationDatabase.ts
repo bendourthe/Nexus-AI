@@ -19,6 +19,7 @@ import type {
 import { contentHashFile } from "./contentHash.js";
 import { redactWorkflow } from "./redactWorkflow.js";
 import { resolveStudioDbPath } from "./paths.js";
+import { needsMigration, snapshotBeforeMigration } from "../storage/preMigrationSnapshot.js";
 
 export type GenerationPillar = "image" | "video";
 
@@ -508,6 +509,8 @@ export class GenerationDatabase {
     this._db.pragma("journal_mode = WAL");
     this._db.pragma("foreign_keys = ON");
     this._db.pragma("busy_timeout = 5000");
+    if (!needsMigration(this._db, 4)) return;
+    if (dbPath !== ":memory:") snapshotBeforeMigration(this._db, 4);
     const migrate = this._db.transaction(() => {
       for (const sql of BASE_SCHEMA) this._db.exec(sql);
       addEnhancementColumnIfMissing(this._db);

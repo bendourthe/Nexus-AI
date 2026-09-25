@@ -1,0 +1,25 @@
+{
+  "artifacts": [
+    {
+      "id": "windows-setup",
+      "uploadName": "NexusSetup-windows",
+      "file": "NexusSetup.exe",
+      "workflow": ".github/workflows/installer-build.yml",
+      "bindsSmokeDigest": true
+    },
+    {
+      "id": "linux-setup",
+      "uploadName": "NexusSetup-linux-rehearsal",
+      "file": "NexusSetup",
+      "workflow": ".github/workflows/installer-linux.yml",
+      "bindsSmokeDigest": false
+    },
+    {
+      "id": "macos-setup",
+      "uploadName": "NexusSetup-macos-rehearsal",
+      "file": "NexusSetup.dmg",
+      "workflow": ".github/workflows/installer-macos.yml",
+      "bindsSmokeDigest": false
+    }
+  ]
+}
