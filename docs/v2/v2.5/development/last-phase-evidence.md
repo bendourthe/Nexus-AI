@@ -127,6 +127,7 @@ Exercises run on 2026-09-25 against `node bin/nexus.mjs`:
 | `nexus logs --json --lines 2` | 1 | one JSON object, `error.code` `sidecar-down`, message names `http://127.0.0.1:11500/nexus/logs?lines=2` | empty |
 | `nexus --bogus` | 2 | empty | `nexus: unknown command` plus the help text, including exit codes 0, 1, and 2 |
 | `nexus doctor --json --home <temp>` | 0 | one JSON object, `generatedAt` and `nexusHome` set to that temp directory | empty |
+| `nexus media inspect <missing> --json` | 1 | one JSON object, `error.code` `sidecar-down`, message names `http://127.0.0.1:11500/nexus/media/inspect` | empty |
 
 That matches `docs/reference/cli/contract.md` rule 46: a loopback runtime failure may put the JSON error on stdout. It does not observe a running sidecar, so `QG-v250-1` stays open.
 
