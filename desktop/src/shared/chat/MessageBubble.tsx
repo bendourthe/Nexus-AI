@@ -243,20 +243,26 @@ export function MessageBubble({
         ) : message.media ? (
           <>
             {message.media.kind === "image" ? (
-              <img
-                data-testid={`message-media-${message.id}`}
-                src={message.media.src}
-                alt={message.content || "Generated image"}
+              <button
+                type="button"
+                aria-label="Open generated image"
                 onClick={(event) => {
                   event.stopPropagation();
                   setPreviewOpen(true);
                 }}
-                onError={() => {
-                  setMediaFailed(true);
-                  onMediaError?.(message);
-                }}
-                style={COMPACT_MEDIA_STYLE}
-              />
+                style={{ padding: 0, border: 0, background: "none" }}
+              >
+                <img
+                  data-testid={`message-media-${message.id}`}
+                  src={message.media.src}
+                  alt={message.content || "Generated image"}
+                  onError={() => {
+                    setMediaFailed(true);
+                    onMediaError?.(message);
+                  }}
+                  style={COMPACT_MEDIA_STYLE}
+                />
+              </button>
             ) : (
               <video
                 data-testid={`message-media-${message.id}`}
@@ -271,7 +277,9 @@ export function MessageBubble({
                   onMediaError?.(message);
                 }}
                 style={COMPACT_MEDIA_STYLE}
-              />
+              >
+                <track kind="captions" />
+              </video>
             )}
             {previewOpen ? (
               // v2.4.9: images open in the editor-capable viewer; video keeps
@@ -750,15 +758,23 @@ function BubbleMeta({
           {tokens.label}
         </span>
       ) : tokens ? (
-        <span
+        <button
+          type="button"
           data-testid={`message-tokens-${message.id}`}
-          tabIndex={0}
           title={tokens.detail}
           aria-label={`${tokens.label}. ${tokens.detail}`}
-          style={{ fontStyle: "italic", marginLeft: "auto" }}
+          style={{
+            fontStyle: "italic",
+            marginLeft: "auto",
+            padding: 0,
+            border: 0,
+            background: "none",
+            color: "inherit",
+            font: "inherit",
+          }}
         >
           {tokens.label}
-        </span>
+        </button>
       ) : null}
     </div>
   );
@@ -826,13 +842,19 @@ function MediaLightbox({
 }): JSX.Element {
   const media = message.media;
   let previewNode: HTMLElement | null = null;
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
   return (
     <div
       data-testid={`message-media-dialog-${message.id}`}
       role="dialog"
       aria-modal="true"
       aria-label="Generated media preview"
-      onClick={onClose}
       style={{
         position: "fixed",
         inset: 0,
@@ -844,9 +866,16 @@ function MediaLightbox({
         padding: "var(--space-4)",
       }}
     >
+      <button
+        type="button"
+        aria-label="Close preview"
+        onClick={onClose}
+        style={{ position: "absolute", inset: 0, border: 0, background: "transparent" }}
+      />
       <div
-        onClick={(event) => event.stopPropagation()}
         style={{
+          position: "relative",
+          zIndex: 1,
           maxWidth: "min(96vw, 64rem)",
           maxHeight: "92vh",
           display: "flex",
@@ -879,7 +908,9 @@ function MediaLightbox({
             controls
             autoPlay
             style={{ maxWidth: "90vw", maxHeight: "70vh" }}
-          />
+          >
+            <track kind="captions" />
+          </video>
         ) : null}
         <div
           style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}
