@@ -85,6 +85,10 @@ export async function jsonCliRequest(
       parsed = null;
     }
     if (res.status === 401 || res.status === 403) {
+      const error = parsed && typeof parsed === "object" ? (parsed as { error?: { code?: unknown; message?: unknown } }).error : undefined;
+      if (error && typeof error.code === "string" && error.code !== "auth" && typeof error.message === "string") {
+        return errorBody(error.code, error.message, { status: res.status });
+      }
       return errorBody("auth", "Bearer token rejected. Check nexus.serving.token.", { status: res.status });
     }
     if (!res.ok) {
