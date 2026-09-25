@@ -761,16 +761,15 @@ function BubbleMeta({
         <button
           type="button"
           data-testid={`message-tokens-${message.id}`}
+          tabIndex={0}
           title={tokens.detail}
-          aria-label={`${tokens.label}. ${tokens.detail}`}
           style={{
-            fontStyle: "italic",
             marginLeft: "auto",
             padding: 0,
             border: 0,
             background: "none",
             color: "inherit",
-            font: "inherit",
+            fontStyle: "italic",
           }}
         >
           {tokens.label}
