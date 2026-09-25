@@ -44,14 +44,9 @@ function now(): string {
   return new Date().toISOString();
 }
 
-/**
- * Stable-ish id that does not need `crypto.randomUUID`.
- *
- * jsdom and older Electron renderers do not always expose it, and a persona id
- * never leaves this machine, so a timestamp plus entropy is sufficient.
- */
+/** Persona ids stay on this machine. The prefix keeps them distinct from session ids. */
 export function newPersonaId(): string {
-  return `persona-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  return `persona-${crypto.randomUUID()}`;
 }
 
 /** Trim and cap a name; an empty result is the caller's problem to reject. */

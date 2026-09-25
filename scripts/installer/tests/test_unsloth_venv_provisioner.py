@@ -70,13 +70,12 @@ def test_hardware_gate() -> None:
 def test_opt_in_off_is_success(tmp_path: Path) -> None:
     p = UnslothVenvProvisioner(root=tmp_path, opt_in=False)
     logs: list[str] = []
-    assert (
-        p.install(
-            HostProfile(gpu_vendor="nvidia", total_vram_gb=24),
-            lambda *_a: logs.append("x"),
-        )
-        is True
-    )
+
+    def log(*_a: object) -> None:
+        logs.append("x")
+
+    installed = p.install(HostProfile(gpu_vendor="nvidia", total_vram_gb=24), log)
+    assert installed is True
     assert p.state()["status"] == "pending"
 
 
