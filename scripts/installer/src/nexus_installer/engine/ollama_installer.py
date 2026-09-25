@@ -346,7 +346,7 @@ class OllamaInstaller:
             log(f"ollama binary not found under {dest_root} after extraction.", "error")
             return False
         with contextlib.suppress(OSError):
-            os.chmod(ollama_bin, 0o755)
+            os.chmod(ollama_bin, 0o700)
         # Make `ollama` resolvable for this process and every child it spawns
         # (the model step, the managed `ollama serve`).
         os.environ["PATH"] = f"{bin_dir}{os.pathsep}{os.environ.get('PATH', '')}"

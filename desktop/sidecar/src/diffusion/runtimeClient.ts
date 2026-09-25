@@ -192,14 +192,15 @@ function appendRuntimeLog(text: string): void {
     const path = diffusionLogPath();
     mkdirSync(dirname(path), { recursive: true });
     try {
-      if (statSync(path).size > LOG_MAX_BYTES) {
+      const info = statSync(path);
+      if (info.size > LOG_MAX_BYTES) {
         // One rotation is enough: the interesting run is the last one.
         renameSync(path, `${path}.1`);
       }
     } catch {
       // No file yet, or it cannot be stat'd: append and move on.
     }
-    appendFileSync(path, text);
+    appendFileSync(path, text, { mode: 0o600 });
   } catch {
     // Logging must never break a generation.
   }

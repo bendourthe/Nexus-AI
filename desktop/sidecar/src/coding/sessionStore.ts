@@ -181,8 +181,8 @@ export class JsonFileSessionStore implements SessionStore {
       }),
     }));
     const payload: SessionsFile = { version: SCHEMA_VERSION, sessions };
-    const tmp = `${this._filePath}.tmp`;
-    writeFileSync(tmp, JSON.stringify(payload, null, 2), "utf8");
+    const tmp = `${this._filePath}.${process.pid}.tmp`;
+    writeFileSync(tmp, JSON.stringify(payload, null, 2), { encoding: "utf8", mode: 0o600, flag: "wx" });
     renameSync(tmp, this._filePath);
   }
 

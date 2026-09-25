@@ -406,16 +406,19 @@ export function activateExtensionOnly(
         const filePath = hookFilePath("enterplanmode-improve");
         try {
           fs.mkdirSync(path.dirname(filePath), { recursive: true });
-          if (!fs.existsSync(filePath)) {
+          try {
+            const fd = fs.openSync(filePath, "wx", 0o600);
             fs.writeFileSync(
-              filePath,
+              fd,
               "# Plan-mode improvement rules\n\n" +
                 "Add user-supplied rules below. Lines are appended verbatim to the prompt as a system message after the plan-mode addendum and capabilities reminder.\n\n" +
                 "Examples:\n" +
                 "- When the plan touches the storage layer, always include a migration step.\n" +
                 "- When the plan involves git operations, always include a backup checkpoint.\n",
-              "utf8",
             );
+            fs.closeSync(fd);
+          } catch (err) {
+            if ((err as NodeJS.ErrnoException).code !== "EEXIST") throw err;
           }
           const doc = await vscode.workspace.openTextDocument(filePath);
           await vscode.window.showTextDocument(doc, { preview: false });
