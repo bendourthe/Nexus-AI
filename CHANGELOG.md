@@ -1,3 +1,26 @@
+# [2.5.0](https://github.com/bendourthe/Nexus-AI/compare/v2.4.11...v2.5.0) (2026-09-25)
+
+
+### Bug Fixes
+
+* **ci:** match the skill count, digest field, and lint ceiling ([94ea0f3](https://github.com/bendourthe/Nexus-AI/commit/94ea0f33063d147fad05b9866600fe8ed7544007))
+* **desktop:** drop unused image studio icon imports ([6382574](https://github.com/bendourthe/Nexus-AI/commit/6382574f9c483935faa60b0dd649181f966ca345))
+* **desktop:** lint the shell for accessibility without hiding the backlog ([8cebd4b](https://github.com/bendourthe/Nexus-AI/commit/8cebd4bc6794b6b42c0b2da4817dc871169c6d67))
+* **security:** append the diffusion log through the open file handle ([b4f8f44](https://github.com/bendourthe/Nexus-AI/commit/b4f8f44c7c90f7306c7d27222e329b13a202dde0))
+* **security:** break the installer import cycle and tighten file creation ([af089e9](https://github.com/bendourthe/Nexus-AI/commit/af089e93bea6702dfb8f584b76b72a67aa9b35b5))
+* **security:** cap the diffusion log on the open handle ([8b12e6d](https://github.com/bendourthe/Nexus-AI/commit/8b12e6d032c95b348f7067eea65c8085b04cbb4a))
+* **security:** compare connection hosts with the URL parser ([c2441ef](https://github.com/bendourthe/Nexus-AI/commit/c2441ef16ac4cbee898423ea99c09bc1925ef8ed))
+* **shell:** fill the sidecar status fields the compile test omitted ([d633b5c](https://github.com/bendourthe/Nexus-AI/commit/d633b5c79fc26bda3ac388a6a722b94c4eab3977))
+* **studio:** pin SANA diffusers weights and keep a busy GPU honest ([4568065](https://github.com/bendourthe/Nexus-AI/commit/4568065acf216c86161a8e0e43c7a91f64e7ee46))
+
+
+### Features
+
+* **cli:** add a --json output contract across nexus subcommands ([f700c61](https://github.com/bendourthe/Nexus-AI/commit/f700c6193e23782e0508c548bdbeb9f48ccf67e9))
+* **cli:** add context, logs, and media inspect observation routes ([e9e9133](https://github.com/bendourthe/Nexus-AI/commit/e9e9133fc4aeecbeb2ea1c4e02e33b919a7fbdc5))
+* **skills:** ship a repo-local skill that drives the nexus CLI ([20e2922](https://github.com/bendourthe/Nexus-AI/commit/20e292226e3c9db051acb6e9b034baec5fe79c0d))
+* **storage:** snapshot a database only when a migration is pending ([36a626f](https://github.com/bendourthe/Nexus-AI/commit/36a626f3342358636a9b7818cb2dfa6bdf317568))
+
 # [2.4.11](https://github.com/bendourthe/Nexus-AI/compare/v2.4.1...v2.4.11) (2026-09-23)
 
 This tag covers develop since `v2.4.1`, including the 2.4.2-2.4.10 field work that had no separate tag, and the local Gaussian splat viewer that landed in pull request 68.
