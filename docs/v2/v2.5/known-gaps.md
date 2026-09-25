@@ -27,6 +27,10 @@ v2.5 plans in this directory are not started by the v2.4.11 tag.
 | QG-v250-2 | QG | migration-durability Phase 1 | `docs/v2/v2.5/plans/v2.5.0-migration-durability.md` | `tests/unit/core/storage/preMigrationSnapshot.test.ts` did not run. `better-sqlite3` is ABI 146 and this Node is ABI 137 (v24.13.0). | Run that file on a Node whose ABI matches the installed native module. Do not rebuild the module to chase the mismatch. |
 | QG-v251-2 | QG | v2.5.1 Phase 3 | `docs/v2/v2.5/plans/v2.5.1-adoption-packaged-verification-and-accessibility.md` | A packaged Tauri window was not launched. The smoke judges a probe report instead. `tauri-driver` has no macOS build, so it was not chosen. | On a Windows host, build the desktop bundle, feed its probe report to `desktop/tests/packaged/bundle.smoke.mjs`, and confirm the four selectors. |
 
+## Adjacent
+
+NI-3 is resolved in `docs/archive/v2/v2.4/known-gaps.md` (2026-09-21). `MODEL_FAMILIES` in `core/registry/ModelCatalog` is the single family tuple, and `desktop/sidecar/src/protocol.ts` builds its Zod enum from that tuple. The v2.5.1 command-parity checker does not reopen NI-3. It also cannot see value-level enum drift, which is why Phase 2 was not allowed to claim NI-3 as its proving case.
+
 ## Closed in v2.5
 
 | ID | Class | Source phase | Plan reference | Resolution |
