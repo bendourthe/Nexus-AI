@@ -17,12 +17,15 @@ this diffusion venv has a CUDA torch build.
 from __future__ import annotations
 
 import base64
+import hashlib
 import io
 import os
 import traceback
+import uuid
 from pathlib import Path
 
-from . import base
+from .. import vram_lifecycle
+from . import base, load_progress
 from .base import (
     ExecutionContext,
     PipelineOutput,
@@ -37,6 +40,8 @@ __all__ = [
     "resolve_weights_dir",
     "image_execute",
     "video_execute",
+    "sana_video_execute",
+    "is_sana_video_model",
     "gpu_ready",
     "allow_cpu",
 ]
@@ -62,20 +67,39 @@ def _require_accelerator() -> None:
     raise base.accelerator_not_ready("image")
 
 
-def _decode_pil(raw: str):
+def decode_source_image(raw: str):
+    """Decode a data URL, raw base64 PNG, or an existing filesystem path."""
     from PIL import Image  # type: ignore[import-not-found]
 
     payload = raw.strip()
+    path = Path(payload)
+    if len(payload) < 4096 and path.is_file():
+        return Image.open(path).convert("RGB")
     if payload.startswith("data:") and "," in payload:
         payload = payload.split(",", 1)[1]
     data = base64.b64decode(payload)
     return Image.open(io.BytesIO(data)).convert("RGB")
 
 
+def _decode_pil(raw: str):
+    return decode_source_image(raw)
+
+
 def _png_bytes(image) -> bytes:
     buf = io.BytesIO()
     image.save(buf, format="PNG")
     return buf.getvalue()
+
+
+def _image_digest(raw: bytes) -> str:
+    """Short content digest used to prove a restyle actually changed pixels.
+
+    v2.4.4 Phase 3: two field cycles shipped a "restyle" that returned the
+    previous PNG. A digest on the decoded source and on the produced PNG makes
+    "the output is a clone of the input" an observable fact in `extra` and an
+    assertable one in tests, instead of something only a human eye catches.
+    """
+    return hashlib.sha256(raw).hexdigest()[:16]
 
 
 def _torch_dtype():
@@ -86,9 +110,39 @@ def _torch_dtype():
     return torch.float32
 
 
+def enable_decode_memory_savers(pipe) -> list[str]:
+    """Decode the latent in tiles instead of all at once.
+
+    v2.4.11 operator report: a 2048x2048 image ran for over ten minutes at
+    100% GPU and never produced a picture. Sampling had finished; the VAE
+    decode had not. Decoding a 2K latent in one piece needs several gigabytes
+    of activations on top of the resident UNet, so on a 16 GB laptop card it
+    spills into shared system memory and crawls -- the GPU looks pinned
+    because it is, thrashing over PCIe.
+
+    Tiling and slicing are the standard remedy: the decode runs in pieces that
+    fit, with no visible difference in the output. They cost nothing on small
+    images, so they are on for every run rather than gated on a size guess.
+
+    Returns the names of what it managed to enable, for the log.
+    """
+    enabled: list[str] = []
+    for name in ("enable_vae_tiling", "enable_vae_slicing", "enable_attention_slicing"):
+        fn = getattr(pipe, name, None)
+        if not callable(fn):
+            continue
+        try:
+            fn()
+            enabled.append(name)
+        except Exception:  # noqa: BLE001 - a memory saver is never worth a failed run
+            continue
+    return enabled
+
+
 def _move_pipe(pipe, offload_strategy: str) -> None:
     import torch  # type: ignore[import-not-found]
 
+    enable_decode_memory_savers(pipe)
     if not gpu_ready():
         pipe.to("cpu")
         return
@@ -100,34 +154,183 @@ def _move_pipe(pipe, offload_strategy: str) -> None:
     pipe.to("cuda" if torch.cuda.is_available() else "cpu")
 
 
+def _clip_frames_for_export(result) -> list:
+    """Convert a Diffusers video output into a list of frames.
+
+    WanPipeline returns a numpy batch of shape (1, frames, height, width, channels).
+    Boolean tests on that array raise ValueError, so callers must use length.
+    """
+    raw = getattr(result, "frames", None)
+    if raw is None:
+        return []
+    try:
+        if len(raw) == 0:
+            return []
+        clip = raw[0]
+        return [clip[index] for index in range(len(clip))]
+    except TypeError:
+        return []
+
+
+def _align_spatial(value: int, multiple: int = 16) -> int:
+    """Round spatial size down to a model-legal multiple, never below the multiple.
+
+    Wan / Diffusers reject sizes that are not divisible by 16. The product
+    contract still advertises 854x480, so the executor aligns at the GPU
+    boundary instead of failing the advertised 480p preset.
+    """
+    aligned = (int(value) // multiple) * multiple
+    return max(multiple, aligned)
+
+
+#: Precision variants diffusers understands, in the order we prefer them.
+#: `fp16` first because that is what the SDXL family ships; `bf16` is how the
+#: SANA repos publish their weights (v2.4.11).
+_WEIGHT_VARIANTS: tuple[str, ...] = ("fp16", "bf16")
+
+
+def _detect_variant(weights: Path) -> str | None:
+    """The precision variant these files are published under, if any.
+
+    Diffusers names a variant file `<stem>.<variant>.safetensors`, and a
+    SHARDED one `<stem>.<variant>-00001-of-0000N.safetensors` -- which is how
+    SANA ships its text encoder. Matching only the first spelling is why a
+    complete SANA directory still failed to load.
+    """
+    for variant in _WEIGHT_VARIANTS:
+        for pattern in (f"*.{variant}.safetensors", f"*.{variant}-*.safetensors"):
+            if next(weights.rglob(pattern), None) is not None:
+                return variant
+    return None
+
+
+def negative_prompt_kwargs(model_id: str, negative: str | None) -> dict[str, object]:
+    """How this family wants to be told about a negative prompt.
+
+    Three contracts, learned the hard way (v2.4.11), each of which failed only
+    AFTER the model had finished loading:
+
+    * SANA types `negative_prompt` as `str` and runs it through a caption
+      cleaner, so a `None` reaches `.lower()` -- `AttributeError: 'NoneType'
+      object has no attribute 'lower'`.
+    * SANA Sprint is guidance-distilled and has no such parameter at all;
+      passing one is a `TypeError: unexpected keyword argument`.
+    * SDXL treats `None` as "no negative conditioning", which is not the same
+      as an empty string, so it keeps `None`.
+    """
+    lowered = model_id.lower()
+    if "sprint" in lowered:
+        return {}
+    if lowered.startswith("sana"):
+        return {"negative_prompt": negative or ""}
+    return {"negative_prompt": negative or None}
+
+
+def _pipeline_load_kwargs(weights: Path) -> dict[str, object]:
+    kwargs: dict[str, object] = {
+        "torch_dtype": _torch_dtype(),
+        "local_files_only": True,
+    }
+    variant = _detect_variant(weights)
+    if variant is not None:
+        kwargs["variant"] = variant
+    return kwargs
+
+
+def _installed_diffusers_version() -> str:
+    """Best-effort version string for the missing-class sentence."""
+    try:
+        import diffusers  # type: ignore[import-not-found]
+
+        return str(getattr(diffusers, "__version__", "unknown"))
+    except Exception:  # noqa: BLE001 - the sentence must never itself raise
+        return "not installed"
+
+
+def _import_diffusers_class(surface: str, name: str):
+    """Import one Diffusers pipeline class or fail closed with a sentence.
+
+    v2.4.4 Phase 4.2: the packaged venv pinned a Diffusers release that has no
+    `SanaVideoPipeline`, and the raw `ImportError: cannot import name ...` was
+    what reached the chat bubble. A missing class is a runtime that was never
+    provisioned for this model, so it is reported as `diffusers-missing` with
+    a sentence naming both the class and the version actually installed -- the
+    two facts needed to tell a bad pin from a bad model directory.
+    """
+    try:
+        module = __import__("diffusers", fromlist=[name])
+        return getattr(module, name)
+    except Exception as exc:  # noqa: BLE001 - typed not-ready, not a traceback
+        raise RuntimeNotReady(
+            f"{surface} runtime is not ready: diffusers-missing: the installed "
+            f"diffusers ({_installed_diffusers_version()}) does not provide "
+            f"{name}. Reinstall the media runtime from Settings.",
+            kind="diffusers-missing",
+        ) from exc
+
+
 def _load_text_pipe(weights: Path, model_id: str):
-    dtype = _torch_dtype()
-    kwargs = {"torch_dtype": dtype, "local_files_only": True}
-    if model_id.lower().startswith("sana"):
-        try:
-            from diffusers import SanaPipeline  # type: ignore[import-not-found]
+    kwargs = _pipeline_load_kwargs(weights)
+    if (weights / "model_index.json").is_file():
+        if model_id.lower().startswith("sana"):
+            # v2.4.11: Sprint is a distilled SANA with its own scheduler and
+            # its own pipeline class; loading it as a plain SanaPipeline pairs
+            # distilled weights with the wrong sampler.
+            class_name = (
+                "SanaSprintPipeline"
+                if "sprint" in model_id.lower()
+                else "SanaPipeline"
+            )
+            sana = _import_diffusers_class("image", class_name)
+            return sana.from_pretrained(str(weights), **kwargs)
+        from diffusers import (
+            AutoPipelineForText2Image,  # type: ignore[import-not-found]
+        )
 
-            return SanaPipeline.from_pretrained(str(weights), **kwargs)
-        except Exception:
-            pass
-    from diffusers import AutoPipelineForText2Image  # type: ignore[import-not-found]
+        return AutoPipelineForText2Image.from_pretrained(str(weights), **kwargs)
+    checkpoints = sorted(weights.glob("*.safetensors"))
+    if len(checkpoints) == 1 and not model_id.lower().startswith("sana"):
+        from diffusers import (
+            StableDiffusionXLPipeline,  # type: ignore[import-not-found]
+        )
 
-    return AutoPipelineForText2Image.from_pretrained(str(weights), **kwargs)
+        return StableDiffusionXLPipeline.from_single_file(
+            str(checkpoints[0]),
+            **{key: value for key, value in kwargs.items() if key != "variant"},
+        )
+    raise RuntimeNotReady(
+        f"image runtime is not ready: model-layout-invalid: {model_id} does not "
+        "contain a complete pipeline or one supported SDXL checkpoint",
+        kind="model-layout-invalid",
+    )
 
 
 def _load_image_pipe(weights: Path, model_id: str):
-    dtype = _torch_dtype()
-    kwargs = {"torch_dtype": dtype, "local_files_only": True}
-    if model_id.lower().startswith("sana"):
-        try:
-            from diffusers import SanaImg2ImgPipeline  # type: ignore[import-not-found]
-
-            return SanaImg2ImgPipeline.from_pretrained(str(weights), **kwargs)
-        except Exception:
-            pass
     from diffusers import AutoPipelineForImage2Image  # type: ignore[import-not-found]
 
-    return AutoPipelineForImage2Image.from_pretrained(str(weights), **kwargs)
+    return AutoPipelineForImage2Image.from_pipe(_load_text_pipe(weights, model_id))
+
+
+#: Applied only when the caller sends no strength at all. Kept as a named
+#: constant so `strength=0` stays distinguishable from "unset" (v2.4.4 P3.2).
+DEFAULT_IMG2IMG_STRENGTH = 0.75
+
+
+def _seeded_generator(seed: int) -> dict:
+    """Pipeline kwargs carrying a seeded generator, or `{}` when torch is absent.
+
+    v2.4.4 Phase 3.2: `image_execute` never forwarded the seed, so an image
+    edit was unreproducible and a bad restyle could not be re-run and compared.
+    Returned as kwargs rather than a value so a torch-less environment (the
+    stub executor, and the unit tests) still runs the same code path instead
+    of failing on an import it does not need.
+    """
+    try:
+        import torch  # type: ignore[import-not-found]
+    except Exception:  # noqa: BLE001 - seeding is best-effort, never fatal
+        return {}
+    device = "cuda" if gpu_ready() else "cpu"
+    return {"generator": torch.Generator(device=device).manual_seed(seed)}
 
 
 def image_execute(ctx: ExecutionContext) -> PipelineOutput:
@@ -141,42 +344,86 @@ def image_execute(ctx: ExecutionContext) -> PipelineOutput:
         )
     if ctx.mode == "img2img" and model_id.lower().endswith("-int4"):
         raise RuntimeNotReady("img2img is not supported for INT4 SANA weights")
+    source_digest: str | None = None
+    strength: float | None = None
+    # Bound before the `try` so the `finally` can always drop them, including
+    # on the paths that raise before a pipeline is ever loaded.
+    pipe = None
+    result = None
     try:
+        seeded = _seeded_generator(ctx.params.seed)
         if ctx.mode == "img2img":
             if not ctx.params.source_image:
                 raise RuntimeNotReady("img2img requires source image bytes")
-            pipe = _load_image_pipe(weights, model_id)
+            base.emit_stage(ctx.job_id, "loading")
+            with load_progress.track_model_load(ctx.job_id, weights):
+                pipe = _load_image_pipe(weights, model_id)
             _move_pipe(pipe, ctx.offload_strategy)
+            base.emit_stage(ctx.job_id, "generating")
             source = _decode_pil(ctx.params.source_image)
+            source_digest = _image_digest(_png_bytes(source))
+            # v2.4.4 Phase 3.2: an explicit None check, not `or`. A caller that
+            # deliberately sends strength 0 used to be silently rewritten to
+            # 0.75, so the number the UI chose never reached the pipeline.
+            strength = (
+                DEFAULT_IMG2IMG_STRENGTH
+                if ctx.params.strength is None
+                else ctx.params.strength
+            )
             result = pipe(
                 prompt=ctx.params.prompt,
-                negative_prompt=ctx.params.negative_prompt or None,
+                **negative_prompt_kwargs(model_id, ctx.params.negative_prompt),
                 image=source,
-                strength=ctx.params.strength or 0.75,
+                strength=strength,
                 num_inference_steps=ctx.params.steps,
                 guidance_scale=ctx.params.cfg_scale,
                 width=ctx.params.width,
                 height=ctx.params.height,
+                **seeded,
+                **base.step_callback_kwargs(pipe, ctx.job_id, ctx.params.steps),
             )
         elif ctx.mode in {"inpaint", "outpaint"}:
             raise RuntimeNotReady(
                 f"image runtime is not ready: {ctx.mode} weights path is not wired"
             )
         else:
-            pipe = _load_text_pipe(weights, model_id)
+            base.emit_stage(ctx.job_id, "loading")
+            with load_progress.track_model_load(ctx.job_id, weights):
+                pipe = _load_text_pipe(weights, model_id)
             _move_pipe(pipe, ctx.offload_strategy)
+            base.emit_stage(ctx.job_id, "generating")
             result = pipe(
                 prompt=ctx.params.prompt,
-                negative_prompt=ctx.params.negative_prompt or None,
+                **negative_prompt_kwargs(model_id, ctx.params.negative_prompt),
                 num_inference_steps=ctx.params.steps,
                 guidance_scale=ctx.params.cfg_scale,
                 width=ctx.params.width,
                 height=ctx.params.height,
+                **seeded,
+                **base.step_callback_kwargs(pipe, ctx.job_id, ctx.params.steps),
             )
         image = result.images[0]
+        png = _png_bytes(image)
+        output_digest = _image_digest(png)
+        if source_digest is not None and output_digest == source_digest:
+            # Fail closed rather than present the previous picture as a new
+            # one. Screenshots 3 across two cycles were exactly this: a turn
+            # that looked successful and had changed nothing.
+            raise RuntimeNotReady(
+                "image runtime is not ready: unchanged-output: the edit "
+                "returned the source image unchanged",
+                kind="unchanged-output",
+            )
         return PipelineOutput(
-            png_bytes=_png_bytes(image),
-            extra={"stubbed": False, "mode": ctx.mode, "jobId": ctx.job_id},
+            png_bytes=png,
+            extra={
+                "stubbed": False,
+                "mode": ctx.mode,
+                "jobId": ctx.job_id,
+                "sourceDigest": source_digest,
+                "outputDigest": output_digest,
+                "strength": strength,
+            },
         )
     except RuntimeNotReady:
         raise
@@ -185,6 +432,41 @@ def image_execute(ctx: ExecutionContext) -> PipelineOutput:
         raise RuntimeNotReady(
             f"image runtime is not ready: {type(exc).__name__}: {exc}"
         ) from exc
+    finally:
+        # v2.4.8 follow-up: give the VRAM back so the chat model can come back
+        # onto the GPU. Without this the torch caching allocator kept the SDXL
+        # weights' worth of VRAM reserved between jobs.
+        #
+        # v2.4.9 correction: dropping the references here is what makes the
+        # sweep effective, and the v2.4.8 version did not do it. The success
+        # path returns from inside the `try`, so this frame is still alive
+        # when `finally` runs and `pipe` -- which owns the weights -- is still
+        # bound. `torch.cuda.empty_cache()` returns only the allocator blocks
+        # no live tensor holds, so sweeping with `pipe` still bound freed the
+        # transient activations and left the weights resident, which is the
+        # opposite of what the comment above claimed. The video path never had
+        # this bug: it runs the pipeline in a nested frame that has already
+        # exited by the time `vram_scope` sweeps.
+        # `del`, not `= None`: unbinding is what this line is for, and saying so
+        # explicitly reads better than an assignment nothing consumes. Both names
+        # are bound before the `try`, so this can never raise NameError.
+        del pipe, result
+        vram_lifecycle.release_vram()
+
+
+_SANA_VIDEO_LAYOUT_FILES = (
+    "model_index.json",
+    "scheduler/scheduler_config.json",
+    "text_encoder/config.json",
+    "tokenizer/tokenizer_config.json",
+    "transformer/config.json",
+    "vae/config.json",
+)
+
+
+def is_sana_video_model(model_id: str) -> bool:
+    """True for SANA-Video catalog ids (not image SANA)."""
+    return model_id.lower().startswith("sana-video")
 
 
 def _require_video_accelerator() -> None:
@@ -193,8 +475,56 @@ def _require_video_accelerator() -> None:
     raise base.accelerator_not_ready("video")
 
 
+def _missing_video_layout_file(weights: Path, model_id: str) -> Path | None:
+    if is_sana_video_model(model_id):
+        for relative in _SANA_VIDEO_LAYOUT_FILES:
+            candidate = weights / relative
+            if not candidate.is_file():
+                return candidate
+        return None
+    index = weights / "model_index.json"
+    if not index.is_file():
+        return index
+    return None
+
+
+def _require_video_layout(weights: Path, model_id: str) -> None:
+    missing = _missing_video_layout_file(weights, model_id)
+    if missing is None:
+        return
+    raise RuntimeNotReady(
+        f"video runtime is not ready: model-layout-invalid: {model_id} is "
+        f"missing {missing.name} at {missing}",
+        kind="model-layout-invalid",
+    )
+
+
+def _load_video_pipeline(kind: str, weights: Path):
+    kwargs: dict[str, object] = {
+        "torch_dtype": _torch_dtype(),
+        "local_files_only": True,
+    }
+    if kind == "sana":
+        sana_video = _import_diffusers_class("video", "SanaVideoPipeline")
+        return sana_video.from_pretrained(str(weights), **kwargs)
+    from diffusers import WanPipeline  # type: ignore[import-not-found]
+
+    return WanPipeline.from_pretrained(str(weights), **kwargs)
+
+
 def video_execute(ctx: VideoExecutionContext) -> VideoPipelineOutput:
     """Run a real text/image-to-video job or raise RuntimeNotReady."""
+    if is_sana_video_model(ctx.params.model_id):
+        return sana_video_execute(ctx)
+    return _run_real_video(ctx, "wan")
+
+
+def sana_video_execute(ctx: VideoExecutionContext) -> VideoPipelineOutput:
+    """Load SanaVideoPipeline for sana-video* ids. Never uses WanPipeline."""
+    return _run_real_video(ctx, "sana")
+
+
+def _run_real_video(ctx: VideoExecutionContext, kind: str) -> VideoPipelineOutput:
     _require_video_accelerator()
     model_id = ctx.params.model_id
     weights = resolve_weights_dir(model_id)
@@ -202,35 +532,82 @@ def video_execute(ctx: VideoExecutionContext) -> VideoPipelineOutput:
         raise RuntimeNotReady(
             base.weights_missing_message("video", model_id), kind="weights-missing"
         )
-    try:
-        import imageio  # type: ignore[import-not-found]
-        from diffusers import AutoPipelineForText2Video  # type: ignore[import-not-found]
-
-        dtype = _torch_dtype()
-        pipe = AutoPipelineForText2Video.from_pretrained(
-            str(weights), torch_dtype=dtype, local_files_only=True
+    _require_video_layout(weights, model_id)
+    if ctx.params.mode != "text2video":
+        raise RuntimeNotReady(
+            "video runtime is not ready: mode-unsupported: "
+            f"{model_id} supports text2video only",
+            kind="mode-unsupported",
         )
+    temporary = Path(ctx.output_path).with_name(
+        f".{Path(ctx.output_path).name}.{uuid.uuid4().hex}.partial.mp4"
+    )
+    try:
+        import torch  # type: ignore[import-not-found]
+        from diffusers.utils import export_to_video  # type: ignore[import-not-found]
+
+        base.emit_stage(ctx.job_id, "loading")
+        with load_progress.track_model_load(ctx.job_id, weights):
+            pipe = _load_video_pipeline(kind, weights)
         _move_pipe(pipe, ctx.offload_strategy)
+        base.emit_stage(ctx.job_id, "generating")
+        requested_frames = max(1, ctx.params.duration_seconds * ctx.params.fps)
+        num_frames = ((requested_frames - 1 + 3) // 4) * 4 + 1
+        width = _align_spatial(ctx.params.width)
+        height = _align_spatial(ctx.params.height)
+        generator_device = "cuda" if gpu_ready() else "cpu"
         kwargs = {
             "prompt": ctx.params.prompt,
+            "negative_prompt": ctx.params.negative_prompt or None,
             "num_inference_steps": ctx.params.steps,
             "guidance_scale": ctx.params.cfg_scale,
+            "width": width,
+            "height": height,
+            "num_frames": num_frames,
+            "generator": torch.Generator(device=generator_device).manual_seed(
+                ctx.params.seed
+            ),
+            **base.step_callback_kwargs(pipe, ctx.job_id, ctx.params.steps),
         }
-        if ctx.params.source_image:
-            kwargs["image"] = _decode_pil(ctx.params.source_image)
         result = pipe(**kwargs)
-        frames = result.frames[0] if hasattr(result, "frames") else result.images
-        Path(ctx.output_path).parent.mkdir(parents=True, exist_ok=True)
-        writer = imageio.get_writer(ctx.output_path, fps=ctx.params.fps)
-        try:
-            for frame in frames:
-                writer.append_data(frame)
-        finally:
-            writer.close()
+        frames = _clip_frames_for_export(result)
+        if len(frames) == 0:
+            raise RuntimeNotReady(
+                "video runtime is not ready: zero-frames: the model returned no frames",
+                kind="zero-frames",
+            )
+        output = Path(ctx.output_path)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        export_to_video(frames, str(temporary), fps=ctx.params.fps)
+        if not temporary.is_file() or temporary.stat().st_size < 12:
+            raise RuntimeNotReady(
+                "video runtime is not ready: encode-failed: "
+                "no finalized video was written",
+                kind="encode-failed",
+            )
+        with temporary.open("rb") as handle:
+            signature = handle.read(12)
+        if signature[4:8] != b"ftyp":
+            raise RuntimeNotReady(
+                "video runtime is not ready: encode-failed: "
+                "output is not an MP4 container",
+                kind="encode-failed",
+            )
+        os.replace(temporary, output)
         return VideoPipelineOutput(
             mp4_path=ctx.output_path,
             frame_previews=[],
-            extra={"stubbed": False, "method": ctx.params.mode, "jobId": ctx.job_id},
+            extra={
+                "stubbed": False,
+                "method": ctx.params.mode,
+                "jobId": ctx.job_id,
+                "frames": len(frames),
+                "requestedWidth": ctx.params.width,
+                "requestedHeight": ctx.params.height,
+                "width": width,
+                "height": height,
+                "pipeline": kind,
+            },
         )
     except RuntimeNotReady:
         raise
@@ -239,3 +616,5 @@ def video_execute(ctx: VideoExecutionContext) -> VideoPipelineOutput:
         raise RuntimeNotReady(
             f"video runtime is not ready: {type(exc).__name__}: {exc}"
         ) from exc
+    finally:
+        temporary.unlink(missing_ok=True)

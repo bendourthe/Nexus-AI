@@ -3,10 +3,21 @@
 // has both a React app and a Node sidecar.
 import tseslint from "@typescript-eslint/eslint-plugin";
 import tsparser from "@typescript-eslint/parser";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+
+function asWarnings(rules) {
+  const out = {};
+  for (const [id, setting] of Object.entries(rules ?? {})) {
+    if (Array.isArray(setting)) out[id] = ["warn", ...setting.slice(1)];
+    else if (setting === "error" || setting === 2) out[id] = "warn";
+    else out[id] = setting;
+  }
+  return out;
+}
 
 export default [
   {
-    ignores: ["dist/**", "src-tauri/target/**", "sidecar/dist/**", "node_modules/**"],
+    ignores: ["dist/**", "src-tauri/target/**", "sidecar/dist/**", "node_modules/**", "tests/fixtures/**"],
   },
   {
     files: ["src/**/*.{ts,tsx}", "sidecar/src/**/*.ts", "tests/**/*.{ts,tsx}"],
@@ -36,7 +47,10 @@ export default [
         JSX: "readonly",
       },
     },
-    plugins: { "@typescript-eslint": tseslint },
+    plugins: {
+      "@typescript-eslint": tseslint,
+      "jsx-a11y": jsxA11y,
+    },
     rules: {
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
@@ -45,6 +59,7 @@ export default [
       ],
       "@typescript-eslint/no-explicit-any": "warn",
       "no-console": ["error", { allow: ["warn", "error"] }],
+      ...asWarnings(jsxA11y.configs.recommended.rules),
     },
   },
 ];

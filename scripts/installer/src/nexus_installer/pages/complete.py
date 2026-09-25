@@ -4,13 +4,11 @@ from __future__ import annotations
 
 import contextlib
 import subprocess
-import sys
 from typing import TYPE_CHECKING
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtWidgets import (
-    QCheckBox,
     QFileDialog,
     QHBoxLayout,
     QLabel,
@@ -29,7 +27,6 @@ from nexus_installer.constants import (
     FS_BODY,
     FS_CAPTION,
     SUCCESS,
-    TEXT_BODY,
     TEXT_SECONDARY,
     WARNING,
 )
@@ -38,11 +35,11 @@ from nexus_installer.engine.model_router import (
     default_catalog_path,
     load_catalog_index,
 )
-from nexus_installer.engine.platform_utils import no_window_kwargs
 from nexus_installer.video_enhancement_support import INSTALLER_NOTE
 from nexus_installer.widgets.callout_box import CalloutBox
-from nexus_installer.widgets.primary_button import PrimaryButton
+from nexus_installer.widgets.page_intro import PageLede
 from nexus_installer.widgets.secondary_button import SecondaryButton
+from nexus_installer.widgets.tertiary_button import TertiaryButton
 
 if TYPE_CHECKING:
     from nexus_installer.installer_state import InstallerState
@@ -100,6 +97,14 @@ class CompletePage(QWidget):
     #: Emitted when the user clicks "Retry failed downloads" (v1.15.0 Phase 3).
     retry_requested = pyqtSignal()
 
+    #: Emitted when the user clicks Close -- finish the wizard without
+    #: launching the desktop app (v2.4.11).
+    close_requested = pyqtSignal()
+
+    #: Emitted when the set of footer-hosted buttons changes (retry
+    #: appearing, no desktop app to close beside) so the window re-hosts them.
+    footer_actions_changed = pyqtSignal()
+
     def __init__(self, state: InstallerState, parent: QWidget | None = None) -> None:
         super().__init__(parent)
         self._state = state
@@ -114,10 +119,7 @@ class CompletePage(QWidget):
         self._title.setObjectName("pageTitle")
         layout.addWidget(self._title)
 
-        self._subtitle = QLabel("Nexus is installed and ready to use.")
-        self._subtitle.setStyleSheet(
-            f"color: {TEXT_BODY}; font-size: {FS_BODY}px; background: transparent;"
-        )
+        self._subtitle = PageLede("Nexus is installed and ready to use.")
         layout.addWidget(self._subtitle)
 
         self._video2x_note = QLabel(INSTALLER_NOTE)
@@ -131,6 +133,11 @@ class CompletePage(QWidget):
 
         # Failure warning (hidden by default)
         self._warning_callout = CalloutBox(title="Some steps encountered issues")
+        self._warning_callout.setStyleSheet(
+            "QFrame#calloutBox { background: #2a2112; "
+            f"border-left: 3px solid {WARNING}; "
+            "border-radius: 6px; }}"
+        )
         self._warning_callout.setVisible(False)
         layout.addWidget(self._warning_callout)
 
@@ -171,25 +178,12 @@ class CompletePage(QWidget):
         )
         layout.addWidget(manage_card)
 
-        # v1.8.0 Phase 2 -- launch the desktop app when the wizard finishes.
-        self._launch_checkbox = QCheckBox("Launch Nexus when I click Finish")
-        self._launch_checkbox.setChecked(state.launch_desktop_on_finish)
-        self._launch_checkbox.stateChanged.connect(
-            lambda _s: setattr(
-                state, "launch_desktop_on_finish", self._launch_checkbox.isChecked()
-            )
-        )
-        layout.addWidget(self._launch_checkbox)
-
-        # Action buttons
-        btn_row = QHBoxLayout()
-        self._open_vscode_btn = PrimaryButton("Open VS Code")
-        self._open_vscode_btn.clicked.connect(self._open_vscode)
-        btn_row.addWidget(self._open_vscode_btn)
-
-        self._save_log_btn = SecondaryButton("View Installation Log")
+        # v2.4.11: every action on this page sits in the footer row, right
+        # aligned where Finish already lives -- "View Logs", "Close",
+        # "Launch Nexus AI". The page owns the widgets; the footer only hosts
+        # them while this page shows (see `footer_actions`).
+        self._save_log_btn = SecondaryButton("View Logs")
         self._save_log_btn.clicked.connect(self._save_log)
-        btn_row.addWidget(self._save_log_btn)
 
         # v1.15.0 Phase 3 (Issue 2): retry just the failed downloads. Hidden
         # unless the summary reports retryable failures (a gated skip is not
@@ -198,16 +192,41 @@ class CompletePage(QWidget):
         self._retry_btn.setObjectName("retryFailedButton")
         self._retry_btn.clicked.connect(self.retry_requested.emit)
         self._retry_btn.setVisible(False)
-        btn_row.addWidget(self._retry_btn)
 
-        btn_row.addStretch()
-        layout.addLayout(btn_row)
+        # Close finishes the wizard without launching the app. Filled gray so
+        # it reads as a real second choice beside the cyan primary.
+        self._close_btn = TertiaryButton("Close")
+        self._close_btn.clicked.connect(self.close_requested.emit)
 
         layout.addStretch()
 
     def showEvent(self, event: object) -> None:  # noqa: N802
         super().showEvent(event)  # type: ignore[arg-type]
         self._refresh()
+
+    def footer_actions(self) -> list[QWidget]:
+        """Buttons the wizard footer hosts while this page shows.
+
+        Ordered left to right; the footer's own primary (Launch Nexus AI /
+        Finish) follows them.
+        """
+        actions: list[QWidget] = [self._save_log_btn]
+        if self._retry_btn.isVisible():
+            actions.append(self._retry_btn)
+        if self.can_launch_desktop():
+            # With no desktop app to launch the primary is already a plain
+            # "Finish", and a Close beside it would be the same action twice.
+            actions.append(self._close_btn)
+        return actions
+
+    def finish_button_text(self) -> str:
+        """Label for the footer's primary button on this page."""
+        return "Launch Nexus AI" if self.can_launch_desktop() else "Finish"
+
+    def can_launch_desktop(self) -> bool:
+        """True when an installed desktop executable is there to start."""
+        state = self._state
+        return bool(state.desktop_installed and state.desktop_exe_path)
 
     def _refresh(self) -> None:
         state = self._state
@@ -224,13 +243,18 @@ class CompletePage(QWidget):
         non_model_failures = [
             s for s in state.failed_steps if s not in ("model", "engine")
         ]
+        optional_failures = [
+            failure
+            for failure in state.step_failures
+            if failure.get("step") in state.optional_failed_steps
+        ]
 
         callout_lines = [
             f"\u2022 {outcome.display_name}: {outcome.reason}"
             for outcome in summary.failed
         ]
         callout_lines += [
-            f"\u2022 {outcome.display_name}: {outcome.reason}"
+            f"\u2022 Optional model skipped - {outcome.display_name}: {outcome.reason}"
             for outcome in summary.skipped
         ]
         if engine_failure:
@@ -247,10 +271,15 @@ class CompletePage(QWidget):
         callout_lines += [
             f"\u2022 The {step} step did not complete." for step in non_model_failures
         ]
+        callout_lines += [
+            f"\u2022 {failure.get('summary', 'An optional component is not ready.')}"
+            for failure in optional_failures
+        ]
 
         has_failure = bool(
             summary.failed
             or non_model_failures
+            or optional_failures
             or engine_failure
             or "engine" in state.failed_steps
         )
@@ -323,10 +352,12 @@ class CompletePage(QWidget):
             state.desktop_installed and state.desktop_health_ok,
         )
 
-        # Launching only makes sense when the desktop app actually landed.
-        self._launch_checkbox.setEnabled(state.desktop_installed)
-        if not state.desktop_installed:
-            self._launch_checkbox.setChecked(False)
+        # Launching only makes sense when the desktop app actually landed; the
+        # footer primary falls back to a plain "Finish" otherwise.
+        can_launch = self.can_launch_desktop()
+        state.launch_desktop_on_finish = can_launch
+        self._close_btn.setVisible(can_launch)
+        self.footer_actions_changed.emit()
 
     def _add_service(self, name: str, detail: str, ok: bool) -> None:
         row = QHBoxLayout()
@@ -352,37 +383,27 @@ class CompletePage(QWidget):
         container.setLayout(row)
         self._services_layout.addWidget(container)
 
-    def on_finish(self) -> None:
-        """Called by the window when Finish is clicked on this page."""
-        # Acknowledge the run: drop the persisted install-state so a later cold
-        # launch starts at Welcome instead of reopening this outcome view
-        # (v1.15.0 Phase 2 / Issue 1).
-        state_store.clear_state(bg_paths.state_file())
-        state = self._state
-        if not (
-            state.launch_desktop_on_finish
-            and state.desktop_installed
-            and state.desktop_exe_path
-        ):
-            return
-        with contextlib.suppress(OSError):
-            subprocess.Popen([state.desktop_exe_path])
+    def acknowledge(self) -> None:
+        """Close out the run without launching anything.
 
-    def _open_vscode(self) -> None:
-        try:
-            if sys.platform == "win32":
-                vscode = self._state.vscode_path or "code"
-                # no_window_kwargs hides the transient cmd console that
-                # otherwise flashes while `start` hands off to the GUI app.
-                subprocess.Popen(
-                    ["cmd", "/c", "start", "", vscode], **no_window_kwargs()
-                )
-            elif sys.platform == "darwin":
-                subprocess.Popen(["open", "-a", "Visual Studio Code"])
-            else:
-                subprocess.Popen(["code"])
-        except OSError:
-            pass
+        Drops the persisted install-state so a later cold launch starts at
+        Welcome instead of reopening this outcome view (v1.15.0 Phase 2 /
+        Issue 1). Both Close and Launch go through here.
+        """
+        state_store.clear_state(bg_paths.state_file())
+
+    def on_finish(self) -> None:
+        """Called by the window when the footer primary is clicked.
+
+        v2.4.11: that button IS the launch action ("Launch Nexus AI"), so the
+        launch is unconditional; a user who does not want the app clicks Close.
+        """
+        self.acknowledge()
+        if not self.can_launch_desktop():
+            return
+        self._state.launch_desktop_on_finish = True
+        with contextlib.suppress(OSError):
+            subprocess.Popen([self._state.desktop_exe_path])
 
     def _save_log(self) -> None:
         path, _ = QFileDialog.getSaveFileName(

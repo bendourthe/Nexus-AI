@@ -7,7 +7,13 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FolderTree, type SelectedNode } from "../src/modules/chat/FolderTree";
 import { InMemoryChatExplorerClient } from "../src/modules/chat/chatExplorerClient";
@@ -38,8 +44,14 @@ describe("<FolderTree>", () => {
     // the module looked like it required a folder before you could talk to
     // anything. Folders stay available; they are just no longer the entry.
     expect(screen.getByTestId("folder-tree-empty-cta")).toHaveTextContent(
-      /start a new chat/i,
+      /start a new session/i,
     );
+    expect(screen.getByTestId("folder-tree-title")).toHaveTextContent(
+      "Sessions",
+    );
+    const header = screen.getByTestId("folder-tree-header");
+    expect(header.style.justifyContent).toBe("space-between");
+    expect(header.style.paddingTop).toBe("0px");
     expect(screen.getByTestId("folder-tree-new-folder")).toBeInTheDocument();
     expect(screen.getByTestId("folder-tree-new-chat")).toBeInTheDocument();
   });
@@ -59,8 +71,16 @@ describe("<FolderTree>", () => {
   // --bg-1 pane -- a --bg-1 fill was invisible (screenshot 2).
   it("gives the selected chat row a contrast fill, an accent bar, and aria-selected", () => {
     const client = setupClient();
-    const chat = client.createChat({ folderId: null, title: "Open me", modelId: "m" });
-    const other = client.createChat({ folderId: null, title: "Not open", modelId: "m" });
+    const chat = client.createChat({
+      folderId: null,
+      title: "Open me",
+      modelId: "m",
+    });
+    const other = client.createChat({
+      folderId: null,
+      title: "Not open",
+      modelId: "m",
+    });
     render(
       <FolderTree
         client={client}
@@ -100,6 +120,29 @@ describe("<FolderTree>", () => {
     expect(client.listTree().chats.length).toBe(1);
   });
 
+  it("selects and opens a chat created from the toolbar", async () => {
+    const client = setupClient();
+    const onSelect = vi.fn();
+    const onOpenChat = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <FolderTree
+        client={client}
+        storageAdapter={storageAdapter}
+        onSelect={onSelect}
+        onOpenChat={onOpenChat}
+      />,
+    );
+    await user.click(screen.getByTestId("folder-tree-new-chat"));
+    const created = client.listTree().chats[0];
+    expect(created).toBeTruthy();
+    if (!created) throw new Error("expected created chat");
+    expect(onSelect).toHaveBeenCalledWith({ kind: "chat", id: created.id });
+    expect(onOpenChat).toHaveBeenCalledWith(
+      expect.objectContaining({ id: created.id }),
+    );
+  });
+
   it("renames a folder via double-click", async () => {
     const client = setupClient();
     const folder = client.createFolder({ parentId: null, name: "Old" });
@@ -132,7 +175,9 @@ describe("<FolderTree>", () => {
     render(<FolderTree client={client} storageAdapter={storageAdapter} />);
     const row = screen.getByTestId(`tree-row-folder-${folder.id}`);
     fireEvent.keyDown(row, { key: "F2" });
-    expect(await screen.findByTestId(`tree-rename-input-${folder.id}`)).toBeInTheDocument();
+    expect(
+      await screen.findByTestId(`tree-rename-input-${folder.id}`),
+    ).toBeInTheDocument();
   });
 
   it("right-click opens the context menu with the right entries", async () => {
@@ -156,7 +201,9 @@ describe("<FolderTree>", () => {
     const row = screen.getByTestId(`tree-row-folder-${folder.id}`);
     fireEvent.contextMenu(row);
     fireEvent.click(await screen.findByTestId("ctx-rename"));
-    expect(await screen.findByTestId(`tree-rename-input-${folder.id}`)).toBeInTheDocument();
+    expect(
+      await screen.findByTestId(`tree-rename-input-${folder.id}`),
+    ).toBeInTheDocument();
   });
 
   it("context-menu delete opens the confirm modal and removes the row on confirm", async () => {
@@ -166,9 +213,11 @@ describe("<FolderTree>", () => {
     const row = screen.getByTestId(`tree-row-folder-${folder.id}`);
     fireEvent.contextMenu(row);
     fireEvent.click(await screen.findByTestId("ctx-delete"));
-    expect(await screen.findByTestId("folder-tree-confirm-delete")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("folder-tree-confirm-delete"),
+    ).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("confirm-delete-ok"));
-    expect(client.getFolder(folder.id)).toBeNull();
+    await waitFor(() => expect(client.getFolder(folder.id)).toBeNull());
   });
 
   it("confirm-delete cancel keeps the folder", async () => {
@@ -177,7 +226,9 @@ describe("<FolderTree>", () => {
     render(<FolderTree client={client} storageAdapter={storageAdapter} />);
     const row = screen.getByTestId(`tree-row-folder-${folder.id}`);
     fireEvent.keyDown(row, { key: "Delete" });
-    expect(await screen.findByTestId("folder-tree-confirm-delete")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("folder-tree-confirm-delete"),
+    ).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("confirm-delete-cancel"));
     expect(client.getFolder(folder.id)?.name).toBe("Keep");
   });
@@ -185,7 +236,11 @@ describe("<FolderTree>", () => {
   it("drag-drop moves a chat into a folder", async () => {
     const client = setupClient();
     const folder = client.createFolder({ parentId: null, name: "Target" });
-    const chat = client.createChat({ folderId: null, title: "draft", modelId: "m" });
+    const chat = client.createChat({
+      folderId: null,
+      title: "draft",
+      modelId: "m",
+    });
     render(<FolderTree client={client} storageAdapter={storageAdapter} />);
     const chatRow = screen.getByTestId(`tree-row-chat-${chat.id}`);
     const folderRow = screen.getByTestId(`tree-row-folder-${folder.id}`);
@@ -214,8 +269,16 @@ describe("<FolderTree>", () => {
   it("drop on a chat row is ignored", () => {
     const client = setupClient();
     const folder = client.createFolder({ parentId: null, name: "F" });
-    const c1 = client.createChat({ folderId: null, title: "one", modelId: "m" });
-    const c2 = client.createChat({ folderId: folder.id, title: "two", modelId: "m" });
+    const c1 = client.createChat({
+      folderId: null,
+      title: "one",
+      modelId: "m",
+    });
+    const c2 = client.createChat({
+      folderId: folder.id,
+      title: "two",
+      modelId: "m",
+    });
     render(<FolderTree client={client} storageAdapter={storageAdapter} />);
     fireEvent.click(screen.getByTestId(`tree-row-folder-${folder.id}`));
     const c1Row = screen.getByTestId(`tree-row-chat-${c1.id}`);
@@ -245,9 +308,13 @@ describe("<FolderTree>", () => {
     row.focus();
     fireEvent.keyDown(row, { key: "ArrowDown" });
     // The second row should now be the focused element.
-    expect(document.activeElement?.getAttribute("data-tree-key")).toBe(`folder:${b.id}`);
+    expect(document.activeElement?.getAttribute("data-tree-key")).toBe(
+      `folder:${b.id}`,
+    );
     fireEvent.keyDown(document.activeElement!, { key: "ArrowUp" });
-    expect(document.activeElement?.getAttribute("data-tree-key")).toBe(`folder:${a.id}`);
+    expect(document.activeElement?.getAttribute("data-tree-key")).toBe(
+      `folder:${a.id}`,
+    );
     // Smoke-check the onSelect surface stayed available.
     fireEvent.click(row);
     expect(captured).toBeTruthy();
@@ -267,14 +334,24 @@ describe("<FolderTree>", () => {
 
   it("Enter on a chat row triggers onOpenChat", () => {
     const client = setupClient();
-    const chat = client.createChat({ folderId: null, title: "draft", modelId: "m" });
+    const chat = client.createChat({
+      folderId: null,
+      title: "draft",
+      modelId: "m",
+    });
     const onOpenChat = vi.fn();
     render(
-      <FolderTree client={client} storageAdapter={storageAdapter} onOpenChat={onOpenChat} />,
+      <FolderTree
+        client={client}
+        storageAdapter={storageAdapter}
+        onOpenChat={onOpenChat}
+      />,
     );
     const row = screen.getByTestId(`tree-row-chat-${chat.id}`);
     fireEvent.keyDown(row, { key: "Enter" });
-    expect(onOpenChat).toHaveBeenCalledWith(expect.objectContaining({ id: chat.id }));
+    expect(onOpenChat).toHaveBeenCalledWith(
+      expect.objectContaining({ id: chat.id }),
+    );
   });
 
   it("Enter on a folder triggers onOpenFolder", () => {
@@ -337,92 +414,280 @@ describe("<FolderTree>", () => {
 
   it("shows rename and delete icons on a chat row without stealing the open click", () => {
     const client = setupClient();
-    const chat = client.createChat({ folderId: null, title: "draft", modelId: "m" });
+    const chat = client.createChat({
+      folderId: null,
+      title: "draft",
+      modelId: "m",
+    });
     const onOpenChat = vi.fn();
     render(
-      <FolderTree client={client} storageAdapter={storageAdapter} onOpenChat={onOpenChat} />,
+      <FolderTree
+        client={client}
+        storageAdapter={storageAdapter}
+        onOpenChat={onOpenChat}
+      />,
     );
     expect(screen.getByTestId(`tree-rename-${chat.id}`)).toBeInTheDocument();
     expect(screen.getByTestId(`tree-delete-${chat.id}`)).toBeInTheDocument();
     fireEvent.click(screen.getByTestId(`tree-row-chat-${chat.id}`));
-    expect(onOpenChat).toHaveBeenCalledWith(expect.objectContaining({ id: chat.id }));
-    expect(screen.queryByTestId(`tree-rename-input-${chat.id}`)).not.toBeInTheDocument();
+    expect(onOpenChat).toHaveBeenCalledWith(
+      expect.objectContaining({ id: chat.id }),
+    );
+    expect(
+      screen.queryByTestId(`tree-rename-input-${chat.id}`),
+    ).not.toBeInTheDocument();
   });
 
   it("rename icon starts inline rename without opening the chat again", () => {
     const client = setupClient();
-    const chat = client.createChat({ folderId: null, title: "draft", modelId: "m" });
+    const chat = client.createChat({
+      folderId: null,
+      title: "draft",
+      modelId: "m",
+    });
     const onOpenChat = vi.fn();
     render(
-      <FolderTree client={client} storageAdapter={storageAdapter} onOpenChat={onOpenChat} />,
+      <FolderTree
+        client={client}
+        storageAdapter={storageAdapter}
+        onOpenChat={onOpenChat}
+      />,
     );
     fireEvent.click(screen.getByTestId(`tree-rename-${chat.id}`));
-    expect(screen.getByTestId(`tree-rename-input-${chat.id}`)).toBeInTheDocument();
+    expect(
+      screen.getByTestId(`tree-rename-input-${chat.id}`),
+    ).toBeInTheDocument();
     expect(onOpenChat).not.toHaveBeenCalled();
   });
 
-  it("delete icon opens the confirm modal and does not delete until confirmed", () => {
+  it("delete icon opens the confirm modal and does not delete until confirmed", async () => {
     const client = setupClient();
-    const chat = client.createChat({ folderId: null, title: "draft", modelId: "m" });
+    const chat = client.createChat({
+      folderId: null,
+      title: "draft",
+      modelId: "m",
+    });
     render(<FolderTree client={client} storageAdapter={storageAdapter} />);
     fireEvent.click(screen.getByTestId(`tree-delete-${chat.id}`));
-    expect(screen.getByTestId("folder-tree-confirm-delete")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("folder-tree-confirm-delete"),
+    ).toBeInTheDocument();
+    expect(document.body).toContainElement(
+      screen.getByTestId("folder-tree-confirm-delete"),
+    );
+    expect(screen.getByTestId("folder-tree-confirm-delete").parentElement).toBe(
+      document.body,
+    );
     expect(client.getChat(chat.id)?.title).toBe("draft");
     fireEvent.click(screen.getByTestId("confirm-delete-ok"));
-    expect(client.getChat(chat.id)).toBeNull();
+    await waitFor(() => expect(client.getChat(chat.id)).toBeNull());
+  });
+
+  it("archives a chat through reversible copy and reports disposition after success", async () => {
+    const client = setupClient();
+    const chat = client.createChat({
+      folderId: null,
+      title: "Keep safely",
+      modelId: "m",
+    });
+    const before = vi.fn();
+    const after = vi.fn();
+    render(
+      <FolderTree
+        client={client}
+        storageAdapter={storageAdapter}
+        onBeforeSessionDisposition={before}
+        onSessionDisposition={after}
+      />,
+    );
+    fireEvent.click(screen.getByTestId(`tree-archive-${chat.id}`));
+    expect(screen.getByTestId("folder-tree-confirm-archive")).toHaveTextContent(
+      /restore it from Settings/i,
+    );
+    fireEvent.click(screen.getByTestId("confirm-archive-ok"));
+    await waitFor(() => expect(client.getChat(chat.id)).toBeNull());
+    expect(before).toHaveBeenCalledWith(chat.id, "archived");
+    expect(after).toHaveBeenCalledWith(chat.id, "archived");
+  });
+
+  it("offers Archive instead and labels permanent deletion as irreversible", () => {
+    const client = setupClient();
+    const chat = client.createChat({
+      folderId: null,
+      title: "Risky",
+      modelId: "m",
+    });
+    render(<FolderTree client={client} storageAdapter={storageAdapter} />);
+    fireEvent.click(screen.getByTestId(`tree-delete-${chat.id}`));
+    const dialog = screen.getByTestId("folder-tree-confirm-delete");
+    expect(dialog).toHaveTextContent(/cannot be undone/i);
+    expect(
+      screen.getByTestId("folder-tree-confirm-delete-question"),
+    ).toHaveTextContent("Delete the selected session?");
+    expect(dialog.textContent).not.toContain("Risky");
+    expect(
+      screen.getByTestId("confirm-delete-archive-instead"),
+    ).toBeInTheDocument();
+  });
+
+  it("ctrl-click selects several chats and bulk-delete uses generic copy", async () => {
+    const client = setupClient();
+    const a = client.createChat({
+      folderId: null,
+      title: "Alpha prompt title here",
+      modelId: "m",
+    });
+    const b = client.createChat({
+      folderId: null,
+      title: "Beta prompt title here",
+      modelId: "m",
+    });
+    render(<FolderTree client={client} storageAdapter={storageAdapter} />);
+    fireEvent.click(screen.getByTestId(`tree-row-chat-${a.id}`));
+    fireEvent.click(screen.getByTestId(`tree-row-chat-${b.id}`), {
+      ctrlKey: true,
+    });
+    expect(screen.getByTestId(`tree-row-chat-${a.id}`)).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByTestId(`tree-row-chat-${b.id}`)).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    fireEvent.keyDown(screen.getByTestId(`tree-row-chat-${b.id}`), {
+      key: "Delete",
+    });
+    const question = await screen.findByTestId(
+      "folder-tree-confirm-delete-question",
+    );
+    expect(question).toHaveTextContent("Delete the selected sessions?");
+    expect(
+      screen.getByTestId("folder-tree-confirm-delete").textContent,
+    ).not.toContain("Alpha prompt");
+    fireEvent.click(screen.getByTestId("confirm-delete-ok"));
+    await waitFor(() => {
+      expect(client.getChat(a.id)).toBeNull();
+      expect(client.getChat(b.id)).toBeNull();
+    });
+  });
+
+  it("Escape clears the multi-selection", () => {
+    const client = setupClient();
+    const a = client.createChat({ folderId: null, title: "A", modelId: "m" });
+    const b = client.createChat({ folderId: null, title: "B", modelId: "m" });
+    render(<FolderTree client={client} storageAdapter={storageAdapter} />);
+    fireEvent.click(screen.getByTestId(`tree-row-chat-${a.id}`));
+    fireEvent.click(screen.getByTestId(`tree-row-chat-${b.id}`), {
+      ctrlKey: true,
+    });
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(screen.getByTestId(`tree-row-chat-${b.id}`)).toHaveAttribute(
+      "aria-selected",
+      "false",
+    );
   });
 
   it("confirm-delete uses a rounded quiet destructive, not a square flash-red fill", () => {
     const client = setupClient();
-    const chat = client.createChat({ folderId: null, title: "draft", modelId: "m" });
+    const chat = client.createChat({
+      folderId: null,
+      title: "draft",
+      modelId: "m",
+    });
     render(<FolderTree client={client} storageAdapter={storageAdapter} />);
     fireEvent.click(screen.getByTestId(`tree-delete-${chat.id}`));
     const dialog = screen.getByTestId("folder-tree-confirm-delete");
     const card = dialog.firstElementChild as HTMLElement;
     const ok = screen.getByTestId("confirm-delete-ok");
-    expect(getComputedStyle(card).borderRadius === "" ? card.style.borderRadius : card.style.borderRadius).not.toBe("0px");
+    expect(
+      getComputedStyle(card).borderRadius === ""
+        ? card.style.borderRadius
+        : card.style.borderRadius,
+    ).not.toBe("0px");
     expect(card.style.borderRadius).toContain("radius");
     expect(ok.style.borderRadius).toContain("radius");
-    expect(ok.style.backgroundColor).not.toMatch(/^(#d33|rgb\(221,\s*51,\s*51\)|white)$/i);
+    expect(ok.style.backgroundColor).not.toMatch(
+      /^(#d33|rgb\(221,\s*51,\s*51\)|white)$/i,
+    );
     expect(ok.style.background).toMatch(/color-mix|status-err/);
     expect(ok.style.color).not.toBe("white");
   });
 
   it("confirm-delete Escape and Cancel keep the chat", () => {
     const client = setupClient();
-    const chat = client.createChat({ folderId: null, title: "keep-me", modelId: "m" });
+    const chat = client.createChat({
+      folderId: null,
+      title: "keep-me",
+      modelId: "m",
+    });
     render(<FolderTree client={client} storageAdapter={storageAdapter} />);
     fireEvent.click(screen.getByTestId(`tree-delete-${chat.id}`));
     fireEvent.keyDown(window, { key: "Escape" });
-    expect(screen.queryByTestId("folder-tree-confirm-delete")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("folder-tree-confirm-delete"),
+    ).not.toBeInTheDocument();
     expect(client.getChat(chat.id)?.title).toBe("keep-me");
     fireEvent.click(screen.getByTestId(`tree-delete-${chat.id}`));
     fireEvent.click(screen.getByTestId("confirm-delete-cancel"));
     expect(client.getChat(chat.id)?.title).toBe("keep-me");
   });
 
-  it("collapsed rail keeps new/folder actions and still confirms delete", () => {
+  it("collapsed rail hides the Sessions label but keeps create actions", () => {
+    render(
+      <FolderTree
+        client={new InMemoryChatExplorerClient()}
+        storageAdapter={storageAdapter}
+        collapsed
+      />,
+    );
+    expect(screen.queryByTestId("folder-tree-title")).toBeNull();
+    expect(screen.getByTestId("folder-tree-header")).toBeInTheDocument();
+    expect(screen.getByTestId("folder-tree-new-chat")).toBeInTheDocument();
+    expect(screen.getByTestId("folder-tree-new-folder")).toBeInTheDocument();
+  });
+
+  it("collapsed rail keeps new/folder actions and still confirms delete", async () => {
     const client = setupClient();
-    const chat = client.createChat({ folderId: null, title: "draft", modelId: "m" });
-    render(<FolderTree client={client} storageAdapter={storageAdapter} collapsed />);
-    expect(screen.getByTestId("folder-tree")).toHaveAttribute("data-collapsed", "true");
+    const chat = client.createChat({
+      folderId: null,
+      title: "draft",
+      modelId: "m",
+    });
+    render(
+      <FolderTree client={client} storageAdapter={storageAdapter} collapsed />,
+    );
+    expect(screen.getByTestId("folder-tree")).toHaveAttribute(
+      "data-collapsed",
+      "true",
+    );
     expect(screen.getByTestId("folder-tree-new-folder")).toBeInTheDocument();
     expect(screen.getByTestId("folder-tree-new-chat")).toBeInTheDocument();
-    expect(screen.getByTestId(`history-rail-mark-${chat.id}`)).toBeInTheDocument();
-    expect(screen.queryByTestId(`tree-delete-${chat.id}`)).not.toBeInTheDocument();
+    expect(
+      screen.getByTestId(`history-rail-mark-${chat.id}`),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByTestId(`tree-delete-${chat.id}`),
+    ).not.toBeInTheDocument();
     const row = screen.getByTestId(`tree-row-chat-${chat.id}`);
     fireEvent.keyDown(row, { key: "Delete" });
-    expect(screen.getByTestId("folder-tree-confirm-delete")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("folder-tree-confirm-delete"),
+    ).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("confirm-delete-cancel"));
     expect(client.getChat(chat.id)).not.toBeNull();
     fireEvent.keyDown(row, { key: "Delete" });
     fireEvent.click(screen.getByTestId("confirm-delete-ok"));
-    expect(client.getChat(chat.id)).toBeNull();
+    await waitFor(() => expect(client.getChat(chat.id)).toBeNull());
   });
 
   it("left-click on the already-selected chat enters rename", () => {
     const client = setupClient();
-    const chat = client.createChat({ folderId: null, title: "draft", modelId: "m" });
+    const chat = client.createChat({
+      folderId: null,
+      title: "draft",
+      modelId: "m",
+    });
     const onOpenChat = vi.fn();
     render(
       <FolderTree
@@ -433,13 +698,19 @@ describe("<FolderTree>", () => {
       />,
     );
     fireEvent.click(screen.getByTestId(`tree-row-chat-${chat.id}`));
-    expect(screen.getByTestId(`tree-rename-input-${chat.id}`)).toBeInTheDocument();
+    expect(
+      screen.getByTestId(`tree-rename-input-${chat.id}`),
+    ).toBeInTheDocument();
     expect(onOpenChat).not.toHaveBeenCalled();
   });
 
   it("keeps the right-click context menu on a chat row", () => {
     const client = setupClient();
-    const chat = client.createChat({ folderId: null, title: "draft", modelId: "m" });
+    const chat = client.createChat({
+      folderId: null,
+      title: "draft",
+      modelId: "m",
+    });
     render(<FolderTree client={client} storageAdapter={storageAdapter} />);
     fireEvent.contextMenu(screen.getByTestId(`tree-row-chat-${chat.id}`));
     const menu = screen.getByTestId("folder-tree-context-menu");
@@ -448,7 +719,12 @@ describe("<FolderTree>", () => {
   });
 });
 
-function makeDt(): { effectAllowed: string; dropEffect: string; setData: (k: string, v: string) => void; getData: (k: string) => string } {
+function makeDt(): {
+  effectAllowed: string;
+  dropEffect: string;
+  setData: (k: string, v: string) => void;
+  getData: (k: string) => string;
+} {
   // jsdom does not implement DataTransfer; we supply a minimal stub that
   // satisfies the FolderTree dnd handlers without crashing.
   const store = new Map<string, string>();
@@ -461,3 +737,199 @@ function makeDt(): { effectAllowed: string; dropEffect: string; setData: (k: str
     getData: (k) => store.get(k) ?? "",
   };
 }
+
+/**
+ * v2.4.4 Phase 2 (T008) -- history chrome and whole-list actions.
+ *
+ * Field screenshot 2 showed three misses at once: the hairline sat closer to
+ * Videos than to Chats, selected chat titles were pushed a further 12px off
+ * the blue selection rail by a dummy chevron spacer, and there was no way to
+ * clear a pillar's history without deleting rows one at a time.
+ */
+describe("history chrome and bulk actions (v2.4.4 Phase 2)", () => {
+  let storage: Map<string, readonly string[]>;
+  const storageAdapter = {
+    read: () => storage.get("expanded") ?? [],
+    write: (ids: readonly string[]) => {
+      storage.set("expanded", ids);
+    },
+  };
+
+  beforeEach(() => {
+    storage = new Map();
+  });
+
+  function seed(count: number): InMemoryChatExplorerClient {
+    const client = new InMemoryChatExplorerClient();
+    for (let i = 0; i < count; i += 1) {
+      client.createChat({
+        folderId: null,
+        title: `Chat ${i + 1}`,
+        modelId: "m",
+      });
+    }
+    return client;
+  }
+
+  it("gives the header no top padding so the hairline gap stays symmetric", () => {
+    render(<FolderTree client={seed(1)} storageAdapter={storageAdapter} />);
+    const header = screen.getByTestId("folder-tree-header");
+    // The sidebar rule owns the whole gap on both of its sides. A second
+    // padding-top here is exactly what made the gap below the rule larger.
+    expect(header.style.paddingTop).toBe("0px");
+    expect(header.style.justifyContent).toBe("space-between");
+    expect(screen.getByTestId("folder-tree-title")).toHaveTextContent(
+      "Sessions",
+    );
+  });
+
+  it("orders the header actions New session, New folder, Archive, Delete, flush right", () => {
+    // v2.4.8 follow-up: the title stays left; the four whole-list actions sit
+    // together on the right in the order a new user reads them.
+    render(<FolderTree client={seed(1)} storageAdapter={storageAdapter} />);
+    const header = screen.getByTestId("folder-tree-header");
+    expect(header.style.justifyContent).toBe("space-between");
+    const order = Array.from(header.querySelectorAll("button")).map((button) =>
+      button.getAttribute("data-testid"),
+    );
+    expect(order).toEqual([
+      "folder-tree-new-chat",
+      "folder-tree-new-folder",
+      "folder-tree-archive-all",
+      "folder-tree-delete-all",
+    ]);
+    expect(header.firstElementChild).toBe(screen.getByTestId("folder-tree-title"));
+  });
+
+  it("still renders Sessions on an empty tree", () => {
+    render(
+      <FolderTree
+        client={new InMemoryChatExplorerClient()}
+        storageAdapter={storageAdapter}
+      />,
+    );
+    expect(screen.getByTestId("folder-tree-empty")).toBeInTheDocument();
+    expect(screen.getByTestId("folder-tree-title")).toHaveTextContent(
+      "Sessions",
+    );
+    // v2.4.8 Phase 3 (T011): the title is set in nav-label type (--fg-1 at
+    // --text-sm), not the muted caption color; the copy is exactly Sessions.
+    expect(screen.getByTestId("folder-tree-title").textContent).toBe("Sessions");
+    expect(screen.getByTestId("folder-tree-title").style.color).toBe(
+      "var(--fg-1)",
+    );
+    expect(screen.getByTestId("folder-tree-title").style.fontSize).toBe(
+      "var(--text-sm)",
+    );
+    expect(screen.getByTestId("folder-tree-header").style.paddingTop).toBe(
+      "0px",
+    );
+    expect(screen.getByTestId("folder-tree-new-chat")).toHaveAttribute(
+      "title",
+      "New session",
+    );
+    expect(screen.queryByText("Chats")).toBeNull();
+  });
+
+  it("puts the chat title first after the rail, with no dummy chevron spacer", () => {
+    const client = seed(1);
+    render(<FolderTree client={client} storageAdapter={storageAdapter} />);
+    const chatId = client.listTree().chats[0]!.id;
+    const row = screen.getByTestId(`tree-row-chat-${chatId}`);
+    // Chat rows have no chevron and are at depth 0, so nothing may sit
+    // between the 4px selection rail and the label.
+    expect(row.querySelectorAll("span").length).toBeGreaterThanOrEqual(1);
+    const first = row.firstElementChild as HTMLElement;
+    expect(first.textContent).toContain("Chat 1");
+    expect(row.style.borderLeft).toContain("4px");
+  });
+
+  it("keeps the folder chevron on folder rows", () => {
+    const client = new InMemoryChatExplorerClient();
+    client.createFolder({ parentId: null, name: "Work" });
+    render(<FolderTree client={client} storageAdapter={storageAdapter} />);
+    const folderId = client.listTree().children[0]!.folder!.id;
+    const row = screen.getByTestId(`tree-row-folder-${folderId}`);
+    expect(row.querySelector("svg")).not.toBeNull();
+  });
+
+  it("archives every chat in the tree behind one confirm", async () => {
+    const client = seed(3);
+    const archive = vi.spyOn(client, "archiveChat");
+    const remove = vi.spyOn(client, "deleteChat");
+    render(<FolderTree client={client} storageAdapter={storageAdapter} />);
+    fireEvent.click(screen.getByTestId("folder-tree-archive-all"));
+    const dialog = screen.getByTestId("folder-tree-confirm-bulk");
+    expect(dialog).toHaveAttribute("data-bulk-kind", "archive");
+    // Portaled to document.body like the per-row confirm, not nested in the row.
+    expect(dialog.parentElement).toBe(document.body);
+    expect(
+      screen.getByTestId("folder-tree-confirm-bulk-question"),
+    ).toHaveTextContent("Archive all 3 sessions?");
+    fireEvent.click(screen.getByTestId("confirm-bulk-ok"));
+    await waitFor(() => expect(client.listTree().chats).toHaveLength(0));
+    expect(archive).toHaveBeenCalledTimes(3);
+    // Archive All must not delete.
+    expect(remove).not.toHaveBeenCalled();
+  });
+
+  it("deletes every chat in the tree behind one confirm", async () => {
+    const client = seed(2);
+    const archive = vi.spyOn(client, "archiveChat");
+    const remove = vi.spyOn(client, "deleteChat");
+    render(<FolderTree client={client} storageAdapter={storageAdapter} />);
+    fireEvent.click(screen.getByTestId("folder-tree-delete-all"));
+    expect(screen.getByTestId("folder-tree-confirm-bulk")).toHaveAttribute(
+      "data-bulk-kind",
+      "delete",
+    );
+    expect(
+      screen.getByTestId("folder-tree-confirm-bulk-question"),
+    ).toHaveTextContent("Delete all 2 sessions?");
+    fireEvent.click(screen.getByTestId("confirm-bulk-ok"));
+    await waitFor(() => expect(client.listTree().chats).toHaveLength(0));
+    expect(remove).toHaveBeenCalledTimes(2);
+    // Delete All must not quietly archive instead.
+    expect(archive).not.toHaveBeenCalled();
+  });
+
+  it("reaches chats inside collapsed folders, not only the visible rows", async () => {
+    const client = new InMemoryChatExplorerClient();
+    const folder = client.createFolder({ parentId: null, name: "Work" });
+    client.createChat({ folderId: folder.id, title: "Nested", modelId: "m" });
+    client.createChat({ folderId: null, title: "Root", modelId: "m" });
+    render(<FolderTree client={client} storageAdapter={storageAdapter} />);
+    // The folder is collapsed, so "Nested" is not a rendered row.
+    expect(screen.queryByText("Nested")).toBeNull();
+    fireEvent.click(screen.getByTestId("folder-tree-delete-all"));
+    expect(
+      screen.getByTestId("folder-tree-confirm-bulk-question"),
+    ).toHaveTextContent("2");
+    fireEvent.click(screen.getByTestId("confirm-bulk-ok"));
+    await waitFor(() => expect(client.listTree().chats).toHaveLength(0));
+    expect(client.listTree().children[0]!.chats).toHaveLength(0);
+  });
+
+  it("cancel leaves the list untouched", async () => {
+    const client = seed(2);
+    render(<FolderTree client={client} storageAdapter={storageAdapter} />);
+    fireEvent.click(screen.getByTestId("folder-tree-delete-all"));
+    fireEvent.click(screen.getByTestId("confirm-bulk-cancel"));
+    await waitFor(() =>
+      expect(screen.queryByTestId("folder-tree-confirm-bulk")).toBeNull(),
+    );
+    expect(client.listTree().chats).toHaveLength(2);
+  });
+
+  it("offers no bulk actions when the list is empty", () => {
+    render(
+      <FolderTree
+        client={new InMemoryChatExplorerClient()}
+        storageAdapter={storageAdapter}
+      />,
+    );
+    // The empty state renders the toolbar; both whole-list actions are inert.
+    expect(screen.getByTestId("folder-tree-delete-all")).toBeDisabled();
+    expect(screen.getByTestId("folder-tree-archive-all")).toBeDisabled();
+  });
+});

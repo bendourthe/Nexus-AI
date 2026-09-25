@@ -1,6 +1,6 @@
 # Low-cost-model optimization (H2)
 
-*v1.12.0 Phase 1 (adoption-ecosystem-2026-07 H2). In-repo guidance the [`HarnessSelector`](../../modules/coding/orchestration/HarnessSelector.ts) references. This is the "skill-native" half of H1: the technique knowledge the scaffold profiles operationalize. Authoring the portable Nexus-Hub `low-cost-model-optimization` skill (or folding it into `model-routing`) is recorded as a demand-gated Hub touchpoint in [../v1/v1.12/known-gaps.md](../v1/v1.12/known-gaps.md) (SO009 precedent: build the runtime in Nexus-AI, keep the reusable method in the Hub).*
+*v1.12.0 Phase 1 (adoption-ecosystem-2026-07 H2). In-repo guidance the [`HarnessSelector`](../../modules/coding/orchestration/HarnessSelector.ts) references. This is the "skill-native" half of H1: the technique knowledge the scaffold profiles operationalize. Authoring the portable Nexus-Hub `low-cost-model-optimization` skill (or folding it into `model-routing`) is recorded as a demand-gated Hub touchpoint in [../v1/v1.12/known-gaps.md](../archive/v1/v1.12/known-gaps.md) (SO009 precedent: build the runtime in Nexus-AI, keep the reusable method in the Hub).*
 
 ## Why this exists
 

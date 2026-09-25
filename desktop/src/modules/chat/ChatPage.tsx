@@ -2,8 +2,8 @@
  * v1.0.0 Phase 4.4 -- Local Chatbot Explorer page.
  *
  * The Chat module's top-level page. Hosts:
- *   - left rail: `<FolderTree>` (drag-drop, context menu, keyboard nav)
- *   - right pane: shared chat shell (`<MessageList>`, `<MediaComposer>`)
+ *   - sidebar-hosted `<FolderTree>` (drag-drop, context menu, keyboard nav)
+ *   - main pane: shared chat shell (`<MessageList>`, `<MediaComposer>`)
  *   - compact model switcher under the composer (installed-and-ready LLMs + Get more models)
  *   - tools always on (confirmation and sandbox still gate execution)
  *
@@ -15,27 +15,40 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FolderTree, type SelectedNode } from "./FolderTree";
 import {
-  CollapsibleHistoryAside,
-  usePersistentCollapsed,
-} from "../../shared/explorer/CollapsibleHistoryAside";
-import { CHAT_HISTORY_COLLAPSE_KEY } from "../../shared/explorer/historyPaneLayout";
+  addPersona,
+  findPersona,
+  loadPersonas,
+  savePersonas,
+  validatePersona,
+  type Persona,
+} from "../../shared/persona/personaLibrary";
+import { useDismissOnOutside } from "../../shared/ui/useDismissOnOutside";
+import {
+  FolderTree,
+  CHAT_FOLDER_TREE_COPY,
+  type SelectedNode,
+} from "./FolderTree";
+import {
+  SidebarHistorySlot,
+  SIDEBAR_COMPACT_STORAGE_KEY,
+  useSidebarCompact,
+} from "../../components/SidebarHistoryHost";
 import { InMemoryChatExplorerClient } from "./chatExplorerClient";
 import {
   createIpcChatExplorerAdapter,
   tauriAvailable,
 } from "./ipcChatExplorerClient";
-import type {
-  AsyncChatExplorerClient,
-} from "./chatExplorerClient";
+import type { AsyncChatExplorerClient } from "./chatExplorerClient";
 import {
   createChatIpcClient,
+  joinChatReasoning,
   joinChatReply,
   usageFromChatEvents,
   type ChatSessionClient,
 } from "./chatIpcClient";
 import { formatChatTurnError } from "../../lib/inferenceRpcError";
+import { estimateModelLoadSeconds } from "../../shared/chat/generationProgress";
 import type { Chat, ChatMessageRecord } from "./types";
 import {
   ComposerContextRow,
@@ -43,6 +56,7 @@ import {
   MessageList,
   composerSessionUsage,
   isoTimestampFromMillis,
+  useStickToBottom,
   withLiveTimestamp,
   type ChatMessage,
 } from "../../shared/chat";
@@ -59,24 +73,30 @@ import {
   resolveVisualTokenBudget,
 } from "../../../../core/chat/vision";
 import { estimateTokens } from "../../../../core/chat/sessionContextUsage";
-import { enforceVisualBudget, capVideoFrames } from "../../../../core/chat/visualBudget";
+import {
+  enforceVisualBudget,
+  capVideoFrames,
+} from "../../../../core/chat/visualBudget";
 import { recordMultimodalTurn } from "../../../../core/memory/multimodalSurrogate";
 import type { EpisodicMemory } from "../../../../core/memory/MemoryHub";
 import { redactSecrets } from "../../../../core/observability/redactSecrets";
-import { PreviewPane, type PreviewArtifact } from "../../components/PreviewPane";
+import { estimatedMessageUsage } from "../../../../core/chat/tokenUsage";
 import { foldModelId } from "../../../../core/registry/modelAliases";
 import { DEFAULT_MODEL_ID, FRONTEND_MODELS } from "../coding/models";
+import { createIpcDocumentClient, type DocumentClient } from "./documentClient";
+import { createIpcAudioClient, type AudioClient } from "./audioClient";
 import {
-  createIpcDocumentClient,
-  type DocumentClient,
-} from "./documentClient";
+  createBrowserMicRecorder,
+  type MicRecorder,
+} from "../../shared/chat/micRecorder";
 import {
-  createIpcAudioClient,
-  type AudioClient,
-} from "./audioClient";
-import { createBrowserMicRecorder, type MicRecorder } from "../../shared/chat/micRecorder";
-import { fallbackTitle } from "../../../sidecar/src/chat/titleGenerator";
-import { labelSttTranscript, STT_TRANSCRIPT_ORIGIN } from "./transcriptProvenance";
+  fallbackTitle,
+  DEFAULT_SESSION_TITLE,
+} from "../../../sidecar/src/chat/titleGenerator";
+import {
+  labelSttTranscript,
+  STT_TRANSCRIPT_ORIGIN,
+} from "./transcriptProvenance";
 import {
   INITIAL_VOICE_LOOP,
   reduceVoiceLoop,
@@ -89,15 +109,31 @@ import { SETTINGS_MODELS_PATH } from "../../shared/models/installedFeed";
 import {
   installedForTask,
   ownedIdSet,
-  readFavorite,
+  recommendOrderForTask,
   resolveDefaultId,
+  snapshotForOwnedIds,
+  writeFavorite,
   type SelectionSnapshot,
 } from "../../shared/models/selectionPolicy";
 import { createIpcModelsClient } from "../../pages/settings/ipcModelsClient";
 import type { ListedModelDto } from "../../pages/settings/modelsTypes";
 import { SidecarDownBanner } from "../../components/SidecarDownBanner";
-import { useSidecarStatus, type UseSidecarStatusOptions } from "../../lib/sidecarStatus";
+import {
+  useSidecarStatus,
+  type UseSidecarStatusOptions,
+} from "../../lib/sidecarStatus";
 import { useModelResidency } from "../../shared/models/useModelResidency";
+import * as chatTurns from "./chatTurns";
+import { ConfirmDialog } from "../../shared/ui/ConfirmDialog";
+import { gpuSwitchBody, gpuSwitchTitle } from "../../shared/models/gpuBusy";
+import {
+  askBeforeModelSwitch,
+  setAskBeforeModelSwitch,
+} from "../../shared/models/modelSwitchPreference";
+import {
+  useModelLoadWatch,
+  warmModel,
+} from "../../shared/models/modelLoadWatch";
 import { ModelSwitchDialog } from "../../shared/models/ModelSwitchDialog";
 import {
   busyContextFromScheduler,
@@ -117,8 +153,8 @@ const FALLBACK_LLMS: readonly ListedModelDto[] = FRONTEND_MODELS.map((m) => ({
   modalities: ["text"] as const,
 }));
 
-/** v2.2.5 Phase 4 / v2.2.8 Phase 2 -- chats aside collapse, namespaced away from the main rail. */
-export const CHATS_PANE_STORAGE_KEY = CHAT_HISTORY_COLLAPSE_KEY;
+/** @deprecated v2.4.2: chat collapse is the sidebar compact toggle. */
+export const CHATS_PANE_STORAGE_KEY = SIDEBAR_COMPACT_STORAGE_KEY;
 
 export interface ChatPageProps {
   /** Optional client override (tests inject an InMemoryChatExplorerClient). */
@@ -147,7 +183,9 @@ export interface ChatPageProps {
    * a stub; production can wire ffmpeg. Missing sampler skips the video
    * with a notice rather than sending container bytes to the model.
    */
-  sampleVideoFrames?: (dataUrl: string) => Promise<{ frames: string[]; notice?: string }>;
+  sampleVideoFrames?: (
+    dataUrl: string,
+  ) => Promise<{ frames: string[]; notice?: string }>;
   /**
    * v2.1.0 Phase 4 -- optional episodic hub so non-text turns are indexed by
    * a redacted caption surrogate. Tests inject InMemoryMemoryHub.
@@ -166,6 +204,8 @@ export interface ChatPageProps {
   sidecarStatus?: UseSidecarStatusOptions;
   /** v2.2.3 Phase 5 -- submit-time GPU occupancy inputs. */
   hostVramFreeGB?: number | null;
+  /** Host VRAM total so the picker uses installer recommend order. */
+  hostVramGB?: number | null;
   activeSchedulerJob?: SchedulerActiveJob | null;
   residencyMemory?: ResidencySessionMemory;
 }
@@ -184,6 +224,7 @@ export function ChatPage({
   memoryHub,
   sidecarStatus: sidecarStatusOptions,
   hostVramFreeGB = null,
+  hostVramGB = null,
   activeSchedulerJob = null,
   residencyMemory,
 }: ChatPageProps = {}): JSX.Element {
@@ -214,26 +255,23 @@ export function ChatPage({
   const hydrationVersionRef = useRef<Map<string, number>>(new Map());
 
   const [selected, setSelected] = useState<SelectedNode | null>(null);
-  const { collapsed: chatsCollapsed, toggle: toggleChatsPane } = usePersistentCollapsed(
-    CHATS_PANE_STORAGE_KEY,
-  );
+  const chatsCollapsed = useSidebarCompact();
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   // Bumped when something outside the rail renames a chat (auto-titling).
   const [treeVersion, setTreeVersion] = useState(0);
   const [modelId, setModelId] = useState<string>(defaultModelId);
-  const [messagesByChat, setMessagesByChat] = useState<Map<string, ChatMessage[]>>(
-    () => new Map(),
-  );
+  const [messagesByChat, setMessagesByChat] = useState<
+    Map<string, ChatMessage[]>
+  >(() => new Map());
   const [transcriptError, setTranscriptError] = useState<string | null>(null);
   const residency = useModelResidency({ rememberedPairs: residencyMemory });
-  const pendingPromptRef = useRef<{ text: string; attachments: readonly string[] }>({
+  const pendingPromptRef = useRef<{
+    text: string;
+    attachments: readonly string[];
+  }>({
     text: "",
     attachments: [],
   });
-  // v1.5.0 Phase 5 (item 24): the artifact currently shown in the side-by-side
-  // preview pane, or null when the pane is closed.
-  const [preview, setPreview] = useState<PreviewArtifact | null>(null);
-
   // v1.16.0 Phase 3 (adoption item A5) -- document-parse state.
   const [documentClient] = useState<DocumentClient>(
     () => documentClientOverride ?? createIpcDocumentClient(),
@@ -241,18 +279,129 @@ export function ChatPage({
   const [audioClient] = useState<AudioClient>(
     () => audioClientOverride ?? createIpcAudioClient(),
   );
-  const [personaByChat, setPersonaByChat] = useState<Record<string, string>>({});
+  const [personaByChat, setPersonaByChat] = useState<Record<string, string>>(
+    {},
+  );
+  // v2.4.8 follow-up: the persona can be written before the first message
+  // creates the chat; the draft moves onto the chat when it is created. The
+  // ref mirrors state so a turn sent in the same tick sees the persona.
+  const personaByChatRef = useRef<Record<string, string>>({});
+  const [draftPersona, setDraftPersona] = useState("");
+  const setChatPersona = useCallback(
+    (chatId: string, value: string) => {
+      personaByChatRef.current = { ...personaByChatRef.current, [chatId]: value };
+      setPersonaByChat((prev) => ({ ...prev, [chatId]: value }));
+      void client
+        .setPersona?.(chatId, value.trim() ? value : null)
+        .catch(() => undefined);
+    },
+    [client],
+  );
+  const adoptDraftPersona = useCallback(
+    (chatId: string) => {
+      const draft = draftPersona.trim();
+      if (!draft) return;
+      setChatPersona(chatId, draftPersona);
+      setDraftPersona("");
+    },
+    [draftPersona, setChatPersona],
+  );
+  /*
+   * v2.4.9 -- the saved-persona library.
+   *
+   * The per-chat persona stays a free-text field (a one-off instruction is a
+   * normal thing to want). What is new is a NAMED library on top: pick one
+   * from the dropdown to apply its text, or name the text you just wrote and
+   * keep it. The chosen name is tracked per chat so the transcript can show
+   * which persona is active -- an anonymous blob of text gave the user no way
+   * to tell at a glance.
+   */
+  const [savedPersonas, setSavedPersonas] = useState<readonly Persona[]>([]);
+  const [personaIdByChat, setPersonaIdByChat] = useState<Record<string, string>>({});
+  const [personaSaveName, setPersonaSaveName] = useState("");
+  const [personaSaveError, setPersonaSaveError] = useState<string | null>(null);
+  useEffect(() => setSavedPersonas(loadPersonas()), []);
+
+  const personaScopeKey = activeChat?.id ?? "__draft__";
+  const activePersonaId = personaIdByChat[personaScopeKey] ?? null;
+  const activePersonaName = useMemo(
+    () => findPersona(savedPersonas, activePersonaId)?.name ?? null,
+    [activePersonaId, savedPersonas],
+  );
+
+  const applySavedPersona = useCallback(
+    (id: string | null): void => {
+      setPersonaSaveError(null);
+      setPersonaIdByChat((prev) => {
+        const next = { ...prev };
+        if (id) next[personaScopeKey] = id;
+        else delete next[personaScopeKey];
+        return next;
+      });
+      const persona = findPersona(savedPersonas, id);
+      if (!persona) return;
+      if (activeChat) setChatPersona(activeChat.id, persona.body);
+      else setDraftPersona(persona.body);
+    },
+    [activeChat, personaScopeKey, savedPersonas, setChatPersona],
+  );
+
+  const saveCurrentPersona = useCallback((): void => {
+    const body = activeChat ? (personaByChatRef.current[activeChat.id] ?? "") : draftPersona;
+    const check = validatePersona({ name: personaSaveName, body }, savedPersonas);
+    if (!check.ok) {
+      setPersonaSaveError(check.error);
+      return;
+    }
+    const next = addPersona(savedPersonas, { name: personaSaveName, body });
+    setSavedPersonas(next);
+    savePersonas(next);
+    const created = next[next.length - 1];
+    if (created) {
+      setPersonaIdByChat((prev) => ({ ...prev, [personaScopeKey]: created.id }));
+    }
+    setPersonaSaveName("");
+    setPersonaSaveError(null);
+  }, [activeChat, draftPersona, personaSaveName, personaScopeKey, savedPersonas]);
+
   // v2.2.7 Phase 3: persona is a text control under the composer, not a header gear.
   const [personaOpen, setPersonaOpen] = useState(false);
-  const [voiceLoop, setVoiceLoop] = useState<VoiceLoopState>(INITIAL_VOICE_LOOP);
+  // v2.4.8 Phase 2 (T007): the popover closes on an outside pointer or Escape.
+  const personaPopoverRef = useRef<HTMLDivElement>(null);
+  // v2.4.8 follow-up: the toggle is part of the dismiss surface so a click on
+  // it toggles instead of closing-then-reopening.
+  const personaToggleRef = useRef<HTMLButtonElement>(null);
+  const personaSurface = useMemo(
+    () => [personaPopoverRef, personaToggleRef],
+    [],
+  );
+  const closePersona = useCallback(() => setPersonaOpen(false), []);
+  useDismissOnOutside(personaSurface, personaOpen, closePersona);
+  const [voiceLoop, setVoiceLoop] =
+    useState<VoiceLoopState>(INITIAL_VOICE_LOOP);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const ttsAbortRef = useRef<AbortController | null>(null);
+  // v2.4.8 follow-up: a chat may switch model mid-conversation. The override
+  // wins over the chat's stored model for this app session; the sidecar
+  // session restarts with the replayed history so no context is lost.
+  const [modelOverrideByChat, setModelOverrideByChat] = useState<
+    Record<string, string>
+  >({});
+  const [pendingModelSwitch, setPendingModelSwitch] = useState<string | null>(
+    null,
+  );
+  const [warmingModelId, setWarmingModelId] = useState<string | null>(null);
+  const [askDialog, setAskDialog] = useState(() => askBeforeModelSwitch());
   const voiceMicRef = useRef<MicRecorder | null>(voiceMicRecorder ?? null);
-  const [documentModelInstalled, setDocumentModelInstalled] = useState<boolean | null>(null);
+  const [documentModelInstalled, setDocumentModelInstalled] = useState<
+    boolean | null
+  >(null);
   // v1.16.0 Phase 5 (A4) -- compact switcher feed. Falls back to the catalog
   // projection when `models.list` is unavailable (tests, sidecar down).
-  const [listedModels, setListedModels] = useState<readonly ListedModelDto[]>(FALLBACK_LLMS);
+  const [listedModels, setListedModels] =
+    useState<readonly ListedModelDto[]>(FALLBACK_LLMS);
   const [selection, setSelection] = useState<SelectionSnapshot | null>(null);
+  const userChangedModelRef = useRef(false);
 
   useEffect(() => {
     let active = true;
@@ -280,16 +429,20 @@ export function ChatPage({
           setSelection(snap);
           const ready = installedForTask(all, "chat", snap);
           const next = resolveDefaultId(ready, {
-            favorite: readFavorite("chat"),
             recommended: snap?.recommendedByTask.chat ?? null,
           });
-          if (next) {
-            setModelId((current) => (ready.some((m) => m.id === current) ? current : next));
+          if (next && !userChangedModelRef.current) {
+            setModelId(next);
           }
         }
       },
       () => {
-        // Keep the catalog fallback; the switcher still has something to show.
+        if (cancelled) return;
+        setSelection(
+          snapshotForOwnedIds(
+            FALLBACK_LLMS.filter((m) => m.installed).map((m) => m.id),
+          ),
+        );
       },
     );
     return () => {
@@ -297,26 +450,107 @@ export function ChatPage({
     };
   }, [modelsClientOverride]);
 
+  // v2.4.8 follow-up: the model this session actually talks to.
+  const effectiveModelId =
+    (activeChat ? modelOverrideByChat[activeChat.id] : undefined) ??
+    activeChat?.modelId ??
+    modelId;
+  const effectiveModel = useMemo(
+    () => listedModels.find((m) => m.id === effectiveModelId),
+    [listedModels, effectiveModelId],
+  );
+  const storedRows = activeChat ? messagesByChat.get(activeChat.id) : undefined;
+  const hasPendingReply = Boolean(
+    storedRows?.some(
+      (m) => m.pending && m.role === "assistant" && m.activity === "chat-streaming",
+    ),
+  );
+  const warmBubbleId = activeChat ? `${activeChat.id}-model-warm` : null;
+  // Watch the model load while a reply is pending or a switch is warming up.
+  const modelLoad = useModelLoadWatch({
+    active: hasPendingReply || warmingModelId !== null,
+    modelId: warmingModelId ?? effectiveModelId,
+    modelVramGB: effectiveModel?.vramGB ?? null,
+  });
+  const loadingProgress = useMemo<ChatMessage["progress"]>(
+    () =>
+      modelLoad.loading
+        ? {
+            step: 0,
+            total: 0,
+            stage: "loading",
+            ...(modelLoad.pct !== null
+              ? { loadedBytes: modelLoad.pct, totalBytes: 100 }
+              : {}),
+          }
+        : undefined,
+    [modelLoad.loading, modelLoad.pct],
+  );
+  // v2.4.8 follow-up (2026-09-08): Ollama publishes no load estimate, so the
+  // chat load had a clock and no idea how long it would run. The model's own
+  // VRAM footprint gives an up-front figure, and the percent the watch reports
+  // gives a measured one within a tick or two.
+  const loadEstimateSeconds = useMemo(
+    () => estimateModelLoadSeconds(effectiveModel?.vramGB ?? null),
+    [effectiveModel?.vramGB],
+  );
+
   const messages = useMemo(() => {
     if (!activeChat) return [];
-    const rows = messagesByChat.get(activeChat.id) ?? [];
-    if (!voiceLoop.captureVisible) return rows;
-    return [
-      ...rows,
-      {
+    const stored = messagesByChat.get(activeChat.id) ?? [];
+    // A pending chat reply shows "Loading model" for as long as Ollama has not
+    // loaded the model; the caption returns to the studio rotator after.
+    const rows = loadingProgress
+      ? stored.map((m) =>
+          m.pending && m.role === "assistant" && m.activity === "chat-streaming"
+            ? { ...m, progress: loadingProgress, loadEstimateSeconds }
+            : m,
+        )
+      : stored;
+    const extras: ChatMessage[] = [];
+    if (warmingModelId !== null && warmBubbleId) {
+      // Transient, never persisted: the model switch loading the new model.
+      extras.push({
+        id: warmBubbleId,
+        role: "assistant",
+        content: "",
+        pending: true,
+        activity: "chat-streaming",
+        progress: loadingProgress ?? { step: 0, total: 0, stage: "loading" },
+        loadEstimateSeconds,
+      });
+    }
+    if (voiceLoop.captureVisible) {
+      extras.push({
         id: `${activeChat.id}-asr-capture`,
         role: "assistant" as const,
         content: "",
         pending: true,
         activity: "asr-capture" as const,
-      },
-    ];
-  }, [activeChat, messagesByChat, voiceLoop.captureVisible]);
+      });
+    }
+    return extras.length > 0 ? [...rows, ...extras] : rows;
+  }, [
+    activeChat,
+    messagesByChat,
+    voiceLoop.captureVisible,
+    loadingProgress,
+    loadEstimateSeconds,
+    warmingModelId,
+    warmBubbleId,
+  ]);
 
-  const selectedListedModel = useMemo(() => {
-    const id = activeChat?.modelId ?? modelId;
-    return listedModels.find((m) => m.id === id);
-  }, [activeChat, listedModels, modelId]);
+  const lastMessage = messages[messages.length - 1];
+  const { scrollRef, onScroll, stickNow } = useStickToBottom(
+    `${messages.length}:${lastMessage?.id ?? ""}:${lastMessage?.content?.length ?? 0}:${lastMessage?.pending ? 1 : 0}`,
+  );
+
+  const selectedListedModel = effectiveModel;
+  const modelDisplayName = useCallback(
+    (id: string): string =>
+      listedModels.find((candidate) => candidate.id === id)?.displayName ?? id,
+    [listedModels],
+  );
 
   const pickerModel = useMemo(
     () => listedModels.find((m) => m.id === modelId),
@@ -330,16 +564,19 @@ export function ChatPage({
   const imageGate = imageAttachmentAffordance(selectedListedModel);
   const audioHint = audioAttachmentCopy(selectedListedModel);
 
-  const dispatchVoice = useCallback((event: Parameters<typeof reduceVoiceLoop>[1]) => {
-    setVoiceLoop((prev) => {
-      const next = reduceVoiceLoop(prev, event);
-      if (shouldStopTts(prev, next)) {
-        ttsAbortRef.current?.abort();
-        ttsAbortRef.current = null;
-      }
-      return next;
-    });
-  }, []);
+  const dispatchVoice = useCallback(
+    (event: Parameters<typeof reduceVoiceLoop>[1]) => {
+      setVoiceLoop((prev) => {
+        const next = reduceVoiceLoop(prev, event);
+        if (shouldStopTts(prev, next)) {
+          ttsAbortRef.current?.abort();
+          ttsAbortRef.current = null;
+        }
+        return next;
+      });
+    },
+    [],
+  );
 
   const playReply = useCallback(
     async (text: string) => {
@@ -384,53 +621,54 @@ export function ChatPage({
     setSelected(node);
   }, []);
 
-  const handleOpenChat = useCallback((chat: Chat) => {
-    setActiveChat(chat);
-    setSelected({ kind: "chat", id: chat.id });
-    setPreview(null);
-    if (!client.listMessages) return;
-
-    const version = (hydrationVersionRef.current.get(chat.id) ?? 0) + 1;
-    hydrationVersionRef.current.set(chat.id, version);
-    const hydration = Promise.resolve(client.listMessages(chat.id, 500)).then(
-      (records) => {
-        if (hydrationVersionRef.current.get(chat.id) !== version) return;
-        const hydrated = records.map(chatMessageFromRecord);
-        const next = new Map(messagesByChatRef.current);
-        next.set(chat.id, hydrated);
-        messagesByChatRef.current = next;
-        setMessagesByChat(next);
-        setTranscriptError(null);
-      },
-      (err: unknown) => {
-        setTranscriptError(
-          `Chat history could not be loaded: ${err instanceof Error ? err.message : String(err)}`,
-        );
-      },
-    );
-    hydrationPromisesRef.current.set(chat.id, hydration);
-    void hydration.finally(() => {
-      if (hydrationPromisesRef.current.get(chat.id) === hydration) {
-        hydrationPromisesRef.current.delete(chat.id);
+  const handleOpenChat = useCallback(
+    (chat: Chat) => {
+      setActiveChat(chat);
+      setSelected({ kind: "chat", id: chat.id });
+      // v2.4.8 follow-up: the picker shows the model this session talks to,
+      // so a switch is always relative to what is really loaded.
+      const sessionModel = modelOverrideByChat[chat.id] ?? chat.modelId;
+      if (listedModels.some((m) => m.id === sessionModel && m.installed)) {
+        setModelId(sessionModel);
       }
-    });
-  }, [client]);
+      if (!client.listMessages) return;
 
-  // v1.5.0 Phase 5 (item 24): open a message's output in the side-by-side
-  // preview pane. HTML artifacts (interactive forms / tool HTML) render through
-  // the shared `InteractiveArtifact`; everything else renders as text.
-  const handleSelectMessage = useCallback((message: ChatMessage) => {
-    const isHtmlArtifact = message.content.includes("data-nexus-artifact");
-    setPreview(
-      isHtmlArtifact
-        ? { kind: "html", title: "Artifact", html: message.content }
-        : {
-            kind: "text",
-            title: message.role === "assistant" ? "Assistant output" : "Message",
-            text: message.content,
-          },
-    );
-  }, []);
+      const version = (hydrationVersionRef.current.get(chat.id) ?? 0) + 1;
+      hydrationVersionRef.current.set(chat.id, version);
+      const hydration = Promise.resolve(client.listMessages(chat.id, 500)).then(
+        (records) => {
+          if (hydrationVersionRef.current.get(chat.id) !== version) return;
+          const hydrated = records.map(chatMessageFromRecord);
+          // v2.4.8 follow-up: a reply still being written for this chat keeps
+          // its pending bubble across a session switch or a tab change.
+          const inFlight = chatTurns.inFlightTurn(chat.id);
+          if (
+            inFlight &&
+            !hydrated.some((m) => m.id === inFlight.assistantId)
+          ) {
+            hydrated.push(withLiveTimestamp(inFlight.pending));
+          }
+          const next = new Map(messagesByChatRef.current);
+          next.set(chat.id, hydrated);
+          messagesByChatRef.current = next;
+          setMessagesByChat(next);
+          setTranscriptError(null);
+        },
+        (err: unknown) => {
+          setTranscriptError(
+            `Chat history could not be loaded: ${err instanceof Error ? err.message : String(err)}`,
+          );
+        },
+      );
+      hydrationPromisesRef.current.set(chat.id, hydration);
+      void hydration.finally(() => {
+        if (hydrationPromisesRef.current.get(chat.id) === hydration) {
+          hydrationPromisesRef.current.delete(chat.id);
+        }
+      });
+    },
+    [client, listedModels, modelOverrideByChat],
+  );
 
   const persistMessage = useCallback(
     async (chatId: string, message: ChatMessage): Promise<void> => {
@@ -441,13 +679,28 @@ export function ChatPage({
             chatId,
             role: message.role === "user" ? "user" : "assistant",
             content: message.content,
-            ...(message.attachments ? { attachments: message.attachments } : {}),
-            ...(message.inputTokens !== undefined ? { inputTokens: message.inputTokens } : {}),
+            ...(message.attachments
+              ? { attachments: message.attachments }
+              : {}),
+            ...(message.inputTokens !== undefined
+              ? { inputTokens: message.inputTokens }
+              : {}),
             ...(message.reasoningTokens !== undefined
               ? { reasoningTokens: message.reasoningTokens }
               : {}),
-            ...(message.outputTokens !== undefined ? { outputTokens: message.outputTokens } : {}),
+            ...(message.reasoningText !== undefined
+              ? { reasoningText: message.reasoningText }
+              : {}),
+            ...(message.outputTokens !== undefined
+              ? { outputTokens: message.outputTokens }
+              : {}),
             ...(message.tokensEstimated ? { tokensEstimated: true } : {}),
+            ...(message.requestUsage
+              ? { requestUsage: message.requestUsage }
+              : {}),
+            ...(message.messageUsage
+              ? { messageUsage: message.messageUsage }
+              : {}),
           }),
         );
         setTranscriptError(null);
@@ -479,13 +732,56 @@ export function ChatPage({
       const next = new Map(messagesByChatRef.current);
       next.set(
         chatId,
-        (next.get(chatId) ?? []).map((m) => (m.id === messageId ? { ...m, ...patch } : m)),
+        (next.get(chatId) ?? []).map((m) =>
+          m.id === messageId ? { ...m, ...patch } : m,
+        ),
       );
       messagesByChatRef.current = next;
       setMessagesByChat(next);
     },
     [],
   );
+
+  // v2.4.8 follow-up: replies finish into whichever ChatPage is mounted. The
+  // instance that started the turn may be gone (tab change) or showing another
+  // session; this listener patches the bubble when the reply lands.
+  useEffect(
+    () =>
+      chatTurns.subscribeCompletedTurns(({ chatId, assistantId, message }) => {
+        const rows = messagesByChatRef.current.get(chatId);
+        if (!rows) return;
+        if (rows.some((m) => m.id === assistantId)) {
+          patchMessage(chatId, assistantId, { ...message, pending: false });
+          return;
+        }
+        // Persisted by the originating turn; only the view needs the row.
+        const next = new Map(messagesByChatRef.current);
+        next.set(chatId, [...rows, withLiveTimestamp(message)]);
+        messagesByChatRef.current = next;
+        setMessagesByChat(next);
+      }),
+    [patchMessage],
+  );
+
+  const handleStopTurn = useCallback((): void => {
+    const chatId = activeChat?.id;
+    if (!chatId) return;
+    chatTurns.cancelTurn(chatId);
+    const pending = [...(messagesByChatRef.current.get(chatId) ?? [])]
+      .reverse()
+      .find((m) => m.pending && m.role === "assistant");
+    if (!pending) return;
+    const stopped = {
+      pending: false,
+      content: pending.content.trim().length > 0 ? pending.content : "Stopped.",
+      messageUsage: estimatedMessageUsage(
+        "assistant",
+        pending.content.trim().length > 0 ? pending.content : "Stopped.",
+      ),
+    };
+    patchMessage(chatId, pending.id, stopped);
+    void persistMessage(chatId, { ...pending, ...stopped });
+  }, [activeChat, patchMessage, persistMessage]);
 
   const sendChatTurn = useCallback(
     async (
@@ -495,28 +791,42 @@ export function ChatPage({
       images: readonly string[] = [],
     ): Promise<string> => {
       const assistantId = `${baseId}-assistant`;
-      appendMessage(chatId, {
+      const pendingBubble: ChatMessage = {
         id: assistantId,
         role: "assistant",
         content: "",
         pending: true,
         activity: "chat-streaming",
-      });
+      };
+      const turn = chatTurns.beginTurn(chatId, pendingBubble);
+      appendMessage(chatId, pendingBubble);
       let content: string;
-      let usage = { inputTokens: null as number | null, reasoningTokens: null as number | null, outputTokens: null as number | null };
+      let usage = {
+        inputTokens: null as number | null,
+        reasoningTokens: null as number | null,
+        outputTokens: null as number | null,
+      };
+      let reasoningText: string | null = null;
       try {
         const chat = activeChat;
         let sessionId = sessionIdsRef.current.get(chatId);
         if (!sessionId) {
           const started = await chatSession.start({
-            modelId: foldModelId(chat?.modelId ?? modelId),
+            modelId: foldModelId(
+              modelOverrideByChat[chatId] ?? chat?.modelId ?? modelId,
+            ),
             title: chat?.title,
-            history: replayHistory(messagesByChatRef.current.get(chatId) ?? [], `${baseId}-user`),
+            history: replayHistory(
+              messagesByChatRef.current.get(chatId) ?? [],
+              `${baseId}-user`,
+            ),
           });
           sessionId = started.sessionId;
           sessionIdsRef.current.set(chatId, sessionId);
         }
-        const persona = personaByChat[chatId]?.trim();
+        const persona = (
+          personaByChatRef.current[chatId] ?? personaByChat[chatId]
+        )?.trim();
         const outbound =
           persona && persona.length > 0
             ? `[Persona]\n${persona}\n\n${message.trim().length > 0 ? message : images.length > 0 ? "(image)" : message}`
@@ -530,33 +840,93 @@ export function ChatPage({
           reply = await chatSession.sendMessage({
             sessionId,
             message: outbound,
-            ...(images.length > 0 ? { images: images.map(stripDataUrlPrefix) } : {}),
+            ...(images.length > 0
+              ? { images: images.map(stripDataUrlPrefix) }
+              : {}),
           });
         } catch (err) {
           if (!isUnknownChatSessionError(err)) throw err;
           sessionIdsRef.current.delete(chatId);
           const restarted = await chatSession.start({
-            modelId: foldModelId(chat?.modelId ?? modelId),
+            modelId: foldModelId(
+              modelOverrideByChat[chatId] ?? chat?.modelId ?? modelId,
+            ),
             title: chat?.title,
-            history: replayHistory(messagesByChatRef.current.get(chatId) ?? [], `${baseId}-user`),
+            history: replayHistory(
+              messagesByChatRef.current.get(chatId) ?? [],
+              `${baseId}-user`,
+            ),
           });
           sessionIdsRef.current.set(chatId, restarted.sessionId);
           reply = await chatSession.sendMessage({
             sessionId: restarted.sessionId,
             message: outbound,
-            ...(images.length > 0 ? { images: images.map(stripDataUrlPrefix) } : {}),
+            ...(images.length > 0
+              ? { images: images.map(stripDataUrlPrefix) }
+              : {}),
           });
         }
         content = joinChatReply(reply.events) || "(no reply)";
+        reasoningText = joinChatReasoning(reply.events) || null;
         usage = usageFromChatEvents(reply.events);
       } catch (err) {
         content = formatChatTurnError(err);
       }
-      patchMessage(chatId, assistantId, { content, pending: false, ...usage });
-      void persistMessage(chatId, { id: assistantId, role: "assistant", content, ...usage });
+      if (!chatTurns.isCurrentTurn(chatId, turn)) return "";
+      const requestUsage = {
+        version: 1 as const,
+        ...usage,
+        provenance: { accuracy: "exact" as const, source: "provider" as const },
+        raw: {
+          inputTokens: usage.inputTokens,
+          reasoningTokens: usage.reasoningTokens,
+          outputTokens: usage.outputTokens,
+        },
+      };
+      const estimated = estimatedMessageUsage(
+        "assistant",
+        content,
+        reasoningText,
+      );
+      const messageUsage = {
+        version: 1 as const,
+        inputTokens: null as number | null,
+        reasoningTokens: usage.reasoningTokens ?? estimated.reasoningTokens,
+        outputTokens: usage.outputTokens ?? estimated.outputTokens,
+        provenance:
+          usage.outputTokens !== null
+            ? { accuracy: "exact" as const, source: "provider" as const }
+            : estimated.provenance,
+      };
+      patchMessage(chatId, assistantId, {
+        content,
+        pending: false,
+        reasoningText,
+        requestUsage,
+        messageUsage,
+      });
+      const finished: ChatMessage = {
+        id: assistantId,
+        role: "assistant",
+        content,
+        reasoningText,
+        requestUsage,
+        messageUsage,
+      };
+      void persistMessage(chatId, finished);
+      chatTurns.completeTurn({ chatId, assistantId, message: finished });
       return content;
     },
-    [activeChat, appendMessage, chatSession, modelId, patchMessage, persistMessage, personaByChat],
+    [
+      activeChat,
+      appendMessage,
+      chatSession,
+      modelId,
+      modelOverrideByChat,
+      patchMessage,
+      persistMessage,
+      personaByChat,
+    ],
   );
 
   /**
@@ -570,7 +940,12 @@ export function ChatPage({
    * prompt.
    */
   const handleParseDocument = useCallback(
-    async (chatId: string, baseId: string, attachment: string, note: string) => {
+    async (
+      chatId: string,
+      baseId: string,
+      attachment: string,
+      note: string,
+    ) => {
       const messageId = `${baseId}-parse`;
       appendMessage(chatId, {
         id: messageId,
@@ -580,26 +955,36 @@ export function ChatPage({
         activity: "document-parse",
       });
       try {
-        const handle = documentClient.parse(attachment, ({ page, totalPages }) => {
-          patchMessage(chatId, messageId, {
-            content:
-              totalPages > 0
-                ? `Reading document... page ${page} of ${totalPages}`
-                : "Reading document...",
-          });
-        });
+        const handle = documentClient.parse(
+          attachment,
+          ({ page, totalPages }) => {
+            patchMessage(chatId, messageId, {
+              content:
+                totalPages > 0
+                  ? `Reading document... page ${page} of ${totalPages}`
+                  : "Reading document...",
+            });
+          },
+        );
         const result = await handle.done;
         const body = (result.markdown ?? result.text).trim();
         const header =
           result.pageCount > 1
             ? `Parsed ${result.pageCount} pages with ${result.engine}:`
             : `Parsed with ${result.engine}:`;
-        const content = body.length > 0 ? `${header}\n\n${body}` : `${header}\n\n(no text found)`;
+        const content =
+          body.length > 0
+            ? `${header}\n\n${body}`
+            : `${header}\n\n(no text found)`;
         patchMessage(chatId, messageId, {
           content,
           pending: false,
         });
-        void persistMessage(chatId, { id: messageId, role: "assistant", content });
+        void persistMessage(chatId, {
+          id: messageId,
+          role: "assistant",
+          content,
+        });
       } catch (err) {
         const content = `Could not parse the document: ${
           err instanceof Error ? err.message : String(err)
@@ -608,14 +993,19 @@ export function ChatPage({
           content,
           pending: false,
         });
-        void persistMessage(chatId, { id: messageId, role: "assistant", content });
+        void persistMessage(chatId, {
+          id: messageId,
+          role: "assistant",
+          content,
+        });
       }
       if (note.trim().length > 0) {
         // The user typed alongside the attachment; keep their note visible.
         appendMessage(chatId, {
           id: `${baseId}-note`,
           role: "assistant",
-          content: "Ask a follow-up question about the parsed text above to send it to the model.",
+          content:
+            "Ask a follow-up question about the parsed text above to send it to the model.",
         });
       }
     },
@@ -628,17 +1018,19 @@ export function ChatPage({
       attachments: readonly string[] = [],
       residencyApproved = false,
     ) => {
+      stickNow();
       let chat = activeChat;
       if (!chat) {
         const created = client.createChat({
           folderId: null,
-          title: "New chat",
+          title: DEFAULT_SESSION_TITLE,
           modelId,
         });
         chat = await Promise.resolve(created);
         setActiveChat(chat);
         setSelected({ kind: "chat", id: chat.id });
         setTreeVersion((v) => v + 1);
+        adoptDraftPersona(chat.id);
       } else {
         await hydrationPromisesRef.current.get(chat.id);
       }
@@ -646,7 +1038,9 @@ export function ChatPage({
       // Document parse does not load the chat LLM. Gate residency only when
       // this turn will actually start or send to the selected chat model.
       if (!residencyApproved && groups.documents.length === 0) {
-        const selectedModel = listedModels.find((candidate) => candidate.id === modelId);
+        const selectedModel = listedModels.find(
+          (candidate) => candidate.id === modelId,
+        );
         const verdict = residency.request({
           targetModelId: modelId,
           targetVramGB: modelVramEstimate(selectedModel?.vramGB),
@@ -695,7 +1089,9 @@ export function ChatPage({
         }
         const labelled = labelSttTranscript(parts.join("\n"));
         origin = STT_TRANSCRIPT_ORIGIN;
-        prompt = [text, labelled].filter((part) => part.trim().length > 0).join("\n\n");
+        prompt = [text, labelled]
+          .filter((part) => part.trim().length > 0)
+          .join("\n\n");
         if (memoryHub) {
           void memoryHub.episodic
             .record({
@@ -717,7 +1113,9 @@ export function ChatPage({
         id: `${baseId}-user`,
         role: "user",
         content: userContent,
-        ...(displayAttachments.length > 0 ? { attachments: displayAttachments } : {}),
+        ...(displayAttachments.length > 0
+          ? { attachments: displayAttachments }
+          : {}),
         ...(origin ? { origin } : {}),
         ...estimatedUserUsage(userContent),
       });
@@ -725,23 +1123,25 @@ export function ChatPage({
       // its first prompt AND persist it. Fire only on the first message of a
       // still-default chat: a chat the user already named must never be
       // renamed out from under them, and re-titling on every send would fight
-      // the user's own rename. An empty prompt keeps "New chat".
+      // the user's own rename. An empty prompt keeps "New session".
       const isFirstTitledSend =
         chat.messageCount === 0 &&
-        chat.title === "New chat" &&
+        chat.title === DEFAULT_SESSION_TITLE &&
         chat.userRenamed !== true &&
         prompt.trim().length > 0;
       if (isFirstTitledSend) {
         // Immediate prompt-derived fallback through the explorer rename
-        // (byUser false), so the rail never sits on "New chat" waiting for
+        // (byUser false), so the rail never sits on "New session" waiting for
         // the 5s title RPC that contends with the live turn.
         const immediate = fallbackTitle(prompt);
-        if (immediate !== "New chat") {
+        if (immediate !== DEFAULT_SESSION_TITLE) {
           const chatId = chat.id;
           void Promise.resolve(client.renameChat(chatId, immediate, false))
             .then(() => {
               setActiveChat((prev) =>
-                prev && prev.id === chatId ? { ...prev, title: immediate } : prev,
+                prev && prev.id === chatId
+                  ? { ...prev, title: immediate }
+                  : prev,
               );
               setTreeVersion((v) => v + 1);
             })
@@ -752,7 +1152,9 @@ export function ChatPage({
       } else {
         // Async-safe touch: the IPC adapter rejects when the sidecar is down,
         // and an unhandled rejection here must never take the send down.
-        void Promise.resolve(client.renameChat(chat.id, chat.title)).catch(() => undefined);
+        void Promise.resolve(client.renameChat(chat.id, chat.title)).catch(
+          () => undefined,
+        );
       }
 
       if (memoryHub && attachments.length > 0) {
@@ -784,7 +1186,9 @@ export function ChatPage({
           await handleParseDocument(chat.id, baseId, first, prompt);
           return;
         }
-        const alt = listedModels.find((m) => m.installed && modelAcceptsVision(m));
+        const alt = listedModels.find(
+          (m) => m.installed && modelAcceptsVision(m),
+        );
         appendMessage(chat.id, {
           id: `${baseId}-assistant`,
           role: "assistant",
@@ -798,7 +1202,9 @@ export function ChatPage({
       const budget = resolveVisualTokenBudget(selectedListedModel);
       for (const clip of groups.video) {
         if (!sampleVideoFrames) {
-          notices.push("Video was not sent: frame sampling is unavailable. Attach a still image instead.");
+          notices.push(
+            "Video was not sent: frame sampling is unavailable. Attach a still image instead.",
+          );
           continue;
         }
         const sampled = await sampleVideoFrames(clip);
@@ -827,11 +1233,20 @@ export function ChatPage({
         });
       }
 
-      if (sendImages.length === 0 && rawImages.length > 0 && prompt.trim().length === 0) {
+      if (
+        sendImages.length === 0 &&
+        rawImages.length > 0 &&
+        prompt.trim().length === 0
+      ) {
         return;
       }
 
-      const reply = await sendChatTurn(chat.id, baseId, prompt, imageGate.enabled ? sendImages : []);
+      const reply = await sendChatTurn(
+        chat.id,
+        baseId,
+        prompt,
+        imageGate.enabled ? sendImages : [],
+      );
       // v2.2.9 Phase 1.5 (T005): refine the fallback title with the model
       // AFTER the first assistant turn completes, so the title RPC never
       // contends with the live reply. The sidecar persists the generated
@@ -842,13 +1257,19 @@ export function ChatPage({
         void client
           .generateTitle(chat.id, prompt)
           .then(async (result: { title: string }) => {
-            const current = await Promise.resolve(client.getChat(chatId)).catch(() => null);
+            const current = await Promise.resolve(client.getChat(chatId)).catch(
+              () => null,
+            );
             if (current?.userRenamed === true) return;
             if (!current || current.title !== result.title) {
-              await Promise.resolve(client.renameChat(chatId, result.title, false));
+              await Promise.resolve(
+                client.renameChat(chatId, result.title, false),
+              );
             }
             setActiveChat((prev) =>
-              prev && prev.id === chatId ? { ...prev, title: result.title } : prev,
+              prev && prev.id === chatId
+                ? { ...prev, title: result.title }
+                : prev,
             );
             setTreeVersion((v) => v + 1);
           })
@@ -883,6 +1304,7 @@ export function ChatPage({
       sampleVideoFrames,
       selectedListedModel,
       sendChatTurn,
+      stickNow,
       voiceEnabled,
     ],
   );
@@ -890,15 +1312,16 @@ export function ChatPage({
   const handleStartNewSession = useCallback(async (): Promise<void> => {
     const created = client.createChat({
       folderId: activeChat?.folderId ?? null,
-      title: "New chat",
+      title: DEFAULT_SESSION_TITLE,
       modelId,
     });
     const chat = await Promise.resolve(created);
     setActiveChat(chat);
     setSelected({ kind: "chat", id: chat.id });
     setTreeVersion((v) => v + 1);
+    adoptDraftPersona(chat.id);
     setPersonaOpen(false);
-  }, [activeChat, client, modelId]);
+  }, [activeChat, adoptDraftPersona, client, modelId]);
 
   const ensureVoiceMic = useCallback((): MicRecorder => {
     if (!voiceMicRef.current) {
@@ -977,7 +1400,10 @@ export function ChatPage({
         // Selecting this arms push-to-talk; the composer's mic button is then
         // the hold target, which is why the old dedicated "Hold to talk"
         // button is no longer needed.
-        label: voiceLoop.mode === "ptt" && voiceLoop.phase === "recording" ? "Release to send" : "Push to talk",
+        label:
+          voiceLoop.mode === "ptt" && voiceLoop.phase === "recording"
+            ? "Release to send"
+            : "Push to talk",
         active: voiceEnabled && voiceLoop.mode === "ptt",
         onSelect: () => {
           if (voiceLoop.mode !== "ptt") {
@@ -991,18 +1417,31 @@ export function ChatPage({
       {
         id: "vad",
         label:
-          voiceLoop.mode === "vad" && voiceLoop.phase === "recording" ? "Stop VAD" : "Start VAD",
+          voiceLoop.mode === "vad" && voiceLoop.phase === "recording"
+            ? "Stop VAD"
+            : "Start VAD",
         active: voiceEnabled && voiceLoop.mode === "vad",
         onSelect: () => {
           if (voiceLoop.mode !== "vad") {
-            dispatchVoice({ type: "set-mode", mode: "vad" as VoiceCaptureMode });
+            dispatchVoice({
+              type: "set-mode",
+              mode: "vad" as VoiceCaptureMode,
+            });
             return;
           }
           onVadToggle();
         },
       },
     ],
-    [voiceEnabled, voiceLoop.mode, voiceLoop.phase, dispatchVoice, onVadToggle, onPttDown, onPttUp],
+    [
+      voiceEnabled,
+      voiceLoop.mode,
+      voiceLoop.phase,
+      dispatchVoice,
+      onVadToggle,
+      onPttDown,
+      onPttUp,
+    ],
   );
 
   return (
@@ -1017,26 +1456,50 @@ export function ChatPage({
         color: "var(--fg-0)",
       }}
     >
-      <CollapsibleHistoryAside
-        testId="chats-pane"
-        ariaLabel="Chats"
-        collapsed={chatsCollapsed}
-        onToggle={toggleChatsPane}
-        toggleTestId="chats-pane-collapse-toggle"
-        expandLabel="Expand chats"
-        collapseLabel="Collapse chats"
+      <SidebarHistorySlot>
+        <div
+          data-testid="chats-pane"
+          aria-label={CHAT_FOLDER_TREE_COPY.paneTitle}
+          data-history-collapsed={chatsCollapsed ? "true" : "false"}
+          style={{
+            flex: 1,
+            minHeight: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <FolderTree
+            client={client}
+            selected={selected}
+            onSelect={handleSelect}
+            onOpenChat={handleOpenChat}
+            refreshToken={treeVersion}
+            defaultModelId={modelId}
+            collapsed={chatsCollapsed}
+            onSessionDisposition={(id) => {
+              if (activeChat?.id !== id) return;
+              const next = new Map(messagesByChatRef.current);
+              next.delete(id);
+              messagesByChatRef.current = next;
+              setMessagesByChat(next);
+              pendingPromptRef.current = { text: "", attachments: [] };
+              setActiveChat(null);
+              setSelected(null);
+              setPersonaOpen(false);
+            }}
+          />
+        </div>
+      </SidebarHistorySlot>
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0,
+          padding: "var(--space-4)",
+          gap: "var(--space-3)",
+        }}
       >
-        <FolderTree
-          client={client}
-          selected={selected}
-          onSelect={handleSelect}
-          onOpenChat={handleOpenChat}
-          refreshToken={treeVersion}
-          defaultModelId={modelId}
-          collapsed={chatsCollapsed}
-        />
-      </CollapsibleHistoryAside>
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, padding: "var(--space-4)", gap: "var(--space-3)" }}>
         {sidecar.isDown && (
           <SidecarDownBanner
             status={sidecar.status}
@@ -1058,6 +1521,50 @@ export function ChatPage({
           </div>
         ) : null}
 
+        {pendingModelSwitch && activeChat ? (
+          <ConfirmDialog
+            testId="chat-model-switch-confirm"
+            title={gpuSwitchTitle("chat", modelDisplayName(pendingModelSwitch))}
+            body={[
+              ...gpuSwitchBody(
+                { label: modelDisplayName(effectiveModelId), running: false },
+                modelDisplayName(pendingModelSwitch),
+              ),
+              "This conversation is kept.",
+            ].map((line) => (
+              <p key={line} style={{ margin: "0 0 var(--space-1)" }}>
+                {line}
+              </p>
+            ))}
+            checkbox={{
+              label: "Do not show this again",
+              checked: !askDialog,
+              onChange: (hide: boolean) => {
+                setAskDialog(!hide);
+                setAskBeforeModelSwitch(!hide);
+              },
+            }}
+            confirmLabel="Switch and load"
+            onCancel={() => setPendingModelSwitch(null)}
+            onConfirm={() => {
+              const next = pendingModelSwitch;
+              const chatId = activeChat.id;
+              setPendingModelSwitch(null);
+              userChangedModelRef.current = true;
+              setModelId(next);
+              writeFavorite("chat", next);
+              setModelOverrideByChat((prev) => ({ ...prev, [chatId]: next }));
+              // The next message restarts the sidecar session with the
+              // replayed history, so the context carries over.
+              sessionIdsRef.current.delete(chatId);
+              setWarmingModelId(next);
+              void warmModel(next).finally(() => {
+                setWarmingModelId((current) => (current === next ? null : current));
+              });
+            }}
+          />
+        ) : null}
+
         {residency.pending ? (
           <ModelSwitchDialog
             pending={residency.pending}
@@ -1074,150 +1581,282 @@ export function ChatPage({
           />
         ) : null}
 
-        <div style={{ flex: 1, display: "flex", minHeight: 0, gap: "var(--space-3)" }}>
-          <div style={{ flex: 1, overflowY: "auto", minWidth: 0 }}>
+        <div style={{ flex: 1, display: "flex", minHeight: 0 }}>
+          <div
+            data-testid="transcript-scroll"
+            ref={scrollRef}
+            onScroll={onScroll}
+            style={{ flex: 1, overflowY: "auto", minWidth: 0 }}
+          >
             {activeChat ? (
-              <MessageList
-                messages={messages}
-                enableTools={true}
-                onSelectMessage={handleSelectMessage}
-              />
+              <MessageList messages={messages} enableTools={true} />
             ) : (
-              <p data-testid="chat-page-empty" style={{ color: "var(--fg-muted)" }}>
+              <p
+                data-testid="chat-page-empty"
+                style={{ color: "var(--fg-muted)" }}
+              >
                 Type a message to start a chat. Folders are optional.
               </p>
             )}
           </div>
-          {preview ? (
-            <PreviewPane
-              artifact={preview}
-              onClose={() => setPreview(null)}
-              style={{ flex: 1 }}
-            />
-          ) : null}
         </div>
 
-        <footer style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)", position: "relative" }}>
-            {/*
+        <footer
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--space-2)",
+            position: "relative",
+          }}
+        >
+          {/*
               v1.20.0 Phase 2: RapidOCR remains required for PDF/image. Native
               Office parse does not, so the composer stays usable when this
               banner is showing.
             */}
-            {documentModelInstalled === false ? (
-              <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-                <button
-                  type="button"
-                  data-testid="chat-get-more-models"
-                  onClick={() => onGetMoreModels?.()}
-                  style={getMoreModelsStyle}
-                >
-                  No document model installed - get more models
-                </button>
-                <a
-                  data-testid="chat-settings-link"
-                  href={SETTINGS_MODELS_PATH}
-                  style={{ display: "none" }}
-                >
-                  Settings
-                </a>
-              </div>
-            ) : null}
-            {/*
+          {documentModelInstalled === false ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--space-2)",
+              }}
+            >
+              <button
+                type="button"
+                data-testid="chat-get-more-models"
+                onClick={() => onGetMoreModels?.()}
+                style={getMoreModelsStyle}
+              >
+                No document model installed - get more models
+              </button>
+              <a
+                data-testid="chat-settings-link"
+                href={SETTINGS_MODELS_PATH}
+                style={{ display: "none" }}
+              >
+                Settings
+              </a>
+            </div>
+          ) : null}
+          {/*
               v2.2.9 Phase 1.1 (T001): the indicator renders ONLY while the
               microphone is actually open. The idle composer shows no "Mic
               closed" leftover (screenshot 1).
             */}
-            {voiceLoop.captureVisible ? (
-              <span
-                data-testid="chat-voice-capture-indicator"
-                data-visible="true"
-                role="status"
-                aria-live="polite"
+          {voiceLoop.captureVisible ? (
+            <span
+              data-testid="chat-voice-capture-indicator"
+              data-visible="true"
+              role="status"
+              aria-live="polite"
+              style={{
+                fontSize: "var(--text-xs)",
+                color: "var(--accent-chatbot)",
+              }}
+            >
+              Recording -- microphone is open
+            </span>
+          ) : null}
+          {personaOpen ? (
+            <div
+              data-testid="chat-persona-popover"
+              ref={personaPopoverRef}
+              style={{
+                position: "absolute",
+                // v2.4.8 follow-up: anchored to the right edge, under the
+                // Persona button, not the left of the composer.
+                right: 0,
+                bottom: "100%",
+                zIndex: 30,
+                width: "min(22rem, 100%)",
+                boxSizing: "border-box",
+                marginBottom: "var(--space-2)",
+                padding: "var(--space-3)",
+                borderRadius: "var(--radius-md)",
+                border: "1px solid var(--border-subtle)",
+                background: "var(--bg-elevated)",
+                boxShadow: "var(--shadow-md)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "var(--space-2)",
+              }}
+            >
+              <label
+                htmlFor="chat-persona-field"
                 style={{
-                  fontSize: "var(--text-xs)",
-                  color: "var(--accent-chatbot)",
+                  fontSize: "var(--text-sm)",
+                  fontWeight: 600,
+                  color: "var(--fg-1)",
                 }}
               >
-                Recording -- microphone is open
-              </span>
-            ) : null}
-            {personaOpen && activeChat ? (
-              <div
-                data-testid="chat-persona-popover"
+                Persona for this chat
+              </label>
+              {/*
+                v2.4.9: pick a saved persona, or keep writing a one-off below.
+                Selecting one copies its text into the chat AND records its
+                name, so the transcript can say which persona is active.
+              */}
+              <select
+                data-testid="chat-persona-select"
+                value={activePersonaId ?? ""}
+                onChange={(e) => applySavedPersona(e.target.value || null)}
                 style={{
-                  position: "absolute",
-                  left: 0,
-                  bottom: "100%",
-                  zIndex: 30,
-                  width: "22rem",
-                  marginBottom: "var(--space-2)",
-                  padding: "var(--space-3)",
+                  width: "100%",
+                  boxSizing: "border-box",
+                  padding: "var(--space-2) var(--space-3)",
                   borderRadius: "var(--radius-md)",
-                  border: "1px solid var(--border-subtle, #2a2a2a)",
-                  background: "var(--bg-elevated, #1b1b1b)",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "var(--space-2)",
+                  border: "1px solid var(--border-subtle)",
+                  background: "var(--bg-1)",
+                  color: "var(--fg-0)",
+                  fontSize: "var(--text-sm)",
                 }}
               >
-                <label style={{ fontSize: "var(--text-sm)", color: "var(--fg-muted)" }}>
-                  Persona for this chat
-                </label>
-                <textarea
-                  data-testid="chat-persona"
-                  rows={3}
-                  value={personaByChat[activeChat.id] ?? ""}
-                  onChange={(e) => {
-                    const next = e.target.value;
-                    setPersonaByChat((prev) => ({ ...prev, [activeChat.id]: next }));
-                    void client
-                      .setPersona?.(activeChat.id, next.trim() ? next : null)
-                      .catch(() => undefined);
-                  }}
-                  placeholder="Optional system prompt for this chat"
-                  style={{ resize: "vertical", width: "100%", boxSizing: "border-box" }}
-                />
-              </div>
-            ) : null}
-            <MediaComposer
-              onSubmit={(text, attachments) => void handleSubmit(text, attachments)}
-              submitAccentVar="--accent-chatbot"
-              voiceModes={voiceModes}
-              // v2.2.9 Phase 1.1 (T001): Persona lives in the composer
-              // overflow, not as an always-visible footer label.
-              overflowActions={
-                activeChat
-                  ? [
-                      {
-                        id: "persona",
-                        label: "Persona",
-                        active: personaOpen,
-                        testId: "chat-persona-toggle",
-                        onSelect: () => setPersonaOpen((v) => !v),
-                      },
-                    ]
-                  : []
-              }
-              accept={chatComposerAccept({ allowImages: imageGate.enabled, allowAudio: true })}
-              placeholder="Type a message, attach a document, or record audio to transcribe locally."
-              streaming={messages.some((m) => m.pending)}
-              imageEnabled={imageGate.enabled}
-              imageDisabledReason={imageGate.tooltip}
-              audioEnabled
-              audioHint={audioHint}
-            />
-            <ComposerContextRow usage={contextUsage} onStartNewSession={() => void handleStartNewSession()}>
-              <QuickModelSwitcher
-                testId="chat-model-select"
-                models={listedModels}
-                taskType="llm"
-                ownedIds={ownedIdSet(selection)}
-                value={modelId}
-                onChange={setModelId}
-                onGetMoreModels={onGetMoreModels}
-                disabled={Boolean(activeChat)}
+                <option value="">Custom (not saved)</option>
+                {savedPersonas.map((persona) => (
+                  <option key={persona.id} value={persona.id}>
+                    {persona.name}
+                  </option>
+                ))}
+              </select>
+              <textarea
+                id="chat-persona-field"
+                data-testid="chat-persona"
+                rows={3}
+                value={
+                  activeChat ? (personaByChat[activeChat.id] ?? "") : draftPersona
+                }
+                onChange={(e) => {
+                  const next = e.target.value;
+                  if (activeChat) setChatPersona(activeChat.id, next);
+                  else setDraftPersona(next);
+                }}
+                placeholder="Optional system prompt for this chat"
+                style={{
+                  resize: "vertical",
+                  width: "100%",
+                  boxSizing: "border-box",
+                  padding: "var(--space-2) var(--space-3)",
+                  borderRadius: "var(--radius-md)",
+                  border: "1px solid var(--border-subtle)",
+                  background: "var(--bg-1)",
+                  color: "var(--fg-0)",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "var(--text-sm)",
+                  lineHeight: 1.4,
+                  outline: "none",
+                }}
               />
-            </ComposerContextRow>
+              <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "center" }}>
+                <input
+                  data-testid="chat-persona-save-name"
+                  value={personaSaveName}
+                  onChange={(e) => setPersonaSaveName(e.target.value)}
+                  placeholder="Save as..."
+                  style={{
+                    flex: "1 1 auto",
+                    minWidth: 0,
+                    boxSizing: "border-box",
+                    padding: "var(--space-1) var(--space-2)",
+                    borderRadius: "var(--radius-md)",
+                    border: "1px solid var(--border-subtle)",
+                    background: "var(--bg-1)",
+                    color: "var(--fg-0)",
+                    fontSize: "var(--text-xs)",
+                  }}
+                />
+                <button
+                  type="button"
+                  data-testid="chat-persona-save"
+                  onClick={saveCurrentPersona}
+                  style={{
+                    padding: "0.25rem 0.7rem",
+                    borderRadius: "999px",
+                    border: "1px solid var(--border-1)",
+                    background: "transparent",
+                    color: "var(--fg-0)",
+                    cursor: "pointer",
+                    fontSize: "var(--text-xs)",
+                  }}
+                >
+                  Save
+                </button>
+              </div>
+              {personaSaveError ? (
+                <span
+                  data-testid="chat-persona-save-error"
+                  role="alert"
+                  style={{ color: "var(--status-err, #ef4444)", fontSize: "var(--text-xs)" }}
+                >
+                  {personaSaveError}
+                </span>
+              ) : null}
+            </div>
+          ) : null}
+          <MediaComposer
+            onSubmit={(text, attachments) =>
+              void handleSubmit(text, attachments)
+            }
+            onStop={handleStopTurn}
+            submitAccentVar="--accent-chatbot"
+            voiceModes={voiceModes}
+            // v2.4.8 follow-up: Persona is its own person-icon button that
+            // opens the persona box directly (no "..." menu in between).
+            // Available before the first message too: the draft persona
+            // moves onto the chat the first send creates.
+            personaAction={{
+              active: personaOpen,
+              testId: "chat-persona-toggle",
+              toggleRef: personaToggleRef,
+              activeName: activePersonaName,
+              onToggle: () => setPersonaOpen((v) => !v),
+            }}
+            accept={chatComposerAccept({
+              allowImages: imageGate.enabled,
+              allowAudio: true,
+            })}
+            placeholder="Type a message, attach a document, or record audio to transcribe locally."
+            streaming={messages.some((m) => m.pending && m.id !== warmBubbleId)}
+            imageEnabled={imageGate.enabled}
+            imageDisabledReason={imageGate.tooltip}
+            audioEnabled
+            audioHint={audioHint}
+          />
+          <ComposerContextRow
+            usage={contextUsage}
+            onStartNewSession={() => void handleStartNewSession()}
+          >
+            <QuickModelSwitcher
+              testId="chat-model-select"
+              models={listedModels}
+              taskType="llm"
+              ownedIds={ownedIdSet(selection)}
+              hostVramGB={hostVramGB}
+              recommendOrder={recommendOrderForTask(selection, "chat")}
+              value={modelId}
+              onChange={(nextModelId) => {
+                // v2.4.8 follow-up: inside a session, switching asks first,
+                // then loads the new model; the conversation is kept.
+                // The switcher also syncs its value once on mount when the
+                // current id is not an installed option; only a change away
+                // from a valid installed model is the user's switch.
+                if (
+                  activeChat &&
+                  nextModelId !== effectiveModelId &&
+                  listedModels.some((m) => m.id === modelId && m.installed) &&
+                  askDialog
+                ) {
+                  setPendingModelSwitch(nextModelId);
+                  return;
+                }
+                userChangedModelRef.current = true;
+                setModelId(nextModelId);
+                writeFavorite("chat", nextModelId);
+              }}
+              onGetMoreModels={onGetMoreModels}
+              disabled={messages.some((m) => m.pending)}
+            />
+          </ComposerContextRow>
         </footer>
       </div>
     </section>
@@ -1225,9 +1864,9 @@ export function ChatPage({
 }
 
 function dataUrlToBytes(dataUrl: string): Uint8Array {
-
   const b64 = stripDataUrlPrefix(dataUrl);
-  if (typeof Buffer !== "undefined") return new Uint8Array(Buffer.from(b64, "base64"));
+  if (typeof Buffer !== "undefined")
+    return new Uint8Array(Buffer.from(b64, "base64"));
   const bin = atob(b64);
   const out = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i += 1) out[i] = bin.charCodeAt(i);
@@ -1243,16 +1882,24 @@ function chatMessageFromRecord(record: ChatMessageRecord): ChatMessage {
     timestamp: isoTimestampFromMillis(record.createdAt),
     inputTokens: record.inputTokens ?? null,
     reasoningTokens: record.reasoningTokens ?? null,
+    reasoningText: record.reasoningText ?? null,
     outputTokens: record.outputTokens ?? null,
     tokensEstimated: record.tokensEstimated,
+    requestUsage: record.requestUsage,
+    messageUsage: record.messageUsage,
   };
 }
 
 function estimatedUserUsage(content: string): {
   inputTokens: number;
   tokensEstimated: true;
+  messageUsage: ReturnType<typeof estimatedMessageUsage>;
 } {
-  return { inputTokens: estimateTokens(content), tokensEstimated: true };
+  return {
+    inputTokens: estimateTokens(content),
+    tokensEstimated: true,
+    messageUsage: estimatedMessageUsage("user", content),
+  };
 }
 
 function replayHistory(
@@ -1262,7 +1909,9 @@ function replayHistory(
   return messages
     .filter(
       (message): message is ChatMessage & { role: "user" | "assistant" } =>
-        !message.pending && message.id !== currentUserId && message.role !== "system",
+        !message.pending &&
+        message.id !== currentUserId &&
+        message.role !== "system",
     )
     .slice(-500)
     .map((message) => ({ role: message.role, content: message.content }));
@@ -1273,7 +1922,8 @@ function isUnknownChatSessionError(err: unknown): boolean {
 }
 
 function uint8ToBase64(bytes: Uint8Array): string {
-  if (typeof Buffer !== "undefined") return Buffer.from(bytes).toString("base64");
+  if (typeof Buffer !== "undefined")
+    return Buffer.from(bytes).toString("base64");
   let s = "";
   for (const b of bytes) s += String.fromCharCode(b);
   return btoa(s);

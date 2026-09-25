@@ -8,14 +8,39 @@
 // consume. Later phases drop schemas in without re-shaping the union.
 
 import { z } from "zod";
+import { MODEL_FAMILIES } from "../../../core/registry/ModelCatalog.js";
+
+const TokenUsageProvenanceSchema = z.object({
+  accuracy: z.enum(["exact", "estimated", "legacy"]),
+  source: z.enum(["provider", "tokenizer", "estimate", "legacy"]),
+});
+const RequestTokenUsageSchema = z.object({
+  version: z.literal(1),
+  inputTokens: z.number().int().nonnegative().nullable(),
+  reasoningTokens: z.number().int().nonnegative().nullable(),
+  outputTokens: z.number().int().nonnegative().nullable(),
+  provenance: TokenUsageProvenanceSchema,
+  raw: z.record(z.string(), z.union([z.number(), z.string(), z.boolean(), z.null()])).optional(),
+});
+const MessageTokenUsageSchema = z.object({
+  version: z.literal(1),
+  inputTokens: z.number().int().nonnegative().nullable(),
+  reasoningTokens: z.number().int().nonnegative().nullable(),
+  outputTokens: z.number().int().nonnegative().nullable(),
+  provenance: TokenUsageProvenanceSchema,
+});
 
 export const IPC_METHODS = [
   "ping",
+  "runtime.desktopPayload",
   "models.list",
   "models.install",
   // v1.15.0 Phase 4 (Issue 3) -- Settings > Models registry management.
   "models.remove",
   "models.diskUsage",
+  // v2.4.8 follow-up: what Ollama holds on the GPU, and load a model now.
+  "models.resident",
+  "models.warm",
   "models.install.drainEvents",
   "models.install.cancel",
   // v1.16.0 Phase 1 (adoption item A1) -- local serving gateway control surface.
@@ -43,6 +68,9 @@ export const IPC_METHODS = [
   "coding.session.resume",
   "coding.session.rename",
   "coding.session.delete",
+  "sessions.archive",
+  "sessions.listArchived",
+  "sessions.restore",
   "coding.memory.snapshot",
   "coding.trace.subscribe",
   "coding.sessions.list",
@@ -121,6 +149,10 @@ export const IPC_METHODS = [
   "gpu.sample",
   "diffusion.health",
   "diffusion.version",
+  "diffusion.runtime.status",
+  "diffusion.runtime.repair",
+  "diffusion.runtime.cancelRepair",
+  "diffusion.runtime.openLogLocation",
   "diffusion.txt2img",
   "diffusion.img2img",
   "diffusion.inpaint",
@@ -145,6 +177,8 @@ export const IPC_METHODS = [
   "video.video2xPath.set",
   // v2.2.3 Phase 5 -- read-only Studio GPU occupancy for submit-time gates.
   "generation.scheduler.snapshot",
+  // v2.4.8 follow-up: a studio page may take the GPU from a running task.
+  "generation.scheduler.cancelActive",
   // v2.1.0 Phase 5 -- local Unsloth Core fine-tuning pillar.
   "tuning.status",
   "tuning.provision",
@@ -174,20 +208,27 @@ export const PingResponse = z.object({
 });
 export type PingResponseT = z.infer<typeof PingResponse>;
 
+export const DesktopPayloadRequest = z.object({}).strict();
+export const DesktopPayloadIdentitySchema = z.object({
+  version: z.string().min(1),
+  sha256: z.string().min(1),
+  originalName: z.string().optional(),
+}).strict();
+export const DesktopPayloadResponse = z.object({
+  identity: DesktopPayloadIdentitySchema.nullable(),
+}).strict();
+export type DesktopPayloadResponseT = z.infer<typeof DesktopPayloadResponse>;
+
 // ---- Coding session lifecycle ------------------------------------------------
 
-export const ModelFamily = z.enum([
-  "gemma",
-  "llama",
-  "qwen",
-  "deepseek",
-  "lfm2.5",
-  "hermes",
-  "muse-glimmer",
-  "nemotron-lightning",
-  "gpt-oss",
-]);
+export const ModelFamily = z.enum(MODEL_FAMILIES);
 export type ModelFamilyT = z.infer<typeof ModelFamily>;
+
+const WorkspaceScopeFields = {
+  workspaceId: z.string().regex(/^ws-[a-f0-9]{24}$/).optional(),
+  workspaceRoots: z.array(z.string().min(1)).min(1).max(32).optional(),
+  primaryRoot: z.string().min(1).optional(),
+} as const;
 
 export const CodingSessionStartRequest = z
   .object({
@@ -197,8 +238,18 @@ export const CodingSessionStartRequest = z
     // are scoped to. When omitted, the sidecar falls back to NEXUS_WORKSPACE or
     // its cwd. Additive + optional, so existing callers are unaffected.
     workspacePath: z.string().min(1).optional(),
+    ...WorkspaceScopeFields,
   })
-  .strict();
+  .strict()
+  .superRefine((request, ctx) => {
+    if (request.primaryRoot && !request.workspaceRoots?.includes(request.primaryRoot)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["primaryRoot"],
+        message: "primaryRoot must be one of workspaceRoots",
+      });
+    }
+  });
 export type CodingSessionStartRequestT = z.infer<
   typeof CodingSessionStartRequest
 >;
@@ -209,6 +260,7 @@ export const CodingSessionStartResponse = z
     modelId: z.string().min(1),
     family: ModelFamily,
     createdAt: z.string().min(1),
+    ...WorkspaceScopeFields,
   })
   .strict();
 export type CodingSessionStartResponseT = z.infer<
@@ -231,6 +283,7 @@ export type CodingSessionSendMessageRequestT = z.infer<
 // shapes; later phases will widen them as new agent surfaces are added.
 export const CodingSessionEvent = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("token"), text: z.string() }),
+  z.object({ kind: z.literal("reasoning_delta"), text: z.string().min(1).max(16_384) }),
   z.object({
     kind: z.literal("toolCallHeader"),
     callId: z.string(),
@@ -325,6 +378,7 @@ export type ChatSessionSendMessageRequestT = z.infer<
 
 export const ChatSessionEvent = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("token"), text: z.string() }),
+  z.object({ kind: z.literal("reasoning_delta"), text: z.string().min(1).max(16_384) }),
   z.object({
     kind: z.literal("done"),
     finishReason: z.string().optional(),
@@ -399,6 +453,7 @@ export const CodingSessionSummary = z
     title: z.string(),
     createdAt: z.string(),
     messageCount: z.number().int().nonnegative(),
+    ...WorkspaceScopeFields,
   })
   .strict();
 export type CodingSessionSummaryT = z.infer<typeof CodingSessionSummary>;
@@ -420,8 +475,12 @@ export const CodingSessionTurn = z
     assistantText: z.string(),
     inputTokens: z.number().int().nonnegative().nullable().optional(),
     reasoningTokens: z.number().int().nonnegative().nullable().optional(),
+    reasoningText: z.string().max(65_536).nullable().optional(),
     outputTokens: z.number().int().nonnegative().nullable().optional(),
     tokensEstimated: z.boolean().optional(),
+    requestUsage: RequestTokenUsageSchema.optional(),
+    userMessageUsage: MessageTokenUsageSchema.optional(),
+    assistantMessageUsage: MessageTokenUsageSchema.optional(),
     createdAt: z.string().optional(),
   })
   .strict();
@@ -469,6 +528,37 @@ export const CodingSessionDeleteResponse = z
 export type CodingSessionDeleteResponseT = z.infer<
   typeof CodingSessionDeleteResponse
 >;
+
+export const SessionPillar = z.enum(["chatbot", "agents", "images", "videos"]);
+export type SessionPillarT = z.infer<typeof SessionPillar>;
+export const SessionDispositionRequest = z
+  .object({ pillar: SessionPillar, id: z.string().min(1) })
+  .strict();
+export const SessionDispositionResponse = z
+  .object({
+    pillar: SessionPillar,
+    id: z.string(),
+    archivedAt: z.string().optional(),
+    parentFallback: z.boolean().optional(),
+  })
+  .strict();
+export const ArchivedSessionDto = z
+  .object({
+    pillar: SessionPillar,
+    id: z.string(),
+    title: z.string(),
+    archivedAt: z.string(),
+    originalParent: z.string().nullable(),
+  })
+  .strict();
+export type ArchivedSessionDtoT = z.infer<typeof ArchivedSessionDto>;
+export const SessionsListArchivedRequest = z.object({}).strict();
+export const SessionsListArchivedResponse = z
+  .object({
+    sessions: z.array(ArchivedSessionDto),
+    errors: z.array(z.object({ pillar: SessionPillar, message: z.string() }).strict()),
+  })
+  .strict();
 
 // ---- Panel data (Memory / Trace / Sessions) ---------------------------------
 
@@ -759,6 +849,20 @@ export type DiffusionDrainEventsResponseT = z.infer<
 
 export const DiffusionEmptyRequest = z.object({}).strict();
 
+export const MediaRuntimeStateResponse = z
+  .object({
+    state: z.enum(["ready", "repairable", "repairing", "failed"]),
+    code: z.string(),
+    message: z.string(),
+    retryable: z.boolean(),
+    progress: z.number().min(0).max(1),
+    details: z.string().optional(),
+    logPath: z.string(),
+  })
+  .strict();
+export type MediaRuntimeStateResponseT = z.infer<typeof MediaRuntimeStateResponse>;
+export const MediaRuntimeOpenLogResponse = z.object({ opened: z.boolean() }).strict();
+
 // v2.2.0 Phase 2 (2.4) -- GPU telemetry sample for the status widget.
 // v2.2.0 Phase 3 (3.2) -- installed skills listing for Settings > Skills.
 // v2.2.0 Phase 5 (5.1) -- chat explorer persistence.
@@ -792,8 +896,11 @@ const ChatMessageDto = z.object({
   createdAt: z.number(),
   inputTokens: z.number().int().nonnegative().nullable().optional(),
   reasoningTokens: z.number().int().nonnegative().nullable().optional(),
+  reasoningText: z.string().max(65_536).nullable().optional(),
   outputTokens: z.number().int().nonnegative().nullable().optional(),
   tokensEstimated: z.boolean().optional(),
+  requestUsage: RequestTokenUsageSchema.optional(),
+  messageUsage: MessageTokenUsageSchema.optional(),
 });
 // The tree is recursive; validate the leaf shapes and pass the nesting
 // through rather than fighting zod's recursive typing for an internal DTO.
@@ -840,8 +947,11 @@ export const ChatExplorerAppendMessageRequest = z
     attachments: z.array(z.string()).optional(),
     inputTokens: z.number().int().nonnegative().nullable().optional(),
     reasoningTokens: z.number().int().nonnegative().nullable().optional(),
+    reasoningText: z.string().max(65_536).nullable().optional(),
     outputTokens: z.number().int().nonnegative().nullable().optional(),
     tokensEstimated: z.boolean().optional(),
+    requestUsage: RequestTokenUsageSchema.optional(),
+    messageUsage: MessageTokenUsageSchema.optional(),
   })
   .strict();
 export const ChatExplorerListMessagesRequest = z
@@ -920,8 +1030,11 @@ export const StudioSessionAppendTurnRequest = z
     mediaRef: z.string().nullable().optional(),
     inputTokens: z.number().int().nonnegative().nullable().optional(),
     reasoningTokens: z.number().int().nonnegative().nullable().optional(),
+    reasoningText: z.string().max(65_536).nullable().optional(),
     outputTokens: z.number().int().nonnegative().nullable().optional(),
     tokensEstimated: z.boolean().optional(),
+    requestUsage: RequestTokenUsageSchema.optional(),
+    messageUsage: MessageTokenUsageSchema.optional(),
     visualUnits: z.number().int().nonnegative().nullable().optional(),
   })
   .strict();
@@ -934,8 +1047,11 @@ export const StudioSessionTurnResponse = z.object({
   createdAt: z.number(),
   inputTokens: z.number().int().nonnegative().nullable().optional(),
   reasoningTokens: z.number().int().nonnegative().nullable().optional(),
+  reasoningText: z.string().max(65_536).nullable().optional(),
   outputTokens: z.number().int().nonnegative().nullable().optional(),
   tokensEstimated: z.boolean().optional(),
+  requestUsage: RequestTokenUsageSchema.optional(),
+  messageUsage: MessageTokenUsageSchema.optional(),
   visualUnits: z.number().int().nonnegative().nullable().optional(),
 });
 export const StudioSessionListTurnsRequest = z
@@ -1664,6 +1780,7 @@ export const GenerationQueueListResponse = z
 export const GenerationQueueEnqueueRequest = z
   .object({
     id: z.string().min(1).optional(),
+    parentId: z.string().min(1).optional(),
     pillar: GenerationPillar,
     jobType: z.string().min(1),
     parameters: z.record(z.string(), z.unknown()),
@@ -1734,6 +1851,13 @@ export const GenerationSchedulerSnapshotResponse = z
     foregroundModule: GenerationSchedulerModuleId.nullable(),
   })
   .strict();
+export const GenerationSchedulerCancelActiveResponse = z
+  .object({
+    cancelled: z
+      .object({ id: z.string().min(1), moduleId: GenerationSchedulerModuleId })
+      .nullable(),
+  })
+  .strict();
 export type GenerationSchedulerSnapshotResponseT = z.infer<
   typeof GenerationSchedulerSnapshotResponse
 >;
@@ -1773,6 +1897,13 @@ export const TuningJobDto = z
   .strict();
 
 export const TuningEmptyRequest = z.object({}).strict();
+
+export const TuningHardwareRequest = z
+  .object({
+    hostVramGB: z.number().nonnegative().optional(),
+    gpuVendor: z.string().min(1).optional(),
+  })
+  .strict();
 
 export const TuningPinDto = z
   .object({
@@ -2058,6 +2189,7 @@ export const ModelsRegistryListResponse = z
   .object({
     models: z.array(ModelListedEntry),
     catalogStatus: z.string().optional(),
+    catalogHash: z.string().regex(/^[a-f0-9]{64}$/).optional(),
     selection: SelectionSnapshotSchema.nullable().optional(),
   })
   .strict();
@@ -2071,8 +2203,33 @@ export type ModelsRemoveRequestT = z.infer<typeof ModelsRemoveRequest>;
 export const ModelsOkResponse = z.object({ ok: z.literal(true) }).strict();
 export type ModelsOkResponseT = z.infer<typeof ModelsOkResponse>;
 
+// v2.4.8 follow-up: Ollama residency (`/api/ps`) and a warm-up load.
+export const ModelsResidentResponse = z.object({
+  models: z.array(
+    z.object({
+      name: z.string(),
+      sizeBytes: z.number(),
+      sizeVramBytes: z.number(),
+      displayName: z.string().optional(),
+    }),
+  ),
+});
+export type ModelsResidentResponseT = z.infer<typeof ModelsResidentResponse>;
+
+export const ModelsWarmRequest = z.object({ modelId: z.string().min(1) }).strict();
+export type ModelsWarmRequestT = z.infer<typeof ModelsWarmRequest>;
+export const ModelsWarmResponse = z.object({ ok: z.boolean(), status: z.number() });
+export type ModelsWarmResponseT = z.infer<typeof ModelsWarmResponse>;
+
 export const ModelsDiskUsageResponse = z
-  .object({ usedBytes: z.number(), freeBytes: z.number().nullable() })
+  .object({
+    usedBytes: z.number(),
+    modelBytes: z.number(),
+    freeBytes: z.number().nullable(),
+    capacityBytes: z.number().nullable(),
+    measurementPath: z.string(),
+    measuredAt: z.string(),
+  })
   .strict();
 export type ModelsDiskUsageResponseT = z.infer<typeof ModelsDiskUsageResponse>;
 
@@ -2734,6 +2891,11 @@ interface MethodSchema {
 
 export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
   ping: { request: PingRequest, response: PingResponse, implemented: true },
+  "runtime.desktopPayload": {
+    request: DesktopPayloadRequest,
+    response: DesktopPayloadResponse,
+    implemented: true,
+  },
   "models.list": {
     request: ModelsListRequest,
     response: ModelsRegistryListResponse,
@@ -2752,6 +2914,16 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
   "models.diskUsage": {
     request: ModelsEmptyRequest,
     response: ModelsDiskUsageResponse,
+    implemented: true,
+  },
+  "models.resident": {
+    request: ModelsEmptyRequest,
+    response: ModelsResidentResponse,
+    implemented: true,
+  },
+  "models.warm": {
+    request: ModelsWarmRequest,
+    response: ModelsWarmResponse,
     implemented: true,
   },
   "models.install.drainEvents": {
@@ -2862,6 +3034,21 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
   "coding.session.delete": {
     request: CodingSessionDeleteRequest,
     response: CodingSessionDeleteResponse,
+    implemented: true,
+  },
+  "sessions.archive": {
+    request: SessionDispositionRequest,
+    response: SessionDispositionResponse,
+    implemented: true,
+  },
+  "sessions.listArchived": {
+    request: SessionsListArchivedRequest,
+    response: SessionsListArchivedResponse,
+    implemented: true,
+  },
+  "sessions.restore": {
+    request: SessionDispositionRequest,
+    response: SessionDispositionResponse,
     implemented: true,
   },
   "coding.memory.snapshot": {
@@ -3205,6 +3392,26 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
     response: DiffusionVersionResponse,
     implemented: true,
   },
+  "diffusion.runtime.status": {
+    request: DiffusionEmptyRequest,
+    response: MediaRuntimeStateResponse,
+    implemented: true,
+  },
+  "diffusion.runtime.repair": {
+    request: DiffusionEmptyRequest,
+    response: MediaRuntimeStateResponse,
+    implemented: true,
+  },
+  "diffusion.runtime.cancelRepair": {
+    request: DiffusionEmptyRequest,
+    response: MediaRuntimeStateResponse,
+    implemented: true,
+  },
+  "diffusion.runtime.openLogLocation": {
+    request: DiffusionEmptyRequest,
+    response: MediaRuntimeOpenLogResponse,
+    implemented: true,
+  },
   "diffusion.txt2img": {
     request: DiffusionTxt2ImgRequest,
     response: DiffusionJobAccepted,
@@ -3320,13 +3527,18 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
     response: GenerationSchedulerSnapshotResponse,
     implemented: true,
   },
+  "generation.scheduler.cancelActive": {
+    request: GenerationSchedulerSnapshotRequest,
+    response: GenerationSchedulerCancelActiveResponse,
+    implemented: true,
+  },
   "tuning.status": {
-    request: TuningEmptyRequest,
+    request: TuningHardwareRequest,
     response: TuningStatusResponse,
     implemented: true,
   },
   "tuning.provision": {
-    request: TuningEmptyRequest,
+    request: TuningHardwareRequest,
     response: TuningProvisionResponse,
     implemented: true,
   },

@@ -1,20 +1,20 @@
 # llama.cpp loopback adapter (large-MoE / patient-tier recipe)
 
-*v1.18.0 Phase 1 (LG-A5). Promotes the user-registered llama.cpp adapter that [EM.P4.A](../v1/v1.12/known-gaps.md) already names into a first-class, loopback-only recipe. This page does **not** open the EM.P4 patient-tier gate, does not add a catalog entry, and does not bundle, download, or auto-install llama.cpp.*
+*v1.18.0 Phase 1 (LG-A5). Promotes the user-registered llama.cpp adapter that [EM.P4.A](../archive/v1/v1.12/known-gaps.md) already names into a first-class, loopback-only recipe. This page does **not** open the EM.P4 patient-tier gate, does not add a catalog entry, and does not bundle, download, or auto-install llama.cpp.*
 
 Nexus talks to local runtimes through [`LocalAdapterRegistry`](../../modules/coding/llm/LocalAdapterRegistry.ts). Ollama and LM Studio ship as built-in manifests. Any other OpenAI-compatible or Ollama-native server on **this machine** is a user-registered `nexus.llm.localAdapters` entry. llama-server is that third runtime: you start it, you register it, Nexus never ships the binary.
 
 The same loopback guard used by the MLX how-to ([`loopback.ts`](../../modules/coding/llm/loopback.ts)) rejects any non-loopback `endpoint` with an error that cites the AGENTS.md MCP Registry Policy. A LAN or cloud llama.cpp host is not a Nexus adapter.
 
-**Support tier**: the adapter registry is `supported`. A live chat against llama-server is `internal-compatible` until you run it on your host (not proven here). See [evidence-and-support-tiers.md](../v1/v1.4/development/evidence-and-support-tiers.md). Source comparison: [Laguna-S-2.1 A5](../v1/v1.18/comparisons/v1.18.2-comparison-laguna-s-2-1.md).
+**Support tier**: the adapter registry is `supported`. A live chat against llama-server is `internal-compatible` until you run it on your host (not proven here). See [evidence-and-support-tiers.md](../archive/v1/v1.4/development/evidence-and-support-tiers.md). Source comparison: [Laguna-S-2.1 A5](../archive/v1/v1.18/comparisons/v1.18.2-comparison-laguna-s-2-1.md).
 
 ## What this recipe is not
 
 - **Not a bundled runtime.** There is no llama.cpp in the installer, no auto-download, no `llama-server` on PATH from Nexus.
-- **Not an EM.P4 enablement.** [`patientTier.ts`](../../core/registry/patientTier.ts) stays off (`nexus.llm.patientTier.enabled` default false). Registering this adapter does not surface `patient-tier`-tagged catalog rows and does not add a Laguna / GLM-5.2 entry ([EM.P4.A](../v1/v1.12/known-gaps.md) remains open).
+- **Not an EM.P4 enablement.** [`patientTier.ts`](../../core/registry/patientTier.ts) stays off (`nexus.llm.patientTier.enabled` default false). Registering this adapter does not surface `patient-tier`-tagged catalog rows and does not add a Laguna / GLM-5.2 entry ([EM.P4.A](../archive/v1/v1.12/known-gaps.md) remains open).
 - **Not an outbound path.** `--host 0.0.0.0` (or any non-loopback bind) is a llama.cpp choice that Nexus will refuse at registration. Bind loopback only.
 
-The MLX sibling of this page is [mlx-via-local-adapters.md](../v1/v1.16/guides/mlx-via-local-adapters.md). ADR: [0019-local-adapter-registry.md](../adr/0019-local-adapter-registry.md). Canonical example file: [examples/llamacpp-loopback-adapter.json](./examples/llamacpp-loopback-adapter.json).
+The MLX sibling of this page is [mlx-via-local-adapters.md](../archive/v1/v1.16/guides/mlx-via-local-adapters.md). ADR: [0019-local-adapter-registry.md](../adr/0019-local-adapter-registry.md). Canonical example file: [examples/llamacpp-loopback-adapter.json](./examples/llamacpp-loopback-adapter.json).
 
 ## 1. Start llama-server on loopback (you own this process)
 
@@ -108,7 +108,7 @@ The rejection text cites the AGENTS.md MCP Registry Policy. There is no settings
 
 ## 4. Patient tier (still gated)
 
-[`patientTier.ts`](../../core/registry/patientTier.ts) is the timeout + visibility plumbing for disk-offload runs. It is **off by default**. This recipe does not flip `nexus.llm.patientTier.enabled`, does not add a `patient-tier` catalog tag, and does not populate GLM-5.2 / Laguna. Those remain [EM.P4.A](../v1/v1.12/known-gaps.md) enablement steps after runtime support and an independent benchmark. The Laguna catalog entry itself is a gated v1.18 item (LG-A1), not this page.
+[`patientTier.ts`](../../core/registry/patientTier.ts) is the timeout + visibility plumbing for disk-offload runs. It is **off by default**. This recipe does not flip `nexus.llm.patientTier.enabled`, does not add a `patient-tier` catalog tag, and does not populate GLM-5.2 / Laguna. Those remain [EM.P4.A](../archive/v1/v1.12/known-gaps.md) enablement steps after runtime support and an independent benchmark. The Laguna catalog entry itself is a gated v1.18 item (LG-A1), not this page.
 
 If you *already* run a slow disk-offload llama-server and you accept non-interactive latency, you may enable the patient timeout so the interactive 60s default does not abort the stream. That is an operator choice on an existing flag, not an opened gate.
 

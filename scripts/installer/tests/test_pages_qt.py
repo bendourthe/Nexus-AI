@@ -2,14 +2,27 @@
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 from unittest.mock import patch
+
+import pytest
 
 from nexus_installer.installer_state import InstallerState
 
 
+@contextmanager
+def _no_probes():
+    """Keep the Welcome/prerequisites probes (software + GPU) off the host."""
+    with (
+        patch("nexus_installer.pages.prerequisites._DetectionWorker.start"),
+        patch("nexus_installer.pages.gpu_detection._GpuDetectionWorker.start"),
+    ):
+        yield
+
+
 class TestWelcomePage:
     def test_creates_without_crash(self, qt_app: object) -> None:
-        with patch("nexus_installer.pages.welcome._QuickCheckWorker.start"):
+        with _no_probes():
             from nexus_installer.pages.welcome import WelcomePage
 
             state = InstallerState()
@@ -18,7 +31,7 @@ class TestWelcomePage:
 
     def test_copy_names_nexus_not_gemma_code(self, qt_app: object) -> None:
         """v1.8.0 Phase 5 (T503) -- the welcome copy sells the product."""
-        with patch("nexus_installer.pages.welcome._QuickCheckWorker.start"):
+        with _no_probes():
             from PyQt5.QtWidgets import QLabel
 
             from nexus_installer.pages.welcome import WelcomePage
@@ -30,7 +43,7 @@ class TestWelcomePage:
             assert "Gemma Code" not in all_text
 
     def test_pillar_chips_present(self, qt_app: object) -> None:
-        with patch("nexus_installer.pages.welcome._QuickCheckWorker.start"):
+        with _no_probes():
             from PyQt5.QtWidgets import QLabel
 
             from nexus_installer.pages.welcome import WelcomePage
@@ -44,7 +57,7 @@ class TestWelcomePage:
     def test_title_is_nexus_ai_studio(self, qt_app: object) -> None:
         """v1.13.0 Phase 3 -- the welcome hero is a gradient wordmark carrying
         the product name (a custom-painted widget, not a plain QLabel)."""
-        with patch("nexus_installer.pages.welcome._QuickCheckWorker.start"):
+        with _no_probes():
             from nexus_installer.pages.welcome import WelcomePage
             from nexus_installer.widgets.gradient_wordmark import (
                 GradientWordmark,
@@ -61,7 +74,7 @@ class TestWelcomePage:
         The hero is now just the title; there is no logo widget beside it (and
         so no floating-logo animation on the Welcome page).
         """
-        with patch("nexus_installer.pages.welcome._QuickCheckWorker.start"):
+        with _no_probes():
             from nexus_installer.pages.welcome import WelcomePage
 
             state = InstallerState()
@@ -69,115 +82,116 @@ class TestWelcomePage:
             assert not hasattr(page, "_logo")
 
 
-class TestWelcomeDiskCheck:
-    """v1.13.0 Phase 4: the disk check probes an existing anchor (the install
-    directory does not exist yet) against the base-install requirement."""
-
-    def test_existing_anchor_walks_up_to_existing_dir(self) -> None:
-        import os
-
-        from nexus_installer.pages.welcome import _existing_anchor
-
-        deep = os.path.join(os.path.expanduser("~"), "definitely", "missing", "x")
-        assert os.path.isdir(_existing_anchor(deep))
-
-    def test_worker_reports_sufficient_for_ample_free_space(
-        self, qt_app: object
-    ) -> None:
-        from unittest.mock import MagicMock
-
-        from nexus_installer.pages.welcome import _QuickCheckWorker
-
-        worker = _QuickCheckWorker(r"C:\Program Files\NexusAI", required_gb=15.0)
-        results: list[tuple[bool, float]] = []
-        worker.disk_ok.connect(lambda ok, gb: results.append((ok, gb)))
-        usage = MagicMock()
-        usage.free = 484 * 1024**3  # 484 GB, like the reported machine
-        with (
-            patch.object(_QuickCheckWorker, "_find_python", return_value=("", False)),
-            patch("nexus_installer.pages.welcome.shutil.which", return_value=None),
-            patch(
-                "nexus_installer.pages.welcome.shutil.disk_usage", return_value=usage
-            ),
-        ):
-            worker.run()
-        assert results
-        ok, gb = results[0]
-        # 484 GB >= 15 GB base install: no more amber-dot-with-ample-space bug.
-        assert ok is True
-        assert gb > 400
-
-
 class TestPrerequisitesPage:
     def test_creates_and_has_validate(self, qt_app: object) -> None:
-        with patch("nexus_installer.pages.prerequisites._DetectionWorker.start"):
+        with _no_probes():
             from nexus_installer.pages.prerequisites import PrerequisitesPage
 
-            state = InstallerState()
-            page = PrerequisitesPage(state)
+            page = PrerequisitesPage(InstallerState())
             assert hasattr(page, "validate")
 
-    def test_validate_fails_without_vscode(self, qt_app: object) -> None:
-        with patch("nexus_installer.pages.prerequisites._DetectionWorker.start"):
-            from nexus_installer.pages.prerequisites import PrerequisitesPage
-
-            state = InstallerState()
-            page = PrerequisitesPage(state)
-            page._vscode_found = False
-            page._disk_ok = True
-            ok, msg = page.validate()
-            assert ok is False
-            assert "VS Code" in msg or "Visual Studio Code" in msg
-
     def test_validate_fails_without_disk(self, qt_app: object) -> None:
-        with patch("nexus_installer.pages.prerequisites._DetectionWorker.start"):
+        with _no_probes():
             from nexus_installer.pages.prerequisites import PrerequisitesPage
 
-            state = InstallerState()
-            page = PrerequisitesPage(state)
-            page._vscode_found = True
+            page = PrerequisitesPage(InstallerState())
             page._disk_ok = False
+            page._gpu_done = True
             ok, msg = page.validate()
             assert ok is False
+            assert "disk" in msg.lower()
 
-    def test_validate_passes_when_both_ok(self, qt_app: object) -> None:
-        with patch("nexus_installer.pages.prerequisites._DetectionWorker.start"):
+    def test_validate_passes_when_disk_and_gpu_ok(self, qt_app: object) -> None:
+        with _no_probes():
             from nexus_installer.pages.prerequisites import PrerequisitesPage
 
-            state = InstallerState()
-            page = PrerequisitesPage(state)
-            page._vscode_found = True
+            page = PrerequisitesPage(InstallerState())
             page._disk_ok = True
+            page._gpu_done = True
             ok, _ = page.validate()
             assert ok is True
 
+    def test_vscode_is_not_a_prerequisite(self, qt_app: object) -> None:
+        # The extension feature detects VS Code and disables itself instead.
+        with _no_probes():
+            from nexus_installer.pages.prerequisites import PrerequisitesPage
 
-class TestGpuDetectionPage:
-    def test_creates_without_crash(self, qt_app: object) -> None:
-        with patch("nexus_installer.pages.gpu_detection._GpuDetectionWorker.start"):
-            from nexus_installer.pages.gpu_detection import GpuDetectionPage
+            page = PrerequisitesPage(InstallerState())
+            assert not hasattr(page, "_vscode_row")
+            names = [row._name.text() for row in page.rows]
+            assert names == ["Disk Space", "GPU", "Python 3.11+", "Ollama"]
 
-            state = InstallerState()
-            page = GpuDetectionPage(state)
-            assert page is not None
+    def test_recheck_is_icon_not_button(self, qt_app: object) -> None:
+        with _no_probes():
+            from PyQt5.QtWidgets import QPushButton, QToolButton
 
-    def test_detection_copies_host_ram_not_disk(self, qt_app: object) -> None:
-        with (
-            patch("nexus_installer.pages.gpu_detection._GpuDetectionWorker.start"),
-            patch(
-                "nexus_installer.pages.gpu_detection.detect_total_ram_gb",
-                return_value=32,
-            ),
-        ):
-            from nexus_installer.pages.gpu_detection import GpuDetectionPage
+            from nexus_installer.pages.prerequisites import PrerequisitesPage
 
-            state = InstallerState()
-            state.free_disk_gb = 0
-            page = GpuDetectionPage(state)
-            page._on_detection_complete("RTX 4080", "nvidia", 16384)
-            assert state.total_ram_gb == 32
-            assert state.vram_mb == 16384
-            assert state.free_disk_gb == 0
+            page = PrerequisitesPage(InstallerState())
+            assert not any(
+                btn.text() == "Re-check" for btn in page.findChildren(QPushButton)
+            )
+            tools = [
+                t
+                for t in page.findChildren(QToolButton)
+                if t.accessibleName() == "Re-check"
+            ]
+            assert len(tools) == 1
+
+    def test_recheck_replaces_inflight_worker(self, qt_app: object) -> None:
+        with _no_probes():
+            from unittest.mock import MagicMock
+
+            from nexus_installer.pages.prerequisites import PrerequisitesPage
+
+            page = PrerequisitesPage(InstallerState())
+            first = MagicMock()
+            first.isRunning.return_value = True
+            page._worker = first
+            page._run_detection()
+            first.python_result.disconnect.assert_called()
+            first.quit.assert_called()
+            first.wait.assert_called()
+
+    def test_prereqs_two_columns_then_stack(self, qt_app: object) -> None:
+        with _no_probes():
+            from PyQt5.QtCore import QSize
+            from PyQt5.QtGui import QResizeEvent
+
+            from nexus_installer.pages.prerequisites import PrerequisitesPage
+
+            page = PrerequisitesPage(InstallerState())
+            page.resizeEvent(QResizeEvent(QSize(800, 400), QSize(800, 400)))
+            grid = page._grid
+            # Disk top-left, GPU top-right, Python bottom-left, Ollama bottom-right.
+            assert grid.itemAtPosition(0, 0).widget() is page._disk_row
+            assert grid.itemAtPosition(0, 1).widget() is page._gpu_row
+            assert grid.itemAtPosition(1, 0).widget() is page._python_row
+            assert grid.itemAtPosition(1, 1).widget() is page._ollama_row
+            page.resizeEvent(QResizeEvent(QSize(400, 400), QSize(800, 400)))
+            assert grid.itemAtPosition(0, 0).widget() is page._disk_row
+            assert grid.itemAtPosition(1, 0).widget() is page._gpu_row
+            empty = grid.itemAtPosition(0, 1)
+            assert empty is None or empty.widget() is None
+
+    def test_prereq_callbacks_and_row_states(self, qt_app: object) -> None:
+        with _no_probes():
+            from nexus_installer.pages.prerequisites import PrerequisitesPage
+
+            page = PrerequisitesPage(InstallerState())
+            page._on_python("", "")
+            page._on_python(r"C:\Python\python.exe", "3.12.3")
+            page._on_ollama(False, "")
+            page._on_ollama(True, "0.11.0")
+            page._on_disk(3.0)
+            page._on_disk(7.0)
+            page._on_disk(80.0)
+            page._disk_row.set_found("ok")
+            page._disk_row.set_missing("no")
+            page._disk_row.set_warning("warn")
+            page._on_gpu("RTX 3080 Ti", "nvidia", 16384)
+            ok, _ = page.validate()
+            assert ok is True
 
 
 class TestInstallPathPage:
@@ -195,18 +209,6 @@ class TestInstallPathPage:
         state = InstallerState()
         page = InstallPathPage(state)
         assert "GemmaCode" not in page._path_input.text()
-
-    def test_callout_names_nexus_models(self, qt_app: object) -> None:
-        """v1.9.0 Phase 3 (T305) -- the storage callout drops the 'Gemma' string."""
-        from PyQt5.QtWidgets import QLabel
-
-        from nexus_installer.pages.install_path import InstallPathPage
-
-        state = InstallerState()
-        page = InstallPathPage(state)
-        all_text = " ".join(lbl.text() for lbl in page.findChildren(QLabel))
-        assert "Nexus models" in all_text
-        assert "Gemma model" not in all_text
 
     def test_validate_empty_path_fails(self, qt_app: object) -> None:
         from nexus_installer.pages.install_path import InstallPathPage
@@ -246,70 +248,6 @@ class TestInstallPathPage:
             assert state.disk_space_gb == 0.0
 
 
-class TestConfigurationPage:
-    def test_creates_with_toggles(self, qt_app: object) -> None:
-        from nexus_installer.pages.configuration import ConfigurationPage
-
-        state = InstallerState()
-        page = ConfigurationPage(state)
-        assert page is not None
-
-    def test_desktop_toggle_default_checked(self, qt_app: object) -> None:
-        from nexus_installer.pages.configuration import ConfigurationPage
-
-        state = InstallerState()
-        page = ConfigurationPage(state)
-        assert page._desktop_toggle.isChecked() is True
-
-    def test_desktop_toggle_updates_components(self, qt_app: object) -> None:
-        from nexus_installer.pages.configuration import ConfigurationPage
-
-        state = InstallerState()
-        page = ConfigurationPage(state)
-        page._desktop_toggle.setChecked(False)
-        assert "desktop" not in state.components_to_install
-        page._desktop_toggle.setChecked(True)
-        assert "desktop" in state.components_to_install
-
-    def test_video2x_note_is_not_an_install_toggle(self, qt_app: object) -> None:
-        from nexus_installer.pages.configuration import ConfigurationPage
-        from nexus_installer.video_enhancement_support import INSTALLER_NOTE
-
-        page = ConfigurationPage(InstallerState())
-        assert page._video2x_note.text() == INSTALLER_NOTE
-        assert "never installed by this wizard" in page._video2x_note.text()
-
-    def test_unsloth_checkbox_is_off_and_sets_state(self, qt_app: object) -> None:
-        from nexus_installer.pages.configuration import ConfigurationPage
-
-        state = InstallerState()
-        page = ConfigurationPage(state)
-        assert page._unsloth.isChecked() is False
-        assert state.install_unsloth is False
-        page._unsloth.setChecked(True)
-        assert state.install_unsloth is True
-        assert "QLoRA" in page._unsloth.text()
-        assert "LGPL" in page._unsloth_help.text()
-
-    def test_unsloth_warns_without_nvidia_16gb(self, qt_app: object) -> None:
-        from nexus_installer.pages.configuration import ConfigurationPage
-
-        state = InstallerState(gpu_vendor="none", vram_mb=0)
-        page = ConfigurationPage(state)
-        page._unsloth.setChecked(True)
-        assert "NVIDIA" in page._unsloth_warning.text()
-        assert not page._unsloth_warning.isHidden()
-
-    def test_unsloth_hides_warning_on_nvidia_16gb(self, qt_app: object) -> None:
-        from nexus_installer.pages.configuration import ConfigurationPage
-
-        state = InstallerState(gpu_vendor="nvidia", vram_mb=16384)
-        page = ConfigurationPage(state)
-        page._unsloth.setChecked(True)
-        assert page._unsloth_warning.isHidden()
-        assert page._unsloth_warning.text() == ""
-
-
 class TestReviewPage:
     def test_creates_with_summary(self, qt_app: object) -> None:
         from nexus_installer.pages.review import ReviewPage
@@ -321,6 +259,54 @@ class TestReviewPage:
         )
         page = ReviewPage(state)
         assert page is not None
+
+    def test_facts_and_models_are_separate_cards(self, qt_app: object) -> None:
+        from nexus_installer.pages.review import ReviewPage
+
+        state = InstallerState(
+            install_path=r"C:\Program Files\NexusAI",
+            gpu_name="NVIDIA GeForce RTX 3080 Ti Laptop GPU",
+            vram_mb=16384,
+            selected_model_ids=["embedding-gemma", "gemma-4-12b-it-gguf"],
+            selected_models_gb=20.0,
+            components_to_install=["extension", "ollama", "venv", "model", "desktop"],
+        )
+        page = ReviewPage(state)
+        page._rebuild_summary()
+        assert page._facts_card.property("reviewColumn") == "facts"
+        assert page._models_card.property("reviewColumn") == "models"
+        assert page._path_label.text() == r"C:\Program Files\NexusAI"
+        assert page._path_label.parentWidget().parentWidget() is page._facts_card
+        # The estimates are model facts: they live in the Model Summary card.
+        for tile in page._tiles.values():
+            assert tile.parentWidget() is page._models_card
+        assert "16 GB VRAM" in page._gpu_pill.text()
+        assert "16384" not in page._gpu_pill.text()
+        names = " ".join(cell.names_text() for cell in page._category_cells)
+        assert "embedding-gemma" in names
+        assert "embedding-gemma" not in page._path_label.text()
+
+    def test_zero_vram_omits_gb_suffix(self, qt_app: object) -> None:
+        from nexus_installer.pages.review import ReviewPage
+
+        page = ReviewPage(InstallerState(gpu_name="", vram_mb=0))
+        page._rebuild_summary()
+        pill = page._gpu_pill.text()
+        assert "None detected" in pill
+        assert "GB VRAM" not in pill
+        assert "0 GB" not in pill
+
+    def test_narrow_width_stacks_review_columns(self, qt_app: object) -> None:
+        from PyQt5.QtCore import QSize
+        from PyQt5.QtGui import QResizeEvent
+
+        from nexus_installer.pages.review import ReviewPage
+
+        page = ReviewPage(InstallerState())
+        page.resizeEvent(QResizeEvent(QSize(400, 700), QSize(900, 700)))
+        assert page._narrow_columns is True
+        page.resizeEvent(QResizeEvent(QSize(900, 700), QSize(400, 700)))
+        assert page._narrow_columns is False
 
 
 class TestInstallingPage:
@@ -451,6 +437,34 @@ class TestCompletePage:
         assert "unexpected error" in page._subtitle.text()
         assert not page._warning_callout.isHidden()
 
+    def test_optional_failure_is_warning_not_stopped(self, qt_app: object) -> None:
+        page = self._refreshed_page(
+            optional_failed_steps=["unsloth"],
+            step_failures=[
+                {
+                    "step": "unsloth",
+                    "summary": "The optional Unsloth environment is not ready.",
+                    "suggestion": "Retry from Settings.",
+                }
+            ],
+        )
+        assert page._title.text() == "Installation Completed with Warnings"
+        assert "unexpected error" not in page._subtitle.text()
+        assert not page._warning_callout.isHidden()
+        assert "#f" in page._warning_callout.styleSheet().lower()
+
+    def test_dropped_progress_diagnostic_is_not_a_completion_warning(
+        self, qt_app: object
+    ) -> None:
+        page = self._refreshed_page(
+            install_log=[
+                "[WARN] Model progress display update was dropped for m1: "
+                "completed event"
+            ]
+        )
+        assert page._title.text() == "Installation Complete"
+        assert page._warning_callout.isHidden()
+
 
 class TestInstallingGatedAuthWiring:
     """v1.14.0 Phase 2 -- the installing page resolves gated auth before the
@@ -492,3 +506,106 @@ class TestInstallingGatedAuthWiring:
         # Declined -> removed from the queue; the public model is untouched.
         assert state.selected_model_ids == ["pub-y"]
         assert "gated-x" in state.skipped_steps
+
+
+class TestWizardDensityV247:
+    """v2.4.7 Phase 3 (T014) -- Install Path and Configuration layout.
+
+    Screenshot 1: Browse sat outside a narrowed path field.
+    Screenshot 2: the Ollama URL spanned the page under both columns, and a
+    blue detection paragraph sat under the VS Code checkbox.
+    """
+
+    def test_path_field_spans_the_row_with_browse_inside_it(
+        self, qt_app: object
+    ) -> None:
+        from nexus_installer.pages.install_path import InstallPathPage
+
+        page = InstallPathPage(InstallerState())
+        # Browse is a child of the field, not a sibling in a shared row.
+        assert page._browse_btn.parentWidget() is page._path_input
+        # Typed text is kept clear of the overlaid button.
+        margins = page._path_input.textMargins()
+        assert margins.right() > 0
+
+    def test_browse_stays_clickable_and_named(self, qt_app: object) -> None:
+        from nexus_installer.pages.install_path import InstallPathPage
+
+        page = InstallPathPage(InstallerState())
+        assert page._browse_btn.isEnabled() is True
+        assert "Browse" in page._browse_btn.text()
+        assert page._path_input.isReadOnly() is False
+
+    def test_disk_and_error_lines_remain_under_the_field(self, qt_app: object) -> None:
+        from nexus_installer.pages.install_path import InstallPathPage
+
+        page = InstallPathPage(InstallerState())
+        assert page._disk_label is not None
+        assert page._error_label is not None
+
+    def test_compact_vscode_row_hides_the_paragraph_only_when_installable(
+        self, qt_app: object, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The paragraph is noise beside a usable control, and the only
+        explanation beside an unusable one.
+
+        v2.4.7 hid it unconditionally, which left a disabled checkbox with its
+        reason in a tooltip -- indistinguishable from a broken control.
+        """
+        from nexus_installer.engine.extension_installer import VsCodeCliStatus
+        from nexus_installer.pages.configuration import ConfigurationPage
+
+        monkeypatch.setattr(
+            "nexus_installer.pages.vscode_extension.detect_vscode_cli",
+            lambda: VsCodeCliStatus(None, None, None, False, "not-found"),
+        )
+        blocked = ConfigurationPage(InstallerState())
+        assert blocked._vscode._checkbox.isEnabled() is False
+        assert blocked._vscode._detection_label.isVisibleTo(blocked._vscode) is True
+        assert blocked._vscode._detection_label.text().strip()
+
+        monkeypatch.setattr(
+            "nexus_installer.pages.vscode_extension.detect_vscode_cli",
+            lambda: VsCodeCliStatus(
+                "/usr/bin/code", "code", "1.137.0", True, "supported"
+            ),
+        )
+        available = ConfigurationPage(
+            InstallerState(), list_fn=lambda _path: (None, "")
+        )
+        assert available._vscode._checkbox.isEnabled() is True
+        assert (
+            available._vscode._detection_label.isVisibleTo(available._vscode) is False
+        )
+
+    def test_detection_still_drives_the_checkbox(self, qt_app: object) -> None:
+        # Removing the paragraph must not remove the information: an
+        # uninstallable extension still disables the box and explains itself.
+        #
+        # Detection is INJECTED rather than read from the host. Written as a
+        # conditional against real detection, this passed vacuously on a
+        # machine with VS Code installed and only ran on CI -- where it caught
+        # a real gap, because the tooltip was set on refresh but not at
+        # construction.
+        from nexus_installer.pages.vscode_extension import VsCodeExtensionPage
+
+        class _Detection:
+            def __init__(self, supported: bool) -> None:
+                self.supported = supported
+                self.version = "1.1.0"
+                self.path = "/usr/bin/code"
+                self.cli_name = "code"
+                self.reason = "ok" if supported else "not-found"
+
+        unsupported = VsCodeExtensionPage(
+            InstallerState(), detect_fn=lambda: _Detection(False), compact=True
+        )
+        assert unsupported._checkbox.isEnabled() is False
+        assert unsupported._checkbox.toolTip().strip()
+
+        supported = VsCodeExtensionPage(
+            InstallerState(), detect_fn=lambda: _Detection(True), compact=True
+        )
+        assert supported._checkbox.isEnabled() is True
+        # No tooltip when there is nothing to explain.
+        assert supported._checkbox.toolTip() == ""

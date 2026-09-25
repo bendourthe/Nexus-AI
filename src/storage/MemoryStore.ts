@@ -28,6 +28,7 @@ import {
   sanitizeFtsQuery,
 } from "./embeddingUtils.js";
 import { createFtsTableAndTriggers } from "./sqliteFts.js";
+import { snapshotBeforeMigration } from "../../core/storage/preMigrationSnapshot.js";
 import { MemoryHnswIndex } from "./MemoryHnswIndex.js";
 import {
   HybridRanker,
@@ -165,6 +166,7 @@ export class MemoryStore {
     }) as number;
 
     if (currentVersion >= MEMORY_SCHEMA_VERSION) return;
+    if (this._ownsDb) snapshotBeforeMigration(this._db, MEMORY_SCHEMA_VERSION);
 
     // v0.5.0 Phase 7: add corroboration_count for the N-corroboration rule.
     if (currentVersion < 2) {

@@ -8,7 +8,14 @@ import { useEffect, useRef, useState } from "react";
 import { useActiveMotionSurface, useAllowsMotion, useReducedMotion } from "../../motion";
 import type { AgentActivity } from "./mapping";
 import { resolveAgentState } from "./mapping";
-import { pendingCaptionState, usePendingCaptionRotator } from "./captionRotator";
+import {
+  isStudioActivity,
+  longestCaptionFor,
+  pillMinWidthExpr,
+  rotatingCaptionState,
+  useCaptionRotator,
+  type CaptionPool,
+} from "./captionRotator";
 import {
   clampOrbDpr,
   createOrbDots,
@@ -19,6 +26,11 @@ import {
   type OrbDot,
   type OrbSizePreset,
 } from "./orbEngine";
+
+export {
+  longestPendingCaption,
+  pendingPillMinWidthExpr,
+} from "./captionRotator";
 
 export interface AgentStateOrbProps {
   activity: AgentActivity;
@@ -32,6 +44,18 @@ export interface AgentStateOrbProps {
    * caption, static, no rotation. Implies `showCaption`.
    */
   rotateCaptions?: boolean;
+  /**
+   * v2.4.8 follow-up (2026-09-08): which word pool a rotating caption draws
+   * from. Defaults to the studio pool for the two studio activities and the
+   * chat pool otherwise, so Images and Videos get the chat pill animation
+   * with their own vocabulary.
+   */
+  captionPool?: CaptionPool;
+  /**
+   * v2.4.8 Phase 8: a fixed caption that overrides the mapping label and the
+   * studio rotator (e.g. "Loading model..." before sampling starts).
+   */
+  caption?: string;
   /**
    * Stable accessible name. Required so a rotating caption never floods a
    * screen reader; defaults to "Generating reply" while rotating.
@@ -62,6 +86,8 @@ export function AgentStateOrb({
   size = "inline",
   showCaption = false,
   rotateCaptions = false,
+  captionPool,
+  caption,
   accessibleName,
   surfaceId,
   className,
@@ -76,12 +102,16 @@ export function AgentStateOrb({
   const allowed = useAllowsMotion("orb");
   const paused = reduce || !visible || !allowed;
   const cssSize = orbPixelSize(size);
-  // Rotator hook is unconditional (hooks rule); it schedules an interval only
-  // while rotation is requested and motion is allowed.
-  const rotatingCaption = usePendingCaptionRotator(rotateCaptions && !reduce);
+  // v2.4.4 Phase 5.3 (T020) / v2.4.8 follow-up: one rotator, pool chosen by
+  // activity unless the caller names one. The hook is called unconditionally
+  // (hooks rule) and schedules an interval only while rotation is live.
+  const studio = isStudioActivity(activity);
+  const pool: CaptionPool = captionPool ?? (studio ? "studio" : "chat");
+  const rotates = (rotateCaptions || (studio && showCaption)) && !caption;
+  const rotatingCaption = useCaptionRotator(rotates && !reduce, pool);
   const captionShown = showCaption || rotateCaptions;
-  const captionText = rotateCaptions ? rotatingCaption : `${mapping.label}...`;
-  const engineState = rotateCaptions ? pendingCaptionState(rotatingCaption) : mapping.state;
+  const captionText = caption ?? (rotates ? rotatingCaption : `${mapping.label}...`);
+  const engineState = rotates ? rotatingCaptionState(rotatingCaption) : mapping.state;
   const hostLabel =
     accessibleName ?? (rotateCaptions ? "Generating reply" : `Agent ${mapping.label.toLowerCase()}`);
 
@@ -185,6 +215,7 @@ export function AgentStateOrb({
       data-orb-paused={paused ? "true" : "false"}
       className={className}
       style={{
+        position: "relative",
         width: captionShown ? "auto" : cssSize,
         height: captionShown ? "auto" : cssSize,
         flex: "none",
@@ -194,29 +225,52 @@ export function AgentStateOrb({
         alignItems: "center",
         justifyContent: "center",
         gap: captionShown ? "var(--space-2)" : undefined,
-        borderRadius: rotateCaptions ? "999px" : captionShown ? undefined : "50%",
-        // Dark pill chrome (thinking-orbs reference grammar, Nexus tokens only).
-        padding: rotateCaptions ? "var(--space-1) var(--space-3) var(--space-1) var(--space-2)" : undefined,
-        border: rotateCaptions ? "1px solid var(--border-1)" : undefined,
-        backgroundColor: rotateCaptions
-          ? "color-mix(in srgb, var(--bg-0, #101014) 88%, transparent)"
-          : undefined,
-        boxShadow: rotateCaptions
-          ? `0 0 14px color-mix(in srgb, ${mapping.accentFallback} 18%, transparent)`
-          : !captionShown && size !== "inline" && activity !== "idle"
+        // v2.4.2 Phase 1: do not put border-radius on the host that owns the
+        // canvas. A 999px capsule clips the 48px bubble orb's left dots.
+        // Pill chrome is a sibling layer; the canvas stays unclipped.
+        overflow: "visible",
+        minWidth: rotateCaptions ? pillMinWidthExpr(cssSize, pool) : undefined,
+        // v2.4.4 Phase 1.2: no second pill inset. The transcript gutter on the
+        // message list is the only left offset, so the pending pill starts on
+        // the same gutter as a completed assistant bubble and its glow still
+        // has room inside that padding instead of being cropped by the pane.
+        borderRadius: rotateCaptions ? undefined : captionShown ? undefined : "50%",
+        padding: rotateCaptions ? "var(--space-2) var(--space-3)" : undefined,
+        boxSizing: "border-box",
+        boxShadow:
+          !rotateCaptions && !captionShown && size !== "inline" && activity !== "idle"
             ? `0 0 16px color-mix(in srgb, ${mapping.accentFallback} 32%, transparent)`
             : undefined,
       }}
     >
+      {rotateCaptions ? (
+        <span
+          data-testid={`${rest["data-testid"] ?? "agent-state-orb"}-pill-chrome`}
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: "999px",
+            border: "1px solid var(--border-1)",
+            backgroundColor: "color-mix(in srgb, var(--bg-0, #101014) 88%, transparent)",
+            boxShadow: `0 0 14px color-mix(in srgb, ${mapping.accentFallback} 18%, transparent)`,
+            pointerEvents: "none",
+          }}
+        />
+      ) : null}
       <canvas
         ref={canvasRef}
+        data-testid={`${rest["data-testid"] ?? "agent-state-orb"}-canvas`}
         aria-hidden="true"
         width={cssSize}
         height={cssSize}
         style={{
+          position: "relative",
+          zIndex: 1,
           display: "block",
           width: cssSize,
           height: cssSize,
+          flex: "none",
           filter:
             captionShown && size !== "inline" && activity !== "idle"
               ? `drop-shadow(0 0 16px color-mix(in srgb, ${mapping.accentFallback} 32%, transparent))`
@@ -230,7 +284,14 @@ export function AgentStateOrb({
           data-testid={`${rest["data-testid"] ?? "agent-state-orb"}-caption`}
           aria-hidden="true"
           aria-live="off"
-          style={{ color: "var(--fg-muted)", fontSize: "var(--text-sm)", whiteSpace: "nowrap" }}
+          style={{
+            position: "relative",
+            zIndex: 1,
+            color: "var(--fg-muted)",
+            fontSize: "var(--text-sm)",
+            whiteSpace: "nowrap",
+            minWidth: rotateCaptions ? `${longestCaptionFor(pool).length}ch` : undefined,
+          }}
         >
           {captionText}
         </span>

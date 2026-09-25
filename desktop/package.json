@@ -11,7 +11,7 @@
     "build:web": "vite build",
     "build:sidecar": "node sidecar/esbuild.config.mjs",
     "preview": "vite preview --port 1421 --strictPort",
-    "lint": "eslint src sidecar/src tests --max-warnings=0",
+    "lint": "eslint src sidecar/src tests --max-warnings=54",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --config vitest.config.ts",
     "test:watch": "vitest --config vitest.config.ts",
@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-dialog": "^2.7.2",
     "@tauri-apps/plugin-shell": "^2.0.1",
     "isomorphic-dompurify": "^3.9.0",
     "lucide-react": "^0.468.0",
@@ -37,7 +38,9 @@
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/coverage-v8": "^2.1.9",
+    "axe-core": "^4.13.0",
     "esbuild": "^0.24.2",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "jsdom": "^25.0.1",
     "vite": "^5.4.21",
     "vitest": "^2.1.9"

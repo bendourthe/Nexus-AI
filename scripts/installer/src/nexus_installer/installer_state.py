@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sys
 from dataclasses import dataclass, field
+from typing import Any
 
 # v1.1.0 Phase 14.5 -- the 10 GB OS reserve floor used by the disk-aware
 # selection guard. Configurable via the `--disk-reserve-gb` CLI flag.
@@ -18,6 +19,14 @@ def _default_install_path() -> str:
     if sys.platform == "darwin":
         return "/Applications/NexusAI"
     return "/usr/local/share/nexus-ai"
+
+
+def _empty_installed_report() -> Any:
+    # Imported inside the function. A module-level import here cycles through
+    # the weights puller and the model router, which both import this module.
+    from nexus_installer.engine.installed_models import InstalledReport
+
+    return InstalledReport()
 
 
 @dataclass
@@ -46,6 +55,7 @@ class InstallerState:
     enable_memory: bool = True
     install_log: list[str] = field(default_factory=list)
     failed_steps: list[str] = field(default_factory=list)
+    optional_failed_steps: list[str] = field(default_factory=list)
 
     # v1.11.0 Phase 3 (T303) -- structured, user-facing failure surfaces.
     # A skipped step is a clear outcome, not an error (e.g. the VS Code
@@ -54,7 +64,8 @@ class InstallerState:
     # (P5) renders these next to the View/Copy/Save log actions, and the
     # headless smoke result includes them verbatim.
     skipped_steps: list[str] = field(default_factory=list)
-    step_failures: list[dict[str, str]] = field(default_factory=list)
+    step_failures: list[dict[str, Any]] = field(default_factory=list)
+    step_results: list[dict[str, Any]] = field(default_factory=list)
 
     # v1.11.0 Phase 7 (T704) -- resume support. Steps a resumed run treats as
     # already satisfied: the engine marks them done up front and does not
@@ -67,6 +78,9 @@ class InstallerState:
     selected_models_gb: float = 0.0
     disk_reserve_gb: int = DEFAULT_DISK_RESERVE_GB
     install_vscode_extension: bool = True
+    # Welcome-page feature toggles: launcher shortcuts for the desktop app.
+    add_start_menu_shortcut: bool = True
+    add_desktop_shortcut: bool = True
     # v2.1 DF-15 -- opt-in Unsloth Core venv. Off by default. LGPL zoo notice
     # is shown next to the checkbox.
     install_unsloth: bool = False
@@ -81,6 +95,15 @@ class InstallerState:
     models_root: str = ""
     # v1.19.2 -- official precision-variant override (empty = hardware-aware default).
     weights_variant: str = ""
+
+    # v2.4.5 Phase 2 -- which selected models are already on disk. Populated by
+    # the picker via `engine.installed_models.probe_installed_models`. Kept as
+    # a field rather than recomputed per page so the filesystem is walked once
+    # per wizard session, not once per card. `selected_models_gb` deliberately
+    # stays the FULL selection total so no existing consumer changes meaning;
+    # `pending_models_gb` is the new quantity the disk guard should compare.
+    installed_report: Any = field(default_factory=_empty_installed_report)
+    pending_models_gb: float = 0.0
 
     # v1.15.0 Phase 3 (Issue 2) -- post-install summary + retry surfaces.
     # `model_failures` maps a failed model id to its raw engine reason (mapped to
@@ -112,14 +135,48 @@ class InstallerState:
     desktop_exe_path: str = ""
     launch_desktop_on_finish: bool = True
 
-    def record_step_failure(self, step: str, summary: str, suggestion: str) -> None:
+    def record_step_failure(
+        self,
+        step: str,
+        summary: str,
+        suggestion: str,
+        *,
+        required: bool = True,
+        error_code: str = "STEP_FAILED",
+        retryable: bool = False,
+    ) -> None:
         """Record a plain-language failure for `step` (T303).
 
         `summary` is one user-facing sentence stating what happened;
         `suggestion` is the next action a non-technical user can take.
         """
         self.step_failures.append(
-            {"step": step, "summary": summary, "suggestion": suggestion}
+            {
+                "step": step,
+                "summary": summary,
+                "suggestion": suggestion,
+            }
+        )
+
+    def record_step_result(
+        self,
+        step: str,
+        status: str,
+        *,
+        required: bool,
+        error_code: str = "",
+        retryable: bool = False,
+    ) -> None:
+        """Replace the terminal outcome for one step with typed metadata."""
+        self.step_results = [r for r in self.step_results if r.get("step") != step]
+        self.step_results.append(
+            {
+                "step": step,
+                "status": status,
+                "required": required,
+                "error_code": error_code,
+                "retryable": retryable,
+            }
         )
 
     def record_skipped_step(self, step: str) -> None:
@@ -150,5 +207,20 @@ class InstallerState:
             # wizard does not lock the user out; the final Install-click
             # guard will re-check.
             return True
-        remaining = self.free_disk_gb - self.selected_models_gb - model_gb
+        # Charge only what is not already on disk, or the picker would refuse a
+        # model the install guard would then happily allow -- two answers to
+        # the same question on adjacent screens.
+        #
+        # v2.4.7: use the SELECTION-scoped pending figure. This previously
+        # credited back `installed_report.downloaded_gb`, which is catalog-wide
+        # (the report is probed over every model so each card can show its
+        # Downloaded pill), so a large downloaded catalog could offset the
+        # whole selection and make the picker accept anything.
+        report = self.installed_report
+        if report.downloaded or report.pending:
+            pending = float(self.pending_models_gb)
+        else:
+            # Probe never ran: assume nothing is present.
+            pending = float(self.selected_models_gb)
+        remaining = self.free_disk_gb - pending - model_gb
         return remaining >= self.disk_reserve_gb

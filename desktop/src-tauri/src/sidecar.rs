@@ -104,10 +104,7 @@ pub enum SidecarError {
     /// Display is `sidecar-exited:<code>` so the Complete page can print it
     /// without wrapping a Windows 232 broken-pipe error around a dead stdin.
     #[error("sidecar-exited:{code}")]
-    Exited {
-        code: i32,
-        stderr_tail: Vec<String>,
-    },
+    Exited { code: i32, stderr_tail: Vec<String> },
 }
 
 #[derive(Debug, Serialize)]
@@ -137,6 +134,41 @@ struct JsonRpcError {
 
 type PendingMap = Arc<Mutex<HashMap<u64, oneshot::Sender<Result<Value, String>>>>>;
 type StderrTail = Arc<Mutex<VecDeque<String>>>;
+type StderrHead = Arc<Mutex<Vec<String>>>;
+
+/// First lines of a run: a Node crash states its reason before its stack.
+const STDERR_HEAD_LINES: usize = 12;
+
+/// Where the sidecar's own output is kept, so a crash leaves something to read.
+pub fn sidecar_log_path() -> Option<PathBuf> {
+    let home = std::env::var_os("USERPROFILE")
+        .or_else(|| std::env::var_os("HOME"))
+        .map(PathBuf::from)?;
+    Some(home.join(".nexus").join("logs").join("sidecar.log"))
+}
+
+/// Cap before the log is rotated once; the interesting run is the last one.
+const SIDECAR_LOG_MAX_BYTES: u64 = 4 * 1024 * 1024;
+
+fn append_sidecar_log(line: &str) {
+    let Some(path) = sidecar_log_path() else { return };
+    if let Some(dir) = path.parent() {
+        let _ = std::fs::create_dir_all(dir);
+    }
+    if let Ok(meta) = std::fs::metadata(&path) {
+        if meta.len() > SIDECAR_LOG_MAX_BYTES {
+            let _ = std::fs::rename(&path, path.with_extension("log.1"));
+        }
+    }
+    if let Ok(mut file) = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(&path)
+    {
+        use std::io::Write;
+        let _ = writeln!(file, "{line}");
+    }
+}
 
 /// How the node executable was chosen. Serialized into `SidecarStatus`.
 #[derive(Debug, Clone, Serialize, PartialEq, Eq)]
@@ -168,6 +200,10 @@ pub struct SidecarStatus {
     pub script_path: Option<String>,
     pub failure: Option<String>,
     pub stderr_tail: Vec<String>,
+    /// First lines of this run, where a crash names its cause (v2.4.11).
+    pub stderr_head: Vec<String>,
+    /// Absolute path of the persisted sidecar log, for the user to open.
+    pub log_path: Option<String>,
     pub candidates_rejected: Vec<String>,
     /// Set when the child has already exited. `None` while it is still running.
     pub exit_code: Option<i32>,
@@ -205,7 +241,12 @@ pub fn provisioned_node_path() -> Option<PathBuf> {
         std::env::var_os("LOCALAPPDATA")
             .map(PathBuf::from)
             .or_else(home_dir)
-            .map(|base| base.join("Nexus").join("runtime").join("node").join("node.exe"))
+            .map(|base| {
+                base.join("Nexus")
+                    .join("runtime")
+                    .join("node")
+                    .join("node.exe")
+            })
     }
     #[cfg(target_os = "macos")]
     {
@@ -266,10 +307,7 @@ pub fn resolve_node(runtime_config: Option<&Path>) -> NodeResolution {
                                 rejected,
                             };
                         }
-                        rejected.push(format!(
-                            "runtime.json nodePath not a file: {}",
-                            p.display()
-                        ));
+                        rejected.push(format!("runtime.json nodePath not a file: {}", p.display()));
                     } else {
                         rejected.push("runtime.json has no nodePath".to_string());
                     }
@@ -307,6 +345,7 @@ pub struct SidecarHandle {
     next_id: Arc<AtomicU64>,
     pending: PendingMap,
     stderr_tail: StderrTail,
+    stderr_head: StderrHead,
 }
 
 impl SidecarHandle {
@@ -316,6 +355,11 @@ impl SidecarHandle {
             .lock()
             .map(|d| d.iter().cloned().collect())
             .unwrap_or_default()
+    }
+
+    /// First captured stderr lines: where a crash states its reason.
+    pub fn stderr_head(&self) -> Vec<String> {
+        self.stderr_head.lock().map(|v| v.clone()).unwrap_or_default()
     }
 
     /// Non-blocking liveness probe. Returns `Ok(None)` while running, the exit
@@ -340,10 +384,10 @@ impl Sidecar {
     /// in the resource bundle (`bundle.resources` maps `../sidecar/dist` to
     /// `sidecar/dist`); in dev we walk relative to the working directory.
     pub fn script_path(app: &AppHandle) -> PathBuf {
-        if let Ok(resolved) = app.path().resolve(
-            "sidecar/dist/main.js",
-            tauri::path::BaseDirectory::Resource,
-        ) {
+        if let Ok(resolved) = app
+            .path()
+            .resolve("sidecar/dist/main.js", tauri::path::BaseDirectory::Resource)
+        {
             if resolved.exists() {
                 return resolved;
             }
@@ -403,6 +447,8 @@ impl Sidecar {
             script_path: Some(script.display().to_string()),
             failure: None,
             stderr_tail: Vec::new(),
+            stderr_head: Vec::new(),
+            log_path: sidecar_log_path().map(|p| p.display().to_string()),
             candidates_rejected: node.rejected.clone(),
             exit_code: None,
         };
@@ -431,14 +477,31 @@ impl Sidecar {
             .ok_or_else(|| SidecarError::Spawn("missing stdout".to_string()))?;
 
         let stderr_tail: StderrTail = Arc::new(Mutex::new(VecDeque::new()));
+        let stderr_head: StderrHead = Arc::new(Mutex::new(Vec::new()));
         if let Some(stderr) = child.stderr.take() {
             let tail = stderr_tail.clone();
             // Drain stderr continuously: an undrained pipe fills its OS buffer
             // and blocks the sidecar's writes (a silent production deadlock).
+            let head = stderr_head.clone();
             thread::spawn(move || {
                 let reader = BufReader::new(stderr);
                 for line in reader.lines() {
                     let Ok(line) = line else { break };
+                    append_sidecar_log(&line);
+                    /*
+                     * v2.4.11 operator report: a crash showed the user three
+                     * V8 stack frames and nothing else -- "no error or log for
+                     * the user to copy". A Node crash prints its REASON first
+                     * (`FATAL ERROR: ...`) and its stack after, so a tail-only
+                     * buffer keeps the noise and drops the cause. Both ends of
+                     * the run are kept now, and every line also goes to a file
+                     * that outlives the process.
+                     */
+                    if let Ok(mut first) = head.lock() {
+                        if first.len() < STDERR_HEAD_LINES {
+                            first.push(line.clone());
+                        }
+                    }
                     if let Ok(mut deque) = tail.lock() {
                         if deque.len() >= STDERR_TAIL_LINES {
                             deque.pop_front();
@@ -459,6 +522,7 @@ impl Sidecar {
             next_id: Arc::new(AtomicU64::new(1)),
             pending,
             stderr_tail,
+            stderr_head,
         };
         if let Err(err) = wait_until_ready(&handle, LIVENESS_WAIT) {
             status.running = false;
@@ -471,6 +535,7 @@ impl Sidecar {
             return Err(err);
         }
         status.stderr_tail = handle.stderr_tail();
+        status.stderr_head = handle.stderr_head();
         Ok((handle, status))
     }
 
@@ -535,8 +600,7 @@ impl Sidecar {
             method,
             params,
         };
-        let line = serde_json::to_string(&req)
-            .map_err(|e| SidecarError::Request(e.to_string()))?;
+        let line = serde_json::to_string(&req).map_err(|e| SidecarError::Request(e.to_string()))?;
         {
             let mut guard = handle
                 .stdin
@@ -545,23 +609,19 @@ impl Sidecar {
             let Some(stdin) = guard.as_mut() else {
                 return Err(SidecarError::Request("stdin-closed".to_string()));
             };
-            writeln!(stdin, "{line}").map_err(|e| {
-                match handle.try_exit_code() {
-                    Ok(Some(code)) => SidecarError::Exited {
-                        code,
-                        stderr_tail: handle.stderr_tail(),
-                    },
-                    _ => SidecarError::Request(e.to_string()),
-                }
+            writeln!(stdin, "{line}").map_err(|e| match handle.try_exit_code() {
+                Ok(Some(code)) => SidecarError::Exited {
+                    code,
+                    stderr_tail: handle.stderr_tail(),
+                },
+                _ => SidecarError::Request(e.to_string()),
             })?;
-            stdin.flush().map_err(|e| {
-                match handle.try_exit_code() {
-                    Ok(Some(code)) => SidecarError::Exited {
-                        code,
-                        stderr_tail: handle.stderr_tail(),
-                    },
-                    _ => SidecarError::Request(e.to_string()),
-                }
+            stdin.flush().map_err(|e| match handle.try_exit_code() {
+                Ok(Some(code)) => SidecarError::Exited {
+                    code,
+                    stderr_tail: handle.stderr_tail(),
+                },
+                _ => SidecarError::Request(e.to_string()),
             })?;
         }
 
@@ -586,16 +646,75 @@ impl Sidecar {
         }
     }
 
+    /// Grace the sidecar gets to stop its own runtimes before it is killed.
+    const SHUTDOWN_GRACE: Duration = Duration::from_secs(5);
+
+    /// Stop the sidecar AND everything it started.
+    ///
+    /// v2.4.11 operator report: "the application cannot be closed" while an
+    /// image was generating, and the GPU stayed pinned afterwards. The old
+    /// shutdown dropped stdin (which is the sidecar's own stop signal) and
+    /// then killed it in the same breath -- so the sidecar never got to stop
+    /// the Python diffusion runtime IT spawned, and that grandchild survived
+    /// the app, holding the GPU and the app's ports.
+    ///
+    /// Now the sidecar is given a few seconds to exit on its own, and if it is
+    /// still there it is killed WITH ITS TREE, so nothing it started outlives
+    /// the window the user just closed.
     pub fn shutdown(handle: SidecarHandle) {
+        // Closing stdin is the graceful stop: `rpcReader.on("close")` in the
+        // sidecar shuts its runtimes down in order.
         if let Ok(mut guard) = handle.stdin.lock() {
             guard.take();
         }
-        if let Ok(mut guard) = handle.child.lock() {
-            if let Some(mut child) = guard.take() {
-                let _ = child.kill();
-                let _ = child.wait();
+        let Ok(mut guard) = handle.child.lock() else {
+            return;
+        };
+        let Some(mut child) = guard.take() else {
+            return;
+        };
+        let deadline = Instant::now() + Self::SHUTDOWN_GRACE;
+        loop {
+            match child.try_wait() {
+                // Gone on its own: its children went with it.
+                Ok(Some(_)) => return,
+                Ok(None) => {}
+                Err(_) => break,
             }
+            if Instant::now() >= deadline {
+                break;
+            }
+            std::thread::sleep(Duration::from_millis(100));
         }
+        kill_tree(child.id());
+        let _ = child.kill();
+        let _ = child.wait();
+    }
+}
+
+/// Kill a process and everything it spawned.
+///
+/// `Child::kill` ends one process; a runtime the sidecar spawned (Python, in
+/// particular) is a GRANDCHILD and simply keeps running, which is how a closed
+/// window left a GPU pinned at 100%. Windows has `taskkill /T`; elsewhere the
+/// caller's own `kill` is the best available and the sidecar's graceful path
+/// (stdin close) is what normally does the work.
+pub fn kill_tree(pid: u32) {
+    #[cfg(windows)]
+    {
+        let mut cmd = Command::new("taskkill");
+        cmd.args(["/PID", &pid.to_string(), "/T", "/F"]);
+        cmd.stdout(Stdio::null()).stderr(Stdio::null());
+        #[cfg(windows)]
+        {
+            use std::os::windows::process::CommandExt;
+            cmd.creation_flags(CREATE_NO_WINDOW);
+        }
+        let _ = cmd.status();
+    }
+    #[cfg(not(windows))]
+    {
+        let _ = pid;
     }
 }
 
@@ -692,7 +811,9 @@ mod tests {
     static ENV_LOCK: Mutex<()> = Mutex::new(());
 
     fn env_lock() -> std::sync::MutexGuard<'static, ()> {
-        ENV_LOCK.lock().unwrap_or_else(|poisoned| poisoned.into_inner())
+        ENV_LOCK
+            .lock()
+            .unwrap_or_else(|poisoned| poisoned.into_inner())
     }
 
     struct EnvGuard(&'static str, Option<std::ffi::OsString>);
@@ -828,6 +949,8 @@ mod tests {
             script_path: None,
             failure: Some("script-not-found: x".into()),
             stderr_tail: vec!["boom".into()],
+            stderr_head: vec![],
+            log_path: None,
             candidates_rejected: vec![],
             exit_code: Some(1),
         };
@@ -933,7 +1056,8 @@ mod tests {
                 if let Some(line) = cwd_line {
                     let reported = line.trim_start_matches("cwd=");
                     let expected = fs::canonicalize(&dir).unwrap_or(dir.clone());
-                    let reported_canon = fs::canonicalize(reported).unwrap_or_else(|_| PathBuf::from(reported));
+                    let reported_canon =
+                        fs::canonicalize(reported).unwrap_or_else(|_| PathBuf::from(reported));
                     assert_eq!(reported_canon, expected, "spawn cwd was {reported}");
                 }
                 Sidecar::shutdown(handle);
@@ -948,7 +1072,10 @@ mod tests {
         assert_eq!(rpc_timeout_for("ping"), Duration::from_secs(15));
         assert_eq!(rpc_timeout_for("models.list"), Duration::from_secs(15));
         assert_eq!(rpc_timeout_for("skills.status"), Duration::from_secs(15));
-        assert_eq!(rpc_timeout_for("chat.explorer.tree"), Duration::from_secs(15));
+        assert_eq!(
+            rpc_timeout_for("chat.explorer.tree"),
+            Duration::from_secs(15)
+        );
         // Malformed / unknown names stay on the short default.
         assert_eq!(rpc_timeout_for(""), Duration::from_secs(15));
         assert_eq!(rpc_timeout_for("chat.send "), Duration::from_secs(15));
@@ -967,7 +1094,10 @@ mod tests {
             rpc_timeout_for("coding.session.sendMessage"),
             Duration::from_secs(600)
         );
-        assert_eq!(rpc_timeout_for("diffusion.txt2img"), Duration::from_secs(600));
+        assert_eq!(
+            rpc_timeout_for("diffusion.txt2img"),
+            Duration::from_secs(600)
+        );
         assert_eq!(
             rpc_timeout_for("diffusion.video.text2video"),
             Duration::from_secs(600)

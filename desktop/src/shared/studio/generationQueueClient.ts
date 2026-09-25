@@ -15,6 +15,7 @@ export interface GenerationQueueClient {
     parameters: Record<string, unknown>;
     priority?: "interactive" | "batch";
     batchSpec?: BatchSpec;
+    parentId?: string;
   }): Promise<readonly GenerationJob[]>;
   cancel(id: string): Promise<GenerationJob | null>;
   reorder(ids: readonly string[]): Promise<void>;
@@ -75,6 +76,7 @@ export class InMemoryGenerationQueueClient implements GenerationQueueClient {
     parameters: Record<string, unknown>;
     priority?: "interactive" | "batch";
     batchSpec?: BatchSpec;
+    parentId?: string;
   }): Promise<readonly GenerationJob[]> {
     const job: GenerationJob = {
       id: `q-${this.jobs.length + 1}`,
@@ -82,7 +84,7 @@ export class InMemoryGenerationQueueClient implements GenerationQueueClient {
       jobType: input.jobType,
       parameters: input.parameters,
       batchSpec: input.batchSpec ?? null,
-      parentId: null,
+      parentId: input.parentId ?? null,
       enhancement: null,
       sortOrder: this.jobs.length,
       state: "queued",

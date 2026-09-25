@@ -17,7 +17,7 @@ gated repo that 401s -- BEFORE a user hits it:
 
 The live pull+load run needs a real Ollama plus multi-GB downloads, so it is
 gated behind ``NEXUS_MODEL_PREFLIGHT=1`` and its CI job is deferred under the
-GitHub Actions budget freeze (see docs/v1/v1.13/known-gaps.md IR.P1.E). The
+GitHub Actions budget freeze (see docs/archive/v1/v1.13/known-gaps.md IR.P1.E). The
 reachability probe and all the logic here are unit-tested with mocked network.
 """
 

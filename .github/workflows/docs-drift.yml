@@ -1,0 +1,135 @@
+name: Docs drift
+
+# v2.4.9 Phase 3 -- a daily check that the feature inventory still matches the
+# README, reported as ONE rolling issue rather than a new issue per run.
+#
+# Why this exists when `check-feature-drift` already gates every pull request:
+# the gate catches drift a change introduces, and this catches drift that
+# arrives without a change to this repository at all -- a file deleted out of
+# band, a rename landed by a tool, a branch merged with protection bypassed by
+# an administrator. The gate answers "did this PR break it"; this answers "is it
+# broken right now".
+#
+# Rolling, deliberately. A job that opens a fresh issue every morning produces
+# 30 issues a month for one unfixed problem, and the correct response to that is
+# to mute the job. So: find the existing open issue by label, update it in
+# place, and CLOSE it when the drift clears. At most one open issue at any time.
+#
+# Cost: one ubuntu job per day, no npm install, a few seconds. The checker is
+# dependency-free by design.
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # 06:00 UTC daily
+  workflow_dispatch: {}
+
+concurrency:
+  group: docs-drift
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  drift:
+    name: Feature inventory drift
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+
+      - name: Check feature inventory drift
+        id: check
+        run: |
+          set -u
+          if node scripts/check-feature-drift.mjs > drift.txt 2>&1; then
+            echo "drifted=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "drifted=true" >> "$GITHUB_OUTPUT"
+          fi
+          cat drift.txt
+
+      - name: Open, update, or close the rolling issue
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.0.1
+        env:
+          DRIFTED: ${{ steps.check.outputs.drifted }}
+        with:
+          script: |
+            const fs = require("node:fs");
+            const LABEL = "docs-drift";
+            const TITLE = "Feature inventory has drifted from README.md";
+            const drifted = process.env.DRIFTED === "true";
+            const report = fs.readFileSync("drift.txt", "utf8").trim();
+
+            // Ensure the label exists, so the lookup below can rely on it.
+            try {
+              await github.rest.issues.getLabel({ ...context.repo, name: LABEL });
+            } catch {
+              await github.rest.issues.createLabel({
+                ...context.repo,
+                name: LABEL,
+                color: "d93f0b",
+                description: "Feature inventory and README disagree (opened by the docs-drift workflow)",
+              });
+            }
+
+            const { data: open } = await github.rest.issues.listForRepo({
+              ...context.repo,
+              state: "open",
+              labels: LABEL,
+              per_page: 100,
+            });
+            // Exclude pull requests, which this endpoint also returns.
+            const existing = open.filter((i) => !i.pull_request)[0];
+
+            const body = [
+              "`scripts/check-feature-drift.mjs` reports that `feature_list.json` and `README.md` disagree.",
+              "",
+              "This issue is updated in place by the `docs-drift` workflow and closes itself when the check passes, so there is only ever one of it.",
+              "",
+              "```",
+              report,
+              "```",
+              "",
+              `Last checked: ${new Date().toISOString()} (run ${context.runId}).`,
+            ].join("\n");
+
+            if (drifted) {
+              if (existing) {
+                await github.rest.issues.update({
+                  ...context.repo,
+                  issue_number: existing.number,
+                  body,
+                });
+                core.notice(`Updated rolling drift issue #${existing.number}`);
+              } else {
+                const { data: created } = await github.rest.issues.create({
+                  ...context.repo,
+                  title: TITLE,
+                  body,
+                  labels: [LABEL],
+                });
+                core.notice(`Opened rolling drift issue #${created.number}`);
+              }
+              return;
+            }
+
+            if (existing) {
+              await github.rest.issues.createComment({
+                ...context.repo,
+                issue_number: existing.number,
+                body: `Drift cleared as of ${new Date().toISOString()} (run ${context.runId}). Closing.`,
+              });
+              await github.rest.issues.update({
+                ...context.repo,
+                issue_number: existing.number,
+                state: "closed",
+              });
+              core.notice(`Closed rolling drift issue #${existing.number}`);
+            } else {
+              core.info("No drift and no open issue. Nothing to do.");
+            }

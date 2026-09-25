@@ -32,14 +32,11 @@ from __future__ import annotations
 import contextlib
 import gc
 import time
-from typing import Any, Callable, Iterator, List, Optional
+from typing import Callable, Iterator, List, Optional
 
 
 TelemetryEvent = dict
 TelemetryPublisher = Callable[[TelemetryEvent], None]
-
-
-_BYTES_PER_GB = 1024 ** 3
 
 
 _publisher: Optional[TelemetryPublisher] = None
@@ -56,6 +53,16 @@ def _publish(event: TelemetryEvent) -> None:
         _publisher(event)
 
 
+def release_vram() -> None:
+    """Drop cached CUDA blocks after a job so another runtime can use them.
+
+    v2.4.8 follow-up: image jobs ran outside `vram_scope`, so the weights'
+    VRAM stayed reserved by the caching allocator after the picture was done.
+    Safe without torch or CUDA (both helpers no-op).
+    """
+    _empty_cache()
+
+
 def _vram_allocated_bytes() -> Optional[int]:
     """Read `torch.cuda.memory_allocated()` if available, else None."""
     try:  # pragma: no cover - exercised on CUDA hosts
@@ -69,7 +76,17 @@ def _vram_allocated_bytes() -> Optional[int]:
 
 
 def _empty_cache() -> None:
-    """Run the gpu-cache + python-gc sweep used after every video job."""
+    """Run the python-gc + gpu-cache sweep used after every job.
+
+    Order matters, and it was wrong until v2.4.9. `torch.cuda.empty_cache()`
+    returns only those allocator blocks that no live tensor still holds, so
+    running it BEFORE `gc.collect()` skips everything the collector is about
+    to make unreachable -- including any pipeline held alive solely by a
+    reference cycle, which is the normal shape for a diffusers pipeline whose
+    submodules point back at their parent. Collect first, then hand the freed
+    blocks back to the driver.
+    """
+    gc.collect()
     try:  # pragma: no cover - exercised on CUDA hosts
         import torch  # type: ignore[import-not-found]
 
@@ -77,7 +94,6 @@ def _empty_cache() -> None:
             torch.cuda.empty_cache()
     except Exception:
         pass
-    gc.collect()
 
 
 def _iso_timestamp() -> str:

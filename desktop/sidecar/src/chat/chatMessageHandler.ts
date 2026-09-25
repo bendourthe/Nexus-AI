@@ -10,6 +10,7 @@
 // usage stays omitted (null at persist), never invented as 0.
 
 import { createHeadlessOllamaClient } from "../../../../modules/coding/llm/headlessOllamaClient.js";
+import { redactSecrets } from "../../../../core/observability/redactSecrets.js";
 import type { LLMClient, LLMMessage } from "../../../../modules/coding/llm/types.js";
 import type { ChatSessionEventT } from "../protocol.js";
 import type { SidecarModelEntry } from "../coding/models.js";
@@ -36,6 +37,8 @@ export interface ChatMessageHandlerOptions {
   readonly llm?: LLMClient;
 }
 
+const MAX_REASONING_TEXT_CHARS = 65_536;
+
 /**
  * Build the production chat runner. Streams the conversation through the local
  * model and collects token events; a fresh client call per turn. Errors become
@@ -49,6 +52,10 @@ export function createChatMessageHandler(
     const events: ChatSessionEventT[] = [];
     const usage = newUsage();
     let thinking = "";
+    // v2.4.8 Phase 1 (T002): the visible reply is accumulated so the provider
+    // total can be split between reasoning and output by text proportion.
+    let reply = "";
+    let reasoningCaptured = 0;
     try {
       for await (const chunk of llm.streamChat(
         { model: input.model.id, messages: [...input.messages], stream: true },
@@ -56,21 +63,34 @@ export function createChatMessageHandler(
       )) {
         collectUsage(chunk, usage);
         const thinkDelta = chunk.message?.thinking ?? "";
-        if (thinkDelta) thinking += thinkDelta;
+        if (thinkDelta) {
+          thinking += thinkDelta;
+          const safeDelta = redactSecrets(thinkDelta).slice(
+            0,
+            Math.max(MAX_REASONING_TEXT_CHARS - reasoningCaptured, 0),
+          );
+          if (safeDelta) {
+            events.push({ kind: "reasoning_delta", text: safeDelta });
+            reasoningCaptured += safeDelta.length;
+          }
+        }
         const delta = chunk.message?.content ?? "";
-        if (delta) events.push({ kind: "token", text: delta });
+        if (delta) {
+          reply += delta;
+          events.push({ kind: "token", text: delta });
+        }
         if (chunk.done) break;
       }
       events.push({
         kind: "done",
         finishReason: "stop",
-        ...doneUsageFields(turnUsageFromCollected(usage, thinking)),
+        ...doneUsageFields(turnUsageFromCollected(usage, thinking, reply)),
       });
     } catch (err) {
       events.push({
         kind: "done",
         finishReason: `error: ${err instanceof Error ? err.message : String(err)}`,
-        ...doneUsageFields(turnUsageFromCollected(usage, thinking)),
+        ...doneUsageFields(turnUsageFromCollected(usage, thinking, reply)),
       });
     }
     return events;

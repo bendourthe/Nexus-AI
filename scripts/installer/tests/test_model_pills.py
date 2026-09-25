@@ -151,11 +151,15 @@ def test_card_renders_pills_on_the_name_row(qt_app, tmp_path: Path) -> None:
         "Guardrails: Censored",
         "License: Gemma Terms of Use",
         "Released: May 2026",
+        "Recommended",
     ]
     assert header_widget.objectName() == "cardHeaderRow"
     assert not header_widget.autoFillBackground()
     assert "transparent" in header_widget.styleSheet()
     assert "#0a0d14" not in header_widget.styleSheet()
+    flow = header_widget.layout()
+    assert flow is not None and flow.hasHeightForWidth()
+    assert flow.heightForWidth(360) > flow.heightForWidth(900)
 
 
 def test_card_header_row_is_not_window_fill(qt_app, tmp_path: Path) -> None:
@@ -182,7 +186,9 @@ def test_card_header_row_is_not_window_fill(qt_app, tmp_path: Path) -> None:
         host_ram_gb=32,
         gpu_vendor="nvidia",
     )
-    assert BG_CARD in card.styleSheet()
+    # The card is tinted with its provider color rather than the flat card fill.
+    assert "rgba(" in card.styleSheet()
+    assert BG_CARD not in card.styleSheet()
     header = card.findChild(QWidget, "cardHeaderRow")
     assert header is not None
     assert BG_WINDOW not in header.styleSheet()

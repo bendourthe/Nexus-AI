@@ -56,40 +56,50 @@ from PyQt5.QtWidgets import (
 from nexus_installer import registry_paths
 from nexus_installer.catalog_invariants import REQUIRED_EMBEDDER_ID
 from nexus_installer.catalog_tab_sort import (
-    collapse_and_sort as shared_collapse_and_sort,
+    canonical_display_order,
+    catalog_fingerprint,
+    release_ordinal,
 )
 from nexus_installer.catalog_tab_sort import (
     is_over_budget as shared_is_over_budget,
 )
-from nexus_installer.catalog_tab_sort import (
-    release_ordinal,
-)
 from nexus_installer.constants import (
     ACCENT,
-    BG_CARD,
-    BORDER,
+    BADGE_DOWNLOADED,
+    BADGE_RECOMMENDED,
     BORDER_STRONG,
     ERROR,
     FAMILY_TO_PUBLISHER,
     FS_BODY,
     FS_CAPTION,
-    FS_H3,
     PROVIDER_COLORS,
     SUCCESS,
     TEXT_BODY,
     TEXT_MUTED,
-    TEXT_PRIMARY,
     TEXT_SECONDARY,
     WARNING,
     provider_color,
     publisher_for_family,
+    rgba_css,
+)
+from nexus_installer.engine.hf_weights_puller import resolve_models_root
+from nexus_installer.engine.installed_models import (
+    InstalledReport,
+    probe_installed_models,
+)
+from nexus_installer.engine.model_router import (
+    default_catalog_path,
+    load_catalog_index,
 )
 from nexus_installer.tier_defaults import (
     default_selection,
     load_tier_matrix,
     resolve_tier,
 )
+from nexus_installer.vram_display import display_vram_gb
 from nexus_installer.widgets.model_checkbox import ModelCheckBox
+from nexus_installer.widgets.page_intro import PageLede
+from nexus_installer.widgets.selectable_text import make_labels_selectable
 
 if TYPE_CHECKING:
     from nexus_installer.installer_state import InstallerState
@@ -100,6 +110,10 @@ TYPE_TABS: tuple[tuple[str, str, str], ...] = (
     # v2.2.9 Phase 5 (T010): Embeddings is its own first tab; embed rows no
     # longer park on Chat. Mirrored by desktop CATALOG_TAB_DEFS.
     ("embeddings", "Embeddings", "[E]"),
+    # Document OCR / parsing sits right after Embeddings (both are the
+    # retrieval side of the catalog); without a tab here `load_catalog_models`
+    # drops any entry whose tab resolves to None.
+    ("document", "Document", "[D]"),
     ("chat", "Chat", "[C]"),
     # v1.9.0 Phase 4 (T404): renamed from "Agentic Coding"; the tab now lists
     # agentic-capable chat models (the Gemma 4 family) alongside the coding
@@ -108,10 +122,6 @@ TYPE_TABS: tuple[tuple[str, str, str], ...] = (
     ("image", "Image", "[I]"),
     ("video", "Video", "[V]"),
     ("audio", "Audio", "[A]"),
-    # v1.16.0 Phase 3 (adoption item A5): document OCR / parsing. Without a tab
-    # here, `load_catalog_models` drops any entry whose tab resolves to None, so
-    # the two document models would be silently invisible in the picker.
-    ("document", "Document", "[D]"),
 )
 
 # Fallback when an entry carries no `task` field: catalog `type` -> tab.
@@ -234,12 +244,11 @@ class CatalogModel:
 
     @property
     def is_required(self) -> bool:
-        """Nomic Embed Text is required by the semantic memory layer.
+        """EmbeddingGemma 300M is required by the semantic memory layer.
 
-        v1.9.0 Phase 4 (T403): its card gets a Required badge and a locked-on
-        checkbox. Later embedders (EmbeddingGemma, Qwen3-Embedding) are the
-        same task but stay opt-in because swapping the default invalidates
-        the on-disk memory index.
+        v2.4.1 field correction: its card gets a Required badge and a locked-on
+        checkbox. Nomic and Qwen3-Embedding stay opt-in because swapping the
+        default invalidates the on-disk memory index.
         """
         return self.id == REQUIRED_EMBEDDER_ID
 
@@ -461,8 +470,7 @@ def load_catalog_models(catalog_path: Path) -> list[CatalogModel]:
     models: list[CatalogModel] = []
     for entry in data.get("models", []):
         raw_task = str(entry.get("task") or "")
-        raw_type = entry.get("type") or ""
-        tab = TASK_TO_TAB.get(raw_task) or CATALOG_TYPE_TO_TAB.get(raw_type)
+        tab = TASK_TO_TAB.get(raw_task)
         if tab is None:
             # VAEs, ControlNets, etc. are not user-facing top-level picks.
             continue
@@ -534,15 +542,25 @@ def _release_ordinal(value: str) -> int:
     return release_ordinal(value)
 
 
-def _catalog_model_sort_row(model: CatalogModel) -> dict[str, object]:
+def _catalog_model_sort_row(
+    model: CatalogModel,
+    *,
+    defaults: set[str] | None = None,
+    recommend_order: Sequence[str] | None = None,
+) -> dict[str, object]:
     tags: list[str] = []
+    default_ids = defaults or set()
+    del recommend_order
     if model.is_required:
         tags.append("required")
+    elif model.id in default_ids:
+        tags.append("recommended")
     return {
         "id": model.id,
         "displayName": model.display_name,
         "family": model.family or model.id,
         "vramGB": model.required_vram_gb,
+        "requiredRamGB": model.required_ram_gb,
         "hideBelowVramGB": model.hide_below_vram_gb,
         "releaseDate": model.release_date,
         "tags": tags,
@@ -572,22 +590,24 @@ def compatibility_badge(
     """Return `(text, color)` for the compatibility badge of the given model."""
     if gpu_vendor == "none" and model.required_vram_gb > 0:
         return (
-            f"Requires {model.required_vram_gb} GB VRAM (no GPU detected)",
+            f"Incompatible - needs {model.required_vram_gb} GB VRAM",
             ERROR,
         )
     if model.required_vram_gb > 0 and total_vram_gb < model.required_vram_gb:
         return (
-            f"Requires {model.required_vram_gb} GB VRAM (you have {total_vram_gb})",
+            f"Incompatible - needs {model.required_vram_gb} GB VRAM",
             WARNING,
         )
     if model.required_ram_gb > 0 and total_ram_gb < model.required_ram_gb:
         if total_ram_gb <= 0:
             return (
-                f"Requires {model.required_ram_gb} GB RAM (RAM not detected)",
+                f"Incompatible - needs {model.required_ram_gb} GB RAM "
+                "(RAM not detected)",
                 WARNING,
             )
         return (
-            f"Requires {model.required_ram_gb} GB RAM (you have {total_ram_gb})",
+            f"Incompatible - needs {model.required_ram_gb} GB RAM "
+            f"(you have {total_ram_gb})",
             WARNING,
         )
     if model.min_ollama_version:
@@ -595,7 +615,9 @@ def compatibility_badge(
             f"Requires Ollama {model.min_ollama_version}+",
             SUCCESS,
         )
-    return "Compatible", SUCCESS
+    if model.required_vram_gb > 0:
+        return f"Compatible - {model.required_vram_gb} GB VRAM", SUCCESS
+    return "Compatible - CPU", SUCCESS
 
 
 def _card_status(
@@ -620,13 +642,9 @@ def _card_status(
         gpu_vendor=gpu_vendor,
     )
     fits = compat_color == SUCCESS
-    if model.is_required:
-        return "Required", accent, fits
     if not fits:
         return compat_text, compat_color, False
-    if recommended:
-        return "Recommended", accent, True
-    return "Compatible", SUCCESS, True
+    return compat_text, SUCCESS, True
 
 
 def _pill(
@@ -641,6 +659,26 @@ def _pill(
     return chip
 
 
+#: Diameter of the round icon badges (compatibility, downloaded) on a card.
+_ICON_BADGE_PX = 22
+
+
+def _icon_badge(glyph: str, *, color: str, tooltip: str, object_name: str) -> QLabel:
+    """A round filled icon badge whose meaning lives on the tooltip."""
+    badge = QLabel(glyph)
+    badge.setObjectName(object_name)
+    badge.setToolTip(tooltip)
+    badge.setAccessibleName(tooltip)
+    badge.setFixedSize(_ICON_BADGE_PX, _ICON_BADGE_PX)
+    badge.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    badge.setStyleSheet(
+        f"color: {color}; background-color: {rgba_css(color, 0.18)}; "
+        f"border: 1px solid {color}; border-radius: {_ICON_BADGE_PX // 2}px; "
+        f"font-size: {FS_CAPTION}px; font-weight: bold;"
+    )
+    return badge
+
+
 @dataclass
 class _ModelCardState:
     """Track a card's checkbox + the model it represents."""
@@ -650,6 +688,11 @@ class _ModelCardState:
     base_label: str = ""
     disabled_for_disk: bool = False
     over_budget: bool = False
+    # v2.4.5 Phase 2.2: mirrored from the card so callers (and tests) can ask
+    # about the downloaded state without holding a widget reference. Keeping a
+    # QWidget here outlived QApplication teardown and crashed the suite with a
+    # COM RPC_E_DISCONNECTED at interpreter shutdown.
+    downloaded: bool = False
 
 
 @dataclass
@@ -737,6 +780,121 @@ class _FlowLayout(QLayout):
         return y + line_height - rect.y()
 
 
+class _CurrentTabHeight(QTabWidget):
+    """Tab widget as tall as the tab being shown, not as the tallest tab.
+
+    QTabWidget reports the largest page it holds, so the Audio tab (two cards)
+    was framed by a panel sized for the Agentic tab (a dozen). The operator
+    asked for the box to "fit the list of models in the current tab", so the
+    hint follows the current page and the panel is re-measured on every tab
+    change.
+    """
+
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.currentChanged.connect(lambda _index: self.updateGeometry())
+
+    def _page_height(self, minimum: bool) -> int | None:
+        page = self.currentWidget()
+        if page is None:
+            return None
+        hint = page.minimumSizeHint() if minimum else page.sizeHint()
+        bar = self.tabBar()
+        chrome = (bar.sizeHint().height() if bar else 0) + 8
+        return hint.height() + chrome
+
+    def sizeHint(self) -> QSize:  # noqa: N802
+        hint = super().sizeHint()
+        height = self._page_height(minimum=False)
+        return hint if height is None else QSize(hint.width(), height)
+
+    def minimumSizeHint(self) -> QSize:  # noqa: N802
+        hint = super().minimumSizeHint()
+        height = self._page_height(minimum=True)
+        return (
+            hint if height is None else QSize(hint.width(), min(hint.height(), height))
+        )
+
+
+class _WrappedCardColumn(QWidget):
+    """Card column that reports the height its WRAPPED content really needs.
+
+    A QWidget's size hints come from its layout, which measures each
+    word-wrapped label at a guessed width. For these cards that guess is two
+    to three times the drawn height (the Audio tab hints 933px and draws
+    354px), and a scroll area sizes its inner widget by that hint -- which is
+    what left a two-card category scrolling inside a tall, mostly empty box.
+    Both hints are re-asked of the layout at the width the column actually
+    has, so the box and the scrollbar describe the cards on screen.
+    """
+
+    def _wrapped_height(self, fallback: int) -> int:
+        layout = self.layout()
+        width = self.width()
+        if layout is None or width <= 0 or not layout.hasHeightForWidth():
+            return fallback
+        return layout.totalHeightForWidth(width)
+
+    def sizeHint(self) -> QSize:  # noqa: N802
+        hint = super().sizeHint()
+        return QSize(hint.width(), self._wrapped_height(hint.height()))
+
+    def minimumSizeHint(self) -> QSize:  # noqa: N802
+        hint = super().minimumSizeHint()
+        return QSize(hint.width(), self._wrapped_height(hint.height()))
+
+
+class _FillScrollArea(QScrollArea):
+    """Inner card list sized to the cards it holds.
+
+    QScrollArea's default sizeHint is the full inner-widget height. Nested
+    inside the window content scroll, that grows the Models page until the
+    tab bar (and Reset) sit below the fold. Report the content height instead,
+    paired with a Maximum vertical policy so a short tab (Audio: two cards)
+    shrinks to its cards rather than stretching into an empty scrolling box,
+    while a long tab still stops at the space the page can give it.
+    """
+
+    #: Floor so a single-card or empty tab keeps a usable box.
+    MIN_CONTENT_HEIGHT = 160
+
+    def _content_height(self) -> int:
+        inner = self.widget()
+        if inner is None:
+            return self.MIN_CONTENT_HEIGHT
+        width = self.viewport().width()
+        # Cards word-wrap, so the height they actually occupy depends on the
+        # width they get. `sizeHint` measures each wrapped label at a guessed
+        # narrow width and comes out two to three times the rendered height
+        # (the Audio tab: 933px hinted, 354px drawn), so the wrapped
+        # measurement wins wherever the layout can supply one.
+        if width > 0 and inner.hasHeightForWidth():
+            hint = inner.heightForWidth(width)
+        else:
+            hint = inner.sizeHint().height()
+        return max(self.MIN_CONTENT_HEIGHT, hint + 2 * self.frameWidth())
+
+    def sizeHint(self) -> QSize:
+        return QSize(400, self._content_height())
+
+    def minimumSizeHint(self) -> QSize:
+        return QSize(200, min(self.MIN_CONTENT_HEIGHT, self._content_height()))
+
+    def resizeEvent(self, event: object) -> None:  # noqa: N802
+        super().resizeEvent(event)  # type: ignore[arg-type]
+        # Width changes re-wrap the cards, which changes the content height.
+        self.updateGeometry()
+
+
+def _section_label(text: str) -> QLabel:
+    label = QLabel(text)
+    label.setStyleSheet(
+        f"color: {TEXT_SECONDARY}; font-size: {FS_CAPTION}px; "
+        f"font-weight: 600; background: transparent; padding-top: 4px;"
+    )
+    return label
+
+
 class _ModelCard(QWidget):
     """One model card with metadata, Phase 4 copy, and checkbox."""
 
@@ -750,18 +908,22 @@ class _ModelCard(QWidget):
         host_ram_gb: int,
         gpu_vendor: str,
         accent: str = ACCENT,
+        downloaded: bool = False,
         parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
         self.model = model
+        self.downloaded = downloaded
         # Scoped selector + WA_StyledBackground: an unqualified stylesheet
         # would propagate the border to every child QLabel (each line
         # rendered as its own boxed pill -- the pre-Phase-5 look).
         self.setObjectName("modelCard")
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        # The card carries a hint of its provider's color, so a Google card
+        # and an Alibaba card read differently before a single word is read.
         self.setStyleSheet(
-            f"QWidget#modelCard {{ background-color: {BG_CARD}; "
-            f"border: 1px solid {BORDER}; border-radius: 8px; }}"
+            f"QWidget#modelCard {{ background-color: {rgba_css(accent, 0.09)}; "
+            f"border: 1px solid {rgba_css(accent, 0.30)}; border-radius: 8px; }}"
         )
         layout = QVBoxLayout(self)
         layout.setContentsMargins(14, 10, 14, 10)
@@ -781,13 +943,14 @@ class _ModelCard(QWidget):
         #: False when the model needs more VRAM/RAM than the host has -- the
         #: page reads this to disable + dim the card (v1.13.0 Phase 4).
         self.fits = fits
-        title_color = TEXT_PRIMARY if fits else TEXT_MUTED
+        # The name takes the provider color; incompatible cards stay muted.
+        title_color = accent if fits else TEXT_MUTED
 
         # --- Title row: [checkbox] name  [status badge]  [disk] ---
         title_row = QHBoxLayout()
         title_row.setSpacing(8)
         # v1.9.0 Phase 5 (T021) -- the custom-painted ModelCheckBox. `accent` is
-        # the per-provider color; the required (embed) model is locked on by the
+        # the per-provider color; the required embedder is locked on by the
         # page in `_update_selection_state`, never silently forced here.
         self.checkbox = ModelCheckBox(accent=accent)
         self.checkbox.setChecked(checked)
@@ -810,26 +973,44 @@ class _ModelCard(QWidget):
         header_flow.addWidget(title)
         for pill_text in build_fact_pills(model):
             header_flow.addWidget(_pill(pill_text))
+        if model.is_required:
+            header_flow.addWidget(_pill("Required", color=accent, border=accent))
+        elif recommended:
+            header_flow.addWidget(
+                _pill("Recommended", color=BADGE_RECOMMENDED, border=BADGE_RECOMMENDED)
+            )
         if model.tool_calling_verified:
             header_flow.addWidget(
                 _pill("Tool calling verified", color=accent, border=accent)
             )
         title_row.addWidget(header, stretch=1)
 
-        status = QLabel(badge_text)
-        status.setStyleSheet(
-            f"color: {badge_color}; font-size: {FS_CAPTION}px; font-weight: bold; "
-            f"border: 1px solid {badge_color}; border-radius: 9px; "
-            f"padding: 1px 8px; background: transparent;"
+        # Right-hand badges, in order: storage required, compatibility icon,
+        # downloaded icon. The two states are icons with the full wording on
+        # the tooltip, so the row stays short on every card.
+        size_label = _pill(f"{model.size_gb:.1f} GB", color=accent, border=accent)
+        title_row.addWidget(size_label)
+
+        status = _icon_badge(
+            "✓" if fits else "!",
+            color=badge_color,
+            tooltip="Compatible" if fits else badge_text,
+            object_name="compatBadge",
         )
         title_row.addWidget(status)
 
-        size_label = QLabel(f"{model.size_gb:.1f} GB")
-        size_label.setStyleSheet(
-            f"color: {accent}; font-weight: bold; font-size: {FS_H3}px; "
-            f"background: transparent;"
-        )
-        title_row.addWidget(size_label)
+        # An ADDITIONAL badge, never a replacement for the compatibility one.
+        # Overloading `_card_status` would drop a hardware incompatibility
+        # warning on a model that happens to be downloaded -- the one case
+        # where that warning matters most.
+        if downloaded:
+            downloaded_pill = _icon_badge(
+                "⤓",
+                color=BADGE_DOWNLOADED,
+                tooltip="Downloaded",
+                object_name="downloadedPill",
+            )
+            title_row.addWidget(downloaded_pill)
         layout.addLayout(title_row)
 
         # --- Incompatibility note (only when the model does not fit) ---
@@ -844,12 +1025,14 @@ class _ModelCard(QWidget):
             # Over budget: dim the card with a dashed muted border so it reads
             # as unavailable, while the requirement note above stays readable.
             self.setStyleSheet(
-                f"QWidget#modelCard {{ background-color: {BG_CARD}; "
+                f"QWidget#modelCard {{ background-color: {rgba_css(accent, 0.04)}; "
                 f"border: 1px dashed {BORDER_STRONG}; border-radius: 8px; }}"
             )
             size_label.setStyleSheet(
-                f"color: {TEXT_SECONDARY}; font-weight: bold; "
-                f"font-size: {FS_H3}px; background: transparent;"
+                f"color: {TEXT_SECONDARY}; font-size: {FS_CAPTION}px; "
+                "background: transparent; "
+                f"border: 1px solid {BORDER_STRONG}; border-radius: 9px; "
+                "padding: 1px 8px;"
             )
 
         # --- Plain-language description leads the card (Phase 2 copy, T023) ---
@@ -911,6 +1094,28 @@ class _ModelCard(QWidget):
             why.setWordWrap(True)
             layout.addWidget(why)
 
+        # The badges keep their mouse events so their tooltips show on hover;
+        # every other label stays selectable (the app-wide text filter) and
+        # the card toggles from its checkbox or any non-text area.
+        if fits:
+            self.setCursor(Qt.CursorShape.PointingHandCursor)
+
+    def mouseReleaseEvent(self, event: object) -> None:  # noqa: N802
+        """Toggle from anywhere on a compatible card, not just the 20px box."""
+        button = getattr(event, "button", None)
+        pos = getattr(event, "pos", None)
+        child = self.childAt(pos()) if callable(pos) else None
+        if child is self.checkbox:
+            super().mouseReleaseEvent(event)  # type: ignore[arg-type]
+            return
+        if (
+            callable(button)
+            and button() == Qt.MouseButton.LeftButton
+            and self.checkbox.isEnabled()
+        ):
+            self.checkbox.toggle()
+        super().mouseReleaseEvent(event)  # type: ignore[arg-type]
+
 
 class TypedCatalogPage(QWidget):
     """Sectioned catalog page (Chat / Agentic Coding / Image / Video / Audio)."""
@@ -929,11 +1134,17 @@ class TypedCatalogPage(QWidget):
         catalog_path: Path | None = None,
         recommended_path: Path | None = None,
         on_selection_changed: Callable[[float], None] | None = None,
+        # v2.4.5 Phase 2.1: injectable so tests are deterministic. The default
+        # reads the real model stores under the user's home; a test that used
+        # it would pass or fail based on what the developer had downloaded.
+        installed_probe: Callable[[], InstalledReport] | None = None,
         parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
         self._state = state
         self._on_selection_changed = on_selection_changed
+        self._installed_probe = installed_probe
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         catalog_path = catalog_path or _default_catalog_path()
         recommended_path = recommended_path or _default_recommended_path()
@@ -941,12 +1152,21 @@ class TypedCatalogPage(QWidget):
         self._catalog: dict[str, CatalogModel] = {
             m.id: m for m in load_catalog_models(catalog_path)
         }
+        catalog_data = json.loads(catalog_path.read_text(encoding="utf-8"))
+        self.catalog_hash = catalog_fingerprint(catalog_data)
         self._matrix = load_tier_matrix(recommended_path)
         self._selection = TypedSelection()
         self._cards: list[_ModelCardState] = []
         # A pre-seeded selection (CLI --model override or back-navigation)
         # counts as user intent: defaults must not stomp it.
         self._user_touched = False
+        # v2.4.5 Phase 2: probe bookkeeping. `_probed_models_root` avoids
+        # re-walking the filesystem on every showEvent; `_downloaded_autoselected`
+        # keeps auto-selection a first-load action so it never re-checks a model
+        # the user deliberately deselected.
+        self._probed_models_root: str | None = None
+        self._downloaded_autoselected = False
+        self._catalog_entry_cache: dict[str, dict] | None = None
         # v1.11.0 Phase 6 (T603): a category is "decided" when it has a
         # selection OR was explicitly skipped OR has no models; the flow blocks
         # leaving the page until every category is decided.
@@ -962,12 +1182,14 @@ class TypedCatalogPage(QWidget):
         title.setObjectName("pageTitle")
         layout.addWidget(title)
 
-        self._subtitle = QLabel("")
-        self._subtitle.setStyleSheet(
-            f"color: {TEXT_BODY}; font-size: {FS_BODY}px; background: transparent;"
-        )
-        self._subtitle.setWordWrap(True)
+        self._subtitle = PageLede("")
         layout.addWidget(self._subtitle)
+
+        catalog_label = QLabel(f"Catalog {self.catalog_hash[:12]}")
+        catalog_label.setStyleSheet(
+            f"color: {TEXT_MUTED}; font-size: {FS_CAPTION}px; background: transparent;"
+        )
+        layout.addWidget(catalog_label)
 
         # v1.9.0 Phase 6 (T025): a compact per-provider color legend so the
         # per-maker card colors are self-explanatory. Shown only when more than
@@ -983,27 +1205,32 @@ class TypedCatalogPage(QWidget):
         self._legend.setVisible(bool(legend_html))
         layout.addWidget(self._legend)
 
-        self._tabs = QTabWidget()
-        layout.addWidget(self._tabs, stretch=1)
-
-        self._totals_label = QLabel("")
-        self._totals_label.setStyleSheet(
-            f"color: {ACCENT}; font-weight: bold; background: transparent;"
+        self._tabs = _CurrentTabHeight()
+        # Maximum: the panel may shrink to the current tab's cards but never
+        # stretches past them (v2.4.11 -- "fit the box containing the models to
+        # the list of models in the current tab").
+        self._tabs.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum
         )
-        layout.addWidget(self._totals_label)
-
-        # v1.9.0 Phase 4 (T403) footer: a Reset-to-recommended control that resets
-        # the picks to the recommended set for the detected hardware, plus a
-        # reassurance note. The wizard's global Next button is the Continue.
-        footer_row = QHBoxLayout()
-        footer_row.setSpacing(12)
+        self._tabs.tabBar().setExpanding(False)
         self._refresh_button = QPushButton("Reset to recommended")
         self._refresh_button.setObjectName("secondaryButton")
         self._refresh_button.setToolTip(
             "Reset the selection to the recommended models for your hardware."
         )
         self._refresh_button.clicked.connect(self._on_refresh_clicked)
-        footer_row.addWidget(self._refresh_button)
+        self._tabs.setCornerWidget(self._refresh_button, Qt.Corner.TopRightCorner)
+        layout.addWidget(self._tabs, stretch=1)
+
+        self._totals_label = QLabel("")
+        self._totals_label.setStyleSheet(
+            f"color: {ACCENT}; font-weight: bold; background: transparent;"
+        )
+        self._totals_label.setWordWrap(True)
+        layout.addWidget(self._totals_label)
+
+        # v1.9.0 Phase 4 (T403): Reset lives on the category tab row so it stays
+        # on screen. The note below is the only footer chrome on this page.
         reassurance = QLabel(
             "You can add or remove models anytime after install from the Nexus "
             "model manager."
@@ -1013,8 +1240,9 @@ class TypedCatalogPage(QWidget):
             f"background: transparent;"
         )
         reassurance.setWordWrap(True)
-        footer_row.addWidget(reassurance, stretch=1)
-        layout.addLayout(footer_row)
+        layout.addWidget(reassurance)
+        # Space a short category no longer fills collects here, at the bottom.
+        layout.addStretch()
 
         # Ids not in the catalog are kept: the model router sends unknown
         # ids to `ollama pull` verbatim (the --model override contract).
@@ -1027,6 +1255,13 @@ class TypedCatalogPage(QWidget):
 
         self._rebuild_tabs()
         self._update_selection_state()
+
+    def sizeHint(self) -> QSize:
+        """Stay viewport-sized so the window scroll does not hide the tab row."""
+        return QSize(720, 560)
+
+    def minimumSizeHint(self) -> QSize:
+        return QSize(480, 400)
 
     # -----------------------------------------------------------------
     # Hardware-tier defaults
@@ -1051,9 +1286,74 @@ class TypedCatalogPage(QWidget):
     def refresh_from_state(self) -> None:
         """Recompute tier defaults + badges from the current installer state."""
         if not self._user_touched:
-            self._selection.selected = set(self._current_defaults())
+            # Rebuild from the tier defaults, but keep every already-downloaded
+            # model that is currently selected. Auto-selection runs once per
+            # session, so a second showEvent (Back from Configuration) used to
+            # reset to the bare defaults and silently drop the downloaded
+            # models it had pre-selected on the first visit.
+            downloaded = {
+                mid
+                for mid in self._state.installed_report.downloaded
+                if mid in self._catalog
+            }
+            kept = self._selection.selected & downloaded
+            self._selection.selected = set(self._current_defaults()) | kept
+        self._refresh_installed_report()
+        self._apply_downloaded_autoselect()
         self._rebuild_tabs()
         self._update_selection_state()
+
+    def _refresh_installed_report(self) -> None:
+        """Probe both model stores for what is already on disk.
+
+        Re-probed when `models_root` changes, because the install path moves
+        the weights destination with it. Never raises: `probe_installed_models`
+        fails open, and this wraps it once more so a page that cannot probe
+        still shows its cards.
+        """
+        root = str(getattr(self._state, "models_root", "") or "")
+        if root == self._probed_models_root and self._state.installed_report.downloaded:
+            return
+        try:
+            if self._installed_probe is not None:
+                report = self._installed_probe()
+            else:
+                report = probe_installed_models(
+                    selection=list(self._catalog),
+                    catalog=self._catalog_entries(),
+                    sizes_gb={mid: m.size_gb for mid, m in self._catalog.items()},
+                    models_root=resolve_models_root(self._state),
+                    ollama_url=getattr(self._state, "ollama_url", None),
+                )
+        except Exception:  # noqa: BLE001 - a probe must never break the picker
+            return
+        self._state.installed_report = report
+        self._probed_models_root = root
+
+    def _catalog_entries(self) -> dict[str, dict]:
+        """Raw catalog entries keyed by id, for protocol + pull-target routing."""
+        if self._catalog_entry_cache is None:
+            self._catalog_entry_cache = load_catalog_index(default_catalog_path())
+        return self._catalog_entry_cache
+
+    def _apply_downloaded_autoselect(self) -> None:
+        """Select already-downloaded models, once per wizard session.
+
+        Applied on the first population only. Re-applying on every rebuild
+        would silently re-check a model the user had just deselected to skip
+        its verification pass, which is a legitimate thing to want on a
+        reinstall.
+        """
+        # A user who has touched the selection owns it. Without this guard,
+        # deselecting an already-downloaded model to skip its verification pass
+        # would be silently undone by the next refresh.
+        if self._downloaded_autoselected or self._user_touched:
+            return
+        downloaded = self._state.installed_report.downloaded
+        if not downloaded:
+            return
+        self._selection.selected |= {mid for mid in downloaded if mid in self._catalog}
+        self._downloaded_autoselected = True
 
     def _on_refresh_clicked(self) -> None:
         """Reset the selection to the recommended set for the detected hardware.
@@ -1100,8 +1400,9 @@ class TypedCatalogPage(QWidget):
                 page.deleteLater()
 
         vram_gb = max(0, int(self._state.vram_mb / 1024))
+        shown_gb = display_vram_gb(self._state.vram_mb)
         self._subtitle.setText(
-            f"Detected {self._state.gpu_name or 'no GPU'} ({vram_gb} GB VRAM). "
+            f"Detected {self._state.gpu_name or 'no GPU'} ({shown_gb} GB VRAM). "
             "We've pre-selected the best fit for your hardware -- tick more to "
             "add them, or untick any you don't want. Each card is colored by its "
             "maker."
@@ -1113,6 +1414,11 @@ class TypedCatalogPage(QWidget):
                 self._build_tab(key, icon, vram_gb, self._state, defaults), label
             )
         self._tabs.setCurrentIndex(min(current, self._tabs.count() - 1))
+        # Removing tabs can drop the corner widget on some Qt builds; pin it
+        # back onto the category row after every rebuild.
+        self._tabs.setCornerWidget(self._refresh_button, Qt.Corner.TopRightCorner)
+        # Cards were just rebuilt: every label on them is selectable.
+        make_labels_selectable(self._tabs)
 
     def _models_for_section(self, section_key: str) -> list[CatalogModel]:
         """Models shown under a tab.
@@ -1136,17 +1442,11 @@ class TypedCatalogPage(QWidget):
         defaults: set[str] | None = None,
         recommend_order: Sequence[str] | None = None,
     ) -> list[CatalogModel]:
-        """Collapse a tab to one best-fitting model per family.
+        """Order a tab: required, then pre-selected defaults, then the rest.
 
-        v1.14.0 Phase 3 (supersedes the v1.13 flat VRAM-ascending sort): for
-        each model family show the single best variant that fits the detected
-        GPU -- the family's tier default when it fits, else the most capable
-        (highest-VRAM) fitting variant. Other fitting variants are hidden; every
-        variant that needs more VRAM than the GPU has is shown disabled/grayed;
-        a family with no fitting variant shows its smallest one, grayed. Enabled
-        rows come first: required, then pre-ticked defaults, then the rest of
-        this tier's recommended.json list (recommendation order), then newest
-        release, then most-capable. Over-budget rows follow.
+        v2.4.1 field correction: pre-ticked hardware defaults lead the tab so
+        the operator sees the required set first. Compatible opt-in rows
+        follow (newest first). Over-budget rows stay at the bottom.
 
         v2.2.8 Phase 4: the comparison and order live in
         ``nexus_installer.catalog_tab_sort`` so Settings can dual-assert the
@@ -1154,12 +1454,19 @@ class TypedCatalogPage(QWidget):
         """
         section = list(self._models_for_section(section_key))
         by_id = {m.id: m for m in section}
-        ordered = shared_collapse_and_sort(
-            [_catalog_model_sort_row(m) for m in section],
+        ordered = canonical_display_order(
+            [
+                _catalog_model_sort_row(
+                    model,
+                    defaults=defaults,
+                    recommend_order=recommend_order,
+                )
+                | {"task": model.task}
+                for model in section
+            ],
             host_vram_gb=host_vram_gb,
+            host_ram_gb=self._state.total_ram_gb,
             gpu_vendor=gpu_vendor,
-            defaults=defaults or set(),
-            recommend_order=recommend_order,
         )
         return [by_id[i] for i in ordered if i in by_id]
 
@@ -1185,9 +1492,10 @@ class TypedCatalogPage(QWidget):
         accent_rule.setStyleSheet(f"background-color: {ACCENT}; border: none;")
         outer.addWidget(accent_rule)
 
-        scroll = QScrollArea()
+        scroll = _FillScrollArea()
         scroll.setWidgetResizable(True)
-        inner = QWidget()
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        inner = _WrappedCardColumn()
         layout = QVBoxLayout(inner)
         layout.setSpacing(8)
 
@@ -1218,10 +1526,11 @@ class TypedCatalogPage(QWidget):
             layout.addWidget(empty)
         else:
             host_ram_gb = state.total_ram_gb
-            # v1.14.0 Phase 3: a labeled divider separates the compatible best-
-            # of-family picks from the grayed, over-budget tiers below.
-            divider_added = False
+            required_header_added = False
+            optional_header_added = False
+            vram_divider_added = False
             for model in models:
+                is_required_pick = model.is_required or model.id in defaults
                 card = _ModelCard(
                     model,
                     recommended=model.id in defaults,
@@ -1230,15 +1539,22 @@ class TypedCatalogPage(QWidget):
                     host_ram_gb=host_ram_gb,
                     gpu_vendor=gpu_vendor,
                     accent=provider_color(model.family),
+                    downloaded=self._state.installed_report.is_downloaded(model.id),
                 )
-                if not card.fits and not divider_added:
+                if card.fits and is_required_pick and not required_header_added:
+                    layout.addWidget(_section_label("Required for this GPU"))
+                    required_header_added = True
+                elif card.fits and not is_required_pick and not optional_header_added:
+                    layout.addWidget(_section_label("More compatible models"))
+                    optional_header_added = True
+                elif not card.fits and not vram_divider_added:
                     divider = QLabel("Needs more VRAM than this GPU")
                     divider.setStyleSheet(
                         f"color: {TEXT_MUTED}; font-size: {FS_CAPTION}px; "
                         f"background: transparent; padding-top: 6px;"
                     )
                     layout.addWidget(divider)
-                    divider_added = True
+                    vram_divider_added = True
                 card.setSizePolicy(
                     QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
                 )
@@ -1253,13 +1569,17 @@ class TypedCatalogPage(QWidget):
                         checkbox=card.checkbox,
                         base_label=base_label,
                         over_budget=not card.fits,
+                        downloaded=card.downloaded,
                     )
                 )
                 layout.addWidget(card)
 
         layout.addStretch()
         scroll.setWidget(inner)
-        outer.addWidget(scroll)
+        # Maximum: the box may shrink below the page height but never grows
+        # past its own content, so short categories lose the empty scroll run.
+        scroll.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
+        outer.addWidget(scroll, stretch=1)
 
         # v1.11.0 Phase 6 (T603): an explicit "Skip this category" control. The
         # category flow requires every category to be decided (a selection or a
@@ -1278,6 +1598,9 @@ class TypedCatalogPage(QWidget):
         self._skip_buttons[section_key] = skip_btn
         skip_row.addWidget(skip_btn)
         outer.addLayout(skip_row)
+        # Absorb the space a short category no longer fills so the card box and
+        # the Skip row stay together at the top of the tab.
+        outer.addStretch()
         return container
 
     # -----------------------------------------------------------------
@@ -1323,6 +1646,29 @@ class TypedCatalogPage(QWidget):
     def _update_selection_state(self) -> None:
         total = self._selection.total_gb(self._catalog)
         self._state.selected_models_gb = total
+        # v2.4.7 Phase 1.1 (T001): the SELECTION-scoped pending size.
+        #
+        # `installed_report` is deliberately probed over the whole catalog, so
+        # every card can show its Downloaded pill -- which means the report's
+        # own `pending_gb` is "every un-downloaded model in the catalog", not
+        # "what this selection still needs". Reading that as a selection size
+        # is what made Review claim `0 to download` beside `~157 GB to
+        # download`, and it fed the install guard the same wrong number.
+        #
+        # Written in the same place as `selected_models_gb` so the two cannot
+        # drift apart.
+        downloaded = self._state.installed_report.downloaded
+        self._state.pending_models_gb = sum(
+            self._catalog[mid].size_gb
+            for mid in self._selection.selected
+            if mid in self._catalog and mid not in downloaded
+        )
+        # Disk arithmetic below charges only what still has to be fetched:
+        # models already on disk consume no new space, so warning about the
+        # whole selection told a host holding 220 GB of weights that it was
+        # about to run out of room for a 9 GB download.
+        pending_total = self._state.pending_models_gb
+        already_total = max(0.0, total - pending_total)
 
         # v1.8.0 Phase 4 (OSI003.P3.D): publish the multi-selection the
         # protocol-routed model step consumes, and keep the legacy single
@@ -1384,20 +1730,38 @@ class TypedCatalogPage(QWidget):
                 card.checkbox.setEnabled(True)
                 card.disabled_for_disk = False
                 continue
-            remaining = free - total - card.model.size_gb
+            remaining = free - pending_total - card.model.size_gb
+            # Compatible cards stay selectable even when the current basket
+            # would dip below the OS reserve. The totals line warns, and the
+            # Review install guard still blocks a too-large download. Operators
+            # can tick SANA (or any other fit) and untick a heavier default.
+            card.checkbox.setEnabled(True)
             if remaining < reserve:
-                card.checkbox.setEnabled(False)
                 card.checkbox.setToolTip(self.DISK_TOOLTIP)
                 card.disabled_for_disk = True
             else:
-                card.checkbox.setEnabled(True)
                 card.checkbox.setToolTip("")
                 card.disabled_for_disk = False
 
         count = len(self._selection.selected)
+        remaining_after = (free - pending_total) if free > 0 else None
+        disk_short = remaining_after is not None and remaining_after < reserve
+        suffix = (
+            f"  --  leaves less than {int(reserve)} GB free; "
+            "untick models to keep the OS reserve"
+            if disk_short
+            else ""
+        )
+        already = (
+            f" ({already_total:.1f} GB already downloaded)" if already_total > 0 else ""
+        )
         self._totals_label.setText(
             f"{count} model{'s' if count != 1 else ''} selected  --  "
-            f"{total:.1f} GB total download"
+            f"{pending_total:.1f} GB to download{already}{suffix}"
+        )
+        self._totals_label.setStyleSheet(
+            f"color: {ERROR if disk_short else ACCENT}; font-weight: bold; "
+            "background: transparent;"
         )
         if self._on_selection_changed:
             with contextlib.suppress(Exception):

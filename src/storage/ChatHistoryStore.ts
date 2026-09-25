@@ -5,6 +5,14 @@ import { escapeLikePattern } from "./likeEscape.js";
 import { secureDbPermissions } from "./dbPermissions.js";
 import { sanitizeFtsQuery } from "./embeddingUtils.js";
 import { createFtsTableAndTriggers } from "./sqliteFts.js";
+import {
+  assertNotHalfMigrated,
+  clearMigrationPending,
+  databaseFilePath,
+  markMigrationPending,
+  needsMigration,
+  snapshotBeforeMigration,
+} from "../../core/storage/preMigrationSnapshot.js";
 
 interface SessionRow {
   id: string;
@@ -42,6 +50,30 @@ export class ChatHistoryStore {
   }
 
   private _initSchema(): void {
+    const filePath = databaseFilePath(this._db);
+    assertNotHalfMigrated(filePath);
+    const pending = needsMigration(this._db, SCHEMA_VERSION);
+    if (pending) {
+      snapshotBeforeMigration(this._db, SCHEMA_VERSION);
+      markMigrationPending(filePath);
+    }
+    const apply = (): void => {
+      this._applySchema();
+      if (pending) this._db.pragma(`user_version = ${SCHEMA_VERSION}`);
+    };
+    if (pending) {
+      try {
+        this._db.transaction(apply)();
+        clearMigrationPending(filePath);
+      } catch (err) {
+        throw err;
+      }
+      return;
+    }
+    apply();
+  }
+
+  private _applySchema(): void {
     this._db.exec(`
       CREATE TABLE IF NOT EXISTS sessions (
         id TEXT PRIMARY KEY,
@@ -81,16 +113,12 @@ export class ChatHistoryStore {
     // Rebuild the FTS index only when the schema version changed. On a hot DB
     // this used to iterate every row on every cold start (review finding
     // #66); now it runs once per schema bump.
-    const currentVersion = this._db.pragma("user_version", {
-      simple: true,
-    }) as number;
-    if (currentVersion !== SCHEMA_VERSION) {
+    if (needsMigration(this._db, SCHEMA_VERSION)) {
       try {
         this._db.exec("INSERT INTO messages_fts(messages_fts) VALUES('rebuild')");
       } catch {
         // Ignore rebuild errors on first creation.
       }
-      this._db.pragma(`user_version = ${SCHEMA_VERSION}`);
     }
   }
 

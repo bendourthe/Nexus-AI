@@ -39,11 +39,13 @@ from nexus_installer.constants import (
     WINDOW_MIN_WIDTH,
 )
 from nexus_installer.engine.install_guard import evaluate_install_guard
+from nexus_installer.engine.installed_models import pending_download_gb
 from nexus_installer.installer_state import InstallerState
 from nexus_installer.theme import generate_stylesheet
 from nexus_installer.widgets.background import BackgroundWidget
 from nexus_installer.widgets.footer import Footer
 from nexus_installer.widgets.header import HEADER_STEP_PX, Header
+from nexus_installer.widgets.selectable_text import make_labels_selectable
 from nexus_installer.widgets.sidebar import Sidebar
 from nexus_installer.widgets.step_indicator import StepIndicator
 from nexus_installer.widgets.title_bar import TitleBar
@@ -242,6 +244,11 @@ class InstallerWindow(QMainWindow):
         QShortcut(Qt.Key.Key_Return, self, self._go_next)
         QShortcut(Qt.Key.Key_Escape, self, self._go_back)
 
+        # Every label in the chrome is selectable, so the step counter, brand
+        # and footer text can be copied. Pages get the same treatment on every
+        # switch (see `switch_page`).
+        make_labels_selectable(central)
+
     @property
     def header(self) -> Header:
         return self._header
@@ -329,7 +336,13 @@ class InstallerWindow(QMainWindow):
         # The sidebar highlights the section being viewed and reflects every
         # section's progression / lock state.
         self._refresh_navigation()
+        self._refresh_page_actions()
         self._refresh_footer()
+
+        # Every label on the page is selectable, so paths, versions, model
+        # names and error text can be copied out of the wizard. Done after the
+        # show so labels built in showEvent handlers are covered too.
+        make_labels_selectable(page)
 
     def show_first_page(self) -> None:
         """Display the first registered page."""
@@ -488,11 +501,33 @@ class InstallerWindow(QMainWindow):
         is_review = index == self.review_page_index
         is_last = index == total - 1
         if is_last:
-            self._footer.set_next_text("Finish")
+            # A page may name its own primary (Complete: "Launch Nexus AI").
+            page = self._pages[index]
+            label = getattr(page, "finish_button_text", None)
+            self._footer.set_next_text(label() if callable(label) else "Finish")
         elif is_review:
             self._footer.set_next_text("Install")
         else:
             self._footer.set_next_text("Next")
+
+    def _refresh_page_actions(self) -> None:
+        """Let the current page put its own buttons in the footer row."""
+        page = self._pages[self._current_index]
+        actions = getattr(page, "footer_actions", None)
+        self._footer.set_page_actions(list(actions()) if callable(actions) else [])
+
+    def refresh_page_actions(self) -> None:
+        """A page rebuilt its footer buttons (e.g. Retry became relevant)."""
+        self._refresh_page_actions()
+        self._refresh_footer()
+
+    def close_from_page(self) -> None:
+        """A page asked to end the wizard without running its finish action."""
+        page = self._pages[self._current_index]
+        acknowledge = getattr(page, "acknowledge", None)
+        if callable(acknowledge):
+            acknowledge()
+        self.close()
 
     def _on_footer_cancel(self) -> None:
         """Footer Cancel during install -> ask the installing page to abort."""
@@ -540,9 +575,14 @@ class InstallerWindow(QMainWindow):
             self._state.apply_total_ram_gb(profile.total_ram_gb)
         except Exception:  # noqa: BLE001 -- probe is best-effort
             pass
+        # v2.4.5 Phase 4.1 (T015): size the REMAINING download. Passing the
+        # whole selection refused an install on a host that already held its
+        # models -- "need 204.4 GB free, have 201.0 GB" for bytes it was never
+        # going to fetch. `evaluate_install_guard` itself is unchanged, so its
+        # reserve arithmetic and its existing tests keep their meaning.
         result = evaluate_install_guard(
             free_disk_gb=free_disk_gb,
-            selection_gb=self._state.selected_models_gb,
+            selection_gb=pending_download_gb(self._state),
             reserve_gb=self._state.disk_reserve_gb,
         )
         if result.ok:

@@ -20,6 +20,8 @@ import {
   CodingSessionResumeRequest,
   CodingSessionSendMessageRequest,
   CodingSessionStartRequest,
+  SessionDispositionRequest,
+  SessionsListArchivedRequest,
   CodingTraceSubscribeRequest,
   CredentialsDeleteRequest,
   CredentialsListRequest,
@@ -50,6 +52,7 @@ import {
   VideoVideo2xPathGetRequest,
   VideoVideo2xPathSetRequest,
   TuningEmptyRequest,
+  TuningHardwareRequest,
   TuningDatasetBuildRequest,
   TuningJobStartRequest,
   TuningJobListRequest,
@@ -64,6 +67,8 @@ import {
   ModelsRemoveRequest,
   ModelsInstallDrainRequest,
   ModelsInstallCancelRequest,
+  ModelsEmptyRequest,
+  ModelsWarmRequest,
   ServingSetEnabledRequest,
   type ServingStatusResponseT,
   AcpSetEnabledRequest,
@@ -130,6 +135,7 @@ import {
   NotImplementedError,
   PingResponse,
   PingResponseT,
+  DesktopPayloadResponse,
   isMethod,
   type Method,
 } from "./protocol.js";
@@ -146,6 +152,9 @@ import {
   hubLayoutDir,
   nexusHome,
 } from "../../../core/storage/paths.js";
+import { readDesktopPayloadIdentity } from "../../../core/storage/desktopPayloadFs.js";
+import { createWorkspaceScope } from "../../../core/project/WorkspaceScope.js";
+import { WorkspaceScopeStore } from "../../../core/project/WorkspaceScopeStore.js";
 import {
   readHubVersionManifest,
   resolveHubLayout,
@@ -156,15 +165,32 @@ import { SkillOptimizerManager } from "./coding/skillOptimizerManager.js";
 import { ChatSessionManager } from "./chat/sessionManager.js";
 import { memorySnapshot, traceSubscribe } from "./coding/panelData.js";
 import {
+  type DiffusionEvent,
   type DiffusionRuntimeClient,
   InMemoryDiffusionRuntime,
 } from "./diffusion/runtimeClient.js";
+import { queuedStageEvent } from "./diffusion/queuedStage.js";
+import { foldModelId } from "../../../core/registry/modelAliases.js";
+import {
+  catalogNamesByOllamaTag,
+  displayNameForResident,
+  evictOllamaIfTight,
+  evictOllamaModels,
+  listResidentOllamaModels,
+  ollamaBaseUrl,
+  warmOllamaModel,
+} from "./models/ollamaResidency.js";
+import type { MediaRuntimeService } from "./diffusion/runtimeFactory.js";
 import {
   buildJobRequest,
   extractWorkflowFromBase64Png,
   nextJobId,
 } from "./diffusion/dispatcher.js";
 import { foldRequestModelId } from "./diffusion/route.js";
+import {
+  jobModelId,
+  mediaModelVramGB,
+} from "./models/mediaModelVram.js";
 import {
   IMAGE_RUNTIME_NOT_READY,
   VIDEO_RUNTIME_NOT_READY,
@@ -199,6 +225,9 @@ import {
 import type { GenerationEnhancementMetadata } from "../../../core/generations/GenerationDatabase.js";
 import { contentHashFile } from "../../../core/generations/contentHash.js";
 import { pumpOnce } from "../../../core/generations/queuePump.js";
+import { SPLAT_GENERATE_JOB_TYPE, prepareSplatGenerate } from "../../../core/image/SplatGenerate.js";
+import { probeSplatHost, promotePreparedSplat, splatJobPaths } from "./image/GaussianSplatRuntime.js";
+import { runTripoSplatAdapter } from "./image/TripoSplatAdapter.js";
 import {
   createStudioRuntime,
   recordCompletion,
@@ -262,6 +291,8 @@ export interface HandlerContext {
   /** v1.7.0 -- Local Chatbot Explorer session manager. */
   chat: ChatSessionManager;
   diffusion: DiffusionRuntimeClient;
+  /** v2.4.1 -- shared media readiness and bounded repair coordinator. */
+  mediaRuntime?: MediaRuntimeService;
   ffmpeg: FfmpegContext;
   /**
    * v1.5.0 Phase 5 (item 25) -- OS-keychain credential vault. The credential
@@ -307,6 +338,8 @@ export interface HandlerContext {
    * Production uses `NEXUS_WORKSPACE` or `process.cwd()`; tests inject a temp dir.
    */
   workspacePath?: string;
+  /** v2.4.1 -- durable workspace registry used before coding session allocation. */
+  workspaceStore?: WorkspaceScopeStore;
   /** v1.18.0 Phase 4 -- persistent approval queue. Tests inject a memory inbox. */
   askInbox?: AskInbox;
   /** v1.18.0 Phase 4 -- local cron-style agent-run scheduler. */
@@ -354,6 +387,13 @@ function resolveServingRuntime(ctx: HandlerContext): ServingRuntime {
   if (ctx.serving) return ctx.serving;
   if (!_servingRuntime) _servingRuntime = createServingRuntime();
   return _servingRuntime;
+}
+
+let _workspaceStore: WorkspaceScopeStore | null = null;
+function resolveWorkspaceStore(ctx: HandlerContext): WorkspaceScopeStore {
+  if (ctx.workspaceStore) return ctx.workspaceStore;
+  if (!_workspaceStore) _workspaceStore = new WorkspaceScopeStore();
+  return _workspaceStore;
 }
 
 /**
@@ -464,6 +504,23 @@ function resolveStudio(ctx: HandlerContext): StudioRuntime {
     });
   }
   return ctx.studio;
+}
+
+async function enqueueInference(
+  ctx: HandlerContext,
+  moduleId: "chat" | "coding",
+  modelId: string | undefined,
+  run: (signal: AbortSignal) => Promise<unknown>,
+): Promise<unknown> {
+  const handle = await resolveStudio(ctx).scheduler.enqueue({
+    moduleId,
+    jobType: "tokens",
+    estimatedVramGB: 4,
+    priority: "foreground",
+    ...(modelId ? { modelId } : {}),
+    run,
+  });
+  return handle.completion;
 }
 
 function resolveVideoEnhancement(
@@ -726,6 +783,19 @@ async function pumpStudio(ctx: HandlerContext): Promise<void> {
           }
           continue;
         }
+        if (next.jobType === SPLAT_GENERATE_JOB_TYPE) {
+          const prepared = prepareSplatGenerate(next.parameters, probeSplatHost());
+          if (!prepared.ok) {
+            const claimed = studio.queue.claimNext();
+            if (!claimed || claimed.id !== next.id) {
+              throw new Error("Splat queue claim lost its selected child.");
+            }
+            const message = `${prepared.code}: ${prepared.message}`;
+            studio.queue.markFailed(claimed.id, message);
+            recordCompletion(studio, { kind: "error", jobId: claimed.id, message });
+            continue;
+          }
+        }
         const ran = await pumpOnce(studio.queue, {
           scheduler: studio.scheduler,
           index: studio.index,
@@ -759,7 +829,41 @@ async function pumpStudio(ctx: HandlerContext): Promise<void> {
             }
           },
           onError: (event) => recordCompletion(studio, event),
-          run: async (job) => {
+          run: async (job, signal) => {
+            if (job.jobType === SPLAT_GENERATE_JOB_TYPE) {
+              const prepared = prepareSplatGenerate(job.parameters, probeSplatHost());
+              if (!prepared.ok) {
+                throw new Error(`${prepared.code}: ${prepared.message}`);
+              }
+              const root = path.join(nexusHome(), "generations", "splats");
+              const paths = splatJobPaths(root, prepared.parameters.outputId);
+              const sourcePath = path.resolve(prepared.parameters.sourcePngPath);
+              const sourceBefore = readFileSync(sourcePath);
+              const written = await promotePreparedSplat({
+                sourcePath,
+                sourceBefore,
+                jobDir: paths.jobDir,
+                outputPath: paths.outputPath,
+                sourceMessageId: prepared.parameters.sourceMessageId,
+                signal,
+                timeoutMs: 30_000,
+                now: Date.now,
+                backend: (backendSignal) =>
+                  runTripoSplatAdapter({
+                    modelsRoot: path.join(nexusHome(), "models"),
+                    sourcePngPath: sourcePath,
+                    signal: backendSignal,
+                  }),
+                stages: ["preflight", "scheduled"],
+              });
+              if (!written.ok) throw new Error(`${written.code}: ${written.message}`);
+              return { outputPath: written.outputPath, workflow: written.workflow };
+            }
+            // v2.4.8 follow-up: hand the GPU over. With the chat model still
+            // resident the diffusion runtime lands in CPU offload and an image
+            // takes minutes instead of seconds, so evict Ollama's residents
+            // when the media model would not fit beside them.
+            await evictOllamaForJob(job.pillar, job.parameters);
             if (job.pillar === "video") {
               const result = await buildVideoJobRequest(
                 job.jobType as "text2video" | "image2video" | "audio2video",
@@ -808,6 +912,27 @@ async function pumpStudio(ctx: HandlerContext): Promise<void> {
   } finally {
     if (studio.pump.active === drain) studio.pump.active = null;
     if (studio.pump.requested && !studio.pump.closing) void pumpStudio(ctx);
+  }
+}
+
+async function evictOllamaForJob(
+  pillar: "image" | "video",
+  parameters: Record<string, unknown>,
+): Promise<void> {
+  try {
+    const { sample } = await sampleGpu();
+    const evicted = await evictOllamaIfTight({
+      freeVramGB: sample ? sample.freeVramGB : null,
+      modelVramGB: await mediaModelVramGB(pillar, jobModelId(parameters)),
+      baseUrl: ollamaBaseUrl(),
+    });
+    if (evicted.length > 0) {
+      process.stderr.write(
+        `[nexus-sidecar] evicted ollama models before ${pillar} job: ${evicted.join(", ")}\n`,
+      );
+    }
+  } catch {
+    // Eviction is best-effort; the job proceeds either way.
   }
 }
 
@@ -909,6 +1034,17 @@ function mcpHarnessFor(ctx: HandlerContext) {
   };
 }
 
+function unavailableMediaRepairState() {
+  return {
+    state: "failed" as const,
+    code: "REPAIR_SERVICE_UNAVAILABLE",
+    message: "The media repair service is unavailable.",
+    retryable: false,
+    progress: 0,
+    logPath: "",
+  };
+}
+
 export const handlers: Record<Method, HandlerFn> = {
   ping: async (_params, ctx): Promise<PingResponseT> => {
     const response: PingResponseT = {
@@ -920,12 +1056,33 @@ export const handlers: Record<Method, HandlerFn> = {
     PingResponse.parse(response);
     return response;
   },
+  "runtime.desktopPayload": async (_params) => {
+    const identity = readDesktopPayloadIdentity();
+    const response = {
+      identity: identity
+        ? {
+            version: identity.version,
+            sha256: identity.sha256,
+            ...(identity.originalName
+              ? { originalName: identity.originalName }
+              : {}),
+          }
+        : null,
+    };
+    DesktopPayloadResponse.parse(response);
+    return response;
+  },
   "models.list": async (_params, ctx) => {
     const runtime = await resolveModelsRuntime(ctx);
     const models = await runtime.service.list();
     const { loadSnapshot } = await import("./models/selectionSnapshot.js");
     const selection = await loadSnapshot();
-    return { models, catalogStatus: runtime.catalogStatus, selection };
+    return {
+      models,
+      catalogStatus: runtime.catalogStatus,
+      catalogHash: runtime.service.catalogHash,
+      selection,
+    };
   },
   "models.install": async (params, ctx) => {
     const req = ModelsInstallRequest.parse(params ?? {});
@@ -941,6 +1098,30 @@ export const handlers: Record<Method, HandlerFn> = {
   "models.diskUsage": async (_params, ctx) => {
     const { service } = await resolveModelsRuntime(ctx);
     return service.diskUsage();
+  },
+  // v2.4.8 follow-up: the renderer polls this while a chat turn waits for its
+  // model, and after a model switch, to show "Loading model" honestly.
+  "models.resident": async (params) => {
+    ModelsEmptyRequest.parse(params ?? {});
+    const models = await listResidentOllamaModels(ollamaBaseUrl());
+    // Name them as the rest of the app does ("Gemma 4 12B", not "gemma4:12b").
+    let byTag = new Map<string, string>();
+    try {
+      const { loadCatalog } = await import("../../../core/registry/catalog.js");
+      byTag = catalogNamesByOllamaTag((await loadCatalog()).models);
+    } catch {
+      // No catalog: the raw tag is still an honest answer.
+    }
+    return {
+      models: models.map((model) => ({
+        ...model,
+        displayName: displayNameForResident(model.name, byTag),
+      })),
+    };
+  },
+  "models.warm": async (params) => {
+    const req = ModelsWarmRequest.parse(params ?? {});
+    return warmOllamaModel(foldModelId(req.modelId), ollamaBaseUrl());
   },
   "models.install.drainEvents": async (params, ctx) => {
     const req = ModelsInstallDrainRequest.parse(params ?? {});
@@ -1066,7 +1247,12 @@ export const handlers: Record<Method, HandlerFn> = {
   },
   "coding.session.start": async (params, ctx) => {
     const req = CodingSessionStartRequest.parse(params ?? {});
-    return ctx.sessions.start(req);
+    const previous = req.workspaceId
+      ? resolveWorkspaceStore(ctx).get(req.workspaceId)
+      : undefined;
+    const scope = await createWorkspaceScope(req, { previous });
+    const stored = resolveWorkspaceStore(ctx).upsert(scope);
+    return ctx.sessions.startWithScope(req, stored);
   },
   "coding.session.sendMessage": async (params, ctx) => {
     const req = CodingSessionSendMessageRequest.parse(params ?? {});
@@ -1075,7 +1261,12 @@ export const handlers: Record<Method, HandlerFn> = {
       source: "coding",
       payload: { role: "worker", sessionId: req.sessionId },
     });
-    const events = await ctx.sessions.sendMessage(req.sessionId, req.message);
+    const events = (await enqueueInference(
+      ctx,
+      "coding",
+      ctx.sessions.peekModelId(req.sessionId),
+      () => ctx.sessions.sendMessage(req.sessionId, req.message),
+    )) as Awaited<ReturnType<typeof ctx.sessions.sendMessage>>;
     for (const event of events) {
       if (event.kind === "toolCallHeader") {
         ctx.telemetry?.publish({
@@ -1112,6 +1303,122 @@ export const handlers: Record<Method, HandlerFn> = {
     const req = CodingSessionDeleteRequest.parse(params ?? {});
     return ctx.sessions.delete(req.sessionId);
   },
+  "sessions.archive": async (params, ctx) => {
+    const req = SessionDispositionRequest.parse(params ?? {});
+    if (req.pillar === "agents") {
+      const result = ctx.sessions.archive(req.id);
+      return { pillar: req.pillar, id: req.id, archivedAt: result.archivedAt };
+    }
+    if (req.pillar === "chatbot") {
+      const chat = (await explorerOps()).archiveChat({ id: req.id });
+      return {
+        pillar: req.pillar,
+        id: req.id,
+        archivedAt: new Date(chat.archivedAt ?? Date.now()).toISOString(),
+      };
+    }
+    const session = (await studioSessionOps()).archiveSession({ id: req.id });
+    return {
+      pillar: req.pillar,
+      id: req.id,
+      archivedAt: new Date(session.archivedAt ?? Date.now()).toISOString(),
+    };
+  },
+  "sessions.listArchived": async (params, ctx) => {
+    SessionsListArchivedRequest.parse(params ?? {});
+    const sessions: Array<{
+      pillar: "chatbot" | "agents" | "images" | "videos";
+      id: string;
+      title: string;
+      archivedAt: string;
+      originalParent: string | null;
+    }> = [];
+    const errors: Array<{
+      pillar: "chatbot" | "agents" | "images" | "videos";
+      message: string;
+    }> = [];
+    try {
+      for (const chat of (await explorerOps()).listArchived().chats) {
+        sessions.push({
+          pillar: "chatbot",
+          id: chat.id,
+          title: chat.title,
+          archivedAt: new Date(chat.archivedAt).toISOString(),
+          originalParent: chat.archivedFolderId ?? chat.folderId,
+        });
+      }
+    } catch (error) {
+      errors.push({
+        pillar: "chatbot",
+        message: error instanceof Error ? error.message : String(error),
+      });
+    }
+    try {
+      for (const session of ctx.sessions.listArchived()) {
+        sessions.push({
+          pillar: "agents",
+          id: session.id,
+          title: session.title,
+          archivedAt: session.archivedAt ?? session.createdAt,
+          originalParent: null,
+        });
+      }
+    } catch (error) {
+      errors.push({
+        pillar: "agents",
+        message: error instanceof Error ? error.message : String(error),
+      });
+    }
+    for (const [pillar, studioPillar] of [
+      ["images", "image"],
+      ["videos", "video"],
+    ] as const) {
+      try {
+        for (const session of (await studioSessionOps()).listArchived({
+          pillar: studioPillar,
+        }).sessions) {
+          sessions.push({
+            pillar,
+            id: session.id,
+            title: session.title,
+            archivedAt: new Date(session.archivedAt).toISOString(),
+            originalParent: session.archivedFolderId ?? session.folderId,
+          });
+        }
+      } catch (error) {
+        errors.push({
+          pillar,
+          message: error instanceof Error ? error.message : String(error),
+        });
+      }
+    }
+    return { sessions, errors };
+  },
+  "sessions.restore": async (params, ctx) => {
+    const req = SessionDispositionRequest.parse(params ?? {});
+    if (req.pillar === "agents") {
+      const restored = ctx.sessions.restore(req.id);
+      return {
+        pillar: req.pillar,
+        id: req.id,
+        parentFallback: restored.parentFallback,
+      };
+    }
+    if (req.pillar === "chatbot") {
+      const restored = (await explorerOps()).restoreChat({ id: req.id });
+      return {
+        pillar: req.pillar,
+        id: req.id,
+        parentFallback: restored.parentFallback,
+      };
+    }
+    const restored = (await studioSessionOps()).restoreSession({ id: req.id });
+    return {
+      pillar: req.pillar,
+      id: req.id,
+      parentFallback: restored.parentFallback,
+    };
+  },
   "coding.memory.snapshot": async (params) => {
     CodingMemorySnapshotRequest.parse(params ?? {});
     return memorySnapshot();
@@ -1139,11 +1446,12 @@ export const handlers: Record<Method, HandlerFn> = {
       source: "chat",
       payload: { role: "app", sessionId: req.sessionId },
     });
-    const events = await ctx.chat.sendMessage(
-      req.sessionId,
-      req.message,
-      req.images,
-    );
+    const events = (await enqueueInference(
+      ctx,
+      "chat",
+      ctx.chat.peekModelId(req.sessionId),
+      () => ctx.chat.sendMessage(req.sessionId, req.message, req.images),
+    )) as Awaited<ReturnType<typeof ctx.chat.sendMessage>>;
     return { sessionId: req.sessionId, events };
   },
   "memory.episodic.record": async (params, ctx) =>
@@ -1511,6 +1819,22 @@ export const handlers: Record<Method, HandlerFn> = {
     DiffusionEmptyRequest.parse(params ?? {});
     return ctx.diffusion.call("version", {});
   },
+  "diffusion.runtime.status": async (params, ctx) => {
+    DiffusionEmptyRequest.parse(params ?? {});
+    return ctx.mediaRuntime?.status() ?? unavailableMediaRepairState();
+  },
+  "diffusion.runtime.repair": async (params, ctx) => {
+    DiffusionEmptyRequest.parse(params ?? {});
+    return ctx.mediaRuntime?.startRepair() ?? unavailableMediaRepairState();
+  },
+  "diffusion.runtime.cancelRepair": async (params, ctx) => {
+    DiffusionEmptyRequest.parse(params ?? {});
+    return ctx.mediaRuntime?.cancelRepair() ?? unavailableMediaRepairState();
+  },
+  "diffusion.runtime.openLogLocation": async (params, ctx) => {
+    DiffusionEmptyRequest.parse(params ?? {});
+    return ctx.mediaRuntime?.openLogLocation() ?? { opened: false };
+  },
   "diffusion.txt2img": async (params, ctx) => {
     const req = DiffusionTxt2ImgRequest.parse(params ?? {});
     return enqueueInteractive(
@@ -1567,7 +1891,14 @@ export const handlers: Record<Method, HandlerFn> = {
     const req = DiffusionDrainEventsRequest.parse(params ?? {});
     const runtimeEvents = ctx.diffusion.drainEvents(req.jobId);
     const extras = ctx.studio ? takeCompletions(ctx.studio, req.jobId) : [];
-    return { events: [...runtimeEvents, ...extras] };
+    const events: DiffusionEvent[] = [...runtimeEvents, ...extras];
+    if (events.length === 0) {
+      // v2.4.8 follow-up: name the wait while the job has not reached the
+      // runtime, instead of leaving a silence the bubble reads as loading.
+      const queued = queuedStageEvent(ctx.studio, req.jobId);
+      if (queued) events.push(queued);
+    }
+    return { events };
   },
   "diffusion.workflow.extract": async (params, ctx) => {
     const req = DiffusionWorkflowExtractRequest.parse(params ?? {});
@@ -1637,6 +1968,12 @@ export const handlers: Record<Method, HandlerFn> = {
   },
   "generation.queue.enqueue": async (params, ctx) => {
     const req = GenerationQueueEnqueueRequest.parse(params ?? {});
+    if (req.jobType === SPLAT_GENERATE_JOB_TYPE) {
+      const parsed = prepareSplatGenerate(req.parameters, probeSplatHost());
+      if (!parsed.ok && (parsed.code === "malformed" || parsed.code === "remote-url")) {
+        throw new Error(`${parsed.code}: ${parsed.message}`);
+      }
+    }
     const studio = resolveStudio(ctx);
     const id = req.id ?? `gen-${Date.now().toString(36)}`;
     const jobs = req.batchSpec
@@ -1657,6 +1994,7 @@ export const handlers: Record<Method, HandlerFn> = {
             parameters: req.parameters,
             priority: req.priority ?? "interactive",
             threadId: req.threadId,
+            parentId: req.parentId,
           }),
         ];
     void pumpStudio(ctx);
@@ -1747,17 +2085,46 @@ export const handlers: Record<Method, HandlerFn> = {
     const stored = await settings.get<string>(VIDEO2X_SETTING_KEY);
     return video2xPathSnapshot(stored, process.env);
   },
+  // v2.4.8 follow-up: clear the GPU so a studio page can load its model now.
+  // The running scheduler job is cancelled (a studio job in the queue with its
+  // handle aborted; a chat or agent turn through the scheduler), the Python
+  // runtime is restarted because it has no per-job cancel (it respawns lazily
+  // on the next call), and Ollama's resident models are evicted.
+  "generation.scheduler.cancelActive": async (params, ctx) => {
+    GenerationSchedulerSnapshotRequest.parse(params ?? {});
+    const studio = resolveStudio(ctx);
+    const active = studio.scheduler.snapshot().active;
+    if (active) {
+      if (active.moduleId === "image" || active.moduleId === "video") {
+        studio.queue.cancel(active.id);
+        studio.activeHandles.get(active.id)?.cancel();
+        await ctx.diffusion.shutdown();
+      } else {
+        studio.scheduler.cancelActive();
+      }
+      process.stderr.write(
+        `[nexus-sidecar] cancelled active gpu job ${active.id} (${active.moduleId}) on request\n`,
+      );
+    }
+    const evicted = await evictOllamaModels(ollamaBaseUrl());
+    if (evicted.length > 0) {
+      process.stderr.write(`[nexus-sidecar] evicted ollama models on request: ${evicted.join(", ")}\n`);
+    }
+    return {
+      cancelled: active ? { id: active.id, moduleId: active.moduleId } : null,
+    };
+  },
   "generation.scheduler.snapshot": async (params, ctx) => {
     GenerationSchedulerSnapshotRequest.parse(params ?? {});
     return resolveStudio(ctx).scheduler.snapshot();
   },
   "tuning.status": async (params, ctx) => {
-    TuningEmptyRequest.parse(params ?? {});
-    return resolveTuning(ctx).status();
+    const req = TuningHardwareRequest.parse(params ?? {});
+    return resolveTuning(ctx).status(req);
   },
   "tuning.provision": async (params, ctx) => {
-    TuningEmptyRequest.parse(params ?? {});
-    return resolveTuning(ctx).provision();
+    const req = TuningHardwareRequest.parse(params ?? {});
+    return resolveTuning(ctx).provision(req);
   },
   "tuning.preflight": async (params, ctx) => {
     TuningEmptyRequest.parse(params ?? {});

@@ -8,7 +8,9 @@
  * input + model-selector contract.
  */
 
+import type { GenerationFailure } from "../studio/generationError";
 import type { AgentActivity } from "../../components/agentState/mapping";
+import type { MessageTokenUsageV1, RequestTokenUsageV1 } from "../../../../core/chat/tokenUsage";
 
 export type ChatRole = "user" | "assistant" | "system";
 
@@ -39,7 +41,36 @@ export interface ChatMessage {
   /** True while an assistant message's generation is still in flight. */
   pending?: boolean;
   /** Optional step/total progress for a pending generation. */
-  progress?: { readonly step: number; readonly total: number };
+  /**
+   * v2.4.8 Phase 8: `stage` is the runtime's explicit phase (`loading` while
+   * weights move onto the GPU, `generating` once sampling starts). Absent
+   * or `loading` renders the bubble's "Loading model..." state.
+   */
+  progress?: {
+    readonly step: number;
+    readonly total: number;
+    readonly stage?: string;
+    /** Bytes of weights read so far / to read while `stage` is `loading`. */
+    readonly loadedBytes?: number;
+    readonly totalBytes?: number;
+    /** Runtime estimate of seconds until the weights are loaded. */
+    readonly etaS?: number | null;
+    /** Module holding the GPU while `stage` is `queued` (e.g. `chat`). */
+    readonly blockedBy?: string;
+    /** A line under the caption, e.g. "Unloading Gemma 4 12B." */
+    readonly detail?: string;
+  };
+  /**
+   * v2.4.8 follow-up: how long a job of this shape usually takes, shown
+   * until the run's own step rate gives a measured estimate.
+   */
+  estimateSeconds?: number;
+  /**
+   * v2.4.8 follow-up (2026-09-08): how long this model usually takes to reach
+   * the GPU. Shown during the loading phase only, so the loading wait is never
+   * described by the generation figure.
+   */
+  loadEstimateSeconds?: number;
   /**
    * v1.17.0 Phase 2 -- agent activity driving the inline orb while this
    * message is pending. Surfaces pass a typed activity; the bubble maps it
@@ -55,6 +86,50 @@ export interface ChatMessage {
   reasoningTokens?: number | null;
   outputTokens?: number | null;
   tokensEstimated?: boolean;
+  /** Request-wide provider telemetry, never displayed on a message bubble. */
+  requestUsage?: RequestTokenUsageV1;
+  /** Usage attributable only to this visible message. */
+  messageUsage?: MessageTokenUsageV1;
+  /** Provider-exposed reasoning content only. Never inferred from ordinary output. */
+  reasoningText?: string | null;
+  /** v2.4.1 -- shared Image/Video runtime recovery state. */
+  mediaRecovery?: MediaRuntimeRecovery;
+  /** v2.4.2 Phase 3 -- SAM2 missing-weights recovery (install or paint a mask). */
+  sam2Recovery?: Sam2Recovery;
+  /**
+   * v2.4.9 -- a structured generation failure.
+   *
+   * Set instead of writing a raw error into `content`. Operator report: a 4K
+   * request printed a forty-line Zod dump into the transcript. The bubble
+   * renders this as a card: one sentence, the reason, and the raw trace behind
+   * a copy button.
+   */
+  failure?: GenerationFailure;
+  /**
+   * v2.4.9 -- how long this response actually took, in seconds.
+   *
+   * Operator ask: "could the time to generate the response (for all modes) be
+   * displayed in brackets after the time?" Measured, not estimated: it is set
+   * when the job completes, so it is the real wall-clock cost of the run.
+   */
+  generationSeconds?: number;
+}
+
+export interface MediaRuntimeRecovery {
+  readonly state: "repairable" | "repairing" | "failed";
+  readonly code: string;
+  readonly message: string;
+  readonly retryable: boolean;
+  readonly progress: number;
+  readonly details?: string;
+  readonly logPath?: string;
+}
+
+export interface Sam2Recovery {
+  readonly modelId: string;
+  readonly message: string;
+  readonly installing?: boolean;
+  readonly installed?: boolean;
 }
 
 export interface ChatMedia {

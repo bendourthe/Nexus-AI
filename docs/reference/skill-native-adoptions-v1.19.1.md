@@ -8,7 +8,7 @@ This note exists so Phase 2 does not rebuild prompting work the catalog already 
 
 | | |
 |---|---|
-| **Source** | Hermes Herald comparison, [Section 4a A3](../v2/v2.0/comparisons/v2.0.1-comparison-hermes-agent.md) and [Section 7 Bucket 1](../v2/v2.0/comparisons/v2.0.1-comparison-hermes-agent.md) |
+| **Source** | Hermes Herald comparison, [Section 4a A3](../archive/v2/v2.0/comparisons/v2.0.1-comparison-hermes-agent.md) and [Section 7 Bucket 1](../archive/v2/v2.0/comparisons/v2.0.1-comparison-hermes-agent.md) |
 | **Covered by** | Nexus-Hub skill `deep-research-compilation` |
 | **What landed** | Quote-verification (quoted passages must match fetched or extracted source text) plus a fact-check pass before finalize. Failure behavior: flag `[UNVERIFIED QUOTE]` / `[UNSUPPORTED]`, do not fabricate a matching quote or a prettier citation. |
 | **What is not covered** | No new research tool, no engine-side quote matcher. |
@@ -20,7 +20,7 @@ Catalog id after namespacing: `nexus-hub/deep-research-compilation`. Upstream: [
 
 | | |
 |---|---|
-| **Source** | Airi comparison, [Section 6 persona-card row](../v2/v2.0/comparisons/v2.0.3-comparison-airi.md) and [Section 7 Bucket 1](../v2/v2.0/comparisons/v2.0.3-comparison-airi.md) |
+| **Source** | Airi comparison, [Section 6 persona-card row](../archive/v2/v2.0/comparisons/v2.0.3-comparison-airi.md) and [Section 7 Bucket 1](../archive/v2/v2.0/comparisons/v2.0.3-comparison-airi.md) |
 | **Covered by** | Nexus-Hub skills `prompt-engineering` (card construction: identity, voice, boundaries) and `creative-generation` (companion-voice application) |
 | **What landed** | A persona-card template and a mapping onto existing surfaces. Coding: system-role slot. Chat: paste the card as the first user message and keep it in the thread. |
 | **What is not covered** | Chat settings have no per-chat system-prompt field (`Chat` is title, modelId, folderId, contextScopeId). That field is a stretch follow-up for the v2.0.0 Chat phases, not a UI build here. |
@@ -32,7 +32,7 @@ A user following the skill can give a chat a stable persona today by keeping the
 
 | | |
 |---|---|
-| **Source** | LongCat comparison [Section 4a A5](../v2/v2.0/comparisons/v2.0.4-comparison-longcat-video.md); Inkling comparison [transcript-reasoning row](../v2/v2.0/comparisons/v2.0.5-comparison-inkling-small.md) |
+| **Source** | LongCat comparison [Section 4a A5](../archive/v2/v2.0/comparisons/v2.0.4-comparison-longcat-video.md); Inkling comparison [transcript-reasoning row](../archive/v2/v2.0/comparisons/v2.0.5-comparison-inkling-small.md) |
 | **Covered by** | Nexus-Hub skill `creative-generation` |
 | **What landed** | (a) Talking-head prep: script pacing, TTS handoff, reference-photo framing, audio hygiene. (b) Transcript-reasoning: heard vs inferred, quote the STT span, do not silently "correct" the transcript. Both blocks are self-contained and name the Nexus features they pair with as "when available" (v2.0.0 Video Lab avatar mode, Phase 3; v2.0.0 audio bridge, Phase 1). |
 | **What is not covered** | No avatar pipeline, no STT bridge, no weights. Those remain v2.0.0 / v1.19.2 builds. |

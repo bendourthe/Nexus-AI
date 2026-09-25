@@ -1,4 +1,9 @@
-"""GPU detection page: probe system GPUs and recommend a model tier."""
+"""GPU detection: probe system GPUs and recommend a model tier.
+
+Detection functions plus the background worker. The result is shown as a
+prerequisite row on the Welcome page (`pages.prerequisites`), which writes the
+hardware fields into `InstallerState`.
+"""
 
 from __future__ import annotations
 
@@ -6,29 +11,10 @@ import json
 import os
 import subprocess
 import sys
-from typing import TYPE_CHECKING
 
 from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtWidgets import QLabel, QVBoxLayout, QWidget
 
-from nexus_installer.constants import (
-    ACCENT,
-    BG_CARD,
-    BORDER,
-    FS_BODY,
-    FS_CAPTION,
-    FS_H2,
-    FS_H3,
-    SUCCESS,
-    TEXT_SECONDARY,
-    WARNING,
-)
-from nexus_installer.engine.host_detect import detect_total_ram_gb
 from nexus_installer.engine.platform_utils import no_window_kwargs
-from nexus_installer.widgets.callout_box import CalloutBox
-
-if TYPE_CHECKING:
-    from nexus_installer.installer_state import InstallerState
 
 DETECTION_TIMEOUT = 5
 
@@ -125,7 +111,8 @@ def detect_amd_windows() -> tuple[str, int]:
             "powershell",
             "-NoProfile",
             "-Command",
-            "Get-CimInstance -ClassName Win32_VideoController | Select-Object Name,AdapterRAM | ConvertTo-Csv -NoTypeInformation",
+            "Get-CimInstance -ClassName Win32_VideoController | "
+            "Select-Object Name,AdapterRAM | ConvertTo-Csv -NoTypeInformation",
         ]
     )
     if output is None:
@@ -285,114 +272,3 @@ class _GpuDetectionWorker(QThread):
     def run(self) -> None:
         name, vendor, vram = detect_gpu()
         self.finished.emit(name, vendor, vram)
-
-
-# ---------------------------------------------------------------------------
-# Page widget
-# ---------------------------------------------------------------------------
-
-
-class GpuDetectionPage(QWidget):
-    """GPU detection page with detection results and model recommendation."""
-
-    def __init__(self, state: InstallerState, parent: QWidget | None = None) -> None:
-        super().__init__(parent)
-        self._state = state
-
-        layout = QVBoxLayout(self)
-        layout.setSpacing(16)
-
-        title = QLabel("GPU Detection")
-        title.setObjectName("pageTitle")
-        layout.addWidget(title)
-
-        self._status_label = QLabel("Detecting GPU...")
-        self._status_label.setStyleSheet(
-            f"color: {TEXT_SECONDARY}; font-size: {FS_BODY}px; background: transparent;"
-        )
-        layout.addWidget(self._status_label)
-
-        # GPU info card
-        self._gpu_card = QWidget()
-        self._gpu_card.setStyleSheet(
-            f"background-color: {BG_CARD}; border: 1px solid {BORDER}; "
-            f"border-radius: 8px; padding: 16px;"
-        )
-        gpu_card_layout = QVBoxLayout(self._gpu_card)
-
-        self._gpu_name_label = QLabel("")
-        self._gpu_name_label.setStyleSheet(
-            f"font-size: {FS_H2}px; font-weight: bold; background: transparent;"
-        )
-        gpu_card_layout.addWidget(self._gpu_name_label)
-
-        self._gpu_detail_label = QLabel("")
-        self._gpu_detail_label.setStyleSheet(
-            f"color: {TEXT_SECONDARY}; font-size: {FS_CAPTION}px; "
-            f"background: transparent;"
-        )
-        gpu_card_layout.addWidget(self._gpu_detail_label)
-
-        self._gpu_card.setVisible(False)
-        layout.addWidget(self._gpu_card)
-
-        # Model recommendation callout
-        self._rec_callout = CalloutBox(title="Recommended Model")
-        self._rec_model_label = QLabel("")
-        self._rec_model_label.setStyleSheet(
-            f"color: {ACCENT}; font-size: {FS_H3}px; font-weight: bold; "
-            f"background: transparent;"
-        )
-        self._rec_callout.add_item(self._rec_model_label)
-
-        self._rec_desc_label = QLabel("")
-        self._rec_desc_label.setStyleSheet(
-            f"color: {TEXT_SECONDARY}; font-size: {FS_CAPTION}px; "
-            f"background: transparent;"
-        )
-        self._rec_callout.add_item(self._rec_desc_label)
-
-        self._rec_callout.setVisible(False)
-        layout.addWidget(self._rec_callout)
-
-        layout.addStretch()
-
-        # Start detection
-        self._worker = _GpuDetectionWorker()
-        self._worker.finished.connect(self._on_detection_complete)
-        self._worker.start()
-
-    def _on_detection_complete(self, name: str, vendor: str, vram_mb: int) -> None:
-        self._state.gpu_vendor = vendor
-        self._state.gpu_name = name
-        self._state.vram_mb = vram_mb
-        self._state.apply_total_ram_gb(detect_total_ram_gb())
-
-        if name:
-            self._status_label.setText("GPU detected successfully.")
-            self._status_label.setStyleSheet(
-                f"color: {SUCCESS}; font-size: {FS_BODY}px; background: transparent;"
-            )
-
-            self._gpu_name_label.setText(name)
-            vram_text = f"{vram_mb} MB VRAM" if vram_mb > 0 else "VRAM not available"
-            self._gpu_detail_label.setText(
-                f"Vendor: {vendor.capitalize()}  |  {vram_text}"
-            )
-            self._gpu_card.setVisible(True)
-        else:
-            self._status_label.setText(
-                "No dedicated GPU detected. CPU-only mode will be used."
-            )
-            self._status_label.setStyleSheet(
-                f"color: {WARNING}; font-size: {FS_BODY}px; background: transparent;"
-            )
-
-        # Model recommendation
-        model_name, model_label, model_desc = recommend_model(vram_mb)
-        self._state.recommended_model = model_name
-        self._state.selected_model = model_name
-
-        self._rec_model_label.setText(f"{model_name}  ({model_label})")
-        self._rec_desc_label.setText(model_desc)
-        self._rec_callout.setVisible(True)

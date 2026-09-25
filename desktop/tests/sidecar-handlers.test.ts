@@ -34,6 +34,17 @@ describe("sidecar handlers", () => {
     });
   });
 
+  it("runtime.desktopPayload returns an identity object or null", async () => {
+    const reply = (await dispatch("runtime.desktopPayload", {}, makeCtx())) as {
+      identity: { version: string; sha256: string } | null;
+    };
+    expect(reply).toHaveProperty("identity");
+    if (reply.identity !== null) {
+      expect(reply.identity.version.length).toBeGreaterThan(0);
+      expect(reply.identity.sha256.length).toBeGreaterThan(0);
+    }
+  });
+
   it("rejects unknown methods", async () => {
     await expect(dispatch("not.a.method", {}, makeCtx())).rejects.toThrow(/UnknownMethod/);
   });
@@ -44,6 +55,7 @@ describe("sidecar handlers", () => {
       (m) =>
         ![
           "ping",
+          "runtime.desktopPayload",
           // v1.15.0 Phase 4 wired the Settings > Models registry surface.
           "models.list",
           "models.install",
@@ -51,6 +63,10 @@ describe("sidecar handlers", () => {
           "models.diskUsage",
           "models.install.drainEvents",
           "models.install.cancel",
+          // v2.4.8 follow-up wired Ollama residency and warm-up.
+          "models.resident",
+          "models.warm",
+          "generation.scheduler.cancelActive",
           // v1.16.0 Phase 1 wired the local serving-gateway control surface.
           "serving.status",
           "serving.setEnabled",
@@ -75,6 +91,9 @@ describe("sidecar handlers", () => {
           "coding.session.resume",
           "coding.session.rename",
           "coding.session.delete",
+          "sessions.archive",
+          "sessions.listArchived",
+          "sessions.restore",
           "coding.memory.snapshot",
           "coding.trace.subscribe",
           "coding.sessions.list",
@@ -98,6 +117,10 @@ describe("sidecar handlers", () => {
           "diffusion.segment",
           "diffusion.job.drainEvents",
           "diffusion.workflow.extract",
+          "diffusion.runtime.status",
+          "diffusion.runtime.repair",
+          "diffusion.runtime.cancelRepair",
+          "diffusion.runtime.openLogLocation",
           // v1.0.0 Phase 7 wired the video surface.
           "diffusion.video.text2video",
           "diffusion.video.image2video",
@@ -263,7 +286,15 @@ describe("sidecar handlers", () => {
         remove: async (id: string) => {
           removed.push(id);
         },
-        diskUsage: async () => ({ usedBytes: 5, freeBytes: null }),
+        get catalogHash() { return "a".repeat(64); },
+        diskUsage: async () => ({
+          usedBytes: 5,
+          modelBytes: 5,
+          freeBytes: null,
+          capacityBytes: null,
+          measurementPath: "/models",
+          measuredAt: "2026-08-29T00:00:00.000Z",
+        }),
       },
       installer: {
         start: (id: string) => `job:${id}`,
@@ -282,7 +313,11 @@ describe("sidecar handlers", () => {
     );
     expect(await dispatch("models.diskUsage", {}, ctx)).toEqual({
       usedBytes: 5,
+      modelBytes: 5,
       freeBytes: null,
+      capacityBytes: null,
+      measurementPath: "/models",
+      measuredAt: "2026-08-29T00:00:00.000Z",
     });
     expect(await dispatch("models.install", { id: "a" }, ctx)).toEqual({ jobId: "job:a" });
     expect(await dispatch("models.install.drainEvents", { jobId: "job:a" }, ctx)).toEqual({
@@ -316,6 +351,17 @@ describe("sidecar handlers", () => {
   });
 
   describe("coding session lifecycle", () => {
+    function inMemoryWorkspaceStore() {
+      const scopes = new Map<string, unknown>();
+      return {
+        get: (id: string) => scopes.get(id),
+        upsert: (scope: { workspaceId: string }) => {
+          scopes.set(scope.workspaceId, scope);
+          return scope;
+        },
+      };
+    }
+
     it("start -> sendMessage -> cancel -> list happy path", async () => {
       const ctx = makeCtx();
       const start = (await dispatch(
@@ -382,6 +428,34 @@ describe("sidecar handlers", () => {
       await expect(
         dispatch("coding.session.sendMessage", { sessionId: "x" }, makeCtx()),
       ).rejects.toThrow();
+    });
+
+    it("gives concurrent starts distinct sessions with the same workspace identity", async () => {
+      const ctx = makeCtx();
+      ctx.workspaceStore = inMemoryWorkspaceStore() as unknown as HandlerContext["workspaceStore"];
+      const first = (await dispatch("coding.session.start", { modelId: "gemma4:e4b" }, ctx)) as {
+        sessionId: string;
+        workspaceId: string;
+      };
+      const second = (await dispatch("coding.session.start", { modelId: "gemma4:e4b" }, ctx)) as {
+        sessionId: string;
+        workspaceId: string;
+      };
+      expect(first.sessionId).not.toBe(second.sessionId);
+      expect(first.workspaceId).toBe(second.workspaceId);
+    });
+
+    it("does not allocate a session when workspace persistence fails", async () => {
+      const ctx = makeCtx();
+      ctx.workspaceStore = {
+        get: () => undefined,
+        upsert: () => {
+          throw new Error("workspace storage unavailable");
+        },
+      } as unknown as HandlerContext["workspaceStore"];
+      await expect(dispatch("coding.session.start", { modelId: "gemma4:e4b" }, ctx))
+        .rejects.toThrow(/workspace storage unavailable/);
+      expect(ctx.sessions.size()).toBe(0);
     });
 
     it("sessions.list returns the same data as session.list", async () => {

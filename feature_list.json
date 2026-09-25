@@ -1,194 +1,269 @@
 {
-  "version": "v0.8.0",
+  "_comment": "Inventory of the features README.md names, enforced by scripts/check-feature-drift.mjs. CONTRACT (decided as D3 in the v2.4.9 plan, 2026-09-10, and documented in docs/reference/feature-inventory.md): CI enforces exactly two things per entry -- the `evidence` path resolves, and `name` appears verbatim in the README region named by `region`. The `status`, `testedAt` and `verificationCommand` fields are ADVISORY: they record how a feature was last verified and are never executed by the drift checker, because shelling out to every command would be a full test run wearing an inventory's clothes. There is deliberately NO version field: it read v0.8.0 while package.json read 2.4.1, and semantic-release bumps package.json on main without touching this file, so a gating version assertion would break main from inside a release commit. Read the version from package.json instead.",
   "features": [
     {
       "id": "f001",
-      "name": "4-layer memory subsystem",
-      "description": "Working / episodic / semantic / graph layers backed by SQLite + FTS5 + optional HNSW vector index.",
-      "status": "passing",
-      "evidence": "src/storage/MemorySubsystem.ts",
-      "testedAt": "2026-05-06",
-      "verificationCommand": "npm run test -- tests/unit/storage/MemorySubsystem.test.ts"
-    },
-    {
-      "id": "f002",
-      "name": "6-stage compaction pipeline",
-      "description": "Hierarchical compaction with budget-aware section dropping and skill-budget reserve.",
-      "status": "passing",
-      "evidence": "src/chat/CompactionStrategy.ts",
-      "testedAt": "2026-05-06",
-      "verificationCommand": "npm run test -- tests/unit/chat/CompactionStrategy.test.ts"
-    },
-    {
-      "id": "f003",
-      "name": "Hardware tiers + auto-detection",
-      "description": "Three GPU tiers (Constrained / Balanced / Full) with auto-detect and override.",
-      "status": "passing",
-      "evidence": "src/runtime/HardwareTier.ts",
-      "testedAt": "2026-05-06",
-      "verificationCommand": "npm run test -- tests/unit/runtime"
-    },
-    {
-      "id": "f004",
-      "name": "Plan mode (toggle + step states)",
-      "description": "Plan mode toggle, draft / approve / reject step transitions, capability reminder.",
-      "status": "passing",
-      "evidence": "src/chat/PlanMode.ts",
-      "testedAt": "2026-05-06",
-      "verificationCommand": "npm run test -- tests/unit/chat/PlanMode.test.ts"
-    },
-    {
-      "id": "f005",
-      "name": "MCP client + opt-in server (stdio)",
-      "description": "MCP client integrates external MCP tools; opt-in stdio server exposes the read-only subset.",
-      "status": "passing",
-      "evidence": "src/mcp/",
-      "testedAt": "2026-05-06",
-      "verificationCommand": "npm run test -- tests/unit/mcp"
-    },
-    {
-      "id": "f006",
-      "name": "HNSW vector index for semantic search",
-      "description": "Optional hnswlib-node-backed index for memory semantic recall, activated at row-count threshold.",
-      "status": "passing",
-      "evidence": "src/storage/MemoryHnswIndex.ts",
-      "testedAt": "2026-05-06",
-      "verificationCommand": "npm run test -- tests/unit/storage/MemoryHnswIndex.test.ts"
-    },
-    {
-      "id": "f007",
-      "name": "Deterministic checks CLI (bin/gemma-check.mjs)",
-      "description": "Standalone CLI that runs deterministic rules (no-secret-patterns, console-noise, todo-without-issue, missing-tests) and emits JSON or text.",
-      "status": "passing",
-      "evidence": "bin/gemma-check.mjs",
-      "testedAt": "2026-05-06",
-      "verificationCommand": "node bin/gemma-check.mjs --json"
-    },
-    {
-      "id": "f008",
-      "name": "Background workers (audit + testgaps)",
-      "description": "Opt-in BackgroundWorkers that spawn gemma-check and vitest --coverage off the agent loop hot path.",
-      "status": "passing",
-      "evidence": "src/agents/BackgroundWorkers.ts",
-      "testedAt": "2026-05-06",
-      "verificationCommand": "npm run test -- tests/integration/background-workers-end-to-end.test.ts"
-    },
-    {
-      "id": "f009",
-      "name": "Webview render protocol (7 primitives)",
-      "description": "DIFF_CARD, ACTION_TAG, PERMISSION_PROMPT, TODO_BLOCK, THOUGHT_META_ROW, QUEUED_MESSAGE_FIELD, COMPLETION_REPORT.",
-      "status": "passing",
-      "evidence": "src/panels/webview/render/",
-      "testedAt": "2026-05-06",
-      "verificationCommand": "npm run test -- tests/unit/panels"
-    },
-    {
-      "id": "f010",
-      "name": "Compaction summary prefix framing",
-      "description": "Compaction outputs are prefixed with framing text that flags the summary as background reference, not active instructions.",
-      "status": "passing",
-      "evidence": "src/chat/prompts/compaction.md",
-      "testedAt": "2026-05-15",
-      "verificationCommand": "npm run test -- tests/unit/chat/CompactionStrategy.test.ts"
-    },
-    {
-      "id": "f011",
-      "name": "Plan-mode denial template",
-      "description": "Strong-framed denial template emitted as a system message on plan/step deny.",
-      "status": "passing",
-      "evidence": "src/chat/PlanMode.ts",
-      "testedAt": "2026-05-15",
-      "verificationCommand": "npm run test -- tests/unit/chat/PlanMode.test.ts"
-    },
-    {
-      "id": "f012",
-      "name": "Plan-mode capabilities reminder",
-      "description": "Capabilities note describing the 7 render primitives injected on plan-mode entry.",
-      "status": "passing",
-      "evidence": "src/chat/prompts/planModeCapabilities.md",
-      "testedAt": "2026-05-15",
-      "verificationCommand": "npm run test -- tests/unit/chat/PlanMode.test.ts"
-    },
-    {
-      "id": "f013",
-      "name": "Plan approveWithNotes path",
-      "description": "Plan can be approved while attaching implementation notes for the executor.",
-      "status": "passing",
-      "evidence": "src/chat/PlanMode.ts",
-      "testedAt": "2026-05-15",
-      "verificationCommand": "npm run test -- tests/unit/chat/PlanMode.test.ts"
-    },
-    {
-      "id": "f014",
-      "name": "feature_list.json scope contract",
-      "description": "Machine-readable feature list with loader, validator, and golden-suite pass-state stamping.",
-      "status": "not_started",
-      "evidence": "feature_list.json",
-      "testedAt": null,
-      "verificationCommand": "npm run test -- tests/unit/evaluation/FeatureList.test.ts"
-    },
-    {
-      "id": "f015",
-      "name": "init.sh / init.ps1 lifecycle bootstrap",
-      "description": "5-step verified bootstrap: install, lint, build, harness-files check, sample-assets check.",
-      "status": "not_started",
-      "evidence": "scripts/init.sh",
-      "testedAt": null,
-      "verificationCommand": "bash scripts/init.sh"
-    },
-    {
-      "id": "f016",
-      "name": "Clean-state end-of-session gate + scanner",
-      "description": "30-item end-of-session checklist plus cleanup-scanner.mjs that surfaces orphan rows, dangling embeddings, deleted-path references, and stale cache files.",
-      "status": "not_started",
-      "evidence": "clean-state-checklist.md",
-      "testedAt": null,
-      "verificationCommand": "node scripts/cleanup-scanner.mjs --format=json"
-    },
-    {
-      "id": "f017",
-      "name": "Pass-state gating in AgentLoop",
-      "description": "AgentLoop refuses to declare task done unless a verification-class tool call has succeeded since the last user message.",
-      "status": "not_started",
-      "evidence": "src/tools/AgentLoop.ts",
-      "testedAt": null,
+      "name": "Agentic AI Coding",
+      "region": "readme:four-pillars",
+      "description": "Tool-using coding agent runtime: plan mode, auto mode, sub-agents, and the verification gates around them.",
+      "status": "shipped",
+      "evidence": "modules/coding/runtime/NexusCodingRuntime.ts",
+      "testedAt": "2026-09-10",
       "verificationCommand": "npm run test -- tests/unit/tools/AgentLoop.test.ts"
     },
     {
+      "id": "f002",
+      "name": "Local Chatbot Explorer",
+      "region": "readme:four-pillars",
+      "description": "Desktop chat pillar with a folder-tree explorer over local sessions, attachments, and archives.",
+      "status": "shipped",
+      "evidence": "desktop/src/modules/chat/ChatPage.tsx",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f003",
+      "name": "Image Studio",
+      "region": "readme:four-pillars",
+      "description": "Desktop image-generation pillar driving the diffusion runtime, with a model-bounded settings surface.",
+      "status": "shipped",
+      "evidence": "desktop/src/modules/image/ImageStudioPage.tsx",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f004",
+      "name": "Video Lab",
+      "region": "readme:four-pillars",
+      "description": "Desktop video-generation pillar driving the diffusion runtime's video pipelines.",
+      "status": "shipped",
+      "evidence": "desktop/src/modules/video/VideoLabPage.tsx",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f005",
+      "name": "Document parsing (OCR)",
+      "region": "readme:four-pillars",
+      "description": "Document-OCR runtime: a portable CPU tier (pypdfium2 + RapidOCR) and an optional NVIDIA quality tier.",
+      "status": "shipped",
+      "evidence": "runtimes/ocr/requirements.txt",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f006",
+      "name": "Local API server (opt-in)",
+      "region": "readme:four-pillars",
+      "description": "Opt-in loopback OpenAI/Anthropic-compatible gateway so other local tools reuse installed models. Default off.",
+      "status": "shipped",
+      "evidence": "desktop/sidecar/src/serving/gateway.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f007",
+      "name": "Ask inbox and scheduled runs (opt-in)",
+      "region": "readme:four-pillars",
+      "description": "Persistent local approval queue for headless and scheduled runs. No auto-approve.",
+      "status": "shipped",
+      "evidence": "desktop/src/pages/inbox/AskInboxPanel.tsx",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f008",
+      "name": "MLX on Apple Silicon (via local adapters)",
+      "region": "readme:four-pillars",
+      "description": "Apple Silicon MLX servers registered as local adapters. No bundled MLX runtime.",
+      "status": "shipped",
+      "evidence": "modules/coding/llm/LocalAdapterRegistry.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f009",
+      "name": "llama.cpp on loopback (via local adapters)",
+      "region": "readme:four-pillars",
+      "description": "A user-started llama-server on loopback registered as a local adapter. No bundled runtime.",
+      "status": "shipped",
+      "evidence": "modules/coding/llm/LocalAdapterRegistry.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f010",
+      "name": "Always-on telemetry",
+      "region": "readme:four-pillars",
+      "description": "Local telemetry bus feeding the GPU/VRAM surfaces and the energy estimator. Local-only; no outbound sink.",
+      "status": "shipped",
+      "evidence": "core/telemetry/TelemetryBus.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f011",
+      "name": "Plan mode",
+      "region": "readme:featured-capabilities",
+      "description": "Slash-command planning mode: produce a Markdown plan, then walk each step with explicit state.",
+      "status": "shipped",
+      "evidence": "modules/coding/chat/PlanMode.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f012",
+      "name": "Auto mode",
+      "region": "readme:featured-capabilities",
+      "description": "End-to-end tool-using sessions with verification gates and git checkpoints.",
+      "status": "shipped",
+      "evidence": "core/coding/AutoModeStream.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f013",
+      "name": "Four-layer memory",
+      "region": "readme:featured-capabilities",
+      "description": "Working / episodic / semantic / graph layers with per-tier half-lives and a scope-aware retriever.",
+      "status": "shipped",
+      "evidence": "src/storage/MemorySubsystem.ts",
+      "testedAt": "2026-09-10",
+      "verificationCommand": "npm run test -- tests/unit/storage/MemorySubsystem.test.ts"
+    },
+    {
+      "id": "f014",
+      "name": "Hybrid retrieval",
+      "region": "readme:featured-capabilities",
+      "description": "BM25 plus dense plus graph retrieval fused by Reciprocal Rank Fusion.",
+      "status": "shipped",
+      "evidence": "core/memory/HybridRetriever.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f015",
+      "name": "Session replay",
+      "region": "readme:featured-capabilities",
+      "description": "Timeline scrubber and compare-two-sessions diff view in the Trace dashboard.",
+      "status": "shipped",
+      "evidence": "desktop/src/modules/coding/panels/SessionCompareView.tsx",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f016",
+      "name": "Skill harness",
+      "region": "readme:featured-capabilities",
+      "description": "Nexus-Hub catalog synced into a single-home catalog directory, hot-reloaded, with an allowlist and an injection scanner on install.",
+      "status": "shipped",
+      "evidence": "core/skills/SkillCatalog.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f017",
+      "name": "Skill self-optimization",
+      "region": "readme:featured-capabilities",
+      "description": "Golden-task-graded, held-out-validated, human-approved bounded edits to skills. Opt-in and default off.",
+      "status": "shipped",
+      "evidence": "desktop/sidecar/src/coding/skillOptimizerManager.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
       "id": "f018",
-      "name": "Frozen memory snapshot at session start",
-      "description": "MemorySnapshot captures Instructions.md / Memory.md / Context.md once per session so prefix caches stay warm.",
-      "status": "not_started",
-      "evidence": "src/storage/MemorySnapshot.ts",
-      "testedAt": null,
-      "verificationCommand": "npm run test -- tests/unit/storage/MemorySnapshot.test.ts"
+      "name": "Per-model harness selection",
+      "region": "readme:featured-capabilities",
+      "description": "Auto-tunes the agent scaffold profile per local model with a golden A/B. Opt-in.",
+      "status": "shipped",
+      "evidence": "modules/coding/orchestration/HarnessSelector.ts",
+      "testedAt": "2026-09-10"
     },
     {
       "id": "f019",
-      "name": "Streaming memory-context scrubber FSM",
-      "description": "Stateful FSM that strips <memory-context> spans from streaming chunks across boundary splits.",
-      "status": "not_started",
-      "evidence": "src/chat/MemoryContextScrubber.ts",
-      "testedAt": null,
-      "verificationCommand": "npm run test -- tests/unit/chat/MemoryContextScrubber.test.ts"
+      "name": "MLX via local adapters",
+      "region": "readme:featured-capabilities",
+      "description": "Apple Silicon MLX servers registered as local adapters. No bundled MLX runtime.",
+      "status": "shipped",
+      "evidence": "modules/coding/llm/LocalAdapterRegistry.ts",
+      "testedAt": "2026-09-10"
     },
     {
       "id": "f020",
-      "name": "Prompt-injection scanner",
-      "description": "Pattern + invisible-unicode scanner enforced at MemoryStore write and MemoryFiles read boundaries.",
-      "status": "not_started",
-      "evidence": "src/guardrails/PromptInjectionScanner.ts",
-      "testedAt": null,
-      "verificationCommand": "npm run test -- tests/unit/guardrails/PromptInjectionScanner.test.ts"
+      "name": "llama.cpp via local adapters",
+      "region": "readme:featured-capabilities",
+      "description": "A user-started llama-server on loopback registered as a local adapter. Does not open the patient-tier gate.",
+      "status": "shipped",
+      "evidence": "modules/coding/llm/LocalAdapterRegistry.ts",
+      "testedAt": "2026-09-10"
     },
     {
       "id": "f021",
-      "name": "Extended SKILL.md YAML frontmatter",
-      "description": "Skill loader accepts version, platforms, metadata.tags, metadata.related_skills.",
-      "status": "not_started",
-      "evidence": "src/skills/SkillLoader.ts",
-      "testedAt": null,
-      "verificationCommand": "npm run test -- tests/unit/skills/SkillLoader.test.ts"
+      "name": "Local API server",
+      "region": "readme:featured-capabilities",
+      "description": "Opt-in loopback gateway, with ACP mounted on the same listener and token. Unattended confirms park in the ask inbox.",
+      "status": "shipped",
+      "evidence": "desktop/sidecar/src/serving/gateway.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f022",
+      "name": "Ask inbox + scheduler",
+      "region": "readme:featured-capabilities",
+      "description": "Local approval queue plus a cron-style scheduler. Morning brief off by default.",
+      "status": "shipped",
+      "evidence": "desktop/src/pages/inbox/AskInboxPanel.tsx",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f023",
+      "name": "Document parsing",
+      "region": "readme:featured-capabilities",
+      "description": "Optional OCR models for PDF and image, plus native DOCX/PPTX/XLSX without them. Docling not required.",
+      "status": "shipped",
+      "evidence": "runtimes/ocr/requirements.txt",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f024",
+      "name": "Motion identity",
+      "region": "readme:featured-capabilities",
+      "description": "Internal orbs, beam, and metal on the desktop shell. One winner per surface; honors OS reduced-motion by halting.",
+      "status": "shipped",
+      "evidence": "desktop/src/motion/index.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f025",
+      "name": "Slash commands",
+      "region": "readme:featured-capabilities",
+      "description": "Built-in memory and planning slash commands plus the skill-backed catalog with preferUpstream ordering.",
+      "status": "shipped",
+      "evidence": "desktop/src/modules/coding/slashCommands.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f026",
+      "name": "GPU scheduler",
+      "region": "readme:featured-capabilities",
+      "description": "Prioritizes coding token generation over background diffusion when both want the same GPU. Tier-aware.",
+      "status": "shipped",
+      "evidence": "core/scheduler/GpuScheduler.ts",
+      "testedAt": "2026-09-10",
+      "verificationCommand": "npm run test -- tests/unit/core/scheduler/GpuScheduler.test.ts"
+    },
+    {
+      "id": "f027",
+      "name": "MCP support",
+      "region": "readme:featured-capabilities",
+      "description": "Stdio MCP servers via the per-project registry, under a reverse-engineering-first policy with per-tool deny.",
+      "status": "shipped",
+      "evidence": "core/coding/McpBridge.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f028",
+      "name": "Trace dashboard",
+      "region": "readme:featured-capabilities",
+      "description": "Tool spans, hook filter, session side-rail, replay scrubber, and side-by-side compare.",
+      "status": "shipped",
+      "evidence": "modules/coding/observability/Tracer.ts",
+      "testedAt": "2026-09-10"
+    },
+    {
+      "id": "f029",
+      "name": "Operation log",
+      "region": "readme:featured-capabilities",
+      "description": "Opt-in append-only Markdown line per tool call, with a secret-path denylist applied before write.",
+      "status": "shipped",
+      "evidence": "modules/coding/observability/OperationLog.ts",
+      "testedAt": "2026-09-10"
     }
   ]
 }

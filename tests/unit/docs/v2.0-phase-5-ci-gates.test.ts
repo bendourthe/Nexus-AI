@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 
 describe("v2.0.0 Phase 5 CI hardware-gates doc", () => {
   const body = readFileSync(
-    path.resolve("docs/v2/v2.0/ci-hardware-gates.md"),
+    path.resolve("docs/archive/v2/v2.0/ci-hardware-gates.md"),
     "utf8",
   );
 
