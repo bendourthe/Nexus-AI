@@ -39,7 +39,7 @@ Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 
 - `DF-v250-1` screenshot and capture stay deferred.
 - `QG-v250-1` live sidecar context was not observed.
-- `QG-v250-2` migration snapshot tests did not load `better-sqlite3` (ABI 146 vs Node ABI 137).
+- `QG-v250-2` closed on CI. Node 22 job `108108818115` passed the byte-identical refusal test. This host still cannot load the module.
 - `MT-v251-1` closed. Desktop eslint reports 0 jsx-a11y warnings and the ceiling is 0.
 - `QG-v251-2` packaged Tauri window was not launched, and `bundle.smoke.mjs` is not a CI job.
 - `CI-v251-1` pipeline profile migration was not approved and was not applied. Linux and macOS installer rehearsals were not run.
@@ -135,7 +135,7 @@ Reviewed against the plan headers, not against ticked boxes. Misses stay known g
 
 **Editor plan.** Goal: an outside agent can install Nexus, read one reference tree, load one skill, and drive plus observe through `nexus`. `docs/reference/cli/` is the tree, `modules/coding/skills/catalog/nexus/SKILL.md` is the skill, and `core/cli/jsonCli.ts` plus `desktop/sidecar/src/controlSurface/jsonCliRoutes.ts` expose `context`, `logs`, and `media inspect`. A live round trip was not observed (`QG-v250-1`). `screenshot` and `capture` stay out of scope (`DF-v250-1`).
 
-**Migration plan.** Definition of done: a corrupted migration leaves the original byte-identical, writes a snapshot, and refuses the next open, and three launches with nothing pending create no snapshots. The code is `core/storage/preMigrationSnapshot.ts` and the refuse-to-start path in `ChatHistoryStore`. The byte-identical run was not executed on this host (`QG-v250-2`).
+**Migration plan.** Definition of done: a corrupted migration leaves the original byte-identical, writes a snapshot, and refuses the next open, and three launches with nothing pending create no snapshots. The code is `core/storage/preMigrationSnapshot.ts` and the refuse-to-start path in `ChatHistoryStore`. Node 22 CI job `108108818115` passed "leaves the original bytes unchanged and refuses to reopen after a failed migration". This host still cannot load `better-sqlite3`.
 
 **v2.5.1, eight criteria:**
 
