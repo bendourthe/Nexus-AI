@@ -131,6 +131,8 @@ Exercises run on 2026-09-25 against `node bin/nexus.mjs`:
 
 That matches `docs/reference/cli/contract.md` rule 46: a loopback runtime failure may put the JSON error on stdout. It does not observe a running sidecar, so `QG-v250-1` stays open.
 
+`node bin/nexus-check.mjs --rule cli-reference-drift` printed `nexus-check: 0 findings`.
+
 ## Goal-vs-codebase review
 
 Reviewed against the plan headers, not against ticked boxes. Misses stay known gaps.
