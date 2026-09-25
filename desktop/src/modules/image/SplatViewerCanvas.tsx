@@ -223,7 +223,12 @@ export function SplatViewerCanvas({
             : null;
 
   return (
+    // Camera orbit is a custom widget: keyboard lives on this surface, and the
+    // canvas inside it is the pointer target.
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div
+      role="application"
+      aria-label="Gaussian splat preview"
       data-testid="splat-viewer"
       data-splat-mode={drawable ? mode : "fallback"}
       data-splat-fallback={fallbackReason ?? undefined}
@@ -238,6 +243,7 @@ export function SplatViewerCanvas({
       data-camera-pan={camera.panX.toFixed(3)}
       data-camera-spin={camera.spinYaw.toFixed(4)}
       data-screenshot={shot}
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
       tabIndex={0}
       onKeyDown={onKeyDown}
       style={{ width: viewport.width, maxWidth: "100%" }}

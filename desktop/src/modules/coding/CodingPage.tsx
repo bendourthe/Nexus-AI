@@ -1069,7 +1069,7 @@ export function CodingPage({
               }
             />
           </div>
-          <nav
+          <div
             data-testid="coding-tabs"
             role="tablist"
             aria-label="Agent workspace views"
@@ -1096,7 +1096,7 @@ export function CodingPage({
                 {t.slice(1)}
               </button>
             ))}
-          </nav>
+          </div>
         </header>
 
         {error && (

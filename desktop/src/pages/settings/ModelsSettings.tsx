@@ -516,6 +516,7 @@ function ModelCard({
   };
   return (
     <li
+      role="group"
       data-testid={`models-row-${item.id}`}
       data-compact="true"
       data-downloaded={downloaded ? "true" : "false"}

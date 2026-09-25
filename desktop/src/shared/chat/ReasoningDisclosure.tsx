@@ -53,7 +53,6 @@ export function ReasoningDisclosure({
         <pre
           id={`message-reasoning-content-${messageId}`}
           aria-label="Model-provided reasoning"
-          tabIndex={0}
           style={{
             maxHeight: "16rem",
             overflow: "auto",
