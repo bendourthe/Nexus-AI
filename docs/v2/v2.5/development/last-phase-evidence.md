@@ -18,6 +18,21 @@ release-assets: PASS parity 3 artifacts
 
 `.github/workflows/ci.yml` runs both checks with no path filter. `.github/workflows/semantic-release.yml` runs the artifact parity check before `npx semantic-release`. Both jobs passed on the integration pull requests before merge.
 
+Provider detected: GitHub Actions (`.github/workflows/`). Compared on `318bb2ea` without applying a rewrite. Silence is not approval, so the differences below stay recorded.
+
+| Field | Observed |
+|---|---|
+| Events | `ci.yml` runs on `push` (every branch except `dependabot/**`) and on `pull_request` to `main` and `develop`. The contract wants validation on the pull request, not a second full run on push to the same branch. |
+| Runners | TypeScript jobs use `ubuntu-latest`. The shell workflow uses an OS matrix. Linux and macOS installer workflows are `workflow_dispatch` only (`ubuntu-22.04`, `macos-latest`). |
+| Required aggregate | Branch protection expects 16 separate status checks. There is no single always-resolving aggregate job. |
+| Permissions | `check-command-parity` and `check-release-assets` set `contents: read`. |
+| Pinning | Checkout and setup-node in those jobs use full commit SHAs with version comments. |
+| Concurrency | `ci.yml` sets `cancel-in-progress: true` on `ci-${{ github.workflow }}-${{ github.head_ref \|\| github.ref }}`. |
+| Path scoping | The two new gates have no `paths` filter. The packaged smoke is not a job at all. |
+| Profiles | The five repository-native profiles (`fast`, `full`, `platform`, `report`, `release`) are not present. Not applied. |
+| Cross-installer | `installer-build.yml`, `installer-linux.yml`, and `installer-macos.yml` exist. Linux and macOS are manual rehearsals and were not executed in this cycle. Windows installer bytes for `v2.5.0` were produced by `release.yml` run 36093413452. |
+| First-run-remote | `check-command-parity` and `check-release-assets` have since passed on the integration pulls and on `2b4ed3b6`. The packaged smoke has not. |
+
 ## Known-gaps reconciliation
 
 Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
@@ -26,7 +41,8 @@ Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 - `QG-v250-1` live sidecar context was not observed.
 - `QG-v250-2` migration snapshot tests did not load `better-sqlite3` (ABI 146 vs Node ABI 137).
 - `MT-v251-1` closed. Desktop eslint reports 0 jsx-a11y warnings and the ceiling is 0.
-- `QG-v251-2` packaged Tauri window was not launched.
+- `QG-v251-2` packaged Tauri window was not launched, and `bundle.smoke.mjs` is not a CI job.
+- `CI-v251-1` pipeline profile migration was not approved and was not applied. Linux and macOS installer rehearsals were not run.
 
 Archived v2.4 gaps were not closed by these plans.
 
