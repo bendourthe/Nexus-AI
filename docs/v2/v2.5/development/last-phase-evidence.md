@@ -105,11 +105,26 @@ This section is the start of the deep-pass record. It is not a finished Tier 3 r
 
 ## Goal-vs-codebase review
 
-The editor-plan goal (an agent can install Nexus, read one reference tree, load one skill, and drive plus observe through `nexus`) is met in source by `docs/reference/cli/`, `modules/coding/skills/catalog/nexus/SKILL.md`, and `nexus context`, `nexus logs`, and `nexus media inspect`. The live sidecar round trip is `QG-v250-1`.
+Reviewed against the plan headers, not against ticked boxes. Misses stay known gaps.
 
-The migration-durability goal (a failed migration leaves the original, writes a snapshot, and refuses the next open) is implemented in `core/storage/preMigrationSnapshot.ts` and `ChatHistoryStore`. The byte-identical proof was not run. See `QG-v250-2`.
+**Editor plan.** Goal: an outside agent can install Nexus, read one reference tree, load one skill, and drive plus observe through `nexus`. `docs/reference/cli/` is the tree, `modules/coding/skills/catalog/nexus/SKILL.md` is the skill, and `core/cli/jsonCli.ts` plus `desktop/sidecar/src/controlSurface/jsonCliRoutes.ts` expose `context`, `logs`, and `media inspect`. A live round trip was not observed (`QG-v250-1`). `screenshot` and `capture` stay out of scope (`DF-v250-1`).
 
-The v2.5.1 goal (machine-checked packaged verification and a first accessibility gate) is met for jsx-a11y, the axe triple baseline, command parity, and the artifact-name list. The packaged window launch is `QG-v251-2`.
+**Migration plan.** Definition of done: a corrupted migration leaves the original byte-identical, writes a snapshot, and refuses the next open, and three launches with nothing pending create no snapshots. The code is `core/storage/preMigrationSnapshot.ts` and the refuse-to-start path in `ChatHistoryStore`. The byte-identical run was not executed on this host (`QG-v250-2`).
+
+**v2.5.1, eight criteria:**
+
+| # | Result | Evidence |
+|---|---|---|
+| 1 | Met in source | `desktop/tests/fixtures/a11y-violation.tsx` is linted with `--no-ignore` by `desktop/tests/a11y-config.test.ts`. The first-run count is in `docs/v2/v2.5/development/v2.5.1-phase1-evidence.md`. Desktop eslint now reports 0 warnings and the ceiling is 0. |
+| 2 | Met in source | `desktop/tests/a11y-baseline.json` is `[]`. `desktop/tests/a11y.test.tsx` fails a new triple while the total count drops. |
+| 3 | Met on this tree | `node scripts/check-command-parity.mjs` printed `command-parity: PASS commands 141, exempt 26, findings 0`. `tests/unit/scripts/command-parity.test.ts` covers an unmapped command, a zero enumeration, and a below-snapshot count. |
+| 4 | Met in the workflow | `check-command-parity` in `.github/workflows/ci.yml` has no `paths` filter. The comment on that job states why. |
+| 5 | Met for the checker, not for a launched window | `tests/unit/packaged/packaged-smoke.test.ts` fails `evaluateSmoke` when `launched` is true and a route selector is missing. No packaged window produced that report (`QG-v251-2`). |
+| 6 | Not met | `bundle.smoke.mjs` can record a SHA-256 when given a bundle path. No workflow runs it. `installer-smoke.yml` still runs the older installer scripts. |
+| 7 | Measured on a fixture, not on a launched app | The same test expects `non-loopback connection: https://example.com/models`. Key Metric M3 is not measured from a running packaged window (`QG-v251-2`). |
+| 8 | Gate exists; the published digest was not bound to a launched smoke | `node scripts/check-release-assets.mjs` printed `release-assets: PASS parity 3 artifacts`. It runs in `ci.yml` and before `npx semantic-release`. The v2.5.0 assets were uploaded by hand after `release.yml` rejected the lightweight tag, and no smoke digest was compared to those bytes. |
+
+NI-3 is resolved in the v2.4 archive and was not used as this plan's proving case. A11 stays deferred.
 
 ## Publication and integration
 
