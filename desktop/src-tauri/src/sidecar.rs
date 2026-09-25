@@ -949,6 +949,8 @@ mod tests {
             script_path: None,
             failure: Some("script-not-found: x".into()),
             stderr_tail: vec!["boom".into()],
+            stderr_head: vec![],
+            log_path: None,
             candidates_rejected: vec![],
             exit_code: Some(1),
         };

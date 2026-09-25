@@ -44,6 +44,9 @@ jobs:
 
       - run: npm ci --prefer-offline --no-audit
 
+      - name: Release artifact matrix parity
+        run: node scripts/check-release-assets.mjs
+
       - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

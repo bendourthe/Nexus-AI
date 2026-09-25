@@ -67,6 +67,7 @@ describe("Built-in skill catalog integration", () => {
       "fuse",
       // v2.1.0 Phase 1 A4 training-recipe presets
       "training-recipe",
+      "nexus",
     ];
 
     for (const name of expected) {

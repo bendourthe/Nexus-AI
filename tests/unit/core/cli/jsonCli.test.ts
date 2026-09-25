@@ -2,10 +2,24 @@ import { describe, expect, it } from "vitest";
 
 import {
   dispatchJsonCli,
+  isJsonOutputFlag,
   parseJsonInput,
+  renderJsonLines,
+  renderJsonValue,
   requireFields,
   SESSION_NEW_SCHEMA,
 } from "../../../../core/cli/jsonCli.js";
+
+describe("json output renderers", () => {
+  it("renders one value or JSON Lines and treats a string body as input, not the output flag", () => {
+    expect(isJsonOutputFlag(true)).toBe(true);
+    expect(isJsonOutputFlag("true")).toBe(true);
+    expect(isJsonOutputFlag('{"modelId":"gemma4"}')).toBe(false);
+    expect(renderJsonValue(null)).toBe("null\n");
+    expect(renderJsonLines([])).toBe("");
+    expect(renderJsonLines([{ name: "a" }, { name: "b" }])).toBe('{"name":"a"}\n{"name":"b"}\n');
+  });
+});
 
 describe("json CLI client", () => {
   it("rejects malformed JSON before touching the network", async () => {
