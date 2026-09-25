@@ -11,7 +11,7 @@
     "build:web": "vite build",
     "build:sidecar": "node sidecar/esbuild.config.mjs",
     "preview": "vite preview --port 1421 --strictPort",
-    "lint": "eslint src sidecar/src tests --max-warnings=31",
+    "lint": "eslint src sidecar/src tests --max-warnings=21",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --config vitest.config.ts",
     "test:watch": "vitest --config vitest.config.ts",

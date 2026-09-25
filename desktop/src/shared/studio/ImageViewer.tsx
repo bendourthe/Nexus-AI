@@ -413,7 +413,6 @@ export function ImageViewer({
       role="dialog"
       aria-modal="true"
       aria-label="Image viewer"
-      onClick={onClose}
       style={{
         position: "fixed",
         inset: 0,
@@ -424,6 +423,12 @@ export function ImageViewer({
         flexDirection: "column",
       }}
     >
+      <button
+        type="button"
+        aria-label="Close image viewer"
+        onClick={onClose}
+        style={{ position: "absolute", inset: 0, border: 0, background: "transparent" }}
+      />
       {/*
         Toolbar.
 
@@ -433,10 +438,10 @@ export function ImageViewer({
         so their width cannot pull the centred group off centre.
       */}
       <div
-        onClick={(e) => e.stopPropagation()}
         data-testid={`${testId}-toolbar`}
         style={{
           position: "relative",
+          zIndex: 1,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -607,10 +612,6 @@ export function ImageViewer({
           role="dialog"
           aria-modal="true"
           aria-label={pendingAction === "save" ? "Save which version" : "Copy which version"}
-          onClick={(e) => {
-            e.stopPropagation();
-            setPendingAction(null);
-          }}
           style={{
             position: "absolute",
             inset: 0,
@@ -621,9 +622,16 @@ export function ImageViewer({
             background: "color-mix(in srgb, #000 55%, transparent)",
           }}
         >
+          <button
+            type="button"
+            aria-label="Dismiss version choice"
+            onClick={() => setPendingAction(null)}
+            style={{ position: "absolute", inset: 0, border: 0, background: "transparent" }}
+          />
           <div
-            onClick={(e) => e.stopPropagation()}
             style={{
+              position: "relative",
+              zIndex: 1,
               display: "inline-flex",
               flexDirection: "column",
               alignItems: "center",
@@ -669,8 +677,9 @@ export function ImageViewer({
 
       {/* Stage: the image at its own resolution, capped to the viewport. */}
       <div
-        onClick={(e) => e.stopPropagation()}
         style={{
+          position: "relative",
+          zIndex: 1,
           flex: 1,
           minHeight: 0,
           display: "flex",
