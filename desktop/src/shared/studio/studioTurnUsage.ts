@@ -26,3 +26,15 @@ export function studioPersistUsage(input: {
   }
   return { visualUnits: input.mediaRef ? 1 : 0 };
 }
+
+/**
+ * v2.4.9 -- wall-clock seconds since a job started, or undefined.
+ *
+ * Feeds `ChatMessage.generationSeconds`, which the bubble renders in brackets
+ * after the timestamp so a ten-minute video reads as ten minutes.
+ */
+export function elapsedSecondsSince(startedAtMs: number | undefined): number | undefined {
+  if (typeof startedAtMs !== "number" || !Number.isFinite(startedAtMs)) return undefined;
+  const seconds = (Date.now() - startedAtMs) / 1000;
+  return seconds >= 0 ? seconds : undefined;
+}

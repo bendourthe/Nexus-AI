@@ -2,43 +2,9 @@
 
 from __future__ import annotations
 
-import sys
 from unittest.mock import patch
 
 from nexus_installer.installer_state import InstallerState
-
-
-class TestOpenVscodeCommand:
-    def test_windows_uses_start_cmd(self) -> None:
-        with patch("subprocess.Popen") as mock_popen:
-            with patch.object(sys, "platform", "win32"):
-                state = InstallerState(vscode_path="code.cmd")
-                # Simulate the command that CompletePage._open_vscode would run
-                import subprocess
-
-                subprocess.Popen(["cmd", "/c", "start", "", state.vscode_path])
-                mock_popen.assert_called_once()
-                cmd = mock_popen.call_args[0][0]
-                assert "cmd" in cmd
-                assert "start" in cmd
-
-    def test_macos_uses_open(self) -> None:
-        with patch("subprocess.Popen") as mock_popen:
-            import subprocess
-
-            subprocess.Popen(["open", "-a", "Visual Studio Code"])
-            mock_popen.assert_called_once()
-            cmd = mock_popen.call_args[0][0]
-            assert cmd[0] == "open"
-
-    def test_linux_uses_code(self) -> None:
-        with patch("subprocess.Popen") as mock_popen:
-            import subprocess
-
-            subprocess.Popen(["code"])
-            mock_popen.assert_called_once()
-            cmd = mock_popen.call_args[0][0]
-            assert cmd[0] == "code"
 
 
 class TestCompleteTitleLogic:
@@ -63,61 +29,79 @@ class TestLogExport:
 
 
 class TestLaunchNexusOnFinish:
-    """v1.8.0 Phase 2 (T203): the 'Launch Nexus' checkbox + finish hook."""
+    """v2.4.11: footer-hosted View Logs / Close / Launch Nexus AI."""
 
     def _page(self, state: InstallerState):
         from nexus_installer.pages.complete import CompletePage
 
         return CompletePage(state)
 
-    def test_checkbox_default_checked(self, qt_app: object) -> None:
-        state = InstallerState()
+    def test_footer_actions_are_view_logs_then_close(self, qt_app: object) -> None:
+        state = InstallerState(
+            desktop_installed=True,
+            desktop_exe_path=r"C:\apps\Nexus\Nexus.exe",
+        )
         page = self._page(state)
-        assert page._launch_checkbox.isChecked() is True
-        assert state.launch_desktop_on_finish is True
+        page._refresh()
+        labels = [b.text() for b in page.footer_actions()]
+        assert labels == ["View Logs", "Close"]
 
-    def test_unchecking_updates_state(self, qt_app: object) -> None:
-        state = InstallerState()
+    def test_primary_button_launches_when_desktop_present(self, qt_app: object) -> None:
+        state = InstallerState(
+            desktop_installed=True,
+            desktop_exe_path=r"C:\apps\Nexus\Nexus.exe",
+        )
         page = self._page(state)
-        page._launch_checkbox.setChecked(False)
-        assert state.launch_desktop_on_finish is False
+        assert page.finish_button_text() == "Launch Nexus AI"
 
-    def test_refresh_disables_checkbox_when_desktop_missing(
+    def test_no_close_button_and_plain_finish_without_desktop(
         self, qt_app: object
     ) -> None:
         state = InstallerState(desktop_installed=False)
         page = self._page(state)
         page._refresh()
-        assert page._launch_checkbox.isEnabled() is False
-        assert page._launch_checkbox.isChecked() is False
+        assert page.finish_button_text() == "Finish"
+        assert [b.text() for b in page.footer_actions()] == ["View Logs"]
+
+    def test_retry_button_joins_the_footer_when_visible(self, qt_app: object) -> None:
+        state = InstallerState(
+            desktop_installed=True,
+            desktop_exe_path=r"C:\apps\Nexus\Nexus.exe",
+        )
+        page = self._page(state)
+        page._retry_btn.setVisible(True)
+        labels = [b.text() for b in page.footer_actions()]
+        assert labels == ["View Logs", "Retry failed downloads", "Close"]
 
     def test_on_finish_launches_installed_desktop(self, qt_app: object) -> None:
         state = InstallerState(
             desktop_installed=True,
             desktop_exe_path=r"C:\apps\Nexus\Nexus.exe",
-            launch_desktop_on_finish=True,
         )
         page = self._page(state)
         with patch("subprocess.Popen") as mock_popen:
             page.on_finish()
         mock_popen.assert_called_once_with([r"C:\apps\Nexus\Nexus.exe"])
 
-    def test_on_finish_respects_unchecked_box(self, qt_app: object) -> None:
-        state = InstallerState(
-            desktop_installed=True,
-            desktop_exe_path=r"C:\apps\Nexus\Nexus.exe",
-            launch_desktop_on_finish=False,
-        )
+    def test_on_finish_noop_when_not_installed(self, qt_app: object) -> None:
+        state = InstallerState()
         page = self._page(state)
         with patch("subprocess.Popen") as mock_popen:
             page.on_finish()
         mock_popen.assert_not_called()
 
-    def test_on_finish_noop_when_not_installed(self, qt_app: object) -> None:
-        state = InstallerState(launch_desktop_on_finish=True)
+    def test_close_acknowledges_without_launching(self, qt_app: object) -> None:
+        state = InstallerState(
+            desktop_installed=True,
+            desktop_exe_path=r"C:\apps\Nexus\Nexus.exe",
+        )
         page = self._page(state)
+        seen: list[bool] = []
+        page.close_requested.connect(lambda: seen.append(True))
         with patch("subprocess.Popen") as mock_popen:
-            page.on_finish()
+            page._close_btn.click()
+            page.acknowledge()
+        assert seen == [True]
         mock_popen.assert_not_called()
 
     def test_refresh_shows_health_status_row(self, qt_app: object) -> None:

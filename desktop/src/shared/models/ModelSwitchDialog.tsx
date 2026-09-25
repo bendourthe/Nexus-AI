@@ -13,6 +13,10 @@
 
 import { useEffect, useState } from "react";
 
+import {
+  estimateModelLoadSeconds,
+  formatDuration,
+} from "../chat/generationProgress";
 import type { PendingSwitch, SwitchResolution } from "./useModelResidency";
 
 export interface ModelSwitchDialogProps {
@@ -60,6 +64,10 @@ export function ModelSwitchDialog({
   const target = pending.request.targetModelId;
   const busy = pending.verdict.busyWith;
   const vramUnknown = pending.verdict.reason === "vram-unknown";
+  // v2.4.11: say what the swap costs. A user who knows a switch is a
+  // two-minute load decides differently than one who thinks it is instant.
+  const loadSeconds = estimateModelLoadSeconds(pending.request.targetVramGB);
+  const outgoing = pending.request.resident.map((r) => r.modelId).join(", ");
 
   return (
     <div
@@ -78,7 +86,7 @@ export function ModelSwitchDialog({
         maxWidth: "34rem",
       }}
     >
-      <strong>Load a different model?</strong>
+      <strong>Switch to a different model?</strong>
       <span style={{ color: "var(--fg-1, #ccc)" }}>
         {vramUnknown ? (
           <>
@@ -88,18 +96,21 @@ export function ModelSwitchDialog({
           </>
         ) : (
           <>
-            This needs <code>{target}</code>, and there is not enough GPU memory to keep
-            both loaded.{" "}
+            Your GPU holds one model at a time, and{" "}
+            <code>{outgoing || "the current model"}</code> is loaded. Switching to{" "}
+            <code>{target}</code> unloads it first.{" "}
             {busy ? (
               <>
-                <code>{busy.modelId ?? "The current model"}</code> is busy with{" "}
-                {moduleLabel(busy.moduleId)} and would be unloaded.
+                It is busy with {moduleLabel(busy.moduleId)}, so that work would be
+                interrupted.{" "}
               </>
-            ) : (
-              <>The currently loaded model would be unloaded.</>
-            )}
+            ) : null}
           </>
         )}
+      </span>
+      <span data-testid={`${testId}-cost`} style={{ color: "var(--fg-1, #ccc)" }}>
+        Loading <code>{target}</code> takes about {formatDuration(loadSeconds)}. Switching
+        back later costs the same again.
       </span>
 
       <label style={{ display: "flex", alignItems: "center", gap: "var(--space-2, 6px)" }}>
@@ -118,21 +129,23 @@ export function ModelSwitchDialog({
           data-testid={`${testId}-switch`}
           onClick={() => onResolve({ action: "switch", remember })}
         >
-          Switch now
+          Switch and load
         </button>
-        <button
-          type="button"
-          data-testid={`${testId}-queue`}
-          onClick={() => onResolve({ action: "queue" })}
-        >
-          Queue after the current job
-        </button>
+        {busy ? (
+          <button
+            type="button"
+            data-testid={`${testId}-queue`}
+            onClick={() => onResolve({ action: "queue" })}
+          >
+            Queue after the current job
+          </button>
+        ) : null}
         <button
           type="button"
           data-testid={`${testId}-keep`}
           onClick={() => onResolve({ action: "keep" })}
         >
-          Keep the current model
+          Cancel
         </button>
       </div>
     </div>

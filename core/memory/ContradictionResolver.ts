@@ -10,7 +10,7 @@
  * `nexus.memory.consolidation.enabled` Settings key (default `false`); when
  * the gate is off, `sweep()` short-circuits before any LLM call.
  *
- * Adopts agentmemory A4 (see docs/v1/v1.1/comparison-agentmemory.md
+ * Adopts agentmemory A4 (see docs/archive/v1/v1.1/comparison-agentmemory.md
  * Section 11.3 P2).
  */
 

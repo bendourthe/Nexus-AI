@@ -1,4 +1,8 @@
-"""Install path page: choose install directory with disk space display."""
+"""Install path panel: choose the install directory, with a disk space line.
+
+Hosted in the Configuration page's Components card (it used to be a step of
+its own, then part of the Setup step).
+"""
 
 from __future__ import annotations
 
@@ -6,9 +10,9 @@ import os
 import shutil
 from typing import TYPE_CHECKING
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QFileDialog,
-    QHBoxLayout,
     QLabel,
     QLineEdit,
     QVBoxLayout,
@@ -22,37 +26,49 @@ from nexus_installer.constants import (
     TEXT_SECONDARY,
     WARNING,
 )
-from nexus_installer.widgets.callout_box import CalloutBox
 from nexus_installer.widgets.secondary_button import SecondaryButton
 
 if TYPE_CHECKING:
     from nexus_installer.installer_state import InstallerState
 
 
+#: Gap between the typed text and the overlaid Browse button.
+_BROWSE_GAP_PX = 8
+
+
 class InstallPathPage(QWidget):
-    """Page for choosing the installation directory."""
+    """Panel for choosing the installation directory."""
 
     def __init__(self, state: InstallerState, parent: QWidget | None = None) -> None:
         super().__init__(parent)
         self._state = state
 
         layout = QVBoxLayout(self)
-        layout.setSpacing(16)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
 
-        title = QLabel("Install Location")
-        title.setObjectName("pageTitle")
+        title = QLabel("Install path")
+        title.setObjectName("cardCaption")
         layout.addWidget(title)
 
-        # Path input row
-        path_row = QHBoxLayout()
+        # One full-width control that reads as a path field with an action,
+        # rather than a narrowed field beside a button. Browse is an overlaid
+        # child so the field keeps the whole row and the button still takes
+        # focus and clicks.
         self._path_input = QLineEdit(state.install_path)
+        self._path_input.setObjectName("install-path-input")
         self._path_input.textChanged.connect(self._on_path_changed)
-        path_row.addWidget(self._path_input, stretch=1)
 
-        browse_btn = SecondaryButton("Browse...")
-        browse_btn.clicked.connect(self._browse)
-        path_row.addWidget(browse_btn)
-        layout.addLayout(path_row)
+        self._browse_btn = SecondaryButton("Browse...")
+        self._browse_btn.setObjectName("install-path-browse")
+        self._browse_btn.setParent(self._path_input)
+        self._browse_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self._browse_btn.clicked.connect(self._browse)
+        # Keep typed text clear of the button.
+        self._path_input.setTextMargins(
+            0, 0, self._browse_btn.sizeHint().width() + _BROWSE_GAP_PX, 0
+        )
+        layout.addWidget(self._path_input)
 
         # Disk space display
         self._disk_label = QLabel("")
@@ -68,21 +84,6 @@ class InstallPathPage(QWidget):
         self._error_label.setVisible(False)
         layout.addWidget(self._error_label)
 
-        # Info callout
-        callout = CalloutBox(
-            title="What gets installed where",
-            body=(
-                "\u2022 VS Code extension: added to your VS Code<br>"
-                "\u2022 Ollama: installed system-wide (the local model runtime)<br>"
-                "\u2022 Python tools: in a self-contained folder inside "
-                "your install path<br>"
-                "\u2022 Nexus models: downloaded to Ollama's model folder"
-            ),
-        )
-        layout.addWidget(callout)
-
-        layout.addStretch()
-
         self._update_disk_display()
 
     def _browse(self) -> None:
@@ -91,6 +92,25 @@ class InstallPathPage(QWidget):
         )
         if path:
             self._path_input.setText(path)
+
+    def resizeEvent(self, event: object) -> None:  # noqa: N802
+        """Keep the overlaid Browse button pinned to the field's right edge."""
+        super().resizeEvent(event)  # type: ignore[arg-type]
+        self._position_browse()
+
+    def showEvent(self, event: object) -> None:  # noqa: N802
+        super().showEvent(event)  # type: ignore[arg-type]
+        self._position_browse()
+
+    def _position_browse(self) -> None:
+        field = self._path_input
+        button = self._browse_btn
+        width = button.sizeHint().width()
+        # A pill: fixed 30px tall (radius 15 in the stylesheet), centered.
+        height = 30
+        button.setFixedHeight(height)
+        top = max(0, (field.height() - height) // 2)
+        button.move(max(0, field.width() - width - 6), top)
 
     def _on_path_changed(self, text: str) -> None:
         self._state.install_path = text
@@ -120,6 +140,11 @@ class InstallPathPage(QWidget):
             f"color: {color}; font-size: {FS_CAPTION}px; background: transparent;"
         )
         self._disk_label.setText(f"{gb_free} GB available on selected drive")
+
+    def set_interactive(self, enabled: bool) -> None:
+        """Lock the path once the install has started (the engine reads it)."""
+        self._path_input.setEnabled(enabled)
+        self._browse_btn.setEnabled(enabled)
 
     def validate(self) -> tuple[bool, str]:
         path = self._state.install_path

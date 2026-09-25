@@ -7,7 +7,7 @@ Thanks for your interest in improving Nexus. This document covers the minimum yo
 ## Project tour
 
 - v1.0.0 shared core under [core/](./core) (`ModelRegistry`, `MemoryHub`, `TelemetryBus`, `SkillCatalog`, `StorageMigration`).
-- Per-pillar modules under [modules/](./modules). The Coding pillar currently lives under [src/](./src) during the one-cycle compat window; wholesale move to [modules/coding/](./modules/coding/) is tracked in [docs/versions/v1/v1.0.0/known-gaps.md](docs/v1/v1.0/known-gaps.md) under code `MV`.
+- Per-pillar modules under [modules/](./modules). The Coding pillar currently lives under [src/](./src) during the one-cycle compat window; wholesale move to [modules/coding/](./modules/coding/) is tracked in [docs/versions/v1/v1.0.0/known-gaps.md](docs/archive/v1/v1.0/known-gaps.md) under code `MV`.
 - Composition root: [src/extension.ts](./src/extension.ts) -> [src/runtime/NexusCodingRuntime.ts](./src/runtime/NexusCodingRuntime.ts) -> [src/panels/NexusCodingPanel.ts](./src/panels/NexusCodingPanel.ts).
 - Vendor-neutral LLM port at [src/llm/types.ts](./src/llm/types.ts); the Ollama adapter at [src/llm/OllamaClient.ts](./src/llm/OllamaClient.ts).
 - Pre-execution safety layer at [src/guardrails/](./src/guardrails) (action classification, loop detection, git checkpoints, permission tiers).
@@ -17,7 +17,7 @@ Thanks for your interest in improving Nexus. This document covers the minimum yo
 - Deterministic-checks CLI at [bin/nexus-check.mjs](./bin/nexus-check.mjs) (renamed from `gemma-check` in Phase 2.4; legacy alias kept for one cycle).
 - Tests mirror source layout under [tests/unit/](./tests/unit), [tests/integration/](./tests/integration), and [tests/golden/](./tests/golden).
 
-For deeper architecture see [ARCHITECTURE.md](./ARCHITECTURE.md) and [docs/versions/v1/v1.0.0/architecture.md](docs/v1/v1.0/architecture.md). The canonical agent directive is [AGENTS.md](./AGENTS.md).
+For deeper architecture see [ARCHITECTURE.md](./ARCHITECTURE.md) and [docs/versions/v1/v1.0.0/architecture.md](docs/archive/v1/v1.0/architecture.md). The canonical agent directive is [AGENTS.md](./AGENTS.md).
 
 ## One-command setup
 
@@ -121,6 +121,14 @@ When you ship a new tool (built-in handler or MCP-side):
 - Update [src/tools/ToolCatalog.ts](./src/tools/ToolCatalog.ts) with the schema (name, description with one usage example, parameters with `required` flags).
 - Update [docs/archive/versions/v0/v0.5.0/tool-audit.md](docs/archive/v0/v0.5/tool-audit.md) with a row classifying the tool against the severity rubric (`blocker | friction | optimization`).
 - Ensure every error returned by the handler contains the failing parameter name and a `Usage:` hint per the actionability convention. Property-based tests in [tests/unit/tools/errors.test.ts](./tests/unit/tools/errors.test.ts) enforce this on every PR.
+
+## Adding a model or runtime
+
+Model, model-variant, and Python-runtime proposals are judged against the job map in [docs/reference/model-acceptance.md](./docs/reference/model-acceptance.md). The catalog is organised so that every entry owns at least one named job and every job has exactly one holder, which means a proposal is accepted on one of two grounds: it takes a job from its current holder with measured numbers from this project's own hardware, or it claims a job nobody holds. "It benchmarks well" is not a job.
+
+A related contract governs the feature inventory rather than the model catalog: [docs/reference/feature-inventory.md](./docs/reference/feature-inventory.md) records what `feature_list.json` asserts, which two `README.md` regions the drift checker parses, and why it never executes a `verificationCommand`. Adding a feature to either of those README regions requires an inventory entry in the same commit, or the `check-feature-drift` job fails.
+
+The bar is higher for an entry that `core/registry/recommended.json` pre-ticks, because a default reaches users who never evaluated the choice. That is also where the license rules bite: a commercially capped license is not acceptable for a pre-ticked default when an alternative fits the same tier. Read the acceptance bar before opening the PR, and update its job map in the same commit as any change to `core/registry/catalog.json` or `core/registry/recommended.json`.
 
 ## Tool quality and severity
 

@@ -12,6 +12,7 @@
  */
 
 import {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -23,8 +24,13 @@ import {
   type FocusEvent,
   type KeyboardEvent,
 } from "react";
-import { Send } from "lucide-react";
-import { AccentBeam, type AccentBeamAccentToken } from "../../components/AccentBeam";
+import { Plus, Send, Square, UserRound } from "lucide-react";
+import type { RefObject } from "react";
+import { useDismissOnOutside } from "../ui/useDismissOnOutside";
+import {
+  AccentBeam,
+  type AccentBeamAccentToken,
+} from "../../components/AccentBeam";
 import { MotionSurface, composerMotionCandidates } from "../../motion";
 import { isAudioDataUrl } from "./classifyAttachment";
 import {
@@ -41,6 +47,8 @@ export interface MediaComposerProps {
   disabled?: boolean;
   placeholder?: string;
   onSubmit: (text: string, attachments: readonly string[]) => void;
+  /** While a turn is in flight, replaces Send. Hidden when idle. */
+  onStop?: () => void;
   accept?: string;
   submitAccentVar?: string;
   /** Accessible name for the icon-only submit control. Image / Video pass "Generate". */
@@ -76,6 +84,29 @@ export interface MediaComposerProps {
    * always-visible label. Omitted by default, so the studios are unchanged.
    */
   overflowActions?: readonly ComposerOverflowAction[];
+  /**
+   * v2.4.8 follow-up: a dedicated Persona button (person icon) in the right
+   * control cluster. It opens the persona box directly; there is no menu in
+   * between. Chat passes it; the studios leave it out.
+   */
+  personaAction?: ComposerPersonaAction;
+}
+
+/** The Persona toggle in the right control cluster. */
+export interface ComposerPersonaAction {
+  readonly active: boolean;
+  /** Test id override so callers keep stable hooks (e.g. chat-persona-toggle). */
+  readonly testId?: string;
+  /** Lets the caller count the toggle as part of the popover's dismiss surface. */
+  readonly toggleRef?: RefObject<HTMLButtonElement | null>;
+  /**
+   * v2.4.9: the SAVED persona currently applied, if any. Rendered beside the
+   * icon so the chat says which persona is speaking -- the operator asked for
+   * a name that "would appear in the chat when selected", and an anonymous
+   * blob of instruction text gave no way to tell at a glance.
+   */
+  readonly activeName?: string | null;
+  onToggle(): void;
 }
 
 /** One entry in the mic dropdown. */
@@ -137,7 +168,8 @@ function readFilesAsDataUrls(files: readonly File[]): Promise<string[]> {
           const reader = new FileReader();
           reader.onload = () =>
             resolve(typeof reader.result === "string" ? reader.result : "");
-          reader.onerror = () => reject(reader.error ?? new Error("read failed"));
+          reader.onerror = () =>
+            reject(reader.error ?? new Error("read failed"));
           reader.readAsDataURL(file);
         }),
     ),
@@ -151,6 +183,7 @@ export function MediaComposer({
   accept = "image/*",
   // v2.2.3 Phase 2 (2.2): `submitAccentVar` stays on the props contract for
   // callers, but no longer drives the beam or the send icon -- both are brand.
+  onStop,
   submitLabel = "Send",
   seededAttachment,
   streaming = false,
@@ -161,6 +194,7 @@ export function MediaComposer({
   micRecorder: micRecorderOverride,
   voiceModes = [],
   overflowActions = [],
+  personaAction,
 }: MediaComposerProps): JSX.Element {
   const [text, setText] = useState("");
   // v2.2.0 Phase 5 (5.4): mic menu + auto-grow ref (focus state already exists).
@@ -168,12 +202,29 @@ export function MediaComposer({
   const [overflowOpen, setOverflowOpen] = useState(false);
   const hasOverflow = overflowActions.length > 0;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  // v2.4.8 Phase 2 (T006): both menus close on an outside pointer or Escape.
+  // Each surface is its menu plus its toggle, so the toggle keeps toggling.
+  const micMenuRef = useRef<HTMLDivElement>(null);
+  const micToggleRef = useRef<HTMLButtonElement>(null);
+  const overflowMenuRef = useRef<HTMLDivElement>(null);
+  const overflowToggleRef = useRef<HTMLButtonElement>(null);
+  const micSurface = useMemo(() => [micMenuRef, micToggleRef], []);
+  const overflowSurface = useMemo(
+    () => [overflowMenuRef, overflowToggleRef],
+    [],
+  );
+  const closeMicMenu = useCallback(() => setMicMenuOpen(false), []);
+  const closeOverflow = useCallback(() => setOverflowOpen(false), []);
+  useDismissOnOutside(micSurface, micMenuOpen, closeMicMenu);
+  useDismissOnOutside(overflowSurface, overflowOpen, closeOverflow);
   const [attachments, setAttachments] = useState<string[]>([]);
   const [dragActive, setDragActive] = useState(false);
   const [focused, setFocused] = useState(false);
   const [recording, setRecording] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const micRecorderRef = useRef<MicRecorder | null>(micRecorderOverride ?? null);
+  const micRecorderRef = useRef<MicRecorder | null>(
+    micRecorderOverride ?? null,
+  );
   if (micRecorderOverride) micRecorderRef.current = micRecorderOverride;
 
   useEffect(() => {
@@ -225,7 +276,11 @@ export function MediaComposer({
       if (item.kind !== "file") continue;
       const file = item.getAsFile();
       if (file && fileMatchesAccept(file, accept)) {
-        if (!imageEnabled && (file.type.startsWith("image/") || file.type.startsWith("video/"))) continue;
+        if (
+          !imageEnabled &&
+          (file.type.startsWith("image/") || file.type.startsWith("video/"))
+        )
+          continue;
         if (!audioEnabled && file.type.startsWith("audio/")) continue;
         files.push(file);
       }
@@ -264,9 +319,13 @@ export function MediaComposer({
     }
   };
 
-  const canSubmit = !disabled && (text.trim().length > 0 || attachments.length > 0);
+  const canSubmit =
+    !disabled && (text.trim().length > 0 || attachments.length > 0);
+
+  const canStop = Boolean(streaming && onStop);
 
   const submit = (): void => {
+    if (canStop) return;
     if (!canSubmit) return;
     onSubmit(text.trim(), attachments);
     setText("");
@@ -290,238 +349,307 @@ export function MediaComposer({
   );
 
   return (
-    <MotionSurface
-      surfaceId="media-composer"
-      candidates={candidates}
-    >
-    <div
-      data-testid="media-composer"
-      data-drag-active={dragActive}
-      onFocus={() => setFocused(true)}
-      onBlur={(e: FocusEvent<HTMLDivElement>) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
-      }}
-      onDragOver={(e) => {
-        e.preventDefault();
-        setDragActive(true);
-      }}
-      onDragLeave={() => setDragActive(false)}
-      onDrop={onDrop}
-      style={composerStyle(dragActive)}
-    >
-      {attachments.length > 0 && (
-        <div
-          data-testid="media-composer-thumbs"
-          style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}
-        >
-          {attachments.map((src, i) => (
-            <div key={i} data-testid={`media-composer-thumb-${i}`} style={{ position: "relative" }}>
-              {isImageDataUrl(src) ? (
-                <img
-                  src={src}
-                  alt="Pending attachment"
-                  style={{ width: 64, height: 64, objectFit: "cover", borderRadius: "var(--radius-sm)" }}
-                />
-              ) : (
-                <div
-                  data-testid={`media-composer-doc-${i}`}
-                  title={isAudioDataUrl(src) ? "Attached audio" : "Attached document"}
-                  style={docChipStyle}
-                >
-                  {chipLabel(src)}
-                </div>
-              )}
-              <button
-                type="button"
-                aria-label="Remove attachment"
-                data-testid={`media-composer-remove-${i}`}
-                onClick={() => removeAttachment(i)}
-                style={removeBtnStyle}
+    <MotionSurface surfaceId="media-composer" candidates={candidates}>
+      <div
+        data-testid="media-composer"
+        data-drag-active={dragActive}
+        onFocus={() => setFocused(true)}
+        onBlur={(e: FocusEvent<HTMLDivElement>) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node | null))
+            setFocused(false);
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragActive(true);
+        }}
+        onDragLeave={() => setDragActive(false)}
+        onDrop={onDrop}
+        style={composerStyle(dragActive)}
+      >
+        {attachments.length > 0 && (
+          <div
+            data-testid="media-composer-thumbs"
+            style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}
+          >
+            {attachments.map((src, i) => (
+              <div
+                key={i}
+                data-testid={`media-composer-thumb-${i}`}
+                style={{ position: "relative" }}
               >
-                x
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-      {recording ? (
-        <div
-          data-testid="media-composer-recording"
-          role="status"
-          aria-live="polite"
-          style={{ color: "var(--accent-chatbot)", fontSize: "var(--text-xs)" }}
-        >
-          Recording -- microphone is open
-        </div>
-      ) : null}
-      {/*
+                {isImageDataUrl(src) ? (
+                  <img
+                    src={src}
+                    alt="Pending attachment"
+                    style={{
+                      width: 64,
+                      height: 64,
+                      objectFit: "cover",
+                      borderRadius: "var(--radius-sm)",
+                    }}
+                  />
+                ) : (
+                  <div
+                    data-testid={`media-composer-doc-${i}`}
+                    title={
+                      isAudioDataUrl(src)
+                        ? "Attached audio"
+                        : "Attached document"
+                    }
+                    style={docChipStyle}
+                  >
+                    {chipLabel(src)}
+                  </div>
+                )}
+                <button
+                  type="button"
+                  aria-label="Remove attachment"
+                  data-testid={`media-composer-remove-${i}`}
+                  onClick={() => removeAttachment(i)}
+                  style={removeBtnStyle}
+                >
+                  x
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        {recording ? (
+          <div
+            data-testid="media-composer-recording"
+            role="status"
+            aria-live="polite"
+            style={{
+              color: "var(--accent-chatbot)",
+              fontSize: "var(--text-xs)",
+            }}
+          >
+            Recording -- microphone is open
+          </div>
+        ) : null}
+        {/*
         v2.2.0 Phase 5 (5.4): ONE rounded surface. The + and send buttons used
         to sit outside the textarea as separate boxes, which is what made the
         composer look bolted together. They are now absolutely positioned
         inside the field, and the textarea reserves matching padding so typed
         text can never slide underneath them.
       */}
-      {/*
+        {/*
         v2.2.3 Phase 2 (2.2): the beam wraps the INNER typing surface, not the
         outer thumbs box, and is always the brand cyan regardless of the
         pillar's submitAccentVar. It is the only focus ring -- the surface no
         longer flips its own border on focus.
       */}
-      <AccentBeam
-        mode={streaming ? "traveling" : "breathing"}
-        playing={Boolean(streaming || focused)}
-        accentToken={BEAM_ACCENT}
-        radiusToken={BEAM_RADIUS}
-        strength={streaming ? 0.9 : 0.7}
-        surfaceId="media-composer-beam"
-        data-testid="media-composer-beam"
-      >
-      <div
-        data-testid="media-composer-surface"
-        style={composerSurfaceStyle}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept={accept}
-          multiple
-          data-testid="media-composer-file"
-          onChange={onFileChange}
-          style={{ display: "none" }}
-        />
-        <textarea
-          ref={textareaRef}
-          data-testid="media-composer-textarea"
-          aria-label="Generation prompt"
-          value={text}
-          disabled={disabled}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={onKeyDown}
-          onPaste={onPaste}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          placeholder={placeholder}
-          rows={1}
-          style={inFieldTextareaStyle(audioEnabled, hasOverflow)}
-        />
-
-        <div data-testid="media-composer-actions" style={rightControlsStyle}>
-          {audioEnabled ? (
-            <>
-              <button
-                type="button"
-                aria-label={recording ? "Stop recording" : "Record audio"}
-                title={audioHint}
-                data-testid="media-composer-mic"
-                disabled={disabled}
-                onClick={() => void toggleMic()}
-                style={recording ? micActiveStyle : iconButtonStyle}
-              >
-                {recording ? "Stop" : "Mic"}
-              </button>
-              <button
-                type="button"
-                aria-label="Voice options"
-                data-testid="media-composer-mic-menu-toggle"
-                aria-expanded={micMenuOpen}
-                disabled={disabled}
-                onClick={() => setMicMenuOpen((v) => !v)}
-                style={chevronButtonStyle}
-              >
-                {"▾"}
-              </button>
-            </>
-          ) : null}
-          <button
-            type="button"
-            aria-label="Add attachments"
-            title={!imageEnabled ? imageDisabledReason : undefined}
-            data-testid="media-composer-add"
-            data-image-enabled={imageEnabled ? "true" : "false"}
-            disabled={disabled}
-            onClick={() => fileInputRef.current?.click()}
-            style={clusterIconStyle}
+        <AccentBeam
+          mode={streaming ? "traveling" : "breathing"}
+          playing={Boolean(streaming || focused)}
+          accentToken={BEAM_ACCENT}
+          radiusToken={BEAM_RADIUS}
+          strength={streaming ? 0.9 : 0.7}
+          surfaceId="media-composer-beam"
+          data-testid="media-composer-beam"
+        >
+          <div
+            data-testid="media-composer-surface"
+            style={composerSurfaceStyle}
           >
-            +
-          </button>
-          {hasOverflow ? (
-            <button
-              type="button"
-              aria-label="More composer options"
-              data-testid="media-composer-overflow-toggle"
-              aria-expanded={overflowOpen}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept={accept}
+              multiple
+              data-testid="media-composer-file"
+              onChange={onFileChange}
+              style={{ display: "none" }}
+            />
+            <textarea
+              ref={textareaRef}
+              data-testid="media-composer-textarea"
+              aria-label="Generation prompt"
+              value={text}
               disabled={disabled}
-              onClick={() => setOverflowOpen((v) => !v)}
-              style={clusterIconStyle}
-            >
-              ...
-            </button>
-          ) : null}
-          <button
-            type="button"
-            aria-label={submitLabel}
-            data-testid="media-composer-submit"
-            disabled={!canSubmit}
-            onClick={submit}
-            style={submitStyle}
-          >
-            <Send size={16} aria-hidden="true" />
-          </button>
-        </div>
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={onKeyDown}
+              onPaste={onPaste}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              placeholder={placeholder}
+              rows={1}
+              style={inFieldTextareaStyle(audioEnabled, hasOverflow)}
+            />
 
-        {overflowOpen && hasOverflow ? (
-          <div
-            data-testid="media-composer-overflow-menu"
-            role="menu"
-            aria-label="More composer options"
-            style={micMenuStyle}
-          >
-            {overflowActions.map((action) => (
+            <div
+              data-testid="media-composer-actions"
+              style={rightControlsStyle}
+            >
+              {audioEnabled ? (
+                <>
+                  <button
+                    type="button"
+                    aria-label={recording ? "Stop recording" : "Record audio"}
+                    title={audioHint}
+                    data-testid="media-composer-mic"
+                    disabled={disabled}
+                    onClick={() => void toggleMic()}
+                    style={recording ? micActiveStyle : iconButtonStyle}
+                  >
+                    {recording ? "Stop" : "Mic"}
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Voice options"
+                    data-testid="media-composer-mic-menu-toggle"
+                    ref={micToggleRef}
+                    aria-expanded={micMenuOpen}
+                    disabled={disabled}
+                    onClick={() => setMicMenuOpen((v) => !v)}
+                    style={chevronButtonStyle}
+                  >
+                    {"▾"}
+                  </button>
+                </>
+              ) : null}
               <button
-                key={action.id}
                 type="button"
-                role="menuitem"
-                data-testid={action.testId ?? `media-composer-action-${action.id}`}
-                aria-pressed={action.active ? true : undefined}
-                onClick={() => {
-                  action.onSelect();
-                  setOverflowOpen(false);
-                }}
-                style={micMenuItemStyle(action.active)}
+                aria-label="Add attachments"
+                title={!imageEnabled ? imageDisabledReason : undefined}
+                data-testid="media-composer-add"
+                data-image-enabled={imageEnabled ? "true" : "false"}
+                disabled={disabled}
+                onClick={() => fileInputRef.current?.click()}
+                style={clusterIconStyle}
               >
-                {action.label}
+                <Plus size={18} aria-hidden="true" />
               </button>
-            ))}
-          </div>
-        ) : null}
-        {micMenuOpen && audioEnabled ? (
-          <div
-            data-testid="media-composer-mic-menu"
-            role="menu"
-            aria-label="Voice options"
-            style={micMenuStyle}
-          >
-            {voiceModes.map((mode) => (
-              <button
-                key={mode.id}
-                type="button"
-                role="menuitem"
-                data-testid={`media-composer-voice-${mode.id}`}
-                aria-pressed={mode.active ? true : undefined}
-                onClick={() => {
-                  mode.onSelect();
-                  setMicMenuOpen(false);
-                }}
-                style={micMenuItemStyle(mode.active)}
+              {personaAction ? (
+                <button
+                  type="button"
+                  aria-label="Persona"
+                  title="Persona"
+                  data-testid={personaAction.testId ?? "media-composer-persona"}
+                  ref={personaAction.toggleRef}
+                  aria-pressed={personaAction.active}
+                  disabled={disabled}
+                  onClick={() => personaAction.onToggle()}
+                  style={clusterIconStyle}
+                >
+                  <UserRound size={18} aria-hidden="true" />
+                </button>
+              ) : null}
+              {personaAction?.activeName ? (
+                <span
+                  data-testid="composer-persona-name"
+                  title={`Persona: ${personaAction.activeName}`}
+                  style={{
+                    maxWidth: "9rem",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    padding: "0.1rem 0.5rem",
+                    borderRadius: "999px",
+                    border: "1px solid color-mix(in srgb, var(--accent-chatbot) 45%, transparent)",
+                    color: "var(--accent-chatbot)",
+                    fontSize: "var(--text-xs)",
+                  }}
+                >
+                  {personaAction.activeName}
+                </span>
+              ) : null}
+              {hasOverflow ? (
+                <button
+                  type="button"
+                  aria-label="More composer options"
+                  data-testid="media-composer-overflow-toggle"
+                  ref={overflowToggleRef}
+                  aria-expanded={overflowOpen}
+                  disabled={disabled}
+                  onClick={() => setOverflowOpen((v) => !v)}
+                  style={clusterIconStyle}
+                >
+                  ...
+                </button>
+              ) : null}
+              {canStop ? (
+                <button
+                  type="button"
+                  aria-label="Stop"
+                  data-testid="media-composer-stop"
+                  onClick={() => onStop?.()}
+                  style={submitStyle}
+                >
+                  <Square size={16} aria-hidden="true" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  aria-label={submitLabel}
+                  data-testid="media-composer-submit"
+                  disabled={!canSubmit}
+                  onClick={submit}
+                  style={submitStyle}
+                >
+                  <Send size={16} aria-hidden="true" />
+                </button>
+              )}
+            </div>
+
+            {overflowOpen && hasOverflow ? (
+              <div
+                data-testid="media-composer-overflow-menu"
+                ref={overflowMenuRef}
+                role="menu"
+                aria-label="More composer options"
+                style={micMenuStyle}
               >
-                {mode.label}
-              </button>
-            ))}
+                {overflowActions.map((action) => (
+                  <button
+                    key={action.id}
+                    type="button"
+                    role="menuitem"
+                    data-testid={
+                      action.testId ?? `media-composer-action-${action.id}`
+                    }
+                    aria-pressed={action.active ? true : undefined}
+                    onClick={() => {
+                      action.onSelect();
+                      setOverflowOpen(false);
+                    }}
+                    style={micMenuItemStyle(action.active)}
+                  >
+                    {action.label}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+            {micMenuOpen && audioEnabled ? (
+              <div
+                data-testid="media-composer-mic-menu"
+                ref={micMenuRef}
+                role="menu"
+                aria-label="Voice options"
+                style={micMenuStyle}
+              >
+                {voiceModes.map((mode) => (
+                  <button
+                    key={mode.id}
+                    type="button"
+                    role="menuitem"
+                    data-testid={`media-composer-voice-${mode.id}`}
+                    aria-pressed={mode.active ? true : undefined}
+                    onClick={() => {
+                      mode.onSelect();
+                      setMicMenuOpen(false);
+                    }}
+                    style={micMenuItemStyle(mode.active)}
+                  >
+                    {mode.label}
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </div>
-        ) : null}
+        </AccentBeam>
       </div>
-      </AccentBeam>
-    </div>
     </MotionSurface>
   );
 }
@@ -570,7 +698,10 @@ function composerStyle(dragActive: boolean): CSSProperties {
  * Padding reserves exactly the space the in-field controls occupy, so typed
  * text can never render underneath them however long the message gets.
  */
-function inFieldTextareaStyle(audioEnabled: boolean, hasOverflow = false): CSSProperties {
+function inFieldTextareaStyle(
+  audioEnabled: boolean,
+  hasOverflow = false,
+): CSSProperties {
   return {
     display: "block",
     width: "100%",
@@ -604,7 +735,10 @@ const iconButtonStyle: CSSProperties = {
   fontSize: "var(--text-xs)",
 };
 
-const micActiveStyle: CSSProperties = { ...iconButtonStyle, color: "var(--accent-chatbot)" };
+const micActiveStyle: CSSProperties = {
+  ...iconButtonStyle,
+  color: "var(--accent-chatbot)",
+};
 
 const chevronButtonStyle: CSSProperties = {
   ...iconButtonStyle,
@@ -638,7 +772,6 @@ function micMenuItemStyle(active?: boolean): CSSProperties {
     fontSize: "var(--text-sm)",
   };
 }
-
 
 /* v2.2.3 Phase 2 (2.2): send icon is neutral fg, never a pillar hue. */
 const submitStyle: CSSProperties = {

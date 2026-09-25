@@ -44,6 +44,7 @@ export interface ChatExplorerClient<Mode extends "sync" | "async"> {
   renameChat(id: string, title: string, byUser?: boolean): ExplorerResult<Chat, Mode>;
   moveChat(id: string, newFolderId: string | null): ExplorerResult<Chat, Mode>;
   deleteChat(id: string): ExplorerResult<void, Mode>;
+  archiveChat?(id: string): ExplorerResult<void, Mode>;
   getFolder(id: string): ExplorerResult<Folder | null, Mode>;
   getChat(id: string): ExplorerResult<Chat | null, Mode>;
   ancestors(folderId: string | null): ExplorerResult<readonly Folder[], Mode>;
@@ -104,6 +105,7 @@ function makeId(): string {
 export class InMemoryChatExplorerClient implements SyncChatExplorerClient {
   private readonly folders = new Map<string, Folder>();
   private readonly chats = new Map<string, Chat>();
+  private readonly archivedChats = new Map<string, Chat>();
 
   listTree(): FolderTreeNode {
     const byParent = new Map<string | null, Folder[]>();
@@ -119,7 +121,10 @@ export class InMemoryChatExplorerClient implements SyncChatExplorerClient {
       bucket.push(chat);
       chatsByFolder.set(chat.folderId, bucket);
     }
-    for (const bucket of chatsByFolder.values()) bucket.sort((a, b) => a.title.localeCompare(b.title));
+    // v2.4.8 follow-up: newest session first, matching ChatExplorerStore.
+    for (const bucket of chatsByFolder.values()) {
+      bucket.sort((a, b) => b.createdAt - a.createdAt || a.title.localeCompare(b.title));
+    }
 
     const buildNode = (folder: Folder | null): FolderTreeNode => {
       const parentKey = folder?.id ?? null;
@@ -257,6 +262,14 @@ export class InMemoryChatExplorerClient implements SyncChatExplorerClient {
 
   deleteChat(id: string): void {
     this.chats.delete(id);
+    this.archivedChats.delete(id);
+  }
+
+  archiveChat(id: string): void {
+    const chat = this.chats.get(id);
+    if (!chat) throw new Error(`chat not found: ${id}`);
+    this.chats.delete(id);
+    this.archivedChats.set(id, { ...chat, archivedAt: Date.now() });
   }
 
   getFolder(id: string): Folder | null {

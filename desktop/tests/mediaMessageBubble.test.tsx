@@ -7,6 +7,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 
 import { MessageBubble } from "../src/shared/chat/MessageBubble";
 import type { ChatMessage } from "../src/shared/chat/types";
+import { STUDIO_PENDING_CAPTIONS } from "../src/components/agentState/captionRotator";
 
 afterEach(() => cleanup());
 
@@ -30,15 +31,19 @@ describe("MessageBubble media", () => {
       media: { kind: "image", src: "data:image/png;base64,BBB" },
     };
     render(<MessageBubble message={msg} />);
-    expect((screen.getByTestId("message-media-a1") as HTMLImageElement).getAttribute("src")).toBe(
-      "data:image/png;base64,BBB",
-    );
+    expect(
+      (screen.getByTestId("message-media-a1") as HTMLImageElement).getAttribute(
+        "src",
+      ),
+    ).toBe("data:image/png;base64,BBB");
     expect(screen.getByTestId("message-media-a1")).toHaveStyle({
       display: "block",
       maxHeight: "40vh",
       objectFit: "contain",
     });
-    expect(screen.getByTestId("message-media-a1").getAttribute("style") ?? "").not.toMatch(/min-height:\s*8rem/);
+    expect(
+      screen.getByTestId("message-media-a1").getAttribute("style") ?? "",
+    ).not.toMatch(/min-height:\s*8rem/);
     expect(screen.getByTestId("message-bubble-a1")).toHaveStyle({
       width: "fit-content",
     });
@@ -59,29 +64,281 @@ describe("MessageBubble media", () => {
     expect(orb).toHaveAttribute("data-orb-size", "bubble");
     expect(orb).toHaveAttribute("data-orb-pill", "true");
     expect(orb.querySelector("canvas")?.style.height).toBe("48px");
+    // v2.4.9: generating is the LEFT-aligned pill at a fixed basis; loading
+    // is the centered hero at full width. Phase decides, not tab.
     expect(screen.getByTestId("message-pending-a2")).toHaveStyle({
-      justifyContent: "center",
-      width: "100%",
+      width: "26rem",
     });
-    expect(screen.getByText(/^(Thinking|Searching|Working|Solving)\.\.\.$/)).toBeInTheDocument();
+    expect(screen.queryByTestId("message-bubble-a2")).toBeNull();
+    expect(
+      screen.getByText(/^(Thinking|Searching|Working|Solving)\.\.\.$/),
+    ).toBeInTheDocument();
     expect(screen.queryByText("Generating...")).toBeNull();
   });
 
-  it("centers Studio pending work around a captioned hero orb", () => {
+  it("generates with the chat pill animation and the studio word pool", () => {
+    // v2.4.8 follow-up (2026-09-08): once the model is loaded, the studios use
+    // the same rotating-caption pill Chat and Agents use, with their own words,
+    // and keep the step bar under it. The hero orb belongs to loading alone.
     const msg: ChatMessage = {
       id: "studio-pending",
       role: "assistant",
       content: "",
       pending: true,
       activity: "image-generation",
+      progress: { step: 1, total: 20, stage: "generating" },
     };
     render(<MessageBubble message={msg} />);
-    expect(screen.getByRole("img", { name: /agent shaping/i })).toHaveAttribute("data-orb-size", "hero");
-    expect(screen.getByText("Shaping...")).toBeInTheDocument();
-    expect(screen.getByTestId("message-bubble-studio-pending").getAttribute("style")).toContain(
-      "min-height: 12rem",
+    const orb = screen.getByRole("img", { name: /generating media/i });
+    expect(orb).toHaveAttribute("data-orb-size", "bubble");
+    expect(orb).toHaveAttribute("data-orb-pill", "true");
+    // v2.4.4 Phase 5.3: studio pending rotates Creating / Crafting /
+    // Generating; the single static "Shaping" read as a stuck word.
+    expect(screen.queryByText("Shaping...")).toBeNull();
+    expect(STUDIO_PENDING_CAPTIONS).toContain(
+      screen.getByTestId("agent-state-orb-caption").textContent,
     );
-    expect(screen.getByTestId("message-bubble-studio-pending")).toHaveStyle({ width: "100%" });
+    // v2.4.11: no bar and no step count while it generates -- the animation
+    // carries the state, and the clock row carries the numbers.
+    expect(screen.queryByTestId("model-load-progress-studio-pending")).toBeNull();
+    expect(screen.queryByText(/Step 1 of 20/)).toBeNull();
+    expect(screen.getByTestId("generation-clock-studio-pending")).toBeInTheDocument();
+    // v2.4.9 operator ask: "When an image or video is generated, the animation
+    // should be aligned left, just like in chat and agents mode." The studio
+    // pending row no longer centers itself or reserves a 12rem hero block.
+    const pendingStyle = screen
+      .getByTestId("message-pending-studio-pending")
+      .getAttribute("style");
+    expect(pendingStyle).not.toContain("min-height: 12rem");
+    expect(pendingStyle).toContain("align-items: flex-start");
+    expect(pendingStyle).not.toContain("align-items: center");
+    expect(screen.queryByTestId("message-bubble-studio-pending")).toBeNull();
+  });
+
+  // v2.4.8 Phase 8: operator report 2026-09-07 -- after switching to Images the
+  // GPU idled while weights loaded, yet the bubble already read "Creating...".
+  it("shows Loading model until the runtime reports generating or a counted step", () => {
+    const base: ChatMessage = {
+      id: "studio-loading",
+      role: "assistant",
+      content: "",
+      pending: true,
+      activity: "image-generation",
+    };
+    const { rerender } = render(<MessageBubble message={base} />);
+    expect(screen.getByRole("img", { name: "Loading model" })).toHaveAttribute(
+      "data-orb-size",
+      "hero",
+    );
+    expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
+      "Loading model",
+    );
+    // A heartbeat with no stage keeps loading.
+    rerender(
+      <MessageBubble
+        message={{ ...base, progress: { step: 0, total: 0, stage: "loading" } }}
+      />,
+    );
+    expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
+      "Loading model",
+    );
+    // The runtime's generating stage flips to the studio captions.
+    rerender(
+      <MessageBubble
+        message={{ ...base, progress: { step: 0, total: 0, stage: "generating" } }}
+      />,
+    );
+    expect(screen.queryByText("Loading model")).toBeNull();
+    expect(STUDIO_PENDING_CAPTIONS).toContain(
+      screen.getByTestId("agent-state-orb-caption").textContent,
+    );
+    expect(screen.getByRole("img", { name: /generating media/i })).toHaveAttribute(
+      "data-orb-pill",
+      "true",
+    );
+    // So does a counted step even without a stage.
+    rerender(<MessageBubble message={{ ...base, progress: { step: 2, total: 20 } }} />);
+    expect(screen.queryByText("Loading model")).toBeNull();
+    // Chat pending is untouched: no Loading model on a text reply.
+    rerender(
+      <MessageBubble
+        message={{ id: "chat", role: "assistant", content: "", pending: true }}
+      />,
+    );
+    expect(screen.queryByText("Loading model")).toBeNull();
+  });
+
+  // v2.4.8 follow-up (2026-09-07): a job parked behind another module used to
+  // read "Loading model..." for twenty minutes at 0% GPU. The sidecar now says
+  // `queued` and names the holder; the runtime reports weight bytes while it
+  // really loads, which the bubble renders as a bar with a time estimate.
+  it("says Waiting for GPU and names the holder while the job is queued", () => {
+    const base: ChatMessage = {
+      id: "studio-queued",
+      role: "assistant",
+      content: "",
+      pending: true,
+      activity: "image-generation",
+    };
+    const { rerender } = render(
+      <MessageBubble
+        message={{
+          ...base,
+          progress: { step: 0, total: 0, stage: "queued", blockedBy: "chat" },
+        }}
+      />,
+    );
+    // Plain words: the caption says what we are waiting for, and a second
+    // line says what is still running. No module names in parentheses.
+    expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
+      "Waiting for the GPU to free up...",
+    );
+    expect(screen.getByTestId("model-queued-detail-studio-queued").textContent).toBe(
+      "A chat reply is still being written.",
+    );
+    expect(screen.getByRole("img", { name: "Waiting for GPU" })).toBeInTheDocument();
+    rerender(
+      <MessageBubble
+        message={{
+          ...base,
+          progress: { step: 0, total: 0, stage: "queued", blockedBy: "image" },
+        }}
+      />,
+    );
+    expect(screen.getByTestId("model-queued-detail-studio-queued").textContent).toBe(
+      "Another image is still being generated.",
+    );
+    rerender(
+      <MessageBubble
+        message={{ ...base, progress: { step: 0, total: 0, stage: "queued" } }}
+      />,
+    );
+    expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
+      "Waiting for the GPU to free up...",
+    );
+    expect(screen.queryByTestId("model-queued-detail-studio-queued")).toBeNull();
+  });
+
+  it("renders a byte-level bar and the time left while the model loads", () => {
+    const base: ChatMessage = {
+      id: "studio-bytes",
+      role: "assistant",
+      content: "",
+      pending: true,
+      activity: "image-generation",
+      // The sampling cost model a studio always attaches; it must stay out of
+      // the loading phase's wording entirely.
+      estimateSeconds: 60,
+    };
+    const { rerender } = render(
+      <MessageBubble
+        message={{
+          ...base,
+          progress: {
+            step: 0,
+            total: 0,
+            stage: "loading",
+            loadedBytes: 2_000,
+            totalBytes: 5_000,
+            etaS: 12.4,
+          },
+        }}
+      />,
+    );
+    // v2.4.11: the caption names the phase; the bar carries the number.
+    expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
+      "Loading model",
+    );
+    // v2.4.9: the bar is a styled div with the progressbar role, not a raw
+    // <progress>, and its width is a fixed track that no longer depends on the
+    // caption under it (operator report: "the bar appears at different width
+    // during the process").
+    const bar = screen
+      .getByTestId("model-load-progress-studio-bytes")
+      .querySelector('[role="progressbar"]');
+    expect(bar).not.toBeNull();
+    expect(bar).toHaveAttribute("aria-valuenow", "40");
+    expect(bar).toHaveAttribute("data-determinate", "true");
+    // Elapsed and time left share ONE row (operator ask).
+    expect(
+      screen.getByTestId("generation-clock-studio-bytes").textContent,
+    ).toContain("00:12 left");
+    // The generation figure never describes the load: while loading, the only
+    // estimate on screen is the load's own (operator report: a video read
+    // "usually about 18 min" while it was still reading weights).
+    expect(screen.queryByText(/generating usually takes/)).toBeNull();
+    // Minutes once the estimate passes a minute.
+    rerender(
+      <MessageBubble
+        message={{
+          ...base,
+          progress: {
+            step: 0,
+            total: 0,
+            stage: "loading",
+            loadedBytes: 500,
+            totalBytes: 5_000,
+            etaS: 150,
+          },
+        }}
+      />,
+    );
+    // v2.4.11 operator report: "the progress kept regressing backward as the
+    // expected completion time changed". A bar that walks back says work was
+    // undone, so the fill holds its high-water mark -- here 40%, even though
+    // this frame reports a smaller count.
+    expect(
+      screen
+        .getByTestId("model-load-progress-studio-bytes")
+        .querySelector('[role="progressbar"]'),
+    ).toHaveAttribute("aria-valuenow", "40");
+    // The time left still tracks the newest reading.
+    expect(
+      screen.getByTestId("generation-clock-studio-bytes").textContent,
+    ).toContain("02:30 left");
+    rerender(
+      <MessageBubble
+        message={{
+          ...base,
+          progress: {
+            step: 0,
+            total: 0,
+            stage: "loading",
+            loadedBytes: 5_000,
+            totalBytes: 5_000,
+            etaS: 0,
+          },
+        }}
+      />,
+    );
+    expect(
+      screen
+        .getByTestId("model-load-progress-studio-bytes")
+        .querySelector('[role="progressbar"]'),
+    ).toHaveAttribute("aria-valuenow", "100");
+    // v2.4.11: sampling retires the bar entirely. The operator watched a
+    // loading bar hand over to a second bar with a fresh counter, then sit
+    // full on "Step 14 of 14"; generating now shows the animation and the
+    // clock row alone.
+    rerender(
+      <MessageBubble
+        message={{
+          ...base,
+          progress: {
+            step: 0,
+            total: 0,
+            stage: "generating",
+            loadedBytes: 5_000,
+            totalBytes: 5_000,
+          },
+        }}
+      />,
+    );
+    expect(screen.queryByTestId("model-load-progress-studio-bytes")).toBeNull();
+    expect(screen.queryByText("Loading model")).toBeNull();
+    expect(
+      screen.getByTestId("generation-clock-studio-bytes").textContent,
+    ).toContain("01:00 left");
   });
 
   it("replaces undecodable generated media with a visible failure", () => {
@@ -94,7 +351,11 @@ describe("MessageBubble media", () => {
     };
     render(<MessageBubble message={msg} onMediaError={onMediaError} />);
     fireEvent.error(screen.getByTestId("message-media-bad-media"));
-    expect(screen.getByText(/Generation failed: generated image could not be displayed/)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /Generation failed: generated image could not be displayed/,
+      ),
+    ).toBeInTheDocument();
     expect(onMediaError).toHaveBeenCalledWith(msg);
   });
 
@@ -104,7 +365,9 @@ describe("MessageBubble media", () => {
     expect(screen.getByText("hello")).toBeInTheDocument();
     expect(screen.queryByTestId("message-media-t1")).toBeNull();
     expect(screen.queryByTestId("message-pending-t1")).toBeNull();
-    expect(screen.getByTestId("message-bubble-t1")).toHaveStyle({ width: "fit-content" });
+    expect(screen.getByTestId("message-bubble-t1")).toHaveStyle({
+      width: "fit-content",
+    });
   });
 
   it("opens a preview dialog from compact media and closes it", () => {
@@ -116,8 +379,12 @@ describe("MessageBubble media", () => {
     };
     render(<MessageBubble message={msg} />);
     fireEvent.click(screen.getByTestId("message-media-preview-1"));
-    expect(screen.getByTestId("message-media-dialog-preview-1")).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId("message-media-close-preview-1"));
+    expect(
+      screen.getByTestId("message-media-dialog-preview-1"),
+    ).toBeInTheDocument();
+    // v2.4.9: an image opens the editor-capable viewer, whose close button is
+    // namespaced under the dialog's own test id.
+    fireEvent.click(screen.getByTestId("message-media-dialog-preview-1-close"));
     expect(screen.queryByTestId("message-media-dialog-preview-1")).toBeNull();
   });
 });

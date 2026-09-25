@@ -19,7 +19,7 @@
  */
 
 import { readFileSync, existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { dirname, resolve as resolvePath } from "node:path";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -83,14 +83,18 @@ function usage() {
   process.exit(2);
 }
 
-async function main() {
-  const [, , subcommand, fileArg] = process.argv;
+export async function main(argv = process.argv) {
+  const args = argv[0] === process.argv[0] || String(argv[0] ?? "").includes("nexus-image")
+    ? argv.slice(2)
+    : argv;
+  const positional = args.filter((a) => a !== "--json" && a !== "--json=true");
+  const [subcommand, fileArg] = positional;
   if (subcommand === "--help" || subcommand === "-h") {
-    process.stdout.write("usage: nexus-image extract-workflow <file.png>\n");
+    process.stdout.write("usage: nexus-image extract-workflow <file.png> [--json]\n");
     return 0;
   }
   if (subcommand !== "extract-workflow" || !fileArg) {
-    usage();
+    process.stderr.write("usage: nexus-image extract-workflow <file.png> [--json]\n");
     return 2;
   }
   let buffer;
@@ -110,9 +114,11 @@ async function main() {
   return 0;
 }
 
-main()
-  .then((code) => process.exit(code))
-  .catch((err) => {
-    process.stderr.write(`nexus-image: ${err && err.stack ? err.stack : err}\n`);
-    process.exit(2);
-  });
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  main(process.argv)
+    .then((code) => process.exit(code))
+    .catch((err) => {
+      process.stderr.write(`nexus-image: ${err && err.stack ? err.stack : err}\n`);
+      process.exit(2);
+    });
+}

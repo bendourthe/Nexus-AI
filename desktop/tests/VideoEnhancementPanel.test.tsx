@@ -4,7 +4,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   VideoEnhancementPanel,
+  choiceFromSelection,
   deriveVideoEnhancementTarget,
+  type VideoEnhancementSelectionId,
 } from "../src/modules/video/VideoEnhancementPanel";
 import {
   VideoEnhancementClientError,
@@ -218,6 +220,28 @@ function renderPanel(
   return { ...result, onClose };
 }
 
+/**
+ * v2.4.8 follow-up: the panel offers a resolution, an animation switch and a
+ * smooth-motion switch rather than one radio per combination. This drives
+ * those three controls to whichever frozen selection a test names.
+ */
+function chooseSelection(id: VideoEnhancementSelectionId): void {
+  const choice = choiceFromSelection(id);
+  fireEvent.click(screen.getByTestId(`video-enhancement-scale-${choice.scale}`));
+  const animation = screen.getByTestId(
+    "video-enhancement-animation",
+  ) as HTMLInputElement;
+  if (!animation.disabled && animation.checked !== choice.animation) {
+    fireEvent.click(animation);
+  }
+  const smooth = screen.getByTestId(
+    "video-enhancement-smooth",
+  ) as HTMLInputElement;
+  if (!smooth.disabled && smooth.checked !== choice.smooth) {
+    fireEvent.click(smooth);
+  }
+}
+
 describe("VideoEnhancementPanel", () => {
   it("offers exactly seven semantic presets with exact derived dimensions and rational frame rates", async () => {
     const client = createClient();
@@ -226,22 +250,25 @@ describe("VideoEnhancementPanel", () => {
     await waitFor(() =>
       expect(screen.getByTestId("video-enhancement-start")).toBeEnabled(),
     );
-    expect(screen.getAllByRole("radio")).toHaveLength(7);
-    expect(
-      screen.getByText("Target: 3840 x 2160, 30000/1001 fps (29.97 fps)"),
-    ).toBeInTheDocument();
-    expect(
-      screen.getAllByText("Target: 7680 x 4320, 30000/1001 fps (29.97 fps)"),
-    ).toHaveLength(2);
-    expect(
-      screen.getByText("Target: 1920 x 1080, 60000/1001 fps (59.94 fps)"),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Target: 3840 x 2160, 60000/1001 fps (59.94 fps)"),
-    ).toBeInTheDocument();
-    expect(
-      screen.getAllByText("Target: 7680 x 4320, 60000/1001 fps (59.94 fps)"),
-    ).toHaveLength(2);
+    // Three controls, not one card per combination.
+    expect(screen.getAllByRole("radio")).toHaveLength(3);
+    const target = () =>
+      screen.getByTestId("video-enhancement-selected-target").textContent ?? "";
+
+    // Every frozen selection is still reachable, with its exact geometry.
+    const cases: readonly [VideoEnhancementSelectionId, string][] = [
+      ["animation-2x", "3840 x 2160, 30000/1001 fps (29.97 fps)"],
+      ["animation-4x", "7680 x 4320, 30000/1001 fps (29.97 fps)"],
+      ["general-4x", "7680 x 4320, 30000/1001 fps (29.97 fps)"],
+      ["smooth-2x", "1920 x 1080, 60000/1001 fps (59.94 fps)"],
+      ["animation-2x-smooth", "3840 x 2160, 60000/1001 fps (59.94 fps)"],
+      ["animation-4x-smooth", "7680 x 4320, 60000/1001 fps (59.94 fps)"],
+      ["general-4x-smooth", "7680 x 4320, 60000/1001 fps (59.94 fps)"],
+    ];
+    for (const [selection, expected] of cases) {
+      chooseSelection(selection);
+      expect(target()).toContain(expected);
+    }
 
     expect(
       deriveVideoEnhancementTarget(
@@ -268,7 +295,7 @@ describe("VideoEnhancementPanel", () => {
       expect(screen.getByTestId("video-enhancement-start")).toBeEnabled(),
     );
 
-    fireEvent.click(screen.getByDisplayValue("general-4x-smooth"));
+    chooseSelection("general-4x-smooth");
     expect(
       screen.getByTestId("video-enhancement-selected-target"),
     ).toHaveTextContent("7680 x 4320, 60000/1001 fps");
@@ -303,12 +330,12 @@ describe("VideoEnhancementPanel", () => {
     await waitFor(() =>
       expect(screen.getByTestId("video-enhancement-start")).toBeDisabled(),
     );
-    for (const radio of screen.getAllByRole("radio"))
-      expect(radio).toBeDisabled();
-    expect(screen.getAllByTestId(/^video-enhancement-unavailable-/)).toHaveLength(7);
-    for (const reason of screen.getAllByTestId(/^video-enhancement-unavailable-/)) {
-      expect(reason).toHaveTextContent("No compatible local Vulkan GPU was found.");
-    }
+    // One reason for the current choice, in place of a reason per card.
+    const reasons = screen.getAllByTestId(/^video-enhancement-unavailable-/);
+    expect(reasons).toHaveLength(1);
+    expect(reasons[0]).toHaveTextContent(
+      "No compatible local Vulkan GPU was found.",
+    );
     expect(screen.getByTestId("video-enhancement-live")).toHaveTextContent(
       "No compatible local Vulkan GPU was found.",
     );
@@ -600,7 +627,7 @@ describe("VideoEnhancementPanel", () => {
       await waitFor(() =>
         expect(screen.getByTestId("video-enhancement-start")).toBeEnabled(),
       );
-      fireEvent.click(screen.getByDisplayValue(selection));
+      chooseSelection(selection);
       fireEvent.click(screen.getByTestId("video-enhancement-start"));
       await waitFor(() => expect(client.enqueue).toHaveBeenCalledTimes(1));
       expect(client.enqueue).toHaveBeenCalledWith({
@@ -622,14 +649,17 @@ describe("VideoEnhancementPanel", () => {
     await waitFor(() =>
       expect(screen.getByTestId("video-enhancement-start")).toBeEnabled(),
     );
-    expect(screen.getByDisplayValue("animation-2x")).toBeEnabled();
-    expect(screen.getByDisplayValue("smooth-2x")).toBeDisabled();
-    expect(
-      screen.getByTestId("video-enhancement-unavailable-smooth-2x"),
-    ).toHaveTextContent("Frame interpolation is not verified");
+    // The upscale-only choice stays available...
+    chooseSelection("animation-2x");
+    expect(screen.getByTestId("video-enhancement-start")).toBeEnabled();
+    // ...while the controls that would need interpolation are disabled, so
+    // an unverified preset cannot be reached at all.
+    expect(screen.getByTestId("video-enhancement-smooth")).toBeDisabled();
+    expect(screen.getByTestId("video-enhancement-scale-1")).toBeDisabled();
+    expect(screen.getByTestId("video-enhancement-scale-4")).toBeEnabled();
   });
 
-  it("rechecks capability and disables presets when the host becomes unavailable", async () => {
+  it("rechecks capability and disables the controls when the host becomes unavailable", async () => {
     const client = createClient();
     vi.mocked(client.capability)
       .mockResolvedValueOnce(readyCapability())
@@ -642,7 +672,7 @@ describe("VideoEnhancementPanel", () => {
     await waitFor(() =>
       expect(screen.getByTestId("video-enhancement-start")).toBeDisabled(),
     );
-    expect(screen.getByDisplayValue("animation-2x")).toBeDisabled();
+    expect(screen.getByTestId("video-enhancement-animation")).toBeDisabled();
     expect(screen.getByTestId("video-enhancement-live")).toHaveTextContent(
       "No compatible local Vulkan GPU was found.",
     );
@@ -686,7 +716,7 @@ describe("VideoEnhancementPanel", () => {
     );
   });
 
-  it("moves keyboard focus from Close to Recheck then the first available preset", async () => {
+  it("moves keyboard focus from Close to Recheck then the first option", async () => {
     const user = userEvent.setup();
     renderPanel(createClient());
     await waitFor(() =>
@@ -696,6 +726,6 @@ describe("VideoEnhancementPanel", () => {
     await user.tab();
     expect(screen.getByTestId("video-enhancement-recheck")).toHaveFocus();
     await user.tab();
-    expect(screen.getByDisplayValue("animation-2x")).toHaveFocus();
+    expect(screen.getByTestId("video-enhancement-scale-1")).toHaveFocus();
   });
 });

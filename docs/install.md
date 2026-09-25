@@ -11,7 +11,7 @@ The supported artifacts are attached to each [GitHub release](https://github.com
 | macOS 15+ (Apple Silicon) | `nexus-coding-2.3.1-darwin-arm64.vsix` | Optional VS Code extension only |
 | Linux x86_64 (glibc 2.35+) | `nexus-coding-2.3.1-linux-x64.vsix` | Optional VS Code extension only |
 
-The optional VS Code extension supports Microsoft stable VS Code 1.134 or 1.135 (same Electron 42.8.1 ABI as the bundled `better-sqlite3` 12.11.1 rebuild). Earlier, later, Insiders, Cursor, and Windsurf hosts are not supported by this artifact. The Windows wizard shows a visible extension checkbox, enables it for 1.134/1.135, and rechecks before installation. The Windows desktop application itself does not have this VS Code requirement.
+The optional VS Code extension supports Microsoft stable VS Code 1.134 through 1.137 (all ship Electron 42, the same NODE_MODULE_VERSION as the bundled `better-sqlite3` 12.11.1 rebuild against the 42.8.1 pin). Earlier, later, Insiders, Cursor, and Windsurf hosts are not supported by this artifact. The Windows wizard shows a visible extension checkbox in Configuration Features, enables it for 1.134/1.135/1.136/1.137, and rechecks before installation. The Windows desktop application itself does not have this VS Code requirement.
 
 The Windows installer embeds its target-qualified VSIX and matching desktop bundle. It downloads selected models and runtime components during installation, verifying downloaded payloads against pinned SHA-256 checksums. Expect 5-60 GB of downloads depending on the models you pick, so plan for disk space and a decent connection.
 
@@ -35,13 +35,13 @@ NexusSetup.exe --headless --json-output
 
 v2.3.1 does not publish a standalone macOS Nexus desktop package. The raw Tauri DMG was withheld because it does not contain the pinned Node runtime required by the sidecar, and the former universal name also overstated the single-architecture native module inside it.
 
-If you use macOS 15+ on Apple Silicon and Microsoft stable VS Code 1.134 or 1.135, download `nexus-coding-2.3.1-darwin-arm64.vsix` and install it from VS Code's **Extensions: Install from VSIX...** command. Do not install it into Insiders, Cursor, Windsurf, an Intel host, an older macOS version, or another VS Code version.
+If you use macOS 15+ on Apple Silicon and Microsoft stable VS Code 1.134 through 1.137, download `nexus-coding-2.3.1-darwin-arm64.vsix` and install it from VS Code's **Extensions: Install from VSIX...** command. Do not install it into Insiders, Cursor, Windsurf, an Intel host, an older macOS version, or another VS Code version.
 
 ## Linux
 
 v2.3.1 does not publish a standalone Linux Nexus desktop package. The raw Tauri AppImage and deb were withheld because they do not contain the pinned Node runtime and runtime manifest required by the sidecar.
 
-If you run Microsoft stable VS Code 1.134 or 1.135 on x86_64 Linux, download `nexus-coding-2.3.1-linux-x64.vsix` and install it from VS Code's **Extensions: Install from VSIX...** command. Do not install it into Insiders, Cursor, Windsurf, or another VS Code version. The native extension requires glibc 2.35+ (Ubuntu 22.04+, Debian 12+, or another distribution with an equivalent/newer glibc); its release builder is pinned to Ubuntu 22.04 to keep that floor stable.
+If you run Microsoft stable VS Code 1.134 through 1.137 on x86_64 Linux, download `nexus-coding-2.3.1-linux-x64.vsix` and install it from VS Code's **Extensions: Install from VSIX...** command. Do not install it into Insiders, Cursor, Windsurf, or another VS Code version. The native extension requires glibc 2.35+ (Ubuntu 22.04+, Debian 12+, or another distribution with an equivalent/newer glibc); its release builder is pinned to Ubuntu 22.04 to keep that floor stable.
 
 ## Verifying your download
 
@@ -61,23 +61,24 @@ sha256sum -c --ignore-missing SHA256SUMS.txt
 ## What the Windows installer actually does
 
 1. **Dependencies**: GPU runtime for your hardware (CUDA / ROCm / Metal, or CPU-only), Node runtime, Ollama, ffmpeg, and the diffusion Python environment.
-2. **VS Code extension** (optional, offered when Microsoft stable VS Code 1.134 or 1.135 is present and still matches immediately before installation; replace uses `--force`).
+2. **VS Code extension** (optional, offered when Microsoft stable VS Code 1.134 through 1.137 is present and still matches immediately before installation; replace uses `--force`).
 3. **Models**: your selection from the typed catalog (Chat, Agentic Coding, Image, Video, Audio), downloaded with live progress; image/video weights come from Hugging Face, text models via Ollama.
 4. **Nexus desktop app**: embedded in `NexusSetup.exe`, manifest/hash-checked, installed and health-checked, then launched from the finish page.
 
-Optional Unsloth Core (local QLoRA fine-tuning runtime) is offered on Configuration, off by default, for NVIDIA GPUs with 16 GB or more VRAM. It is not a VS Code option.
+Optional Unsloth Core (local QLoRA fine-tuning runtime) is offered on Configuration Features, selected by default when the host is Compatible (NVIDIA 16 GB or more VRAM), and locked off when Incompatible. It is not a VS Code option.
 
 Everything lands under your user account (no admin rights needed for the wizard itself); user data lives in `~/.nexus`.
 
 ## After you install (v2.3.1)
 
-- **VS Code extension**: optional. The wizard enables the checkbox for Microsoft stable 1.134 or 1.135. 1.136+, Insiders, Cursor, and Windsurf stay visible and disabled. Replace uses `--force` only when `nexus-coding.nexus-coding` or `gemma-code.gemma-code` is already listed.
-- **Unsloth Core**: Configuration Features, off by default, NVIDIA 16 GB+ VRAM. Not a VS Code option.
+- **VS Code extension**: optional. The wizard enables the Features checkbox for Microsoft stable 1.134 through 1.137. 1.138+, Insiders, Cursor, and Windsurf stay visible and disabled. Replace uses `--force` only when `nexus-coding.nexus-coding` or `gemma-code.gemma-code` is already listed. After install, **Nexus Code: Select Agentic Model** (status bar and `/model`) lists only models from this install's `selected-models.json` that are agentic and present on disk, not every Ollama tag.
+- **Desktop Chat, Agents, Image, and Video pickers**: the same this-install allowlist (`selected-models.json` ordered ids union Settings downloads). A missing snapshot shows only Get more models. Settings > Models remains the catalog browser, including cards you have not selected. On a 16 GB snapshot the Image default is `realvisxl-v5` when that id is owned. Juggernaut XL v9 is catalog id `juggernaut-xl-v9`; the wizard can auto-tick it because it is already on disk, which is not a ghost picker row.
+- **Unsloth Core**: Configuration Features, on by default when Compatible (NVIDIA 16 GB+ VRAM). Not a VS Code option.
 - **Embedder**: Nomic is required. EmbeddingGemma 300M is opt-in and does not reindex existing memory.
 
 ## After you install (v2.3.0)
 
-- **Video Lab Enhance**: after a completed clip has a durable output id, Video Lab can offer Enhance. Install Video2X 6.4.0 yourself, then set `NEXUS_VIDEO2X_PATH` or Settings > Video > Video2X executable to the absolute executable path. Recheck capability; Enhance stays disabled until capability is ready. Clearing the setting and unsetting the env var turns the surface off. That does not uninstall Video2X and does not delete originals. Configuring a path does not install Video2X, search PATH, replace originals, grant network or Hub writes, or add Qwen3.8. Details: [video-enhancement-baseline.md](v2/v2.3/benchmarks/video-enhancement-baseline.md).
+- **Video Lab Enhance**: after a completed clip has a durable output id, Video Lab can offer Enhance. Install Video2X 6.4.0 yourself, then set `NEXUS_VIDEO2X_PATH` or Settings > Video > Video2X executable to the absolute executable path. Recheck capability; Enhance stays disabled until capability is ready. Clearing the setting and unsetting the env var turns the surface off. That does not uninstall Video2X and does not delete originals. Configuring a path does not install Video2X, search PATH, replace originals, grant network or Hub writes, or add Qwen3.8. Details: [video-enhancement-baseline.md](archive/v2/v2.3/benchmarks/video-enhancement-baseline.md).
 
 ## After you install (v1.20.0)
 
@@ -119,19 +120,19 @@ Everything lands under your user account (no admin rights needed for the wizard 
 ## After you install (v2.0.0)
 
 - **Chat vision and voice**: image attach in Local Chatbot is on only for models whose catalog `modalities` include `image` (for example Gemma 4 12B IT GGUF). Audio files and the composer mic transcribe on-device after you install **faster-whisper-large-v3**. The Voice loop checkbox is off by default; turn it on for push-to-talk or VAD, and install **kokoro-82m** to hear replies. No image or audio bytes leave the machine.
-- **Coding browser tools**: `browser_navigate` / `browser_click` / `browser_type` / `browser_aria_snapshot` / `browser_close` run in an isolated `~/.nexus/browser-profiles/` directory, never your logged-in Chrome. Every call is DANGEROUS and confirms. Install a local Chromium with `npx playwright@1.55.0 install chromium` if you want live pages; CI uses HTML fixtures only. See [browser-surface-security.md](v2/v2.0/browser-surface-security.md).
+- **Coding browser tools**: `browser_navigate` / `browser_click` / `browser_type` / `browser_aria_snapshot` / `browser_close` run in an isolated `~/.nexus/browser-profiles/` directory, never your logged-in Chrome. Every call is DANGEROUS and confirms. Install a local Chromium with `npx playwright@1.55.0 install chromium` if you want live pages; CI uses HTML fixtures only. See [browser-surface-security.md](archive/v2/v2.0/browser-surface-security.md).
 - **Video Lab continuation and avatar**: a requested duration longer than the tier clip chains segments in the timeline (prototype seams; not a measured Wan 2.2 quality claim). Talking-head (`audio2video`) is `diffusion-pro` only: install **longcat-video-avatar-1.5** (official Meituan INT8, sha256-pinned), tick the local-generation checkbox, and attach a photo plus audio. Those bytes stay on the device. Below-tier hosts do not see the control.
 
 ## After you install (v1.17.0)
 
-The desktop shell now uses orbs, a surface-liveness beam, and a metal ring on Send / Generate / New session. If your OS has reduced-motion enabled, every effect **halts** (static fallbacks) instead of slowing down. Tokens: [design-tokens.md](v1/v1.17/design-tokens.md).
+The desktop shell now uses orbs, a surface-liveness beam, and a metal ring on Send / Generate / New session. If your OS has reduced-motion enabled, every effect **halts** (static fallbacks) instead of slowing down. Tokens: [design-tokens.md](archive/v1/v1.17/design-tokens.md).
 
 ## After you install (v1.16.0)
 
 - **Local API server**: off by default. In Nexus, open Settings > Local API server, turn it on, and copy the base URL plus token into Claude Code / Codex / Cursor. The server binds loopback only and serves model inference, never files or tools. See [README](../README.md#local-api-server-opt-in).
 - **ACP agent** (v1.18.0): same Settings section, separate toggle. Uses the same loopback listener and token at `POST /acp`. Off by default. Unattended confirmations park in the ask inbox (or fail-closed if no inbox is configured).
 - **Document parsing**: Settings > Models, install **RapidOCR PP-OCRv4** (CPU, every OS) and optionally **Unlimited-OCR 3B** (NVIDIA) for PDFs and images. Word, PowerPoint, and Excel (`.docx` / `.pptx` / `.xlsx`) parse with native libraries and do not require those OCR models or Docling. Attach in Local Chatbot or Agentic AI Coding. Parsed text is shown in the thread and is not auto-sent to a model. Neither OCR model is auto-installed.
-- **MLX on Apple Silicon**: Nexus does not bundle MLX. Register an existing loopback server as described in [MLX via localAdapters](v1/v1.16/guides/mlx-via-local-adapters.md).
+- **MLX on Apple Silicon**: Nexus does not bundle MLX. Register an existing loopback server as described in [MLX via localAdapters](archive/v1/v1.16/guides/mlx-via-local-adapters.md).
 
 ## Uninstalling
 

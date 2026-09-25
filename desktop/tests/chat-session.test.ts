@@ -70,12 +70,15 @@ describe("createChatMessageHandler", () => {
       model: requireModel("gemma4:e4b"),
       messages: [{ role: "user", content: "hi" }],
     });
+    // v2.4.8 Phase 1: eval_count (8) already includes the thinking tokens, so
+    // it is split by text proportion (4 thinking bytes : 2 reply bytes ->
+    // 5 : 3) instead of adding a bytes/4 estimate on top of it.
     expect(events.at(-1)).toEqual({
       kind: "done",
       finishReason: "stop",
       inputTokens: 20,
-      reasoningTokens: 1,
-      outputTokens: 8,
+      reasoningTokens: 5,
+      outputTokens: 3,
     });
     const done = events.at(-1);
     if (!done || done.kind !== "done") throw new Error("expected done event");
@@ -89,9 +92,56 @@ describe("createChatMessageHandler", () => {
       ],
       contextWindow: 100,
     });
-    expect(summed.usedTokens).toBe(29);
-    expect(summed.percent).toBeCloseTo(29);
+    // 20 input + 8 generated (5 reasoning + 3 output): the provider total is
+    // never inflated by an estimate.
+    expect(summed.usedTokens).toBe(28);
+    expect(summed.percent).toBeCloseTo(28);
     expect(summed.estimated).toBe(false);
+  });
+
+  it("emits only explicit provider reasoning and redacts it before the UI boundary", async () => {
+    const llm: LLMClient = {
+      async checkHealth() {
+        return true;
+      },
+      async listModels() {
+        return [];
+      },
+      async *streamChat() {
+        yield {
+          message: {
+            role: "assistant",
+            content: "Visible answer",
+            thinking: "Inspect " + ["gh", "p_abcdefghijklmnopqrstuvwxyz1234567890"].join("") + " safely",
+          },
+          done: false,
+        };
+        yield { message: { role: "assistant", content: "" }, done: true };
+      },
+    };
+    const events = await createChatMessageHandler({ llm })({
+      sessionId: "c1",
+      model: requireModel("gemma4:e4b"),
+      messages: [{ role: "user", content: "hi" }],
+    });
+    const reasoning = events.find((event) => event.kind === "reasoning_delta");
+    expect(reasoning).toEqual(expect.objectContaining({ kind: "reasoning_delta" }));
+    if (!reasoning || reasoning.kind !== "reasoning_delta") throw new Error("expected reasoning");
+    expect(reasoning.text).toContain("<redacted>");
+    expect(reasoning.text).not.toContain("ghp_");
+    expect(events.find((event) => event.kind === "token")).toEqual({
+      kind: "token",
+      text: "Visible answer",
+    });
+  });
+
+  it("does not synthesize reasoning text when the provider reports counts only", async () => {
+    const events = await createChatMessageHandler({ llm: scriptedLlm([["answer"]]) })({
+      sessionId: "c1",
+      model: requireModel("gemma4:e4b"),
+      messages: [{ role: "user", content: "hi" }],
+    });
+    expect(events.some((event) => event.kind === "reasoning_delta")).toBe(false);
   });
 
   it("never throws -- an LLM failure becomes a done with an error reason", async () => {

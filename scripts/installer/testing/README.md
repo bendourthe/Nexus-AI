@@ -49,7 +49,7 @@ mode with the same result contract.
 ## macOS
 
 No virtualization path exists on the Windows host: use the manual checklist at
-[`docs/v1/v1.11/testing/macos-install-checklist.md`](../../../docs/v1/v1.11/testing/macos-install-checklist.md)
+[`docs/archive/v1/v1.11/testing/macos-install-checklist.md`](../../../docs/archive/v1/v1.11/testing/macos-install-checklist.md)
 on a physical Mac.
 
 ## Profiles

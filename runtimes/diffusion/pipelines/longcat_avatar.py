@@ -1,7 +1,7 @@
 """Official LongCat-Video-Avatar-1.5 INT8 adapter.
 
 Nexus does not vendor the upstream Meituan inference tree this cycle
-(see docs/v2/v2.0/development/history/2026-08-19_phase-3-longcat-scan.md).
+(see docs/archive/v2/v2.0/development/history/2026-08-19_phase-3-longcat-scan.md).
 This module is Nexus-owned: it refuses unofficial orgs, community
 re-quantizations, and any request that did not carry an explicit local
 confirmation. Runtime generation stays on the stub executor unless a

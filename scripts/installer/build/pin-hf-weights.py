@@ -106,6 +106,62 @@ def digests_from_api(repo: str) -> dict[str, str]:
     return digests
 
 
+#: Ceiling for the resolve-and-hash fallback. A non-LFS file on the Hub is a
+#: config, an index, or a small module; anything genuinely large is in LFS and
+#: already has an `oid`. The cap keeps a mis-declared manifest from pulling a
+#: multi-gigabyte checkpoint through a build step that is meant to be cheap.
+MAX_INLINE_HASH_BYTES = 8 * 1024 * 1024
+HF_RESOLVE_URL = "https://huggingface.co/{repo}/resolve/main/{path}"
+
+
+def digest_by_download(repo: str, file_path: str) -> str | None:
+    """sha256 of a NON-LFS Hub file, by fetching it and hashing the bytes.
+
+    The tree API only carries `lfs.oid`, so a small file stored outside LFS
+    (`config.json`, `model.safetensors.index.json`, a `modeling_*.py`) has no
+    digest to read and used to keep its placeholder forever -- five of the
+    twelve remaining unpinned entries were exactly that. Those files are part
+    of the download and are executed or parsed at load time, so leaving them
+    unverified is not a cosmetic gap.
+
+    Fetching them is cheap and gives a real digest. Returns None on any
+    failure (gated repo, network, oversize) so the caller keeps its
+    placeholder and warns, exactly as before.
+    """
+    url = HF_RESOLVE_URL.format(repo=repo, path=file_path)
+    try:
+        with urlrequest.urlopen(url, timeout=120) as resp:
+            declared = resp.headers.get("Content-Length")
+            if declared and int(declared) > MAX_INLINE_HASH_BYTES:
+                LOG.warning(
+                    "%s/%s: %s bytes exceeds the inline-hash cap; placeholder kept",
+                    repo,
+                    file_path,
+                    declared,
+                )
+                return None
+            hasher = hashlib.sha256()
+            read = 0
+            while True:
+                chunk = resp.read(65536)
+                if not chunk:
+                    break
+                read += len(chunk)
+                if read > MAX_INLINE_HASH_BYTES:
+                    LOG.warning(
+                        "%s/%s: exceeded the inline-hash cap mid-stream; "
+                        "placeholder kept",
+                        repo,
+                        file_path,
+                    )
+                    return None
+                hasher.update(chunk)
+    except (urlerror.URLError, OSError, ValueError) as exc:
+        LOG.warning("%s/%s: resolve fetch failed (%s)", repo, file_path, exc)
+        return None
+    return hasher.hexdigest()
+
+
 def sha256_path(path: Path) -> str:
     hasher = hashlib.sha256()
     with path.open("rb") as f:
@@ -137,11 +193,16 @@ def collect_pins(
                     LOG.error("%s", exc)
                     api_cache[repo] = {}
             digest = api_cache[repo].get(file_path)
+            if not digest:
+                # Not in LFS: fetch the bytes and hash them rather than
+                # shipping the file unverified.
+                digest = digest_by_download(repo, file_path)
             if digest:
                 pins[(model_id, file_path)] = digest
             else:
                 LOG.warning(
-                    "%s/%s: no LFS sha256 exposed by the API; placeholder kept",
+                    "%s/%s: no digest available from the API or a direct "
+                    "fetch; placeholder kept",
                     model_id,
                     file_path,
                 )

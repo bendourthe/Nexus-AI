@@ -1,17 +1,33 @@
 name: CodeQL
 
-# v0.9.0 Phase 7 (sub-task 7.4) -- GitHub CodeQL SAST scan over the
-# TypeScript/JavaScript surface in `src/` and `bin/`. Starts non-blocking
+# v0.9.0 Phase 7 (sub-task 7.4) -- GitHub CodeQL SAST scan. Starts non-blocking
 # (continue-on-error) so a fresh advisory ruleset rollout cannot stall PRs;
 # the SARIF report is still uploaded to the GitHub Security tab for triage.
 # After one clean week (no critical/high findings on `main`) flip
 # `continue-on-error: false` to gate merges on critical+high.
+#
+# v2.4.9 Phase 2 -- Python joins the matrix. The repository tracks 308 Python
+# files (193 installer, 55 runtimes, 57 tests, 3 other) that this scan ignored
+# entirely, including the whole PyQt installer and all three model runtimes.
+# Two consequences worth stating because they are easy to get wrong:
+#
+#   * The job name is now templated per language. It used to be the literal
+#     `Analyze (javascript-typescript)`, so a second matrix entry would have
+#     produced two identically named checks and made "gate Python but not TS"
+#     unexpressible in branch protection. THIS RENAMES THE EXISTING CHECK:
+#     branch protection must be updated deliberately, not discovered.
+#   * `develop` joined the trigger branches. The scan previously ran only on
+#     `main` and a weekly cron, so a plan that publishes to `develop` could
+#     never see its own Python results before merge. A scanned-file count in
+#     the thousands would mean the extractor reached a vendored virtualenv
+#     (`scripts/installer/.venv/`, gitignored and absent from a CI checkout);
+#     the plausible number is the low hundreds.
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "develop"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "develop"]
   schedule:
     # Weekly scan independent of activity: catches advisories that land
     # against the existing tree even when no new code lands that week.
@@ -23,7 +39,7 @@ concurrency:
 
 jobs:
   analyze:
-    name: Analyze (javascript-typescript)
+    name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
     # Cost control: skip on Dependabot PRs. A dependency bump does not need a
     # full SAST scan, and push-to-main + the weekly schedule still cover the tree.
@@ -35,7 +51,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["javascript-typescript"]
+        include:
+          # build-mode `none` keeps the extractor on source only. The runtimes
+          # carry multi-gigabyte ML dependency trees; installing them to scan
+          # them would cost more than the scan is worth and would fail closed
+          # on any host without CUDA wheels.
+          - language: javascript-typescript
+            build-mode: none
+          - language: python
+            build-mode: none
     continue-on-error: true # nexus-check-allow: no-disabled-ci-check -- baseline CodeQL rollout is intentionally non-blocking until gating is flipped on (see header)
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
@@ -44,6 +68,16 @@ jobs:
         uses: github/codeql-action/init@f411752efdf656cb71aa17b755b22c890960da1d # v3.35.5
         with:
           languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          # Defensive: the installer venv is gitignored and should never be in
+          # a CI checkout, but an extractor that finds one reports thousands of
+          # files and a meaningless clean.
+          config: |
+            paths-ignore:
+              - '**/.venv/**'
+              - '**/node_modules/**'
+              - 'out/**'
+              - 'dist/**'
           # `security-and-quality` is the broader query pack -- start there
           # while the baseline is non-blocking; tighten to `security-extended`
           # once gating is on.

@@ -16,7 +16,7 @@ import { validateLocalAdapterManifest } from "../../../modules/coding/llm/LocalA
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GUIDE = join(
   HERE,
-  "../../../docs/v1/v1.16/guides/mlx-via-local-adapters.md",
+  "../../../docs/archive/v1/v1.16/guides/mlx-via-local-adapters.md",
 );
 
 function extractAdapterManifests(markdown: string): unknown[] {

@@ -48,12 +48,12 @@ const COMPLETE = join(
 const CATALOG = join(REPO_ROOT, "core/registry/catalog.json");
 const HANDOFF = join(
   REPO_ROOT,
-  "docs/v2/v2.3/development/nexus-hub-security-audit-handoff.md",
+  "docs/archive/v2/v2.3/development/nexus-hub-security-audit-handoff.md",
 );
 const BENCH = join(REPO_ROOT, "scripts/bench-video-enhancement.mjs");
 const BASELINE = join(
   REPO_ROOT,
-  "docs/v2/v2.3/benchmarks/video-enhancement-baseline.md",
+  "docs/archive/v2/v2.3/benchmarks/video-enhancement-baseline.md",
 );
 
 const DOWNLOAD_PATTERN =
@@ -170,7 +170,7 @@ describe("video enhancement packaging parity", () => {
     expect(installer).toContain(`SETTING_KEY = "${contract.settingKey}"`);
     expect(installer).toContain("never installed by this wizard");
     expect(installer).toContain("does not download, bundle, or search");
-    expect(read(CONFIGURATION)).toContain("INSTALLER_NOTE");
+    expect(read(CONFIGURATION)).not.toContain("INSTALLER_NOTE");
     expect(read(COMPLETE)).toContain("INSTALLER_NOTE");
     expect(read(CONFIGURATION)).not.toMatch(/Install Video2X/i);
     expect(read(CONFIGURATION)).not.toMatch(/download.*Video2X/i);

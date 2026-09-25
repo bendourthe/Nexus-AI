@@ -32,6 +32,16 @@ class Footer(QWidget):
 
         layout.addStretch()
 
+        # v2.4.11: slot for page-supplied action buttons (e.g. the Complete
+        # page's View Logs / Close) so every action on the last step shares the
+        # footer row with Finish instead of floating in the page body.
+        self._actions = QWidget()
+        self._actions_layout = QHBoxLayout(self._actions)
+        self._actions_layout.setContentsMargins(0, 0, 0, 0)
+        self._actions_layout.setSpacing(8)
+        self._actions.setVisible(False)
+        layout.addWidget(self._actions, alignment=Qt.AlignmentFlag.AlignVCenter)
+
         self._back_btn = SecondaryButton("Back")
         self._back_btn.clicked.connect(self.back_clicked.emit)
         layout.addWidget(self._back_btn, alignment=Qt.AlignmentFlag.AlignVCenter)
@@ -59,6 +69,21 @@ class Footer(QWidget):
     @property
     def cancel_button(self) -> SecondaryButton:
         return self._cancel_btn
+
+    def set_page_actions(self, buttons: list[QWidget]) -> None:
+        """Host the current page's own action buttons left of Back / Next.
+
+        The footer never owns these widgets' lifetime: the page keeps them, so
+        switching away simply re-parents them out of the row.
+        """
+        while self._actions_layout.count():
+            item = self._actions_layout.takeAt(0)
+            widget = item.widget() if item else None
+            if widget is not None:
+                widget.setParent(None)
+        for button in buttons:
+            self._actions_layout.addWidget(button)
+        self._actions.setVisible(bool(buttons))
 
     def set_cancel_visible(self, visible: bool) -> None:
         """Show/remove the footer Cancel button (v1.14.0 Phase 4)."""

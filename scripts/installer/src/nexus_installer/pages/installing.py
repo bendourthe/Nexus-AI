@@ -18,7 +18,6 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import (
     QLabel,
     QMessageBox,
-    QProgressBar,
     QVBoxLayout,
     QWidget,
 )
@@ -29,6 +28,7 @@ from nexus_installer.constants import (
 )
 from nexus_installer.engine.crash import is_engine_exception
 from nexus_installer.engine.gated_auth import ensure_gated_auth
+from nexus_installer.engine.install_progress import planned_steps
 from nexus_installer.engine.install_summary import prepare_model_retry
 from nexus_installer.engine.installer import InstallEngine, start_install
 from nexus_installer.engine.model_router import (
@@ -37,6 +37,8 @@ from nexus_installer.engine.model_router import (
     resolve_selected_models,
 )
 from nexus_installer.widgets.gated_auth_dialog import run_gated_prompt
+from nexus_installer.widgets.overall_progress import OverallProgressBar
+from nexus_installer.widgets.page_intro import PageLede
 from nexus_installer.widgets.phase_group import PhaseGroup
 
 if TYPE_CHECKING:
@@ -47,10 +49,10 @@ if TYPE_CHECKING:
 # Phase title -> (engine step names it covers, in engine order; section icon
 # glyph for the mockup's iconed header tile). v1.13.0 Phase 5 adds the icon.
 PHASE_GROUPS: tuple[tuple[str, tuple[str, ...], str], ...] = (
-    ("Dependencies", ("ollama", "venv"), "⚙"),  # gear
+    ("Dependencies", ("ollama", "venv", "unsloth"), "⚙"),  # gear
     ("VS Code Extension", ("extension",), "</>"),  # code brackets
     ("Models", ("model",), "◆"),  # diamond
-    ("Nexus Desktop", ("desktop",), "▭"),  # screen / monitor
+    ("Nexus Desktop", ("desktop", "runtime", "hub-catalog"), "▭"),
 )
 
 
@@ -92,6 +94,15 @@ class InstallingPage(QWidget):
         self._title.setObjectName("pageTitle")
         layout.addWidget(self._title)
 
+        # Every other page opens with a lede; this one used to jump straight
+        # from the title to a progress bar.
+        layout.addWidget(
+            PageLede(
+                "Nexus is downloading and setting up everything you chose. You "
+                "can minimize this window -- the install keeps running."
+            )
+        )
+
         # Overall progress bar on top
         overall_label = QLabel("Overall progress")
         overall_label.setStyleSheet(
@@ -100,10 +111,7 @@ class InstallingPage(QWidget):
         )
         layout.addWidget(overall_label)
 
-        self._progress = QProgressBar()
-        self._progress.setMinimum(0)
-        self._progress.setMaximum(0)  # Indeterminate
-        self._progress.setTextVisible(False)
+        self._progress = OverallProgressBar()
         layout.addWidget(self._progress)
 
         # Per-phase groups
@@ -134,7 +142,12 @@ class InstallingPage(QWidget):
         self._groups = []
         self._active_group = None
 
-        components = self._state.components_to_install
+        components = set(
+            planned_steps(
+                self._state.components_to_install,
+                include_unsloth=self._state.install_unsloth,
+            )
+        )
         for title, steps, icon in PHASE_GROUPS:
             covered = [s for s in steps if s in components]
             if not covered:
@@ -159,7 +172,7 @@ class InstallingPage(QWidget):
         self._has_started = True
         self._is_running = True
         self._title.setText("Installing...")
-        self._progress.setMaximum(0)  # Indeterminate
+        self._progress.reset_for_run()
         self._log_lines = []
         # v1.14.0 Phase 2: resolve auth for any gated model BEFORE the engine
         # reads the selection, so a declined one leaves the queue (never fails
@@ -316,16 +329,17 @@ class InstallingPage(QWidget):
             target.append_log(message, level)
 
     def _on_progress(self, value: float) -> None:
-        if self._progress.maximum() == 0:
-            self._progress.setMaximum(1000)
-        self._progress.setValue(int(value * 1000))
+        self._progress.set_fraction(value)
 
     def _on_finished(self, success: bool, error_message: str) -> None:
         self._is_running = False
-        self._progress.setMaximum(1000)
-        self._progress.setValue(1000)
+        self._progress.complete()
 
-        if success:
+        if success and error_message:
+            self._title.setText("Installation Complete with Warnings")
+            if error_message:
+                self._log_lines.append(error_message)
+        elif success:
             self._title.setText("Installation Complete")
         elif is_engine_exception(error_message):
             self._title.setText("Installation Stopped")
@@ -370,6 +384,7 @@ class InstallingPage(QWidget):
         if self._engine:
             self._engine.cancel()
         self._is_running = False
+        self._progress.cancel()
         self._title.setText("Installation Cancelled")
         # Release the shell lock so navigation is usable again (T602).
         self.finished.emit(False)

@@ -56,7 +56,17 @@ export type ConfirmReason =
   /** An active job from another module would be evicted. */
   | "other-module-busy"
   /** Free VRAM is unknown, so a fit cannot be computed honestly. */
-  | "vram-unknown";
+  | "vram-unknown"
+  /**
+   * A different model is resident and does not fit alongside this one, so the
+   * request costs a full unload + load.
+   *
+   * v2.4.11 operator instruction: the user should be told that only one model
+   * fits at a time and roughly what the swap costs, "just so they're aware
+   * ... that switching back and forth may slow things down" -- even when the
+   * incumbent is idle and nothing would be interrupted.
+   */
+  | "evicts-resident";
 
 export interface ModelResidency {
   readonly modelId: string;
@@ -188,12 +198,15 @@ export function classifySwitch(request: SwitchRequest): SwitchVerdict {
   }
 
   // They do not both fit: something must be evicted.
-  if (busyOtherModule && !preConsented) {
+  if (!preConsented) {
+    // An idle incumbent is still a swap the user pays for in load time, so it
+    // is offered rather than performed silently (v2.4.11). Consent is
+    // remembered per module pair, so agreeing once stops the asking.
     return {
       kind: "confirm",
       modelId: targetModelId,
       busyWith: busyOtherModule,
-      reason: "other-module-busy",
+      reason: busyOtherModule ? "other-module-busy" : "evicts-resident",
     };
   }
 

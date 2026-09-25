@@ -47,14 +47,30 @@ ACCENT_VIDEO = "#22c55e"  # --accent-video
 WORDMARK_PRIMARY = "#eaf6f8"  # "Nexus" (weight 700)
 WORDMARK_SECONDARY = "#6f8990"  # " AI Studio" (weight 600)
 
+# Section accents without a desktop module token yet: amber for the
+# embeddings tab and violet for the document tab (the Review page category
+# pills need one color per catalog tab).
+ACCENT_EMBEDDINGS = "#fbbf24"
+# One steady color for the Recommended pill on every model card (steelblue),
+# so it never inherits the per-provider accent and reads the same everywhere.
+BADGE_RECOMMENDED = "#4682b4"
+# The downloaded badge on a model card: violet, so it never reads as the green
+# compatibility check beside it.
+BADGE_DOWNLOADED = "#a78bfa"
+ACCENT_DOCUMENT = "#a78bfa"
+
 # Catalog section key -> accent. Audio has no dedicated module accent in the
-# desktop tokens yet; the info blue stands in until one exists.
+# desktop tokens yet; the info blue stands in until one exists. Every
+# `TYPE_TABS` key on the Models page has an entry here so the Review page can
+# color its category pills.
 SECTION_ACCENTS: dict[str, str] = {
+    "embeddings": ACCENT_EMBEDDINGS,
     "chat": ACCENT_CHAT,
     "agentic": ACCENT_CODING,
     "image": ACCENT_IMAGE,
     "video": ACCENT_VIDEO,
     "audio": "#38bdf8",
+    "document": ACCENT_DOCUMENT,
 }
 
 # ---------------------------------------------------------------------------
@@ -68,7 +84,7 @@ SECTION_ACCENTS: dict[str, str] = {
 # provider color is the only card color signal. Hues stay distinguishable on the
 # dark theme, brand-adjacent where a publisher has a known brand color; unknown
 # / community publishers fall back to a neutral slate.
-# See docs/v1/v1.9/ui-rework-design.md.
+# See docs/archive/v1/v1.9/ui-rework-design.md.
 # ---------------------------------------------------------------------------
 PROVIDER_FALLBACK = "#94a3b8"  # slate -- community / unknown publisher
 
@@ -123,6 +139,13 @@ FAMILY_TO_PUBLISHER: dict[str, str] = {
 }
 
 
+def rgba_css(hex_color: str, alpha: float) -> str:
+    """QSS `rgba()` for a `#rrggbb` token at `alpha` (0-1), for tinted fills."""
+    value = hex_color.lstrip("#")
+    r, g, b = (int(value[i : i + 2], 16) for i in (0, 2, 4))
+    return f"rgba({r}, {g}, {b}, {int(round(alpha * 255))})"
+
+
 def publisher_for_family(family: str) -> str:
     """Resolve a catalog `family` to its publisher name (fallback: Community)."""
     return FAMILY_TO_PUBLISHER.get(family, "Community")
@@ -159,7 +182,7 @@ INFO = "#38bdf8"
 # gradient, and radial-glow background (guides/interactive-guide/
 # nexus-ai-guide.html), mirroring tokens.css so the installer and the app
 # share one look. Consumed by the constellation background + floating-glow
-# logo primitives (T203). See docs/v1/v1.9/design-tokens.md.
+# logo primitives (T203). See docs/archive/v1/v1.9/design-tokens.md.
 # ---------------------------------------------------------------------------
 # Deepest gradient stop for the radial-glow body treatment (--bg-deep).
 BG_DEEP = "#010608"
@@ -214,7 +237,7 @@ else:
 # and every page/widget label). The QSS base stays 15px. FS_BODY_STRONG shares
 # FS_BODY's size -- emphasis comes from FW_SEMIBOLD, not a larger size. Sizes
 # are px ints; QSS consumers format as f"{FS_H1}px".
-# See docs/v1/v1.9/ui-rework-design.md.
+# See docs/archive/v1/v1.9/ui-rework-design.md.
 # ---------------------------------------------------------------------------
 FS_DISPLAY = 34  # page hero / welcome title
 FS_H1 = 28  # page titles
@@ -290,14 +313,12 @@ DOCS_URL = "https://github.com/bendourthe/Nexus-AI"
 # ---------------------------------------------------------------------------
 # Step names
 # ---------------------------------------------------------------------------
+# Welcome carries the machine checks (prerequisites + GPU) and the
+# configuration choices (install path, features), so the former Setup and
+# Configuration steps are gone.
 STEP_NAMES: list[str] = [
     "Welcome",
-    "Prerequisites",
-    "GPU Detection",
-    "Install Path",
     "Models",
-    "Configuration",
-    "VS Code",
     "Review",
     "Installing",
     "Complete",

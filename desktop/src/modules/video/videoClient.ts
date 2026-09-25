@@ -23,8 +23,8 @@ export interface VideoBaseRequest {
   readonly modelId: string;
   readonly prompt: string;
   readonly negativePrompt?: string;
-  readonly width: 854 | 1280;
-  readonly height: 480 | 720;
+  readonly width: number;
+  readonly height: number;
   readonly durationSeconds: number;
   readonly fps: 12 | 16 | 24;
   readonly steps: number;
@@ -68,6 +68,13 @@ export interface VideoProgressEvent {
   readonly stage?: string;
   readonly step?: number;
   readonly totalSteps?: number;
+  /** Bytes of weights read so far / to read while `stage` is `loading`. */
+  readonly loadedBytes?: number;
+  readonly totalBytes?: number;
+  /** Runtime estimate of seconds until the weights are loaded. */
+  readonly etaS?: number | null;
+  /** Module holding the GPU while `stage` is `queued`. */
+  readonly blockedBy?: string;
   /** Base64-encoded JPEG thumbnail for the current second. */
   readonly preview?: string;
   /** Which "second bucket" this preview belongs to (0-indexed). */

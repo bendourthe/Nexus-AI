@@ -29,6 +29,11 @@ import tempfile
 from collections.abc import Callable
 from pathlib import Path
 
+from nexus_installer.engine import shortcuts
+from nexus_installer.engine.desktop_payload import (
+    StageError,
+    write_desktop_payload_identity,
+)
 from nexus_installer.engine.platform_utils import (
     is_linux,
     is_macos,
@@ -103,6 +108,8 @@ class DesktopProvisioner:
 
     def __init__(self) -> None:
         self._cancelled = False
+        # Test seam: write identity under this home instead of Path.home().
+        self.identity_home: Path | None = None
 
     def cancel(self) -> None:
         """Kept for engine compatibility; the embedded flow has no download."""
@@ -148,6 +155,7 @@ class DesktopProvisioner:
         progress(0.9)
 
         state.desktop_installed = True
+        self._record_payload_identity(state, log)
         log("Nexus desktop installed.", "success")
 
         if not first_run_health_check(state, log):
@@ -221,6 +229,34 @@ class DesktopProvisioner:
         log("Embedded bundle verified.", "success")
         return str(bundle)
 
+    def _record_payload_identity(
+        self,
+        state: InstallerState,
+        log: Callable[[str, str], None],
+    ) -> None:
+        """Write ~/.nexus/desktop-payload.json so Settings can show the hash."""
+        manifest: dict[str, str] | None = None
+        if state.desktop_bundle_override:
+            override = Path(state.desktop_bundle_override)
+            if override.is_file():
+                manifest = {
+                    "version": "local-override",
+                    "sha256": _sha256_file(override),
+                    "original_name": override.name,
+                }
+        else:
+            payload_dir = embedded_payload_dir()
+            manifest = load_payload_manifest(payload_dir) if payload_dir else None
+        if manifest is None:
+            log("Desktop payload identity was not recorded (no manifest).", "warn")
+            return
+        try:
+            target = write_desktop_payload_identity(manifest, home=self.identity_home)
+        except (OSError, StageError) as exc:
+            log(f"Could not write desktop payload identity: {exc}", "warn")
+            return
+        log(f"Desktop payload identity written to {target}", "info")
+
     # -- per-OS install ----------------------------------------------------
 
     def _dispatch_install(
@@ -249,7 +285,10 @@ class DesktopProvisioner:
         state: InstallerState,
         log: Callable[[str, str], None],
     ) -> bool:
-        log("Installing Nexus desktop silently (NSIS)...", "info")
+        log(
+            "Installing Nexus desktop silently (NSIS, overwrites a previous copy)...",
+            "info",
+        )
         cmd = [bundle_path, "/S"]
         if state.desktop_install_dir:
             # NSIS: /D must be the last argument and must not be quoted.
@@ -269,6 +308,12 @@ class DesktopProvisioner:
         )
         state.desktop_exe_path = _locate_windows_exe(install_dir)
         log(f"Desktop binary: {state.desktop_exe_path}", "info")
+        # v2.4.11: honor the two Features checkboxes. The desktop app's own
+        # setup program decides for itself what icons to drop, so the wizard
+        # reconciles afterwards -- creating what was asked for and removing
+        # what was not (operator report: an unticked Desktop icon appeared
+        # anyway, and a ticked Start Menu entry never did).
+        shortcuts.reconcile_shortcuts(state, log)
         return True
 
     def _install_macos(

@@ -12,6 +12,7 @@ describe("ToolCallFormat strategies", () => {
       "qwen-json",
       "deepseek-json",
       "lfm-pythonic",
+      "none",
     ]);
   });
 
@@ -87,6 +88,11 @@ describe("ToolCallFormat strategies", () => {
       const out = getToolCallFormat(v.fmt).parse(v.wrap(body));
       expect(out[0]?.args).toEqual({ path: "y" });
     }
+  });
+
+  it("none never extracts a tool call, including a qwen envelope", () => {
+    const text = `<tool_call>{"name":"fs.read","arguments":{"path":"a.ts"}}</tool_call>`;
+    expect(getToolCallFormat("none").parse(text)).toEqual([]);
   });
 
   it("Empty or whitespace input produces an empty list", () => {

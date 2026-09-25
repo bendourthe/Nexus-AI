@@ -1,0 +1,98 @@
+[
+  {
+    "label": "single",
+    "seed": 1,
+    "prompt": "What is the weather in Paris right now? Use the tools available to you.",
+    "response": " name=\"get_weather\"> name=\"city\">Paris",
+    "done_reason": "stop",
+    "eval_count": 16
+  },
+  {
+    "label": "single",
+    "seed": 2,
+    "prompt": "What is the weather in Paris right now? Use the tools available to you.",
+    "response": " name=\"get_weather\"> name=\"city\">Paris",
+    "done_reason": "stop",
+    "eval_count": 16
+  },
+  {
+    "label": "single",
+    "seed": 3,
+    "prompt": "What is the weather in Paris right now? Use the tools available to you.",
+    "response": " name=\"get_weather\"> name=\"city\">Paris",
+    "done_reason": "stop",
+    "eval_count": 16
+  },
+  {
+    "label": "single2",
+    "seed": 1,
+    "prompt": "Read the file at /etc/hosts and tell me what is in it.",
+    "response": "I cannot directly access or read files on the user's system, including /etc/hosts, as I operate without direct file system access. To see the contents of /etc/hosts, you would need to use a command like `cat /etc/hosts` on the system where that file exists. I recommend checking this file manually if you need to view its contents.",
+    "done_reason": "stop",
+    "eval_count": 76
+  },
+  {
+    "label": "single2",
+    "seed": 2,
+    "prompt": "Read the file at /etc/hosts and tell me what is in it.",
+    "response": " name=\"read_file\"> name=\"path\">/etc/hosts",
+    "done_reason": "stop",
+    "eval_count": 18
+  },
+  {
+    "label": "single2",
+    "seed": 3,
+    "prompt": "Read the file at /etc/hosts and tell me what is in it.",
+    "response": " name=\"read_file\"> name=\"path\">/etc/hosts",
+    "done_reason": "stop",
+    "eval_count": 18
+  },
+  {
+    "label": "multi",
+    "seed": 1,
+    "prompt": "Get the weather in Tokyo in celsius, and also read the file /tmp/notes.txt.",
+    "response": " name=\"get_weather\"> name=\"city\">Tokyo name=\"unit\">celsius\n name=\"read_file\"> name=\"path\">/tmp/notes.txt",
+    "done_reason": "stop",
+    "eval_count": 43
+  },
+  {
+    "label": "multi",
+    "seed": 2,
+    "prompt": "Get the weather in Tokyo in celsius, and also read the file /tmp/notes.txt.",
+    "response": " name=\"get_weather\"> name=\"city\">Tokyo name=\"unit\">celsius\n name=\"read_file\"> name=\"path\">/tmp/notes.txt",
+    "done_reason": "stop",
+    "eval_count": 43
+  },
+  {
+    "label": "multi",
+    "seed": 3,
+    "prompt": "Get the weather in Tokyo in celsius, and also read the file /tmp/notes.txt.",
+    "response": " name=\"get_weather\"> name=\"city\">Tokyo name=\"unit\">celsius\n name=\"read_file\"> name=\"path\">/tmp/notes.txt",
+    "done_reason": "stop",
+    "eval_count": 43
+  },
+  {
+    "label": "none",
+    "seed": 1,
+    "prompt": "Say hello in exactly three words. Do not call any function.",
+    "response": "Hello, hello, hello.",
+    "done_reason": "stop",
+    "eval_count": 7
+  },
+  {
+    "label": "none",
+    "seed": 2,
+    "prompt": "Say hello in exactly three words. Do not call any function.",
+    "response": "Hello.",
+    "done_reason": "stop",
+    "eval_count": 3
+  },
+  {
+    "label": "none",
+    "seed": 3,
+    "prompt": "Say hello in exactly three words. Do not call any function.",
+    "response": "Hello, hello, hello.",
+    "done_reason": "stop",
+    "eval_count": 7
+  }
+]

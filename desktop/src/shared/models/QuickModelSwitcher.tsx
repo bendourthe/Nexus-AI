@@ -9,13 +9,18 @@
 import { useEffect, useMemo } from "react";
 
 import { ModelSelector } from "../chat/ModelSelector";
-import type { ListedModelDto, ModelType } from "../../pages/settings/modelsTypes";
-import { GET_MORE_MODELS_ID, installedModelsForType } from "./installedFeed";
+import type {
+  ListedModelDto,
+  ModelType,
+} from "../../pages/settings/modelsTypes";
 import {
-  catalogSortGpuVendor,
-  visibleModelsOnTab,
-  type CatalogTab,
-} from "./catalogTabs";
+  readDefaultModel,
+  readModelOrder,
+} from "./modelPreferences";
+import { GET_MORE_MODELS_ID, installedModelsForType } from "./installedFeed";
+import { catalogTabsFor, pickerOrder, type CatalogTab } from "./catalogTabs";
+
+const EMPTY_OWNED = new Set<string>();
 
 export interface QuickModelSwitcherProps {
   readonly models: readonly ListedModelDto[];
@@ -23,7 +28,7 @@ export interface QuickModelSwitcherProps {
   readonly value: string;
   readonly onChange: (modelId: string) => void;
   readonly onGetMoreModels?: () => void;
-  /** v2.2.4 Phase 2 -- this-install ownership set; omit to keep probe-only filtering. */
+  /** v2.4.6 Phase 7 -- this-install ownership set. Omit or null means empty, not every disk model. */
   ownedIds?: ReadonlySet<string> | null;
   disabled?: boolean;
   label?: string;
@@ -35,6 +40,8 @@ export interface QuickModelSwitcherProps {
   hostVramGB?: number | null;
   /** Override tab (Agents uses agentic; default follows taskType). */
   catalogTab?: CatalogTab;
+  /** Installer recommend order (required/recommended id first). */
+  recommendOrder?: readonly string[];
 }
 
 function catalogTabForTask(type: ModelType): CatalogTab {
@@ -59,16 +66,25 @@ export function QuickModelSwitcher({
   harnessSelectorEnabled,
   hostVramGB = null,
   catalogTab,
+  recommendOrder,
 }: QuickModelSwitcherProps): JSX.Element {
   const ready = useMemo(() => {
-    const installed = new Set(
-      installedModelsForType(models, taskType, ownedIds).map((m) => m.id),
+    const owned = ownedIds ?? EMPTY_OWNED;
+    const tab = catalogTab ?? catalogTabForTask(taskType);
+    const onTab = installedModelsForType(models, taskType, owned).filter((m) =>
+      catalogTabsFor(m).includes(tab),
     );
-    return visibleModelsOnTab(models, catalogTab ?? catalogTabForTask(taskType), {
+    // v2.4.8 Phase 5 (T020): installer picker order. Catalog tier first, the
+    // snapshot's recommend order as the tie-break, so a stale snapshot that
+    // names an untagged model cannot push the catalog recommendation down.
+    // v2.4.8 follow-up: the user's own order from Settings > Preferences
+    // comes first; everything they have not placed keeps the installer order.
+    return pickerOrder(onTab, {
       hostVramGB,
-      gpuVendor: catalogSortGpuVendor(hostVramGB),
-    }).filter((m) => installed.has(m.id));
-  }, [models, taskType, ownedIds, hostVramGB, catalogTab]);
+      ...(recommendOrder ? { recommendOrder } : {}),
+      userOrder: readModelOrder(tab),
+    });
+  }, [models, taskType, ownedIds, catalogTab, recommendOrder, hostVramGB]);
 
   const options = useMemo(
     () => [
@@ -89,17 +105,26 @@ export function QuickModelSwitcher({
     onChange(id);
   }
 
-  const selectValue = ready.some((m) => m.id === value) ? value : (ready[0]?.id ?? GET_MORE_MODELS_ID);
+  // The user's default for this category wins over the first listed row when
+  // the parent is holding an id that is not installed.
+  const preferred = useMemo(() => {
+    const tab = catalogTab ?? catalogTabForTask(taskType);
+    const chosen = readDefaultModel(tab);
+    return chosen && ready.some((m) => m.id === chosen) ? chosen : ready[0]?.id;
+  }, [catalogTab, taskType, ready]);
+
+  const selectValue = ready.some((m) => m.id === value)
+    ? value
+    : (preferred ?? GET_MORE_MODELS_ID);
 
   // v2.2.4 Phase 2: never display ready[0] while parent state stays on a
   // missing id. Sync once so send uses the same id the <select> shows.
   useEffect(() => {
-    const first = ready[0];
-    if (!first) return;
+    if (ready.length === 0 || !preferred) return;
     if (!ready.some((m) => m.id === value)) {
-      onChange(first.id);
+      onChange(preferred);
     }
-  }, [ready, value, onChange]);
+  }, [ready, value, onChange, preferred]);
 
   return (
     <ModelSelector

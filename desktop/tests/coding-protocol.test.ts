@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { MODEL_FAMILIES } from "../../core/registry/ModelCatalog";
 import {
   CodingMemorySnapshotRequest,
   CodingSessionCancelRequest,
@@ -50,7 +51,7 @@ describe("coding protocol", () => {
   });
 
   it("ModelFamily covers the v1.0.0 catalog families", () => {
-    expect(ModelFamily.options).toEqual(["gemma", "llama", "qwen", "deepseek", "lfm2.5", "hermes", "muse-glimmer", "nemotron-lightning", "gpt-oss"]);
+    expect(ModelFamily.options).toEqual([...MODEL_FAMILIES]);
   });
 
   it("isMethod is exhaustive against IPC_METHODS", () => {
@@ -107,6 +108,16 @@ describe("coding protocol", () => {
         kind: "token",
         text: "hi",
       });
+    });
+    it("validates bounded explicit reasoning events", () => {
+      expect(CodingSessionEvent.parse({ kind: "reasoning_delta", text: "step" })).toEqual({
+        kind: "reasoning_delta",
+        text: "step",
+      });
+      expect(() => CodingSessionEvent.parse({ kind: "reasoning_delta", text: "" })).toThrow();
+      expect(() =>
+        CodingSessionEvent.parse({ kind: "reasoning_delta", text: "x".repeat(16_385) }),
+      ).toThrow();
     });
     it("validates toolCallHeader / toolCallArgDelta / toolCallComplete", () => {
       const header = { kind: "toolCallHeader", callId: "c1", name: "fs.read" };

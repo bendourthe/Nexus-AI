@@ -140,6 +140,8 @@ class TestInstallFromEmbedded:
     def test_install_verifies_then_dispatches(self, tmp_path: Path) -> None:
         payload = _write_payload(tmp_path)
         state = InstallerState()
+        provisioner = DesktopProvisioner()
+        provisioner.identity_home = tmp_path
         with (
             patch(f"{_MOD}.embedded_payload_dir", return_value=payload),
             patch.object(
@@ -147,7 +149,7 @@ class TestInstallFromEmbedded:
             ) as mock_dispatch,
             patch(f"{_MOD}.first_run_health_check", return_value=True),
         ):
-            ok = DesktopProvisioner().install(state, MagicMock())
+            ok = provisioner.install(state, MagicMock())
         assert ok is True
         assert state.desktop_installed is True
         assert mock_dispatch.call_args[0][0] == str(payload / "Nexus-Desktop-Setup.exe")
@@ -363,6 +365,7 @@ class TestInstallOrchestration:
         state = InstallerState(desktop_bundle_override=str(bundle))
         log = MagicMock()
         provisioner = DesktopProvisioner()
+        provisioner.identity_home = tmp_path
 
         with (
             patch(f"{_MOD}.embedded_payload_dir") as mock_payload,
@@ -400,6 +403,7 @@ class TestInstallOrchestration:
         state = InstallerState(desktop_bundle_override=str(bundle))
         log = MagicMock()
         provisioner = DesktopProvisioner()
+        provisioner.identity_home = tmp_path
 
         with (
             patch.object(provisioner, "_dispatch_install", return_value=True),
@@ -493,14 +497,14 @@ class TestFirstRunHealthCheck:
         assert state.desktop_health_ok is False
         proc.kill.assert_called_once()
 
-    def test_dead_child_verdict_names_the_exception_not_slash_joined_blanks(self) -> None:
+    def test_dead_child_verdict_names_exception(self) -> None:
         proc = MagicMock()
         proc.communicate.return_value = (
             '{"sidecar":"fail: sidecar-exited:7","exitCode":7,'
             '"nodePath":"C:/Nexus/runtime/node/node.exe",'
             '"scriptPath":"C:/apps/sidecar/dist/main.js","catalogRows":0,'
             '"stderrTail":["","", "Nodejs v22.11.0",'
-            '"Cannot find module \'better-sqlite3\'"]}\n',
+            "\"Cannot find module 'better-sqlite3'\"]}\n",
             None,
         )
         proc.returncode = 1

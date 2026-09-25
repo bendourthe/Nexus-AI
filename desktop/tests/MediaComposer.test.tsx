@@ -3,7 +3,13 @@
  */
 
 import { afterEach, describe, it, expect, vi } from "vitest";
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 
 import { MediaComposer } from "../src/shared/chat/MediaComposer";
 
@@ -17,7 +23,9 @@ describe("MediaComposer", () => {
   it("submits typed text with no attachments", () => {
     const onSubmit = vi.fn();
     render(<MediaComposer onSubmit={onSubmit} />);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "hello" } });
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "hello" },
+    });
     fireEvent.click(screen.getByTestId("media-composer-submit"));
     expect(onSubmit).toHaveBeenCalledWith("hello", []);
   });
@@ -26,8 +34,12 @@ describe("MediaComposer", () => {
     const onSubmit = vi.fn();
     render(<MediaComposer onSubmit={onSubmit} />);
     expect(screen.getByTestId("media-composer-submit")).toBeDisabled();
-    fireEvent.change(screen.getByTestId("media-composer-file"), { target: { files: [pngFile()] } });
-    await waitFor(() => expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument());
+    fireEvent.change(screen.getByTestId("media-composer-file"), {
+      target: { files: [pngFile()] },
+    });
+    await waitFor(() =>
+      expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument(),
+    );
     expect(screen.getByTestId("media-composer-submit")).not.toBeDisabled();
     fireEvent.click(screen.getByTestId("media-composer-submit"));
     await waitFor(() => expect(onSubmit).toHaveBeenCalled());
@@ -39,10 +51,16 @@ describe("MediaComposer", () => {
 
   it("removes a pending attachment", async () => {
     render(<MediaComposer onSubmit={vi.fn()} />);
-    fireEvent.change(screen.getByTestId("media-composer-file"), { target: { files: [pngFile()] } });
-    await waitFor(() => expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument());
+    fireEvent.change(screen.getByTestId("media-composer-file"), {
+      target: { files: [pngFile()] },
+    });
+    await waitFor(() =>
+      expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument(),
+    );
     fireEvent.click(screen.getByTestId("media-composer-remove-0"));
-    await waitFor(() => expect(screen.queryByTestId("media-composer-thumb-0")).toBeNull());
+    await waitFor(() =>
+      expect(screen.queryByTestId("media-composer-thumb-0")).toBeNull(),
+    );
   });
 
   it("Enter submits; Shift+Enter inserts a newline", () => {
@@ -65,16 +83,33 @@ describe("MediaComposer", () => {
     expect(screen.queryByTestId("media-composer-submit-metal")).toBeNull();
     // v2.2.3 Phase 2 (2.2): a pillar submitAccentVar must NOT tint the beam --
     // the beam is always the brand cyan.
-    rerender(<MediaComposer onSubmit={vi.fn()} streaming submitAccentVar="--accent-image" />);
-    expect(screen.getByTestId("media-composer-beam")).toHaveAttribute("data-beam-mode", "traveling");
-    expect(screen.getByTestId("media-composer-beam")).toHaveAttribute("data-beam-playing", "true");
-    expect(screen.getByTestId("media-composer-beam")).toHaveAttribute("data-beam-accent", "--accent-chatbot");
+    rerender(
+      <MediaComposer
+        onSubmit={vi.fn()}
+        streaming
+        submitAccentVar="--accent-image"
+      />,
+    );
+    expect(screen.getByTestId("media-composer-beam")).toHaveAttribute(
+      "data-beam-mode",
+      "traveling",
+    );
+    expect(screen.getByTestId("media-composer-beam")).toHaveAttribute(
+      "data-beam-playing",
+      "true",
+    );
+    expect(screen.getByTestId("media-composer-beam")).toHaveAttribute(
+      "data-beam-accent",
+      "--accent-chatbot",
+    );
   });
 
   // v2.2.3 Phase 2 (2.2): the beam wraps the INNER typing surface, sits inside
   // the outer composer box, and the send icon is neutral fg, not a pillar hue.
   it("wraps the inner typing surface with the beam, not the outer box", () => {
-    render(<MediaComposer onSubmit={vi.fn()} submitAccentVar="--accent-image" />);
+    render(
+      <MediaComposer onSubmit={vi.fn()} submitAccentVar="--accent-image" />,
+    );
     const beam = screen.getByTestId("media-composer-beam");
     const outer = screen.getByTestId("media-composer");
     const surface = screen.getByTestId("media-composer-surface");
@@ -96,11 +131,102 @@ describe("MediaComposer", () => {
       .map((n) => n.textContent?.trim())
       .join("");
     expect(caption).toBe("");
-    expect(submit.closest("[data-testid='media-composer-submit-metal']")).toBeNull();
+    expect(
+      submit.closest("[data-testid='media-composer-submit-metal']"),
+    ).toBeNull();
     const surface = screen.getByTestId("media-composer-surface");
     const actions = screen.getByTestId("media-composer-actions");
     expect(surface.contains(actions)).toBe(true);
-    expect(actions.contains(screen.getByTestId("media-composer-add"))).toBe(true);
+    expect(actions.contains(screen.getByTestId("media-composer-add"))).toBe(
+      true,
+    );
     expect(actions.contains(submit)).toBe(true);
+  });
+
+  it("replaces Send with Stop while streaming and hides Stop when idle", () => {
+    const onStop = vi.fn();
+    const { rerender } = render(
+      <MediaComposer onSubmit={vi.fn()} onStop={onStop} streaming />,
+    );
+    expect(screen.queryByTestId("media-composer-submit")).toBeNull();
+    fireEvent.click(screen.getByTestId("media-composer-stop"));
+    expect(onStop).toHaveBeenCalledTimes(1);
+    rerender(<MediaComposer onSubmit={vi.fn()} onStop={onStop} />);
+    expect(screen.queryByTestId("media-composer-stop")).toBeNull();
+    expect(screen.getByTestId("media-composer-submit")).toBeDisabled();
+  });
+
+  // v2.4.8 Phase 2 (T008): operator screenshot 2 (2026-09-06) showed the
+  // overflow menu staying open after the user moved on. Both composer menus
+  // now close on an outside pointer and on Escape, and stay open on an
+  // inside pointer.
+  describe("v2.4.8 menu dismissal", () => {
+    const overflowActions = [
+      { id: "persona", label: "Persona", onSelect: vi.fn() },
+    ];
+    const voiceModes = [
+      { id: "dictate", label: "Dictate", active: true, onSelect: vi.fn() },
+    ];
+
+    it("closes the overflow menu on a pointer outside it", () => {
+      render(
+        <MediaComposer onSubmit={vi.fn()} overflowActions={overflowActions} />,
+      );
+      fireEvent.click(screen.getByTestId("media-composer-overflow-toggle"));
+      expect(
+        screen.getByTestId("media-composer-overflow-menu"),
+      ).toBeInTheDocument();
+      fireEvent.pointerDown(document.body);
+      expect(screen.queryByTestId("media-composer-overflow-menu")).toBeNull();
+    });
+
+    it("keeps the overflow menu open on a pointer inside it", () => {
+      render(
+        <MediaComposer onSubmit={vi.fn()} overflowActions={overflowActions} />,
+      );
+      fireEvent.click(screen.getByTestId("media-composer-overflow-toggle"));
+      fireEvent.pointerDown(screen.getByTestId("media-composer-overflow-menu"));
+      expect(
+        screen.getByTestId("media-composer-overflow-menu"),
+      ).toBeInTheDocument();
+    });
+
+    it("closes the overflow menu on Escape", () => {
+      render(
+        <MediaComposer onSubmit={vi.fn()} overflowActions={overflowActions} />,
+      );
+      fireEvent.click(screen.getByTestId("media-composer-overflow-toggle"));
+      fireEvent.keyDown(document, { key: "Escape" });
+      expect(screen.queryByTestId("media-composer-overflow-menu")).toBeNull();
+    });
+
+    it("still toggles the overflow menu from its own button", () => {
+      render(
+        <MediaComposer onSubmit={vi.fn()} overflowActions={overflowActions} />,
+      );
+      const toggle = screen.getByTestId("media-composer-overflow-toggle");
+      fireEvent.pointerDown(toggle);
+      fireEvent.click(toggle);
+      expect(
+        screen.getByTestId("media-composer-overflow-menu"),
+      ).toBeInTheDocument();
+      fireEvent.pointerDown(toggle);
+      fireEvent.click(toggle);
+      expect(screen.queryByTestId("media-composer-overflow-menu")).toBeNull();
+    });
+
+    it("closes the mic menu on an outside pointer and on Escape", () => {
+      render(
+        <MediaComposer onSubmit={vi.fn()} audioEnabled voiceModes={voiceModes} />,
+      );
+      const toggle = screen.getByTestId("media-composer-mic-menu-toggle");
+      fireEvent.click(toggle);
+      expect(screen.getByTestId("media-composer-mic-menu")).toBeInTheDocument();
+      fireEvent.pointerDown(document.body);
+      expect(screen.queryByTestId("media-composer-mic-menu")).toBeNull();
+      fireEvent.click(toggle);
+      fireEvent.keyDown(document, { key: "Escape" });
+      expect(screen.queryByTestId("media-composer-mic-menu")).toBeNull();
+    });
   });
 });

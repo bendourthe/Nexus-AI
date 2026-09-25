@@ -6,9 +6,9 @@ The PyInstaller spec bundles ``core/registry/catalog.json`` straight from the
 repo, so a *fresh* build always ships the current catalog. The failure the user
 hit was a *stale* catalog: an older build whose Gemma entry still pointed at the
 Unsloth ``hf.co`` GGUF pull target (Ollama manifest bug -> the blobs download
-fully, then the manifest commit errors HTTP 400) and whose access-gated SANA
-INT4 entry was not flagged ``gated`` (an unauthenticated fetch -> HTTP 401 retry
-loop). This module encodes those two fixes as invariants so CI and the build
+fully, then the manifest commit errors HTTP 400). The former access-gated SANA
+INT4 source was replaced in v2.4.1 by a public, pinned Nunchaku repository.
+This module keeps the remaining catalog fixes as invariants so CI and the build
 fail if the catalog ever regresses to a shippable-but-broken shape.
 
 Pure and Qt-free: :func:`validate_catalog` takes the parsed catalog dict and
@@ -17,6 +17,8 @@ returns a list of human-readable problems (empty list == valid).
 
 from __future__ import annotations
 
+import re
+from collections.abc import Callable
 from typing import Any
 
 #: Ollama pull targets known to fail (Ollama manifest bug): the Unsloth hf.co
@@ -28,7 +30,7 @@ KNOWN_BROKEN_OLLAMA_REFS: tuple[str, ...] = ("unsloth/gemma-4-12b-it-GGUF",)
 #: unauthenticated fetch returns HTTP 401). They MUST stay flagged ``gated`` so
 #: the installer offers the guided token step / clean skip instead of looping on
 #: a 401 it can never satisfy without credentials.
-KNOWN_GATED_IDS: frozenset[str] = frozenset({"sana-1.6b-int4"})
+KNOWN_GATED_IDS: frozenset[str] = frozenset()
 
 #: v1.19.0 Phase 1 -- low-VRAM Agentic entry. Present-or-valid: synthetic
 #: catalogs without this id are unchanged; when the id is present the
@@ -37,6 +39,93 @@ LFM_AGENTIC_ID = "lfm2.5:2.6b"
 LFM_LICENSE = "LFM Open License v1.0"
 LFM_OLLAMA_TARGET = "hf.co/LiquidAI/LFM2.5-2.6B-GGUF"
 PLACEHOLDER_SHA256 = "0" * 64
+
+#: v2.4.10 Phase 3 (T013) -- ids exempt from the catalog-wide placeholder-SHA rule.
+#:
+#: These three entries have shipped all-zero pins since v1.1.0 Phase 12 and CANNOT be
+#: rotated: `Efficient-Large-Model/SANA-ControlNet-*` returns HTTP 401 to an
+#: unauthenticated fetch, so `pin-hf-weights.py` has nothing to read. They are also not
+#: flagged `gated`, so invariants B and C do not catch them either.
+#:
+#: The exemption is deliberately a NAMED LIST rather than a softened rule: every future
+#: entry is covered, and removing an id from here is the whole fix. Tracked as BG-2 in
+#: docs/archive/v2/v2.4/known-gaps.md with an evaluable exit condition.
+PLACEHOLDER_SHA_LEGACY_EXEMPT: frozenset[str] = frozenset(
+    {
+        "sana-controlnet-canny",
+        "sana-controlnet-depth",
+        "sana-controlnet-pose",
+    }
+)
+
+#: v2.4.10 Phase 3 (T013) -- benchmark suite names that must not be ASSERTED in any
+#: entry's card copy. Hoisted from the per-id tuples, which stay in place as additions.
+#:
+#: Case-sensitive, matching the existing per-id behaviour. The per-id tuples remain the
+#: place for vendor NUMBERS ("77.83", "76.0"), which are model-specific; this list is
+#: only for suite names, which are shared across vendors and so belong catalog-wide.
+GLOBAL_FORBIDDEN_BENCHMARK_SUITES: tuple[str, ...] = (
+    "SWE-Bench",
+    "SWE-bench",
+    "SWEBench",
+    "BFCL",
+    "MMLU",
+    "GPQA",
+    "HumanEval",
+    "MBPP",
+    "GSM8K",
+    "MATH-500",
+    "AIME",
+    "LiveCodeBench",
+    "IFEval",
+    "LongBench",
+    "ToolSandbox",
+    "Arena-Hard",
+    "MT-Bench",
+    "HellaSwag",
+    "AGIEval",
+    "C-Eval",
+    "CMMLU",
+    "MMMU",
+    "MathVista",
+    "TAU-bench",
+    "ACEBench",
+    "OlympiadBench",
+    "CRUXEval",
+)
+
+#: Naming a suite in order to say Nexus does NOT quote it is the convention working, not
+#: breaking. `qwen3-coder:30b` ships exactly that ("Vendor SWE-bench numbers are not
+#: copied here."), and a bare substring check would flag it. A suite name is only a
+#: violation when the sentence containing it does not disclaim it.
+BENCHMARK_DISCLAIMER_MARKERS: tuple[str, ...] = (
+    "not copied",
+    "not reproduced",
+    "not asserted",
+    "not quoted",
+    "no vendor",
+)
+
+#: v2.4.10 Phase 3 (T014) -- MiniCPM5-2B chat entry. Present-or-valid, like the LFM
+#: block: a synthetic catalog without this id is unchanged.
+#:
+#: Phase 2 resolved decision 2.2 to option 3. The model emits correct tool calls, but
+#: `<function` / `</function>` / `<param` / `</param>` are tokenizer special tokens that
+#: Ollama's detokenizer removes before any Nexus parser sees them, so the entry ships as
+#: chat-only and MUST NOT claim agentic capability. These invariants are what stop a
+#: later edit from quietly promoting it without redoing the probe.
+MINICPM5_ID = "minicpm5:2b"
+MINICPM5_LICENSE = "Apache-2.0"
+MINICPM5_OLLAMA_TARGET = "hf.co/openbmb/MiniCPM5-2B-GGUF"
+#: Enumerated from the model card rather than guessed, so the tuple has a real basis.
+#: These are the suite names openbmb/MiniCPM5-2B's README actually uses.
+MINICPM5_FORBIDDEN_BENCHMARK_TOKENS: tuple[str, ...] = (
+    "MMLU-Redux",
+    "LongBenchPro",
+    "GPQA-Diamond",
+    "Just RL",
+)
+
 #: Vendor-reported numbers and suite names that must not appear in card copy
 #: until locally reproduced (comparison Section 9).
 LFM_FORBIDDEN_BENCHMARK_TOKENS: tuple[str, ...] = (
@@ -88,7 +177,7 @@ POST_2025_OLLAMA_TARGETS: dict[str, str] = {
     "qwen3-embedding:0.6b": "ollama://qwen3-embedding:0.6b",
 }
 
-#: Pre-2025 selectable models that stay because they are required (embed),
+#: Pre-2025 selectable models that stay as supported legacy alternatives,
 #: recommended.json image/audio defaults, RapidOCR (CPU document pillar), or
 #: SAM2 (Image Studio replace-the-X). 2024 coding specialists were replaced
 #: by Qwen 3.5 / gpt-oss / Qwen3-Coder. Everything else 2024-or-earlier is
@@ -105,8 +194,8 @@ PRE_2025_KEEP_IDS: frozenset[str] = frozenset(
 )
 
 
-REQUIRED_EMBEDDER_ID = "nomic-embed-text"
 EMBEDDINGGEMMA_ID = "embeddinggemma"
+REQUIRED_EMBEDDER_ID = EMBEDDINGGEMMA_ID
 
 
 def validate_catalog(catalog: dict[str, Any]) -> list[str]:
@@ -132,6 +221,14 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
             problems.append(f"{model_id}: duplicate id")
         else:
             seen_ids.add(str(model_id))
+
+        if model.get("task") is not None:
+            description = str(model.get("description") or "").strip()
+            if not description or description[-1:] not in {".", "!", "?"}:
+                problems.append(
+                    f"{where}: selectable entry requires a complete-sentence "
+                    "description"
+                )
 
         source = model.get("source")
         if not isinstance(source, dict) or not source.get("protocol"):
@@ -162,6 +259,18 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
                 f"the guided token step"
             )
 
+        # E) v2.4.10 Phase 3 -- catalog-wide placeholder-SHA rule. Previously this was
+        #    checked in exactly one place, inside _check_lfm_entry, so an entry with no
+        #    bespoke block shipped an all-zero pin unchallenged.
+        problems.extend(_check_weight_pins(model, where))
+
+        # F) v2.4.10 Phase 3 -- catalog-wide no-vendor-benchmark rule. Previously
+        #    reachable only through per-id token tuples; those remain as additions.
+        problems.extend(_check_global_benchmark_copy(model, where))
+
+        # G) v2.4.10 Phase 3 -- a tool-calling claim needs a benchmark record.
+        problems.extend(_check_tool_calling_claim(model, where))
+
     # C) Known-gated regression: a model known to be access-gated must stay
     #    flagged, or the installer would 401-loop on it again.
     by_id = {m.get("id"): m for m in models if isinstance(m, dict)}
@@ -178,12 +287,16 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     #    no-vendor-benchmark copy must all hold.
     lfm = by_id.get(LFM_AGENTIC_ID)
     if isinstance(lfm, dict):
-        problems.extend(_check_lfm_entry(lfm))
+        problems.extend(_run_id_contract(lfm, LFM_AGENTIC_ID))
+
+    minicpm5 = by_id.get(MINICPM5_ID)
+    if isinstance(minicpm5, dict):
+        problems.extend(_run_id_contract(minicpm5, MINICPM5_ID))
 
     for muse_id in MUSE_IDS:
         muse = by_id.get(muse_id)
         if isinstance(muse, dict):
-            problems.extend(_check_muse_entry(muse, muse_id))
+            problems.extend(_run_id_contract(muse, muse_id))
     if any(isinstance(by_id.get(i), dict) for i in MUSE_IDS) and not all(
         isinstance(by_id.get(i), dict) for i in MUSE_IDS
     ):
@@ -195,7 +308,7 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     for lightning_id in LIGHTNING_IDS:
         lightning = by_id.get(lightning_id)
         if isinstance(lightning, dict):
-            problems.extend(_check_lightning_entry(lightning, lightning_id))
+            problems.extend(_run_id_contract(lightning, lightning_id))
     if any(isinstance(by_id.get(i), dict) for i in LIGHTNING_IDS) and not all(
         isinstance(by_id.get(i), dict) for i in LIGHTNING_IDS
     ):
@@ -206,7 +319,7 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
 
     sam2 = by_id.get("sam2:hiera-tiny")
     if isinstance(sam2, dict):
-        problems.extend(_check_sam2_entry(sam2))
+        problems.extend(_run_id_contract(sam2, "sam2:hiera-tiny"))
 
     for gemma_id in GEMMA_OLLAMA_IDS:
         gemma = by_id.get(gemma_id)
@@ -240,13 +353,13 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
 
 
 def _check_required_embedder(by_id: dict[str, Any]) -> list[str]:
-    """KEEP Nomic as the memory default; EmbeddingGemma copy is 300M not 300B."""
+    """Require EmbeddingGemma as the memory default and keep its 300M identity."""
     problems: list[str] = []
-    nomic = by_id.get(REQUIRED_EMBEDDER_ID)
+    required = by_id.get(REQUIRED_EMBEDDER_ID)
     if (
-        isinstance(nomic, dict)
-        and "task" in nomic
-        and nomic.get("task") not in ("embed", "embeddings")
+        isinstance(required, dict)
+        and "task" in required
+        and required.get("task") not in ("embed", "embeddings")
     ):
         problems.append(f"{REQUIRED_EMBEDDER_ID}: task must be embed")
 
@@ -272,7 +385,7 @@ def _check_required_embedder(by_id: dict[str, Any]) -> list[str]:
     return problems
 
 
-def _check_lfm_entry(model: dict[str, Any]) -> list[str]:
+def _lfm_contract(model: dict[str, Any]) -> list[str]:
     """Invariants that apply only when ``lfm2.5:2.6b`` is in the catalog."""
     problems: list[str] = []
     where = LFM_AGENTIC_ID
@@ -336,6 +449,146 @@ def _check_lfm_entry(model: dict[str, Any]) -> list[str]:
     return problems
 
 
+def _minicpm5_contract(model: dict[str, Any]) -> list[str]:
+    """Invariants that apply only when ``minicpm5:2b`` is in the catalog."""
+    problems: list[str] = []
+    where = MINICPM5_ID
+
+    if model.get("license") != MINICPM5_LICENSE:
+        problems.append(f"{where}: license must be '{MINICPM5_LICENSE}'")
+    license_url = str(model.get("licenseUrl") or "")
+    if not license_url.startswith("https://"):
+        problems.append(f"{where}: licenseUrl must be an https:// first-party page")
+    if model.get("requiresLicense") is True:
+        problems.append(f"{where}: requiresLicense must be false (weights are ungated)")
+    if model.get("gated"):
+        problems.append(f"{where}: must not be gated (would fire the token flow)")
+
+    source = model.get("source") if isinstance(model.get("source"), dict) else {}
+    url = str(source.get("url") or "")
+    if MINICPM5_OLLAMA_TARGET not in url:
+        problems.append(
+            f"{where}: ollama source must pull the first-party "
+            f"{MINICPM5_OLLAMA_TARGET} GGUF"
+        )
+
+    # The Phase 2 negative result is load-bearing product behaviour, not a note. If a
+    # later edit flips either of these without redoing the probe, users would be routed
+    # to a model whose tool calls this runtime provably cannot read.
+    if model.get("task") != "chat":
+        problems.append(
+            f"{where}: task must be 'chat' -- Phase 2 proved the tool-call delimiters "
+            f"are stripped by the Ollama detokenizer (see v2.4.10-model-evidence.md)"
+        )
+    if model.get("agentic"):
+        problems.append(
+            f"{where}: agentic must be false -- no Nexus parser can read this model's "
+            f"tool calls through Ollama"
+        )
+    if model.get("toolCallingVerified"):
+        problems.append(
+            f"{where}: toolCallingVerified must be false -- all five parsers returned "
+            f"zero calls on nine transcripts"
+        )
+    if "recommended" in (model.get("tags") or []):
+        problems.append(
+            f"{where}: must not be tagged 'recommended' while it ships chat-only"
+        )
+
+    blob = _card_copy(model) + " " + str(model.get("licenseNote") or "")
+    for token in MINICPM5_FORBIDDEN_BENCHMARK_TOKENS:
+        if token in blob:
+            problems.append(
+                f"{where}: card copy must not assert unverified vendor benchmark "
+                f"{token!r}"
+            )
+    return problems
+
+
+def _check_tool_calling_claim(model: dict[str, Any], where: str) -> list[str]:
+    """Catalog-wide: a verified-tool-calling claim needs a benchmark record behind it.
+
+    v2.4.10 Phase 3 (T014). Without this, an entry can assert ``toolCallingVerified``
+    with nothing recording who verified it, when, or what they observed.
+    """
+    if not model.get("toolCallingVerified"):
+        return []
+    benchmark = model.get("toolCallingBenchmark")
+    if not isinstance(benchmark, dict) or not benchmark:
+        return [
+            f"{where}: toolCallingVerified is true but no toolCallingBenchmark records "
+            f"the suite, date, and observed result"
+        ]
+    missing = [k for k in ("suite", "date", "result") if not benchmark.get(k)]
+    if missing:
+        return [
+            f"{where}: toolCallingBenchmark is missing {', '.join(sorted(missing))}"
+        ]
+    return []
+
+
+def _check_weight_pins(model: dict[str, Any], where: str) -> list[str]:
+    """Catalog-wide: a weighted entry may not ship an all-zero or empty SHA-256.
+
+    Entries with no ``weights.files`` are out of scope: plenty of rows pull through
+    Ollama and carry no per-file manifest at all, and demanding one here would be a
+    different rule than the one being hoisted.
+    """
+    problems: list[str] = []
+    weights = model.get("weights")
+    if not isinstance(weights, dict):
+        return problems
+    files = weights.get("files")
+    if not isinstance(files, list) or not files:
+        return problems
+    if str(model.get("id") or "") in PLACEHOLDER_SHA_LEGACY_EXEMPT:
+        return problems
+    for entry in files:
+        if not isinstance(entry, dict):
+            continue
+        pin = str(entry.get("sha256") or "")
+        if pin == PLACEHOLDER_SHA256 or not pin:
+            path = str(entry.get("path") or "?")
+            problems.append(
+                f"{where}: weights file {path!r} ships a placeholder SHA-256 pin; "
+                f"rotate it with scripts/installer/build/pin-hf-weights.py"
+            )
+    return problems
+
+
+def _check_global_benchmark_copy(model: dict[str, Any], where: str) -> list[str]:
+    """Catalog-wide: card copy may not assert a vendor benchmark suite result.
+
+    Naming a suite to say Nexus does not quote it is allowed, so a hit is only a
+    violation when the sentence carrying it holds no disclaimer marker.
+    """
+    problems: list[str] = []
+    blob = _card_copy(model) + " " + str(model.get("licenseNote") or "")
+    if not blob.strip():
+        return problems
+    for token in GLOBAL_FORBIDDEN_BENCHMARK_SUITES:
+        if token not in blob:
+            continue
+        if _every_mention_is_disclaimed(blob, token):
+            continue
+        problems.append(
+            f"{where}: card copy must not assert vendor benchmark suite {token!r} "
+            f"(state it as not reproduced, or drop it)"
+        )
+    return problems
+
+
+def _every_mention_is_disclaimed(blob: str, token: str) -> bool:
+    """True when every sentence mentioning ``token`` also carries a disclaimer."""
+    for sentence in re.split(r"(?<=[.!?])\s+", blob):
+        if token not in sentence:
+            continue
+        lowered = sentence.lower()
+        if not any(m in lowered for m in BENCHMARK_DISCLAIMER_MARKERS):
+            return False
+    return True
+
+
 def _card_copy(model: dict[str, Any]) -> str:
     strengths = (
         [str(s) for s in model["strengths"]]
@@ -352,7 +605,7 @@ def _card_copy(model: dict[str, Any]) -> str:
     )
 
 
-def _check_muse_entry(model: dict[str, Any], where: str) -> list[str]:
+def _muse_contract(model: dict[str, Any], where: str) -> list[str]:
     """Invariants that apply when a Muse Glimmer entry is in the catalog."""
     problems: list[str] = []
     if model.get("family") != "muse-glimmer":
@@ -397,7 +650,7 @@ def _check_muse_entry(model: dict[str, Any], where: str) -> list[str]:
     return problems
 
 
-def _check_lightning_entry(model: dict[str, Any], where: str) -> list[str]:
+def _lightning_contract(model: dict[str, Any], where: str) -> list[str]:
     """Invariants that apply when a Nemotron Lightning entry is in the catalog."""
     problems: list[str] = []
     if model.get("family") != "nemotron-lightning":
@@ -432,7 +685,7 @@ def _check_lightning_entry(model: dict[str, Any], where: str) -> list[str]:
     return problems
 
 
-def _check_sam2_entry(model: dict[str, Any]) -> list[str]:
+def _sam2_contract(model: dict[str, Any]) -> list[str]:
     problems: list[str] = []
     where = "sam2:hiera-tiny"
     if model.get("license") != "Apache-2.0":
@@ -445,6 +698,33 @@ def _check_sam2_entry(model: dict[str, Any]) -> list[str]:
     if "utility" not in tags or "sam2" not in tags:
         problems.append(f"{where}: must be tagged utility and sam2")
     return problems
+
+
+def _contract_model_only(
+    fn: Callable[[dict[str, Any]], list[str]],
+) -> Callable[[dict[str, Any], str], list[str]]:
+    def run(model: dict[str, Any], _where: str) -> list[str]:
+        return fn(model)
+    return run
+
+
+_ID_CONTRACTS: dict[str, Callable[[dict[str, Any], str], list[str]]] = {
+    LFM_AGENTIC_ID: _contract_model_only(_lfm_contract),
+    MINICPM5_ID: _contract_model_only(_minicpm5_contract),
+    "sam2:hiera-tiny": _contract_model_only(_sam2_contract),
+}
+for _muse_id in MUSE_IDS:
+    _ID_CONTRACTS[_muse_id] = _muse_contract
+for _lightning_id in LIGHTNING_IDS:
+    _ID_CONTRACTS[_lightning_id] = _lightning_contract
+
+
+def _run_id_contract(model: dict[str, Any], where: str) -> list[str]:
+    """Dispatch per-id catalog contracts from one table."""
+    fn = _ID_CONTRACTS.get(where)
+    if fn is None:
+        return []
+    return fn(model, where)
 
 
 def _check_pre_2025_keep(by_id: dict[str, Any]) -> list[str]:

@@ -120,14 +120,36 @@ describe("classifySwitch: co-residency", () => {
 });
 
 describe("classifySwitch: auto-switch vs confirm", () => {
-  it("auto-switches when the GPU is idle and the models do not both fit", () => {
+  // v2.4.11 operator instruction: a swap that costs a full unload + load is
+  // offered, not performed silently -- the user learns that one model fits at
+  // a time and that switching back and forth costs that time again. An idle
+  // incumbent is still an incumbent.
+  it("confirms when an idle model would be evicted", () => {
     const verdict = classifySwitch(request({ activeJob: null }));
+    expect(verdict).toMatchObject({
+      kind: "confirm",
+      reason: "evicts-resident",
+      busyWith: null,
+    });
+  });
+
+  it("auto-switches once the user has agreed to this pair for the session", () => {
+    const target = "sana-1.6b-2k";
+    const verdict = classifySwitch(
+      request({
+        activeJob: null,
+        rememberedPairs: new Set([rememberKey("image", null, target)]),
+      }),
+    );
     expect(verdict).toMatchObject({ kind: "auto-switch", evicting: ["qwen2.5-coder:14b"] });
   });
 
-  it("auto-switches when the only active job is the requesting module's own", () => {
+  it("auto-switches for an agentic call that already carries consent", () => {
     const verdict = classifySwitch(
-      request({ activeJob: { moduleId: "image", jobType: "txt2img" } }),
+      request({
+        activeJob: { moduleId: "image", jobType: "txt2img" },
+        userAlreadyConsented: true,
+      }),
     );
     expect(verdict.kind).toBe("auto-switch");
   });

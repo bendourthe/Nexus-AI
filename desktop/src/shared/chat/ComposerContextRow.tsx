@@ -10,17 +10,38 @@ import { ContextUsageBar } from "./ContextUsageBar";
 export interface ComposerContextRowProps {
   readonly usage: SessionContextUsage;
   readonly onStartNewSession?: () => void;
+  /** Image / Video park Advanced settings on this row (Context | Model | Advanced). */
+  readonly trailing?: ReactNode;
+  /**
+   * v2.4.9: the studios' always-visible controls (resolution, size, duration)
+   * render INSIDE this row rather than on a second row under it.
+   *
+   * Operator ask: "the settings for Image and Video generation should all be
+   * on the same row as the context, model selector, etc. and be more compact."
+   * A separate `StudioQuickControls` block below the row was two rows of
+   * chrome under a one-line composer.
+   */
+  readonly quickControls?: ReactNode;
   readonly children: ReactNode;
 }
 
 export function ComposerContextRow({
   usage,
   onStartNewSession,
+  trailing,
+  quickControls,
   children,
 }: ComposerContextRowProps): JSX.Element {
   const showBar = usage.percent !== null && usage.denominatorKind !== "none";
   return (
-    <div data-testid="composer-context-row" style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
+    <div
+      data-testid="composer-context-row"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "var(--space-2)",
+      }}
+    >
       <div
         style={{
           display: "flex",
@@ -42,12 +63,49 @@ export function ComposerContextRow({
           data-testid="composer-picker-slot"
           style={
             showBar
-              ? { minWidth: "14rem", maxWidth: "30%", flex: "0 1 30%", overflow: "hidden" }
+              ? {
+                  // With the studio controls on the row too, the picker takes a
+                  // narrower share; it still fits the longest catalog name.
+                  minWidth: quickControls ? "11rem" : "14rem",
+                  maxWidth: quickControls ? "22%" : "30%",
+                  flex: quickControls ? "0 1 22%" : "0 1 30%",
+                  overflow: "hidden",
+                }
               : { minWidth: 0, flex: "1 1 auto" }
           }
         >
           {children}
         </div>
+        {quickControls ? (
+          <div
+            data-testid="composer-quick-slot"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "var(--space-2)",
+              // v2.4.9: the settings size to their CONTENT so a long option
+              // cannot crop; the Context pill absorbs the slack instead, which
+              // is what closes the trailing gap in the row.
+              flex: "0 0 auto",
+              minWidth: 0,
+              // On a narrow window they scroll sideways rather than wrapping
+              // the row (wrapping is what produced the inverted layout this
+              // row was built to fix).
+              overflowX: "auto",
+              scrollbarWidth: "thin",
+            }}
+          >
+            {quickControls}
+          </div>
+        ) : null}
+        {trailing ? (
+          <div
+            data-testid="composer-advanced-slot"
+            style={{ flex: "0 0 auto" }}
+          >
+            {trailing}
+          </div>
+        ) : null}
       </div>
       {usage.atOrAbove80 && onStartNewSession ? (
         <div
@@ -55,7 +113,9 @@ export function ComposerContextRow({
           role="status"
           style={{ fontSize: "var(--text-xs)", color: "var(--status-warn)" }}
         >
-          This session is at 80% of context. Starting a new session keeps this transcript.
+          This session is at{" "}
+          {Math.floor(Math.max(0, usage.percent ?? 0) + 1e-9)}% of context.
+          Starting a new session keeps this transcript.
           <button
             type="button"
             data-testid="context-usage-new-session"

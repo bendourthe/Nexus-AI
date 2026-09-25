@@ -47,8 +47,30 @@ describe("useModelResidency", () => {
     expect(result.current.pending).not.toBeNull();
   });
 
-  it("does NOT open a dialog when the GPU is idle", () => {
+  // v2.4.11 operator instruction: the user is told whenever a switch costs a
+  // load -- "just so they're aware that only one model can be loaded at a time,
+  // and that switching back and forth may slow things down" -- even with an
+  // idle incumbent and nothing to interrupt.
+  it("opens a dialog when an idle model would still be evicted", () => {
     const { result } = renderHook(() => useModelResidency());
+    act(() => {
+      result.current.request(req({ activeJob: null }));
+    });
+    expect(result.current.pending?.verdict).toMatchObject({
+      kind: "confirm",
+      reason: "evicts-resident",
+      busyWith: null,
+    });
+  });
+
+  it("does NOT open a dialog once the user has agreed this session", () => {
+    const { result } = renderHook(() => useModelResidency());
+    act(() => {
+      result.current.request(req({ activeJob: null }));
+    });
+    act(() => {
+      result.current.resolvePending({ action: "switch", remember: true });
+    });
     act(() => {
       result.current.request(req({ activeJob: null }));
     });

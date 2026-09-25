@@ -6,14 +6,30 @@
  * Assistant labels on normal turns. Tool cards keep their name.
  */
 
-import { useEffect, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  formatDuration,
+  jobPhase,
+  MODEL_LOAD_SECONDS,
+  loadFraction,
+  progressLines,
+  type JobPhase,
+} from "./generationProgress";
+import { GenerationClockRow, GenerationProgressBar } from "./GenerationProgressBar";
+import { GenerationFailureCard } from "../studio/GenerationFailureCard";
+import { ImageViewer } from "../studio/ImageViewer";
 import type { ChatMessage, ToolCard } from "./types";
 import { AgentStateOrb } from "../../components/agentState/AgentStateOrb";
 import {
+  bubbleTokenMetadata,
   formatBubbleTime,
-  formatBubbleTokens,
   parseMessageTime,
 } from "./transcriptChrome";
+import { ReasoningDisclosure } from "./ReasoningDisclosure";
+import {
+  MediaRuntimeRecoveryCard,
+  Sam2RecoveryCard,
+} from "../../components/GenerationCanvas";
 
 const COMPACT_MEDIA_STYLE: CSSProperties = {
   display: "block",
@@ -28,32 +44,59 @@ const COMPACT_MEDIA_STYLE: CSSProperties = {
   cursor: "zoom-in",
 };
 
+/** What a meta-action renderer may drive on the bubble it sits in. */
+export interface MessageBubbleActionApi {
+  /** Open this message's image in the editing viewer. */
+  readonly openEditor: () => void;
+}
+
 export interface MessageBubbleProps {
   message: ChatMessage;
   /** When false, tool-call cards are omitted from the rendered output. */
   enableTools?: boolean;
-  /**
-   * v1.5.0 Phase 5 (item 24) -- when provided, the bubble becomes selectable
-   * (click / Enter / Space) so the host can open the message's output in the
-   * side-by-side preview pane. Omitted by default; non-preview hosts (e.g. the
-   * Coding pillar) render a static bubble unchanged.
-   */
-  onSelect?: (message: ChatMessage) => void;
   /** Lets the owning Studio clear actions and cached output after decode failure. */
   onMediaError?: (message: ChatMessage) => void;
   /** v2.2.4 Phase 4 -- extra studio actions inside the media lightbox. */
   renderPreviewExtra?: (message: ChatMessage) => ReactNode;
+  /**
+   * v2.4.9 -- per-message actions rendered ON the timestamp row.
+   *
+   * Operator ask: "could the copy/save/enhance buttons appear on the same line
+   * as the time of the response?" They used to sit on their own row below the
+   * media via `renderAfter`.
+   *
+   * v2.4.11: a render function receives the bubble's own controls, so a studio
+   * button can open the image editor that only this component can open (the
+   * lightbox state lives here, not in the studio).
+   */
+  metaActions?: ReactNode | ((api: MessageBubbleActionApi) => ReactNode);
   /** v2.2.7 Phase 4 -- tests pin `en-US`; production uses the host locale. */
   locale?: string;
+  onRepairMediaRuntime?: (message: ChatMessage) => void;
+  onCancelMediaRepair?: (message: ChatMessage) => void;
+  onOpenMediaRepairLog?: (message: ChatMessage) => void;
+  onInstallSam2?: (message: ChatMessage) => void;
+  onPaintSam2Mask?: (message: ChatMessage) => void;
+  onOpenSam2Settings?: (message: ChatMessage) => void;
+  onRetrySam2?: (message: ChatMessage) => void;
+  sam2InstallDisabled?: boolean;
 }
 
 export function MessageBubble({
   message,
   enableTools = true,
-  onSelect,
   onMediaError,
   renderPreviewExtra,
+  metaActions,
   locale,
+  onRepairMediaRuntime,
+  onCancelMediaRepair,
+  onOpenMediaRepairLog,
+  onInstallSam2,
+  onPaintSam2Mask,
+  onOpenSam2Settings,
+  onRetrySam2,
+  sam2InstallDisabled = false,
 }: MessageBubbleProps): JSX.Element {
   const [mediaFailed, setMediaFailed] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -66,162 +109,613 @@ export function MessageBubble({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [previewOpen]);
-  const selectable = Boolean(onSelect);
+  // v2.4.11: a studio hands its Edit button the bubble's own opener, so the
+  // transcript row can raise the editing viewer that lives here.
+  const resolvedMetaActions =
+    typeof metaActions === "function"
+      ? metaActions({ openEditor: () => setPreviewOpen(true) })
+      : metaActions;
   const studioPending = isStudioPending(message);
-  const handleSelect = () => onSelect?.(message);
   const caption = captionFor(message);
-  return (
-    <article
-      data-testid={`message-bubble-${message.id}`}
-      data-role={message.role}
-      {...(selectable
-        ? {
-            role: "button",
-            tabIndex: 0,
-            "aria-label": `Preview ${ariaRole(message.role)} message`,
-            onClick: handleSelect,
-            onKeyDown: (e: ReactKeyboardEvent) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                handleSelect();
-              }
-            },
-          }
-        : {})}
-      style={bubbleStyle(message, selectable)}
-    >
-      {caption}
-      {/* v2.2.9 Phase 1.3 (T003): meta sits ABOVE the body, never on pending rows. */}
-      {message.pending ? null : <BubbleMeta message={message} locale={locale} />}
-      {message.content && <p style={{ whiteSpace: "pre-wrap", margin: 0 }}>{message.content}</p>}
-      {message.attachments && message.attachments.length > 0 && (
-        <div
-          data-testid={`message-attachments-${message.id}`}
-          style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-1)", marginTop: "var(--space-2)" }}
-        >
-          {message.attachments.map((src, i) => (
-            <img
-              key={i}
-              src={src}
-              alt="Attachment"
-              data-testid={`message-attachment-${message.id}-${i}`}
-              style={{ maxWidth: 96, maxHeight: 96, borderRadius: "var(--radius-sm)", objectFit: "cover" }}
-            />
-          ))}
-        </div>
-      )}
-      {message.pending && (
-        <div
-          data-testid={`message-pending-${message.id}`}
-          style={{
-            marginTop: studioPending ? 0 : "var(--space-2)",
-            color: "var(--fg-muted)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "var(--space-2)",
-            width: "100%",
-            minHeight: studioPending ? "12rem" : "5.5rem",
-          }}
-        >
-          {/* v2.2.9 Phase 2.1 (T006): chat/agents pending is a dark pill that
-              cycles Thinking / Searching / Working / Solving with one stable
-              accessible name. Image/Video pending stays the hero orb. */}
-          <AgentStateOrb
-            activity={message.activity ?? "chat-streaming"}
-            size={studioPending ? "hero" : "bubble"}
-            showCaption
-            rotateCaptions={!studioPending}
-            accessibleName={studioPending ? undefined : "Generating reply"}
-            surfaceId={`message-${message.id}`}
-          />
-          {message.progress && message.progress.total > 0 && (
-            <progress value={message.progress.step} max={message.progress.total} />
-          )}
-        </div>
-      )}
-      {mediaFailed ? (
-        <p data-testid={`message-media-error-${message.id}`} style={{ color: "var(--danger, #f87171)", margin: 0 }}>
-          Generation failed: generated {message.media?.kind ?? "media"} could not be displayed.
-        </p>
-      ) : message.media ? (
-        <>
-          {message.media.kind === "image" ? (
-            <img
-              data-testid={`message-media-${message.id}`}
-              src={message.media.src}
-              alt={message.content || "Generated image"}
-              onClick={(event) => {
-                event.stopPropagation();
-                setPreviewOpen(true);
-              }}
-              onError={() => {
-                setMediaFailed(true);
-                onMediaError?.(message);
-              }}
-              style={COMPACT_MEDIA_STYLE}
-            />
-          ) : (
-            <video
-              data-testid={`message-media-${message.id}`}
-              src={message.media.src}
-              controls
-              onClick={(event) => {
-                event.stopPropagation();
-                setPreviewOpen(true);
-              }}
-              onError={() => {
-                setMediaFailed(true);
-                onMediaError?.(message);
-              }}
-              style={COMPACT_MEDIA_STYLE}
-            />
-          )}
-          {previewOpen ? (
-            <MediaLightbox
-              message={message}
-              extra={renderPreviewExtra?.(message)}
-              onClose={() => setPreviewOpen(false)}
-            />
-          ) : null}
-        </>
-      ) : null}
-      {enableTools && message.toolCards && message.toolCards.length > 0 && (
-        <ul
-          data-testid={`message-bubble-tools-${message.id}`}
-          style={{ listStyle: "none", padding: 0, margin: "var(--space-2) 0 0", display: "flex", flexDirection: "column", gap: "var(--space-1)" }}
-        >
-          {message.toolCards.map((card) => (
-            <li key={card.callId}>
-              <ToolCardView card={card} />
-            </li>
-          ))}
-        </ul>
-      )}
-    </article>
+  const purePending = Boolean(
+    message.pending &&
+    !message.content &&
+    !message.media &&
+    (!message.toolCards || message.toolCards.length === 0),
   );
+  if (purePending) {
+    return <PendingMessage message={message} studioPending={studioPending} />;
+  }
+  return (
+    <div
+      data-testid={`message-shell-${message.id}`}
+      style={{
+        width: "fit-content",
+        maxWidth: message.media ? "min(100%, 28rem)" : "80%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {message.role === "assistant" ? (
+        <ReasoningDisclosure
+          messageId={message.id}
+          text={message.reasoningText}
+          tokenCount={message.reasoningTokens}
+        />
+      ) : null}
+      <article
+        data-testid={`message-bubble-${message.id}`}
+        data-role={message.role}
+        style={bubbleStyle(message)}
+      >
+        {message.pending ? null : (
+          <BubbleMeta
+            message={message}
+            locale={locale}
+            {...(resolvedMetaActions ? { actions: resolvedMetaActions } : {})}
+          />
+        )}
+        {message.mediaRecovery ? (
+          <MediaRuntimeRecoveryCard
+            {...message.mediaRecovery}
+            onRepair={() => onRepairMediaRuntime?.(message)}
+            onCancel={() => onCancelMediaRepair?.(message)}
+            onOpenLog={() => onOpenMediaRepairLog?.(message)}
+          />
+        ) : null}
+        {message.sam2Recovery ? (
+          <Sam2RecoveryCard
+            {...message.sam2Recovery}
+            installDisabled={sam2InstallDisabled}
+            onInstall={() => onInstallSam2?.(message)}
+            onPaintMask={() => onPaintSam2Mask?.(message)}
+            onOpenSettings={() => onOpenSam2Settings?.(message)}
+            onRetry={() => onRetrySam2?.(message)}
+          />
+        ) : null}
+        {caption}
+        {message.content && (
+          <p style={{ whiteSpace: "pre-wrap", margin: 0 }}>{message.content}</p>
+        )}
+        {message.attachments && message.attachments.length > 0 && (
+          <div
+            data-testid={`message-attachments-${message.id}`}
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "var(--space-1)",
+              marginTop: "var(--space-2)",
+            }}
+          >
+            {message.attachments.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt="Attachment"
+                data-testid={`message-attachment-${message.id}-${i}`}
+                style={{
+                  maxWidth: 96,
+                  maxHeight: 96,
+                  borderRadius: "var(--radius-sm)",
+                  objectFit: "cover",
+                }}
+              />
+            ))}
+          </div>
+        )}
+        {message.pending && (
+          <div
+            data-testid={`message-pending-${message.id}`}
+            style={{
+              marginTop: studioPending ? 0 : "var(--space-2)",
+              color: "var(--fg-muted)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: isLoadingModel(message) ? "center" : "flex-start",
+              justifyContent: isLoadingModel(message) ? "center" : "flex-start",
+              gap: "var(--space-2)",
+              width: isLoadingModel(message) ? "100%" : "26rem",
+              maxWidth: "100%",
+              overflow: "visible",
+              // v2.4.4 Phase 1.1: the transcript gutter on MessageList is the
+              // only left offset. Adding one here again is what pushed the pill
+              // inches into the pane.
+              paddingLeft: 0,
+            }}
+          >
+            <PendingWork message={message} studioPending={studioPending} />
+          </div>
+        )}
+        {message.failure ? (
+          <GenerationFailureCard
+            failure={message.failure}
+            testId={`generation-failure-${message.id}`}
+          />
+        ) : null}
+        {mediaFailed ? (
+          <p
+            data-testid={`message-media-error-${message.id}`}
+            style={{ color: "var(--danger, #f87171)", margin: 0 }}
+          >
+            Generation failed: generated {message.media?.kind ?? "media"} could
+            not be displayed.
+          </p>
+        ) : message.media ? (
+          <>
+            {message.media.kind === "image" ? (
+              <img
+                data-testid={`message-media-${message.id}`}
+                src={message.media.src}
+                alt={message.content || "Generated image"}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setPreviewOpen(true);
+                }}
+                onError={() => {
+                  setMediaFailed(true);
+                  onMediaError?.(message);
+                }}
+                style={COMPACT_MEDIA_STYLE}
+              />
+            ) : (
+              <video
+                data-testid={`message-media-${message.id}`}
+                src={message.media.src}
+                controls
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setPreviewOpen(true);
+                }}
+                onError={() => {
+                  setMediaFailed(true);
+                  onMediaError?.(message);
+                }}
+                style={COMPACT_MEDIA_STYLE}
+              />
+            )}
+            {previewOpen ? (
+              // v2.4.9: images open in the editor-capable viewer; video keeps
+              // the simple lightbox (a clip has nothing to paint on).
+              message.media?.kind === "image" ? (
+                <ImageViewer
+                  src={message.media.src}
+                  alt={message.content || "Generated image"}
+                  downloadName={`nexus-${message.id}`}
+                  onClose={() => setPreviewOpen(false)}
+                  testId={`message-media-dialog-${message.id}`}
+                  {...(renderPreviewExtra
+                    ? { extra: renderPreviewExtra(message) }
+                    : {})}
+                />
+              ) : (
+                <MediaLightbox
+                  message={message}
+                  extra={renderPreviewExtra?.(message)}
+                  onClose={() => setPreviewOpen(false)}
+                />
+              )
+            ) : null}
+          </>
+        ) : null}
+        {enableTools && message.toolCards && message.toolCards.length > 0 && (
+          <ul
+            data-testid={`message-bubble-tools-${message.id}`}
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: "var(--space-2) 0 0",
+              display: "flex",
+              flexDirection: "column",
+              gap: "var(--space-1)",
+            }}
+          >
+            {message.toolCards.map((card) => (
+              <li key={card.callId}>
+                <ToolCardView card={card} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </article>
+    </div>
+  );
+}
+
+function PendingMessage({
+  message,
+  studioPending,
+}: {
+  message: ChatMessage;
+  studioPending: boolean;
+}): JSX.Element {
+  /*
+   * v2.4.9, second operator pass: alignment is decided by PHASE, not by tab.
+   *
+   * "The loading animation should be centered for all modes ... which should
+   * only apply to the model generation animation, not the loading."
+   *
+   * The first pass made everything left-aligned, which fixed the studio/chat
+   * mismatch but flattened this distinction with it. Loading (and its queued /
+   * clearing preludes) is a centered hero block on every tab; generating is
+   * the left-aligned pill on every tab.
+   */
+  const centered = isLoadingModel(message);
+  return (
+    <div
+      data-testid={`message-pending-${message.id}`}
+      role="status"
+      aria-label={studioPending ? "Generating media" : "Generating reply"}
+      style={{
+        color: "var(--fg-muted)",
+        display: "flex",
+        flexDirection: "column",
+        // v2.4.9 second pass: PHASE decides alignment, not tab. Loading is a
+        // centered hero block everywhere; generating is the left-aligned pill
+        // everywhere. A fixed basis (not `fit-content`) keeps the bar one
+        // width in both phases -- `fit-content` is what leaked caption length
+        // back into the bar the first time.
+        alignItems: centered ? "center" : "flex-start",
+        justifyContent: centered ? "center" : "flex-start",
+        gap: "var(--space-2)",
+        width: centered ? "100%" : "26rem",
+        maxWidth: "100%",
+        // v2.4.4 Phase 1.1 (T001): no inline padding here. The pending row is
+        // an assistant row and takes its left margin from the list gutter, the
+        // same one a completed assistant bubble sits on.
+        paddingInline: 0,
+        boxSizing: "border-box",
+        overflow: "visible",
+      }}
+    >
+      <PendingWork message={message} studioPending={studioPending} />
+    </div>
+  );
+}
+
+/**
+ * v2.4.8 Phase 8 -- a studio job is "loading the model" until the runtime says
+ * otherwise. Operator report (2026-09-07): after switching from Chat to Images
+ * the GPU sat idle for a while before the first sample, and the bubble already
+ * read "Creating...". Weights moving onto the GPU are not creation. The
+ * runtime now emits `stage: "loading"` before a pipeline is built and
+ * `stage: "generating"` once it is on the device; before any event, or while
+ * the stage is still `loading` with no step counted, the orb shows
+ * "Loading model...". A counted step or the `generating` stage flips it to the
+ * studio captions.
+ *
+ * v2.4.8 follow-up (2026-09-07): the sidecar now reports `queued` while the
+ * job waits for the GPU behind another module, and the runtime reports the
+ * weight bytes read while `loading`. Both are still "not creating yet"; the
+ * caption names which one it is, and a byte-level bar shows how far along.
+ */
+export function isLoadingModel(message: ChatMessage): boolean {
+  return pendingPhase(message) !== "generating";
+}
+
+/**
+ * v2.4.8 follow-up (2026-09-08) -- which phase a pending message is in.
+ *
+ * Operator report: loading and generating looked the same, so a number shown
+ * during one read as a promise about the other. The phase is decided in one
+ * place and drives everything the operator sees: the animation (a fixed
+ * "Loading model" caption on a hero orb, then the rotating-caption pill the
+ * chatbot uses), the bar's meaning (weight bytes, then sampling steps) and the
+ * wording of the estimate under it.
+ */
+export function pendingPhase(message: ChatMessage): JobPhase {
+  return jobPhase(message.progress, isStudioPending(message));
+}
+
+/**
+ * The pending animation and its progress block, one per phase.
+ *
+ * Loading (and its queued / clearing preludes) is a centered hero orb with a
+ * fixed caption. Generating is the chat pill -- the same rotating-caption
+ * animation on every tab -- drawing words from the studio pool on Images and
+ * Videos and from the chat pool on Chat and Agents.
+ */
+function PendingWork({
+  message,
+  studioPending,
+}: {
+  message: ChatMessage;
+  studioPending: boolean;
+}): JSX.Element {
+  const phase = pendingPhase(message);
+  const generating = phase === "generating";
+  /*
+   * v2.4.11 operator ask: the time left must line up with "the right edge of
+   * the animation (not so far right)". While generating, the pill and the
+   * clock row share an inline-flex column, so the row is exactly as wide as
+   * the pill above it. While loading, the bar is the reference and the row
+   * matches the bar, which is what the column does there too.
+   */
+  return (
+    <div
+      style={{
+        display: generating ? "inline-flex" : "flex",
+        flexDirection: "column",
+        alignItems: "stretch",
+        gap: "var(--space-1)",
+        maxWidth: "100%",
+      }}
+    >
+      <AgentStateOrb
+        activity={generating ? (message.activity ?? "chat-streaming") : "model-loading"}
+        size={generating ? "bubble" : "hero"}
+        showCaption
+        rotateCaptions={generating}
+        captionPool={studioPending ? "studio" : "chat"}
+        {...(generating ? {} : { caption: loadingCaption(message) })}
+        accessibleName={
+          generating
+            ? studioPending
+              ? "Generating media"
+              : "Generating reply"
+            : loadingAccessibleName(message)
+        }
+        surfaceId={`message-${message.id}`}
+      />
+      <GenerationProgress message={message} phase={phase} />
+    </div>
+  );
+}
+
+/**
+ * Plain-language reasons the GPU is busy, by the scheduler module holding it.
+ * Operator feedback (2026-09-07): "(Images is using it)" read as jargon; say
+ * what is still running instead.
+ */
+const GPU_HOLDER_DETAIL: Record<string, string> = {
+  chat: "A chat reply is still being written.",
+  coding: "An agent task is still running.",
+  image: "Another image is still being generated.",
+  video: "Another video is still being generated.",
+};
+
+/** The line under the caption: an explicit note, else who holds the GPU. */
+export function queuedDetail(progress: LoadProgress | undefined): string | null {
+  if (progress?.detail) return progress.detail;
+  if (progress?.stage !== "queued" || !progress.blockedBy) return null;
+  return GPU_HOLDER_DETAIL[progress.blockedBy] ?? null;
+}
+
+type LoadProgress = NonNullable<ChatMessage["progress"]>;
+
+/** Whole-number percent of weight bytes read, or null before any byte count. */
+export function loadPercent(progress: LoadProgress | undefined): number | null {
+  if (!progress || !progress.totalBytes || progress.totalBytes <= 0) return null;
+  if (typeof progress.loadedBytes !== "number") return null;
+  const ratio = progress.loadedBytes / progress.totalBytes;
+  return Math.min(100, Math.max(0, Math.round(ratio * 100)));
+}
+
+/** "about 12 s left" / "about 2 min left", or null without a usable estimate. */
+export function loadEtaLabel(progress: LoadProgress | undefined): string | null {
+  const eta = progress?.etaS;
+  if (typeof eta !== "number" || !Number.isFinite(eta) || eta <= 0) return null;
+  // Units are spelled out app-wide (v2.4.9); formatDuration owns the wording.
+  return `about ${formatDuration(eta)} left`;
+}
+
+export function loadingCaption(message: ChatMessage): string {
+  const progress = message.progress;
+  if (progress?.stage === "queued") return "Waiting for the GPU to free up...";
+  if (progress?.stage === "clearing") return "Clearing the GPU...";
+  // v2.4.11: one reading of the load, on the bar. The caption used to carry a
+  // percentage of its own ("Loading model 17%") beside a bar and a countdown
+  // that were computed differently, which is how three numbers on one screen
+  // came to disagree.
+  return "Loading model";
+}
+
+function loadingAccessibleName(message: ChatMessage): string {
+  const stage = message.progress?.stage;
+  if (stage === "queued") return "Waiting for GPU";
+  return stage === "clearing" ? "Clearing the GPU" : "Loading model";
+}
+
+/**
+ * v2.4.8 follow-up (2026-09-07) -- one progress block for a running job.
+ *
+ * Operator report: a Wan video sat on a rotating word for fifteen minutes with
+ * no bar, no clock and no idea whether it was working. This renders whichever
+ * measurement the job currently has -- weight bytes while the model loads,
+ * sampling steps once it is generating -- plus a running clock, so silence is
+ * never the only signal. The bar is as wide as the caption above it.
+ */
+function GenerationProgress({
+  message,
+  phase,
+}: {
+  message: ChatMessage;
+  phase: JobPhase;
+}): JSX.Element | null {
+  const progress = message.progress;
+  const detail = queuedDetail(progress);
+  /*
+   * v2.4.11 operator ask: "please add the elapsed timer under it" -- every
+   * pending turn now runs a clock, chat replies included. Only the REMAINING
+   * figure needs something to measure, so a chat reply shows the time it has
+   * taken and nothing it cannot know.
+   */
+  const phaseElapsed = usePhaseElapsed(message.id, phase, !detail);
+  // The high-water mark for an unmeasured load: the fill may stall, never fall.
+  const fillRef = useRef(0);
+  if (detail) {
+    return (
+      <span
+        data-testid={`model-queued-detail-${message.id}`}
+        style={{ color: "var(--fg-muted)", fontSize: "var(--text-xs)" }}
+      >
+        {detail}
+      </span>
+    );
+  }
+
+  const estimateSeconds = phaseEstimateSeconds(message, phase);
+  const lines = progressLines({
+    progress,
+    phase,
+    phaseElapsed,
+    estimateSeconds,
+  });
+
+  /*
+   * v2.4.11 -- one shape for every mode (chat, image, video, agents):
+   *
+   *   loading    bar, "Loading model" above it, elapsed left, time left right
+   *   generating the activity animation, elapsed left, time left right, and
+   *              NO bar, no step count
+   *
+   * The operator watched an image job show a loading bar, swap it for a
+   * second bar with a fresh counter when sampling began, and leave that one
+   * stuck full on "Step 14 of 14". Sampling steps still drive the estimate;
+   * they no longer draw a second progress bar the user has to reinterpret.
+   */
+  if (phase === "generating") {
+    return (
+      <GenerationClockRow
+        testId={`generation-clock-${message.id}`}
+        elapsed={lines.elapsed}
+        remaining={lines.remaining}
+        maxWidth="none"
+      />
+    );
+  }
+
+  const fraction = loadFraction(
+    progress,
+    phaseElapsed,
+    estimateSeconds,
+    fillRef.current,
+  );
+  fillRef.current = fraction ?? 0;
+  return (
+    <GenerationProgressBar
+      testId={`model-load-progress-${message.id}`}
+      clockTestId={`generation-clock-${message.id}`}
+      fraction={fraction}
+      elapsed={lines.elapsed}
+      remaining={lines.remaining}
+      accentVar={PHASE_ACCENT_VAR[phase] ?? "--accent-chatbot"}
+    />
+  );
+}
+
+
+/**
+ * One accent per phase so the bar reads as part of the surface it sits on:
+ * loading is the neutral chat accent, sampling takes the module's colour via
+ * the caller. Kept here (not inline) so every tab resolves it the same way.
+ */
+const PHASE_ACCENT_VAR: Partial<Record<JobPhase, string>> = {
+  queued: "--fg-muted",
+  clearing: "--fg-muted",
+  loading: "--accent-chatbot",
+  generating: "--accent-chatbot",
+};
+
+/**
+ * The up-front figure for the phase being shown, never for the whole job.
+ *
+ * Operator report (2026-09-08): a video showed "usually about 18 min" while it
+ * was loading weights, so the load looked like it would take 18 minutes. The
+ * sampling figure belongs to sampling; the load has its own, from the model's
+ * size where the caller knows it.
+ */
+function phaseEstimateSeconds(message: ChatMessage, phase: JobPhase): number | undefined {
+  if (phase === "generating") return message.estimateSeconds;
+  if (phase !== "loading") return undefined;
+  return message.loadEstimateSeconds ?? MODEL_LOAD_SECONDS;
+}
+
+/**
+ * Seconds spent in the current phase.
+ *
+ * Each phase gets its own clock so a measured rate describes that phase alone:
+ * the load estimate is not diluted by sampling time and the sampling estimate
+ * does not carry the load.
+ *
+ * v2.4.11 operator report: "the elapsed time goes faster, a second is less
+ * than a second". The loading clock used to anchor on the MESSAGE timestamp,
+ * which is stamped when the bubble is created -- before the queue wait and the
+ * GPU clear, and formatted by the sender rather than measured here. The clock
+ * therefore opened at three or four seconds and every figure derived from it
+ * was ahead of the wall. Every phase now anchors on the first frame this
+ * bubble actually observes it, so the number counts real seconds of the phase
+ * it is labelled with. The anchor lives in a ref, so re-renders never restart
+ * it.
+ */
+function usePhaseElapsed(
+  messageId: string,
+  phase: JobPhase,
+  active: boolean,
+): number | null {
+  const anchorRef = useRef<{ key: string; at: number } | null>(null);
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!active) return;
+    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, [active, messageId, phase]);
+  if (!active) return null;
+  const key = `${messageId}:${phase}`;
+  if (anchorRef.current?.key !== key) {
+    anchorRef.current = { key, at: Date.now() };
+  }
+  return Math.max(0, (now - anchorRef.current.at) / 1000);
+}
+
+/**
+ * " (00:00:42)" after the timestamp, or "" when unmeasured.
+ *
+ * One fixed HH:MM:SS shape on every mode, so a column of replies lines up and
+ * a 10-second chat turn is directly comparable to a 20-minute video without
+ * the reader parsing "2 min 5 s" against "42 s".
+ *
+ * A turn under a second still gets nothing: the brackets exist to make real
+ * work legible, not to decorate every row.
+ */
+export function formatGenerationDuration(seconds: number | undefined): string {
+  const clock = formatHhMmSs(seconds);
+  return clock ? ` (${clock})` : "";
+}
+
+/** "HH:MM:SS", or "" when there is nothing worth reporting. */
+export function formatHhMmSs(seconds: number | undefined): string {
+  if (typeof seconds !== "number" || !Number.isFinite(seconds) || seconds < 1) return "";
+  const whole = Math.floor(seconds);
+  const hours = Math.floor(whole / 3600);
+  const minutes = Math.floor((whole % 3600) / 60);
+  const rest = whole % 60;
+  const pad = (value: number): string => String(value).padStart(2, "0");
+  return `${pad(hours)}:${pad(minutes)}:${pad(rest)}`;
 }
 
 function BubbleMeta({
   message,
   locale,
+  actions,
 }: {
   message: ChatMessage;
   locale?: string;
+  /** v2.4.9 -- studio actions share the timestamp row instead of a row below. */
+  actions?: ReactNode;
 }): JSX.Element | null {
   const when = parseMessageTime(message.timestamp);
-  const tokens = formatBubbleTokens(message);
+  const tokens = bubbleTokenMetadata(message);
   // Nothing known: no empty chrome row above the text.
-  if (!when && tokens.length === 0) return null;
+  if (!when && !tokens && !actions) return null;
   return (
     <div
       data-testid={`message-meta-${message.id}`}
       style={{
         display: "flex",
         alignItems: "baseline",
-        gap: "var(--space-2)",
-        marginBottom: "var(--space-1)",
+        justifyContent: "space-between",
+        gap: "var(--space-4)",
+        marginBottom: "var(--space-2)",
         color: "var(--fg-muted)",
         fontSize: "var(--text-xs)",
       }}
@@ -232,10 +726,39 @@ function BubbleMeta({
           dateTime={when.toISOString()}
         >
           {formatBubbleTime(when, locale)}
+          {formatGenerationDuration(message.generationSeconds)}
         </time>
       ) : null}
-      {tokens.length > 0 ? (
-        <span data-testid={`message-tokens-${message.id}`}>{tokens}</span>
+      {actions ? (
+        <span
+          data-testid={`message-meta-actions-${message.id}`}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "var(--space-1)",
+            marginLeft: "auto",
+          }}
+        >
+          {actions}
+        </span>
+      ) : null}
+      {tokens && message.role === "user" ? (
+        <span
+          data-testid={`message-tokens-${message.id}`}
+          style={{ fontStyle: "italic", marginLeft: "auto" }}
+        >
+          {tokens.label}
+        </span>
+      ) : tokens ? (
+        <span
+          data-testid={`message-tokens-${message.id}`}
+          tabIndex={0}
+          title={tokens.detail}
+          aria-label={`${tokens.label}. ${tokens.detail}`}
+          style={{ fontStyle: "italic", marginLeft: "auto" }}
+        >
+          {tokens.label}
+        </span>
       ) : null}
     </div>
   );
@@ -268,27 +791,29 @@ function ToolCardView({ card }: { card: ToolCard }): JSX.Element {
 function captionFor(message: ChatMessage): ReactNode {
   if (message.role === "system") {
     return (
-      <header style={{ marginBottom: "var(--space-1)", color: "var(--fg-muted)", fontSize: "var(--text-xs)" }}>
+      <header
+        style={{
+          marginBottom: "var(--space-1)",
+          color: "var(--fg-muted)",
+          fontSize: "var(--text-xs)",
+        }}
+      >
         System
       </header>
     );
   }
   if (message.origin === "stt_transcript") {
     return (
-      <span data-testid={`message-origin-${message.id}`} style={{ color: "var(--fg-muted)", fontSize: "var(--text-xs)" }}>
+      <span
+        data-testid={`message-origin-${message.id}`}
+        style={{ color: "var(--fg-muted)", fontSize: "var(--text-xs)" }}
+      >
         origin:stt_transcript
       </span>
     );
   }
   return null;
 }
-
-function ariaRole(role: ChatMessage["role"]): string {
-  if (role === "user") return "your";
-  if (role === "assistant") return "assistant";
-  return "system";
-}
-
 
 function MediaLightbox({
   message,
@@ -339,7 +864,11 @@ function MediaLightbox({
             }}
             src={media.src}
             alt={message.content || "Generated image"}
-            style={{ maxWidth: "90vw", maxHeight: "70vh", objectFit: "contain" }}
+            style={{
+              maxWidth: "90vw",
+              maxHeight: "70vh",
+              objectFit: "contain",
+            }}
           />
         ) : media ? (
           <video
@@ -352,12 +881,17 @@ function MediaLightbox({
             style={{ maxWidth: "90vw", maxHeight: "70vh" }}
           />
         ) : null}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}>
+        <div
+          style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}
+        >
           <button
             type="button"
             data-testid={`message-media-fullscreen-${message.id}`}
             onClick={() => {
-              if (previewNode && typeof previewNode.requestFullscreen === "function") {
+              if (
+                previewNode &&
+                typeof previewNode.requestFullscreen === "function"
+              ) {
                 void previewNode.requestFullscreen();
               }
             }}
@@ -367,7 +901,11 @@ function MediaLightbox({
           <a
             data-testid={`message-media-download-${message.id}`}
             href={media?.src}
-            download={media?.kind === "video" ? `nexus-${message.id}.mp4` : `nexus-${message.id}.png`}
+            download={
+              media?.kind === "video"
+                ? `nexus-${message.id}.mp4`
+                : `nexus-${message.id}.png`
+            }
           >
             Download
           </a>
@@ -381,7 +919,11 @@ function MediaLightbox({
             </button>
           ) : null}
           {extra}
-          <button type="button" data-testid={`message-media-close-${message.id}`} onClick={onClose}>
+          <button
+            type="button"
+            data-testid={`message-media-close-${message.id}`}
+            onClick={onClose}
+          >
             Close
           </button>
         </div>
@@ -393,9 +935,16 @@ function MediaLightbox({
 async function copyImageSrc(src: string): Promise<void> {
   try {
     const blob = await (await fetch(src)).blob();
-    const clipboard = typeof navigator !== "undefined" ? navigator.clipboard : undefined;
-    if (clipboard && typeof ClipboardItem !== "undefined" && typeof clipboard.write === "function") {
-      await clipboard.write([new ClipboardItem({ [blob.type || "image/png"]: blob })]);
+    const clipboard =
+      typeof navigator !== "undefined" ? navigator.clipboard : undefined;
+    if (
+      clipboard &&
+      typeof ClipboardItem !== "undefined" &&
+      typeof clipboard.write === "function"
+    ) {
+      await clipboard.write([
+        new ClipboardItem({ [blob.type || "image/png"]: blob }),
+      ]);
       return;
     }
     if (clipboard && typeof clipboard.writeText === "function") {
@@ -409,11 +958,12 @@ async function copyImageSrc(src: string): Promise<void> {
 function isStudioPending(message: ChatMessage): boolean {
   return Boolean(
     message.pending &&
-      (message.activity === "image-generation" || message.activity === "video-generation"),
+    (message.activity === "image-generation" ||
+      message.activity === "video-generation"),
   );
 }
 
-function bubbleStyle(message: ChatMessage, selectable = false): CSSProperties {
+function bubbleStyle(message: ChatMessage): CSSProperties {
   const user = message.role === "user";
   const system = message.role === "system";
   const studioPending = isStudioPending(message);
@@ -434,17 +984,16 @@ function bubbleStyle(message: ChatMessage, selectable = false): CSSProperties {
   }
   return {
     width: "fit-content",
-    maxWidth: message.media ? "min(100%, 28rem)" : "80%",
+    maxWidth: "100%",
     boxSizing: "border-box",
     padding: "var(--space-2) var(--space-3)",
     borderRadius: "var(--radius-lg, 12px)",
-    border: `1px solid ${user ? "var(--border-subtle, #2a2a2a)" : "var(--border-1)"}`,
+    border: "1px solid var(--bubble-border, var(--border-1))",
     backgroundColor: system
       ? "transparent"
       : user
-        ? "color-mix(in srgb, var(--bg-2, #2a2a2a) 70%, transparent)"
-        : "color-mix(in srgb, var(--bg-1, #1b1b1b) 85%, transparent)",
+        ? "var(--bubble-user, var(--bg-2))"
+        : "var(--bubble-assistant, var(--bg-1))",
     color: "var(--fg-0)",
-    ...(selectable ? { cursor: "pointer" } : {}),
   };
 }

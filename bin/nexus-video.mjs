@@ -24,7 +24,7 @@
 
 import { existsSync } from "node:fs";
 import { spawn } from "node:child_process";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { dirname, resolve as resolvePath } from "node:path";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -121,14 +121,18 @@ function usage() {
 }
 
 
-async function main() {
-  const [, , subcommand, fileArg] = process.argv;
+export async function main(argv = process.argv) {
+  const args = argv[0] === process.argv[0] || String(argv[0] ?? "").includes("nexus-video")
+    ? argv.slice(2)
+    : argv;
+  const positional = args.filter((a) => a !== "--json" && a !== "--json=true");
+  const [subcommand, fileArg] = positional;
   if (subcommand === "--help" || subcommand === "-h") {
-    process.stdout.write("usage: nexus-video extract-workflow <file.mp4>\n");
+    process.stdout.write("usage: nexus-video extract-workflow <file.mp4> [--json]\n");
     return 0;
   }
   if (subcommand !== "extract-workflow" || !fileArg) {
-    usage();
+    process.stderr.write("usage: nexus-video extract-workflow <file.mp4> [--json]\n");
     return 2;
   }
   const extract = await loadExtractor();
@@ -152,11 +156,13 @@ async function main() {
 }
 
 
-main()
-  .then((code) => process.exit(code))
-  .catch((err) => {
-    process.stderr.write(
-      `nexus-video: ${err && err.stack ? err.stack : err}\n`,
-    );
-    process.exit(2);
-  });
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  main(process.argv)
+    .then((code) => process.exit(code))
+    .catch((err) => {
+      process.stderr.write(
+        `nexus-video: ${err && err.stack ? err.stack : err}\n`,
+      );
+      process.exit(2);
+    });
+}

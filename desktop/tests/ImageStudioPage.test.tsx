@@ -3,29 +3,53 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 
 import { ImageStudioPage } from "../src/modules/image/ImageStudioPage";
 import { InMemoryDiffusionClient } from "../src/modules/image/diffusionClient";
 import { InMemoryGenerationQueueClient } from "../src/shared/studio/generationQueueClient";
 import { InMemoryStudioExplorerClient } from "../src/shared/explorer/studioExplorerClient";
 import type { ListedModelDto } from "../src/pages/settings/modelsTypes";
+import { RESTYLE_IMG2IMG_STRENGTH } from "../src/modules/image/followUpSource";
+import { STUDIO_PENDING_CAPTIONS } from "../src/components/agentState/captionRotator";
+import { GET_MORE_MODELS_ID } from "../src/shared/models/installedFeed";
 
 const NO_MODELS = { list: async (): Promise<ListedModelDto[]> => [] };
 
-function imageModels(): { list: () => Promise<ListedModelDto[]> } {
+function imageModels(): {
+  lastSelection: {
+    schemaVersion: 1;
+    orderedIds: string[];
+    recommendedByTask: { image: string };
+    downloadedSinceInstall: string[];
+  };
+  list: () => Promise<ListedModelDto[]>;
+} {
+  const models: ListedModelDto[] = [
+    {
+      id: "sana-1.6b-1024",
+      displayName: "SANA 1.5 1.6B",
+      type: "image",
+      installed: true,
+      source: "registry",
+      vramGB: 3.2,
+      visualTokenBudget: { maxImages: 4 },
+    },
+  ];
   return {
-    list: async () => [
-      {
-        id: "sana-1.6b-1024",
-        displayName: "SANA 1.5 1.6B",
-        type: "image",
-        installed: true,
-        source: "registry",
-        vramGB: 3.2,
-        visualTokenBudget: { maxImages: 4 },
-      },
-    ],
+    lastSelection: {
+      schemaVersion: 1,
+      orderedIds: ["sana-1.6b-1024"],
+      recommendedByTask: { image: "sana-1.6b-1024" },
+      downloadedSinceInstall: [],
+    },
+    list: async () => models,
   };
 }
 
@@ -35,16 +59,31 @@ describe("ImageStudioPage (chat)", () => {
 
   it("renders the model selector, empty state, composer, and Advanced panel", () => {
     render(
-      <ImageStudioPage client={new InMemoryDiffusionClient()} modelsClient={NO_MODELS} drainIntervalMs={20} />,
+      <ImageStudioPage
+        client={new InMemoryDiffusionClient()}
+        modelsClient={NO_MODELS}
+        drainIntervalMs={20}
+      />,
     );
     expect(screen.getByTestId("image-model-select")).toBeInTheDocument();
-    expect(screen.getByTestId("composer-context-row").querySelector('[data-testid="image-model-select"]')).toBeTruthy();
+    expect(
+      screen
+        .getByTestId("composer-context-row")
+        .querySelector('[data-testid="image-model-select"]'),
+    ).toBeTruthy();
     // v2.2.9 Phase 3.1 (T007): no header at all until it has visible children.
-    expect(screen.getByTestId("image-studio-page").querySelector(":scope > header")).toBeNull();
+    expect(
+      screen.getByTestId("image-studio-page").querySelector(":scope > header"),
+    ).toBeNull();
     expect(screen.queryByTestId("context-usage-bar")).toBeNull();
     expect(screen.getByTestId("image-empty")).toBeInTheDocument();
     expect(screen.getByTestId("media-composer")).toBeInTheDocument();
     expect(screen.getByTestId("image-advanced-settings")).toBeInTheDocument();
+    expect(
+      screen
+        .getByTestId("composer-advanced-slot")
+        .querySelector('[data-testid="image-advanced-settings"]'),
+    ).toBeTruthy();
     expect(screen.getByTestId("image-history-pane")).toBeInTheDocument();
   });
 
@@ -54,15 +93,23 @@ describe("ImageStudioPage (chat)", () => {
   // visual budget (Phase 3.2, T008) -- 0% before any generation.
   it("renders no header when models are installed and shows the visual Context bar", async () => {
     render(
-      <ImageStudioPage client={new InMemoryDiffusionClient()} modelsClient={imageModels()} drainIntervalMs={20} />,
+      <ImageStudioPage
+        client={new InMemoryDiffusionClient()}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
     );
-    await waitFor(() => expect(screen.getByTestId("context-usage-bar")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByTestId("context-usage-bar")).toBeInTheDocument(),
+    );
     expect(screen.getByTestId("context-usage-bar")).toHaveAttribute(
       "aria-label",
       expect.stringContaining("visual token budget"),
     );
     expect(screen.getByTestId("context-usage-percent")).toHaveTextContent("0%");
-    expect(screen.getByTestId("image-studio-page").querySelector(":scope > header")).toBeNull();
+    expect(
+      screen.getByTestId("image-studio-page").querySelector(":scope > header"),
+    ).toBeNull();
   });
 
   // v2.2.9 Phase 3.1 (T007): when no models are installed the get-more-models
@@ -77,26 +124,87 @@ describe("ImageStudioPage (chat)", () => {
         onGetMoreModels={onGetMoreModels}
       />,
     );
-    await waitFor(() => expect(screen.getByTestId("image-get-more-models")).toBeInTheDocument());
-    expect(screen.getByTestId("image-studio-page").querySelector(":scope > header")).not.toBeNull();
+    await waitFor(() =>
+      expect(screen.getByTestId("image-get-more-models")).toBeInTheDocument(),
+    );
+    expect(
+      screen.getByTestId("image-studio-page").querySelector(":scope > header"),
+    ).not.toBeNull();
     fireEvent.click(screen.getByTestId("image-get-more-models"));
     expect(onGetMoreModels).toHaveBeenCalledTimes(1);
   });
 
+  // Operator ask (2026-09-08): the settings changed on nearly every prompt
+  // should not be behind a panel. Resolution, Width, Height and Fast preview
+  // sit in the chat area at all times, and what they set is what is generated.
+  it("keeps resolution, size, and fast preview in the chat area at all times", async () => {
+    const client = new InMemoryDiffusionClient();
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    // Visible with the Advanced panel closed.
+    expect(screen.queryByTestId("image-settings-panel")).toBeNull();
+    const quick = screen.getByTestId("composer-quick-slot");
+    expect(quick).toBeInTheDocument();
+    fireEvent.change(screen.getByTestId("image-quick-resolution"), {
+      target: { value: "768x768" },
+    });
+    fireEvent.change(screen.getByTestId("image-quick-height"), {
+      target: { value: "512" },
+    });
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "PNGB64==" },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a fox" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await waitFor(() => expect(client.lastRequest).not.toBeNull());
+    const request = client.lastRequest?.request as { width: number; height: number };
+    expect(request.width).toBe(768);
+    expect(request.height).toBe(512);
+    // The Advanced panel opens onto the same values, not a stale copy.
+    fireEvent.click(screen.getByTestId("image-advanced-settings"));
+    await waitFor(() =>
+      expect(screen.getByTestId("image-settings-panel")).toBeInTheDocument(),
+    );
+    expect((screen.getByTestId("image-width") as HTMLInputElement).value).toBe("768");
+    expect((screen.getByTestId("image-height") as HTMLInputElement).value).toBe("512");
+  });
+
   it("drops the four mode tabs", () => {
-    render(<ImageStudioPage client={new InMemoryDiffusionClient()} modelsClient={NO_MODELS} />);
+    render(
+      <ImageStudioPage
+        client={new InMemoryDiffusionClient()}
+        modelsClient={NO_MODELS}
+      />,
+    );
     expect(screen.queryByTestId("mode-tab-txt2img")).toBeNull();
     expect(screen.queryByTestId("mode-tab-inpaint")).toBeNull();
   });
 
   it("a text-only prompt runs txt2img and renders the generated image inline", async () => {
     const client = new InMemoryDiffusionClient();
-    render(<ImageStudioPage client={client} modelsClient={imageModels()} drainIntervalMs={20} />);
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
     client.scriptEvents("mem-job-1", [
       { kind: "progress", jobId: "mem-job-1", step: 2, totalSteps: 4 },
       { kind: "complete", jobId: "mem-job-1", png: "PNGB64==" },
     ]);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "a fox" } });
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a fox" },
+    });
     await act(async () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
     });
@@ -104,12 +212,20 @@ describe("ImageStudioPage (chat)", () => {
       vi.advanceTimersByTime(60);
       await Promise.resolve();
     });
-    await waitFor(() => expect(screen.getByAltText("Generated image")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByAltText("Generated image")).toBeInTheDocument(),
+    );
     expect(client.lastRequest?.mode).toBe("txt2img");
-    expect((client.lastRequest?.request as { prompt: string }).prompt).toBe("a fox");
-    expect((client.lastRequest?.request as { modelId: string }).modelId).toBe("sana-1.6b-1024");
+    expect((client.lastRequest?.request as { prompt: string }).prompt).toBe(
+      "a fox",
+    );
+    expect((client.lastRequest?.request as { modelId: string }).modelId).toBe(
+      "sana-1.6b-1024",
+    );
     expect(screen.getByTestId("context-usage-bar")).toBeInTheDocument();
-    expect(screen.getAllByTestId(/^message-time-/).length).toBeGreaterThanOrEqual(2);
+    expect(
+      screen.getAllByTestId(/^message-time-/).length,
+    ).toBeGreaterThanOrEqual(2);
     // v2.2.9 Phase 1.3: these turns report no token usage, so the span is
     // omitted rather than rendered as an em dash.
     expect(screen.queryAllByTestId(/^message-tokens-/).length).toBe(0);
@@ -117,7 +233,171 @@ describe("ImageStudioPage (chat)", () => {
     expect(screen.getAllByText("a fox").length).toBeGreaterThanOrEqual(1);
   });
 
-  it("does not generate until a conflicting active model switch is approved", async () => {
+  // Operator report (2026-09-08): during one run the bar and the step line
+  // appeared and disappeared repeatedly. The liveness heartbeat carries no
+  // stage and no counters, and it was being written straight over the counted
+  // step. This replays that exact stream: load, sample, heartbeat, sample.
+  it("holds the measured progress through a bare liveness heartbeat", async () => {
+    const client = new InMemoryDiffusionClient();
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [
+      {
+        kind: "progress",
+        jobId: "mem-job-1",
+        stage: "loading",
+        loadedBytes: 1_000,
+        totalBytes: 4_000,
+        etaS: 9,
+      },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a fox" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    const drain = async (): Promise<void> => {
+      await act(async () => {
+        vi.advanceTimersByTime(60);
+        await Promise.resolve();
+      });
+    };
+    await drain();
+    // Loading: the caption states the phase, the bar reports weight bytes.
+    await waitFor(() =>
+      expect(screen.getByTestId("agent-state-orb-caption").textContent).toBe(
+        "Loading model",
+      ),
+    );
+    expect(
+      screen
+        .getAllByTestId(/^model-load-progress-/)[0]
+        ?.querySelector('[role="progressbar"]'),
+    ).toHaveAttribute("aria-valuenow", "25");
+
+    client.scriptEvents("mem-job-1", [
+      { kind: "progress", jobId: "mem-job-1", stage: "generating", step: 4, totalSteps: 14 },
+    ]);
+    await drain();
+    // v2.4.11: sampling shows the animation and the clock row -- no bar and
+    // no step line. The counted step still drives the time left.
+    await waitFor(() =>
+      expect(screen.queryAllByTestId(/^model-load-progress-/)).toHaveLength(0),
+    );
+    expect(screen.queryByText(/Step 4 of 14/)).toBeNull();
+    const clock = (): string =>
+      screen.getAllByTestId(/^generation-clock-/)[0]?.textContent ?? "";
+    // v2.4.11: the row is "0:00" on the left and "MM:SS left" on the right.
+    expect(clock()).toMatch(/^\d+:\d\d/);
+    // Generating: the pill animation and the studio pool.
+    const orb = screen.getByTestId("agent-state-orb");
+    expect(orb).toHaveAttribute("data-orb-pill", "true");
+    expect(STUDIO_PENDING_CAPTIONS).toContain(
+      screen.getByTestId("agent-state-orb-caption").textContent,
+    );
+
+    // The heartbeat: no stage, no step, no bytes. Nothing may be erased.
+    client.scriptEvents("mem-job-1", [
+      { kind: "progress", jobId: "mem-job-1" },
+    ]);
+    await drain();
+    // The heartbeat must not send it back to the loading bar.
+    expect(screen.queryAllByTestId(/^model-load-progress-/)).toHaveLength(0);
+    expect(screen.getByTestId("agent-state-orb")).toHaveAttribute(
+      "data-orb-pill",
+      "true",
+    );
+
+    client.scriptEvents("mem-job-1", [
+      { kind: "progress", jobId: "mem-job-1", step: 9, totalSteps: 14 },
+    ]);
+    await drain();
+    // A later counted step still lands (it drives the time left), and it
+    // still does not bring a bar back.
+    await waitFor(() => expect(clock()).toMatch(/^\d+:\d\d/));
+    expect(screen.queryAllByTestId(/^model-load-progress-/)).toHaveLength(0);
+    expect(screen.getByTestId("agent-state-orb")).toHaveAttribute(
+      "data-orb-pill",
+      "true",
+    );
+  });
+
+  it("repairs an unavailable runtime and retries the same image turn exactly once", async () => {
+    const client = new InMemoryDiffusionClient();
+    const txt2img = client.txt2img.bind(client);
+    const txt2imgSpy = vi
+      .spyOn(client, "txt2img")
+      .mockRejectedValueOnce(
+        new Error("runtime-unavailable: CUDA runtime is not ready"),
+      )
+      .mockImplementation(txt2img);
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "PNGB64==" },
+    ]);
+    const mediaRuntimeClient = {
+      status: vi.fn(async () => ({
+        state: "repairable" as const,
+        code: "RUNTIME_UNAVAILABLE",
+        message: "The local media runtime needs repair.",
+        retryable: true,
+        progress: 0,
+        logPath: "C:\\logs\\media-runtime-repair.log",
+      })),
+      repair: vi.fn(async () => ({
+        state: "ready" as const,
+        code: "READY",
+        message: "The local media runtime is ready.",
+        retryable: false,
+        progress: 100,
+        logPath: "C:\\logs\\media-runtime-repair.log",
+      })),
+      cancelRepair: vi.fn(),
+      openLogLocation: vi.fn(async () => true),
+    };
+
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        mediaRuntimeClient={mediaRuntimeClient}
+        drainIntervalMs={20}
+      />,
+    );
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a repaired fox" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await waitFor(() =>
+      expect(screen.getByTestId("media-runtime-recovery")).toBeInTheDocument(),
+    );
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-runtime-repair"));
+      await Promise.resolve();
+      vi.advanceTimersByTime(60);
+    });
+    await waitFor(() =>
+      expect(screen.getByAltText("Generated image")).toBeInTheDocument(),
+    );
+    expect(txt2imgSpy).toHaveBeenCalledTimes(2);
+    expect(mediaRuntimeClient.repair).toHaveBeenCalledTimes(1);
+    const page = screen.getByTestId("image-studio-page");
+    expect(
+      page.querySelectorAll('[data-testid^="message-shell-user-"]'),
+    ).toHaveLength(1);
+    expect(
+      page.querySelectorAll('[data-testid^="message-shell-assistant-"]'),
+    ).toHaveLength(1);
+  });
+
+  it("does not generate until the user chooses to cancel the conflicting active job", async () => {
     const client = new InMemoryDiffusionClient();
     render(
       <ImageStudioPage
@@ -138,24 +418,86 @@ describe("ImageStudioPage (chat)", () => {
       target: { value: "a fox" },
     });
     fireEvent.click(screen.getByTestId("media-composer-submit"));
-    expect(await screen.findByTestId("model-switch-dialog")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("image-gpu-busy-confirm"),
+    ).toBeInTheDocument();
     expect(client.lastRequest).toBeNull();
-    fireEvent.click(screen.getByTestId("model-switch-dialog-switch"));
+    fireEvent.click(screen.getByTestId("image-gpu-busy-confirm-confirm"));
     await waitFor(() => expect(client.lastRequest?.mode).toBe("txt2img"));
-    expect(screen.queryByTestId("model-switch-dialog")).toBeNull();
+    expect(screen.queryByTestId("image-gpu-busy-confirm")).toBeNull();
+  });
+
+  // v2.4.8 follow-up (2026-09-07): a request made while another job holds the
+  // GPU (often one from a session no longer on screen) asks to cancel it or
+  // wait, instead of silently queueing behind a task the user cannot see.
+  it("asks to switch models when another job holds the GPU; Cancel drops it, Switch clears and sends", async () => {
+    const client = new InMemoryDiffusionClient();
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        activeSchedulerJob={{
+          id: "older-image-job",
+          moduleId: "image",
+          jobType: "txt2img",
+          estimatedVramGB: 6,
+          startedAt: 1,
+        }}
+      />,
+    );
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a black puppy" },
+    });
+    fireEvent.click(screen.getByTestId("media-composer-submit"));
+    const dialog = await screen.findByTestId("image-gpu-busy-confirm");
+    // v2.4.8 follow-up: the title names the kind of model being loaded and
+    // the body names what is on the GPU and what switching does to it.
+    expect(dialog.textContent).toContain("Switch to Image model:");
+    expect(dialog.textContent).toContain("A task in Images is currently running on the GPU.");
+    // v2.4.11: the prompt states the one-model-at-a-time rule and the cost of
+    // the switch, so the choice is informed.
+    expect(dialog.textContent).toContain("holds one model at a time");
+    expect(dialog.textContent).toContain("stops it, clears the GPU");
+    expect(dialog.textContent).toMatch(/takes about .*(second|minute)/);
+    expect(screen.getByTestId("image-gpu-busy-confirm-checkbox")).toBeInTheDocument();
+    expect(client.lastRequest).toBeNull();
+    fireEvent.click(screen.getByTestId("image-gpu-busy-confirm-cancel"));
+    expect(screen.queryByTestId("image-gpu-busy-confirm")).toBeNull();
+    expect(client.lastRequest).toBeNull();
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a black puppy" },
+    });
+    fireEvent.click(screen.getByTestId("media-composer-submit"));
+    fireEvent.click(await screen.findByTestId("image-gpu-busy-confirm-confirm"));
+    await waitFor(() => expect(client.lastRequest?.mode).toBe("txt2img"));
+    expect(screen.queryByTestId("image-gpu-busy-confirm")).toBeNull();
   });
 
   it("an attached image routes to img2img with the source image", async () => {
     const client = new InMemoryDiffusionClient();
-    render(<ImageStudioPage client={client} modelsClient={imageModels()} drainIntervalMs={20} />);
-    client.scriptEvents("mem-job-1", [{ kind: "complete", jobId: "mem-job-1", png: "P==" }]);
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "P==" },
+    ]);
     const file = new File(["x"], "cat.png", { type: "image/png" });
     await act(async () => {
-      fireEvent.change(screen.getByTestId("media-composer-file"), { target: { files: [file] } });
+      fireEvent.change(screen.getByTestId("media-composer-file"), {
+        target: { files: [file] },
+      });
       await Promise.resolve();
     });
-    await waitFor(() => expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument());
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "make it night" } });
+    await waitFor(() =>
+      expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument(),
+    );
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "make it night" },
+    });
     await act(async () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
     });
@@ -164,40 +506,9 @@ describe("ImageStudioPage (chat)", () => {
       await Promise.resolve();
     });
     await waitFor(() => expect(client.lastRequest?.mode).toBe("img2img"));
-    expect((client.lastRequest?.request as { sourceImage: string }).sourceImage).toContain(
-      "data:image/png",
-    );
-  });
-
-  it("Copy Workflow forwards extracted JSON to the clipboard adapter", async () => {
-    const client = new InMemoryDiffusionClient();
-    client.extractResult = { prompt: "fox" };
-    const clipboard = { writeText: vi.fn().mockResolvedValue(undefined) };
-    const { container } = render(
-      <ImageStudioPage
-        client={client}
-        modelsClient={imageModels()}
-        drainIntervalMs={20}
-        clipboard={clipboard}
-      />,
-    );
-    client.scriptEvents("mem-job-1", [{ kind: "complete", jobId: "mem-job-1", png: "PNG==" }]);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "fox" } });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId("media-composer-submit"));
-    });
-    await act(async () => {
-      vi.advanceTimersByTime(40);
-      await Promise.resolve();
-    });
-    await waitFor(() => expect(screen.getByAltText("Generated image")).toBeInTheDocument());
-    fireEvent.click(screen.getByAltText("Generated image"));
-    const copyBtn = container.querySelector('[data-testid^="image-copyworkflow-"]') as HTMLButtonElement;
-    await act(async () => {
-      fireEvent.click(copyBtn);
-      await Promise.resolve();
-    });
-    await waitFor(() => expect(clipboard.writeText).toHaveBeenCalled());
+    expect(
+      (client.lastRequest?.request as { sourceImage: string }).sourceImage,
+    ).toContain("data:image/png");
   });
 
   it("the selector's 'Get more models' entry fires the callback", () => {
@@ -217,39 +528,92 @@ describe("ImageStudioPage (chat)", () => {
 
   it("shows the shaping orb while a generation is pending", async () => {
     const client = new InMemoryDiffusionClient();
-    render(<ImageStudioPage client={client} modelsClient={imageModels()} drainIntervalMs={20} />);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "a fox" } });
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a fox" },
+    });
     await act(async () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
     });
-    const orb = await screen.findByRole("img", { name: /agent shaping/i });
-    expect(orb).toHaveAttribute("data-agent-activity", "image-generation");
+    // v2.4.8 Phase 8: before the runtime reports a stage or a counted step the
+    // orb reads "Loading model" (weights moving onto the GPU are not
+    // creation); once sampling starts it rotates the studio captions.
+    const orb = await screen.findByRole("img", {
+      name: /loading model|generating media/i,
+    });
+    expect(orb).toHaveAttribute(
+      "data-agent-activity",
+      expect.stringMatching(/^(model-loading|image-generation)$/),
+    );
     expect(orb).toHaveAttribute("data-orb-size", "hero");
-    expect(screen.getByText("Shaping...")).toBeInTheDocument();
-    expect(screen.queryByText("Generating...")).toBeNull();
-    expect(screen.getByTestId("media-composer-beam")).toHaveAttribute("data-beam-mode", "traveling");
+    // v2.4.4 Phase 5.3: one of Creating / Crafting / Generating, never Shaping.
+    expect(screen.queryByText("Shaping...")).toBeNull();
+    expect(
+      screen.queryByText("Loading model") !== null ||
+        STUDIO_PENDING_CAPTIONS.some(
+          (caption) => screen.queryByText(caption) !== null,
+        ),
+    ).toBe(true);
+    // The old assertion here was that "Generating..." is absent, meaning "no
+    // second status label beside the orb". "Generating..." is now one of the
+    // three studio captions, so as written it failed whenever the per-bubble
+    // shuffle happened to land on it -- a one-in-three flake. The intent moves
+    // to the composer: the pending signal must still be the orb alone.
+    expect(screen.queryByTestId("image-studio-status-label")).toBeNull();
+    expect(screen.getByTestId("media-composer-beam")).toHaveAttribute(
+      "data-beam-mode",
+      "traveling",
+    );
   });
 
   it("turns a complete event without image bytes into a written failure", async () => {
     const client = new InMemoryDiffusionClient();
-    render(<ImageStudioPage client={client} modelsClient={imageModels()} drainIntervalMs={20} />);
-    client.scriptEvents("mem-job-1", [{ kind: "complete", jobId: "mem-job-1", png: "" }]);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "fox" } });
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "" },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "fox" },
+    });
     await act(async () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
       vi.advanceTimersByTime(40);
       await Promise.resolve();
     });
-    await waitFor(() => expect(screen.getByText(/Generation failed/)).toBeInTheDocument());
-    expect(screen.queryByTestId(/^image-download-/)).toBeNull();
+    await waitFor(() =>
+      expect(screen.getByText(/Generation failed/)).toBeInTheDocument(),
+    );
+    expect(screen.queryByTestId(/^image-save-/)).toBeNull();
     expect(screen.queryByTestId(/^message-media-/)).toBeNull();
   });
 
   it("hides generated-image actions when the browser cannot decode the asset", async () => {
     const client = new InMemoryDiffusionClient();
-    render(<ImageStudioPage client={client} modelsClient={imageModels()} drainIntervalMs={20} />);
-    client.scriptEvents("mem-job-1", [{ kind: "complete", jobId: "mem-job-1", png: "bad" }]);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "fox" } });
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "bad" },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "fox" },
+    });
     await act(async () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
       vi.advanceTimersByTime(40);
@@ -257,16 +621,27 @@ describe("ImageStudioPage (chat)", () => {
     });
     const media = await screen.findByTestId(/^message-media-/);
     fireEvent.error(media);
-    await waitFor(() => expect(screen.queryByTestId(/^image-download-/)).toBeNull());
+    await waitFor(() =>
+      expect(screen.queryByTestId(/^image-save-/)).toBeNull(),
+    );
     expect(screen.getByText(/could not be displayed/)).toBeInTheDocument();
   });
 
-  it("hides recall actions when extract returns no workflow", async () => {
+  it("offers exactly Edit, Copy and Save on a generated image", async () => {
     const client = new InMemoryDiffusionClient();
-    client.extractResult = null;
-    render(<ImageStudioPage client={client} modelsClient={imageModels()} drainIntervalMs={20} />);
-    client.scriptEvents("mem-job-1", [{ kind: "complete", jobId: "mem-job-1", png: "PNG==" }]);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "fox" } });
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "PNG==" },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "fox" },
+    });
     await act(async () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
     });
@@ -274,35 +649,15 @@ describe("ImageStudioPage (chat)", () => {
       vi.advanceTimersByTime(40);
       await Promise.resolve();
     });
-    await waitFor(() => expect(screen.getByAltText("Generated image")).toBeInTheDocument());
-    // v2.2.3 Phase 2 (2.3): recall actions are icon buttons named by aria-label.
-    expect(screen.queryByLabelText("Use Prompt")).toBeNull();
-  });
-
-  it("Use Prompt prefills the advanced prompt from extracted workflow", async () => {
-    const client = new InMemoryDiffusionClient();
-    client.extractResult = { prompt: "watercolor fox", seed: 42 };
-    render(<ImageStudioPage client={client} modelsClient={imageModels()} drainIntervalMs={20} />);
-    client.scriptEvents("mem-job-1", [{ kind: "complete", jobId: "mem-job-1", png: "PNG==" }]);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "fox" } });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId("media-composer-submit"));
-    });
-    await act(async () => {
-      vi.advanceTimersByTime(40);
-      await Promise.resolve();
-    });
-    fireEvent.click(await screen.findByAltText("Generated image"));
-    const usePrompt = await screen.findByLabelText("Use Prompt");
-    fireEvent.click(screen.getByTestId("image-advanced-settings"));
-    await act(async () => {
-      fireEvent.click(usePrompt);
-    });
-    await waitFor(() => {
-      expect((screen.getByTestId("image-prompt") as HTMLTextAreaElement | HTMLInputElement).value).toBe(
-        "watercolor fox",
-      );
-    });
+    const row = await screen.findByTestId(/^image-actions-/);
+    // The row is Edit, 3D preview, Copy, Save, in that order.
+    const labels = Array.from(row.querySelectorAll("button")).map((b) =>
+      b.getAttribute("aria-label"),
+    );
+    expect(labels).toEqual(["Edit", "3D preview", "Copy", "Save"]);
+    // Edit opens the editing viewer that the bubble owns.
+    fireEvent.click(screen.getByLabelText("Edit"));
+    expect(await screen.findByLabelText("Image viewer")).toBeInTheDocument();
   });
 
   it("shows queue pending count for a seed sweep", async () => {
@@ -319,7 +674,11 @@ describe("ImageStudioPage (chat)", () => {
     await act(async () => {
       fireEvent.click(screen.getByTestId("image-seed-sweep"));
     });
-    await waitFor(() => expect(screen.getByTestId("generation-queue-count")).toHaveTextContent("1"));
+    await waitFor(() =>
+      expect(screen.getByTestId("generation-queue-count")).toHaveTextContent(
+        "1",
+      ),
+    );
   });
 
   it("omits SAM2 utility weights from the generator picker", async () => {
@@ -327,11 +686,18 @@ describe("ImageStudioPage (chat)", () => {
       <ImageStudioPage
         client={new InMemoryDiffusionClient()}
         modelsClient={{
+          lastSelection: {
+            schemaVersion: 1 as const,
+            orderedIds: ["sana-1.6b-1024", "sam2:hiera-tiny"],
+            recommendedByTask: { image: "sana-1.6b-1024" },
+            downloadedSinceInstall: [] as string[],
+          },
           list: async () => [
             {
               id: "sana-1.6b-1024",
               displayName: "SANA 1.5 1.6B",
               type: "image",
+              task: "image",
               installed: true,
               source: "registry",
             },
@@ -339,6 +705,7 @@ describe("ImageStudioPage (chat)", () => {
               id: "sam2:hiera-tiny",
               displayName: "SAM2 Hiera Tiny",
               type: "image",
+              task: "image",
               installed: true,
               source: "registry",
               tags: ["sam2", "utility"],
@@ -348,7 +715,9 @@ describe("ImageStudioPage (chat)", () => {
       />,
     );
     await waitFor(() => {
-      const select = screen.getByTestId("image-model-select") as HTMLSelectElement;
+      const select = screen.getByTestId(
+        "image-model-select",
+      ) as HTMLSelectElement;
       const values = [...select.options].map((o) => o.value);
       expect(values).toContain("sana-1.6b-1024");
       expect(values).not.toContain("sam2:hiera-tiny");
@@ -357,14 +726,26 @@ describe("ImageStudioPage (chat)", () => {
 
   it("replace the car with a truck segments then inpaints", async () => {
     const client = new InMemoryDiffusionClient();
-    render(<ImageStudioPage client={client} modelsClient={imageModels()} drainIntervalMs={20} />);
-    client.scriptEvents("mem-job-1", [{ kind: "complete", jobId: "mem-job-1", png: "P==" }]);
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "P==" },
+    ]);
     const file = new File(["x"], "scene.png", { type: "image/png" });
     await act(async () => {
-      fireEvent.change(screen.getByTestId("media-composer-file"), { target: { files: [file] } });
+      fireEvent.change(screen.getByTestId("media-composer-file"), {
+        target: { files: [file] },
+      });
       await Promise.resolve();
     });
-    await waitFor(() => expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument(),
+    );
     fireEvent.change(screen.getByTestId("media-composer-textarea"), {
       target: { value: "replace the car with a truck" },
     });
@@ -373,7 +754,9 @@ describe("ImageStudioPage (chat)", () => {
     });
     await waitFor(() => expect(client.lastRequest?.mode).toBe("inpaint"));
     expect(client.lastSegment?.phrase).toBe("car");
-    expect((client.lastRequest?.request as { prompt: string }).prompt).toMatch(/Replace the car with truck/i);
+    expect((client.lastRequest?.request as { prompt: string }).prompt).toMatch(
+      /Replace the car with truck/i,
+    );
   });
 
   it("weights_missing leaves the original image and asks to install or paint a mask", async () => {
@@ -381,22 +764,38 @@ describe("ImageStudioPage (chat)", () => {
     client.segmentResult = {
       ok: false,
       code: "weights_missing",
-      message: "SAM2 weights are not installed. Install sam2:hiera-tiny from Settings > Models, or paint a mask to continue.",
+      message:
+        "SAM2 weights are not installed. Install sam2:hiera-tiny from Settings > Models, or paint a mask to continue.",
     };
-    render(<ImageStudioPage client={client} modelsClient={imageModels()} drainIntervalMs={20} />);
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
     const file = new File(["x"], "scene.png", { type: "image/png" });
     await act(async () => {
-      fireEvent.change(screen.getByTestId("media-composer-file"), { target: { files: [file] } });
+      fireEvent.change(screen.getByTestId("media-composer-file"), {
+        target: { files: [file] },
+      });
       await Promise.resolve();
     });
-    await waitFor(() => expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument(),
+    );
     fireEvent.change(screen.getByTestId("media-composer-textarea"), {
       target: { value: "replace the car with a truck" },
     });
     await act(async () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
     });
-    expect(await screen.findByText(/Install sam2:hiera-tiny/i)).toBeInTheDocument();
+    expect(await screen.findByTestId("sam2-recovery")).toBeInTheDocument();
+    expect(screen.getByTestId("sam2-install")).toHaveTextContent(
+      /Install sam2:hiera-tiny/i,
+    );
+    expect(screen.getByTestId("sam2-install")).toBeEnabled();
+    expect(screen.getByTestId("sam2-paint-mask")).toBeInTheDocument();
     expect(client.lastRequest).toBeNull();
     expect(screen.getByAltText("Attachment")).toBeInTheDocument();
   });
@@ -410,14 +809,26 @@ describe("ImageStudioPage (chat)", () => {
         { id: "c1", maskPngBase64: "mask-b", score: 0.8, label: "car-b" },
       ],
     };
-    client.scriptEvents("mem-job-1", [{ kind: "complete", jobId: "mem-job-1", png: "P==" }]);
-    render(<ImageStudioPage client={client} modelsClient={imageModels()} drainIntervalMs={20} />);
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "P==" },
+    ]);
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
     const file = new File(["x"], "scene.png", { type: "image/png" });
     await act(async () => {
-      fireEvent.change(screen.getByTestId("media-composer-file"), { target: { files: [file] } });
+      fireEvent.change(screen.getByTestId("media-composer-file"), {
+        target: { files: [file] },
+      });
       await Promise.resolve();
     });
-    await waitFor(() => expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument(),
+    );
     fireEvent.change(screen.getByTestId("media-composer-textarea"), {
       target: { value: "replace the cars with trucks" },
     });
@@ -426,26 +837,42 @@ describe("ImageStudioPage (chat)", () => {
     });
     expect(await screen.findByText(/Several matches/i)).toBeInTheDocument();
     expect(client.lastRequest).toBeNull();
-    expect(await screen.findByTestId("image-sam-candidates")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("image-sam-candidates"),
+    ).toBeInTheDocument();
     await act(async () => {
       fireEvent.click(screen.getByTestId("image-sam-candidate-car-a"));
     });
     await waitFor(() => expect(client.lastRequest?.mode).toBe("inpaint"));
-    expect((client.lastRequest?.request as { mask: string }).mask).toBe("mask-a");
+    expect((client.lastRequest?.request as { mask: string }).mask).toBe(
+      "mask-a",
+    );
   });
 
   it("turns a complete event with whitespace-only png into a written failure", async () => {
     const client = new InMemoryDiffusionClient();
-    render(<ImageStudioPage client={client} modelsClient={imageModels()} drainIntervalMs={20} />);
-    client.scriptEvents("mem-job-1", [{ kind: "complete", jobId: "mem-job-1", png: "   " }]);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "fox" } });
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "   " },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "fox" },
+    });
     await act(async () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
       vi.advanceTimersByTime(40);
       await Promise.resolve();
     });
-    await waitFor(() => expect(screen.getByText(/Generation failed/)).toBeInTheDocument());
-    expect(screen.queryByTestId(/^image-download-/)).toBeNull();
+    await waitFor(() =>
+      expect(screen.getByText(/Generation failed/)).toBeInTheDocument(),
+    );
+    expect(screen.queryByTestId(/^image-save-/)).toBeNull();
     expect(screen.queryByTestId(/^message-media-/)).toBeNull();
   });
 
@@ -479,9 +906,16 @@ describe("ImageStudioPage (chat)", () => {
       />,
     );
     client.scriptEvents("mem-job-1", [
-      { kind: "complete", jobId: "mem-job-1", png: "PNGB64==", outputPath: "/tmp/fox.png" },
+      {
+        kind: "complete",
+        jobId: "mem-job-1",
+        png: "PNGB64==",
+        outputPath: "/tmp/fox.png",
+      },
     ]);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "a fox" } });
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a fox" },
+    });
     await act(async () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
     });
@@ -489,7 +923,9 @@ describe("ImageStudioPage (chat)", () => {
       vi.advanceTimersByTime(60);
       await Promise.resolve();
     });
-    await waitFor(() => expect(screen.getByAltText("Generated image")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByAltText("Generated image")).toBeInTheDocument(),
+    );
     await waitFor(() => {
       const session = explorer.listTree().sessions[0];
       expect(session).toBeTruthy();
@@ -497,9 +933,16 @@ describe("ImageStudioPage (chat)", () => {
       expect(session!.lastOutputRef).toBe("/tmp/fox.png");
     });
     client.scriptEvents("mem-job-2", [
-      { kind: "complete", jobId: "mem-job-2", png: "PNGB64==", outputPath: "/tmp/fox-snow.png" },
+      {
+        kind: "complete",
+        jobId: "mem-job-2",
+        png: "PNGB64==",
+        outputPath: "/tmp/fox-snow.png",
+      },
     ]);
-    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "make it snow" } });
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "make it snow" },
+    });
     await act(async () => {
       fireEvent.click(screen.getByTestId("media-composer-submit"));
     });
@@ -508,7 +951,12 @@ describe("ImageStudioPage (chat)", () => {
       await Promise.resolve();
     });
     await waitFor(() => expect(client.lastRequest?.mode).toBe("img2img"));
-    expect((client.lastRequest?.request as { sourceImage: string }).sourceImage).toBe("/tmp/fox.png");
+    expect(
+      (client.lastRequest?.request as { sourceImage: string }).sourceImage,
+    ).toBe("data:image/png;base64,PNGB64==");
+    expect(
+      (client.lastRequest?.request as { strength?: number }).strength,
+    ).toBe(0.45);
     await waitFor(() => {
       const session = explorer.listTree().sessions[0];
       expect(explorer.listTurns(session!.id).length).toBeGreaterThanOrEqual(3);
@@ -522,7 +970,11 @@ describe("ImageStudioPage (chat)", () => {
       title: "Fox",
       modelId: "sana-1.6b-1024",
     });
-    explorer.appendTurn({ sessionId: session.id, role: "user", content: "a fox" });
+    explorer.appendTurn({
+      sessionId: session.id,
+      role: "user",
+      content: "a fox",
+    });
     explorer.appendTurn({
       sessionId: session.id,
       role: "assistant",
@@ -559,7 +1011,11 @@ describe("ImageStudioPage (chat)", () => {
       title: "Gone",
       modelId: "sana-1.6b-1024",
     });
-    explorer.appendTurn({ sessionId: session.id, role: "user", content: "a fox" });
+    explorer.appendTurn({
+      sessionId: session.id,
+      role: "user",
+      content: "a fox",
+    });
     explorer.appendTurn({
       sessionId: session.id,
       role: "assistant",
@@ -575,7 +1031,367 @@ describe("ImageStudioPage (chat)", () => {
         outputExists={() => false}
       />,
     );
-    await waitFor(() => expect(screen.getByText(/output missing on disk/i)).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByText(/output missing on disk/i)).toBeInTheDocument(),
+    );
     expect(screen.queryByRole("img")).toBeNull();
+  });
+
+  it("titles a pre-created untitled session on the first prompt", async () => {
+    const explorer = new InMemoryStudioExplorerClient("image");
+    const session = explorer.createSession({
+      folderId: null,
+      title: "New session",
+      modelId: "sana-1.6b-1024",
+    });
+    const client = new InMemoryDiffusionClient();
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        explorerClient={explorer}
+        initialSessionId={session.id}
+        drainIntervalMs={20}
+      />,
+    );
+    await waitFor(() =>
+      expect(screen.getByTestId(`tree-row-chat-${session.id}`)).toHaveAttribute(
+        "aria-selected",
+        "true",
+      ),
+    );
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "PNGB64==" },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "Generate image of a puppy" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await waitFor(() => {
+      expect(explorer.getSession(session.id)?.title).toBe(
+        "Generate image of a puppy",
+      );
+    });
+    expect(screen.queryByText("New session")).toBeNull();
+  });
+
+  it("Make that puppy black without an attachment img2imgs the last PNG and does not segment", async () => {
+    const client = new InMemoryDiffusionClient();
+    const explorer = new InMemoryStudioExplorerClient("image");
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        explorerClient={explorer}
+        drainIntervalMs={20}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [
+      {
+        kind: "complete",
+        jobId: "mem-job-1",
+        png: "PNGB64==",
+        outputPath: "/tmp/puppy.png",
+      },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a puppy" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(60);
+      await Promise.resolve();
+    });
+    await waitFor(() =>
+      expect(screen.getByAltText("Generated image")).toBeInTheDocument(),
+    );
+    client.lastSegment = null;
+    client.scriptEvents("mem-job-2", [
+      {
+        kind: "complete",
+        jobId: "mem-job-2",
+        png: "PNGB64==",
+        outputPath: "/tmp/puppy-black.png",
+      },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "Make that puppy black" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await waitFor(() => expect(client.lastRequest?.mode).toBe("img2img"));
+    expect(client.lastSegment).toBeNull();
+    expect(
+      (client.lastRequest?.request as { sourceImage: string }).sourceImage,
+    ).toBe("data:image/png;base64,PNGB64==");
+    // v2.4.4 Phase 3.2: 0.7 shipped in v2.4.3 and still returned a picture
+    // indistinguishable from the source in the field.
+    expect(
+      (client.lastRequest?.request as { strength?: number }).strength,
+    ).toBe(RESTYLE_IMG2IMG_STRENGTH);
+    expect((client.lastRequest?.request as { prompt?: string }).prompt).toMatch(
+      /Keep the same composition/,
+    );
+    expect((client.lastRequest?.request as { prompt?: string }).prompt).toMatch(
+      /fur and color to black/,
+    );
+  });
+
+  it("fails closed on an unattached restyle when last output is missing", async () => {
+    const client = new InMemoryDiffusionClient();
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "Make the puppy black" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await waitFor(() => {
+      expect(
+        screen.getByText(/No previous image in this session to restyle/),
+      ).toBeInTheDocument();
+    });
+    expect(client.lastRequest).toBeNull();
+  });
+
+  it("replace the sky with sunset without an attachment segments the last PNG", async () => {
+    const client = new InMemoryDiffusionClient();
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [
+      {
+        kind: "complete",
+        jobId: "mem-job-1",
+        png: "PNGB64==",
+        outputPath: "/tmp/scene.png",
+      },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a field" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(60);
+      await Promise.resolve();
+    });
+    await waitFor(() =>
+      expect(screen.getByAltText("Generated image")).toBeInTheDocument(),
+    );
+    client.scriptEvents("mem-job-2", [
+      { kind: "complete", jobId: "mem-job-2", png: "P==" },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "replace the sky with sunset" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await waitFor(() => expect(client.lastRequest?.mode).toBe("inpaint"));
+    expect(client.lastSegment?.phrase).toBe("sky");
+  });
+
+  it("SAM2 install then Retry replays the parked object replace", async () => {
+    const client = new InMemoryDiffusionClient();
+    client.segmentResult = {
+      ok: false,
+      code: "weights_missing",
+      message:
+        "SAM2 weights are not installed. Install sam2:hiera-tiny from Settings > Models, or paint a mask to continue.",
+    };
+    let resolveInstall: (() => void) | undefined;
+    const modelsClient = {
+      ...imageModels(),
+      install: () => {
+        const done = new Promise<void>((resolve) => {
+          resolveInstall = resolve;
+        });
+        return { cancel() {}, done };
+      },
+    };
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={modelsClient}
+        drainIntervalMs={20}
+      />,
+    );
+    const file = new File(["x"], "scene.png", { type: "image/png" });
+    await act(async () => {
+      fireEvent.change(screen.getByTestId("media-composer-file"), {
+        target: { files: [file] },
+      });
+      await Promise.resolve();
+    });
+    await waitFor(() =>
+      expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument(),
+    );
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "replace the car with a truck" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    expect(await screen.findByTestId("sam2-recovery")).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("sam2-install"));
+    });
+    client.segmentResult = {
+      ok: true,
+      candidates: [
+        { id: "c0", maskPngBase64: "mask", score: 0.9, label: "car" },
+      ],
+    };
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "P==" },
+    ]);
+    await act(async () => {
+      resolveInstall?.();
+      await Promise.resolve();
+    });
+    fireEvent.click(await screen.findByTestId("sam2-retry"));
+    await waitFor(() => expect(client.lastRequest?.mode).toBe("inpaint"));
+  });
+
+  it("defaults a 16 GB snapshot to realvisxl-v5 when that id is owned", async () => {
+    render(
+      <ImageStudioPage
+        client={new InMemoryDiffusionClient()}
+        hostVramGB={16}
+        modelsClient={{
+          lastSelection: {
+            schemaVersion: 1 as const,
+            orderedIds: ["juggernaut-xl-v9", "realvisxl-v5"],
+            recommendedByTask: { image: "realvisxl-v5" },
+            downloadedSinceInstall: [],
+          },
+          list: async () => [
+            {
+              id: "juggernaut-xl-v9",
+              displayName: "Juggernaut XL v9",
+              type: "image" as const,
+              installed: true,
+              source: "registry" as const,
+              vramGB: 8,
+            },
+            {
+              id: "realvisxl-v5",
+              displayName: "RealVisXL V5",
+              type: "image" as const,
+              installed: true,
+              source: "registry" as const,
+              vramGB: 6,
+            },
+          ],
+        }}
+        drainIntervalMs={20}
+      />,
+    );
+    await waitFor(() => {
+      expect(
+        (screen.getByTestId("image-model-select") as HTMLSelectElement).value,
+      ).toBe("realvisxl-v5");
+    });
+    expect(
+      [
+        ...(screen.getByTestId("image-model-select") as HTMLSelectElement)
+          .options,
+      ].map((option) => option.value),
+    ).toEqual(["realvisxl-v5", "juggernaut-xl-v9", GET_MORE_MODELS_ID]);
+  });
+
+  it("opens a 3D preview for a finished image and leaves the 2D download in place", async () => {
+    const client = new InMemoryDiffusionClient();
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("offline"));
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        drainIntervalMs={20}
+        openLocalSplat={async () => ({
+          path: "C:/studio/preview.splat",
+          bytes: new Uint8Array(32),
+          format: "splat",
+          sourceImageHash: "abc",
+        })}
+      />,
+    );
+    expect(screen.queryByRole("button", { name: "3D preview" })).toBeNull();
+    client.scriptEvents("mem-job-1", [
+      { kind: "complete", jobId: "mem-job-1", png: "PNGB64==" },
+    ]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "a fox" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(60);
+      await Promise.resolve();
+    });
+    const preview = await screen.findByRole("button", { name: "3D preview" });
+    expect(screen.getByRole("button", { name: "Save" })).toBeTruthy();
+    fireEvent.click(preview);
+    expect(screen.getByRole("dialog")).toHaveTextContent(
+      "This is a generated 3D preview. Unseen sides are invented. It is not a measured property tour.",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Open local splat" }));
+    expect(await screen.findByText(/\.splat$/)).toBeTruthy();
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Save" })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Close 3D preview" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("queues a splat generate on a ready host and cancels it without a remote call", async () => {
+    const client = new InMemoryDiffusionClient();
+    const queue = new InMemoryGenerationQueueClient();
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("offline"));
+    render(
+      <ImageStudioPage
+        client={client}
+        modelsClient={imageModels()}
+        queueClient={queue}
+        drainIntervalMs={20}
+        splatHost={{ platform: "win32", nvidia: true, cuda: true }}
+      />,
+    );
+    client.scriptEvents("mem-job-1", [{ kind: "complete", jobId: "mem-job-1", png: "PNGB64==" }]);
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), { target: { value: "a fox" } });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(60);
+      await Promise.resolve();
+    });
+    fireEvent.click(await screen.findByRole("button", { name: "3D preview" }));
+    fireEvent.click(screen.getByRole("button", { name: "3D generate coming from local backend" }));
+    expect(await screen.findByText(/Splat generate queued as/)).toBeTruthy();
+    expect(queue.jobs[0]?.jobType).toBe("splat_generate");
+    expect(queue.jobs[0]?.pillar).toBe("image");
+    expect(queue.jobs[0]?.parentId).not.toBe(queue.jobs[0]?.id);
+    fireEvent.click(screen.getByRole("button", { name: "Cancel splat generate" }));
+    expect(await screen.findByText(/Splat generate was cancelled/)).toBeTruthy();
+    expect(queue.jobs[0]?.error).toBe("cancelled");
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 });

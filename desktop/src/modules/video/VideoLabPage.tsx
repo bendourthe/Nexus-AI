@@ -10,7 +10,8 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Download, FileJson, ImagePlus } from "lucide-react";
+import { setModelActivity } from "../../lib/modelActivity";
+import { Download, FileJson, ImagePlus, Settings, Sparkles } from "lucide-react";
 
 import { useModelResidency } from "../../shared/models/useModelResidency";
 import {
@@ -20,35 +21,91 @@ import {
   type ResidencySessionMemory,
   type SchedulerActiveJob,
 } from "../../shared/models/schedulerResidency";
-import { ModelSwitchChip, ModelSwitchDialog } from "../../shared/models/ModelSwitchDialog";
+import { ConfirmDialog } from "../../shared/ui/ConfirmDialog";
+import {
+  cancelActiveGpuJob,
+  gpuSwitchBody,
+  gpuSwitchTitle,
+  queuedHolder,
+  resolveGpuHolder,
+  type GpuSwitchPrompt,
+} from "../../shared/models/gpuBusy";
+import {
+  askBeforeModelSwitch,
+  setAskBeforeModelSwitch,
+} from "../../shared/models/modelSwitchPreference";
+import {
+  estimateGenerationSeconds,
+  mergeProgress,
+} from "../../shared/chat/generationProgress";
+import {
+  ModelSwitchChip,
+  ModelSwitchDialog,
+} from "../../shared/models/ModelSwitchDialog";
 import { SidecarDownBanner } from "../../components/SidecarDownBanner";
-import { Button } from "../../components/ui";
+import { Select } from "../../components/ui";
 import { formatInferenceError } from "../../lib/inferenceRpcError";
 import {
-  isBackendDownMessage,
+  describeGenerationFailure,
+  failureTranscriptText,
+} from "../../shared/studio/generationError";
+import {
+  reportsBackendDown,
   isSidecarFailureMessage,
   useSidecarStatus,
 } from "../../lib/sidecarStatus";
 
-import { ComposerContextRow, MediaComposer, MessageList, chatComposerAccept, composerSessionUsage, withLiveTimestamp, type ChatMessage } from "../../shared/chat";
+import {
+  ComposerContextRow,
+  MediaComposer,
+  MessageList,
+  chatComposerAccept,
+  composerSessionUsage,
+  useStickToBottom,
+  withLiveTimestamp,
+  type ChatMessage,
+} from "../../shared/chat";
 import { isUsableVideoPath } from "../../shared/studio/usablePayload";
+import {
+  EMPTY_VIDEO_CLIP,
+  formatVideoFailure,
+  persistableAssistant,
+} from "./videoFailClosed";
 import { QuickModelSwitcher } from "../../shared/models/QuickModelSwitcher";
+import {
+  StudioInlineControl,
+} from "../../shared/studio/StudioSettings";
+import {
+  allowedDurations,
+  nativeClipSeconds,
+  reconcileVideoValues,
+  videoCapabilitiesFor,
+} from "../../shared/studio/modelCapabilities";
 import {
   SETTINGS_MODELS_PATH,
   installedModelsForType,
 } from "../../shared/models/installedFeed";
 import {
   ownedIdSet,
-  readFavorite,
+  recommendOrderForTask,
   resolveDefaultId,
+  snapshotForOwnedIds,
+  writeFavorite,
   type SelectionSnapshot,
 } from "../../shared/models/selectionPolicy";
 import { createIpcModelsClient } from "../../pages/settings/ipcModelsClient";
 import type { ListedModelDto } from "../../pages/settings/modelsTypes";
 import type { DiffusionTierId } from "../../../../core/config/DiffusionTier";
 import { getDiffusionTierConfig } from "../../../../core/config/DiffusionTier";
-import { planVideoContinuation, type ContinuationSegmentPlan } from "../../../../core/video/continuation";
-import { OFFICIAL_AVATAR_MODEL_ID, avatarAvailable, assertAvatarAllowed } from "../../../../core/video/avatarGate";
+import {
+  planVideoContinuation,
+  type ContinuationSegmentPlan,
+} from "../../../../core/video/continuation";
+import {
+  OFFICIAL_AVATAR_MODEL_ID,
+  avatarAvailable,
+  assertAvatarAllowed,
+} from "../../../../core/video/avatarGate";
 import type { RationalFrameRate } from "../../../../core/video/VideoEnhancement";
 import {
   DEFAULT_VIDEO_FORM_VALUES,
@@ -57,7 +114,7 @@ import {
   type VideoFormValues,
 } from "./VideoPromptForm";
 import { inferVideoIntent } from "./intent";
-import { TimelinePreviewer, type TimelineSegment } from "./TimelinePreviewer";
+import { type TimelineSegment } from "./TimelinePreviewer";
 import {
   createIpcVideoClient,
   type VideoClient,
@@ -71,8 +128,15 @@ import {
   type VideoEnhancementClient,
   type VideoEnhancementJobDto,
 } from "./videoEnhancementClient";
-import { RecallActions, applyImageRecall, type RecallMode } from "../../shared/studio/RecallActions";
+import {
+  RecallActions,
+  applyImageRecall,
+  type RecallMode,
+} from "../../shared/studio/RecallActions";
 import { GenerationQueueBar } from "../../shared/studio/GenerationQueueBar";
+import { useJobDrain } from "../../shared/studio/useJobDrain";
+import { clipBudgetRefusal } from "../../shared/studio/clipBudget";
+import { estimateModelLoadSeconds } from "../../shared/chat/generationProgress";
 import {
   createIpcGenerationQueueClient,
   type GenerationQueueClient,
@@ -85,15 +149,30 @@ import {
 } from "../../shared/explorer/studioExplorerClient";
 import { createIpcStudioExplorerClient } from "../../shared/explorer/ipcStudioExplorerClient";
 import { tauriAvailable } from "../chat/ipcChatExplorerClient";
+import { ipc } from "../../lib/ipc";
 import {
   isUsablePathRef,
   lastAssistantMediaRef,
-  sessionTitleFromPrompt,
   studioTurnsToChatMessages,
   UNREADABLE_OUTPUT_TEXT,
 } from "../../shared/explorer/studioSessionMemory";
+import {
+  applyImmediateFallbackTitle,
+  DEFAULT_SESSION_TITLE,
+  refineGeneratedTitle,
+  shouldTitleOnFirstSend,
+} from "../../shared/explorer/scheduleFirstPromptTitle";
 import type { StudioTurn } from "../../../../core/generations/StudioSessionStore.types";
-import { studioPersistUsage } from "../../shared/studio/studioTurnUsage";
+import {
+  elapsedSecondsSince,
+  studioPersistUsage,
+} from "../../shared/studio/studioTurnUsage";
+import {
+  createIpcMediaRuntimeClient,
+  isMediaRuntimeFailure,
+  type MediaRuntimeClient,
+  type MediaRuntimeState,
+} from "../../shared/studio/mediaRuntimeClient";
 
 const FALLBACK_MODEL: ListedModelDto = {
   id: DEFAULT_VIDEO_FORM_VALUES.modelId,
@@ -140,6 +219,7 @@ export interface VideoLabPageProps {
   readonly initialSessionId?: string;
   /** Test seam: probe whether a last-output path still exists on disk. */
   readonly outputExists?: (path: string) => boolean;
+  readonly mediaRuntimeClient?: MediaRuntimeClient;
 }
 
 interface VideoEnhancementSourceBinding {
@@ -157,6 +237,31 @@ const OUTPUT_HASH_PATTERN = /^[a-f0-9]{64}$/;
 function nextId(prefix: string): string {
   messageSeq += 1;
   return `${prefix}-${messageSeq}`;
+}
+
+function videoRecoveryState(
+  state: MediaRuntimeState,
+): ChatMessage["mediaRecovery"] {
+  if (state.state === "ready") return undefined;
+  return {
+    state: state.state,
+    code: state.code,
+    message: state.message,
+    retryable: state.retryable,
+    progress: state.progress,
+    ...(state.details ? { details: state.details } : {}),
+    ...(state.logPath ? { logPath: state.logPath } : {}),
+  };
+}
+
+/** The running clip this page is polling. */
+interface ActiveVideoJob {
+  readonly jobId: string;
+  readonly messageId: string;
+  /** v2.4.8 follow-up: the session the job belongs to (may not be visible). */
+  readonly sessionId: string | null;
+  /** v2.4.9: wall-clock start, so the bubble can report what the run cost. */
+  readonly startedAtMs: number;
 }
 
 export function VideoLabPage({
@@ -178,35 +283,61 @@ export function VideoLabPage({
   explorerClient: explorerClientOverride,
   initialSessionId,
   outputExists,
+  mediaRuntimeClient: mediaRuntimeOverride,
 }: VideoLabPageProps = {}): JSX.Element {
   const tierClip = getDiffusionTierConfig(diffusionTier).video.clipSeconds || 4;
   const canAvatar = avatarAvailable(diffusionTier, vramGB);
-  const [client] = useState<VideoClient>(() => clientOverride ?? createIpcVideoClient());
+  const [client] = useState<VideoClient>(
+    () => clientOverride ?? createIpcVideoClient(),
+  );
   const [enhancementClient] = useState<VideoEnhancementClient>(
     () => enhancementClientOverride ?? createIpcVideoEnhancementClient(),
   );
   const [queueClient] = useState<GenerationQueueClient>(
     () => queueOverride ?? createIpcGenerationQueueClient(),
   );
-  const [models, setModels] = useState<readonly ListedModelDto[]>([FALLBACK_MODEL]);
+  const [mediaRuntimeClient] = useState<MediaRuntimeClient>(
+    () => mediaRuntimeOverride ?? createIpcMediaRuntimeClient(),
+  );
+  const [models, setModels] = useState<readonly ListedModelDto[]>([
+    FALLBACK_MODEL,
+  ]);
+  const [selection, setSelection] = useState<SelectionSnapshot | null>(null);
+  const userChangedModelRef = useRef(false);
   const [noneInstalled, setNoneInstalled] = useState(false);
   // v2.2.0 Phase 2 (2.2): "backend down" is not "no models installed".
   const [listFailure, setListFailure] = useState<string | null>(null);
   const sidecar = useSidecarStatus();
-  const backendDown = sidecar.isDown || isBackendDownMessage(listFailure);
+  // v2.4.11: a call that timed out behind a running generation is not a
+  // backend that could not start -- see `reportsBackendDown`.
+  const backendDown =
+    sidecar.isDown || reportsBackendDown(listFailure, sidecar.status);
+  const mediaRetryRef = useRef<{
+    assistantId: string;
+    text: string;
+    attachments: readonly string[];
+  } | null>(null);
   const studioClient = useMemo(() => {
     if (explorerClientOverride) return explorerClientOverride;
-    if (backendDown || !tauriAvailable()) return new InMemoryStudioExplorerClient("video");
+    if (backendDown || !tauriAvailable())
+      return new InMemoryStudioExplorerClient("video");
     return createIpcStudioExplorerClient("video");
   }, [explorerClientOverride, backendDown]);
-  const [selectedModelId, setSelectedModelId] = useState<string>(FALLBACK_MODEL.id);
+  const [selectedModelId, setSelectedModelId] = useState<string>(
+    FALLBACK_MODEL.id,
+  );
   const [values, setValues] = useState<VideoFormValues>({
     ...DEFAULT_VIDEO_FORM_VALUES,
     clipSeconds: tierClip,
     ...initialValues,
   });
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const lastStudioMessage = messages[messages.length - 1];
+  const { scrollRef, onScroll, stickNow } = useStickToBottom(
+    `${messages.length}:${lastStudioMessage?.id ?? ""}:${lastStudioMessage?.content?.length ?? 0}:${lastStudioMessage?.pending ? 1 : 0}`,
+  );
   const activeSessionIdRef = useRef<string | null>(null);
+  const titleJobRef = useRef<{ id: string; prompt: string } | null>(null);
   // v2.2.9 Phase 1.4 (T004): state mirror of the ref so the history pane can
   // bind its highlighted row to the session that is actually open.
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
@@ -217,26 +348,102 @@ export function VideoLabPage({
   const lastOutputRef = useRef<string | null>(null);
   const lastJobIdRef = useRef<string | null>(null);
   const [historyEpoch, setHistoryEpoch] = useState(0);
-  const [activeJob, setActiveJob] = useState<{ jobId: string; messageId: string } | null>(null);
+  const [activeJob, setActiveJob] = useState<ActiveVideoJob | null>(null);
+  // v2.4.8 follow-up: see ImageStudioPage -- pending bubble survives a session
+  // switch; completions persist to the job's own session.
+  const pendingTurnRef = useRef<{ sessionId: string | null; assistant: ChatMessage } | null>(null);
+  const jobSessionRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!activeJob) pendingTurnRef.current = null;
+  }, [activeJob]);
+  const [busyConfirm, setBusyConfirm] = useState<GpuSwitchPrompt | null>(null);
+  // One switch question per job: the first `queued` report opens it.
+  const queuedPromptedRef = useRef<Set<string>>(new Set());
+  // v2.4.8 follow-up: the seconds between "Switch and start" and the job
+  // starting are the GPU actually being cleared; say so rather than freeze.
+  const [clearingFor, setClearingFor] = useState<string | null>(null);
+  const [askDialog, setAskDialog] = useState(() => askBeforeModelSwitch());
+  const jobIdRef = useRef<string | null>(null);
   const [seededAttachment, setSeededAttachment] = useState<string | null>(null);
-  const [playlists, setPlaylists] = useState<ReadonlyMap<string, readonly TimelineSegment[]>>(
-    () => new Map(),
-  );
+  const [playlists, setPlaylists] = useState<
+    ReadonlyMap<string, readonly TimelineSegment[]>
+  >(() => new Map());
   const outputs = useRef<Map<string, string>>(new Map()); // messageId -> mp4Path
+  // v2.4.8 follow-up (2026-09-08): the merged progress per message; a bare
+  // heartbeat must not erase a counted step (see ImageStudioPage).
+  const progressByMessage = useRef<Map<string, ChatMessage["progress"]>>(new Map());
   const frameRatesByMessage = useRef<Map<string, number>>(new Map());
   const [enhancementSources, setEnhancementSources] = useState<
     ReadonlyMap<string, VideoEnhancementSourceBinding>
   >(() => new Map());
-  const [openEnhancementPanels, setOpenEnhancementPanels] = useState<ReadonlySet<string>>(
-    () => new Set(),
+  const [openEnhancementPanels, setOpenEnhancementPanels] = useState<
+    ReadonlySet<string>
+  >(() => new Set());
+  const enhancementButtonRefs = useRef<Map<string, HTMLButtonElement>>(
+    new Map(),
   );
-  const enhancementButtonRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const completedEnhancementJobs = useRef<Set<string>>(new Set());
   const enhancedMessageIds = useRef<Set<string>>(new Set());
   const [formEpoch, setFormEpoch] = useState(0);
+  /** Quick-row edits share the panel's values; the epoch remounts it. */
+  const patchValues = useCallback((patch: Partial<VideoFormValues>): void => {
+    setValues((prev) => ({ ...prev, ...patch }));
+    setFormEpoch((n) => n + 1);
+  }, []);
+
+  /**
+   * v2.4.9 -- what THIS video model can render.
+   *
+   * Operator failure: Wan 2.1 T2V 1.3B was asked for 720p / 8 s. Its catalog
+   * entry declares a 480p local path, 81 frames and a 5 s ceiling; the job ran
+   * for ten minutes and then failed. Both settings are now bounded by the
+   * model, and duration is a dropdown rather than an open number field.
+   */
+  const videoCaps = useMemo(
+    () => videoCapabilitiesFor(selectedModelId, models.find((m) => m.id === selectedModelId)?.family),
+    [models, selectedModelId],
+  );
+  /**
+   * The offered clip lengths. Stable across model and fps changes by design:
+   * a long clip is a CHAIN of native segments, so the option set does not
+   * depend on what one pass can render.
+   */
+  const durationChoices = useMemo(() => allowedDurations(videoCaps), [videoCaps]);
+
+  /**
+   * Per-segment length for the continuation planner, from the model's own
+   * frame budget at the current frame rate. Keeping this in sync is what lets
+   * the duration dropdown stay constant while the segments stay renderable.
+   */
+  useEffect(() => {
+    const clip = nativeClipSeconds(videoCaps, values.fps);
+    if (clip !== values.clipSeconds) patchValues({ clipSeconds: clip });
+  }, [patchValues, values.clipSeconds, values.fps, videoCaps]);
+
+  /**
+   * Pull the form inside what the new model supports.
+   *
+   * v2.4.9 second pass: this no longer ANNOUNCES what it changed. The operator
+   * asked for the sentence to go, and with durations now stable across models
+   * there is far less for it to say -- usually only a resolution or frame-rate
+   * correction, which is visible in the controls themselves.
+   */
+  useEffect(() => {
+    const { patch, changed } = reconcileVideoValues(values, videoCaps);
+    if (changed.length === 0) return;
+    patchValues(patch as Partial<VideoFormValues>);
+    // Reconcile on a MODEL change, not on every keystroke within one model.
+  }, [videoCaps]);
   const [queueJobs, setQueueJobs] = useState<readonly GenerationJob[]>([]);
-  const [workflowByMessage, setWorkflowByMessage] = useState<Record<string, Record<string, unknown>>>({});
-  const [frameComments, setFrameComments] = useState<readonly { frame: number; text: string }[]>([]);
+  const [workflowByMessage, setWorkflowByMessage] = useState<
+    Record<string, Record<string, unknown>>
+  >({});
+  // v2.4.8 follow-up: frame notes were written by the inline frame-by-frame
+  // previewer, which duplicated the clip and has been removed. The list stays
+  // wired into the prompt so a future previewer can fill it again.
+  const [frameComments] = useState<readonly { frame: number; text: string }[]>(
+    [],
+  );
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const chainRef = useRef<{
     messageId: string;
@@ -250,6 +457,31 @@ export function VideoLabPage({
   } | null>(null);
 
   const isGenerating = activeJob !== null;
+  // v2.4.8 follow-up: see ImageStudioPage -- the GPU handover gets its own row.
+  const shownMessages = useMemo<readonly ChatMessage[]>(
+    () =>
+      clearingFor === null
+        ? messages
+        : [
+            ...messages,
+            {
+              id: "video-gpu-clearing",
+              role: "assistant" as const,
+              content: "",
+              pending: true,
+              activity: "video-generation" as const,
+              progress: {
+                step: 0,
+                total: 0,
+                stage: "clearing",
+                detail: `Unloading ${clearingFor}.`,
+              },
+            },
+          ],
+    [messages, clearingFor],
+  );
+  const selectedModelName =
+    models.find((m) => m.id === selectedModelId)?.displayName ?? selectedModelId;
   // v2.2.0 Phase 8 (DF-9/10/11): the same single-GPU switch policy Image
   // Studio has used since Phase 4. Video is the tab most likely to collide
   // with agentic work, and it was the one still loading unconditionally.
@@ -258,7 +490,10 @@ export function VideoLabPage({
   const residency = useModelResidency({ rememberedPairs: residencyMemory });
   // Holds the prompt whose submit opened the dialog, so "Switch now" resumes
   // the SAME request instead of losing it.
-  const pendingPromptRef = useRef<{ text: string; attachments: readonly string[] }>({
+  const pendingPromptRef = useRef<{
+    text: string;
+    attachments: readonly string[];
+  }>({
     text: "",
     attachments: [],
   });
@@ -274,14 +509,15 @@ export function VideoLabPage({
         const snap = source.lastSelection ?? null;
         const video = installedModelsForType(all, "video", ownedIdSet(snap));
         if (cancelled) return;
+        setSelection(snap);
         const first = video[0];
         if (first) {
           setModels(video);
           const next = resolveDefaultId(video, {
-            favorite: readFavorite("video"),
             recommended: snap?.recommendedByTask.video ?? null,
           });
-          setSelectedModelId(next || first.id);
+          if (!userChangedModelRef.current)
+            setSelectedModelId(next || first.id);
           setNoneInstalled(false);
           setListFailure(null);
         } else {
@@ -299,6 +535,11 @@ export function VideoLabPage({
             setListFailure(message);
           } else {
             setModels([FALLBACK_MODEL]);
+            setSelection(
+              snapshotForOwnedIds([FALLBACK_MODEL.id], {
+                video: FALLBACK_MODEL.id,
+              }),
+            );
             setNoneInstalled(false);
             setListFailure(null);
           }
@@ -310,25 +551,42 @@ export function VideoLabPage({
     };
   }, [modelsClient]);
 
-  const patchMessage = useCallback((id: string, patch: Partial<ChatMessage>): void => {
-    setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, ...patch } : m)));
-  }, []);
+  const patchMessage = useCallback(
+    (id: string, patch: Partial<ChatMessage>): void => {
+      setMessages((prev) =>
+        prev.map((m) => (m.id === id ? { ...m, ...patch } : m)),
+      );
+    },
+    [],
+  );
 
   const persistTurn = useCallback(
-    (input: { role: "user" | "assistant"; content: string; mediaRef?: string | null }): void => {
+    (input: {
+      role: "user" | "assistant";
+      content: string;
+      mediaRef?: string | null;
+    }): void => {
       if (backendDown) return;
-      const sessionId = activeSessionIdRef.current;
+      // A completion for a job started in another session persists there.
+      const sessionId = jobSessionRef.current ?? activeSessionIdRef.current;
       if (!sessionId || !studioClient.appendTurn) return;
       try {
         void Promise.resolve(
           studioClient.appendTurn({
             sessionId,
             role: input.role,
-            content: input.content,
-            mediaRef: input.mediaRef ?? null,
+            ...(input.role === "assistant"
+              ? persistableAssistant({
+                  content: input.content,
+                  mediaRef: input.mediaRef,
+                })
+              : { content: input.content, mediaRef: input.mediaRef ?? null }),
             ...studioPersistUsage(input),
           }),
-        ).then(() => setHistoryEpoch((n) => n + 1), () => undefined);
+        ).then(
+          () => setHistoryEpoch((n) => n + 1),
+          () => undefined,
+        );
       } catch {
         // Do not claim saved.
       }
@@ -336,19 +594,61 @@ export function VideoLabPage({
     [backendDown, studioClient],
   );
 
+  const handleStopGeneration = useCallback((): void => {
+    if (!activeJob) return;
+    const { jobId, messageId } = activeJob;
+    void queueClient.cancel(jobId);
+    patchMessage(messageId, { pending: false, content: "Stopped." });
+    persistTurn({ role: "assistant", content: "Stopped." });
+    setActiveJob(null);
+  }, [activeJob, patchMessage, persistTurn, queueClient]);
+
   const ensureSession = useCallback(
-    async (title: string): Promise<string | null> => {
+    async (prompt: string): Promise<string | null> => {
       if (backendDown) return null;
-      if (activeSessionIdRef.current) return activeSessionIdRef.current;
+      const scheduleTitle = (
+        sessionId: string,
+        title: string,
+        turnCount: number,
+      ): void => {
+        if (!shouldTitleOnFirstSend({ title, turnCount, prompt })) return;
+        titleJobRef.current = { id: sessionId, prompt };
+        void applyImmediateFallbackTitle({
+          sessionId,
+          prompt,
+          currentTitle: title,
+          rename: (id, nextTitle) => studioClient.renameSession(id, nextTitle),
+        }).then(
+          () => setHistoryEpoch((n) => n + 1),
+          () => undefined,
+        );
+      };
+      if (activeSessionIdRef.current) {
+        const existingId = activeSessionIdRef.current;
+        try {
+          const session = await Promise.resolve(
+            studioClient.getSession(existingId),
+          );
+          scheduleTitle(
+            existingId,
+            session?.title ?? DEFAULT_SESSION_TITLE,
+            session?.turnCount ?? 0,
+          );
+        } catch {
+          scheduleTitle(existingId, DEFAULT_SESSION_TITLE, 0);
+        }
+        return existingId;
+      }
       try {
         const session = await Promise.resolve(
           studioClient.createSession({
             folderId: null,
-            title: sessionTitleFromPrompt(title),
+            title: DEFAULT_SESSION_TITLE,
             modelId: selectedModelId,
           }),
         );
         setActiveSession(session.id);
+        scheduleTitle(session.id, DEFAULT_SESSION_TITLE, 0);
         setHistoryEpoch((n) => n + 1);
         return session.id;
       } catch {
@@ -360,7 +660,10 @@ export function VideoLabPage({
 
   const hydrateSession = useCallback(
     (sessionId: string): void => {
-      const apply = (turns: readonly StudioTurn[], lastRef: string | null): void => {
+      const apply = (
+        turns: readonly StudioTurn[],
+        lastRef: string | null,
+      ): void => {
         setActiveSession(sessionId);
         lastOutputRef.current = lastRef;
         lastJobIdRef.current = null;
@@ -369,26 +672,39 @@ export function VideoLabPage({
         completedEnhancementJobs.current.clear();
         enhancedMessageIds.current.clear();
         frameRatesByMessage.current.clear();
-        setMessages(studioTurnsToChatMessages(turns, { outputExists, mediaKind: "video" }));
+        setMessages(
+          studioTurnsToChatMessages(turns, {
+            outputExists,
+            mediaKind: "video",
+          }),
+        );
       };
       const turnsMaybe = studioClient.listTurns?.(sessionId) ?? [];
       const sessionMaybe = studioClient.getSession(sessionId);
       const isThenable = (value: unknown): value is Promise<unknown> =>
-        typeof value === "object" && value !== null && typeof (value as { then?: unknown }).then === "function";
+        typeof value === "object" &&
+        value !== null &&
+        typeof (value as { then?: unknown }).then === "function";
       if (!isThenable(turnsMaybe) && !isThenable(sessionMaybe)) {
         const turns = turnsMaybe as readonly StudioTurn[];
-        apply(turns, (sessionMaybe as { lastOutputRef?: string | null } | null)?.lastOutputRef ?? lastAssistantMediaRef(turns));
+        apply(
+          turns,
+          (sessionMaybe as { lastOutputRef?: string | null } | null)
+            ?.lastOutputRef ?? lastAssistantMediaRef(turns),
+        );
         return;
       }
-      void Promise.all([Promise.resolve(turnsMaybe), Promise.resolve(sessionMaybe)]).then(
-        ([turns, session]) => {
-          const list = (turns ?? []) as readonly StudioTurn[];
-          apply(
-            list,
-            (session as { lastOutputRef?: string | null } | null)?.lastOutputRef ?? lastAssistantMediaRef(list),
-          );
-        },
-      );
+      void Promise.all([
+        Promise.resolve(turnsMaybe),
+        Promise.resolve(sessionMaybe),
+      ]).then(([turns, session]) => {
+        const list = (turns ?? []) as readonly StudioTurn[];
+        apply(
+          list,
+          (session as { lastOutputRef?: string | null } | null)
+            ?.lastOutputRef ?? lastAssistantMediaRef(list),
+        );
+      });
     },
     [studioClient, outputExists, setActiveSession],
   );
@@ -408,7 +724,7 @@ export function VideoLabPage({
       const session = await Promise.resolve(
         studioClient.createSession({
           folderId: null,
-          title: "New chat",
+          title: DEFAULT_SESSION_TITLE,
           modelId: selectedModelId,
         }),
       );
@@ -465,12 +781,25 @@ export function VideoLabPage({
         });
       }
       if (mode === "image2video") {
-        return client.image2video({ ...request, sourceImage: extras.sourceImage ?? "" });
+        return client.image2video({
+          ...request,
+          sourceImage: extras.sourceImage ?? "",
+        });
       }
       return client.text2video(request);
     },
     [client, diffusionTier, vramGB],
   );
+
+  // v2.4.8 follow-up: name the model this job uses for the sidebar GPU card.
+  useEffect(() => {
+    if (!activeJob) return;
+    const label =
+      models.find((candidate) => candidate.id === selectedModelId)?.displayName ??
+      selectedModelId;
+    setModelActivity({ pillar: "video", modelLabel: label });
+    return () => setModelActivity(null);
+  }, [activeJob, models, selectedModelId]);
 
   const advanceFromEvents = useCallback(
     async (
@@ -479,9 +808,36 @@ export function VideoLabPage({
     ): Promise<{ done: boolean; nextJobId?: string }> => {
       for (const event of events) {
         if (event.kind === "progress") {
-          patchMessage(messageId, {
-            progress: { step: event.step ?? 0, total: event.totalSteps ?? 0 },
+          // v2.4.8 follow-up: a queued job asks to take the GPU instead of
+          // showing a waiting message; the bubble stays on "Loading model".
+          if (event.stage === "queued") {
+            const jobId = jobIdRef.current;
+            if (jobId && !queuedPromptedRef.current.has(jobId)) {
+              queuedPromptedRef.current.add(jobId);
+              setBusyConfirm({
+                kind: "queued",
+                holder: queuedHolder(event.blockedBy),
+                jobId,
+                messageId,
+              });
+            }
+            continue;
+          }
+          const merged = mergeProgress(progressByMessage.current.get(messageId), {
+            stage: event.stage ?? "loading",
+            step: event.step ?? 0,
+            totalSteps: event.totalSteps ?? 0,
+            ...(typeof event.totalBytes === "number"
+              ? {
+                  loadedBytes: event.loadedBytes ?? 0,
+                  totalBytes: event.totalBytes,
+                  etaS: event.etaS,
+                }
+              : {}),
+            ...(event.blockedBy ? { blockedBy: event.blockedBy } : {}),
           });
+          progressByMessage.current.set(messageId, merged);
+          patchMessage(messageId, { progress: merged });
         } else if (event.kind === "complete") {
           const mp4Path = event.outputPath ?? event.mp4Path ?? "";
           if (!isUsableVideoPath(mp4Path)) {
@@ -512,11 +868,11 @@ export function VideoLabPage({
               pending: false,
               progress: undefined,
               media: undefined,
-              content: "Generation failed: video generation completed without a playable clip.",
+              content: EMPTY_VIDEO_CLIP,
             });
             persistTurn({
               role: "assistant",
-              content: "Generation failed: video generation completed without a playable clip.",
+              content: EMPTY_VIDEO_CLIP,
             });
             return { done: true };
           }
@@ -533,12 +889,17 @@ export function VideoLabPage({
           if (chain && next) {
             chain.current = next;
             chain.remaining = chain.remaining.slice(1);
-            const accepted = await dispatchSegment(chain.mode, chain.base, next, {
-              sourceImage: chain.sourceImage,
-              sourceAudio: chain.sourceAudio,
-              priorJobId: event.jobId,
-              segmentCount: next.index + 1 + chain.remaining.length,
-            });
+            const accepted = await dispatchSegment(
+              chain.mode,
+              chain.base,
+              next,
+              {
+                sourceImage: chain.sourceImage,
+                sourceAudio: chain.sourceAudio,
+                priorJobId: event.jobId,
+                segmentCount: next.index + 1 + chain.remaining.length,
+              },
+            );
             return { done: false, nextJobId: accepted.jobId };
           }
           const playlist = chain?.playlist ?? [];
@@ -549,18 +910,32 @@ export function VideoLabPage({
               return copy;
             });
           }
-          const firstSrc = playlist[0]?.src ?? (mp4Path ? resolveMp4Url(mp4Path) : undefined);
+          const firstSrc =
+            playlist[0]?.src || (mp4Path ? resolveMp4Url(mp4Path) : "") || "";
+          if (!firstSrc) {
+            patchMessage(messageId, {
+              pending: false,
+              progress: undefined,
+              media: undefined,
+              content: EMPTY_VIDEO_CLIP,
+            });
+            persistTurn({ role: "assistant", content: EMPTY_VIDEO_CLIP });
+            chainRef.current = null;
+            return { done: true };
+          }
           patchMessage(messageId, {
             pending: false,
             progress: undefined,
-            media: firstSrc ? { kind: "video", src: firstSrc } : undefined,
+            media: { kind: "video", src: firstSrc },
+            // v2.4.9: the measured cost of the run, in brackets after the time.
+            generationSeconds: elapsedSecondsSince(activeJob?.startedAtMs),
           });
           if (isUsablePathRef(mp4Path)) {
             lastOutputRef.current = mp4Path;
             lastJobIdRef.current = event.jobId;
             persistTurn({ role: "assistant", content: "", mediaRef: mp4Path });
           } else {
-            persistTurn({ role: "assistant", content: "" });
+            persistTurn({ role: "assistant", content: "Generated video." });
           }
           if (mp4Path) {
             void client.extractWorkflow(mp4Path).then((wf) => {
@@ -600,6 +975,9 @@ export function VideoLabPage({
             });
           }
           chainRef.current = null;
+          if (mediaRetryRef.current?.assistantId === messageId) {
+            mediaRetryRef.current = null;
+          }
           return { done: true };
         } else if (event.kind === "error") {
           chainRef.current = null;
@@ -610,22 +988,49 @@ export function VideoLabPage({
             next.delete(messageId);
             return next;
           });
+          const runtimeMessage = event.message ?? "unknown error";
+          if (isMediaRuntimeFailure(runtimeMessage)) {
+            void mediaRuntimeClient.status().then((state) => {
+              const recovery = videoRecoveryState(state);
+              patchMessage(messageId, {
+                pending: false,
+                progress: undefined,
+                media: undefined,
+                content: recovery ? "" : formatVideoFailure(runtimeMessage),
+                mediaRecovery: recovery,
+              });
+              persistTurn({
+                role: "assistant",
+                content:
+                  recovery?.message ?? formatVideoFailure(runtimeMessage),
+              });
+            });
+            return { done: true };
+          }
+          const failed = formatVideoFailure(runtimeMessage);
           patchMessage(messageId, {
             pending: false,
             progress: undefined,
             media: undefined,
-            content: `Generation failed: ${event.message ?? "unknown error"}`,
+            content: failed,
           });
           persistTurn({
             role: "assistant",
-            content: `Generation failed: ${event.message ?? "unknown error"}`,
+            content: failed,
           });
           return { done: true };
         }
       }
       return { done: false };
     },
-    [patchMessage, resolveMp4Url, dispatchSegment, client, persistTurn],
+    [
+      patchMessage,
+      resolveMp4Url,
+      dispatchSegment,
+      client,
+      persistTurn,
+      mediaRuntimeClient,
+    ],
   );
 
   const handleMediaError = useCallback(
@@ -652,71 +1057,136 @@ export function VideoLabPage({
         delete next[message.id];
         return next;
       });
+      const failed = formatVideoFailure(
+        "generated video could not be displayed.",
+      );
       patchMessage(message.id, {
         media: undefined,
-        content: "Generation failed: generated video could not be displayed.",
+        content: failed,
       });
     },
     [patchMessage],
   );
 
-  useEffect(() => {
-    if (!activeJob) return;
-    let cancelled = false;
-    const timer = setInterval(() => {
-      void (async () => {
-        if (cancelled) return;
-        try {
-          const events = await client.drainEvents(activeJob.jobId);
-          if (cancelled) return;
-          const { done, nextJobId } = await advanceFromEvents(events, activeJob.messageId);
-          if (nextJobId) {
-            setActiveJob({ jobId: nextJobId, messageId: activeJob.messageId });
-            return;
-          }
-          if (done) {
-            cancelled = true;
-            clearInterval(timer);
-            setActiveJob(null);
-          }
-        } catch (err) {
-          cancelled = true;
-          clearInterval(timer);
-          chainRef.current = null;
-          patchMessage(activeJob.messageId, {
-            pending: false,
-            content: `Generation failed: ${formatInferenceError(err)}`,
-          });
-          setActiveJob(null);
-        }
-      })();
-    }, drainIntervalMs);
-    return () => {
-      cancelled = true;
-      clearInterval(timer);
-    };
-  }, [activeJob, client, advanceFromEvents, drainIntervalMs, patchMessage]);
+  // v2.4.11: the shared loop, whose contract is that a drained batch is always
+  // applied -- see `useJobDrain`. A lost batch is how a finished clip left a
+  // bubble waiting forever.
+  useJobDrain<ActiveVideoJob, VideoProgressEvent>({
+    job: activeJob,
+    intervalMs: drainIntervalMs,
+    drain: (job) => client.drainEvents(job.jobId),
+    apply: async (events, job) => {
+      jobSessionRef.current = job.sessionId;
+      jobIdRef.current = job.jobId;
+      const { done, nextJobId } = await advanceFromEvents(events, job.messageId);
+      jobSessionRef.current = null;
+      if (nextJobId) {
+        return {
+          nextJob: {
+            ...job,
+            jobId: nextJobId,
+            // A continuation keeps the original start: the reported duration
+            // is the whole chained clip, not just its final segment.
+          },
+        };
+      }
+      return { done };
+    },
+    onError: (err, job) => {
+      chainRef.current = null;
+      const failure = describeGenerationFailure(err, { surface: "video" });
+      patchMessage(job.messageId, { pending: false, content: "", failure });
+      persistTurn({
+        role: "assistant",
+        content: failureTranscriptText(failure),
+      });
+    },
+    onSettled: (next) => setActiveJob(next),
+  });
+
 
   useEffect(() => {
     let cancelled = false;
-    const timer = setInterval(() => {
-      void queueClient.list().then((jobs) => {
-        if (!cancelled) setQueueJobs(jobs);
-      }).catch(() => undefined);
-    }, Math.max(drainIntervalMs, 200));
+    const timer = setInterval(
+      () => {
+        void queueClient
+          .list()
+          .then((jobs) => {
+            if (!cancelled) setQueueJobs(jobs);
+          })
+          .catch(() => undefined);
+      },
+      Math.max(drainIntervalMs, 200),
+    );
     return () => {
       cancelled = true;
       clearInterval(timer);
     };
   }, [queueClient, drainIntervalMs]);
 
+  const markMediaRuntimeFailure = useCallback(
+    async (assistantId: string, error: unknown): Promise<boolean> => {
+      const message = formatInferenceError(error);
+      if (!isMediaRuntimeFailure(message)) return false;
+      try {
+        const state = await mediaRuntimeClient.status();
+        const recovery = videoRecoveryState(state);
+        patchMessage(assistantId, {
+          pending: false,
+          content: recovery ? "" : formatVideoFailure(message),
+          mediaRecovery: recovery,
+        });
+        persistTurn({
+          role: "assistant",
+          content: recovery?.message ?? formatVideoFailure(message),
+        });
+      } catch {
+        patchMessage(assistantId, {
+          pending: false,
+          content: formatVideoFailure(message),
+        });
+        persistTurn({
+          role: "assistant",
+          content: formatVideoFailure(message),
+        });
+      }
+      return true;
+    },
+    [mediaRuntimeClient, patchMessage],
+  );
+
   const handleSubmit = useCallback(
     async (
       text: string,
       attachments: readonly string[],
       residencyApproved = false,
+      retryAssistantId?: string,
+      busyApproved = false,
     ): Promise<void> => {
+      stickNow();
       if (isGenerating) return;
+      // v2.4.8 follow-up: another task holds the GPU (often a job from a
+      // session no longer on screen) or simply still loaded on it (Ollama
+      // keeps a chat model resident for minutes after its last reply). Ask
+      // before taking it. Either answer settles the GPU question, so the
+      // residency policy below then only checks that the model is installed.
+      if (!busyApproved && !residencyApproved && askBeforeModelSwitch()) {
+        const holder = await resolveGpuHolder({
+          active: activeSchedulerJob,
+          targetModelId: selectedModelId,
+          nameFor: (id) => models.find((m) => m.id === id)?.displayName ?? id,
+        });
+        if (holder) {
+          setBusyConfirm({
+            kind: "submit",
+            holder,
+            text,
+            attachments,
+            ...(retryAssistantId ? { retryAssistantId } : {}),
+          });
+          return;
+        }
+      }
       if (!residencyApproved) {
         const selected = models.find((m) => m.id === selectedModelId);
         const verdict = residency.request({
@@ -728,11 +1198,14 @@ export function VideoLabPage({
           activeJob: busyContextFromScheduler(activeSchedulerJob),
           installed: Boolean(selected?.installed),
         });
-        if (verdict.kind === "confirm") {
+        if (verdict.kind === "confirm" && !busyApproved) {
           pendingPromptRef.current = { text, attachments };
           return;
         }
-        if (verdict.kind === "not-installed" || verdict.kind === "defer") {
+        if (
+          verdict.kind === "not-installed" ||
+          (verdict.kind === "defer" && !busyApproved)
+        ) {
           setMessages((prev) => [
             ...prev,
             withLiveTimestamp({
@@ -762,36 +1235,85 @@ export function VideoLabPage({
           role: "assistant",
           content: UNREADABLE_OUTPUT_TEXT,
         };
-        setMessages((prev) => [...prev, withLiveTimestamp(userMsg), withLiveTimestamp(assistantMsg)]);
+        setMessages((prev) => [
+          ...prev,
+          withLiveTimestamp(userMsg),
+          withLiveTimestamp(assistantMsg),
+        ]);
         await ensureSession(text);
         persistTurn({ role: "user", content: text });
         persistTurn({ role: "assistant", content: UNREADABLE_OUTPUT_TEXT });
         return;
       }
-      const intent = inferVideoIntent({ text, attachments, avatarEnabled: canAvatar });
+      const intent = inferVideoIntent({
+        text,
+        attachments,
+        avatarEnabled: canAvatar,
+      });
       const userMsg: ChatMessage = {
         id: nextId("vuser"),
         role: "user",
         content: text,
         ...(attachments.length > 0 ? { attachments: [...attachments] } : {}),
       };
-      const assistantId = nextId("vassistant");
-      setMessages((prev) => [
-        ...prev,
-        withLiveTimestamp(userMsg),
-        withLiveTimestamp({
-          id: assistantId,
-          role: "assistant",
-          content: "",
+      const assistantId = retryAssistantId ?? nextId("vassistant");
+      // A retry reuses the message; the finished run's phase must not carry over.
+      progressByMessage.current.delete(assistantId);
+      if (retryAssistantId) {
+        patchMessage(assistantId, {
           pending: true,
+          content: "",
+          mediaRecovery: undefined,
           activity: "video-generation",
-        }),
-      ]);
-      await ensureSession(text);
-      persistTurn({ role: "user", content: text });
+        });
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          withLiveTimestamp(userMsg),
+          withLiveTimestamp({
+            id: assistantId,
+            role: "assistant",
+            content: "",
+            pending: true,
+            activity: "video-generation",
+            estimateSeconds: estimateGenerationSeconds({
+              pillar: "video",
+              width: values.width,
+              height: values.height,
+              steps: values.steps,
+              frames: Math.max(1, values.durationSeconds * values.fps),
+            }),
+          }),
+        ]);
+        await ensureSession(text);
+        persistTurn({ role: "user", content: text });
+      }
+      mediaRetryRef.current = {
+        assistantId,
+        text,
+        attachments: [...attachments],
+      };
 
       if (intent.blockedReason) {
-        patchMessage(assistantId, { pending: false, content: intent.blockedReason });
+        patchMessage(assistantId, {
+          pending: false,
+          content: intent.blockedReason,
+        });
+        return;
+      }
+
+      // v2.4.11: a clip whose own estimate outruns the request limit is
+      // refused here rather than after thirty minutes of sampling.
+      const budgetRefusal = clipBudgetRefusal({
+        width: values.width,
+        height: values.height,
+        steps: values.steps,
+        durationSeconds: values.durationSeconds,
+        fps: values.fps,
+      });
+      if (budgetRefusal) {
+        patchMessage(assistantId, { pending: false, content: budgetRefusal });
+        persistTurn({ role: "assistant", content: budgetRefusal });
         return;
       }
 
@@ -809,15 +1331,22 @@ export function VideoLabPage({
       }
 
       const clipSeconds = values.clipSeconds || tierClip;
-      const segments = planVideoContinuation(values.durationSeconds, clipSeconds);
+      const segments = planVideoContinuation(
+        values.durationSeconds,
+        clipSeconds,
+      );
       const first = segments[0];
       if (!first) {
-        patchMessage(assistantId, { pending: false, content: "Generation failed: empty continuation plan" });
+        const failed = formatVideoFailure("empty continuation plan");
+        patchMessage(assistantId, { pending: false, content: failed });
+        persistTurn({ role: "assistant", content: failed });
         return;
       }
 
       const modelId =
-        intent.mode === "audio2video" ? OFFICIAL_AVATAR_MODEL_ID : selectedModelId;
+        intent.mode === "audio2video"
+          ? OFFICIAL_AVATAR_MODEL_ID
+          : selectedModelId;
       const commentBlock =
         frameComments.length > 0
           ? `\n\nFrame notes:\n${frameComments.map((c) => `f${c.frame}: ${c.text}`).join("\n")}`
@@ -857,17 +1386,50 @@ export function VideoLabPage({
           segmentCount: segments.length,
           sessionContinueFrom,
         });
-        setActiveJob({ jobId: accepted.jobId, messageId: assistantId });
+        setActiveJob({
+          jobId: accepted.jobId,
+          messageId: assistantId,
+          sessionId: activeSessionIdRef.current,
+          startedAtMs: Date.now(),
+        });
       } catch (err) {
         chainRef.current = null;
-        patchMessage(assistantId, {
-          pending: false,
-          content: `Generation failed: ${formatInferenceError(err)}`,
-        });
-        persistTurn({
-          role: "assistant",
-          content: `Generation failed: ${formatInferenceError(err)}`,
-        });
+        if (!(await markMediaRuntimeFailure(assistantId, err))) {
+          patchMessage(assistantId, {
+            pending: false,
+            content: "",
+            failure: describeGenerationFailure(err, { surface: "video" }),
+          });
+          persistTurn({
+            role: "assistant",
+            content: failureTranscriptText(
+              describeGenerationFailure(err, { surface: "video" }),
+            ),
+          });
+          mediaRetryRef.current = null;
+        }
+      }
+      const titleJob = titleJobRef.current;
+      titleJobRef.current = null;
+      if (titleJob) {
+        void refineGeneratedTitle({
+          sessionId: titleJob.id,
+          prompt: titleJob.prompt,
+          rename: (id, title) => studioClient.renameSession(id, title),
+          generateTitle: async (id, prompt) => {
+            const reply = await ipc.call<{ title: string }>(
+              "chat.generateTitle",
+              {
+                chatId: id,
+                firstMessage: prompt,
+              },
+            );
+            return reply.ok ? reply.value : null;
+          },
+        }).then(
+          () => setHistoryEpoch((n) => n + 1),
+          () => undefined,
+        );
       }
     },
     [
@@ -885,7 +1447,42 @@ export function VideoLabPage({
       persistTurn,
       ensureSession,
       outputExists,
+      markMediaRuntimeFailure,
+      stickNow,
+      studioClient,
     ],
+  );
+
+  const repairMediaRuntime = useCallback(
+    async (message: ChatMessage): Promise<void> => {
+      let state = await mediaRuntimeClient.repair();
+      patchMessage(message.id, { mediaRecovery: videoRecoveryState(state) });
+      while (state.state === "repairing") {
+        await new Promise((resolve) => window.setTimeout(resolve, 750));
+        state = await mediaRuntimeClient.status();
+        patchMessage(message.id, { mediaRecovery: videoRecoveryState(state) });
+      }
+      const pending = mediaRetryRef.current;
+      if (state.state === "ready" && pending?.assistantId === message.id) {
+        mediaRetryRef.current = null;
+        await handleSubmit(
+          pending.text,
+          pending.attachments,
+          true,
+          pending.assistantId,
+        );
+      }
+    },
+    [handleSubmit, mediaRuntimeClient, patchMessage],
+  );
+
+  const cancelMediaRepair = useCallback(
+    async (message: ChatMessage): Promise<void> => {
+      const state = await mediaRuntimeClient.cancelRepair();
+      mediaRetryRef.current = null;
+      patchMessage(message.id, { mediaRecovery: videoRecoveryState(state) });
+    },
+    [mediaRuntimeClient, patchMessage],
   );
 
   const handleEnhancementComplete = useCallback(
@@ -927,7 +1524,11 @@ export function VideoLabPage({
 
   useEffect(() => {
     const parentIds = Array.from(
-      new Set(Array.from(enhancementSources.values()).map((source) => source.parentJobId)),
+      new Set(
+        Array.from(enhancementSources.values()).map(
+          (source) => source.parentJobId,
+        ),
+      ),
     );
     if (parentIds.length === 0) return;
     let cancelled = false;
@@ -945,12 +1546,20 @@ export function VideoLabPage({
       }
     };
     void refresh();
-    const timer = window.setInterval(() => void refresh(), enhancementPollIntervalMs);
+    const timer = window.setInterval(
+      () => void refresh(),
+      enhancementPollIntervalMs,
+    );
     return () => {
       cancelled = true;
       window.clearInterval(timer);
     };
-  }, [enhancementClient, enhancementPollIntervalMs, enhancementSources, handleEnhancementComplete]);
+  }, [
+    enhancementClient,
+    enhancementPollIntervalMs,
+    enhancementSources,
+    handleEnhancementComplete,
+  ]);
 
   const closeEnhancementPanel = useCallback((messageId: string): void => {
     setOpenEnhancementPanels((prev) => {
@@ -962,13 +1571,18 @@ export function VideoLabPage({
   }, []);
 
   function isEnhancedOutput(messageId: string): boolean {
-    return messageId.startsWith("video-enhancement-") || enhancedMessageIds.current.has(messageId);
+    return (
+      messageId.startsWith("video-enhancement-") ||
+      enhancedMessageIds.current.has(messageId)
+    );
   }
 
   function downloadVideo(messageId: string): void {
     const href =
       playlists.get(messageId)?.[0]?.src ??
-      (outputs.current.get(messageId) ? resolveMp4Url(outputs.current.get(messageId) as string) : undefined);
+      (outputs.current.get(messageId)
+        ? resolveMp4Url(outputs.current.get(messageId) as string)
+        : undefined);
     if (!href || typeof document === "undefined") return;
     const a = document.createElement("a");
     a.href = href;
@@ -982,9 +1596,12 @@ export function VideoLabPage({
     const mp4Path = outputs.current.get(messageId);
     if (!mp4Path) return;
     try {
-      const workflow = workflowByMessage[messageId] ?? (await client.extractWorkflow(mp4Path));
+      const workflow =
+        workflowByMessage[messageId] ?? (await client.extractWorkflow(mp4Path));
       if (!workflow) return;
-      const adapter = clipboard ?? (typeof navigator !== "undefined" ? navigator.clipboard : null);
+      const adapter =
+        clipboard ??
+        (typeof navigator !== "undefined" ? navigator.clipboard : null);
       if (adapter && typeof adapter.writeText === "function") {
         await adapter.writeText(JSON.stringify(workflow, null, 2));
       }
@@ -1036,7 +1653,13 @@ export function VideoLabPage({
   return (
     <section
       data-testid="video-lab-page"
-      style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, color: "var(--fg-0)" }}
+      style={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        minHeight: 0,
+        color: "var(--fg-0)",
+      }}
     >
       {/* v2.2.9 Phase 3.1 (T007): the header only exists when it has a visible
           child. When models are installed it would be an empty padded bar
@@ -1056,15 +1679,78 @@ export function VideoLabPage({
             type="button"
             data-testid="video-get-more-models"
             onClick={() => onGetMoreModels?.()}
-            style={{ background: "transparent", color: "var(--accent-video)", border: "none", cursor: "pointer" }}
+            style={{
+              background: "transparent",
+              color: "var(--accent-video)",
+              border: "none",
+              cursor: "pointer",
+            }}
           >
             No video models installed - get more models
           </button>
         </header>
       )}
-      <a data-testid="video-settings-link" href={SETTINGS_MODELS_PATH} style={{ display: "none" }}>
+      <a
+        data-testid="video-settings-link"
+        href={SETTINGS_MODELS_PATH}
+        style={{ display: "none" }}
+      >
         models settings
       </a>
+      {busyConfirm && (
+        <ConfirmDialog
+          testId="video-gpu-busy-confirm"
+          title={gpuSwitchTitle("video", selectedModelName)}
+          body={gpuSwitchBody(
+            busyConfirm.holder,
+            selectedModelName,
+            estimateModelLoadSeconds(
+              models.find((m) => m.id === selectedModelId)?.vramGB ?? null,
+            ),
+          ).map((line) => (
+            <p key={line} style={{ margin: "0 0 var(--space-1)" }}>
+              {line}
+            </p>
+          ))}
+          checkbox={{
+            label: "Do not show this again",
+            checked: !askDialog,
+            onChange: (hide) => {
+              setAskDialog(!hide);
+              setAskBeforeModelSwitch(!hide);
+            },
+          }}
+          confirmLabel="Switch and start"
+          cancelLabel={busyConfirm.kind === "queued" ? "Stop this request" : "Cancel"}
+          onCancel={() => {
+            const next = busyConfirm;
+            setBusyConfirm(null);
+            if (next.kind === "queued") {
+              void queueClient.cancel(next.jobId).catch(() => undefined);
+              patchMessage(next.messageId, {
+                pending: false,
+                progress: undefined,
+                content: "Stopped.",
+              });
+              setActiveJob(null);
+            }
+          }}
+          onConfirm={() => {
+            const next = busyConfirm;
+            setBusyConfirm(null);
+            // Say what is happening while the GPU is actually being cleared.
+            setClearingFor(next.holder.label);
+            void cancelActiveGpuJob()
+              .catch(() => false)
+              .then(() => {
+                setClearingFor(null);
+                return next.kind === "submit"
+                  ? handleSubmit(next.text, next.attachments, false, next.retryAssistantId, true)
+                  : undefined;
+              });
+          }}
+        />
+      )}
       {residency.pending && (
         <ModelSwitchDialog
           pending={residency.pending}
@@ -1092,228 +1778,353 @@ export function VideoLabPage({
         />
       )}
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "row", minHeight: 0 }}>
-        <StudioHistoryPane
-          pillar="video"
-          client={studioClient}
-          defaultModelId={selectedModelId}
-          sidecarDown={backendDown}
-          refreshToken={historyEpoch}
-          onSelectSession={hydrateSession}
-          activeSessionId={activeSessionId}
-        />
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
+      <StudioHistoryPane
+        pillar="video"
+        client={studioClient}
+        defaultModelId={selectedModelId}
+        sidecarDown={backendDown}
+        refreshToken={historyEpoch}
+        onSelectSession={hydrateSession}
+        activeSessionId={activeSessionId}
+        onBeforeSessionDisposition={async (id) => {
+          if (activeSessionId !== id || !activeJob) return;
+          await queueClient.cancel(activeJob.jobId);
+        }}
+        onSessionDisposition={(id) => {
+          if (activeSessionId !== id) return;
+          setActiveJob(null);
+          setActiveSession(null);
+          setMessages([]);
+          setSeededAttachment(null);
+          lastOutputRef.current = null;
+          pendingPromptRef.current = { text: "", attachments: [] };
+        }}
+      />
       <div
-        data-testid="video-history"
-        style={{ flex: 1, overflowY: "auto", padding: "var(--space-4)", display: "flex", flexDirection: "column", gap: "var(--space-3)" }}
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0,
+        }}
       >
-        {messages.length === 0 ? (
-          <p data-testid="video-empty" style={{ color: "var(--fg-muted)" }}>
-            Describe a video to generate it, or drop an image and ask to animate it.
-            {canAvatar
-              ? " On this diffusion-pro host, attach a photo and an audio track for a local talking-head."
-              : ""}
-          </p>
-        ) : (
-          <MessageList
-            messages={messages}
-            enableTools={false}
-            onMediaError={handleMediaError}
-            renderAfter={(m) => {
-              const enhancementSource = enhancementSources.get(m.id);
-              const panelOpen = openEnhancementPanels.has(m.id);
-              return (
-                <>
-                  {m.role === "assistant" && (m.media || (playlists.get(m.id)?.length ?? 0) > 0) ? (
-                    <TimelinePreviewer
-                      src={playlists.get(m.id)?.[0]?.src ?? m.media?.src ?? null}
-                      fps={frameRatesByMessage.current.get(m.id) ?? values.fps}
-                      segments={playlists.get(m.id)}
-                      testId={`video-timeline-${m.id}`}
-                      comments={frameComments}
-                      onAddComment={(c) => setFrameComments((prev) => [...prev, c])}
-                    />
-                  ) : null}
-                  {m.role === "assistant" && m.media ? (
-                    <div
-                      data-testid={`video-actions-${m.id}`}
-                      style={{ display: "flex", gap: "var(--space-2)", marginTop: "var(--space-1)", flexWrap: "wrap" }}
-                    >
-                      <button
-                        type="button"
-                        className="nx-icon-btn"
-                        aria-label={
-                          isEnhancedOutput(m.id)
-                            ? `Download enhanced video ${m.id}`
-                            : `Download original video ${m.id}`
-                        }
-                        title={
-                          isEnhancedOutput(m.id)
-                            ? "Download enhanced video"
-                            : "Download original video"
-                        }
-                        data-testid={`video-download-${m.id}`}
-                        onClick={() => downloadVideo(m.id)}
+        <div
+          data-testid="video-history"
+          ref={scrollRef}
+          onScroll={onScroll}
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            padding: "var(--space-4)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--space-3)",
+          }}
+        >
+          {messages.length === 0 ? (
+            <p data-testid="video-empty" style={{ color: "var(--fg-muted)" }}>
+              Describe a video to generate it, or drop an image and ask to
+              animate it.
+              {canAvatar
+                ? " On this diffusion-pro host, attach a photo and an audio track for a local talking-head."
+                : ""}
+            </p>
+          ) : (
+            <MessageList
+              messages={shownMessages}
+              enableTools={false}
+              onMediaError={handleMediaError}
+              renderMetaActions={(m) => {
+                const enhancementSource = enhancementSources.get(m.id);
+                const panelOpen = openEnhancementPanels.has(m.id);
+                return (
+                  <>
+                    {/* v2.4.8 follow-up: the result is the clip the bubble
+                        already plays. The full frame-by-frame previewer that
+                        used to sit here repeated the same video at full width
+                        under it, so a 4 s clip appeared twice. */}
+                    {m.role === "assistant" && m.media ? (
+                      <div
+                        data-testid={`video-actions-${m.id}`}
+                        style={{
+                          display: "flex",
+                          gap: "var(--space-1)",
+                          marginTop: "var(--space-1)",
+                          flexWrap: "wrap",
+                        }}
                       >
-                        <Download size={16} aria-hidden="true" />
-                      </button>
-                      {enhancementSource ? (
                         <button
-                          ref={(element) => {
-                            if (element) enhancementButtonRefs.current.set(m.id, element);
-                            else enhancementButtonRefs.current.delete(m.id);
-                          }}
                           type="button"
-                          className="nx-control"
-                          aria-label={`Enhance video ${m.id}`}
-                          aria-expanded={panelOpen}
-                          title="Create a separate enhanced copy. The original is preserved."
-                          data-testid={`video-enhance-${m.id}`}
-                          onClick={() => {
-                            setOpenEnhancementPanels((prev) => {
-                              const next = new Set(prev);
-                              if (next.has(m.id)) next.delete(m.id);
-                              else next.add(m.id);
-                              return next;
-                            });
-                          }}
+                          className="nx-icon-btn-bare"
+                          aria-label={
+                            isEnhancedOutput(m.id)
+                              ? `Download enhanced video ${m.id}`
+                              : `Download original video ${m.id}`
+                          }
+                          title={
+                            isEnhancedOutput(m.id)
+                              ? "Download enhanced video"
+                              : "Download original video"
+                          }
+                          data-testid={`video-download-${m.id}`}
+                          onClick={() => downloadVideo(m.id)}
                         >
-                          Enhance
+                          <Download size={16} aria-hidden="true" />
                         </button>
-                      ) : null}
-                    </div>
-                  ) : null}
-                  {enhancementSource && panelOpen ? (
-                    <VideoEnhancementPanel
-                      parentJobId={enhancementSource.parentJobId}
-                      sourceOutputId={enhancementSource.sourceOutputId}
-                      sourceWidth={enhancementSource.width}
-                      sourceHeight={enhancementSource.height}
-                      sourceFrameRate={enhancementSource.frameRate}
-                      client={enhancementClient}
-                      pollIntervalMs={enhancementPollIntervalMs}
-                      onClose={() => closeEnhancementPanel(m.id)}
-                      onComplete={handleEnhancementComplete}
+                        {enhancementSource ? (
+                          <button
+                            ref={(element) => {
+                              if (element)
+                                enhancementButtonRefs.current.set(
+                                  m.id,
+                                  element,
+                                );
+                              else enhancementButtonRefs.current.delete(m.id);
+                            }}
+                            type="button"
+                            className="nx-icon-btn-bare"
+                            aria-label={`Enhance video ${m.id}`}
+                            aria-expanded={panelOpen}
+                            title="Create a separate enhanced copy. The original is preserved."
+                            data-testid={`video-enhance-${m.id}`}
+                            onClick={() => {
+                              setOpenEnhancementPanels((prev) => {
+                                const next = new Set(prev);
+                                if (next.has(m.id)) next.delete(m.id);
+                                else next.add(m.id);
+                                return next;
+                              });
+                            }}
+                          >
+                            <Sparkles size={16} aria-hidden="true" />
+                          </button>
+                        ) : null}
+                      </div>
+                    ) : null}
+                    {enhancementSource && panelOpen ? (
+                      <VideoEnhancementPanel
+                        parentJobId={enhancementSource.parentJobId}
+                        sourceOutputId={enhancementSource.sourceOutputId}
+                        sourceWidth={enhancementSource.width}
+                        sourceHeight={enhancementSource.height}
+                        sourceFrameRate={enhancementSource.frameRate}
+                        client={enhancementClient}
+                        pollIntervalMs={enhancementPollIntervalMs}
+                        onClose={() => closeEnhancementPanel(m.id)}
+                        onComplete={handleEnhancementComplete}
+                      />
+                    ) : null}
+                  </>
+                );
+              }}
+              renderPreviewExtra={(m) =>
+                m.role === "assistant" && m.media ? (
+                  <>
+                    <button
+                      type="button"
+                      className="nx-icon-btn-bare"
+                      aria-label={
+                        isEnhancedOutput(m.id)
+                          ? "Copy workflow and provenance"
+                          : "Copy Workflow"
+                      }
+                      title={
+                        isEnhancedOutput(m.id)
+                          ? "Copy workflow and provenance"
+                          : "Copy Workflow"
+                      }
+                      data-testid={`video-copyworkflow-${m.id}`}
+                      onClick={() => void copyWorkflow(m.id)}
+                    >
+                      <FileJson size={16} aria-hidden="true" />
+                    </button>
+                    <RecallActions
+                      messageId={m.id}
+                      testIdPrefix="video"
+                      hasWorkflow={Boolean(workflowByMessage[m.id])}
+                      onRecall={(mode) => recall(m.id, mode)}
                     />
-                  ) : null}
-                </>
-              );
-            }}
-            renderPreviewExtra={(m) =>
-              m.role === "assistant" && m.media ? (
-                <>
-                  <button
-                    type="button"
-                    className="nx-icon-btn"
-                    aria-label={
-                      isEnhancedOutput(m.id)
-                        ? "Copy workflow and provenance"
-                        : "Copy Workflow"
-                    }
-                    title={
-                      isEnhancedOutput(m.id)
-                        ? "Copy workflow and provenance"
-                        : "Copy Workflow"
-                    }
-                    data-testid={`video-copyworkflow-${m.id}`}
-                    onClick={() => void copyWorkflow(m.id)}
-                  >
-                    <FileJson size={16} aria-hidden="true" />
-                  </button>
-                  <RecallActions
-                    messageId={m.id}
-                    testIdPrefix="video"
-                    hasWorkflow={Boolean(workflowByMessage[m.id])}
-                    onRecall={(mode) => recall(m.id, mode)}
-                  />
-                  <button
-                    type="button"
-                    className="nx-icon-btn"
-                    aria-label="Use as Source"
-                    title="Use as Source"
-                    data-testid={`video-useframe-${m.id}`}
-                    onClick={() => setSeededAttachment(m.media?.src ?? null)}
-                  >
-                    <ImagePlus size={16} aria-hidden="true" />
-                  </button>
-                </>
-              ) : null
-            }
-          />
-        )}
-      </div>
-
-      <div style={{ padding: "var(--space-3) var(--space-4)", borderTop: "1px solid var(--border-1)", display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
-        <div>
-          <Button
-            type="button"
-            variant="ghost"
-            testId="video-advanced-settings"
-            aria-expanded={advancedOpen}
-            onClick={() => setAdvancedOpen((v) => !v)}
-          >
-            Advanced settings
-          </Button>
-          {advancedOpen ? (
-          <div style={{ marginTop: "var(--space-2)" }}>
-            <VideoPromptForm
-              key={formEpoch}
-              initial={values}
-              availableModels={models.map((m) => ({
-                id: m.id,
-                displayName: m.displayName,
-                mode: "text2video" as const,
-              }))}
-              onChange={setValues}
-              disabled={isGenerating}
-              hideMode
-              avatarAvailable={canAvatar}
-              diffusionTier={diffusionTier}
+                    <button
+                      type="button"
+                      className="nx-icon-btn-bare"
+                      aria-label="Use as Source"
+                      title="Use as Source"
+                      data-testid={`video-useframe-${m.id}`}
+                      onClick={() => setSeededAttachment(m.media?.src ?? null)}
+                    >
+                      <ImagePlus size={16} aria-hidden="true" />
+                    </button>
+                  </>
+                ) : null
+              }
+              onRepairMediaRuntime={(message) =>
+                void repairMediaRuntime(message)
+              }
+              onCancelMediaRepair={(message) => void cancelMediaRepair(message)}
+              onOpenMediaRepairLog={() =>
+                void mediaRuntimeClient.openLogLocation()
+              }
             />
-            <GenerationQueueBar
-              jobs={queueJobs}
-              onCancel={(id) => {
-                void queueClient.cancel(id).then(() => queueClient.list().then(setQueueJobs));
-              }}
-              onReorder={(ids) => {
-                void queueClient.reorder(ids).then(() => queueClient.list().then(setQueueJobs));
-              }}
-            />
-          </div>
-          ) : null}
+          )}
         </div>
-        <MediaComposer
-          disabled={isGenerating}
-          placeholder={
-            canAvatar
-              ? "Describe the video, drop an image to animate, or add a photo plus audio for a talking-head..."
-              : "Describe the video you want, or drop an image to animate..."
-          }
-          onSubmit={(text, attachments) => void handleSubmit(text, attachments)}
-          submitAccentVar="--accent-video"
-          submitLabel="Generate"
-          seededAttachment={seededAttachment}
-          streaming={isGenerating}
-          accept={
-            canAvatar
-              ? chatComposerAccept({ allowImages: true, allowAudio: true })
-              : "image/*"
-          }
-          audioEnabled={canAvatar}
-          audioHint="Photo plus audio stay on this device."
-        />
-        <ComposerContextRow usage={contextUsage} onStartNewSession={() => void startFreshStudioSession()}>
-          <QuickModelSwitcher
-            testId="video-model-select"
-            models={models}
-            taskType="video"
-            value={selectedModelId}
-            onChange={setSelectedModelId}
-            onGetMoreModels={onGetMoreModels}
+
+        <div
+          style={{
+            padding: "var(--space-3) var(--space-4)",
+            borderTop: "1px solid var(--border-1)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--space-2)",
+          }}
+        >
+          <MediaComposer
             disabled={isGenerating}
+            placeholder={
+              canAvatar
+                ? "Describe the video, drop an image to animate, or add a photo plus audio for a talking-head..."
+                : "Describe the video you want, or drop an image to animate..."
+            }
+            onSubmit={(text, attachments) =>
+              void handleSubmit(text, attachments)
+            }
+            onStop={handleStopGeneration}
+            submitAccentVar="--accent-video"
+            submitLabel="Generate"
+            seededAttachment={seededAttachment}
+            streaming={isGenerating}
+            accept={
+              canAvatar
+                ? chatComposerAccept({ allowImages: true, allowAudio: true })
+                : "image/*"
+            }
+            audioEnabled={canAvatar}
+            audioHint="Photo plus audio stay on this device."
           />
-        </ComposerContextRow>
-      </div>
+          <ComposerContextRow
+            usage={contextUsage}
+            onStartNewSession={() => void startFreshStudioSession()}
+            trailing={
+              <button
+                type="button"
+                className="nx-icon-btn-bare"
+                data-testid="video-advanced-settings"
+                aria-expanded={advancedOpen}
+                aria-label="Advanced settings"
+                title="Advanced settings"
+                onClick={() => setAdvancedOpen((v) => !v)}
+              >
+                <Settings size={17} aria-hidden="true" />
+              </button>
+            }
+            quickControls={
+              <>
+                {/*
+                  v2.4.9 operator ask: duration was a free number field the user
+                  could raise indefinitely. An 8 s request on a model trained for
+                  5 s ran for ten minutes and then failed, so it is a dropdown of
+                  what THIS model can render at the chosen frame rate.
+                */}
+                <StudioInlineControl label="Duration" width="7.5rem">
+                  <Select
+                    data-testid="video-quick-duration"
+                    value={String(values.durationSeconds)}
+                    disabled={isGenerating}
+                    onChange={(e) =>
+                      patchValues({ durationSeconds: Number(e.target.value) })
+                    }
+                  >
+                    {durationChoices.map((seconds) => (
+                      <option key={seconds} value={String(seconds)}>
+                        {seconds} s
+                      </option>
+                    ))}
+                  </Select>
+                </StudioInlineControl>
+                <StudioInlineControl label="Resolution" width="12rem">
+                  <Select
+                    data-testid="video-quick-resolution"
+                    value={`${values.width}x${values.height}`}
+                    disabled={isGenerating}
+                    onChange={(e) => {
+                      const option = videoCaps.resolutions.find(
+                        (candidate) => candidate.value === e.target.value,
+                      );
+                      if (!option) return;
+                      patchValues({ width: option.width, height: option.height });
+                    }}
+                  >
+                    {videoCaps.resolutions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
+                </StudioInlineControl>
+                <StudioInlineControl label="FPS" width="5.5rem">
+                  <Select
+                    data-testid="video-quick-fps"
+                    value={String(values.fps)}
+                    disabled={isGenerating}
+                    onChange={(e) => patchValues({ fps: Number(e.target.value) as 12 | 16 | 24 })}
+                  >
+                    {videoCaps.fps.map((rate) => (
+                      <option key={rate} value={String(rate)}>
+                        {rate}
+                      </option>
+                    ))}
+                  </Select>
+                </StudioInlineControl>
+              </>
+            }
+          >
+            <QuickModelSwitcher
+              testId="video-model-select"
+              models={models}
+              taskType="video"
+              value={selectedModelId}
+              hostVramGB={vramGB > 0 ? vramGB : null}
+              recommendOrder={recommendOrderForTask(selection, "video")}
+              ownedIds={ownedIdSet(selection)}
+              onChange={(nextModelId) => {
+                userChangedModelRef.current = true;
+                setSelectedModelId(nextModelId);
+                writeFavorite("video", nextModelId);
+              }}
+              onGetMoreModels={onGetMoreModels}
+              disabled={isGenerating}
+            />
+          </ComposerContextRow>
+          {advancedOpen ? (
+            <div style={{ marginTop: "var(--space-2)" }}>
+              <VideoPromptForm
+                key={formEpoch}
+                initial={values}
+                availableModels={models.map((m) => ({
+                  id: m.id,
+                  displayName: m.displayName,
+                  mode: "text2video" as const,
+                }))}
+                onChange={setValues}
+                disabled={isGenerating}
+                hideMode
+                avatarAvailable={canAvatar}
+                diffusionTier={diffusionTier}
+              />
+              <GenerationQueueBar
+                jobs={queueJobs}
+                onCancel={(id) => {
+                  void queueClient
+                    .cancel(id)
+                    .then(() => queueClient.list().then(setQueueJobs));
+                }}
+                onReorder={(ids) => {
+                  void queueClient
+                    .reorder(ids)
+                    .then(() => queueClient.list().then(setQueueJobs));
+                }}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     </section>

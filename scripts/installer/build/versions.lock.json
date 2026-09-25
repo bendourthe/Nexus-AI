@@ -24,6 +24,163 @@
       }
     }
   },
+  "diffusion": {
+    "schemaVersion": 1,
+    "provisionerVersion": "2.4.1",
+    "python": {
+      "minimum": "3.11",
+      "maximumExclusive": "3.13",
+      "abis": [
+        "cp311",
+        "cp312"
+      ]
+    },
+    "runtimeIndexUrl": "https://pypi.org/simple",
+    "runtimeRequirements": [
+      "diffusers==0.36.0",
+      "transformers==4.53.2",
+      "accelerate==1.8.1",
+      "safetensors==0.5.3",
+      "Pillow==11.2.1",
+      "imageio==2.37.0",
+      "imageio-ffmpeg==0.6.0",
+      "opencv-python-headless==4.11.0.86",
+      "numpy==1.26.4",
+      "sentencepiece==0.2.0",
+      "protobuf==5.29.5",
+      "ftfy==6.3.1"
+    ],
+    "targets": {
+      "win-x64-nvidia": {
+        "backend": "cuda",
+        "torchIndexUrl": "https://download.pytorch.org/whl/cu121",
+        "torchRequirements": [
+          "torch==2.5.1",
+          "torchvision==0.20.1",
+          "torchaudio==2.5.1"
+        ],
+        "referenceArtifacts": [
+          {
+            "name": "torch",
+            "pythonAbi": "cp311",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torch-2.5.1%2Bcu121-cp311-cp311-win_amd64.whl",
+            "filename": "torch-2.5.1+cu121-cp311-cp311-win_amd64.whl",
+            "size": 2449385544,
+            "sha256": "4bcee18f00c43c815efad8efaa3bca584ffdc8d2cd35ef4c44c814f2739d9191"
+          },
+          {
+            "name": "torchvision",
+            "pythonAbi": "cp311",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.1%2Bcu121-cp311-cp311-win_amd64.whl",
+            "filename": "torchvision-0.20.1+cu121-cp311-cp311-win_amd64.whl",
+            "size": 6063667,
+            "sha256": "00143c941b30f2d5001b58f8caada826aaa4dce94b8ae4192730e5c34165fa8c"
+          },
+          {
+            "name": "torchaudio",
+            "pythonAbi": "cp311",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.1%2Bcu121-cp311-cp311-win_amd64.whl",
+            "filename": "torchaudio-2.5.1+cu121-cp311-cp311-win_amd64.whl",
+            "size": 4136125,
+            "sha256": "f9397ff9c6e8fa1b4fdc94939411ac65fe43f66d66367ee80603bc7ce10e18e2"
+          },
+          {
+            "name": "torch",
+            "pythonAbi": "cp312",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torch-2.5.1%2Bcu121-cp312-cp312-win_amd64.whl",
+            "filename": "torch-2.5.1+cu121-cp312-cp312-win_amd64.whl",
+            "size": 2449331371,
+            "sha256": "473d76257636c66b22cbfac6f616d6b522ef3d3473c13decb1afda22a7b059eb"
+          },
+          {
+            "name": "torchvision",
+            "pythonAbi": "cp312",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.1%2Bcu121-cp312-cp312-win_amd64.whl",
+            "filename": "torchvision-0.20.1+cu121-cp312-cp312-win_amd64.whl",
+            "size": 6063634,
+            "sha256": "12b764936fc3fde29d7165adc7c721e491fa75c7a498c9fbaa08757b5fe59fe7"
+          },
+          {
+            "name": "torchaudio",
+            "pythonAbi": "cp312",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.1%2Bcu121-cp312-cp312-win_amd64.whl",
+            "filename": "torchaudio-2.5.1+cu121-cp312-cp312-win_amd64.whl",
+            "size": 4132013,
+            "sha256": "80400d75da5852bb5491f6259d47a163a00c2d1479ed57d3d95fde205e1b2815"
+          }
+        ]
+      },
+      "linux-x64-nvidia": {
+        "backend": "cuda",
+        "torchIndexUrl": "https://download.pytorch.org/whl/cu121",
+        "torchRequirements": [
+          "torch==2.5.1",
+          "torchvision==0.20.1",
+          "torchaudio==2.5.1"
+        ],
+        "referenceArtifacts": [
+          {
+            "name": "torch",
+            "pythonAbi": "cp311",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torch-2.5.1%2Bcu121-cp311-cp311-linux_x86_64.whl",
+            "filename": "torch-2.5.1+cu121-cp311-cp311-linux_x86_64.whl",
+            "size": 780460642,
+            "sha256": "c8ab8c92eab928a93c483f83ca8c63f13dafc10fc93ad90ed2dcb7c82ea50410"
+          },
+          {
+            "name": "torchvision",
+            "pythonAbi": "cp311",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.1%2Bcu121-cp311-cp311-linux_x86_64.whl",
+            "filename": "torchvision-0.20.1+cu121-cp311-cp311-linux_x86_64.whl",
+            "size": 7284399,
+            "sha256": "237609a3551c2b68f32bcd3f3875dca93836010d83922ef2f3bd3a7540caee58"
+          },
+          {
+            "name": "torchaudio",
+            "pythonAbi": "cp311",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.1%2Bcu121-cp311-cp311-linux_x86_64.whl",
+            "filename": "torchaudio-2.5.1+cu121-cp311-cp311-linux_x86_64.whl",
+            "size": 3416148,
+            "sha256": "9e6f03e6410cb3557978dea25fb30ce3e7c165e8377fcc8e0e1ddc700503d38b"
+          },
+          {
+            "name": "torch",
+            "pythonAbi": "cp312",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torch-2.5.1%2Bcu121-cp312-cp312-linux_x86_64.whl",
+            "filename": "torch-2.5.1+cu121-cp312-cp312-linux_x86_64.whl",
+            "size": 780369235,
+            "sha256": "222be02548c2e74a21a8fbc8e5b8d2eef9f9faee865d70385d2eb1b9aabcbc76"
+          },
+          {
+            "name": "torchvision",
+            "pythonAbi": "cp312",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.1%2Bcu121-cp312-cp312-linux_x86_64.whl",
+            "filename": "torchvision-0.20.1+cu121-cp312-cp312-linux_x86_64.whl",
+            "size": 7283755,
+            "sha256": "48cf3a716f70370ed5dcb656e7497415ef37860b07e67ea4b1ef8598efe28445"
+          },
+          {
+            "name": "torchaudio",
+            "pythonAbi": "cp312",
+            "url": "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.1%2Bcu121-cp312-cp312-linux_x86_64.whl",
+            "filename": "torchaudio-2.5.1+cu121-cp312-cp312-linux_x86_64.whl",
+            "size": 3413077,
+            "sha256": "5648a01f23033f15d60dc638f91c2d4c66c0a01621162471e806064acda63b70"
+          }
+        ]
+      },
+      "mac-arm64-apple": {
+        "backend": "mps",
+        "torchIndexUrl": "https://pypi.org/simple",
+        "torchRequirements": [
+          "torch==2.5.1",
+          "torchvision==0.20.1",
+          "torchaudio==2.5.1"
+        ],
+        "referenceArtifacts": []
+      }
+    }
+  },
   "platforms": {
     "win-x64": {
       "python": {

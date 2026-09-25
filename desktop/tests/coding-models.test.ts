@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ModelCatalog } from "../../core/registry/ModelCatalog";
+import { MODEL_FAMILIES, ModelCatalog } from "../../core/registry/ModelCatalog";
 import {
   SIDECAR_MODELS,
   lookupModel,
@@ -68,6 +68,6 @@ describe("model catalog (derived from core/registry/ModelCatalog)", () => {
 
   it("covers each ModelFamily at least once", () => {
     const families = new Set(SIDECAR_MODELS.map((m) => m.family));
-    expect(families).toEqual(new Set(["gemma", "llama", "qwen", "deepseek", "lfm2.5", "hermes", "muse-glimmer", "nemotron-lightning", "gpt-oss"]));
+    expect(families).toEqual(new Set(MODEL_FAMILIES));
   });
 });

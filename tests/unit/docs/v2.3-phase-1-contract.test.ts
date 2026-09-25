@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, "../../..");
-const DEVELOPMENT_ROOT = join(REPO_ROOT, "docs/v2/v2.3/development");
+const DEVELOPMENT_ROOT = join(REPO_ROOT, "docs/archive/v2/v2.3/development");
 const HUB_HANDOFF = join(
   DEVELOPMENT_ROOT,
   "nexus-hub-security-audit-handoff.md",

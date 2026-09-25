@@ -346,7 +346,7 @@ class OllamaInstaller:
             log(f"ollama binary not found under {dest_root} after extraction.", "error")
             return False
         with contextlib.suppress(OSError):
-            os.chmod(ollama_bin, 0o755)
+            os.chmod(ollama_bin, 0o700)
         # Make `ollama` resolvable for this process and every child it spawns
         # (the model step, the managed `ollama serve`).
         os.environ["PATH"] = f"{bin_dir}{os.pathsep}{os.environ.get('PATH', '')}"
@@ -435,7 +435,6 @@ class OllamaInstaller:
         )
         return False
 
-
     def _ollama_version(self, state: InstallerState) -> str | None:
         """Best-effort detection of the installed Ollama version (API, then CLI)."""
         try:
@@ -460,6 +459,7 @@ class OllamaInstaller:
         combined = f"{result.stdout or ''}{result.stderr or ''}"
         match = re.search(r"\d+\.\d+\.\d+", combined)
         return match.group() if match else None
+
 
 # v2.2.0 Phase 2 (2.3) -- per-model Ollama version gate, run at PULL time.
 #

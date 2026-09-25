@@ -5,11 +5,18 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { ipcCall } from "../../lib/ipc";
+import {
+  formatDesktopPayloadLabel,
+  type DesktopPayloadIdentity,
+} from "../../../../core/storage/desktopPayload";
 import { DataSettings } from "./DataSettings";
 import { VideoSettings } from "./VideoSettings";
 import type { VideoSettingsClient } from "./videoSettingsTypes";
 import { createMockVideoSettingsClient } from "./mockVideoSettingsClient";
 
+import { PreferencesSettings } from "./PreferencesSettings";
+import { PersonasSettings } from "./PersonasSettings";
 import { ModelsSettings, type ModelsClient } from "./ModelsSettings";
 import { SkillsSettings, type SkillsSettingsClient } from "./SkillsSettings";
 import { SkillOptimizerSettings, type SkillOptimizerClient } from "./SkillOptimizerSettings";
@@ -29,10 +36,14 @@ import { createMockCredentialsClient } from "./mockCredentialsClient";
 import { createMockServingClient } from "./mockServingClient";
 import { createMockFineTuningClient } from "./mockFineTuningClient";
 import { createMockMcpRegistryClient } from "./mockMcpRegistryClient";
+import type { ArchivedChatsClient } from "./ArchivedChatsSettings";
 
 // v2.2.0 Phase 7: "data" hosts export/import; the retired User Profile page
 // redirects here rather than rendering a placeholder that read nothing.
 type SettingsTab =
+  // v2.4.8 follow-up: Preferences leads, and is where Settings opens.
+  | "preferences"
+  | "personas"
   | "models"
   | "skills"
   | "optimizer"
@@ -45,6 +56,8 @@ type SettingsTab =
   | "video";
 
 const SETTINGS_TABS: readonly SettingsTab[] = [
+  "preferences",
+  "personas",
   "models",
   "skills",
   "optimizer",
@@ -58,6 +71,7 @@ const SETTINGS_TABS: readonly SettingsTab[] = [
 ];
 
 function parseSettingsTab(raw: string | null): SettingsTab | null {
+  if (raw === "archives") return "data";
   if (raw && (SETTINGS_TABS as readonly string[]).includes(raw)) {
     return raw as SettingsTab;
   }
@@ -78,9 +92,13 @@ export interface SettingsPageProps {
   securityClient?: SecuritySettingsClient;
   auditClient?: AuditLogClient;
   videoClient?: VideoSettingsClient;
-  initialTab?: SettingsTab;
+  archivedChatsClient?: ArchivedChatsClient;
+  initialTab?: SettingsTab | "archives";
   /** v1.16.0 Phase 5 (A4) -- host VRAM for the Models page tier-fit filter. */
   hostVramGB?: number | null;
+  hostGpuVendor?: string | null;
+  /** v2.4.6 Phase 1 -- installer payload identity. Undefined loads via IPC. */
+  payloadIdentity?: DesktopPayloadIdentity | null;
 }
 
 export function SettingsPage({
@@ -94,12 +112,33 @@ export function SettingsPage({
   securityClient,
   auditClient,
   videoClient,
-  initialTab = "models",
+  archivedChatsClient,
+  initialTab = "preferences",
   hostVramGB = null,
+  hostGpuVendor = null,
+  payloadIdentity,
 }: SettingsPageProps = {}): JSX.Element {
   const [searchParams, setSearchParams] = useSearchParams();
   const tabFromUrl = parseSettingsTab(searchParams.get("tab"));
-  const [tab, setTabState] = useState<SettingsTab>(tabFromUrl ?? initialTab);
+  const [tab, setTabState] = useState<SettingsTab>(
+    tabFromUrl ?? (initialTab === "archives" ? "data" : initialTab),
+  );
+  const identityInjected = payloadIdentity !== undefined;
+  const [identity, setIdentity] = useState<DesktopPayloadIdentity | null>(
+    payloadIdentity ?? null,
+  );
+
+  useEffect(() => {
+    if (identityInjected) {
+      setIdentity(payloadIdentity ?? null);
+      return;
+    }
+    void ipcCall<{ identity: DesktopPayloadIdentity | null }>(
+      "runtime.desktopPayload",
+    ).then((reply) => {
+      setIdentity(reply.ok ? reply.value.identity : null);
+    });
+  }, [identityInjected, payloadIdentity]);
 
   useEffect(() => {
     const next = parseSettingsTab(searchParams.get("tab"));
@@ -155,6 +194,22 @@ export function SettingsPage({
       <nav data-testid="settings-tabs" style={tabsStyle}>
         <button
           type="button"
+          data-testid="settings-tab-preferences"
+          onClick={() => setTab("preferences")}
+          style={tabButtonStyle(tab === "preferences")}
+        >
+          Preferences
+        </button>
+        <button
+          type="button"
+          data-testid="settings-tab-personas"
+          onClick={() => setTab("personas")}
+          style={tabButtonStyle(tab === "personas")}
+        >
+          Personas
+        </button>
+        <button
+          type="button"
           data-testid="settings-tab-models"
           onClick={() => setTab("models")}
           style={tabButtonStyle(tab === "models")}
@@ -199,7 +254,7 @@ export function SettingsPage({
           onClick={() => setTab("tuning")}
           style={tabButtonStyle(tab === "tuning")}
         >
-          Fine-tuning
+          Training
         </button>
         <button
           type="button"
@@ -234,8 +289,12 @@ export function SettingsPage({
           Data
         </button>
       </nav>
-      {tab === "models" ? (
-        <ModelsSettings client={models} hostVramGB={hostVramGB} />
+      {tab === "preferences" ? (
+        <PreferencesSettings />
+      ) : tab === "personas" ? (
+        <PersonasSettings />
+      ) : tab === "models" ? (
+        <ModelsSettings client={models} hostVramGB={hostVramGB} gpuVendor={hostGpuVendor} />
       ) : tab === "skills" ? (
         <SkillsSettings client={skills} />
       ) : tab === "optimizer" ? (
@@ -243,7 +302,7 @@ export function SettingsPage({
       ) : tab === "serving" ? (
         <ServingSettings client={serving} />
       ) : tab === "tuning" ? (
-        <FineTuningSettings client={fineTuning} />
+        <FineTuningSettings client={fineTuning} hostVramGB={hostVramGB} gpuVendor={hostGpuVendor} />
       ) : tab === "video" ? (
         <VideoSettings client={video} />
       ) : tab === "mcp" ? (
@@ -251,10 +310,22 @@ export function SettingsPage({
       ) : tab === "security" ? (
         <SecuritySettings client={securityClient} auditClient={auditClient} />
       ) : tab === "data" ? (
-        <DataSettings />
+        <DataSettings archivedChatsClient={archivedChatsClient} />
       ) : (
         <CredentialsSettings client={credentials} />
       )}
+      <p
+        data-testid="settings-payload-fingerprint"
+        style={{
+          margin: 0,
+          padding: "var(--space-2, 8px) var(--space-6, 24px)",
+          color: "var(--fg-muted)",
+          fontSize: 12,
+          borderTop: "1px solid var(--border-1, #2a2a2a)",
+        }}
+      >
+        {formatDesktopPayloadLabel(identity)}
+      </p>
     </div>
   );
 }

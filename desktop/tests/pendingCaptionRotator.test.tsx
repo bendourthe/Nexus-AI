@@ -16,12 +16,17 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { AgentStateOrb } from "../src/components/agentState/AgentStateOrb";
 import {
   CAPTION_ROTATE_INTERVAL_MS,
+  longestPendingCaption,
   PENDING_CAPTIONS,
   pendingCaptionState,
   shufflePendingCaptions,
 } from "../src/components/agentState/captionRotator";
 import { MessageBubble } from "../src/shared/chat/MessageBubble";
 import type { ChatMessage } from "../src/shared/chat/types";
+import {
+  longestStudioCaption,
+  STUDIO_PENDING_CAPTIONS,
+} from "../src/components/agentState/captionRotator";
 
 afterEach(() => {
   cleanup();
@@ -48,6 +53,15 @@ describe("shufflePendingCaptions", () => {
     const b = shufflePendingCaptions(() => 0.5);
     expect(a).toEqual(b);
   });
+
+  it("treats Searching... as the longest caption for a constant pill min-width", () => {
+    expect(longestPendingCaption()).toBe("Searching...");
+    expect(
+      PENDING_CAPTIONS.every(
+        (caption) => caption.length <= longestPendingCaption().length,
+      ),
+    ).toBe(true);
+  });
 });
 
 describe("pendingCaptionState", () => {
@@ -62,7 +76,9 @@ describe("pendingCaptionState", () => {
 describe("AgentStateOrb rotateCaptions", () => {
   it("cycles all fixed captions on the interval, in a per-mount stable order", () => {
     vi.useFakeTimers();
-    render(<AgentStateOrb activity="chat-streaming" size="bubble" rotateCaptions />);
+    render(
+      <AgentStateOrb activity="chat-streaming" size="bubble" rotateCaptions />,
+    );
     const seen: string[] = [captionText()];
     for (let step = 0; step < PENDING_CAPTIONS.length - 1; step += 1) {
       act(() => {
@@ -85,7 +101,9 @@ describe("AgentStateOrb rotateCaptions", () => {
 
   it("respects the interval: no rotation before it elapses", () => {
     vi.useFakeTimers();
-    render(<AgentStateOrb activity="chat-streaming" size="bubble" rotateCaptions />);
+    render(
+      <AgentStateOrb activity="chat-streaming" size="bubble" rotateCaptions />,
+    );
     const first = captionText();
     act(() => {
       vi.advanceTimersByTime(CAPTION_ROTATE_INTERVAL_MS - 1);
@@ -100,21 +118,32 @@ describe("AgentStateOrb rotateCaptions", () => {
   it("holds the first fixed caption under reduced motion", () => {
     vi.stubGlobal(
       "matchMedia",
-      vi.fn(() => ({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() })),
+      vi.fn(() => ({
+        matches: true,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
     );
     vi.useFakeTimers();
-    render(<AgentStateOrb activity="chat-streaming" size="bubble" rotateCaptions />);
+    render(
+      <AgentStateOrb activity="chat-streaming" size="bubble" rotateCaptions />,
+    );
     expect(captionText()).toBe(PENDING_CAPTIONS[0]);
     act(() => {
       vi.advanceTimersByTime(CAPTION_ROTATE_INTERVAL_MS * 3);
     });
     expect(captionText()).toBe(PENDING_CAPTIONS[0]);
-    expect(screen.getByTestId("agent-state-orb")).toHaveAttribute("data-orb-paused", "true");
+    expect(screen.getByTestId("agent-state-orb")).toHaveAttribute(
+      "data-orb-paused",
+      "true",
+    );
   });
 
   it("exposes one stable accessible name and hides the caption from readers", () => {
     vi.useFakeTimers();
-    render(<AgentStateOrb activity="chat-streaming" size="bubble" rotateCaptions />);
+    render(
+      <AgentStateOrb activity="chat-streaming" size="bubble" rotateCaptions />,
+    );
     const orb = screen.getByRole("img", { name: "Generating reply" });
     act(() => {
       vi.advanceTimersByTime(CAPTION_ROTATE_INTERVAL_MS);
@@ -130,35 +159,72 @@ describe("AgentStateOrb rotateCaptions", () => {
     const { rerender } = render(
       <AgentStateOrb activity="chat-streaming" size="bubble" rotateCaptions />,
     );
-    expect(screen.getByTestId("agent-state-orb")).toHaveAttribute("data-orb-pill", "true");
-    rerender(<AgentStateOrb activity="image-generation" size="hero" showCaption />);
-    expect(screen.getByTestId("agent-state-orb")).not.toHaveAttribute("data-orb-pill");
+    expect(screen.getByTestId("agent-state-orb")).toHaveAttribute(
+      "data-orb-pill",
+      "true",
+    );
+    rerender(
+      <AgentStateOrb activity="image-generation" size="hero" showCaption />,
+    );
+    expect(screen.getByTestId("agent-state-orb")).not.toHaveAttribute(
+      "data-orb-pill",
+    );
   });
 });
 
 describe("MessageBubble pending pill", () => {
   it("mounts the chat pending orb as a rotating bubble pill named Generating reply", () => {
-    const msg: ChatMessage = { id: "p1", role: "assistant", content: "", pending: true };
+    const msg: ChatMessage = {
+      id: "p1",
+      role: "assistant",
+      content: "",
+      pending: true,
+    };
     render(<MessageBubble message={msg} />);
     const orb = screen.getByRole("img", { name: "Generating reply" });
     expect(orb).toHaveAttribute("data-orb-size", "bubble");
     expect(orb).toHaveAttribute("data-orb-pill", "true");
     expect(PENDING_CAPTIONS).toContain(captionText());
+    // v2.4.4 Phase 1: the pill takes its left offset from the list gutter, so
+    // neither the orb nor the pending row may add a second inset.
+    expect(orb.style.marginLeft).toBe("");
+    expect(orb.style.minWidth).toContain(`${longestPendingCaption().length}ch`);
+    const pending = screen.getByTestId("message-pending-p1");
+    expect(pending.style.overflow).toBe("visible");
+    expect(pending.style.paddingInline).toBe("0px");
   });
 
-  it("keeps Image/Video pending on the hero preset without the pill", () => {
-    const msg: ChatMessage = {
+  it("splits Image/Video pending into a loading hero and a generating pill", () => {
+    // v2.4.8 follow-up (2026-09-08): the two phases must not look alike. A
+    // studio job that has not reported a stage yet is loading its model, and
+    // that is the centered hero orb with a fixed caption. Once the runtime
+    // says it is generating, the studios switch to the chat pill -- the same
+    // rotating-caption animation -- drawing on the studio word pool.
+    const base: ChatMessage = {
       id: "p2",
       role: "assistant",
       content: "",
       pending: true,
       activity: "image-generation",
     };
-    render(<MessageBubble message={msg} />);
-    const orb = screen.getByRole("img", { name: /agent shaping/i });
-    expect(orb).toHaveAttribute("data-orb-size", "hero");
-    expect(orb).not.toHaveAttribute("data-orb-pill");
-    expect(captionText()).toBe("Shaping...");
+    const { rerender } = render(<MessageBubble message={base} />);
+    const loading = screen.getByRole("img", { name: "Loading model" });
+    expect(loading).toHaveAttribute("data-orb-size", "hero");
+    expect(loading).not.toHaveAttribute("data-orb-pill");
+    expect(captionText()).toBe("Loading model");
+
+    rerender(
+      <MessageBubble
+        message={{ ...base, progress: { step: 0, total: 0, stage: "generating" } }}
+      />,
+    );
+    const orb = screen.getByRole("img", { name: /generating media/i });
+    expect(orb).toHaveAttribute("data-orb-size", "bubble");
+    expect(orb).toHaveAttribute("data-orb-pill", "true");
+    // The pill is sized by the studio pool, not the chat pool.
+    expect(orb.style.minWidth).toContain(`${longestStudioCaption().length}ch`);
+    expect(STUDIO_PENDING_CAPTIONS).toContain(captionText());
+    expect(PENDING_CAPTIONS).not.toContain(captionText());
   });
 });
 
@@ -169,7 +235,10 @@ describe("thinking-orbs stays reference-only", () => {
   });
 
   it("is absent from the workspace package-lock.json", () => {
-    const lock = readFileSync(join(__dirname, "..", "..", "package-lock.json"), "utf8");
+    const lock = readFileSync(
+      join(__dirname, "..", "..", "package-lock.json"),
+      "utf8",
+    );
     expect(lock).not.toContain("thinking-orbs");
   });
 });

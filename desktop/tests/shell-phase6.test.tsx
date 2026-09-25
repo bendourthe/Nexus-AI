@@ -16,8 +16,12 @@ import userEvent from "@testing-library/user-event";
 
 import { Sidebar } from "../src/components/Sidebar";
 import { GpuStatusFooter } from "../src/components/GpuStatusFooter";
+import { setModelActivity } from "../src/lib/modelActivity";
 import { ApprovalsBell } from "../src/components/ApprovalsBell";
-import type { LocalModelTelemetry, TelemetryStream } from "../src/components/LocalModelStatus.types";
+import type {
+  LocalModelTelemetry,
+  TelemetryStream,
+} from "../src/components/LocalModelStatus.types";
 
 function streamOf(sample: LocalModelTelemetry | null): TelemetryStream {
   return {
@@ -28,7 +32,9 @@ function streamOf(sample: LocalModelTelemetry | null): TelemetryStream {
   } as TelemetryStream;
 }
 
-function sample(partial: Partial<LocalModelTelemetry> = {}): LocalModelTelemetry {
+function sample(
+  partial: Partial<LocalModelTelemetry> = {},
+): LocalModelTelemetry {
   return {
     modelName: "qwen2.5-coder",
     paramSize: "14B",
@@ -50,23 +56,26 @@ function renderSidebar(props: Parameters<typeof Sidebar>[0] = {}) {
 }
 
 describe("sidebar compact mode", () => {
-  it("starts compact on a wide window", () => {
+  it("starts expanded so session titles fit in the history slot", () => {
     localStorage.clear();
     renderSidebar({ initialWidth: 1600 });
-    expect(screen.getByTestId("nav-chatbot").textContent).toBe("");
-    expect(screen.getByTestId("nav-chatbot").getAttribute("aria-label")).toBe("Chatbot");
+    expect(screen.getByTestId("nav-chatbot").textContent).toContain("Chatbot");
+    expect(screen.getByTestId("nav-chatbot").getAttribute("aria-label")).toBe(
+      "Chatbot",
+    );
   });
 
-  it("auto-compacts on a narrow window without a stored preference", () => {
-    localStorage.clear();
+  it("hides labels when the stored compact preference is true", () => {
+    localStorage.setItem("nexus.sidebar.compact", "true");
     renderSidebar({ initialWidth: 900 });
-    // Labels are hidden; the icon and its aria-label remain.
     expect(screen.getByTestId("nav-chatbot").textContent).toBe("");
-    expect(screen.getByTestId("nav-chatbot").getAttribute("aria-label")).toBe("Chatbot");
+    expect(screen.getByTestId("nav-chatbot").getAttribute("aria-label")).toBe(
+      "Chatbot",
+    );
+    localStorage.clear();
   });
 
-  it("lets an explicit preference beat the width heuristic", () => {
-    // A user who expanded the rail on a narrow window keeps it expanded.
+  it("lets an explicit expand preference keep titles visible", () => {
     localStorage.setItem("nexus.sidebar.compact", "false");
     renderSidebar({ initialWidth: 900 });
     expect(screen.getByTestId("nav-chatbot").textContent).toContain("Chatbot");
@@ -78,8 +87,8 @@ describe("sidebar compact mode", () => {
     const user = userEvent.setup();
     renderSidebar({ initialWidth: 1600 });
     await user.click(screen.getByTestId("sidebar-collapse-toggle"));
-    expect(localStorage.getItem("nexus.sidebar.compact")).toBe("false");
-    expect(screen.getByTestId("nav-chatbot").textContent).toContain("Chatbot");
+    expect(localStorage.getItem("nexus.sidebar.compact")).toBe("true");
+    expect(screen.getByTestId("nav-chatbot").textContent).toBe("");
     localStorage.clear();
   });
 
@@ -111,11 +120,56 @@ describe("GPU status footer", () => {
     expect(footer.textContent).toContain("unavailable");
   });
 
-  it("renders utilization and free VRAM when a sample arrives", () => {
+  it("renders the GPU usage label left and the percentage right, free VRAM in the tooltip", () => {
     render(<GpuStatusFooter compact={false} stream={streamOf(sample())} />);
     const footer = screen.getByTestId("gpu-status-footer");
-    expect(footer.textContent).toContain("GPU 41%");
-    expect(footer.textContent).toContain("4.8 GB free");
+    // v2.4.8 follow-up: "GPU usage" on the left, "41%" on the right; the free
+    // VRAM figure moved to the tooltip so the row is label + percentage only.
+    expect(footer.textContent).toContain("GPU usage");
+    expect(screen.getByTestId("gpu-status-footer-gpu-pct").textContent).toBe("41%");
+    expect(footer.textContent).not.toContain("GB free");
+    expect(footer.getAttribute("title")).toContain("Free VRAM: 4.8 GB");
+  });
+
+  it("names the model a studio page is loading, muted and flush right of Local model", () => {
+    setModelActivity({ pillar: "image", modelLabel: "RealVisXL V5.0" });
+    try {
+      render(
+        <GpuStatusFooter
+          compact={false}
+          stream={streamOf(sample({ gpuPct: 0, idle: false, modelName: "Local model", paramSize: "" }))}
+        />,
+      );
+      expect(screen.getByTestId("gpu-status-footer-headline").textContent).toBe("Local model");
+      const model = screen.getByTestId("gpu-status-footer-model");
+      expect(model.textContent).toBe("RealVisXL V5.0");
+      expect(model.style.color).toBe("var(--fg-muted)");
+      expect(model.style.marginLeft).toBe("auto");
+      expect(screen.getByTestId("gpu-status-footer-gpu-pct").textContent).toBe("0%");
+    } finally {
+      setModelActivity(null);
+    }
+  });
+
+  it("shows Local model with the loading model even when the sample is idle", () => {
+    setModelActivity({ pillar: "video", modelLabel: "Wan 2.1 T2V 1.3B" });
+    try {
+      render(<GpuStatusFooter compact={false} stream={streamOf(sample({ idle: true }))} />);
+      expect(screen.getByTestId("gpu-status-footer-headline").textContent).toBe("Local model");
+      expect(screen.getByTestId("gpu-status-footer-model").textContent).toBe("Wan 2.1 T2V 1.3B");
+    } finally {
+      setModelActivity(null);
+    }
+  });
+
+  it("drops the headline row while idle so the card is the bar plus one line", () => {
+    render(<GpuStatusFooter compact={false} stream={streamOf(sample({ idle: true }))} />);
+    const footer = screen.getByTestId("gpu-status-footer");
+    expect(footer.textContent).not.toContain("Idle");
+    expect(screen.queryByTestId("gpu-status-footer-headline")).toBeNull();
+    expect(screen.queryByTestId("gpu-status-footer-model")).toBeNull();
+    expect(footer.textContent).toContain("GPU usage");
+    expect(screen.getByTestId("gpu-status-footer-gpu-pct").textContent).toBe("41%");
   });
 
   it("marks a stale sample rather than presenting it as current", () => {
@@ -128,15 +182,40 @@ describe("GPU status footer", () => {
     expect(screen.getByTestId("gpu-status-footer-stale")).toBeTruthy();
   });
 
+  it("is not Idle at 0% utilization while a job is active", () => {
+    render(
+      <GpuStatusFooter
+        compact={false}
+        stream={streamOf(
+          sample({
+            gpuPct: 0,
+            idle: false,
+            modelName: "gemma4",
+            paramSize: "e4b",
+          }),
+        )}
+      />,
+    );
+    const footer = screen.getByTestId("gpu-status-footer");
+    expect(footer.textContent).not.toContain("Idle");
+    expect(footer.textContent).toContain("gemma4");
+    expect(screen.getByTestId("gpu-status-footer-headline").textContent).toBe(
+      "gemma4 e4b",
+    );
+  });
+
   it("collapses to a slim mark with the numbers in its tooltip", () => {
     render(<GpuStatusFooter compact stream={streamOf(sample())} />);
     const footer = screen.getByTestId("gpu-status-footer");
     expect(footer.getAttribute("title")).toContain("Free VRAM");
-    expect(footer.textContent).not.toContain("GPU 41%");
+    expect(footer.textContent).not.toContain("GPU usage");
   });
 
   it("is not fixed-positioned anywhere (the dock covered the buttons)", () => {
-    const appSource = readFileSync(path.resolve(__dirname, "../src/App.tsx"), "utf8");
+    const appSource = readFileSync(
+      path.resolve(__dirname, "../src/App.tsx"),
+      "utf8",
+    );
     expect(appSource).not.toContain("LocalModelStatusDock");
     expect(appSource).not.toContain("DockMount");
   });
@@ -176,12 +255,14 @@ describe("approvals bell", () => {
     render(<ApprovalsBell pendingCount={1} compact={false} client={client} />);
     await user.click(screen.getByTestId("approvals-bell"));
     await screen.findByTestId("approvals-bell-item-a1");
-    const before = (client as unknown as { list: { mock: { calls: unknown[] } } }).list.mock.calls
-      .length;
+    const before = (
+      client as unknown as { list: { mock: { calls: unknown[] } } }
+    ).list.mock.calls.length;
     await user.click(screen.getByTestId("approvals-bell-approve-a1"));
     await waitFor(() =>
       expect(
-        (client as unknown as { list: { mock: { calls: unknown[] } } }).list.mock.calls.length,
+        (client as unknown as { list: { mock: { calls: unknown[] } } }).list
+          .mock.calls.length,
       ).toBeGreaterThan(before),
     );
   });
@@ -251,7 +332,12 @@ describe("design tokens", () => {
     );
     // These were referenced in 71 places but never defined, so each usage fell
     // through to whatever inline literal the author happened to write.
-    for (const name of ["--border-1", "--accent-primary", "--accent-danger", "--accent-warning"]) {
+    for (const name of [
+      "--border-1",
+      "--accent-primary",
+      "--accent-danger",
+      "--accent-warning",
+    ]) {
       expect(tokens).toContain(`${name}:`);
     }
   });
