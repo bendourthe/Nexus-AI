@@ -61,6 +61,8 @@ describe("pillar axe baseline", () => {
   }, 60_000);
 
   it("axe reports a nameless button, so a silent empty run cannot pass", async () => {
+    // The unlabeled button is the fixture that proves axe reports button-name.
+    // eslint-disable-next-line jsx-a11y/control-has-associated-label
     const { container } = render(<button />);
     const results = await axe.run(container);
     expect(results.violations.map((violation) => violation.id)).toContain("button-name");

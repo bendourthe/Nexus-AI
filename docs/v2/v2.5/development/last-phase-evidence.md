@@ -25,7 +25,7 @@ Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 - `DF-v250-1` screenshot and capture stay deferred.
 - `QG-v250-1` live sidecar context was not observed.
 - `QG-v250-2` migration snapshot tests did not load `better-sqlite3` (ABI 146 vs Node ABI 137).
-- `MT-v251-1` 21 jsx-a11y warnings remain, ceiling 21.
+- `MT-v251-1` closed. Desktop eslint reports 0 jsx-a11y warnings and the ceiling is 0.
 - `QG-v251-2` packaged Tauri window was not launched.
 
 Archived v2.4 gaps were not closed by these plans.
