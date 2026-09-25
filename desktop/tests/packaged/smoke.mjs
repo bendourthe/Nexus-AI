@@ -21,8 +21,15 @@ export function sha256File(filePath) {
 }
 
 export function isLoopback(destination) {
-  const host = String(destination).replace(/^[a-z]+:\/\//, "").split("/")[0].split(":")[0];
-  return host === "127.0.0.1" || host === "localhost" || host === "::1" || host === "[::1]";
+  let host = "";
+  try {
+    const value = String(destination);
+    const withScheme = /^[a-z][a-z0-9+.-]*:\/\//i.test(value) ? value : `http://${value}`;
+    host = new URL(withScheme).hostname;
+  } catch {
+    host = "";
+  }
+  return host === "127.0.0.1" || host === "localhost" || host === "::1";
 }
 
 export function evaluateSmoke(report) {

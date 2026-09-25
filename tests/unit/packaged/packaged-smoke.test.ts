@@ -27,7 +27,7 @@ describe("packaged smoke", () => {
 
   it("names a non-loopback destination", () => {
     const result = evaluateSmoke({ ...full, connections: ["https://example.com/models"] });
-    expect(result.findings.some((finding) => finding.includes("example.com"))).toBe(true);
+    expect(result.findings).toContain("non-loopback connection: https://example.com/models");
   });
 
   it("records a bundle digest", () => {
