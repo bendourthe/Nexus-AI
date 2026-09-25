@@ -60,6 +60,16 @@ export default [
       "@typescript-eslint/no-explicit-any": "warn",
       "no-console": ["error", { allow: ["warn", "error"] }],
       ...asWarnings(jsxA11y.configs.recommended.rules),
+      // These components render a native control. A wrapping <label> is a real
+      // association; the plugin cannot see through the component otherwise.
+      "jsx-a11y/label-has-associated-control": [
+        "warn",
+        {
+          controlComponents: ["TextField", "Select", "SearchInput"],
+          labelComponents: ["label"],
+          depth: 3,
+        },
+      ],
     },
   },
 ];
