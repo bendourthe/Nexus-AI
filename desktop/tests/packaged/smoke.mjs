@@ -29,7 +29,7 @@ export function isLoopback(destination) {
   } catch {
     host = "";
   }
-  return host === "127.0.0.1" || host === "localhost" || host === "::1";
+  return host === "127.0.0.1" || host === "localhost" || host.endsWith(".localhost") || host === "::1";
 }
 
 export function evaluateSmoke(report) {
