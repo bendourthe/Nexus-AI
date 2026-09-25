@@ -142,6 +142,17 @@ Reviewed against the plan headers, not against ticked boxes. Misses stay known g
 
 NI-3 is resolved in the v2.4 archive and was not used as this plan's proving case. A11 stays deferred.
 
+## Full-suite testing and stabilization
+
+Measured on this host on 2026-09-25. Desktop vitest (`npx vitest run --config vitest.config.ts` from `desktop/`):
+
+```
+Test Files  9 failed | 228 passed (237)
+     Tests  36 failed | 2163 passed | 1 skipped (2200)
+```
+
+Every failure is `better-sqlite3` compiled for Node ABI 146 while this Node is ABI 137. The plan forbids `npm rebuild` to chase that mismatch. This is the same baseline as `QG-v250-2`, now counted for the desktop suite. The root suite was not run in this measurement.
+
 ## Publication and integration
 
 Pull request 69 merged to `develop` at `c92bdfb15b2ab587b5810fe019bac9d3894a0198`. Pull request 71 merged the CodeQL fixes. Pull request 70 merged to `main` at `58b03ed225c25c27472003f83b6423215fc7c966`. Semantic-release published `v2.5.0` at `da07e4bd9a2330e5c7ede2406607fc01289f1201`. The release page has the three platform VSIX files, `NexusSetup.exe`, and `SHA256SUMS.txt`: https://github.com/bendourthe/Nexus-AI/releases/tag/v2.5.0. `develop` was fast-forwarded to that same commit. There is no separate `v2.5.1` tag, because the commit range since `v2.4.11` includes `feat` commits and semantic-release computed one minor.
