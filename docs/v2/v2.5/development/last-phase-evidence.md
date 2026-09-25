@@ -38,7 +38,7 @@ Provider detected: GitHub Actions (`.github/workflows/`). Compared on `318bb2ea`
 Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 
 - `DF-v250-1` screenshot and capture stay deferred.
-- `QG-v250-1` live sidecar context was not observed.
+- `QG-v250-1` closed. The release executable served context and refused `C:/Windows/win.ini` as outside the workspace roots.
 - `QG-v250-2` closed on CI. Node 22 job `108108818115` passed the byte-identical refusal test. This host still cannot load the module.
 - `MT-v251-1` closed. Desktop eslint reports 0 jsx-a11y warnings and the ceiling is 0.
 - `QG-v251-2` the Windows executable was launched and the four selectors were observed. The smoke passed. Launching that window is still not a CI job.
@@ -128,6 +128,8 @@ Exercises run on 2026-09-25 against `node bin/nexus.mjs`:
 | `nexus --bogus` | 2 | empty | `nexus: unknown command` plus the help text, including exit codes 0, 1, and 2 |
 | `nexus doctor --json --home <temp>` | 0 | one JSON object, `generatedAt` and `nexusHome` set to that temp directory | empty |
 | `nexus media inspect <missing> --json` | 1 | one JSON object, `error.code` `sidecar-down`, message names `http://127.0.0.1:11500/nexus/media/inspect` | empty |
+| `nexus context --json` against the launched executable | 0 | `{"sessionId":null,"title":null,"workspaceRoots":[],"primaryRoot":null,"modelId":null,"generationInFlight":false}` | empty |
+| `nexus media inspect C:/Windows/win.ini --json` against the launched executable | 1 | `error.code` `forbidden`, message names `C:\Windows\win.ini` as outside authorized workspace roots | empty |
 
 That matches `docs/reference/cli/contract.md` rule 46: a loopback runtime failure may put the JSON error on stdout. It does not observe a running sidecar, so `QG-v250-1` stays open.
 
@@ -137,7 +139,7 @@ That matches `docs/reference/cli/contract.md` rule 46: a loopback runtime failur
 
 Reviewed against the plan headers, not against ticked boxes. Misses stay known gaps.
 
-**Editor plan.** Goal: an outside agent can install Nexus, read one reference tree, load one skill, and drive plus observe through `nexus`. `docs/reference/cli/` is the tree, `modules/coding/skills/catalog/nexus/SKILL.md` is the skill, and `core/cli/jsonCli.ts` plus `desktop/sidecar/src/controlSurface/jsonCliRoutes.ts` expose `context`, `logs`, and `media inspect`. A live round trip was not observed (`QG-v250-1`). `screenshot` and `capture` stay out of scope (`DF-v250-1`).
+**Editor plan.** Goal: an outside agent can install Nexus, read one reference tree, load one skill, and drive plus observe through `nexus`. `docs/reference/cli/` is the tree, `modules/coding/skills/catalog/nexus/SKILL.md` is the skill, and `core/cli/jsonCli.ts` plus `desktop/sidecar/src/controlSurface/jsonCliRoutes.ts` expose `context`, `logs`, and `media inspect`. A launched `nexus-shell.exe` returned context JSON and refused a path outside the workspace roots. `screenshot` and `capture` stay out of scope (`DF-v250-1`).
 
 **Migration plan.** Definition of done: a corrupted migration leaves the original byte-identical, writes a snapshot, and refuses the next open, and three launches with nothing pending create no snapshots. The code is `core/storage/preMigrationSnapshot.ts` and the refuse-to-start path in `ChatHistoryStore`. Node 22 CI job `108108818115` passed "leaves the original bytes unchanged and refuses to reopen after a failed migration". This host still cannot load `better-sqlite3`.
 
