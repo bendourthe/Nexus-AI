@@ -30,7 +30,7 @@ Provider detected: GitHub Actions (`.github/workflows/`). Compared on `318bb2ea`
 | Concurrency | `ci.yml` sets `cancel-in-progress: true` on `ci-${{ github.workflow }}-${{ github.head_ref \|\| github.ref }}`. |
 | Path scoping | The two new gates have no `paths` filter. The packaged smoke is not a job at all. |
 | Profiles | The five repository-native profiles (`fast`, `full`, `platform`, `report`, `release`) are not present. Not applied. |
-| Cross-installer | `installer-build.yml`, `installer-linux.yml`, and `installer-macos.yml` exist. Linux and macOS are manual rehearsals. Dispatched on `develop` on 2026-09-25: Linux https://github.com/bendourthe/Nexus-AI/actions/runs/36153544032 and macOS https://github.com/bendourthe/Nexus-AI/actions/runs/36153548528. Results are not in yet. Windows installer bytes for `v2.5.0` were produced by `release.yml` run 36093413452. |
+| Cross-installer | `installer-build.yml`, `installer-linux.yml`, and `installer-macos.yml` exist. Linux job "Build manual Linux installer rehearsal" succeeded: https://github.com/bendourthe/Nexus-AI/actions/runs/36153544032. macOS job "Build manual macOS installer rehearsal" succeeded: https://github.com/bendourthe/Nexus-AI/actions/runs/36153548528. Both are dispatch-only rehearsals and do not stage the desktop payload. Windows installer bytes for `v2.5.0` were produced by `release.yml` run 36093413452. |
 | First-run-remote | `check-command-parity` and `check-release-assets` have since passed on the integration pulls and on `2b4ed3b6`. The packaged smoke has not. |
 
 ## Known-gaps reconciliation
@@ -42,7 +42,7 @@ Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 - `QG-v250-2` closed on CI. Node 22 job `108108818115` passed the byte-identical refusal test. This host still cannot load the module.
 - `MT-v251-1` closed. Desktop eslint reports 0 jsx-a11y warnings and the ceiling is 0.
 - `QG-v251-2` the Windows executable was launched and the four selectors were observed. The smoke passed. Launching that window is still not a CI job.
-- `CI-v251-1` pipeline profile migration was not approved and was not applied. Linux run 36153544032 and macOS run 36153548528 were dispatched and have not concluded.
+- `CI-v251-1` pipeline profile migration was not approved and was not applied. Linux run 36153544032 and macOS run 36153548528 both succeeded.
 
 Archived v2.4 gaps were not closed by these plans.
 
