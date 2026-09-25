@@ -114,7 +114,7 @@ describe("mic menu", () => {
     render(<MediaComposer onSubmit={() => undefined} audioEnabled voiceModes={voiceModes} />);
     await user.click(screen.getByTestId("media-composer-mic-menu-toggle"));
     expect(
-      screen.getByTestId("media-composer-voice-vad").getAttribute("aria-pressed"),
+      screen.getByTestId("media-composer-voice-vad").getAttribute("aria-checked"),
     ).toBe("true");
   });
 });
