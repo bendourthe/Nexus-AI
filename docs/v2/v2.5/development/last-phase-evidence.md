@@ -131,9 +131,20 @@ Exercises run on 2026-09-25 against `node bin/nexus.mjs`:
 | `nexus context --json` against the launched executable | 0 | `{"sessionId":null,"title":null,"workspaceRoots":[],"primaryRoot":null,"modelId":null,"generationInFlight":false}` | empty |
 | `nexus media inspect C:/Windows/win.ini --json` against the launched executable | 1 | `error.code` `forbidden`, message names `C:\Windows\win.ini` as outside authorized workspace roots | empty |
 
-That matches `docs/reference/cli/contract.md` rule 46: a loopback runtime failure may put the JSON error on stdout. It does not observe a running sidecar, so `QG-v250-1` stays open.
+That matches `docs/reference/cli/contract.md` rule 46 for the sidecar-down rows. The later rows are the live executable: context exited 0, and `C:\Windows\win.ini` was refused. `QG-v250-1` is closed.
 
 `node bin/nexus-check.mjs --rule cli-reference-drift` printed `nexus-check: 0 findings`.
+
+### Goal-vs-plan sufficiency
+
+`fix_rerun_cycles_used` is still 0. These answers are not a finished deep pass. Rendered-surface delegates, the adversarial verifier, and implementation-convergence remain `NOT COVERED`.
+
+| Question | Answer | Evidence |
+|---|---|---|
+| What did implementing this teach that the plan did not know? | A 403 from a path outside the workspace roots was reported as an auth failure. Tauri's `tauri.localhost` and `ipc.localhost` hosts are loopback, and the first smoke treated them as egress. `workflow_dispatch` cannot see a workflow that is only on `develop`. | `core/cli/jsonCli.ts` now keeps a non-auth 403 body. `desktop/tests/packaged/smoke.mjs` accepts `*.localhost`. GitHub returned HTTP 404 for `packaged-window-smoke.yml` before the develop push trigger. |
+| What did the plan assume that turned out false? | NI-3 was already resolved in the v2.4 archive. The plan's v2.5.1 name assumed no `feat` commits in the release range. Semantic-release computed one minor, `v2.5.0`, and there is no `v2.5.1` tag. | `docs/archive/v2/v2.4/known-gaps.md`. Release commit `da07e4bd`. |
+| What would a reader of the Goal expect that no phase delivered? | Screenshot and capture stay excluded. A keyboard and screen-reader pass was not run. The Windows launch probe on CI run 36209938149 had not finished when this row was written. | `DF-v250-1`. Human-testing section above. |
+| What did the maintainer ask for that no task line captured? | One release after both 2.5.0 and 2.5.1 were finished. `v2.5.0` was published at `da07e4bd`. Later fixes, including the path refusal and the window probe, are on `develop` and are not in that tag. | https://github.com/bendourthe/Nexus-AI/releases/tag/v2.5.0 |
 
 ## Goal-vs-codebase review
 
