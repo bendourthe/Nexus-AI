@@ -119,7 +119,7 @@ Bounded terminal result. Not a clean pass. `fix_rerun_cycles_used` is 0.
 - Exercised and quoted below: CLI contract commands, `cli-reference-drift`, the migration snapshot test on Node 22 CI, and the Windows packaged window probe in run 36214895318.
 - Implementation-convergence ran on 2026-09-26 against revision `6a585116`. No new task lines were appended. The open items were already tasks or known gaps.
 - The four-route measurement on 2026-09-26 is under `### Rendered-surface measurement`. `QG-v251-3` is closed there.
-- Environments: Windows host, Node v24.13.0 ABI 137. This host cannot load `better-sqlite3`. The live executable and the CI window probe were observed separately.
+- Environments: Windows host, Node v24.13.0 ABI 137. The published Node 24 prebuild later loaded `better-sqlite3` for the full-suite measurement below. The live executable and the CI window probe were observed separately.
 
 Exercises run on 2026-09-25 against `node bin/nexus.mjs`:
 
@@ -220,3 +220,7 @@ The earlier same-day counts (root 503 failed, desktop 36 failed) were the Electr
 ## Publication and integration
 
 Pull request 69 merged to `develop` at `c92bdfb15b2ab587b5810fe019bac9d3894a0198`. Pull request 71 merged the CodeQL fixes. Pull request 70 merged to `main` at `58b03ed225c25c27472003f83b6423215fc7c966`. Semantic-release published `v2.5.0` at `da07e4bd9a2330e5c7ede2406607fc01289f1201`. The release page has the three platform VSIX files, `NexusSetup.exe`, and `SHA256SUMS.txt`: https://github.com/bendourthe/Nexus-AI/releases/tag/v2.5.0. `develop` was fast-forwarded to that same commit. There is no separate `v2.5.1` tag, because the commit range since `v2.4.11` includes `feat` commits and semantic-release computed one minor.
+
+Current `develop` is `8b13c28e`. CI run `36275272873` finished success: https://github.com/bendourthe/Nexus-AI/actions/runs/36275272873. Every required check on `develop` succeeded in that run: Lint TypeScript (Node 22.x), Lint TypeScript (Node 24.x), Test TypeScript (Node 22.x), Test TypeScript (Node 24.x), Build TypeScript (Node 22.x), Build TypeScript (Node 24.x), Coverage gate (80%), nexus-check (repository), check-architecture, check-prompts, docs/index.md sync check, pytest (runtimes/), pip-audit (installer venv), Package VSIX (smoke), init.sh (Linux), and fast-bench (rendering). CodeQL run `36275272874`, installer tests run `36275272973`, and secret scan run `36275272888` also succeeded. The packaged window smoke that applies to this shell is run `36274353659` on `20e2d692`. The release-workflow probe added in `8b13c28e` has not run, because that workflow starts on a tag.
+
+`/update release` has not started. Notes for `v2.5.0..develop` are not approved. That range has no `feat` commits, so the next semantic-release computation is `2.5.1`.
