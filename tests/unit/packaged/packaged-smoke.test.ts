@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { evaluateSmoke, sha256File } from "../../../desktop/tests/packaged/smoke.mjs";
+import { evaluateSmoke, isLoopback, sha256File } from "../../../desktop/tests/packaged/smoke.mjs";
 import { checkArtifacts, checkStaging, parityAgainstWorkflows } from "../../../scripts/check-release-assets.mjs";
 
 const full = {
@@ -65,6 +65,16 @@ describe("packaged smoke", () => {
     });
     expect(result.ok).toBe(false);
     expect(result.findings.some((finding) => finding.startsWith("non-loopback connection:"))).toBe(true);
+  });
+
+  it("canonicalizes numeric loopback and still rejects dotted lookalikes", () => {
+    expect(isLoopback("http://2130706433/")).toBe(true);
+    expect(isLoopback("http://0x7f000001/")).toBe(true);
+    expect(isLoopback("http://[::1]/")).toBe(true);
+    expect(isLoopback("http://[::ffff:127.0.0.1]/")).toBe(true);
+    expect(isLoopback("http://127.0.0.1.evil.com/")).toBe(false);
+    expect(isLoopback("http://[::ffff:8.8.8.8]/")).toBe(false);
+    expect(isLoopback("http://127.0.0.1.nip.io/")).toBe(false);
   });
 
   it("records a bundle digest", () => {
