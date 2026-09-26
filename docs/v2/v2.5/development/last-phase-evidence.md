@@ -161,7 +161,7 @@ Present-state check of the three plans against the tree at `6a585116`. Counts of
 | source-ref | gap type | severity | evidence | remaining work |
 |---|---|---|---|---|
 | T025, T030 | closed | HIGH | Afternoon measurement on 2026-09-26, quoted under Full-suite testing. Root: 551 files passed, 3 skipped, 5913 tests passed, 12 skipped. Desktop: 237 files passed, 2199 tests passed, 1 skipped. Both exits were 0. | None. The Node 24 prebuild is local and uncommitted. |
-| v2.5.1 DoD 8 | partial | HIGH | Smoke run 36274353659 printed digest `8272dd28c0053177cd9dda48b72b12834211010c290b7ed10e018176984b81bf` for a normal `npm run build:shell` with no `tauri.conf.json` patch. `check-release-assets.mjs` with no arguments still prints `release-assets: PASS parity 3 artifacts`. | The smoked file is `nexus-shell.exe`. The published Windows file is `NexusSetup.exe`. Those digests are of different files, and `release.yml` does not compare them. |
+| v2.5.1 DoD 8 | partial | HIGH | Smoke run 36274353659 printed digest `8272dd28c0053177cd9dda48b72b12834211010c290b7ed10e018176984b81bf` for a normal `npm run build:shell`. `release.yml` now runs that same probe on the shell before it will upload the NSIS payload. | The published file is still `NexusSetup.exe`. Its digest is not the shell digest. The new release step has not run, because that workflow starts on a tag. |
 | DF-v250-1, CI-v251-1 | excluded |  | The editor plan leaves screenshot and capture out. The pipeline profiles were not approved. | Leave both open. |
 | T026, T031, T043 | partial | HIGH | Later `develop` commits are not in tag `v2.5.0` at `da07e4bd`. | `/update release` starts only after a green merged integration and its confirmation gates. |
 
@@ -191,7 +191,7 @@ Reviewed against the plan headers, not against ticked boxes. Misses stay known g
 | 5 | Met on a launched Windows executable | `nexus-shell.exe` opened `http://tauri.localhost/chatbot`, `/coding`, `/images`, and `/videos`. Each route exposed `chat-page`, `coding-page`, `image-model-select`, or `video-lab-page`. |
 | 6 | Met on the Windows smoke job | Run 36274353659 built `nexus-shell.exe` without a `tauri.conf.json` patch and the probe printed `{"ok":true,"digest":"8272dd28c0053177cd9dda48b72b12834211010c290b7ed10e018176984b81bf","findings":[]}`. |
 | 7 | Measured on the launched window | The only requests observed were `tauri.localhost` and `ipc.localhost`. Those names are loopback. `https://example.com/models` still fails the checker. |
-| 8 | Gate exists; the published installer digest is not the smoked shell digest | `node scripts/check-release-assets.mjs` prints `release-assets: PASS parity 3 artifacts` and runs in `ci.yml` and before `npx semantic-release`. Run 36274353659 smoked `nexus-shell.exe`. `release.yml` publishes `NexusSetup.exe` plus three VSIX files and does not compare those bytes to the smoke digest. |
+| 8 | Gate exists; the published installer digest is not the smoked shell digest | Run 36274353659 smoked `nexus-shell.exe`. `release.yml` `desktop-bundle` now runs `launch-probe.mjs` on that shell and refuses to upload the NSIS payload when the probe is missing or not ok. `NexusSetup.exe` remains the published Windows file, so its digest is a different file. That release step has not run on a tag. |
 
 NI-3 is resolved in the v2.4 archive and was not used as this plan's proving case. A11 stays deferred.
 
