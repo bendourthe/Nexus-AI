@@ -43,7 +43,7 @@ Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 - `MT-v251-1` closed. Desktop eslint reports 0 jsx-a11y warnings and the ceiling is 0.
 - `QG-v251-2` closed. Windows run 36214895318 printed `ok: true` and digest `4ac3034c06049ced364afc830971fedafb304d60aab0d9b0aac58e084a2fbf79`.
 - `CI-v251-1` pipeline profile migration was not approved and was not applied. Linux run 36153544032 and macOS run 36153548528 both succeeded.
-- `QG-v251-3` the smoke host check held against lookalike and userinfo hosts. Rendered-surface delegates and implementation-convergence were not run.
+- `QG-v251-3` implementation-convergence was run on 2026-09-26 and added no new task lines. The HTML rendered-surface detector was not run: `python -c "import playwright"` raised `ModuleNotFoundError`. The packaged window probe remains the rendered observation that did run.
 
 Archived v2.4 gaps were not closed by these plans.
 
@@ -117,7 +117,8 @@ Bounded terminal result. Not a clean pass. `fix_rerun_cycles_used` is 0.
 - Revision under review: `fdc80498` on `develop`. The published tag `v2.5.0` is `da07e4bd` on `main`.
 - Blast-radius verdict: `run`. The diff changes CLI output, desktop UI, persistence snapshots, and release workflows.
 - Exercised and quoted below: CLI contract commands, `cli-reference-drift`, the migration snapshot test on Node 22 CI, and the Windows packaged window probe in run 36214895318.
-- `NOT COVERED`: rendered-surface delegates, the adversarial verifier, and implementation-convergence. Owned as `QG-v251-3`.
+- Implementation-convergence ran on 2026-09-26 against revision `6a585116`. No new task lines were appended. The open items were already tasks or known gaps.
+- `NOT COVERED`: `scripts/detect_visual_defects.py` and the browser, accessibility, and hallmark delegates. `python -c "import playwright"` raised `ModuleNotFoundError: No module named 'playwright'`. The adversarial-verifier skill was not invoked. Owned as `QG-v251-3`.
 - Environments: Windows host, Node v24.13.0 ABI 137. This host cannot load `better-sqlite3`. The live executable and the CI window probe were observed separately.
 
 Exercises run on 2026-09-25 against `node bin/nexus.mjs`:
@@ -138,7 +139,18 @@ That matches `docs/reference/cli/contract.md` rule 46 for the sidecar-down rows.
 
 ### Goal-vs-plan sufficiency
 
-`fix_rerun_cycles_used` is 0. Rendered-surface delegates, the adversarial verifier, and implementation-convergence are `QG-v251-3`.
+`fix_rerun_cycles_used` is 0.
+
+### Implementation-convergence (2026-09-26)
+
+Present-state check of the three plans against the tree at `6a585116`. Counts of new findings appended to the plans: 0 missing, 0 partial, 0 contradicts. The plan files were left unchanged. These already-tracked items are not new work:
+
+| source-ref | gap type | severity | evidence | remaining work |
+|---|---|---|---|---|
+| T025, T030 | partial | HIGH | Root Vitest on 2026-09-26: 503 failed, 5408 passed, 12 skipped. Desktop: 37 failed, 2162 passed, 1 skipped. 36 desktop failures and the root failures are `better-sqlite3` ABI 146 (Electron 42) on Node ABI 137. The Video2X deadline test passed alone in 66 ms. | Already tasked. Do not `npm rebuild`. |
+| v2.5.1 DoD 8 | partial | HIGH | Smoke run 36257845813 printed digest `0998f0b77cfb3a5315b2e3204ed8442edd5c57dbeab06df36ced4940cddd8c22` for a build that compiles the debug port in. `check-release-assets.mjs --staging` can compare a directory, and the no-argument command still prints `release-assets: PASS parity 3 artifacts`. | The release job does not hold the Linux and macOS installers beside the Windows one, and the smoked bytes are not the shipping bytes. `QG-v251-2`. |
+| DF-v250-1, CI-v251-1 | excluded |  | The editor plan leaves screenshot and capture out. The pipeline profiles were not approved. | Leave both open. |
+| T026, T031, T043 | partial | HIGH | Later `develop` commits are not in tag `v2.5.0` at `da07e4bd`. | `/update release` starts only after a green merged integration and its confirmation gates. |
 
 | Question | Answer | Evidence |
 |---|---|---|
