@@ -50,6 +50,23 @@ describe("packaged smoke", () => {
     expect(result.findings).toContain("non-loopback connection: https://localhost.evil.com/models");
   });
 
+  it("does not let userinfo hide an external host", () => {
+    const result = evaluateSmoke({
+      ...full,
+      connections: ["http://127.0.0.1@evil.com/models"],
+    });
+    expect(result.findings).toContain("non-loopback connection: http://127.0.0.1@evil.com/models");
+  });
+
+  it("rejects an empty connection list item and a non-url", () => {
+    const result = evaluateSmoke({
+      ...full,
+      connections: ["", "not a url"],
+    });
+    expect(result.ok).toBe(false);
+    expect(result.findings.some((finding) => finding.startsWith("non-loopback connection:"))).toBe(true);
+  });
+
   it("records a bundle digest", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "bundle-"));
     const file = path.join(dir, "app.bin");
