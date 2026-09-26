@@ -41,7 +41,7 @@ Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 - `QG-v250-1` closed. The release executable served context and refused `C:/Windows/win.ini` as outside the workspace roots.
 - `QG-v250-2` closed on CI. Node 22 job `108108818115` passed the byte-identical refusal test. This host still cannot load the module.
 - `MT-v251-1` closed. Desktop eslint reports 0 jsx-a11y warnings and the ceiling is 0.
-- `QG-v251-2` the Windows executable was launched and the four selectors were observed. The smoke passed. Launching that window is still not a CI job.
+- `QG-v251-2` closed. Windows run 36214895318 printed `ok: true` and digest `4ac3034c06049ced364afc830971fedafb304d60aab0d9b0aac58e084a2fbf79`.
 - `CI-v251-1` pipeline profile migration was not approved and was not applied. Linux run 36153544032 and macOS run 36153548528 both succeeded.
 
 Archived v2.4 gaps were not closed by these plans.
