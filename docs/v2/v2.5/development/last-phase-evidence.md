@@ -137,6 +137,19 @@ That matches `docs/reference/cli/contract.md` rule 46 for the sidecar-down rows.
 
 `node bin/nexus-check.mjs --rule cli-reference-drift` printed `nexus-check: 0 findings`.
 
+### Rendered-surface measurement (2026-09-26)
+
+The detector CLI opened `desktop/dist/index.html` and passed with 0 findings, but that file does not switch routes. Cold start in `desktop/src/main.tsx` replaces any other path with `/chatbot`. A local server of the same build, then an in-app link click, then the detector's measurement function, showed the route selector on each pillar at 1440px:
+
+| Route | Selector count | Findings |
+|---|---|---|
+| `/chatbot` | `chat-page` 1 | `horizontal-overflow` on `aside` |
+| `/coding` | `coding-page` 1 | `horizontal-overflow` on `aside` |
+| `/images` | `image-model-select` 1 | `horizontal-overflow` on `aside`, plus two `undersized-text-box` findings |
+| `/videos` | `video-lab-page` 1 | `horizontal-overflow` on `aside` |
+
+That is not a clean pass. `QG-v251-3` stays open for those findings.
+
 ### Goal-vs-plan sufficiency
 
 `fix_rerun_cycles_used` is 0.
