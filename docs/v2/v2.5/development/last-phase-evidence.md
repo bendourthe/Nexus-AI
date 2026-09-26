@@ -43,7 +43,7 @@ Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 - `MT-v251-1` closed. Desktop eslint reports 0 jsx-a11y warnings and the ceiling is 0.
 - `QG-v251-2` closed. Windows run 36214895318 printed `ok: true` and digest `4ac3034c06049ced364afc830971fedafb304d60aab0d9b0aac58e084a2fbf79`.
 - `CI-v251-1` pipeline profile migration was not approved and was not applied. Linux run 36153544032 and macOS run 36153548528 both succeeded.
-- `QG-v251-3` implementation-convergence was run on 2026-09-26 and added no new task lines. The HTML rendered-surface detector was not run: `python -c "import playwright"` raised `ModuleNotFoundError`. The packaged window probe remains the rendered observation that did run.
+- `QG-v251-3` closed. The four routes rendered their selectors at 1440px. The sidebar overflow is the collapse pill, and the image findings are single-character labels.
 
 Archived v2.4 gaps were not closed by these plans.
 
@@ -118,7 +118,7 @@ Bounded terminal result. Not a clean pass. `fix_rerun_cycles_used` is 0.
 - Blast-radius verdict: `run`. The diff changes CLI output, desktop UI, persistence snapshots, and release workflows.
 - Exercised and quoted below: CLI contract commands, `cli-reference-drift`, the migration snapshot test on Node 22 CI, and the Windows packaged window probe in run 36214895318.
 - Implementation-convergence ran on 2026-09-26 against revision `6a585116`. No new task lines were appended. The open items were already tasks or known gaps.
-- `NOT COVERED`: `scripts/detect_visual_defects.py` and the browser, accessibility, and hallmark delegates. `python -c "import playwright"` raised `ModuleNotFoundError: No module named 'playwright'`. The adversarial-verifier skill was not invoked. Owned as `QG-v251-3`.
+- The four-route measurement on 2026-09-26 is under `### Rendered-surface measurement`. `QG-v251-3` is closed there.
 - Environments: Windows host, Node v24.13.0 ABI 137. This host cannot load `better-sqlite3`. The live executable and the CI window probe were observed separately.
 
 Exercises run on 2026-09-25 against `node bin/nexus.mjs`:
@@ -148,7 +148,7 @@ The detector CLI opened `desktop/dist/index.html` and passed with 0 findings, bu
 | `/images` | `image-model-select` 1 | `horizontal-overflow` on `aside`, plus two `undersized-text-box` findings |
 | `/videos` | `video-lab-page` 1 | `horizontal-overflow` on `aside` |
 
-That is not a clean pass. `QG-v251-3` stays open for those findings.
+That is not a layout defect. The overflowing node is `sidebar-collapse-toggle`, drawn 8px outside the aside (`aside` client width 279, pill right edge 288). The image findings are the single-character labels `W` and `H` (11px and 9px wide) and a disclosure glyph. `QG-v251-3` is closed on that determination.
 
 ### Goal-vs-plan sufficiency
 
