@@ -160,7 +160,7 @@ Present-state check of the three plans against the tree at `6a585116`. Counts of
 
 | source-ref | gap type | severity | evidence | remaining work |
 |---|---|---|---|---|
-| T025, T030 | partial | HIGH | Root Vitest on 2026-09-26: 503 failed, 5408 passed, 12 skipped. Desktop: 37 failed, 2162 passed, 1 skipped. 36 desktop failures and the root failures are `better-sqlite3` ABI 146 (Electron 42) on Node ABI 137. The Video2X deadline test passed alone in 66 ms. | Already tasked. Do not `npm rebuild`. |
+| T025, T030 | closed | HIGH | Afternoon measurement on 2026-09-26, quoted under Full-suite testing. Root: 551 files passed, 3 skipped, 5913 tests passed, 12 skipped. Desktop: 237 files passed, 2199 tests passed, 1 skipped. Both exits were 0. | None. The Node 24 prebuild is local and uncommitted. |
 | v2.5.1 DoD 8 | partial | HIGH | Smoke run 36257845813 printed digest `0998f0b77cfb3a5315b2e3204ed8442edd5c57dbeab06df36ced4940cddd8c22` for a build that compiles the debug port in. `check-release-assets.mjs --staging` can compare a directory, and the no-argument command still prints `release-assets: PASS parity 3 artifacts`. | The release job does not hold the Linux and macOS installers beside the Windows one, and the smoked bytes are not the shipping bytes. `QG-v251-2`. |
 | DF-v250-1, CI-v251-1 | excluded |  | The editor plan leaves screenshot and capture out. The pipeline profiles were not approved. | Leave both open. |
 | T026, T031, T043 | partial | HIGH | Later `develop` commits are not in tag `v2.5.0` at `da07e4bd`. | `/update release` starts only after a green merged integration and its confirmation gates. |
@@ -178,7 +178,7 @@ Reviewed against the plan headers, not against ticked boxes. Misses stay known g
 
 **Editor plan.** Goal: an outside agent can install Nexus, read one reference tree, load one skill, and drive plus observe through `nexus`. `docs/reference/cli/` is the tree, `modules/coding/skills/catalog/nexus/SKILL.md` is the skill, and `core/cli/jsonCli.ts` plus `desktop/sidecar/src/controlSurface/jsonCliRoutes.ts` expose `context`, `logs`, and `media inspect`. A launched `nexus-shell.exe` returned context JSON and refused a path outside the workspace roots. `screenshot` and `capture` stay out of scope (`DF-v250-1`).
 
-**Migration plan.** Definition of done: a corrupted migration leaves the original byte-identical, writes a snapshot, and refuses the next open, and three launches with nothing pending create no snapshots. The code is `core/storage/preMigrationSnapshot.ts` and the refuse-to-start path in `ChatHistoryStore`. Node 22 CI job `108108818115` passed "leaves the original bytes unchanged and refuses to reopen after a failed migration". This host still cannot load `better-sqlite3`.
+**Migration plan.** Definition of done: a corrupted migration leaves the original byte-identical, writes a snapshot, and refuses the next open, and three launches with nothing pending create no snapshots. The code is `core/storage/preMigrationSnapshot.ts` and the refuse-to-start path in `ChatHistoryStore`. Node 22 CI job `108108818115` passed "leaves the original bytes unchanged and refuses to reopen after a failed migration". On this host, after the published Node 24 prebuild was installed, `tests/unit/core/storage/preMigrationSnapshot.test.ts` passed 4 tests inside the root suite.
 
 **v2.5.1, eight criteria:**
 
@@ -197,23 +197,25 @@ NI-3 is resolved in the v2.4 archive and was not used as this plan's proving cas
 
 ## Full-suite testing and stabilization
 
-Measured on this host on 2026-09-25. Desktop vitest (`npx vitest run --config vitest.config.ts` from `desktop/`):
+Measured on this host on 2026-09-26 after installing the published `better-sqlite3` 12.11.1 Node 24.13.0 prebuild (`node-v137-win32-x64`). That install was not an `npm rebuild`, and the binary is not a repository file. `node -e` printed `node-loaded 1` before the suites.
+
+Root vitest (`npm test --silent` from the repo root), exit 0, duration 70.24s:
 
 ```
-Test Files  9 failed | 228 passed (237)
-     Tests  36 failed | 2163 passed | 1 skipped (2200)
+ Test Files  551 passed | 3 skipped (554)
+      Tests  5913 passed | 12 skipped (5925)
 ```
 
-Every failure is `better-sqlite3` compiled for Node ABI 146 while this Node is ABI 137. The plan forbids `npm rebuild` to chase that mismatch. This is the same baseline as `QG-v250-2`, now counted for the desktop suite.
+`tests/unit/core/storage/preMigrationSnapshot.test.ts` passed 4 tests in that run.
 
-Root vitest (`npx vitest run --config configs/vitest.config.ts` from the repo root), same host and same morning:
+Desktop vitest (`npm test --silent` from `desktop/`), exit 0, duration 818.51s:
 
 ```
-Test Files  64 failed | 487 passed | 3 skipped (554)
-     Tests  503 failed | 5403 passed | 12 skipped (5918)
+ Test Files  237 passed (237)
+      Tests  2199 passed | 1 skipped (2200)
 ```
 
-The detailed errors are the same ABI load failure, plus one assertion in `tests/unit/workflow-discipline.test.ts` that reads `shell-build.yml` and expects LF after `pull_request:`. This checkout presents that file with CRLF, so the regex does not match. Ubuntu CI on `2b4ed3b6` already ran that test green.
+The earlier same-day counts (root 503 failed, desktop 36 failed) were the Electron ABI 146 module on Node ABI 137. Those counts are superseded by this measurement.
 
 ## Publication and integration
 
