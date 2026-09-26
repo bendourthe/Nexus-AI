@@ -6,7 +6,7 @@
  * Usage: node launch-probe.mjs <path-to-nexus-shell.exe>
  */
 import { spawn, spawnSync } from "node:child_process";
-import { writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,25 +16,40 @@ if (!exe) {
   process.stderr.write("usage: node launch-probe.mjs <nexus-shell.exe>\n");
   process.exit(2);
 }
+if (!existsSync(exe)) {
+  process.stderr.write(`missing executable: ${exe}\n`);
+  process.exit(2);
+}
 
 const port = 9333;
 const selectors = ["chat-page", "coding-page", "image-model-select", "video-lab-page"];
 const routes = ["/chatbot", "/coding", "/images", "/videos"];
+const userData = path.join(tmpdir(), "nexus-webview-probe");
+mkdirSync(userData, { recursive: true });
+const logs = [];
 
 const child = spawn(exe, [], {
   env: {
     ...process.env,
-    WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: `--remote-debugging-port=${port}`,
+    WEBVIEW2_USER_DATA_FOLDER: userData,
+    WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: `--remote-debugging-port=${port} --remote-allow-origins=*`,
   },
-  stdio: "ignore",
+  stdio: ["ignore", "pipe", "pipe"],
 });
+let spawnError = "";
+child.on("error", (err) => {
+  spawnError = err.message;
+});
+child.stdout?.on("data", (chunk) => logs.push(String(chunk)));
+child.stderr?.on("data", (chunk) => logs.push(String(chunk)));
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function waitForPage() {
-  for (let attempt = 0; attempt < 40; attempt += 1) {
+  for (let attempt = 0; attempt < 60; attempt += 1) {
+    if (spawnError || child.exitCode !== null) break;
     try {
       const list = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
       const page = list.find((item) => item.type === "page" && item.webSocketDebuggerUrl);
@@ -42,9 +57,12 @@ async function waitForPage() {
     } catch {
       // The debug port opens after the webview does.
     }
-    await delay(500);
+    await delay(1000);
   }
-  throw new Error(`webview debug port ${port} did not open`);
+  const tail = logs.join("").slice(-4000);
+  throw new Error(
+    `webview debug port ${port} did not open; exit=${child.exitCode}; spawn=${spawnError || "none"}; log:\n${tail}`,
+  );
 }
 
 async function connect(page) {
