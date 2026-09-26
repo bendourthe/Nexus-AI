@@ -33,7 +33,7 @@ const child = spawn(exe, [], {
   env: {
     ...process.env,
     WEBVIEW2_USER_DATA_FOLDER: userData,
-    WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: `--remote-debugging-port=${port} --remote-allow-origins=*`,
+    WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: `--remote-debugging-port=${port} --remote-allow-origins=* --disable-gpu`,
   },
   stdio: ["ignore", "pipe", "pipe"],
 });

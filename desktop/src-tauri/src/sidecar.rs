@@ -756,8 +756,15 @@ pub fn sidecar_windows_creation_flags() -> Option<u32> {
 /// Shared Command builder for app spawn, restart, and `--healthcheck`.
 pub fn sidecar_command(node: &Path, script: &Path) -> Command {
     let mut command = Command::new(node);
+    // Node 22 on Windows realpath's an absolute `D:\...` entry as the bare
+    // drive `D:` and exits EISDIR before the sidecar boots. The child cwd is
+    // the script directory, so the file name is enough.
+    let script_arg = script
+        .file_name()
+        .map(PathBuf::from)
+        .unwrap_or_else(|| script.to_path_buf());
     command
-        .arg(script)
+        .arg(script_arg)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
