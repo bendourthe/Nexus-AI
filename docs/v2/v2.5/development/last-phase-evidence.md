@@ -43,7 +43,7 @@ Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 - `MT-v251-1` closed. Desktop eslint reports 0 jsx-a11y warnings and the ceiling is 0.
 - `QG-v251-2` closed. Windows run 36214895318 printed `ok: true` and digest `4ac3034c06049ced364afc830971fedafb304d60aab0d9b0aac58e084a2fbf79`.
 - `CI-v251-1` pipeline profile migration was not approved and was not applied. Linux run 36153544032 and macOS run 36153548528 both succeeded.
-- `QG-v251-3` rendered-surface delegates, the adversarial verifier, and implementation-convergence were not run.
+- `QG-v251-3` the smoke host check held against lookalike and userinfo hosts. Rendered-surface delegates and implementation-convergence were not run.
 
 Archived v2.4 gaps were not closed by these plans.
 
