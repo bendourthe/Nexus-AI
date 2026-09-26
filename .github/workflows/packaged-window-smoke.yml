@@ -1,0 +1,44 @@
+name: Packaged window smoke
+
+# Launches the Windows release executable and feeds the live probe to
+# desktop/tests/packaged/bundle.smoke.mjs. Dispatch-only: a GUI launch is not
+# part of the ubuntu shell job that runs on every develop push.
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: packaged-window-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Launch Windows bundle and judge the probe
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22.x"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable
+
+      - name: Install workspace deps
+        working-directory: .
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Build the Windows shell
+        run: npm run build:shell
+
+      - name: Probe the launched window
+        run: node tests/packaged/launch-probe.mjs src-tauri/target/release/nexus-shell.exe
