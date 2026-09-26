@@ -4,6 +4,7 @@
  * workflow upload name is missing from that file.
  */
 
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -53,6 +54,35 @@ export function loadExpected(root) {
   return raw.artifacts;
 }
 
+export function readStagingFiles(stagingDir, expected) {
+  const files = [];
+  for (const item of expected) {
+    const full = path.join(stagingDir, item.file);
+    if (!fs.existsSync(full) || !fs.statSync(full).isFile()) continue;
+    const data = fs.readFileSync(full);
+    files.push({
+      name: item.file,
+      size: data.length,
+      digest: crypto.createHash("sha256").update(data).digest("hex"),
+    });
+  }
+  return files;
+}
+
+export function checkStaging({ expected, stagingDir, smokeDigest }) {
+  return checkArtifacts({
+    expected,
+    files: readStagingFiles(stagingDir, expected),
+    smokeDigest,
+  });
+}
+
+function argValue(argv, flag) {
+  const index = argv.indexOf(flag);
+  if (index === -1 || index + 1 >= argv.length) return undefined;
+  return argv[index + 1];
+}
+
 function main() {
   const root = process.cwd();
   const expected = loadExpected(root);
@@ -68,7 +98,23 @@ function main() {
     for (const finding of parity) process.stderr.write(`  ${finding}\n`);
     process.exit(1);
   }
-  process.stdout.write(`release-assets: PASS parity ${expected.length} artifacts\n`);
+  const staging = argValue(process.argv, "--staging");
+  if (!staging) {
+    process.stdout.write(`release-assets: PASS parity ${expected.length} artifacts\n`);
+    return;
+  }
+  const result = checkStaging({
+    expected,
+    stagingDir: staging,
+    smokeDigest: argValue(process.argv, "--smoke-digest"),
+  });
+  if (!result.ok) {
+    process.stderr.write(`release-assets: FAIL\n`);
+    for (const finding of result.findings) process.stderr.write(`  ${finding}\n`);
+    process.exit(1);
+  }
+  for (const warning of result.warnings) process.stderr.write(`release-assets: warning ${warning}\n`);
+  process.stdout.write(`release-assets: PASS parity ${expected.length} artifacts, staging checked\n`);
 }
 
 if (process.argv[1]?.endsWith("check-release-assets.mjs")) main();
