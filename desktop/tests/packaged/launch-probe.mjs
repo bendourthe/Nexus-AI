@@ -2,6 +2,7 @@
 /**
  * Launch a built Nexus executable, read the four pillar selectors and the
  * WebView requests, and judge that probe with bundle.smoke.mjs.
+ * The shell also prints sidecar stderr when spawn fails, which the CI log keeps.
  *
  * Usage: node launch-probe.mjs <path-to-nexus-shell.exe>
  */
