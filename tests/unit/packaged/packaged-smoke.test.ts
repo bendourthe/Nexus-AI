@@ -42,6 +42,14 @@ describe("packaged smoke", () => {
     expect(result.findings).toEqual([]);
   });
 
+  it("does not treat a lookalike host as loopback", () => {
+    const result = evaluateSmoke({
+      ...full,
+      connections: ["https://localhost.evil.com/models"],
+    });
+    expect(result.findings).toContain("non-loopback connection: https://localhost.evil.com/models");
+  });
+
   it("records a bundle digest", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "bundle-"));
     const file = path.join(dir, "app.bin");
