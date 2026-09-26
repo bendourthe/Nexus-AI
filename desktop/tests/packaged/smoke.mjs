@@ -29,7 +29,26 @@ export function isLoopback(destination) {
   } catch {
     host = "";
   }
-  return host === "127.0.0.1" || host === "localhost" || host.endsWith(".localhost") || host === "::1";
+  if (host.startsWith("[") && host.endsWith("]")) host = host.slice(1, -1);
+  host = host.toLowerCase();
+  if (host === "127.0.0.1" || host === "localhost" || host.endsWith(".localhost") || host === "::1") {
+    return true;
+  }
+  return isIpv4MappedLoopback(host);
+}
+
+function isIpv4MappedLoopback(host) {
+  if (!host.startsWith("::ffff:")) return false;
+  const rest = host.slice("::ffff:".length);
+  if (rest.includes(".")) {
+    const parts = rest.split(".");
+    if (parts.length !== 4) return false;
+    const nums = parts.map((part) => Number(part));
+    return nums.every((n) => Number.isInteger(n) && n >= 0 && n <= 255) && nums[0] === 127;
+  }
+  const hex = rest.split(":");
+  if (hex.length !== 2 || hex.some((part) => !/^[0-9a-f]{1,4}$/.test(part))) return false;
+  return (Number.parseInt(hex[0], 16) >>> 8) === 127;
 }
 
 export function evaluateSmoke(report) {
