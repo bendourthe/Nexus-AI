@@ -28,10 +28,10 @@ Provider detected: GitHub Actions (`.github/workflows/`). Compared on `318bb2ea`
 | Permissions | `check-command-parity` and `check-release-assets` set `contents: read`. |
 | Pinning | Checkout and setup-node in those jobs use full commit SHAs with version comments. |
 | Concurrency | `ci.yml` sets `cancel-in-progress: true` on `ci-${{ github.workflow }}-${{ github.head_ref \|\| github.ref }}`. |
-| Path scoping | The two new gates have no `paths` filter. The packaged smoke is not a job at all. |
+| Path scoping | `check-command-parity` and `check-release-assets` have no `paths` filter. `packaged-window-smoke.yml` runs on `develop` when its own files change. |
 | Profiles | The five repository-native profiles (`fast`, `full`, `platform`, `report`, `release`) are not present. Not applied. |
 | Cross-installer | `installer-build.yml`, `installer-linux.yml`, and `installer-macos.yml` exist. Linux job "Build manual Linux installer rehearsal" succeeded: https://github.com/bendourthe/Nexus-AI/actions/runs/36153544032. macOS job "Build manual macOS installer rehearsal" succeeded: https://github.com/bendourthe/Nexus-AI/actions/runs/36153548528. Both are dispatch-only rehearsals and do not stage the desktop payload. Windows installer bytes for `v2.5.0` were produced by `release.yml` run 36093413452. |
-| First-run-remote | `check-command-parity` and `check-release-assets` have since passed on the integration pulls and on `2b4ed3b6`. The packaged smoke has not. |
+| First-run-remote | The three gates are command parity, release-artifact parity, and the packaged window smoke. Command parity and release-artifact parity passed on the integration pulls and on `2b4ed3b6`. The window smoke passed later in run `36274353659`. |
 
 ## Known-gaps reconciliation
 
