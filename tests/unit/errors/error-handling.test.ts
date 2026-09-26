@@ -11,6 +11,7 @@
 
 import { describe, it, expect, vi } from "vitest";
 import { FetchPageTool } from "../../../src/tools/handlers/webSearch.js";
+import { isSsrfBlockedSync } from "../../../modules/coding/utils/ssrf.js";
 import { RunTerminalTool } from "../../../src/tools/handlers/terminal.js";
 import { ReadFileTool } from "../../../src/tools/handlers/filesystem.js";
 import { ConversationManager } from "../../../modules/coding/chat/ConversationManager.js";
@@ -62,17 +63,8 @@ describe("FetchPageTool SSRF protection", () => {
     });
   }
 
-  it("does not block a normal public URL (fetch will fail in test environment — that is OK)", async () => {
-    // We just verify the SSRF check itself doesn't block public URLs.
-    // The actual fetch will fail in a test environment without network.
-    const result = await tool.execute({
-      url: "https://example.com",
-      _callId: "test",
-    });
-    // Either success (unlikely in test env) or a network error — NOT an SSRF block.
-    if (!result.success) {
-      expect(result.error).not.toMatch(/not allowed|permitted/);
-    }
+  it("does not block a normal public URL", () => {
+    expect(isSsrfBlockedSync("https://example.com")).toBe(false);
   });
 });
 
