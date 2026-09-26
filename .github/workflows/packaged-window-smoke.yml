@@ -11,6 +11,8 @@ on:
     paths:
       - .github/workflows/packaged-window-smoke.yml
       - desktop/tests/packaged/launch-probe.mjs
+      - desktop/src-tauri/src/lib.rs
+      - desktop/src-tauri/tauri.conf.json
 
 concurrency:
   group: packaged-window-smoke-${{ github.ref }}
