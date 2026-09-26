@@ -1,11 +1,16 @@
 name: Packaged window smoke
 
 # Launches the Windows release executable and feeds the live probe to
-# desktop/tests/packaged/bundle.smoke.mjs. Dispatch-only: a GUI launch is not
-# part of the ubuntu shell job that runs on every develop push.
+# desktop/tests/packaged/bundle.smoke.mjs. A push of this file runs it once
+# on develop. It is not part of the ubuntu shell job.
 
 on:
   workflow_dispatch:
+  push:
+    branches: [develop]
+    paths:
+      - .github/workflows/packaged-window-smoke.yml
+      - desktop/tests/packaged/launch-probe.mjs
 
 concurrency:
   group: packaged-window-smoke-${{ github.ref }}
