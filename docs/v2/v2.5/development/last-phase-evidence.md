@@ -161,7 +161,7 @@ Present-state check of the three plans against the tree at `6a585116`. Counts of
 | source-ref | gap type | severity | evidence | remaining work |
 |---|---|---|---|---|
 | T025, T030 | closed | HIGH | Afternoon measurement on 2026-09-26, quoted under Full-suite testing. Root: 551 files passed, 3 skipped, 5913 tests passed, 12 skipped. Desktop: 237 files passed, 2199 tests passed, 1 skipped. Both exits were 0. | None. The Node 24 prebuild is local and uncommitted. |
-| v2.5.1 DoD 8 | partial | HIGH | Smoke run 36257845813 printed digest `0998f0b77cfb3a5315b2e3204ed8442edd5c57dbeab06df36ced4940cddd8c22` for a build that compiles the debug port in. `check-release-assets.mjs --staging` can compare a directory, and the no-argument command still prints `release-assets: PASS parity 3 artifacts`. | The release job does not hold the Linux and macOS installers beside the Windows one, and the smoked bytes are not the shipping bytes. `QG-v251-2`. |
+| v2.5.1 DoD 8 | partial | HIGH | Smoke run 36274353659 printed digest `8272dd28c0053177cd9dda48b72b12834211010c290b7ed10e018176984b81bf` for a normal `npm run build:shell` with no `tauri.conf.json` patch. `check-release-assets.mjs` with no arguments still prints `release-assets: PASS parity 3 artifacts`. | The smoked file is `nexus-shell.exe`. The published Windows file is `NexusSetup.exe`. Those digests are of different files, and `release.yml` does not compare them. |
 | DF-v250-1, CI-v251-1 | excluded |  | The editor plan leaves screenshot and capture out. The pipeline profiles were not approved. | Leave both open. |
 | T026, T031, T043 | partial | HIGH | Later `develop` commits are not in tag `v2.5.0` at `da07e4bd`. | `/update release` starts only after a green merged integration and its confirmation gates. |
 
@@ -189,9 +189,9 @@ Reviewed against the plan headers, not against ticked boxes. Misses stay known g
 | 3 | Met on this tree | `node scripts/check-command-parity.mjs` printed `command-parity: PASS commands 141, exempt 26, findings 0`. `tests/unit/scripts/command-parity.test.ts` covers an unmapped command, a zero enumeration, and a below-snapshot count. |
 | 4 | Met in the workflow | `check-command-parity` in `.github/workflows/ci.yml` has no `paths` filter. The comment on that job states why. |
 | 5 | Met on a launched Windows executable | `nexus-shell.exe` opened `http://tauri.localhost/chatbot`, `/coding`, `/images`, and `/videos`. Each route exposed `chat-page`, `coding-page`, `image-model-select`, or `video-lab-page`. |
-| 6 | Met locally, not as a CI launch job | `node desktop/tests/packaged/bundle.smoke.mjs` on that probe printed `ok: true` and digest `139c84eed2982d3665eda15564360d01f0bec6cc259b6e71027429c28d220e90`, the SHA-256 of `desktop/src-tauri/target/release/nexus-shell.exe`. No workflow launches the window. |
+| 6 | Met on the Windows smoke job | Run 36274353659 built `nexus-shell.exe` without a `tauri.conf.json` patch and the probe printed `{"ok":true,"digest":"8272dd28c0053177cd9dda48b72b12834211010c290b7ed10e018176984b81bf","findings":[]}`. |
 | 7 | Measured on the launched window | The only requests observed were `tauri.localhost` and `ipc.localhost`. Those names are loopback. `https://example.com/models` still fails the checker. |
-| 8 | Gate exists; the published digest was not bound to a launched smoke | `node scripts/check-release-assets.mjs` printed `release-assets: PASS parity 3 artifacts`. It runs in `ci.yml` and before `npx semantic-release`. The v2.5.0 assets were uploaded by hand after `release.yml` rejected the lightweight tag, and no smoke digest was compared to those bytes. |
+| 8 | Gate exists; the published installer digest is not the smoked shell digest | `node scripts/check-release-assets.mjs` prints `release-assets: PASS parity 3 artifacts` and runs in `ci.yml` and before `npx semantic-release`. Run 36274353659 smoked `nexus-shell.exe`. `release.yml` publishes `NexusSetup.exe` plus three VSIX files and does not compare those bytes to the smoke digest. |
 
 NI-3 is resolved in the v2.4 archive and was not used as this plan's proving case. A11 stays deferred.
 
