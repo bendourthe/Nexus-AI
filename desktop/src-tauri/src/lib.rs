@@ -364,6 +364,23 @@ pub fn run() {
             default_workspace_root
         ])
         .setup(|app| {
+            // The config window is `create: false` so this is the only place it
+            // is built. That lets a smoke launch pass WEBVIEW2_USER_DATA_FOLDER
+            // before the webview exists. A fresh profile is what makes
+            // WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS apply; an existing profile
+            // ignores a new argument set.
+            let Some(window_config) = app.config().app.windows.first().cloned() else {
+                return Err(std::io::Error::other("tauri window config is empty").into());
+            };
+            let mut window =
+                tauri::WebviewWindowBuilder::from_config(app.handle(), &window_config)?;
+            if let Some(dir) = std::env::var_os("WEBVIEW2_USER_DATA_FOLDER") {
+                let path = std::path::PathBuf::from(&dir);
+                if !path.as_os_str().is_empty() {
+                    window = window.data_directory(path);
+                }
+            }
+            window.build()?;
             // Window icon (title bar + taskbar): the transparent no-background
             // Nexus mark, deliberately distinct from the exe/Explorer icon
             // (the navy `nexus-ai-primary` embedded via bundle.icon). The
