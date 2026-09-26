@@ -58,8 +58,12 @@ export function readStagingFiles(stagingDir, expected) {
   const files = [];
   for (const item of expected) {
     const full = path.join(stagingDir, item.file);
-    if (!fs.existsSync(full) || !fs.statSync(full).isFile()) continue;
-    const data = fs.readFileSync(full);
+    let data;
+    try {
+      data = fs.readFileSync(full);
+    } catch {
+      continue;
+    }
     files.push({
       name: item.file,
       size: data.length,

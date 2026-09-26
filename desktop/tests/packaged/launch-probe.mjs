@@ -7,7 +7,7 @@
  * Usage: node launch-probe.mjs <path-to-nexus-shell.exe>
  */
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -148,12 +148,15 @@ try {
     })()`);
     await delay(1500);
     const found = await evalJs(
-      `(() => ${JSON.stringify(selectors)}.filter((id) => document.querySelector('[data-testid="' + id + '"]')))()`,
+      `(() => {
+        const ids = ${JSON.stringify(selectors)};
+        return ids.filter((id) => [...document.querySelectorAll("[data-testid]")].some((el) => el.getAttribute("data-testid") === id));
+      })()`,
     );
     for (const id of found ?? []) present.add(id);
   }
   ws.close();
-  const reportPath = path.join(tmpdir(), "nexus-window-probe.json");
+  const reportPath = path.join(mkdtempSync(path.join(tmpdir(), "nexus-window-probe-")), "report.json");
   writeFileSync(
     reportPath,
     JSON.stringify({
