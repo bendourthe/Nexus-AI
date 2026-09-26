@@ -43,6 +43,7 @@ Open rows in `docs/v2/v2.5/known-gaps.md` for this work:
 - `MT-v251-1` closed. Desktop eslint reports 0 jsx-a11y warnings and the ceiling is 0.
 - `QG-v251-2` closed. Windows run 36214895318 printed `ok: true` and digest `4ac3034c06049ced364afc830971fedafb304d60aab0d9b0aac58e084a2fbf79`.
 - `CI-v251-1` pipeline profile migration was not approved and was not applied. Linux run 36153544032 and macOS run 36153548528 both succeeded.
+- `QG-v251-3` rendered-surface delegates, the adversarial verifier, and implementation-convergence were not run.
 
 Archived v2.4 gaps were not closed by these plans.
 
@@ -111,13 +112,13 @@ Class (a) is already asserted by the packaged smoke selectors (`chat-page`, `cod
 
 ## Tier 3 deep pass
 
-This section is the start of the deep-pass record. It is not a finished Tier 3 result.
+Bounded terminal result. Not a clean pass. `fix_rerun_cycles_used` is 0.
 
-- Revision under review: `2b4ed3b606c429b776c7a0a7825e0fd224d14251` on `develop`. Integration base for the original publication was `develop` at the PR 69 merge, then `main` at `58b03ed2`.
+- Revision under review: `fdc80498` on `develop`. The published tag `v2.5.0` is `da07e4bd` on `main`.
 - Blast-radius verdict: `run`. The diff changes CLI output, desktop UI, persistence snapshots, and release workflows.
-- Feature inventory, per-feature exercises, rendered-surface delegates, adversarial-verifier, and implementation-convergence are `NOT COVERED` in this session. Owner: the functional-verification deep pass. Next step: walk `references/deep-pass.md` steps 3 through 8 against the plan artifacts and quote each exercise.
-- `fix_rerun_cycles_used`: 0. No deep-pass fix has been applied.
-- Environments that bound the evidence: Windows host, Node v24.13.0 ABI 137, sidecar port 11500 not listening. The release executable `nexus-shell.exe` was launched after this sentence was first written; the selector and request observations are in the Goal review below.
+- Exercised and quoted below: CLI contract commands, `cli-reference-drift`, the migration snapshot test on Node 22 CI, and the Windows packaged window probe in run 36214895318.
+- `NOT COVERED`: rendered-surface delegates, the adversarial verifier, and implementation-convergence. Owned as `QG-v251-3`.
+- Environments: Windows host, Node v24.13.0 ABI 137. This host cannot load `better-sqlite3`. The live executable and the CI window probe were observed separately.
 
 Exercises run on 2026-09-25 against `node bin/nexus.mjs`:
 
@@ -137,13 +138,13 @@ That matches `docs/reference/cli/contract.md` rule 46 for the sidecar-down rows.
 
 ### Goal-vs-plan sufficiency
 
-`fix_rerun_cycles_used` is still 0. These answers are not a finished deep pass. Rendered-surface delegates, the adversarial verifier, and implementation-convergence remain `NOT COVERED`.
+`fix_rerun_cycles_used` is 0. Rendered-surface delegates, the adversarial verifier, and implementation-convergence are `QG-v251-3`.
 
 | Question | Answer | Evidence |
 |---|---|---|
 | What did implementing this teach that the plan did not know? | A 403 from a path outside the workspace roots was reported as an auth failure. Tauri's `tauri.localhost` and `ipc.localhost` hosts are loopback, and the first smoke treated them as egress. `workflow_dispatch` cannot see a workflow that is only on `develop`. | `core/cli/jsonCli.ts` now keeps a non-auth 403 body. `desktop/tests/packaged/smoke.mjs` accepts `*.localhost`. GitHub returned HTTP 404 for `packaged-window-smoke.yml` before the develop push trigger. |
 | What did the plan assume that turned out false? | NI-3 was already resolved in the v2.4 archive. The plan's v2.5.1 name assumed no `feat` commits in the release range. Semantic-release computed one minor, `v2.5.0`, and there is no `v2.5.1` tag. | `docs/archive/v2/v2.4/known-gaps.md`. Release commit `da07e4bd`. |
-| What would a reader of the Goal expect that no phase delivered? | Screenshot and capture stay excluded. A keyboard and screen-reader pass was not run. The Windows launch probe on CI run 36209938149 had not finished when this row was written. | `DF-v250-1`. Human-testing section above. |
+| What would a reader of the Goal expect that no phase delivered? | Screenshot and capture stay excluded. A keyboard and screen-reader pass was not run. The Windows launch probe later passed in run 36214895318. | `DF-v250-1`. Human-testing section above. |
 | What did the maintainer ask for that no task line captured? | One release after both 2.5.0 and 2.5.1 were finished. `v2.5.0` was published at `da07e4bd`. Later fixes, including the path refusal and the window probe, are on `develop` and are not in that tag. | https://github.com/bendourthe/Nexus-AI/releases/tag/v2.5.0 |
 
 ## Goal-vs-codebase review
