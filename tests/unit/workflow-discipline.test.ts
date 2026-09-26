@@ -66,7 +66,7 @@ describe('Long-running workflows cancel superseded runs', () => {
 });
 
 describe('Shell build protects the integration branch without multiplying runner cost', () => {
-  const text = readFileSync(join(WORKFLOWS_DIR, 'shell-build.yml'), 'utf8');
+  const text = readFileSync(join(WORKFLOWS_DIR, 'shell-build.yml'), 'utf8').replace(/\r\n/g, '\n');
 
   it('runs for main and develop pushes plus pull requests to either', () => {
     expect(text).toMatch(/push:\s*\n\s+branches:\s*\[main, develop\]/);
