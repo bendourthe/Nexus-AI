@@ -1,8 +1,10 @@
 name: Packaged window smoke
 
 # Launches the Windows release executable and feeds the live probe to
-# desktop/tests/packaged/bundle.smoke.mjs. A push of this file runs it once
-# on develop. It is not part of the ubuntu shell job.
+# desktop/tests/packaged/bundle.smoke.mjs. The probe opens the debug port
+# through WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS at launch. This workflow
+# does not patch tauri.conf.json, so the smoked exe is a normal shell build.
+# A push of this file runs it once on develop. It is not part of the ubuntu shell job.
 
 on:
   workflow_dispatch:
@@ -43,10 +45,6 @@ jobs:
       - name: Install workspace deps
         working-directory: .
         run: npm ci --prefer-offline --no-audit
-
-      - name: Enable the WebView2 debug port for this build
-        shell: pwsh
-        run: node -e "const fs=require('fs'); const p='src-tauri/tauri.conf.json'; const c=JSON.parse(fs.readFileSync(p,'utf8')); c.app.windows[0].additionalBrowserArgs='--remote-debugging-port=9333 --remote-allow-origins=* --disable-gpu'; fs.writeFileSync(p, JSON.stringify(c,null,2)+'\n');"
 
       - name: Build the Windows shell
         run: npm run build:shell

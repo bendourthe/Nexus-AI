@@ -341,6 +341,20 @@ pub fn run_healthcheck(budget_secs: u64) -> i32 {
     code
 }
 
+/// Browser arguments for a smoke launch. Wry replaces its defaults when
+/// `additional_browser_args` is set, so an empty variable leaves the binary
+/// on those defaults. A non-empty variable keeps the defaults and appends
+/// the caller's flags.
+fn smoke_browser_args(extra: &str) -> Option<String> {
+    let extra = extra.trim();
+    if extra.is_empty() {
+        return None;
+    }
+    Some(format!(
+        "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection {extra}"
+    ))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // Headless health check: never build a window, print a verdict, exit.
@@ -365,10 +379,12 @@ pub fn run() {
         ])
         .setup(|app| {
             // The config window is `create: false` so this is the only place it
-            // is built. That lets a smoke launch pass WEBVIEW2_USER_DATA_FOLDER
-            // before the webview exists. A fresh profile is what makes
-            // WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS apply; an existing profile
-            // ignores a new argument set.
+            // is built. A smoke launch passes WEBVIEW2_USER_DATA_FOLDER so the
+            // webview gets a fresh profile. Wry always calls
+            // set_additional_browser_arguments, and WebView2 then ignores
+            // WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS. Read that variable here
+            // and pass it through, keeping wry's default feature flags, so a
+            // smoke can open the debug port without compiling it into the exe.
             let Some(window_config) = app.config().app.windows.first().cloned() else {
                 return Err(std::io::Error::other("tauri window config is empty").into());
             };
@@ -379,6 +395,11 @@ pub fn run() {
                 if !path.as_os_str().is_empty() {
                     window = window.data_directory(path);
                 }
+            }
+            if let Some(args) = smoke_browser_args(
+                &std::env::var("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS").unwrap_or_default(),
+            ) {
+                window = window.additional_browser_args(&args);
             }
             window.build()?;
             // Window icon (title bar + taskbar): the transparent no-background
@@ -440,7 +461,25 @@ pub fn run() {
 
 #[cfg(test)]
 mod workspace_tests {
-    use super::default_workspace_root;
+    use super::{default_workspace_root, smoke_browser_args};
+
+    #[test]
+    fn smoke_browser_args_leave_the_shipping_binary_on_wry_defaults() {
+        assert_eq!(smoke_browser_args(""), None);
+        assert_eq!(smoke_browser_args("   "), None);
+    }
+
+    #[test]
+    fn smoke_browser_args_keep_wry_defaults_and_append_the_debug_port() {
+        let args = smoke_browser_args(
+            "--remote-debugging-port=9333 --remote-allow-origins=* --disable-gpu",
+        )
+        .expect("debug flags");
+        assert!(args.starts_with(
+            "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection "
+        ));
+        assert!(args.contains("--remote-debugging-port=9333"));
+    }
 
     #[test]
     fn default_workspace_root_is_an_existing_absolute_directory() {
