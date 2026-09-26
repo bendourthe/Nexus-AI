@@ -107,6 +107,18 @@ pub enum SidecarError {
     Exited { code: i32, stderr_tail: Vec<String> },
 }
 
+impl SidecarError {
+    /// Prints the captured sidecar stderr. The Display string stays
+    /// `sidecar-exited:<code>` so the UI contract does not change.
+    pub fn log_stderr(&self) {
+        if let SidecarError::Exited { stderr_tail, .. } = self {
+            for line in stderr_tail {
+                eprintln!("[nexus-shell] sidecar stderr: {line}");
+            }
+        }
+    }
+}
+
 #[derive(Debug, Serialize)]
 struct JsonRpcRequest<'a> {
     jsonrpc: &'a str,

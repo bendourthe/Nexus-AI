@@ -393,6 +393,7 @@ pub fn run() {
                 }
                 Err(err) => {
                     eprintln!("[nexus-shell] sidecar failed to spawn: {err}");
+                    err.log_stderr();
                     if let Some(state) = app.try_state::<AppState>() {
                         if let Ok(mut stored) = state.status.lock() {
                             stored.running = false;
