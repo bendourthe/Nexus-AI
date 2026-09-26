@@ -7,7 +7,7 @@
  * Usage: node launch-probe.mjs <path-to-nexus-shell.exe>
  */
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -25,30 +25,40 @@ if (!existsSync(exe)) {
 const port = 9333;
 const selectors = ["chat-page", "coding-page", "image-model-select", "video-lab-page"];
 const routes = ["/chatbot", "/coding", "/images", "/videos"];
-const userData = path.join(tmpdir(), "nexus-webview-probe");
+const userData = path.join(tmpdir(), `nexus-webview-probe-${Date.now()}`);
 mkdirSync(userData, { recursive: true });
 const logs = [];
-const probeEnv = {
-  ...process.env,
-  WEBVIEW2_USER_DATA_FOLDER: userData,
-  WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: `--remote-debugging-port=${port} --remote-allow-origins=* --disable-gpu`,
-};
 
 function psQuote(value) {
   return `'${String(value).replaceAll("'", "''")}'`;
 }
 
+const browserArgs = `--remote-debugging-port=${port} --remote-allow-origins=* --disable-gpu`;
+const pidFile = path.join(userData, "pid.txt");
 const started = spawnSync(
   "powershell.exe",
   [
     "-NoProfile",
     "-Command",
-    `$p = Start-Process -FilePath ${psQuote(exe)} -PassThru; Write-Output $p.Id`,
+    [
+      "$psi = New-Object System.Diagnostics.ProcessStartInfo",
+      `$psi.FileName = ${psQuote(exe)}`,
+      "$psi.UseShellExecute = $false",
+      `$psi.EnvironmentVariables['WEBVIEW2_USER_DATA_FOLDER'] = ${psQuote(userData)}`,
+      `$psi.EnvironmentVariables['WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS'] = ${psQuote(browserArgs)}`,
+      "$p = [System.Diagnostics.Process]::Start($psi)",
+      `Set-Content -LiteralPath ${psQuote(pidFile)} -Value $p.Id`,
+    ].join("; "),
   ],
-  { env: probeEnv, encoding: "utf8" },
+  { stdio: "ignore", timeout: 20000 },
 );
-const appPid = Number(String(started.stdout || "").trim().split(/\s+/).pop());
-let spawnError = started.status === 0 && appPid > 0 ? "" : started.stderr || started.stdout || "Start-Process failed";
+let appPid = 0;
+try {
+  appPid = Number(readFileSync(pidFile, "utf8").trim());
+} catch {
+  appPid = 0;
+}
+let spawnError = started.status === 0 && appPid > 0 ? "" : started.error?.message || "process start failed";
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -65,7 +75,7 @@ async function waitForPage() {
   for (let attempt = 0; attempt < 60; attempt += 1) {
     if (spawnError) break;
     try {
-      const list = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
+      const list = await (await fetch(`http://127.0.0.1:${port}/json/list`, { signal: AbortSignal.timeout(2000) })).json();
       const page = list.find((item) => item.type === "page" && item.webSocketDebuggerUrl);
       if (page) return page;
     } catch {
@@ -91,8 +101,13 @@ async function connect(page) {
   });
   function send(method, params) {
     const msgId = ++id;
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        pending.delete(msgId);
+        reject(new Error(`devtools ${method} timed out`));
+      }, 10000);
       pending.set(msgId, (data) => {
+        clearTimeout(timer);
         pending.delete(msgId);
         resolve(data);
       });
@@ -105,15 +120,24 @@ async function connect(page) {
     return res.result?.result?.value;
   }
   await new Promise((resolve, reject) => {
-    ws.addEventListener("open", resolve);
-    ws.addEventListener("error", () => reject(new Error("webview socket failed")));
+    const timer = setTimeout(() => reject(new Error("webview socket timed out")), 10000);
+    ws.addEventListener("open", () => {
+      clearTimeout(timer);
+      resolve();
+    });
+    ws.addEventListener("error", () => {
+      clearTimeout(timer);
+      reject(new Error("webview socket failed"));
+    });
   });
   await send("Network.enable");
   return { ws, urls, evalJs };
 }
 
 try {
+  process.stderr.write(`launching pid=${appPid || "none"}\n`);
   const page = await waitForPage();
+  process.stderr.write(`debug port open ${page.url}\n`);
   const { ws, urls, evalJs } = await connect(page);
   const present = new Set();
   for (const route of routes) {
@@ -148,5 +172,5 @@ try {
   process.stderr.write(`${err instanceof Error ? err.message : String(err)}\n`);
   process.exitCode = 1;
 } finally {
-  if (appPid > 0) spawnSync("taskkill", ["/PID", String(appPid), "/T", "/F"]);
+  if (appPid > 0) spawnSync("taskkill", ["/PID", String(appPid), "/T", "/F"], { timeout: 15000 });
 }
