@@ -44,6 +44,10 @@ jobs:
         working-directory: .
         run: npm ci --prefer-offline --no-audit
 
+      - name: Enable the WebView2 debug port for this build
+        shell: pwsh
+        run: node -e "const fs=require('fs'); const p='src-tauri/tauri.conf.json'; const c=JSON.parse(fs.readFileSync(p,'utf8')); c.app.windows[0].additionalBrowserArgs='--remote-debugging-port=9333 --remote-allow-origins=* --disable-gpu'; fs.writeFileSync(p, JSON.stringify(c,null,2)+'\n');"
+
       - name: Build the Windows shell
         run: npm run build:shell
 
