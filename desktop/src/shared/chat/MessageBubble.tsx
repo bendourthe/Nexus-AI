@@ -26,6 +26,9 @@ import {
   parseMessageTime,
 } from "./transcriptChrome";
 import { ReasoningDisclosure } from "./ReasoningDisclosure";
+import { BranchControl, type BranchControlProps } from "./BranchControl";
+import { MermaidDiagram } from "./MermaidDiagram";
+import { splitMermaidFences } from "./mermaidLimits";
 import {
   MediaRuntimeRecoveryCard,
   Sam2RecoveryCard,
@@ -78,8 +81,36 @@ export interface MessageBubbleProps {
   onInstallSam2?: (message: ChatMessage) => void;
   onPaintSam2Mask?: (message: ChatMessage) => void;
   onOpenSam2Settings?: (message: ChatMessage) => void;
+  /**
+   * Branch affordance, rendered as a child component. Omit it and the bubble
+   * shows no branch chrome (the empty-thread case).
+   */
+  branchControl?: Omit<BranchControlProps, "messageId">;
   onRetrySam2?: (message: ChatMessage) => void;
   sam2InstallDisabled?: boolean;
+}
+
+function MessageBody({
+  messageId,
+  content,
+}: {
+  messageId: string;
+  content: string;
+}): JSX.Element {
+  const parts = splitMermaidFences(content);
+  return (
+    <>
+      {parts.map((part, index) =>
+        part.kind === "mermaid" ? (
+          <MermaidDiagram key={`${messageId}-diagram-${index}`} messageId={messageId} source={part.text} />
+        ) : (
+          <p key={`${messageId}-text-${index}`} style={{ whiteSpace: "pre-wrap", margin: 0 }}>
+            {part.text}
+          </p>
+        ),
+      )}
+    </>
+  );
 }
 
 export function MessageBubble({
@@ -97,6 +128,7 @@ export function MessageBubble({
   onOpenSam2Settings,
   onRetrySam2,
   sam2InstallDisabled = false,
+  branchControl,
 }: MessageBubbleProps): JSX.Element {
   const [mediaFailed, setMediaFailed] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -174,9 +206,7 @@ export function MessageBubble({
           />
         ) : null}
         {caption}
-        {message.content && (
-          <p style={{ whiteSpace: "pre-wrap", margin: 0 }}>{message.content}</p>
-        )}
+        {message.content ? <MessageBody messageId={message.id} content={message.content} /> : null}
         {message.attachments && message.attachments.length > 0 && (
           <div
             data-testid={`message-attachments-${message.id}`}
@@ -325,6 +355,7 @@ export function MessageBubble({
           </ul>
         )}
       </article>
+      {branchControl ? <BranchControl messageId={message.id} {...branchControl} /> : null}
     </div>
   );
 }

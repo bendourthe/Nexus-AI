@@ -1,4 +1,5 @@
 export { MessageBubble, type MessageBubbleProps } from "./MessageBubble";
+export { BranchControl, type BranchControlProps, type BranchSibling } from "./BranchControl";
 export { MessageList, type MessageListProps } from "./MessageList";
 export { ChatInput, type ChatInputProps } from "./ChatInput";
 export { MediaComposer, type MediaComposerProps } from "./MediaComposer";
@@ -13,6 +14,8 @@ export { classifyDataUrl, partitionAttachments, isAudioDataUrl } from "./classif
 export { stripDataUrlPrefix } from "./dataUrl";
 export { ModelSelector, type ModelSelectorProps } from "./ModelSelector";
 export { ContextUsageBar, type ContextUsageBarProps } from "./ContextUsageBar";
+export { ContextUsage } from "./ContextUsage";
+export { CompactControl, type CompactControlProps } from "./CompactControl";
 export { ComposerContextRow, type ComposerContextRowProps } from "./ComposerContextRow";
 export { composerSessionUsage, usageTurnsFromMessages } from "./usageTurnsFromMessages";
 export { useStickToBottom } from "./useStickToBottom";

@@ -59,6 +59,18 @@ export default [
       ],
       "@typescript-eslint/no-explicit-any": "warn",
       "no-console": ["error", { allow: ["warn", "error"] }],
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "isomorphic-dompurify",
+              message:
+                "Import desktop/src/shared/security/sanitizeArtifact.ts or sanitizeSvg.ts. A second DOMPurify call site is a second security boundary.",
+            },
+          ],
+        },
+      ],
       ...asWarnings(jsxA11y.configs.recommended.rules),
       // These components render a native control. A wrapping <label> is a real
       // association; the plugin cannot see through the component otherwise.
@@ -70,6 +82,12 @@ export default [
           depth: 3,
         },
       ],
+    },
+  },
+  {
+    files: ["src/shared/security/sanitizeArtifact.ts", "src/shared/security/sanitizeSvg.ts"],
+    rules: {
+      "no-restricted-imports": "off",
     },
   },
 ];

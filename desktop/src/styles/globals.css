@@ -778,3 +778,8 @@ button {
   flex: 1 1 auto;
   min-width: 8rem;
 }
+
+/* Diagram labels. The SVG sanitiser forbids embedded <style>, so color lives here. */
+.nexus-mermaid text {
+  fill: var(--fg-0);
+}

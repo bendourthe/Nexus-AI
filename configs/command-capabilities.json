@@ -100,6 +100,22 @@
       "feature": "f002"
     },
     {
+      "command": "chat.explorer.forkChat",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.explorer.setActiveLeaf",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.compact",
+      "feature": "f002"
+    },
+    {
+      "command": "chat.compact.undo",
+      "feature": "f002"
+    },
+    {
       "command": "chat.explorer.setPersona",
       "feature": "f002"
     },

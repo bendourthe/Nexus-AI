@@ -2,7 +2,121 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
-- 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.5/known-gaps.md`.
+- 2026-09-26 v2.5: the three v2.5 plans are archived at `docs/archive/v2/v2.5/`. v2.5.0 and v2.5.1 are already published. Still-open items: `docs/v2/v2.6/known-gaps.md`.
+- 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.6/known-gaps.md`.
+
+---
+
+## [2026-09-26] v2.6.0 Qwen3.8 Phase 2 - Catalog guard
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-qwen38-27b.md), [evidence](v2/v2.6/development/v2.6.0-qwen38-phase2-evidence.md), history [P2](v2/v2.6/development/history/2026-09-26_v2.6.0-qwen38-phase-2.md).
+
+### What Changed
+
+- **Unadmitted Qwen3.8 rows fail catalog validation.** The pattern matches ids and source URLs. It does not match the real Qwen3-8B. The allowlist is empty.
+
+### Verification
+
+Catalog invariant tests: 60 passed. The installer suite exited 0. `check-catalog.py` reported 40 models and exited 0.
+
+### Known gaps
+
+No new gap. The family check is a sixth family-shaped block; Phase 3 records that against NI-2.
+
+---
+
+## [2026-09-26] v2.6.0 Chat surface Phase 5 - Context pressure and compaction
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase5-evidence.md), history [P5](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-5.md).
+
+### What Changed
+
+- **Context pressure adds up.** Known categories plus unaccounted equal the total. An unknown category stays unknown. Cache counters sit beside the total.
+- **Compaction takes one lease.** The coding compactor and the user control both acquire it. Recent turns stay byte-identical, and undo restores the snapshot for the open session.
+
+### Verification
+
+Root tests: 4 pressure, 23 compactor, 9 compact-command. Desktop controls: 2. Command parity: 145 commands, pass.
+
+### Known gaps
+
+Restart does not yet reload the compacted transcript (`DF-v260-2` in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md)).
+
+---
+
+## [2026-09-26] v2.6.0 Chat surface Phase 4 - Diagram versions and export
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase4-evidence.md), history [P4](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-4.md).
+
+### What Changed
+
+- **Export writes only the save-dialog path.** The capability file adds `dialog:allow-save` and does not add a general filesystem write. A renderer-supplied path is rejected.
+- **Artifact versions are a stable id.** The cap is 20. Pruning drops the oldest and never drops the version being viewed.
+
+### Verification
+
+Desktop export and version tests passed with the existing artifact suite (12). Rust `export::` tests: 3 passed.
+
+### Known gaps
+
+No new gap. The command map does not list the Tauri command; the reason is in the phase evidence.
+
+---
+
+## [2026-09-26] v2.6.0 Chat surface Phase 3 - Mermaid behind one sanitiser
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase3-evidence.md), history [P3](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-3.md).
+
+### What Changed
+
+- **Diagram fences render through one sanitiser.** The HTML forbidden-tag list did not change. SVG output uses a separate profile, and `style` stays forbidden. Label color comes from the application stylesheet.
+- **Mermaid is a local dependency.** Caps are 8192 bytes, 40 nodes, 60 edges, and 1500 ms. Over the cap, or after a timeout, the fence stays source text.
+
+### Verification
+
+Desktop guard tests: 8 passed. ESLint on the touched files: 0 errors. The packaged offline probe was not re-run (`QG-v260-1`).
+
+### Known gaps
+
+`QG-v260-1` in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md).
+
+---
+
+## [2026-09-26] v2.6.0 Chat surface Phase 2 - Conversation forking
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase2-evidence.md), history [P2](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-2.md).
+
+### What Changed
+
+- **A branch is a new session row.** The active leaf is stored on the root. Depth stops at 8. A cycle is rejected. Delete does not cascade into other branches.
+- **A newer database is refused.** Both chat stores throw instead of stamping `user_version` down. The Chat pillar store is `ChatExplorerStore`; it had the stamp-down the plan described on the coding history store.
+
+### Verification
+
+Root Vitest: 8 new history-branch tests, 24 existing history tests, 2 explorer-branch tests, 38 existing explorer tests. Desktop branch control: 2 tests. Command parity: pass, 143 commands.
+
+### Known gaps
+
+Search hits are still title-only (`DF-v260-1` in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md)).
+
+---
+
+## [2026-09-26] v2.6.0 Chat surface Phase 1 - Rank and capability bar
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase1-evidence.md), history [P1](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-1.md).
+
+### What Changed
+
+- **Chat pillar rank 2 is confirmed.** STRATEGY.md section 4 records the confirmation. Forking, diagram rendering, diagram export, and context control each have a local cost. None was kept only because a comparison source had it.
+- **The Chat pillar bar is a living reference.** `docs/reference/chat-surface-bar.md` states the observable items and the default-visibility rules. CONTRIBUTING.md and AGENTS.md link it.
+
+### Verification
+
+Documentation only. No test suite. No remote CI.
+
+### Known gaps
+
+No new gap. Open items remain in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md).
 
 ---
 
@@ -1040,7 +1154,7 @@ Index: [plan](archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md),
 
 - Added `scripts/bench-video-enhancement.mjs` with versioned 480p/720p fixtures and a fake deterministic backend. Real-backend mode is explicit and records typed `missing_configuration` / `backend_unavailable` rather than fabricating zeros.
 - Shared setup, env, setting, and capability copy now live in `core/video/video-enhancement-support.json`. Settings > Video stores an absolute `video.video2xPath`. The installer notes the optional backend and never offers an install or download toggle.
-- Packaging tests prove installer, desktop, runtime, and docs agree, and that the tree contains no Video2X binary, AGPL source, automatic download URL, or Qwen3.8 catalog entry.
+- Packaging tests prove installer, desktop, runtime, and docs agree, and that the tree contains no Video2X binary, AGPL source, automatic download URL, or a Qwen3.8 family catalog entry.
 
 ### Why It Changed
 

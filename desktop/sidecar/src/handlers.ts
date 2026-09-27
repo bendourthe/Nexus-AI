@@ -96,6 +96,10 @@ import {
   ChatExplorerRenameChatRequest,
   ChatExplorerRenameFolderRequest,
   ChatExplorerSearchRequest,
+  ChatExplorerForkRequest,
+  ChatExplorerSetActiveLeafRequest,
+  ChatCompactRequest,
+  ChatCompactUndoRequest,
   ChatExplorerSetPersonaRequest,
   ChatExplorerAppendMessageRequest,
   ChatGenerateTitleRequest,
@@ -162,6 +166,8 @@ import {
 } from "../../../core/storage/hubVersionManifest.js";
 import { CodingSessionManager } from "./coding/sessionManager.js";
 import { SkillOptimizerManager } from "./coding/skillOptimizerManager.js";
+import { sharedCompactionLease } from "../../../core/chat/compactionLease.js";
+import { compactThread, undoCompaction } from "../../../core/chat/compactionSnapshot.js";
 import { ChatSessionManager } from "./chat/sessionManager.js";
 import { memorySnapshot, traceSubscribe } from "./coding/panelData.js";
 import {
@@ -1673,6 +1679,33 @@ export const handlers: Record<Method, HandlerFn> = {
     ),
   "chat.explorer.search": async (params) =>
     (await explorerOps()).search(ChatExplorerSearchRequest.parse(params ?? {})),
+  "chat.explorer.forkChat": async (params) => {
+    const req = ChatExplorerForkRequest.parse(params ?? {});
+    return (await explorerOps()).forkChat(req);
+  },
+  "chat.explorer.setActiveLeaf": async (params) => {
+    const req = ChatExplorerSetActiveLeafRequest.parse(params ?? {});
+    (await explorerOps()).setActiveLeaf(req);
+    return { ok: true as const };
+  },
+  "chat.compact": async (params) => {
+    const req = ChatCompactRequest.parse(params ?? {});
+    const result = compactThread({
+      messages: req.messages,
+      baseline: req.messages,
+      streaming: req.streaming,
+      lease: sharedCompactionLease,
+      actor: req.actor,
+      summarise: () => req.summary,
+    });
+    return result.ok
+      ? { ok: true, messages: result.messages }
+      : { ok: false, reason: result.reason, messages: result.messages };
+  },
+  "chat.compact.undo": async (params) => {
+    const req = ChatCompactUndoRequest.parse(params ?? {});
+    return { ok: true, messages: undoCompaction(req.current, req.snapshot) };
+  },
   // v2.2.0 Phase 5 (5.3): name a chat from its first message.
   // v2.2.9 Phase 1.5 (T005): the generated title now PERSISTS through the
   // explorer rename (machine path, never byUser), so the rail survives a
