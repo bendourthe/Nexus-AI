@@ -161,4 +161,6 @@ Command parity, earlier this session after the compaction commands: `command-par
 
 ## Publication and integration
 
-Not done in this file's first draft. The branch has not been pushed. Required check on `develop` is `ci-required`.
+Branch `feat/v2.6.0-adoption` was pushed once. Integration pull request: https://github.com/bendourthe/Nexus-AI/pull/75 against `develop`.
+
+Required check on `develop`: `ci-required`. That check was not terminal when this paragraph was written. The pull request is not merged. No tag and no GitHub Release were created.
