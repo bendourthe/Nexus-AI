@@ -32,7 +32,7 @@ import {
   useState,
   type CSSProperties,
 } from "react";
-import DOMPurify from "isomorphic-dompurify";
+import { sanitizeArtifactHtml } from "../shared/security/sanitizeArtifact";
 
 export interface InteractiveArtifactProps {
   /** Raw HTML body (the wrapper sanitises before rendering). */
@@ -71,7 +71,7 @@ export function InteractiveArtifact({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [confirmation, setConfirmation] = useState<string | null>(null);
 
-  const sanitisedHtml = useMemo(() => sanitiseArtifactHtml(html), [html]);
+  const sanitisedHtml = useMemo(() => sanitizeArtifactHtml(html), [html]);
 
   const handleCopy = useCallback(async () => {
     const container = containerRef.current;
@@ -225,25 +225,6 @@ function collectFormState(form: HTMLFormElement): Record<string, FormValue> {
     out[name] = el.value;
   }
   return out;
-}
-
-/**
- * Strip the script vectors from `html` before embedding via
- * `dangerouslySetInnerHTML`.
- *
- * v1.4.0 Phase 8 (gap 6.3.P2.Z): this now delegates to DOMPurify via
- * `isomorphic-dompurify` (browser + jsdom/SSR), replacing the prior
- * hand-rolled DOMParser walk. DOMPurify strips `<script>`, `on*`
- * event-handler attributes, and `javascript:` URLs by default; we
- * additionally forbid the structural tags the artifact host never needs so
- * the surface matches (and hardens) the previous allowlist. Centralising on
- * the maintained sanitiser removes the bespoke walk and covers network-sourced
- * HTML should the host ever render it.
- */
-const FORBIDDEN_TAGS = ["style", "iframe", "object", "embed", "link", "meta", "base"];
-
-function sanitiseArtifactHtml(html: string): string {
-  return DOMPurify.sanitize(html, { FORBID_TAGS: FORBIDDEN_TAGS });
 }
 
 function fallbackCopy(text: string): boolean {

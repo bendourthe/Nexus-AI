@@ -7,6 +7,25 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-26] v2.6.0 Chat surface Phase 3 - Mermaid behind one sanitiser
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase3-evidence.md), history [P3](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-3.md).
+
+### What Changed
+
+- **Diagram fences render through one sanitiser.** The HTML forbidden-tag list did not change. SVG output uses a separate profile, and `style` stays forbidden. Label color comes from the application stylesheet.
+- **Mermaid is a local dependency.** Caps are 8192 bytes, 40 nodes, 60 edges, and 1500 ms. Over the cap, or after a timeout, the fence stays source text.
+
+### Verification
+
+Desktop guard tests: 8 passed. ESLint on the touched files: 0 errors. The packaged offline probe was not re-run (`QG-v260-1`).
+
+### Known gaps
+
+`QG-v260-1` in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md).
+
+---
+
 ## [2026-09-26] v2.6.0 Chat surface Phase 2 - Conversation forking
 
 Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase2-evidence.md), history [P2](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-2.md).
