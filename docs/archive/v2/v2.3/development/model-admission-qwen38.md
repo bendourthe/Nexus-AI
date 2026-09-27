@@ -18,6 +18,8 @@ The seed comparison described the model as 125B total parameters with 6B active.
 
 Qwen released the open-weight `Qwen/Qwen3.8-Flash-Next` experimental preview on 2026-08-26. It is distinct from the hosted production derivative named `qwen3.8-flash`; catalog or benchmark evidence for one identifier does not transfer to the other.
 
+This record covers Qwen3.8-Flash-Next only. The family's living admission bar is the "Qwen3.8 family" section of [model-acceptance.md](../../../../reference/model-acceptance.md). This record's own re-evaluation checklist continues to govern Flash-Next specifically. The two-path reopening trigger in that living section governs Qwen3.8-27B.
+
 Primary sources:
 
 - Qwen repository and runtime matrix: https://github.com/QwenLM/Qwen3.8-Flash-Next

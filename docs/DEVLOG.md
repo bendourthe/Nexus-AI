@@ -1136,7 +1136,7 @@ Index: [plan](archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md),
 
 - Added `scripts/bench-video-enhancement.mjs` with versioned 480p/720p fixtures and a fake deterministic backend. Real-backend mode is explicit and records typed `missing_configuration` / `backend_unavailable` rather than fabricating zeros.
 - Shared setup, env, setting, and capability copy now live in `core/video/video-enhancement-support.json`. Settings > Video stores an absolute `video.video2xPath`. The installer notes the optional backend and never offers an install or download toggle.
-- Packaging tests prove installer, desktop, runtime, and docs agree, and that the tree contains no Video2X binary, AGPL source, automatic download URL, or Qwen3.8 catalog entry.
+- Packaging tests prove installer, desktop, runtime, and docs agree, and that the tree contains no Video2X binary, AGPL source, automatic download URL, or a Qwen3.8 family catalog entry.
 
 ### Why It Changed
 
