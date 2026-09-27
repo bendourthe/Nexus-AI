@@ -19,3 +19,7 @@ Audit only. Added `development/v2.6.0-phase3-evidence.md` and `development/histo
 ## Phase 4
 
 Audit only. Added `development/v2.6.0-phase4-evidence.md` and `development/history/2026-09-26_v2.6.0-chat-phase-4.md`. No files moved.
+
+## Phase 5
+
+Audit only. Added `development/v2.6.0-phase5-evidence.md` and `development/history/2026-09-26_v2.6.0-chat-phase-5.md`. No files moved.

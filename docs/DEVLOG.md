@@ -7,6 +7,25 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-26] v2.6.0 Chat surface Phase 5 - Context pressure and compaction
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase5-evidence.md), history [P5](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-5.md).
+
+### What Changed
+
+- **Context pressure adds up.** Known categories plus unaccounted equal the total. An unknown category stays unknown. Cache counters sit beside the total.
+- **Compaction takes one lease.** The coding compactor and the user control both acquire it. Recent turns stay byte-identical, and undo restores the snapshot for the open session.
+
+### Verification
+
+Root tests: 4 pressure, 23 compactor, 9 compact-command. Desktop controls: 2. Command parity: 145 commands, pass.
+
+### Known gaps
+
+Restart does not yet reload the compacted transcript (`DF-v260-2` in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md)).
+
+---
+
 ## [2026-09-26] v2.6.0 Chat surface Phase 4 - Diagram versions and export
 
 Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase4-evidence.md), history [P4](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-4.md).
