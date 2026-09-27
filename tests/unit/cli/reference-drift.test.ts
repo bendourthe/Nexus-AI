@@ -32,9 +32,9 @@ describe("cli reference drift", () => {
 
   it("fails when a page documents a group HELP does not list", () => {
     const pages = livePages();
-    pages.set("screenshot.md", "# screenshot\n\nnexus screenshot now\n");
+    pages.set("notacommand.md", "# notacommand\n\nnexus notacommand now\n");
     const messages = diffReference(parsed.commands, pages);
-    expect(messages.some((message) => message.includes("orphaned page") && message.includes("screenshot.md"))).toBe(true);
+    expect(messages.some((message) => message.includes("orphaned page") && message.includes("notacommand.md"))).toBe(true);
   });
 
   it("fails closed when HELP cannot be parsed", () => {
