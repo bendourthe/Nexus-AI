@@ -2,14 +2,15 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
-- 2026-09-26 v2.5: the three v2.5 plans are archived at `docs/archive/v2/v2.5/`. v2.5.0 and v2.5.1 are already published. Still-open items: `docs/v2/v2.6/known-gaps.md`.
-- 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.6/known-gaps.md`.
+- 2026-09-27 v2.6: the chat-surface and Qwen3.8 plans are archived at `docs/archive/v2/v2.6/`. v2.6.0 is published. Still-open items: `docs/v2/v2.7/known-gaps.md`.
+- 2026-09-26 v2.5: the three v2.5 plans are archived at `docs/archive/v2/v2.5/`. v2.5.0 and v2.5.1 are already published. Still-open items: `docs/v2/v2.7/known-gaps.md`.
+- 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.7/known-gaps.md`.
 
 ---
 
 ## [2026-09-26] v2.6.0 Qwen3.8 Phase 2 - Catalog guard
 
-Index: [plan](v2/v2.6/plans/v2.6.0-adoption-qwen38-27b.md), [evidence](v2/v2.6/development/v2.6.0-qwen38-phase2-evidence.md), history [P2](v2/v2.6/development/history/2026-09-26_v2.6.0-qwen38-phase-2.md).
+Index: [plan](archive/v2/v2.6/plans/v2.6.0-adoption-qwen38-27b.md), [evidence](archive/v2/v2.6/development/v2.6.0-qwen38-phase2-evidence.md), history [P2](archive/v2/v2.6/development/history/2026-09-26_v2.6.0-qwen38-phase-2.md).
 
 ### What Changed
 
@@ -27,7 +28,7 @@ No new gap. The family check is a sixth family-shaped block; Phase 3 records tha
 
 ## [2026-09-26] v2.6.0 Chat surface Phase 5 - Context pressure and compaction
 
-Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase5-evidence.md), history [P5](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-5.md).
+Index: [plan](archive/v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](archive/v2/v2.6/development/v2.6.0-phase5-evidence.md), history [P5](archive/v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-5.md).
 
 ### What Changed
 
@@ -40,13 +41,13 @@ Root tests: 4 pressure, 23 compactor, 9 compact-command. Desktop controls: 2. Co
 
 ### Known gaps
 
-Restart does not yet reload the compacted transcript (`DF-v260-2` in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md)).
+Restart does not yet reload the compacted transcript (`DF-v260-2` in [docs/archive/v2/v2.6/known-gaps.md](archive/v2/v2.6/known-gaps.md)).
 
 ---
 
 ## [2026-09-26] v2.6.0 Chat surface Phase 4 - Diagram versions and export
 
-Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase4-evidence.md), history [P4](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-4.md).
+Index: [plan](archive/v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](archive/v2/v2.6/development/v2.6.0-phase4-evidence.md), history [P4](archive/v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-4.md).
 
 ### What Changed
 
@@ -65,7 +66,7 @@ No new gap. The command map does not list the Tauri command; the reason is in th
 
 ## [2026-09-26] v2.6.0 Chat surface Phase 3 - Mermaid behind one sanitiser
 
-Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase3-evidence.md), history [P3](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-3.md).
+Index: [plan](archive/v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](archive/v2/v2.6/development/v2.6.0-phase3-evidence.md), history [P3](archive/v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-3.md).
 
 ### What Changed
 
@@ -78,13 +79,13 @@ Desktop guard tests: 8 passed. ESLint on the touched files: 0 errors. The packag
 
 ### Known gaps
 
-`QG-v260-1` in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md).
+`QG-v260-1` in [docs/archive/v2/v2.6/known-gaps.md](archive/v2/v2.6/known-gaps.md).
 
 ---
 
 ## [2026-09-26] v2.6.0 Chat surface Phase 2 - Conversation forking
 
-Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase2-evidence.md), history [P2](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-2.md).
+Index: [plan](archive/v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](archive/v2/v2.6/development/v2.6.0-phase2-evidence.md), history [P2](archive/v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-2.md).
 
 ### What Changed
 
@@ -97,13 +98,13 @@ Root Vitest: 8 new history-branch tests, 24 existing history tests, 2 explorer-b
 
 ### Known gaps
 
-Search hits are still title-only (`DF-v260-1` in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md)).
+Search hits are still title-only (`DF-v260-1` in [docs/archive/v2/v2.6/known-gaps.md](archive/v2/v2.6/known-gaps.md)).
 
 ---
 
 ## [2026-09-26] v2.6.0 Chat surface Phase 1 - Rank and capability bar
 
-Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase1-evidence.md), history [P1](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-1.md).
+Index: [plan](archive/v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](archive/v2/v2.6/development/v2.6.0-phase1-evidence.md), history [P1](archive/v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-1.md).
 
 ### What Changed
 
@@ -116,7 +117,7 @@ Documentation only. No test suite. No remote CI.
 
 ### Known gaps
 
-No new gap. Open items remain in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md).
+No new gap. Open items remain in [docs/archive/v2/v2.6/known-gaps.md](archive/v2/v2.6/known-gaps.md).
 
 ---
 
