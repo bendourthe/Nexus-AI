@@ -18,7 +18,6 @@ use tauri::{AppHandle, Manager};
 
 const ALLOWED_ROUTES: &[&str] = &["/chatbot", "/coding", "/images", "/videos"];
 const MAX_REQUEST_BYTES: usize = 4096;
-const MAX_EDGE: u32 = 4096;
 
 pub struct WindowCapture {
     pub url: String,
@@ -198,6 +197,7 @@ fn capture_window_png(window: &tauri::WebviewWindow) -> Result<(u32, u32, Vec<u8
         }
         let width = rect.right.saturating_sub(rect.left).max(0) as u32;
         let height = rect.bottom.saturating_sub(rect.top).max(0) as u32;
+        const MAX_EDGE: u32 = 4096;
         if width == 0 || height == 0 || width > MAX_EDGE || height > MAX_EDGE {
             return Err("Nexus window size is outside the capture bounds".to_string());
         }
