@@ -9,10 +9,13 @@ access-gated model.
 from __future__ import annotations
 
 import json
+import sys
 from typing import Any
 
 from nexus_installer.catalog_invariants import (
     POST_2025_OLLAMA_TARGETS,
+    QWEN38_ADMITTED_IDS,
+    QWEN38_FAMILY_PATTERN,
     validate_catalog,
 )
 from nexus_installer.registry_paths import default_catalog_path
@@ -669,22 +672,22 @@ class TestQwen38FamilyGuard:
         assert not any("Qwen3.8" in problem for problem in url_problems)
 
     def test_admitted_id_is_the_escape_hatch(self, monkeypatch) -> None:
-        import nexus_installer.catalog_invariants as invariants
-
-        monkeypatch.setattr(invariants, "QWEN38_ADMITTED_IDS", frozenset({"qwen3.8:27b"}))
+        monkeypatch.setattr(
+            sys.modules["nexus_installer.catalog_invariants"],
+            "QWEN38_ADMITTED_IDS",
+            frozenset({"qwen3.8:27b"}),
+        )
         assert validate_catalog(_qwen_entry("qwen3.8:27b", "ollama://qwen3.8:27b")) == []
 
     def test_shipped_catalog_strings_do_not_match(self) -> None:
-        import nexus_installer.catalog_invariants as invariants
-
         catalog = json.loads(default_catalog_path().read_text(encoding="utf-8"))
         matches: list[str] = []
         for model in catalog["models"]:
             model_id = str(model.get("id") or "")
             url = str((model.get("source") or {}).get("url") or "")
-            if invariants.QWEN38_FAMILY_PATTERN.search(model_id):
+            if QWEN38_FAMILY_PATTERN.search(model_id):
                 matches.append(model_id)
-            if invariants.QWEN38_FAMILY_PATTERN.search(url):
+            if QWEN38_FAMILY_PATTERN.search(url):
                 matches.append(url)
         assert matches == [], matches
         spared = {"qwen3.5:9b", "qwen3.5:4b", "qwen3-coder:30b", "qwen3-embedding:0.6b"}
@@ -692,10 +695,8 @@ class TestQwen38FamilyGuard:
         assert spared <= present
 
     def test_admitted_ids_are_mirrored_in_the_living_bar(self) -> None:
-        import nexus_installer.catalog_invariants as invariants
-
         root = default_catalog_path().parents[2]
         bar = (root / "docs" / "reference" / "model-acceptance.md").read_text(encoding="utf-8")
         assert (root / "docs" / "reference" / "model-acceptance.md").is_file()
-        for admitted in invariants.QWEN38_ADMITTED_IDS:
+        for admitted in QWEN38_ADMITTED_IDS:
             assert admitted in bar
