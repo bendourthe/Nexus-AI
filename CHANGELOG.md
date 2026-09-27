@@ -1,3 +1,23 @@
+# [2.6.0](https://github.com/bendourthe/Nexus-AI/compare/v2.5.1...v2.6.0) (2026-09-27)
+
+
+### Bug Fixes
+
+* **catalog:** import the Qwen guard with one statement ([e5b2b47](https://github.com/bendourthe/Nexus-AI/commit/e5b2b479b67ab9d6ec9af3f433814f4a0fde0ca7))
+* **catalog:** reject unadmitted Qwen3.8 rows without catching Qwen3-8B ([721ad91](https://github.com/bendourthe/Nexus-AI/commit/721ad91c12e3f8ba93e4110d2c6b1208dadd5b2c))
+* **chat:** stop parsing diagram markup with incomplete patterns ([92d067a](https://github.com/bendourthe/Nexus-AI/commit/92d067a6b5de17cc2e0655769e17fdf2cdd87fd7))
+* **ci:** accept a lightweight release tag that points at the expected commit ([825f3a4](https://github.com/bendourthe/Nexus-AI/commit/825f3a42ff4c9517443c3950aff4430734e2fe3f))
+* **shell:** keep the window-size cap on Windows and wait for a real page ([da5e55a](https://github.com/bendourthe/Nexus-AI/commit/da5e55a1fe36d5678e4280289c5bab64f5e2d3fc))
+
+
+### Features
+
+* **chat:** branch a thread without risking existing history ([efcf1fe](https://github.com/bendourthe/Nexus-AI/commit/efcf1fe7aa045bde7f03337de99d123c007e8af1))
+* **chat:** export diagrams through a save dialog and keep versions by id ([508d707](https://github.com/bendourthe/Nexus-AI/commit/508d70764cd3f0e6160693815b6a8995939de990))
+* **chat:** render Mermaid through one shared sanitiser ([bd4a386](https://github.com/bendourthe/Nexus-AI/commit/bd4a386d554072f158d50091d9aaee65bde83ef4))
+* **chat:** show context pressure and compact without losing recent turns ([fc28572](https://github.com/bendourthe/Nexus-AI/commit/fc28572b5559cf5ff4ebf42a433c82707e33d89d))
+* **cli:** capture the Nexus window and add the five CI profiles ([03c9a9d](https://github.com/bendourthe/Nexus-AI/commit/03c9a9d95c4a1d7d0c3fe187703281ebf1c36f9b))
+
 ## [2.5.1](https://github.com/bendourthe/Nexus-AI/compare/v2.5.0...v2.5.1) (2026-09-27)
 
 
