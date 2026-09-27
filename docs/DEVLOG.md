@@ -2,7 +2,8 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
-- 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.5/known-gaps.md`.
+- 2026-09-26 v2.5: the three v2.5 plans are archived at `docs/archive/v2/v2.5/`. v2.5.0 and v2.5.1 are already published. Still-open items: `docs/v2/v2.6/known-gaps.md`.
+- 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.6/known-gaps.md`.
 
 ---
 
