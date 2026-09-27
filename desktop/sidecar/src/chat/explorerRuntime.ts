@@ -103,6 +103,8 @@ export interface ChatExplorerOps {
   appendMessage(input: AppendMessageInput): ChatMessageRecord;
   listMessages(input: { chatId: string; limit?: number }): { messages: readonly ChatMessageRecord[] };
   search(input: { query: string; limit?: number }): { hits: ReturnType<ChatExplorerStore["search"]> };
+  forkChat(input: { chatId: string; messageId: string }): Chat;
+  setActiveLeaf(input: { chatId: string; leafChatId: string }): { ok: true };
 }
 
 export function createChatExplorerOps(
@@ -148,5 +150,10 @@ export function createChatExplorerOps(
       messages: store.listMessages(input.chatId, input.limit ?? 500),
     }),
     search: (input) => ({ hits: store.search(input.query, input.limit ?? 25) }),
+    forkChat: (input) => store.forkFromMessage(input.chatId, input.messageId),
+    setActiveLeaf: (input) => {
+      store.setActiveLeaf(input.chatId, input.leafChatId);
+      return { ok: true };
+    },
   };
 }

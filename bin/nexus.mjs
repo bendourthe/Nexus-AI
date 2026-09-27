@@ -67,6 +67,8 @@ Usage:
   nexus context [--json] [--token t] [--host 127.0.0.1] [--port 11500]
   nexus logs [--lines N] [--json] [--token t] [--host 127.0.0.1] [--port 11500]
   nexus media inspect <path> [--json] [--token t] [--host 127.0.0.1] [--port 11500]
+  nexus screenshot [--out <file>] [--json] [--token t] [--host 127.0.0.1] [--port 11500]
+  nexus capture [--route <path>] [--out <file>] [--json] [--token t] [--host 127.0.0.1] [--port 11500]
   nexus check [...]                     deterministic source-code checks
   nexus image [...]                     image-pipeline helpers
   nexus video [...]                     video-pipeline helpers
@@ -1526,6 +1528,27 @@ export async function runJsonCli(args, stdout = process.stdout, stderr = process
     }
     const lines = typeof rawLines === "string" ? rawLines : "100";
     path = `${JSON_CLI_PREFIX}/logs?lines=${encodeURIComponent(lines)}`;
+  } else if (args.command === "screenshot") {
+    if (args.flags.out === true) {
+      stderr.write("nexus screenshot: --out requires a file path\n");
+      return 2;
+    }
+    path = `${JSON_CLI_PREFIX}/screenshot`;
+  } else if (args.command === "capture") {
+    if (args.flags.out === true) {
+      stderr.write("nexus capture: --out requires a file path\n");
+      return 2;
+    }
+    const route = args.flags.route;
+    if (route !== undefined && route !== true) {
+      if (typeof route !== "string" || !["/chatbot", "/coding", "/images", "/videos"].includes(route)) {
+        stderr.write("nexus capture: --route must be /chatbot, /coding, /images, or /videos\n");
+        return 2;
+      }
+    }
+    method = "POST";
+    path = `${JSON_CLI_PREFIX}/capture`;
+    body = { route: typeof route === "string" ? route : null };
   } else if (args.command === "media" && args.subcommand === "inspect") {
     const mediaPath = Array.isArray(args.positional) ? args.positional[0] : "";
     if (!mediaPath) {
@@ -1593,6 +1616,14 @@ export async function runJsonCli(args, stdout = process.stdout, stderr = process
         }) + "\n",
       );
       return 1;
+    }
+    if (
+      (args.command === "screenshot" || args.command === "capture") &&
+      typeof args.flags.out === "string" &&
+      parsed &&
+      typeof parsed.pngBase64 === "string"
+    ) {
+      writeFileSync(args.flags.out, Buffer.from(parsed.pngBase64, "base64"));
     }
     if (args.command === "logs" && parsed && Array.isArray(parsed.lines)) {
       writeJsonLines(stdout, parsed.lines);
@@ -1702,7 +1733,9 @@ export async function main(argv) {
     args.command === "generate" ||
     args.command === "context" ||
     args.command === "logs" ||
-    args.command === "media"
+    args.command === "media" ||
+    args.command === "screenshot" ||
+    args.command === "capture"
   ) {
     if (args.help) {
       process.stdout.write(HELP);

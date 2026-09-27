@@ -130,6 +130,10 @@ A related contract governs the feature inventory rather than the model catalog: 
 
 The bar is higher for an entry that `core/registry/recommended.json` pre-ticks, because a default reaches users who never evaluated the choice. That is also where the license rules bite: a commercially capped license is not acceptable for a pre-ticked default when an alternative fits the same tier. Read the acceptance bar before opening the PR, and update its job map in the same commit as any change to `core/registry/catalog.json` or `core/registry/recommended.json`.
 
+## Chat pillar capability bar
+
+A change to the Chat pillar is judged against [docs/reference/chat-surface-bar.md](./docs/reference/chat-surface-bar.md). That document states what "supported" means for message edit and regenerate, conversation branching, thread export, per-category token accounting, user-initiated compaction, artifact rendering, and keyboard reachability, including the default-visibility and empty-state rule for every persistent control. Read it before adding a control to the message surface or the composer.
+
 ## Tool quality and severity
 
 When discussing tool surfaces (existing or proposed), use the severity rubric in [docs/archive/versions/v0/v0.5.0/tool-audit.md](docs/archive/v0/v0.5/tool-audit.md): `blocker | friction | optimization`. The labels are vocabulary, not a CI gate; they keep PR descriptions and review threads grounded in the same definitions. If you add a new tool or change an existing tool's schema, update the audit table in the same PR.

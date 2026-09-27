@@ -151,6 +151,10 @@ The Unused report is framed **"suggest first"**: it surfaces candidates, never v
 
 `feature_list.json` is enforced, not decorative. [docs/reference/feature-inventory.md](docs/reference/feature-inventory.md) records the contract: `scripts/check-feature-drift.mjs` asserts that every `evidence` path resolves and that the inventory and two named `README.md` regions (`## The Four Pillars` and `## Featured Capabilities`, 29 names) claim the same features, in both directions. It never executes `verificationCommand`, so those fields are advisory. There is deliberately no `version` field. Adding a feature to either region requires an entry in the same commit.
 
+### Chat pillar capability bar (v2.6.0 Phase 1)
+
+A change to the Chat pillar is judged against [docs/reference/chat-surface-bar.md](docs/reference/chat-surface-bar.md). The pillar is called done only when that bar's items are observable. Every persistent control on the message surface or the composer has a stated default-visibility and empty-state rule there. Use "Chat pillar" in new prose.
+
 ### Model and runtime acceptance bar (v2.4.9 Phase 1)
 
 Any proposal to add a model, a model variant, or a Python runtime is judged against the job map in [docs/reference/model-acceptance.md](docs/reference/model-acceptance.md), not against benchmark scores. Every catalog entry owns at least one named job and every job has exactly one holder, so a proposal must either take a job with measured local numbers or claim an uncovered one. The document also fixes the license posture: permissive and unrestricted-use licenses are fine for a pre-ticked default, use-restricted licenses need a `licenseNote`, and a commercially capped license is not acceptable for a pre-ticked default while an alternative fits the tier. Its five open questions record the entries the map cannot cleanly assign, including a live divergence between `core/registry/catalog.json` and `core/registry/ModelCatalog.ts`. Update the map in the same commit as any catalog or tier-defaults change.

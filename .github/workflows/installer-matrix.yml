@@ -1,0 +1,47 @@
+name: Installer matrix
+
+# Cross-installer parity on the integration pull request. Each leg calls the
+# existing platform workflow. The aggregate is the check to require. Do not
+# require the per-leg names.
+
+on:
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: installer-matrix-${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    uses: ./.github/workflows/installer-build.yml
+    secrets: inherit
+  linux:
+    uses: ./.github/workflows/installer-linux.yml
+    secrets: inherit
+  macos:
+    uses: ./.github/workflows/installer-macos.yml
+    secrets: inherit
+  installer-required:
+    name: installer-required
+    needs: [windows, linux, macos]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Allowlist installer results
+        env:
+          R_windows: ${{ needs.windows.result }}
+          R_linux: ${{ needs.linux.result }}
+          R_macos: ${{ needs.macos.result }}
+        run: |
+          set -uo pipefail
+          fail=0
+          for var in $(env | sed -n 's/^\(R_[A-Za-z0-9_]*\)=.*/\1/p' | sort); do
+            eval "result=\${${var}-}"
+            case "${result}" in
+              success|skipped) ;;
+              *) echo "FAIL: ${var#R_}=${result:-<empty>}"; fail=1 ;;
+            esac
+          done
+          exit "$fail"

@@ -30,6 +30,7 @@ import {
 import { resolveStudioDbPath } from "../../../core/generations/paths.js";
 import { createServingRuntime } from "./serving/servingRuntime.js";
 import { createJsonCliRoute } from "./controlSurface/jsonCliRoutes.js";
+import { captureNexusWindow } from "./controlSurface/windowCaptureClient.js";
 import { createAuditRuntime } from "./audit/runtime.js";
 import { InProcessTelemetryBus } from "../../../core/telemetry/TelemetryBus.js";
 import { createHookBus } from "../../../core/lifecycle/HookBus.js";
@@ -169,6 +170,7 @@ serving.gateway.surface.mount(
     workspaceStore,
     listModels: async () =>
       SIDECAR_MODELS.map((m) => ({ id: m.id, displayName: m.displayName })),
+    captureWindow: (request) => captureNexusWindow(request),
   }),
 );
 

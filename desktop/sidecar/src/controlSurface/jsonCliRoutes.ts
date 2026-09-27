@@ -36,6 +36,66 @@ export interface MediaInspectResult {
   readonly runtime?: string;
 }
 
+export const NEXUS_WINDOW_ROUTES = ["/chatbot", "/coding", "/images", "/videos"] as const;
+
+export interface WindowCaptureRequest {
+  readonly kind: "screenshot" | "capture";
+  readonly route: string | null;
+}
+
+export interface WindowCaptureResult {
+  readonly scope: "nexus-window";
+  readonly route: string | null;
+  readonly width: number;
+  readonly height: number;
+  readonly mediaType: "image/png";
+  readonly pngBase64: string;
+}
+
+export class WindowCaptureError extends Error {
+  readonly status: number;
+  readonly code: string;
+
+  constructor(status: number, code: string, message: string) {
+    super(message);
+    this.name = "WindowCaptureError";
+    this.status = status;
+    this.code = code;
+  }
+}
+
+export function parseCaptureRoute(value: unknown): string | null | "invalid" {
+  if (value === undefined || value === null || value === "") return null;
+  if (typeof value !== "string") return "invalid";
+  return (NEXUS_WINDOW_ROUTES as readonly string[]).includes(value) ? value : "invalid";
+}
+
+const MAX_CAPTURE_BASE64 = 12_000_000;
+
+function readCaptureResult(value: unknown): WindowCaptureResult {
+  if (!value || typeof value !== "object") {
+    throw new WindowCaptureError(503, "unavailable", "Nexus window capture returned an empty body");
+  }
+  const body = value as Partial<WindowCaptureResult>;
+  if (body.scope !== "nexus-window" || body.mediaType !== "image/png") {
+    throw new WindowCaptureError(503, "unavailable", "Nexus window capture returned an unexpected scope");
+  }
+  if (typeof body.pngBase64 !== "string" || body.pngBase64.length === 0 || body.pngBase64.length > MAX_CAPTURE_BASE64) {
+    throw new WindowCaptureError(503, "unavailable", "Nexus window capture returned no PNG");
+  }
+  if (typeof body.width !== "number" || typeof body.height !== "number" || body.width < 1 || body.height < 1) {
+    throw new WindowCaptureError(503, "unavailable", "Nexus window capture returned no size");
+  }
+  return {
+    scope: "nexus-window",
+    route: typeof body.route === "string" ? body.route : null,
+    width: body.width,
+    height: body.height,
+    mediaType: "image/png",
+    pngBase64: body.pngBase64,
+  };
+}
+
 export interface JsonCliRouteDeps {
   readonly sessions: CodingSessionManager;
   readonly studio?: StudioRuntime;
@@ -44,6 +104,8 @@ export interface JsonCliRouteDeps {
   readonly readLogs?: () => readonly ObservationLogRecord[];
   readonly inspectMedia?: (filePath: string) => Promise<MediaInspectResult>;
   readonly statMedia?: (filePath: string) => { exists: boolean; incomplete?: boolean };
+  /** PNG of the Nexus window only. Absent when the shell capture server is not attached. */
+  readonly captureWindow?: (request: WindowCaptureRequest) => Promise<WindowCaptureResult>;
   /** Extra literal secrets (loopback tokens) to scrub from log lines. */
   readonly redactLiterals?: readonly string[];
 }
@@ -149,6 +211,20 @@ export function createJsonCliRoute(deps: JsonCliRouteDeps): ControlSurfaceRoute 
         return write(200, snapshotContext(deps));
       }
 
+      if (ctx.method === "GET" && path === `${prefix}/screenshot`) {
+        return write(200, await captureNexusWindow(deps, { kind: "screenshot", route: null }));
+      }
+
+      if (ctx.method === "POST" && path === `${prefix}/capture`) {
+        const raw = await readLimitedBody(ctx.req, ctx.maxBodyBytes);
+        const body = raw.length === 0 ? {} : (parseJsonBody(raw) as Record<string, unknown>);
+        const route = parseCaptureRoute(body.route);
+        if (route === "invalid") {
+          return write(400, { error: { code: "schema", message: "route is not a Nexus window route" } });
+        }
+        return write(200, await captureNexusWindow(deps, { kind: "capture", route }));
+      }
+
       if (ctx.method === "GET" && pathOnly(ctx.path) === `${prefix}/logs`) {
         const lines = queryLines(ctx.path);
         if (lines === "invalid") {
@@ -204,6 +280,9 @@ export function createJsonCliRoute(deps: JsonCliRouteDeps): ControlSurfaceRoute 
 
       return write(404, { error: { code: "unknown_route", message: `No JSON CLI route for ${ctx.method} ${path}` } });
     } catch (err) {
+      if (err instanceof WindowCaptureError) {
+        return write(err.status, { error: { code: err.code, message: err.message } });
+      }
       const message = err instanceof Error ? err.message : String(err);
       return write(400, { error: { code: "sidecar", message } });
     }
@@ -241,6 +320,13 @@ function pathIsAuthorized(absolute: string, roots: readonly string[]): boolean {
     const rel = nodePath.relative(base, target);
     return rel === "" || (!rel.startsWith("..") && !nodePath.isAbsolute(rel));
   });
+}
+
+async function captureNexusWindow(deps: JsonCliRouteDeps, request: WindowCaptureRequest): Promise<WindowCaptureResult> {
+  if (!deps.captureWindow) {
+    throw new WindowCaptureError(503, "unavailable", "Nexus window capture is not attached");
+  }
+  return readCaptureResult(await deps.captureWindow(request));
 }
 
 function snapshotContext(deps: JsonCliRouteDeps) {

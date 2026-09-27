@@ -18,6 +18,7 @@ name: Installer build (Windows)
 # same fail-closed desktop-payload contract without depending on another job.
 
 on:
+  workflow_call:
   workflow_dispatch:
     inputs:
       reason:

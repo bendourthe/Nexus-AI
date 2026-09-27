@@ -56,6 +56,14 @@ export interface Chat {
   archivedAt?: number | null;
   /** Former folder retained while archived, without keeping a cascading foreign key alive. */
   archivedFolderId?: string | null;
+  /** Chat this one was branched from. Null on a root thread. */
+  forkedFromChatId?: string | null;
+  /** Message in the parent chat that this branch split from. */
+  forkedFromMessageId?: string | null;
+  /** Continuation currently open for this family. Stored on the root chat. */
+  activeLeafChatId?: string | null;
+  /** True when the parent id is set and that chat row is gone. */
+  parentUnresolved?: boolean;
 }
 
 export interface ArchivedChat extends Chat {

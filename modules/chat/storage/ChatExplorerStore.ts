@@ -15,6 +15,20 @@
 
 import Database from "better-sqlite3";
 import { randomUUID } from "crypto";
+import {
+  assertCanBranch,
+  describeChain,
+  installBranchDeleteGuards,
+  NewerSchemaError,
+} from "../../../core/chat/branchPolicy.js";
+import {
+  assertNotHalfMigrated,
+  clearMigrationPending,
+  databaseFilePath,
+  markMigrationPending,
+  snapshotBeforeMigration,
+  userVersion,
+} from "../../../core/storage/preMigrationSnapshot.js";
 import { redactSecrets } from "../../../core/observability/redactSecrets.js";
 import { sanitizeFtsQuery } from "../../../src/storage/embeddingUtils.js";
 import { createFtsTableAndTriggers } from "../../../src/storage/sqliteFts.js";
@@ -30,7 +44,9 @@ import type {
   FolderTreeNode,
 } from "./ChatExplorerStore.types.js";
 
-const SCHEMA_VERSION = 3;
+const SCHEMA_VERSION = 4;
+
+export { NewerSchemaError };
 
 interface FolderRow {
   id: string;
@@ -57,6 +73,9 @@ interface ChatRow {
   user_renamed?: number;
   archived_at?: number | null;
   archived_folder_id?: string | null;
+  forked_from_chat_id?: string | null;
+  forked_from_message_id?: string | null;
+  active_leaf_chat_id?: string | null;
 }
 
 interface MessageRow {
@@ -103,6 +122,10 @@ function rowToChat(row: ChatRow): Chat {
     userRenamed: row.user_renamed === 1,
     archivedAt: row.archived_at ?? null,
     archivedFolderId: row.archived_folder_id ?? null,
+    forkedFromChatId: row.forked_from_chat_id ?? null,
+    forkedFromMessageId: row.forked_from_message_id ?? null,
+    activeLeafChatId: row.active_leaf_chat_id ?? null,
+    parentUnresolved: false,
   };
 }
 
@@ -156,15 +179,33 @@ export class ChatExplorerStore {
 
   constructor(dbPath: string) {
     this._db = new Database(dbPath);
-    if (dbPath !== ":memory:") {
-      secureDbPermissions(dbPath);
+    try {
+      if (dbPath !== ":memory:") {
+        secureDbPermissions(dbPath);
+      }
+      this._db.pragma("journal_mode = WAL");
+      this._db.pragma("foreign_keys = ON");
+      this._initSchema();
+    } catch (err) {
+      this._db.close();
+      throw err;
     }
-    this._db.pragma("journal_mode = WAL");
-    this._db.pragma("foreign_keys = ON");
-    this._initSchema();
   }
 
   private _initSchema(): void {
+    const filePath = databaseFilePath(this._db);
+    assertNotHalfMigrated(filePath);
+    const openingVersion = userVersion(this._db);
+    if (openingVersion > SCHEMA_VERSION) {
+      throw new NewerSchemaError(
+        `Database ${filePath ?? "(memory)"} was written by a newer version (user_version ${openingVersion}, this build expects ${SCHEMA_VERSION}). Refusing to open rather than downgrading.`,
+      );
+    }
+    const pending = openingVersion < SCHEMA_VERSION;
+    if (pending) {
+      snapshotBeforeMigration(this._db, SCHEMA_VERSION);
+      markMigrationPending(filePath);
+    }
     this._db.exec(`
       CREATE TABLE IF NOT EXISTS chat_folders (
         id          TEXT    PRIMARY KEY,
@@ -218,6 +259,15 @@ export class ChatExplorerStore {
     this._addColumnIfMissing("chat_chat_messages", "tokens_estimated", "INTEGER NOT NULL DEFAULT 0");
     this._addColumnIfMissing("chat_chat_messages", "request_usage", "TEXT");
     this._addColumnIfMissing("chat_chat_messages", "message_usage", "TEXT");
+    this._addColumnIfMissing("chat_chats", "forked_from_chat_id", "TEXT");
+    this._addColumnIfMissing("chat_chats", "forked_from_message_id", "TEXT");
+    this._addColumnIfMissing("chat_chats", "active_leaf_chat_id", "TEXT");
+    installBranchDeleteGuards(this._db, {
+      sessionTable: "chat_chats",
+      messageTable: "chat_chat_messages",
+      parentSessionColumn: "forked_from_chat_id",
+      parentMessageColumn: "forked_from_message_id",
+    });
 
     createFtsTableAndTriggers(this._db, {
       ftsTable: "chat_folders_fts",
@@ -232,10 +282,14 @@ export class ChatExplorerStore {
       triggerPrefix: "chat_chats_fts",
     });
 
-    const currentVersion = this._db.pragma("user_version", {
-      simple: true,
-    }) as number;
-    if (currentVersion !== SCHEMA_VERSION) {
+    const version = userVersion(this._db);
+    if (version > SCHEMA_VERSION) {
+      const filePath = databaseFilePath(this._db);
+      throw new NewerSchemaError(
+        `Database ${filePath ?? "(memory)"} was written by a newer version (user_version ${version}, this build expects ${SCHEMA_VERSION}). Refusing to open rather than downgrading.`,
+      );
+    }
+    if (version < SCHEMA_VERSION) {
       try {
         this._db.exec("INSERT INTO chat_folders_fts(chat_folders_fts) VALUES('rebuild')");
         this._db.exec("INSERT INTO chat_chats_fts(chat_chats_fts) VALUES('rebuild')");
@@ -243,6 +297,7 @@ export class ChatExplorerStore {
         // First-create path: tables are empty so rebuild may noop.
       }
       this._db.pragma(`user_version = ${SCHEMA_VERSION}`);
+      clearMigrationPending(filePath);
     }
   }
 
@@ -351,7 +406,83 @@ export class ChatExplorerStore {
       createdAt: now,
       updatedAt: now,
       messageCount: 0,
+      forkedFromChatId: null,
+      forkedFromMessageId: null,
+      activeLeafChatId: id,
+      parentUnresolved: false,
     };
+  }
+
+  /**
+   * Branch `chatId` at `messageId`. The new chat keeps the prefix through
+   * that message and becomes the family's active leaf.
+   */
+  forkFromMessage(chatId: string, messageId: string): Chat {
+    const source = this.getChat(chatId);
+    if (!source) throw new Error(`chat not found: ${chatId}`);
+    const messages = this.listMessages(chatId, 10_000);
+    const splitAt = messages.findIndex((message) => message.id === messageId);
+    if (splitAt < 0) throw new Error(`message not found: ${messageId}`);
+    const parentOf = (id: string): string | null => {
+      const row = this._getChatRow(id);
+      return row?.forked_from_chat_id ?? null;
+    };
+    assertCanBranch(chatId, parentOf);
+    const rootId = describeChain(chatId, parentOf).rootId;
+    const id = randomUUID();
+    const now = Date.now();
+    const title = `${source.title} (branch)`;
+    const prefix = messages.slice(0, splitAt + 1);
+    const tx = this._db.transaction(() => {
+      this._db
+        .prepare(
+          `INSERT INTO chat_chats (
+             id, folder_id, title, model_id, context_scope_id, created_at, updated_at, message_count,
+             forked_from_chat_id, forked_from_message_id
+           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        )
+        .run(
+          id,
+          source.folderId,
+          title,
+          source.modelId,
+          source.contextScopeId,
+          now,
+          now,
+          prefix.length,
+          chatId,
+          messageId,
+        );
+      const insert = this._db.prepare(
+        `INSERT INTO chat_chat_messages (id, chat_id, role, content, attachments, created_at)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+      );
+      for (const message of prefix) {
+        insert.run(
+          randomUUID(),
+          id,
+          message.role,
+          message.content,
+          message.attachments.length > 0 ? JSON.stringify(message.attachments) : null,
+          message.createdAt,
+        );
+      }
+      this._db
+        .prepare("UPDATE chat_chats SET active_leaf_chat_id = ?, updated_at = ? WHERE id = ?")
+        .run(id, now, rootId);
+    });
+    tx();
+    const created = this.getChat(id);
+    if (!created) throw new Error("branch was not persisted");
+    return created;
+  }
+
+  setActiveLeaf(chatId: string, leafChatId: string): void {
+    const parentOf = (id: string): string | null => this._getChatRow(id)?.forked_from_chat_id ?? null;
+    const rootId = describeChain(chatId, parentOf).rootId;
+    const leafRoot = describeChain(leafChatId, parentOf).rootId;
+    if (leafRoot !== rootId) throw new Error("active leaf is not in this thread family");
+    this._db.prepare("UPDATE chat_chats SET active_leaf_chat_id = ? WHERE id = ?").run(leafChatId, rootId);
   }
 
   renameChat(id: string, title: string): Chat {
@@ -472,7 +603,8 @@ export class ChatExplorerStore {
 
   getChat(id: string): Chat | null {
     const row = this._getChatRow(id);
-    return row && row.archived_at == null ? rowToChat(row) : null;
+    if (!row || row.archived_at != null) return null;
+    return this._annotateChat(rowToChat(row));
   }
 
   bumpMessageCount(id: string, delta = 1): void {
@@ -508,11 +640,17 @@ export class ChatExplorerStore {
       bucket.push(rowToFolder(row));
       byParent.set(parent, bucket);
     }
+    const chatIds = new Set(chats.map((row) => row.id));
     const chatsByFolder = new Map<string | null, Chat[]>();
     for (const row of chats) {
-      const folderId = row.folder_id;
+      let chat = rowToChat(row);
+      const parentMissing = Boolean(chat.forkedFromChatId && !chatIds.has(chat.forkedFromChatId));
+      if (parentMissing) {
+        chat = { ...chat, parentUnresolved: true, folderId: null };
+      }
+      const folderId = parentMissing ? null : row.folder_id;
       const bucket = chatsByFolder.get(folderId) ?? [];
-      bucket.push(rowToChat(row));
+      bucket.push(chat);
       chatsByFolder.set(folderId, bucket);
     }
     const buildNode = (folder: Folder | null): FolderTreeNode => {
@@ -717,6 +855,28 @@ export class ChatExplorerStore {
     return this._db
       .prepare<[string], FolderRow>(`SELECT * FROM chat_folders WHERE id = ?`)
       .get(id);
+  }
+
+  private _annotateChat(chat: Chat): Chat {
+    const parentMissing = Boolean(chat.forkedFromChatId && !this._getChatRow(chat.forkedFromChatId));
+    let active = chat.activeLeafChatId ?? chat.id;
+    if (!chat.forkedFromChatId && !chat.activeLeafChatId) active = chat.id;
+    if (chat.forkedFromChatId || chat.activeLeafChatId) {
+      try {
+        const rootId = describeChain(
+          chat.id,
+          (id) => this._getChatRow(id)?.forked_from_chat_id ?? null,
+        ).rootId;
+        active = this._getChatRow(rootId)?.active_leaf_chat_id ?? rootId;
+      } catch {
+        active = chat.activeLeafChatId ?? chat.id;
+      }
+    }
+    return {
+      ...chat,
+      parentUnresolved: parentMissing,
+      activeLeafChatId: active,
+    };
   }
 
   private _getChatRow(id: string): ChatRow | undefined {

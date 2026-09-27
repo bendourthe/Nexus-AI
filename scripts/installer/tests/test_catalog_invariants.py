@@ -9,10 +9,13 @@ access-gated model.
 from __future__ import annotations
 
 import json
+import sys
 from typing import Any
 
 from nexus_installer.catalog_invariants import (
     POST_2025_OLLAMA_TARGETS,
+    QWEN38_ADMITTED_IDS,
+    QWEN38_FAMILY_PATTERN,
     validate_catalog,
 )
 from nexus_installer.registry_paths import default_catalog_path
@@ -630,3 +633,70 @@ def test_minicpm5_vendor_benchmark_copy_fails() -> None:
 def test_minicpm5_contract_is_present_or_valid() -> None:
     # A synthetic catalog without the id must be unchanged by this block.
     assert not any("minicpm5" in p for p in _problems(_plain_entry()))
+
+
+def _qwen_entry(model_id: str, url: str, protocol: str = "ollama") -> dict[str, Any]:
+    return {"models": [{"id": model_id, "source": {"protocol": protocol, "url": url}}]}
+
+
+class TestQwen38FamilyGuard:
+    def test_synthetic_id_is_rejected(self) -> None:
+        problems = validate_catalog(_qwen_entry("qwen3.8:27b", "ollama://qwen3.8:27b"))
+        assert any("model-acceptance" in problem for problem in problems)
+
+    def test_benign_id_with_family_url_is_rejected(self) -> None:
+        url = (
+            "ollama://hf.co/DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-"
+            "735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF:Q4_K_M"
+        )
+        problems = validate_catalog(_qwen_entry("local-coder", url))
+        assert any("model-acceptance" in problem for problem in problems)
+
+    def test_huggingface_url_is_rejected(self) -> None:
+        problems = validate_catalog(
+            _qwen_entry(
+                "weights",
+                "https://huggingface.co/Qwen/Qwen3.8-27B",
+                protocol="huggingface",
+            )
+        )
+        assert any("model-acceptance" in problem for problem in problems)
+
+    def test_real_qwen3_8b_is_not_the_family(self) -> None:
+        # Qwen3-8B is a real unrelated dense 8B model, not the Qwen3.8 line.
+        id_problems = validate_catalog(_qwen_entry("qwen3:8b", "ollama://qwen3:8b"))
+        url_problems = validate_catalog(
+            _qwen_entry("other", "ollama://hf.co/Qwen/Qwen3-8B-GGUF:Q4_K_M")
+        )
+        assert not any("Qwen3.8" in problem for problem in id_problems)
+        assert not any("Qwen3.8" in problem for problem in url_problems)
+
+    def test_admitted_id_is_the_escape_hatch(self, monkeypatch) -> None:
+        monkeypatch.setattr(
+            sys.modules["nexus_installer.catalog_invariants"],
+            "QWEN38_ADMITTED_IDS",
+            frozenset({"qwen3.8:27b"}),
+        )
+        assert validate_catalog(_qwen_entry("qwen3.8:27b", "ollama://qwen3.8:27b")) == []
+
+    def test_shipped_catalog_strings_do_not_match(self) -> None:
+        catalog = json.loads(default_catalog_path().read_text(encoding="utf-8"))
+        matches: list[str] = []
+        for model in catalog["models"]:
+            model_id = str(model.get("id") or "")
+            url = str((model.get("source") or {}).get("url") or "")
+            if QWEN38_FAMILY_PATTERN.search(model_id):
+                matches.append(model_id)
+            if QWEN38_FAMILY_PATTERN.search(url):
+                matches.append(url)
+        assert matches == [], matches
+        spared = {"qwen3.5:9b", "qwen3.5:4b", "qwen3-coder:30b", "qwen3-embedding:0.6b"}
+        present = {str(model.get("id")) for model in catalog["models"]}
+        assert spared <= present
+
+    def test_admitted_ids_are_mirrored_in_the_living_bar(self) -> None:
+        root = default_catalog_path().parents[2]
+        bar = (root / "docs" / "reference" / "model-acceptance.md").read_text(encoding="utf-8")
+        assert (root / "docs" / "reference" / "model-acceptance.md").is_file()
+        for admitted in QWEN38_ADMITTED_IDS:
+            assert admitted in bar
