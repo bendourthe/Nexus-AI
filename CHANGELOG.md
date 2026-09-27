@@ -1,3 +1,28 @@
+## [2.5.1](https://github.com/bendourthe/Nexus-AI/compare/v2.5.0...v2.5.1) (2026-09-27)
+
+
+### Bug Fixes
+
+* **ci:** compile the WebView2 debug port into the smoke build ([5508057](https://github.com/bendourthe/Nexus-AI/commit/5508057765a5ae1cf6ec47cff124da8a36f0b3a0))
+* **ci:** report why the packaged window debug port did not open ([3891e5a](https://github.com/bendourthe/Nexus-AI/commit/3891e5a824a58241e8629a169d82584e3a7b04de))
+* **ci:** start the packaged window on the interactive desktop ([aa42306](https://github.com/bendourthe/Nexus-AI/commit/aa42306435ba1142d4913a890c3a802f8c00e840))
+* clear the CodeQL findings that block the release pull request ([0f90f54](https://github.com/bendourthe/Nexus-AI/commit/0f90f54ffe00bc0c00d2d23849db79e5b8a9e546))
+* **cli:** keep a path refusal distinct from a bad serving token ([f99eff6](https://github.com/bendourthe/Nexus-AI/commit/f99eff63da988c18f1674a506d19e4ece8ed10b5))
+* **desktop:** caption generated video and make the lightbox keyboard-safe ([4305abe](https://github.com/bendourthe/Nexus-AI/commit/4305abe6465b8539113442f97d04a754f628f132))
+* **desktop:** clear the remaining jsx-a11y warnings ([2b4ed3b](https://github.com/bendourthe/Nexus-AI/commit/2b4ed3b606c429b776c7a0a7825e0fd224d14251))
+* **desktop:** close the image viewer from a backdrop button ([4152652](https://github.com/bendourthe/Nexus-AI/commit/415265280d1136a5918d562672915b66c3647349))
+* **desktop:** give the packaged smoke a fresh WebView2 profile ([185fc6a](https://github.com/bendourthe/Nexus-AI/commit/185fc6ac79bbf732845eeea42b84c452d8439296))
+* **desktop:** keep the token total focusable without stealing the Reasoning name ([4ab6955](https://github.com/bendourthe/Nexus-AI/commit/4ab695515e6d0d2c204718149d18c74921e275da))
+* **desktop:** open the packaged smoke debug port without changing the build ([30861d9](https://github.com/bendourthe/Nexus-AI/commit/30861d9995b9405dceef35ce764f21ae9b1a17fc))
+* **desktop:** open the smoke debug port without compiling it into the shell ([20e2d69](https://github.com/bendourthe/Nexus-AI/commit/20e2d692c042b520641451c3024e57b4bbcdffa1))
+* **desktop:** print sidecar stderr when the packaged window fails to spawn it ([23fd775](https://github.com/bendourthe/Nexus-AI/commit/23fd7750b8fc56c00ab3a5d9d1c7d8d4ae191c6a))
+* **desktop:** start the sidecar by file name so Node 22 does not realpath the drive ([9df480c](https://github.com/bendourthe/Nexus-AI/commit/9df480ca62c1d07f46acadc83bed789fd9df0c28))
+* **desktop:** treat IPv6 loopback as a loopback smoke connection ([481bcce](https://github.com/bendourthe/Nexus-AI/commit/481bcce4b2d779d8e28fb0385c1defecd304d0aa))
+* **desktop:** treat native field components as label controls ([a415f14](https://github.com/bendourthe/Nexus-AI/commit/a415f143108693f6e0cdee38d0808a8a73f50c19))
+* **desktop:** treat Tauri webview hosts as loopback in the smoke ([e9dd9e1](https://github.com/bendourthe/Nexus-AI/commit/e9dd9e125e05b1d5ec37d173f931b05e73ee6b05))
+* **release:** check staged artifact size and the smoke digest ([6a58511](https://github.com/bendourthe/Nexus-AI/commit/6a585116c022daec20f63f15832c9fedbd567c25))
+* **storage:** close the chat database when startup refuses it ([80da026](https://github.com/bendourthe/Nexus-AI/commit/80da02628077e9354ee75c394eaca8b475834689))
+
 # [2.5.0](https://github.com/bendourthe/Nexus-AI/compare/v2.4.11...v2.5.0) (2026-09-25)
 
 
