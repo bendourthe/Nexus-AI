@@ -241,7 +241,7 @@ function flattenTree(
       depth: nextDepth,
       kind: "chat",
       id: chat.id,
-      label: chat.title,
+      label: chat.parentUnresolved ? `${chat.title} (parent missing)` : chat.title,
       chat,
     });
   }

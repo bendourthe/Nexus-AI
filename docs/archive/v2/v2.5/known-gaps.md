@@ -22,8 +22,7 @@ v2.5 plans in this directory are not started by the v2.4.11 tag.
 
 | ID | Class | Source phase | Plan reference | Reason | Suggested next step |
 | --- | --- | --- | --- | --- | --- |
-| DF-v250-1 | DF | Phase 4 | `docs/v2/v2.5/plans/v2.5.0-adoption-diffusionstudio-editor.md` | `nexus screenshot` and `nexus capture` were left out on purpose. They would expose whatever is on screen, which is a different disclosure class from structured state. | A later plan should decide, with an operator, whether a loopback capture route is acceptable and what it is allowed to see. |
-| CI-v251-1 | CI | v2.5.1 Phase 4 | `docs/v2/v2.5/plans/v2.5.1-adoption-packaged-verification-and-accessibility.md` | The pipeline comparison was not applied. There is no single aggregate required check and no `fast`/`full`/`platform`/`report`/`release` profiles. Linux run 36153544032 and macOS run 36153548528 succeeded as dispatch-only rehearsals. | Approve a profile migration separately. Do not rewrite `ci.yml` inside this plan without that approval. |
+| CI-v251-1 | CI | v2.5.1 Phase 4 | `docs/archive/v2/v2.5/plans/v2.5.1-adoption-packaged-verification-and-accessibility.md` | On 2026-09-26 `develop` and `main` required checks were switched to the single context `ci-required`. The installer matrix workflow is `installer-matrix.yml`. Its first run is the archive pull request, and the run id is recorded in `docs/v2/v2.6/known-gaps.md` when that workflow finishes. | Record the matrix run id in the v2.6 gap log when the workflow finishes, then close this row there. |
 
 ## Adjacent
 
@@ -33,6 +32,7 @@ NI-3 is resolved in `docs/archive/v2/v2.4/known-gaps.md` (2026-09-21). `MODEL_FA
 
 | ID | Class | Source phase | Plan reference | Resolution |
 | --- | --- | --- | --- | --- |
+| DF-v250-1 | DF | Phase 4 | `docs/v2/v2.5/plans/v2.5.0-adoption-diffusionstudio-editor.md` | Operator approved screen capture on 2026-09-26. `nexus screenshot` and `nexus capture` return a PNG of the Nexus window only, on the existing loopback token. `--route` accepts `/chatbot`, `/coding`, `/images`, or `/videos`. Other applications and the rest of the desktop are not captured. Windows reads the webview client pixels. Other hosts answer `unavailable`. |
 | MT-v251-1 | MT | v2.5.1 Phase 1 | `docs/v2/v2.5/plans/v2.5.1-adoption-packaged-verification-and-accessibility.md` | Desktop `eslint` reports 0 `jsx-a11y` warnings. The lint ceiling is 0. The splat viewer keeps a keyboard camera with two rule disables because that surface is a custom widget. |
 | QG-v250-2 | QG | migration-durability Phase 1 | `docs/v2/v2.5/plans/v2.5.0-migration-durability.md` | Closed. Job `108108818115` (Test TypeScript, Node 22.x, run `36146482594`) passed `preMigrationSnapshot.test.ts`. On 2026-09-26 the published Node 24.13.0 prebuild loaded locally and that file passed 4 tests inside a green root suite (5913 passed, 12 skipped). The prebuild is not committed. Do not `npm rebuild`. |
 | QG-v250-1 | QG | Phase 4 | `docs/v2/v2.5/plans/v2.5.0-adoption-diffusionstudio-editor.md` | The release executable served `nexus context --json` with exit 0 and an empty session object. `nexus media inspect C:/Windows/win.ini --json` exited 1 with `error.code` `forbidden` and did not return file bytes. |

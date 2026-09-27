@@ -16,6 +16,7 @@ name: Installer rehearsal (macOS, non-release)
 # download page). Signing + notarization remains rehearsal-only here.
 
 on:
+  workflow_call:
   workflow_dispatch:
     inputs:
       reason:

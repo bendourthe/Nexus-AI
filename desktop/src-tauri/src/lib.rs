@@ -8,6 +8,8 @@
 // failure so the installer can prove the app actually works (1.4).
 
 pub mod sidecar;
+mod export;
+mod window_capture;
 
 use serde_json::{json, Value};
 use sidecar::{
@@ -22,6 +24,7 @@ pub struct AppState {
     pub sidecar: Mutex<Option<SidecarHandle>>,
     pub status: Mutex<SidecarStatus>,
     pub restarting: AtomicBool,
+    pub window_capture: Mutex<Option<window_capture::WindowCapture>>,
 }
 
 #[tauri::command]
@@ -369,13 +372,15 @@ pub fn run() {
             sidecar: Mutex::new(None),
             status: Mutex::new(SidecarStatus::default()),
             restarting: AtomicBool::new(false),
+            window_capture: Mutex::new(None),
         })
         .invoke_handler(tauri::generate_handler![
             ipc_call,
             sidecar_status,
             sidecar_restart,
             canonicalize_workspace_roots,
-            default_workspace_root
+            default_workspace_root,
+            export::export_diagram
         ])
         .setup(|app| {
             // The config window is `create: false` so this is the only place it
@@ -402,6 +407,15 @@ pub fn run() {
                 window = window.additional_browser_args(&args);
             }
             window.build()?;
+            if let Ok(capture) = window_capture::start(app.handle().clone()) {
+                std::env::set_var("NEXUS_WINDOW_CAPTURE_URL", &capture.url);
+                std::env::set_var("NEXUS_WINDOW_CAPTURE_TOKEN", &capture.token);
+                if let Some(state) = app.try_state::<AppState>() {
+                    if let Ok(mut guard) = state.window_capture.lock() {
+                        *guard = Some(capture);
+                    }
+                }
+            }
             // Window icon (title bar + taskbar): the transparent no-background
             // Nexus mark, deliberately distinct from the exe/Explorer icon
             // (the navy `nexus-ai-primary` embedded via bundle.icon). The

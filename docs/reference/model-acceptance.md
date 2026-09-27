@@ -158,6 +158,33 @@ Every entry above is a maintenance commitment on three platforms. When a proposa
 
 The same test applies in the other direction. An entry that no longer holds its job, because something took it or because the job stopped existing, is a removal candidate. The map is the record of which entries still have a reason.
 
+## Qwen3.8 family
+
+"3.8" is a release line, not a parameter count. That mislabel has been observed twice. Evidence for one row never transfers to another.
+
+| Name | Parameters | Architecture | llama.cpp architecture id | Approximate smallest artifact | Status |
+|---|---|---|---|---|---|
+| `Qwen/Qwen3.8-Flash-Next` | 125B total, 6B activated per token, plus 51B n-gram embeddings and 4B MTP parameters (surfaces may report 176B to 180B) | MoE | `qwen4exp` (v2.4.0 comparison HF API inventory, 2026-08-28) | about 105 GB smallest observed listing | rejected v2.3.0 |
+| `Qwen/Qwen3.8-27B` | 27B dense | hybrid groups of three Gated DeltaNet blocks plus one gated-attention block | `qwen35` | about 17 GB at Q4-class | not admitted |
+| `Qwen/Qwen3-8B` | dense 8B, unrelated to this family | dense | not a Qwen3.8 architecture id | official Ollama tag `qwen3:8b` | not proposed |
+
+### Contested job
+
+Qwen3.8-27B, if proposed, would contest the 24 GB coding-specialist fallback job held by `qwen3-coder:30b`. Taking that job requires measured numbers from this project's own hardware, on the terms in "Taking a job" above.
+
+### Reopening the bar
+
+Neither path below admits a model. Each one only reopens the existing acceptance bar and the six gates in [the v2.3.0 Flash-Next record](../archive/v2/v2.3/development/model-admission-qwen38.md).
+
+1. An official Ollama library tag exists for the artifact at `ollama.com/library` (not an `hf.co/` community pull). That reopens the bar for text-only chat and coding use, on the same terms `qwen3-coder:30b` holds its job today.
+2. That tag additionally lists vision among its capabilities on the library page. That reopens the bar with vision in scope. The observable is what the library page lists, not an inference about `mmproj` files. Ollama does not support separate `mmproj` projector files, which is why every vision model in the catalog (`qwen3.5:9b`, `qwen3.5:4b`, `gemma-4-12b-it-gguf`) uses an official library tag and none uses an `hf.co` pull.
+
+### What the catalog guard covers
+
+The invariant in `scripts/installer/src/nexus_installer/catalog_invariants.py` governs curated catalog admission only. It does not constrain what a user's locally installed Ollama will serve, which reaches the desktop through runtime model discovery in `desktop/sidecar/src/models/modelsService.ts`. A green CI run is therefore not a runtime guarantee.
+
+Admitted ids: none. `QWEN38_ADMITTED_IDS` in the invariants module is authoritative. This sentence mirrors that list.
+
 ## Changing this document
 
 The map goes stale the moment `catalog.json` or `recommended.json` changes. A change to either that adds, removes, or re-tiers an entry updates this document in the same commit, and the open questions above are either resolved or restated with what was learned. A job that quietly acquires a second holder is the specific failure this document exists to catch.

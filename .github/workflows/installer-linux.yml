@@ -16,6 +16,7 @@ name: Installer rehearsal (Linux, non-release)
 # (libfuse2) to mount; both caveats are documented on the download page.
 
 on:
+  workflow_call:
   workflow_dispatch:
     inputs:
       reason:

@@ -32,7 +32,12 @@ import {
   useState,
   type CSSProperties,
 } from "react";
-import DOMPurify from "isomorphic-dompurify";
+import { sanitizeArtifactHtml } from "../shared/security/sanitizeArtifact";
+import {
+  pruneArtifactVersions,
+  versionById,
+  type ArtifactVersion,
+} from "../shared/studio/artifactVersions";
 
 export interface InteractiveArtifactProps {
   /** Raw HTML body (the wrapper sanitises before rendering). */
@@ -70,8 +75,25 @@ export function InteractiveArtifact({
 }: InteractiveArtifactProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [confirmation, setConfirmation] = useState<string | null>(null);
+  const [versions, setVersions] = useState<readonly ArtifactVersion[]>([]);
+  const [viewingId, setViewingId] = useState<string | null>(null);
+  const [pruned, setPruned] = useState(false);
+  const sequenceRef = useRef(0);
 
-  const sanitisedHtml = useMemo(() => sanitiseArtifactHtml(html), [html]);
+  const sanitisedHtml = useMemo(() => sanitizeArtifactHtml(html), [html]);
+
+  useEffect(() => {
+    sequenceRef.current += 1;
+    const sequence = sequenceRef.current;
+    const id = `artifact-v${sequence}`;
+    setVersions((current) => {
+      const next = [...current, { id, payload: sanitisedHtml, sequence }];
+      const result = pruneArtifactVersions(next, viewingId ?? id);
+      setPruned(result.pruned);
+      return result.versions;
+    });
+    setViewingId(id);
+  }, [sanitisedHtml]);
 
   const handleCopy = useCallback(async () => {
     const container = containerRef.current;
@@ -143,8 +165,26 @@ export function InteractiveArtifact({
         data-testid="interactive-artifact-body"
         // Sanitised by sanitiseArtifactHtml above; the sanitiser is the
         // trust boundary for embedding agent-authored HTML.
-        dangerouslySetInnerHTML={{ __html: sanitisedHtml }}
+        dangerouslySetInnerHTML={{
+          __html: versionById(versions, viewingId ?? "")?.payload ?? sanitisedHtml,
+        }}
       />
+      {versions.length > 1 ? (
+        <div role="group" aria-label="Artifact versions">
+          {versions.map((version, index) => (
+            <button
+              key={version.id}
+              type="button"
+              aria-label={`Artifact version ${version.id}`}
+              aria-current={version.id === viewingId ? "true" : undefined}
+              onClick={() => setViewingId(version.id)}
+            >
+              {index + 1}
+            </button>
+          ))}
+          {pruned ? <span>Older versions pruned</span> : null}
+        </div>
+      ) : null}
       <div
         style={{
           marginTop: 8,
@@ -225,25 +265,6 @@ function collectFormState(form: HTMLFormElement): Record<string, FormValue> {
     out[name] = el.value;
   }
   return out;
-}
-
-/**
- * Strip the script vectors from `html` before embedding via
- * `dangerouslySetInnerHTML`.
- *
- * v1.4.0 Phase 8 (gap 6.3.P2.Z): this now delegates to DOMPurify via
- * `isomorphic-dompurify` (browser + jsdom/SSR), replacing the prior
- * hand-rolled DOMParser walk. DOMPurify strips `<script>`, `on*`
- * event-handler attributes, and `javascript:` URLs by default; we
- * additionally forbid the structural tags the artifact host never needs so
- * the surface matches (and hardens) the previous allowlist. Centralising on
- * the maintained sanitiser removes the bespoke walk and covers network-sourced
- * HTML should the host ever render it.
- */
-const FORBIDDEN_TAGS = ["style", "iframe", "object", "embed", "link", "meta", "base"];
-
-function sanitiseArtifactHtml(html: string): string {
-  return DOMPurify.sanitize(html, { FORBID_TAGS: FORBIDDEN_TAGS });
 }
 
 function fallbackCopy(text: string): boolean {

@@ -38,6 +38,7 @@ describe('GitHub Actions are SHA-pinned', () => {
         const m = lines[i].match(USES_LINE_RE);
         if (!m) continue;
         const ref = m[1];
+        if (ref.startsWith("./")) continue;
         const at = ref.lastIndexOf('@');
         if (at < 0) {
           offenders.push(`${workflow}:${i + 1}: missing @ref in ${ref}`);
