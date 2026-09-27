@@ -83,6 +83,29 @@ describe("json CLI client", () => {
     expect((result.body as { error: { code: string } }).error.code).toBe("auth");
   });
 
+  it("keeps a 403 path refusal instead of calling it an auth failure", async () => {
+    const result = await dispatchJsonCli({
+      command: "media",
+      subcommand: "inspect",
+      flags: { path: "C:/Windows/win.ini" },
+      client: {
+        baseUrl: "http://127.0.0.1:11500",
+        token: "t",
+        fetchImpl: async () => ({
+          status: 403,
+          ok: false,
+          json: async () => ({
+            error: { code: "forbidden", message: "path is outside authorized workspace roots: C:\\Windows\\win.ini" },
+          }),
+        }),
+      },
+    });
+    expect(result.exitCode).toBe(1);
+    const error = (result.body as { error: { code: string; message: string } }).error;
+    expect(error.code).toBe("forbidden");
+    expect(error.message).toMatch(/outside authorized workspace roots/);
+  });
+
   it("maps connection failure to sidecar-down exit 1", async () => {
     const result = await dispatchJsonCli({
       command: "models",

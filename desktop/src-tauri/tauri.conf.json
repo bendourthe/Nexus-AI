@@ -21,7 +21,8 @@
         "fullscreen": false,
         "maximized": true,
         "theme": "Dark",
-        "decorations": false
+        "decorations": false,
+        "create": false
       }
     ],
     "security": {

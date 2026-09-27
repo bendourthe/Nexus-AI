@@ -1557,6 +1557,11 @@ export async function runJsonCli(args, stdout = process.stdout, stderr = process
       parsed = null;
     }
     if (res.status === 401 || res.status === 403) {
+      const error = parsed && typeof parsed === "object" ? parsed.error : undefined;
+      if (error && typeof error.code === "string" && error.code !== "auth" && typeof error.message === "string") {
+        stdout.write(JSON.stringify({ error: { code: error.code, message: error.message, status: res.status } }) + "\n");
+        return 1;
+      }
       stdout.write(
         JSON.stringify({
           error: {

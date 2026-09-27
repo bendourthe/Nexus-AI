@@ -107,6 +107,18 @@ pub enum SidecarError {
     Exited { code: i32, stderr_tail: Vec<String> },
 }
 
+impl SidecarError {
+    /// Prints the captured sidecar stderr. The Display string stays
+    /// `sidecar-exited:<code>` so the UI contract does not change.
+    pub fn log_stderr(&self) {
+        if let SidecarError::Exited { stderr_tail, .. } = self {
+            for line in stderr_tail {
+                eprintln!("[nexus-shell] sidecar stderr: {line}");
+            }
+        }
+    }
+}
+
 #[derive(Debug, Serialize)]
 struct JsonRpcRequest<'a> {
     jsonrpc: &'a str,
@@ -744,8 +756,15 @@ pub fn sidecar_windows_creation_flags() -> Option<u32> {
 /// Shared Command builder for app spawn, restart, and `--healthcheck`.
 pub fn sidecar_command(node: &Path, script: &Path) -> Command {
     let mut command = Command::new(node);
+    // Node 22 on Windows realpath's an absolute `D:\...` entry as the bare
+    // drive `D:` and exits EISDIR before the sidecar boots. The child cwd is
+    // the script directory, so the file name is enough.
+    let script_arg = script
+        .file_name()
+        .map(PathBuf::from)
+        .unwrap_or_else(|| script.to_path_buf());
     command
-        .arg(script)
+        .arg(script_arg)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());

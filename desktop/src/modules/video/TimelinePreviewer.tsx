@@ -106,7 +106,9 @@ export function TimelinePreviewer({
           setCurrentTime((e.currentTarget as HTMLVideoElement).currentTime || 0)
         }
         style={{ maxWidth: "100%", maxHeight: "60vh", background: "var(--bg-1)" }}
-      />
+      >
+        <track kind="captions" />
+      </video>
       <div style={{ display: "flex", gap: "var(--space-1)", alignItems: "center" }}>
         <button
           data-testid={`${testId}-step-back`}

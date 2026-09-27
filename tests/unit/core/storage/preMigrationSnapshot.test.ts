@@ -48,7 +48,11 @@ describe("pre-migration snapshots", () => {
     first.createSession("kept");
     const afterFirst = snapshots(dir).length;
     expect(afterFirst).toBe(1);
-    for (let i = 0; i < 3; i++) new ChatHistoryStore(file);
+    first.close();
+    for (let i = 0; i < 3; i++) {
+      const next = new ChatHistoryStore(file);
+      next.close();
+    }
     expect(snapshots(dir).length).toBe(afterFirst);
   });
 
@@ -90,6 +94,11 @@ describe("pre-migration snapshots", () => {
     expect(fs.readFileSync(file).equals(before)).toBe(true);
     expect(() => assertNotHalfMigrated(file)).toThrow(HalfMigratedDatabaseError);
     expect(() => new ChatHistoryStore(file)).toThrow(/half-migrated/);
-    expect(userVersion(new Database(file))).toBe(0);
+    const check = new Database(file);
+    try {
+      expect(userVersion(check)).toBe(0);
+    } finally {
+      check.close();
+    }
   });
 });

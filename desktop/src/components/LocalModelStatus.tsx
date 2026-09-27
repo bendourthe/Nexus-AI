@@ -139,7 +139,6 @@ export function LocalModelStatus({ stream }: LocalModelStatusProps): JSX.Element
         data-idle={idle ? "true" : "false"}
         data-queue-depth={String(queue.length)}
         data-stale={isStale ? "true" : "false"}
-        role="status"
         aria-live="polite"
         aria-label={`Local model status: ${headline}, GPU ${pct.toFixed(0)} percent, ${sample.vramFreeGB.toFixed(1)} GB free`}
         title={tooltip}
@@ -255,20 +254,32 @@ function QueueModal({ queue, activeModel, onClose }: QueueModalProps): JSX.Eleme
       aria-modal="true"
       aria-label="GPU scheduler queue"
       data-testid="local-model-queue-modal"
-      onClick={onClose}
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(0,0,0,0.6)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         zIndex: 100,
       }}
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
+      <button
+        type="button"
+        aria-label="Close GPU scheduler queue"
+        onClick={onClose}
         style={{
+          position: "absolute",
+          inset: 0,
+          border: 0,
+          padding: 0,
+          background: "rgba(0,0,0,0.6)",
+          cursor: "pointer",
+        }}
+      />
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
           background: "var(--bg-elevated)",
           color: "var(--fg-0)",
           padding: "var(--space-5)",

@@ -258,6 +258,11 @@ jobs:
         working-directory: desktop
         run: npm run build:shell
 
+      - name: Probe the shell that this payload embeds
+        working-directory: desktop
+        shell: cmd
+        run: node tests/packaged/launch-probe.mjs src-tauri/target/release/nexus-shell.exe > ..\shell-smoke.json
+
       - name: Stage current Windows payload
         shell: pwsh
         run: |
@@ -269,6 +274,15 @@ jobs:
           }
           New-Item -ItemType Directory -Force bundle-out | Out-Null
           Copy-Item -LiteralPath $Matches[0].FullName "bundle-out/Nexus-Desktop_${v}_x64-setup.exe"
+          $smokePath = "shell-smoke.json"
+          if (-not (Test-Path -LiteralPath $smokePath)) {
+            throw "shell smoke report is missing"
+          }
+          $smoke = Get-Content -Raw -LiteralPath $smokePath | ConvertFrom-Json
+          if ($smoke.ok -ne $true) {
+            throw "shell smoke did not pass"
+          }
+          Copy-Item -LiteralPath $smokePath "bundle-out/shell-smoke.json"
 
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
