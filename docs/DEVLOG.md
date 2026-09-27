@@ -7,6 +7,25 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-26] v2.6.0 Chat surface Phase 1 - Rank and capability bar
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase1-evidence.md), history [P1](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-1.md).
+
+### What Changed
+
+- **Chat pillar rank 2 is confirmed.** STRATEGY.md section 4 records the confirmation. Forking, diagram rendering, diagram export, and context control each have a local cost. None was kept only because a comparison source had it.
+- **The Chat pillar bar is a living reference.** `docs/reference/chat-surface-bar.md` states the observable items and the default-visibility rules. CONTRIBUTING.md and AGENTS.md link it.
+
+### Verification
+
+Documentation only. No test suite. No remote CI.
+
+### Known gaps
+
+No new gap. Open items remain in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md).
+
+---
+
 ## [2026-09-22] v2.4.0 Phase 5 - Optional TripoSplat adapter
 
 Index: [plan](archive/v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md), [benchmark](archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md), history [P5](archive/v2/v2.4/development/history/2026-09-22_v2.4.0-phase-5-adapter.md).
