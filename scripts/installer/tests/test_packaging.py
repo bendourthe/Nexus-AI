@@ -326,6 +326,7 @@ class TestWorkflows:
         assert final_check in content
         assert "git ls-remote --tags origin" in content
         assert "has no peeled commit on origin" in content
+        assert "$2 == tag {print $1; exit}" in content
         assert '"$TAG_SHA" != "$EXPECTED_SHA"' in content
         assert "target_commitish: ${{ github.sha }}" in content
         assert content.index(final_check) < content.index(create_release)

@@ -364,6 +364,9 @@ jobs:
           REMOTE_TAGS=$(git ls-remote --tags origin "refs/tags/${RELEASE_TAG}" "refs/tags/${RELEASE_TAG}^{}")
           TAG_SHA=$(printf '%s\n' "$REMOTE_TAGS" | awk '$2 ~ /\^\{\}$/ {print $1; exit}')
           if [ -z "$TAG_SHA" ]; then
+            TAG_SHA=$(printf '%s\n' "$REMOTE_TAGS" | awk -v tag="refs/tags/${RELEASE_TAG}" '$2 == tag {print $1; exit}')
+          fi
+          if [ -z "$TAG_SHA" ]; then
             echo "Annotated release tag ${RELEASE_TAG} is missing or has no peeled commit on origin" >&2
             exit 1
           fi
