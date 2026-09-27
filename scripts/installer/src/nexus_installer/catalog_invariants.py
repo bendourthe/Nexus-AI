@@ -26,6 +26,18 @@ from typing import Any
 #: The fix routes Gemma to the Ollama-library ``gemma4:12b`` build.
 KNOWN_BROKEN_OLLAMA_REFS: tuple[str, ...] = ("unsloth/gemma-4-12b-it-GGUF",)
 
+#: Qwen3.8 is a release line, not an 8B model. The negative lookahead spares
+#: Qwen3-8B (`qwen3:8b`, `Qwen/Qwen3-8B`), which is a real unrelated dense 8B
+#: model. An id is added here only after the acceptance bar is satisfied for
+#: that exact artifact, quantization, and chat template. This frozenset is
+#: authoritative. The "Qwen3.8 family" section of
+#: docs/reference/model-acceptance.md mirrors it.
+QWEN38_FAMILY_PATTERN = re.compile(
+    r"qwen[._\-: ]?3[._\-: ]?8(?![bB]\b)",
+    re.IGNORECASE,
+)
+QWEN38_ADMITTED_IDS: frozenset[str] = frozenset()
+
 #: Model ids known to live in access-gated Hugging Face repos (an
 #: unauthenticated fetch returns HTTP 401). They MUST stay flagged ``gated`` so
 #: the installer offers the guided token step / clean skip instead of looping on
@@ -246,6 +258,20 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
                         f"reference '{broken}' (Ollama manifest bug -> HTTP 400); "
                         f"route it to the Ollama-library tag instead"
                     )
+
+        # A2) Qwen3.8 family is deny-by-default. Read the allowlist at call
+        # time so tests can monkeypatch the module attribute. Match id and
+        # source.url for every protocol, not only Ollama.
+        admitted = QWEN38_ADMITTED_IDS
+        id_text = str(model_id) if model_id else ""
+        url_text = str(source.get("url") or "") if isinstance(source, dict) else ""
+        if (QWEN38_FAMILY_PATTERN.search(id_text) or QWEN38_FAMILY_PATTERN.search(url_text)) and (
+            id_text not in admitted
+        ):
+            problems.append(
+                f"{where}: Qwen3.8 family is not admitted. See "
+                "docs/reference/model-acceptance.md"
+            )
 
         # B) Gated consistency: requiresLicense implies gated, and a gated model
         #    must carry a reason or license URL so the UX can explain the guided
@@ -748,6 +774,8 @@ def _check_pre_2025_keep(by_id: dict[str, Any]) -> list[str]:
 
 __all__ = [
     "KNOWN_BROKEN_OLLAMA_REFS",
+    "QWEN38_FAMILY_PATTERN",
+    "QWEN38_ADMITTED_IDS",
     "KNOWN_GATED_IDS",
     "LFM_AGENTIC_ID",
     "MUSE_IDS",

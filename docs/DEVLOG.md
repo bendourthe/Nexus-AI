@@ -7,6 +7,24 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-26] v2.6.0 Qwen3.8 Phase 2 - Catalog guard
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-qwen38-27b.md), [evidence](v2/v2.6/development/v2.6.0-qwen38-phase2-evidence.md), history [P2](v2/v2.6/development/history/2026-09-26_v2.6.0-qwen38-phase-2.md).
+
+### What Changed
+
+- **Unadmitted Qwen3.8 rows fail catalog validation.** The pattern matches ids and source URLs. It does not match the real Qwen3-8B. The allowlist is empty.
+
+### Verification
+
+Catalog invariant tests: 60 passed. The installer suite exited 0. `check-catalog.py` reported 40 models and exited 0.
+
+### Known gaps
+
+No new gap. The family check is a sixth family-shaped block; Phase 3 records that against NI-2.
+
+---
+
 ## [2026-09-26] v2.6.0 Chat surface Phase 5 - Context pressure and compaction
 
 Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase5-evidence.md), history [P5](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-5.md).
