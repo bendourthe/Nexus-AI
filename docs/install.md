@@ -78,7 +78,7 @@ Everything lands under your user account (no admin rights needed for the wizard 
 
 ## After you install (v2.3.0)
 
-- **Video Lab Enhance**: after a completed clip has a durable output id, Video Lab can offer Enhance. Install Video2X 6.4.0 yourself, then set `NEXUS_VIDEO2X_PATH` or Settings > Video > Video2X executable to the absolute executable path. Recheck capability; Enhance stays disabled until capability is ready. Clearing the setting and unsetting the env var turns the surface off. That does not uninstall Video2X and does not delete originals. Configuring a path does not install Video2X, search PATH, replace originals, grant network or Hub writes, or add Qwen3.8. Details: [video-enhancement-baseline.md](archive/v2/v2.3/benchmarks/video-enhancement-baseline.md).
+- **Video Lab Enhance**: after a completed clip has a durable output id, Video Lab can offer Enhance. Install Video2X 6.4.0 yourself, then set `NEXUS_VIDEO2X_PATH` or Settings > Video > Video2X executable to the absolute executable path. Recheck capability; Enhance stays disabled until capability is ready. Clearing the setting and unsetting the env var turns the surface off. That does not uninstall Video2X and does not delete originals. Configuring a path does not install Video2X, search PATH, replace originals, grant network or Hub writes, or add a Qwen3.8 family model. Details: [video-enhancement-baseline.md](archive/v2/v2.3/benchmarks/video-enhancement-baseline.md).
 
 ## After you install (v1.20.0)
 
