@@ -7,6 +7,25 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-26] v2.6.0 Chat surface Phase 4 - Diagram versions and export
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase4-evidence.md), history [P4](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-4.md).
+
+### What Changed
+
+- **Export writes only the save-dialog path.** The capability file adds `dialog:allow-save` and does not add a general filesystem write. A renderer-supplied path is rejected.
+- **Artifact versions are a stable id.** The cap is 20. Pruning drops the oldest and never drops the version being viewed.
+
+### Verification
+
+Desktop export and version tests passed with the existing artifact suite (12). Rust `export::` tests: 3 passed.
+
+### Known gaps
+
+No new gap. The command map does not list the Tauri command; the reason is in the phase evidence.
+
+---
+
 ## [2026-09-26] v2.6.0 Chat surface Phase 3 - Mermaid behind one sanitiser
 
 Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase3-evidence.md), history [P3](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-3.md).

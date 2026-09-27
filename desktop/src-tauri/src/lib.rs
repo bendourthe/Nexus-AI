@@ -8,6 +8,7 @@
 // failure so the installer can prove the app actually works (1.4).
 
 pub mod sidecar;
+mod export;
 mod window_capture;
 
 use serde_json::{json, Value};
@@ -378,7 +379,8 @@ pub fn run() {
             sidecar_status,
             sidecar_restart,
             canonicalize_workspace_roots,
-            default_workspace_root
+            default_workspace_root,
+            export::export_diagram
         ])
         .setup(|app| {
             // The config window is `create: false` so this is the only place it

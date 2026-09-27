@@ -33,6 +33,11 @@ import {
   type CSSProperties,
 } from "react";
 import { sanitizeArtifactHtml } from "../shared/security/sanitizeArtifact";
+import {
+  pruneArtifactVersions,
+  versionById,
+  type ArtifactVersion,
+} from "../shared/studio/artifactVersions";
 
 export interface InteractiveArtifactProps {
   /** Raw HTML body (the wrapper sanitises before rendering). */
@@ -70,8 +75,25 @@ export function InteractiveArtifact({
 }: InteractiveArtifactProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [confirmation, setConfirmation] = useState<string | null>(null);
+  const [versions, setVersions] = useState<readonly ArtifactVersion[]>([]);
+  const [viewingId, setViewingId] = useState<string | null>(null);
+  const [pruned, setPruned] = useState(false);
+  const sequenceRef = useRef(0);
 
   const sanitisedHtml = useMemo(() => sanitizeArtifactHtml(html), [html]);
+
+  useEffect(() => {
+    sequenceRef.current += 1;
+    const sequence = sequenceRef.current;
+    const id = `artifact-v${sequence}`;
+    setVersions((current) => {
+      const next = [...current, { id, payload: sanitisedHtml, sequence }];
+      const result = pruneArtifactVersions(next, viewingId ?? id);
+      setPruned(result.pruned);
+      return result.versions;
+    });
+    setViewingId(id);
+  }, [sanitisedHtml]);
 
   const handleCopy = useCallback(async () => {
     const container = containerRef.current;
@@ -143,8 +165,26 @@ export function InteractiveArtifact({
         data-testid="interactive-artifact-body"
         // Sanitised by sanitiseArtifactHtml above; the sanitiser is the
         // trust boundary for embedding agent-authored HTML.
-        dangerouslySetInnerHTML={{ __html: sanitisedHtml }}
+        dangerouslySetInnerHTML={{
+          __html: versionById(versions, viewingId ?? "")?.payload ?? sanitisedHtml,
+        }}
       />
+      {versions.length > 1 ? (
+        <div role="group" aria-label="Artifact versions">
+          {versions.map((version, index) => (
+            <button
+              key={version.id}
+              type="button"
+              aria-label={`Artifact version ${version.id}`}
+              aria-current={version.id === viewingId ? "true" : undefined}
+              onClick={() => setViewingId(version.id)}
+            >
+              {index + 1}
+            </button>
+          ))}
+          {pruned ? <span>Older versions pruned</span> : null}
+        </div>
+      ) : null}
       <div
         style={{
           marginTop: 8,
