@@ -18,7 +18,7 @@ import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const RETIRED = ["docs/versions", "docs/archive/versions"];
-// v2.4.11 archived v1 and v2.0-v2.4. Active plans stay under docs/v2.
+// v2.4.11 archived v1 and v2.0-v2.4. v2.5 was archived on 2026-09-26. Active plans stay under docs/v2.
 const EXPECTED = ["docs/v2", "docs/archive/v0", "docs/archive/v1", "docs/archive/v2"];
 
 const problems = [];
