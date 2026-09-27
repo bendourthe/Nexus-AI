@@ -675,6 +675,30 @@ export function FolderTree({
 
   const closeContextMenu = useCallback(() => setContextMenu(null), []);
 
+  useEffect(() => {
+    if (!contextMenu) return;
+    const dismiss = (event: globalThis.MouseEvent) => {
+      const target = event.target;
+      if (
+        target instanceof Element &&
+        target.closest("[data-testid='folder-tree-context-menu']")
+      ) {
+        return;
+      }
+      closeContextMenu();
+    };
+    document.addEventListener("mousedown", dismiss);
+    return () => document.removeEventListener("mousedown", dismiss);
+  }, [contextMenu, closeContextMenu]);
+
+  useEffect(() => {
+    if (renamingId === null) return;
+    const node = document.querySelector(
+      `[data-testid="tree-rename-input-${renamingId}"]`,
+    );
+    if (node instanceof HTMLInputElement) node.focus();
+  }, [renamingId]);
+
   const onCreateFolder = useCallback(
     (parentId: string | null) => {
       resolveMaybe(
@@ -997,7 +1021,6 @@ export function FolderTree({
       <div
         data-testid="folder-tree-empty"
         data-collapsed={collapsed ? "true" : "false"}
-        onClick={closeContextMenu}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -1087,7 +1110,6 @@ export function FolderTree({
     <div
       data-testid="folder-tree"
       data-collapsed={collapsed ? "true" : "false"}
-      onClick={closeContextMenu}
     >
       {header}
 
@@ -1187,7 +1209,6 @@ export function FolderTree({
                   ) : null}
                   {isRenaming ? (
                     <input
-                      autoFocus
                       data-testid={`tree-rename-input-${node.id ?? "root"}`}
                       value={renameValue}
                       onChange={(e) => setRenameValue(e.target.value)}
@@ -1224,8 +1245,6 @@ export function FolderTree({
                         gap: 2,
                         flex: "0 0 auto",
                       }}
-                      onClick={(e) => e.stopPropagation()}
-                      onDoubleClick={(e) => e.stopPropagation()}
                     >
                       <button
                         type="button"
@@ -1240,6 +1259,7 @@ export function FolderTree({
                             label: node.label,
                           });
                         }}
+                        onDoubleClick={(e) => e.stopPropagation()}
                         style={iconButtonStyle}
                       >
                         <Archive size={12} aria-hidden />
@@ -1253,6 +1273,7 @@ export function FolderTree({
                           e.stopPropagation();
                           startRename(node);
                         }}
+                        onDoubleClick={(e) => e.stopPropagation()}
                         style={iconButtonStyle}
                       >
                         <Pencil size={12} aria-hidden />
@@ -1279,6 +1300,7 @@ export function FolderTree({
                           }
                           requestDelete([target]);
                         }}
+                        onDoubleClick={(e) => e.stopPropagation()}
                         style={iconButtonStyle}
                       >
                         <Trash2 size={12} aria-hidden />
@@ -1296,7 +1318,6 @@ export function FolderTree({
         <ul
           role="menu"
           data-testid="folder-tree-context-menu"
-          onClick={(e) => e.stopPropagation()}
           style={contextMenuStyle(contextMenu)}
         >
           {contextMenu.target.kind === "folder" && (

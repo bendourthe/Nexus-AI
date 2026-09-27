@@ -605,11 +605,11 @@ export function MediaComposer({
                   <button
                     key={action.id}
                     type="button"
-                    role="menuitem"
+                    role="menuitemcheckbox"
                     data-testid={
                       action.testId ?? `media-composer-action-${action.id}`
                     }
-                    aria-pressed={action.active ? true : undefined}
+                    aria-checked={action.active ? true : false}
                     onClick={() => {
                       action.onSelect();
                       setOverflowOpen(false);
@@ -633,9 +633,9 @@ export function MediaComposer({
                   <button
                     key={mode.id}
                     type="button"
-                    role="menuitem"
+                    role="menuitemcheckbox"
                     data-testid={`media-composer-voice-${mode.id}`}
-                    aria-pressed={mode.active ? true : undefined}
+                    aria-checked={mode.active ? true : false}
                     onClick={() => {
                       mode.onSelect();
                       setMicMenuOpen(false);

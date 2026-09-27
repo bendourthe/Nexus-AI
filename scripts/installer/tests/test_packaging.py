@@ -350,6 +350,12 @@ class TestWorkflows:
         assert '"Nexus AI Studio_${v}_x64-setup.exe"' in content
         assert "Expected exactly one Windows desktop bundle" in content
         assert "name: desktop-bundle-windows" in content
+        assert "Probe the shell that this payload embeds" in content
+        assert "launch-probe.mjs" in content
+        assert content.index("Probe the shell that this payload embeds") < content.index(
+            "Stage current Windows payload"
+        )
+        assert "shell smoke did not pass" in content
         assert "desktop-bundle-${{ matrix.platform }}" not in content
         assert '"Nexus AI Studio_${V}"*.dmg' not in content
         assert '"*${V}*.AppImage"' not in content

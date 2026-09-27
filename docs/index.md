@@ -11,7 +11,7 @@ For the ADR-level architecture see [../ARCHITECTURE.md](../ARCHITECTURE.md) and 
 | `activation` | 5 | 981 | [src/activation/extensionOnly.ts](../src/activation/extensionOnly.ts) | `activateExtensionOnly`, `activateProxy`, `COMPAT_COMMAND_MAP` |
 | `desktop` | 2 | 299 | [src/desktop/ipcClient.ts](../src/desktop/ipcClient.ts) | `createInProcessIpcClient`, `DaemonDiscoveryOptions`, `DaemonDiscoveryResult` |
 | `panels` | 32 | 10335 | [src/panels/webview/index.ts](../src/panels/webview/index.ts) | `ACTION_TAG_FN_SOURCE`, `ActionClassificationMessage`, `actionLabelFor` |
-| `storage` | 37 | 8932 | [src/storage/eviction/index.ts](../src/storage/eviction/index.ts) | `ARCEvictor`, `ArchiveResult`, `BrokenPathIssue` |
+| `storage` | 37 | 8937 | [src/storage/eviction/index.ts](../src/storage/eviction/index.ts) | `ARCEvictor`, `ArchiveResult`, `BrokenPathIssue` |
 | `tools` | 30 | 8413 | [src/tools/AgentLoop.ts](../src/tools/AgentLoop.ts) | `_checkCacheSizeForTests`, `AgentLoop`, `AgentLoopOptions` |
 
 ## Module purposes

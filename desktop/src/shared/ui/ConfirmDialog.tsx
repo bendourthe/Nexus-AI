@@ -6,7 +6,7 @@
  * starting with the chat model switch.
  */
 
-import type { CSSProperties, ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Switch } from "../../components/ui";
 
@@ -36,6 +36,15 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps): JSX.Element | null {
+  const confirmRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    confirmRef.current?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onCancel();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onCancel]);
   if (typeof document === "undefined") return null;
   return createPortal(
     <div
@@ -44,9 +53,6 @@ export function ConfirmDialog({
       aria-modal="true"
       aria-labelledby={`${testId}-title`}
       style={backdropStyle}
-      onKeyDown={(event) => {
-        if (event.key === "Escape") onCancel();
-      }}
     >
       <div style={cardStyle}>
         <h2 id={`${testId}-title`} style={{ margin: 0, fontSize: "var(--text-md)" }}>
@@ -75,8 +81,8 @@ export function ConfirmDialog({
           <button
             type="button"
             data-testid={`${testId}-confirm`}
+            ref={confirmRef}
             onClick={onConfirm}
-            autoFocus
             style={primaryStyle}
           >
             {confirmLabel}

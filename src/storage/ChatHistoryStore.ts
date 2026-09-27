@@ -43,10 +43,15 @@ export class ChatHistoryStore {
 
   constructor(dbPath: string) {
     this._db = new Database(dbPath);
-    secureDbPermissions(dbPath);
-    this._db.pragma("journal_mode = WAL");
-    this._db.pragma("foreign_keys = ON");
-    this._initSchema();
+    try {
+      secureDbPermissions(dbPath);
+      this._db.pragma("journal_mode = WAL");
+      this._db.pragma("foreign_keys = ON");
+      this._initSchema();
+    } catch (err) {
+      this._db.close();
+      throw err;
+    }
   }
 
   private _initSchema(): void {
