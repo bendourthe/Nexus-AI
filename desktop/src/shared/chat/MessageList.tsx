@@ -8,6 +8,7 @@
 
 import type { ReactNode } from "react";
 import { MessageBubble, type MessageBubbleActionApi } from "./MessageBubble";
+import type { BranchControlProps } from "./BranchControl";
 import type { ChatMessage } from "./types";
 import {
   calendarDayKey,
@@ -42,6 +43,11 @@ export interface MessageListProps {
   onOpenSam2Settings?: (message: ChatMessage) => void;
   onRetrySam2?: (message: ChatMessage) => void;
   sam2InstallDisabled?: boolean;
+  /**
+   * Per-message branch control. A null result hides the control, which is
+   * the empty state for a message that cannot branch and has no siblings.
+   */
+  branchForMessage?: (message: ChatMessage) => Omit<BranchControlProps, "messageId"> | null;
 }
 
 /**
@@ -77,6 +83,7 @@ export function MessageList({
   onOpenSam2Settings,
   onRetrySam2,
   sam2InstallDisabled,
+  branchForMessage,
 }: MessageListProps): JSX.Element {
   if (messages.length === 0) {
     return (
@@ -145,6 +152,7 @@ export function MessageList({
           {...(onOpenSam2Settings ? { onOpenSam2Settings } : {})}
           {...(onRetrySam2 ? { onRetrySam2 } : {})}
           {...(sam2InstallDisabled ? { sam2InstallDisabled } : {})}
+          {...(branchForMessage?.(msg) ? { branchControl: branchForMessage(msg)! } : {})}
         />
         {renderAfter?.(msg)}
       </li>,

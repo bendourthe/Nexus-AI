@@ -50,8 +50,13 @@ import {
 import { formatChatTurnError } from "../../lib/inferenceRpcError";
 import { estimateModelLoadSeconds } from "../../shared/chat/generationProgress";
 import type { Chat, ChatMessageRecord } from "./types";
+import { accountContext } from "../../../../core/chat/contextAccounting";
+import { sharedCompactionLease } from "../../../../core/chat/compactionLease";
+import { compactThread } from "../../../../core/chat/compactionSnapshot";
 import {
   ComposerContextRow,
+  CompactControl,
+  ContextUsage,
   MediaComposer,
   MessageList,
   composerSessionUsage,
@@ -560,6 +565,22 @@ export function ChatPage({
     () => composerSessionUsage(messages, pickerModel),
     [messages, pickerModel],
   );
+  const pressureAccount = useMemo(
+    () =>
+      accountContext({
+        categories: [
+          {
+            name: "prompt",
+            tokens: contextUsage.estimated ? null : contextUsage.usedTokens,
+          },
+        ],
+        observedTotal: contextUsage.denominatorKind === "none" ? null : contextUsage.usedTokens,
+        windowTokens: pickerModel?.contextWindow ?? null,
+      }),
+    [contextUsage, pickerModel],
+  );
+  const compactionSnapshotRef = useRef<ChatMessage[] | null>(null);
+  const [canUndoCompaction, setCanUndoCompaction] = useState(false);
 
   const imageGate = imageAttachmentAffordance(selectedListedModel);
   const audioHint = audioAttachmentCopy(selectedListedModel);
@@ -712,6 +733,58 @@ export function ChatPage({
     },
     [client],
   );
+
+  const replaceTranscript = useCallback((chatId: string, nextMessages: ChatMessage[]) => {
+    const next = new Map(messagesByChatRef.current);
+    next.set(chatId, nextMessages);
+    messagesByChatRef.current = next;
+    setMessagesByChat(next);
+  }, []);
+
+  const compactActiveChat = useCallback(() => {
+    if (!activeChat) return;
+    const current = messagesByChatRef.current.get(activeChat.id) ?? [];
+    const mapped = current.map((message) => ({
+      id: message.id,
+      role: message.role,
+      content: message.content,
+    }));
+    const result = compactThread({
+      messages: mapped,
+      baseline: mapped,
+      streaming: current.some((message) => message.pending),
+      lease: sharedCompactionLease,
+      actor: `chat:${activeChat.id}`,
+      summarise: (older) => `Compacted ${older.length} earlier turns.`,
+    });
+    if (!result.ok) {
+      setTranscriptError(result.reason);
+      return;
+    }
+    compactionSnapshotRef.current = current;
+    setCanUndoCompaction(true);
+    const byId = new Map(current.map((message) => [message.id, message]));
+    replaceTranscript(
+      activeChat.id,
+      result.messages.map((message) => {
+        const existing = byId.get(message.id);
+        if (existing) return existing;
+        return {
+          id: message.id,
+          role: "assistant",
+          content: message.content,
+          timestamp: new Date().toISOString(),
+        };
+      }),
+    );
+  }, [activeChat, replaceTranscript]);
+
+  const undoActiveCompaction = useCallback(() => {
+    if (!activeChat || !compactionSnapshotRef.current) return;
+    replaceTranscript(activeChat.id, compactionSnapshotRef.current);
+    compactionSnapshotRef.current = null;
+    setCanUndoCompaction(false);
+  }, [activeChat, replaceTranscript]);
 
   /** Append locally first, then persist non-pending rows without blocking UI. */
   const appendMessage = useCallback(
@@ -1825,6 +1898,19 @@ export function ChatPage({
           <ComposerContextRow
             usage={contextUsage}
             onStartNewSession={() => void handleStartNewSession()}
+            pressure={
+              <>
+                <ContextUsage account={pressureAccount} />
+                <CompactControl
+                  visible={pressureAccount.visible}
+                  streaming={messages.some((message) => message.pending)}
+                  turnsToSummarise={Math.max(0, messages.length - 10)}
+                  onCompact={compactActiveChat}
+                  onUndo={undoActiveCompaction}
+                  canUndo={canUndoCompaction}
+                />
+              </>
+            }
           >
             <QuickModelSwitcher
               testId="chat-model-select"

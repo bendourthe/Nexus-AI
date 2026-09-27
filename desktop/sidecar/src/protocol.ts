@@ -125,6 +125,10 @@ export const IPC_METHODS = [
   "chat.explorer.appendMessage",
   "chat.explorer.listMessages",
   "chat.explorer.search",
+  "chat.explorer.forkChat",
+  "chat.explorer.setActiveLeaf",
+  "chat.compact",
+  "chat.compact.undo",
   "chat.generateTitle",
   // v2.2.6 Phase 1 -- named Image/Video studio sessions.
   "studio.session.tree",
@@ -886,6 +890,10 @@ const ChatChatDto = z.object({
   messageCount: z.number(),
   persona: z.string().nullable().optional(),
   userRenamed: z.boolean().optional(),
+  forkedFromChatId: z.string().nullable().optional(),
+  forkedFromMessageId: z.string().nullable().optional(),
+  activeLeafChatId: z.string().nullable().optional(),
+  parentUnresolved: z.boolean().optional(),
 });
 const ChatMessageDto = z.object({
   id: z.string(),
@@ -926,6 +934,36 @@ export const ChatExplorerCreateChatRequest = z
   })
   .strict();
 export const ChatExplorerChatResponse = ChatChatDto;
+export const ChatExplorerForkRequest = z
+  .object({ chatId: z.string().min(1), messageId: z.string().min(1) })
+  .strict();
+export const ChatExplorerSetActiveLeafRequest = z
+  .object({ chatId: z.string().min(1), leafChatId: z.string().min(1) })
+  .strict();
+const ChatCompactMessage = z.object({
+  id: z.string(),
+  role: z.string(),
+  content: z.string(),
+});
+export const ChatCompactRequest = z
+  .object({
+    actor: z.string().min(1),
+    streaming: z.boolean(),
+    summary: z.string(),
+    messages: z.array(ChatCompactMessage).max(500),
+  })
+  .strict();
+export const ChatCompactResponse = z.object({
+  ok: z.boolean(),
+  reason: z.string().optional(),
+  messages: z.array(ChatCompactMessage),
+});
+export const ChatCompactUndoRequest = z
+  .object({
+    current: z.array(ChatCompactMessage).max(500),
+    snapshot: z.array(ChatCompactMessage).max(500),
+  })
+  .strict();
 export const ChatExplorerRenameChatRequest = z
   .object({
     id: z.string(),
@@ -3305,6 +3343,26 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
   "chat.explorer.search": {
     request: ChatExplorerSearchRequest,
     response: ChatExplorerSearchResponse,
+    implemented: true,
+  },
+  "chat.explorer.forkChat": {
+    request: ChatExplorerForkRequest,
+    response: ChatExplorerChatResponse,
+    implemented: true,
+  },
+  "chat.explorer.setActiveLeaf": {
+    request: ChatExplorerSetActiveLeafRequest,
+    response: ChatExplorerOkResponse,
+    implemented: true,
+  },
+  "chat.compact": {
+    request: ChatCompactRequest,
+    response: ChatCompactResponse,
+    implemented: true,
+  },
+  "chat.compact.undo": {
+    request: ChatCompactUndoRequest,
+    response: ChatCompactResponse,
     implemented: true,
   },
   "chat.generateTitle": {

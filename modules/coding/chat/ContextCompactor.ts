@@ -17,6 +17,7 @@ import { PurgeErrorsStrategy } from "./strategies/purgeErrors.js";
 import { RegenerateFromSource } from "./RegenerateFromSource.js";
 import { calculateBudget } from "../config/PromptBudget.js";
 import { Tracer } from "../observability/Tracer.js";
+import { sharedCompactionLease } from "../../../core/chat/compactionLease.js";
 import type { HookBus } from "../../../core/lifecycle/HookBus.js";
 
 /**
@@ -154,6 +155,17 @@ export class ContextCompactor {
    * @param force - if true, compact regardless of the token count
    */
   async compact(postMessage: PostMessageFn, force = false): Promise<CompactionResult> {
+    const leaseId = `coding:${this._traceId}`;
+    const acquired = sharedCompactionLease.tryAcquire(leaseId);
+    if (!acquired.ok) return { state: "error", error: acquired.reason };
+    try {
+      return await this._compactHeld(postMessage, force);
+    } finally {
+      sharedCompactionLease.release(leaseId);
+    }
+  }
+
+  private async _compactHeld(postMessage: PostMessageFn, force = false): Promise<CompactionResult> {
     if (!force && !this.shouldCompact()) {
       return { state: "ok", summary: "no-op (below threshold)" };
     }
