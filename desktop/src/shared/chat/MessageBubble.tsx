@@ -26,6 +26,7 @@ import {
   parseMessageTime,
 } from "./transcriptChrome";
 import { ReasoningDisclosure } from "./ReasoningDisclosure";
+import { BranchControl, type BranchControlProps } from "./BranchControl";
 import {
   MediaRuntimeRecoveryCard,
   Sam2RecoveryCard,
@@ -78,6 +79,11 @@ export interface MessageBubbleProps {
   onInstallSam2?: (message: ChatMessage) => void;
   onPaintSam2Mask?: (message: ChatMessage) => void;
   onOpenSam2Settings?: (message: ChatMessage) => void;
+  /**
+   * Branch affordance, rendered as a child component. Omit it and the bubble
+   * shows no branch chrome (the empty-thread case).
+   */
+  branchControl?: Omit<BranchControlProps, "messageId">;
   onRetrySam2?: (message: ChatMessage) => void;
   sam2InstallDisabled?: boolean;
 }
@@ -97,6 +103,7 @@ export function MessageBubble({
   onOpenSam2Settings,
   onRetrySam2,
   sam2InstallDisabled = false,
+  branchControl,
 }: MessageBubbleProps): JSX.Element {
   const [mediaFailed, setMediaFailed] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -325,6 +332,7 @@ export function MessageBubble({
           </ul>
         )}
       </article>
+      {branchControl ? <BranchControl messageId={message.id} {...branchControl} /> : null}
     </div>
   );
 }

@@ -20,4 +20,12 @@ export interface ConversationSession {
   readonly messages: readonly Message[];
   readonly createdAt: number;
   readonly updatedAt: number;
+  /** Session this one was branched from. Null on a root thread. */
+  readonly forkedFromSessionId?: string | null;
+  /** Message in the parent session that this branch split from. */
+  readonly forkedFromMessageId?: string | null;
+  /** The continuation currently open for this family. Stored on the root row. */
+  readonly activeLeafSessionId?: string | null;
+  /** True when the parent id is set and that session row is gone. */
+  readonly parentUnresolved?: boolean;
 }

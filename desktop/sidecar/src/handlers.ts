@@ -96,6 +96,8 @@ import {
   ChatExplorerRenameChatRequest,
   ChatExplorerRenameFolderRequest,
   ChatExplorerSearchRequest,
+  ChatExplorerForkRequest,
+  ChatExplorerSetActiveLeafRequest,
   ChatExplorerSetPersonaRequest,
   ChatExplorerAppendMessageRequest,
   ChatGenerateTitleRequest,
@@ -1673,6 +1675,15 @@ export const handlers: Record<Method, HandlerFn> = {
     ),
   "chat.explorer.search": async (params) =>
     (await explorerOps()).search(ChatExplorerSearchRequest.parse(params ?? {})),
+  "chat.explorer.forkChat": async (params) => {
+    const req = ChatExplorerForkRequest.parse(params ?? {});
+    return (await explorerOps()).forkChat(req);
+  },
+  "chat.explorer.setActiveLeaf": async (params) => {
+    const req = ChatExplorerSetActiveLeafRequest.parse(params ?? {});
+    (await explorerOps()).setActiveLeaf(req);
+    return { ok: true as const };
+  },
   // v2.2.0 Phase 5 (5.3): name a chat from its first message.
   // v2.2.9 Phase 1.5 (T005): the generated title now PERSISTS through the
   // explorer rename (machine path, never byUser), so the rail survives a

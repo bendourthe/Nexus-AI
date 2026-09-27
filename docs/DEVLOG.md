@@ -7,6 +7,25 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-26] v2.6.0 Chat surface Phase 2 - Conversation forking
+
+Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase2-evidence.md), history [P2](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-2.md).
+
+### What Changed
+
+- **A branch is a new session row.** The active leaf is stored on the root. Depth stops at 8. A cycle is rejected. Delete does not cascade into other branches.
+- **A newer database is refused.** Both chat stores throw instead of stamping `user_version` down. The Chat pillar store is `ChatExplorerStore`; it had the stamp-down the plan described on the coding history store.
+
+### Verification
+
+Root Vitest: 8 new history-branch tests, 24 existing history tests, 2 explorer-branch tests, 38 existing explorer tests. Desktop branch control: 2 tests. Command parity: pass, 143 commands.
+
+### Known gaps
+
+Search hits are still title-only (`DF-v260-1` in [docs/v2/v2.6/known-gaps.md](v2/v2.6/known-gaps.md)).
+
+---
+
 ## [2026-09-26] v2.6.0 Chat surface Phase 1 - Rank and capability bar
 
 Index: [plan](v2/v2.6/plans/v2.6.0-adoption-chat-surface.md), [evidence](v2/v2.6/development/v2.6.0-phase1-evidence.md), history [P1](v2/v2.6/development/history/2026-09-26_v2.6.0-chat-phase-1.md).
