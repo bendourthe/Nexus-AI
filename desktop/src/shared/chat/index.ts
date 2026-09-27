@@ -14,6 +14,8 @@ export { classifyDataUrl, partitionAttachments, isAudioDataUrl } from "./classif
 export { stripDataUrlPrefix } from "./dataUrl";
 export { ModelSelector, type ModelSelectorProps } from "./ModelSelector";
 export { ContextUsageBar, type ContextUsageBarProps } from "./ContextUsageBar";
+export { ContextUsage } from "./ContextUsage";
+export { CompactControl, type CompactControlProps } from "./CompactControl";
 export { ComposerContextRow, type ComposerContextRowProps } from "./ComposerContextRow";
 export { composerSessionUsage, usageTurnsFromMessages } from "./usageTurnsFromMessages";
 export { useStickToBottom } from "./useStickToBottom";

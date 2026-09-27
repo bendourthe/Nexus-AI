@@ -23,6 +23,8 @@ export interface ComposerContextRowProps {
    */
   readonly quickControls?: ReactNode;
   readonly children: ReactNode;
+  /** Context breakdown and compact control. Hidden by the child when there is no pressure. */
+  readonly pressure?: ReactNode;
 }
 
 export function ComposerContextRow({
@@ -31,6 +33,7 @@ export function ComposerContextRow({
   trailing,
   quickControls,
   children,
+  pressure,
 }: ComposerContextRowProps): JSX.Element {
   const showBar = usage.percent !== null && usage.denominatorKind !== "none";
   return (
@@ -52,6 +55,7 @@ export function ComposerContextRow({
           flexWrap: "nowrap",
         }}
       >
+        {pressure}
         {showBar ? <ContextUsageBar usage={usage} /> : null}
         {/*
           Bounded picker: ~25-30% of the row when the Context bar is present,
