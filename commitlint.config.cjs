@@ -5,6 +5,13 @@
 // `perf`, `revert`, `style`).
 module.exports = {
   extends: ["@commitlint/config-conventional"],
+  // 68341997 is already on develop. Its subject is lowercase, so the
+  // default "Merge branch" / "Merge pull request" ignores do not match,
+  // and a develop-to-main pull request lints it. The message is pinned
+  // so a future non-conventional commit still fails.
+  ignores: [
+    (message) => message.startsWith("merge main back into develop after v2.5.1"),
+  ],
   rules: {
     "type-enum": [
       2,
