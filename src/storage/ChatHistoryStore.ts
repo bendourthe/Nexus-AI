@@ -6,19 +6,37 @@ import { secureDbPermissions } from "./dbPermissions.js";
 import { sanitizeFtsQuery } from "./embeddingUtils.js";
 import { createFtsTableAndTriggers } from "./sqliteFts.js";
 import {
+  assertCanBranch,
+  describeChain,
+  installBranchDeleteGuards,
+  NewerSchemaError,
+} from "../../core/chat/branchPolicy.js";
+import {
   assertNotHalfMigrated,
   clearMigrationPending,
   databaseFilePath,
   markMigrationPending,
   needsMigration,
   snapshotBeforeMigration,
+  userVersion,
 } from "../../core/storage/preMigrationSnapshot.js";
+
+export { NewerSchemaError };
+
+/**
+ * Test-only. Set `fault` to throw inside the next schema migration so a
+ * caller can prove the original rows survive a rollback.
+ */
+export const chatHistoryMigrationTest: { fault: (() => void) | null } = { fault: null };
 
 interface SessionRow {
   id: string;
   title: string;
   created_at: number;
   updated_at: number;
+  forked_from_session_id?: string | null;
+  forked_from_message_id?: string | null;
+  active_leaf_session_id?: string | null;
 }
 
 // Schema version persisted via PRAGMA user_version. Bump when the schema or
@@ -26,7 +44,7 @@ interface SessionRow {
 // exactly once. Rebuilds on an unchanged DB are now a no-op.
 // v0.9.0 Phase 2.8 (from v0.8.0 known-gaps 10.O.Y): bumped to 2 to add the
 // `tool_call_bytes` table.
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 
 /** Default cap on rows returned by searchSessions -- see 4.6. */
 const DEFAULT_SEARCH_LIMIT = 100;
@@ -47,6 +65,7 @@ export class ChatHistoryStore {
       secureDbPermissions(dbPath);
       this._db.pragma("journal_mode = WAL");
       this._db.pragma("foreign_keys = ON");
+      this._db.pragma("busy_timeout = 1000");
       this._initSchema();
     } catch (err) {
       this._db.close();
@@ -57,6 +76,12 @@ export class ChatHistoryStore {
   private _initSchema(): void {
     const filePath = databaseFilePath(this._db);
     assertNotHalfMigrated(filePath);
+    const version = userVersion(this._db);
+    if (version > SCHEMA_VERSION) {
+      throw new NewerSchemaError(
+        `Database ${filePath ?? "(memory)"} was written by a newer version (user_version ${version}, this build expects ${SCHEMA_VERSION}). Refusing to open rather than downgrading.`,
+      );
+    }
     const pending = needsMigration(this._db, SCHEMA_VERSION);
     if (pending) {
       snapshotBeforeMigration(this._db, SCHEMA_VERSION);
@@ -64,14 +89,30 @@ export class ChatHistoryStore {
     }
     const apply = (): void => {
       this._applySchema();
+      if (chatHistoryMigrationTest.fault) {
+        const fault = chatHistoryMigrationTest.fault;
+        chatHistoryMigrationTest.fault = null;
+        fault();
+      }
       if (pending) this._db.pragma(`user_version = ${SCHEMA_VERSION}`);
     };
     if (pending) {
+      const previousTimeout = Number(this._db.pragma("busy_timeout", { simple: true }) ?? 0);
+      this._db.pragma("busy_timeout = 200");
       try {
-        this._db.transaction(apply)();
+        this._db.exec("BEGIN IMMEDIATE");
+        apply();
+        this._db.exec("COMMIT");
         clearMigrationPending(filePath);
       } catch (err) {
+        try {
+          this._db.exec("ROLLBACK");
+        } catch {
+          // A failed BEGIN has nothing to roll back.
+        }
         throw err;
+      } finally {
+        this._db.pragma(`busy_timeout = ${previousTimeout}`);
       }
       return;
     }
@@ -107,6 +148,15 @@ export class ChatHistoryStore {
       );
       CREATE INDEX IF NOT EXISTS idx_tool_call_bytes_session ON tool_call_bytes(session_id, ts);
     `);
+    this._addColumnIfMissing("sessions", "forked_from_session_id", "TEXT");
+    this._addColumnIfMissing("sessions", "forked_from_message_id", "TEXT");
+    this._addColumnIfMissing("sessions", "active_leaf_session_id", "TEXT");
+    installBranchDeleteGuards(this._db, {
+      sessionTable: "sessions",
+      messageTable: "messages",
+      parentSessionColumn: "forked_from_session_id",
+      parentMessageColumn: "forked_from_message_id",
+    });
 
     createFtsTableAndTriggers(this._db, {
       ftsTable: "messages_fts",
@@ -135,7 +185,17 @@ export class ChatHistoryStore {
         "INSERT INTO sessions (id, title, created_at, updated_at) VALUES (?, ?, ?, ?)"
       )
       .run(id, title, now, now);
-    return { id, title, messages: [], createdAt: now, updatedAt: now };
+    return {
+      id,
+      title,
+      messages: [],
+      createdAt: now,
+      updatedAt: now,
+      forkedFromSessionId: null,
+      forkedFromMessageId: null,
+      activeLeafSessionId: id,
+      parentUnresolved: false,
+    };
   }
 
   saveMessage(sessionId: string, message: Message): void {
@@ -172,7 +232,9 @@ export class ChatHistoryStore {
   getSession(sessionId: string): ConversationSession | null {
     const row = this._db
       .prepare(
-        "SELECT id, title, created_at, updated_at FROM sessions WHERE id = ?"
+        `SELECT id, title, created_at, updated_at,
+                forked_from_session_id, forked_from_message_id, active_leaf_session_id
+         FROM sessions WHERE id = ?`
       )
       .get(sessionId) as SessionRow | undefined;
 
@@ -184,11 +246,20 @@ export class ChatHistoryStore {
       )
       .all(sessionId) as MessageRow[];
 
+    const chain = this._chain(row.id);
+    const root = this._sessionPointer(chain.rootId);
+    const parentMissing = Boolean(
+      row.forked_from_session_id && !this._sessionPointer(row.forked_from_session_id),
+    );
     return {
       id: row.id,
       title: row.title,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
+      forkedFromSessionId: row.forked_from_session_id ?? null,
+      forkedFromMessageId: row.forked_from_message_id ?? null,
+      activeLeafSessionId: root?.active_leaf_session_id ?? chain.rootId,
+      parentUnresolved: parentMissing,
       messages: msgRows.map((m) => ({
         id: m.id,
         role: m.role as Role,
@@ -196,6 +267,81 @@ export class ChatHistoryStore {
         timestamp: m.timestamp,
       })),
     };
+  }
+
+  /**
+   * Branch `sessionId` at `messageId`. The new session keeps the prefix
+   * through that message and becomes the family's active leaf.
+   */
+  forkFromMessage(sessionId: string, messageId: string): ConversationSession {
+    const source = this.getSession(sessionId);
+    if (!source) throw new Error(`session not found: ${sessionId}`);
+    const splitAt = source.messages.findIndex((message) => message.id === messageId);
+    if (splitAt < 0) throw new Error(`message not found: ${messageId}`);
+    assertCanBranch(sessionId, (id) => this._parentSessionId(id));
+    const rootId = describeChain(sessionId, (id) => this._parentSessionId(id)).rootId;
+    const id = randomUUID();
+    const now = Date.now();
+    const title = `${source.title} (branch)`;
+    const prefix = source.messages.slice(0, splitAt + 1);
+    this._immediate(() => {
+      this._db
+        .prepare(
+          `INSERT INTO sessions (
+             id, title, created_at, updated_at,
+             forked_from_session_id, forked_from_message_id, active_leaf_session_id
+           ) VALUES (?, ?, ?, ?, ?, ?, NULL)`,
+        )
+        .run(id, title, now, now, sessionId, messageId);
+      const insert = this._db.prepare(
+        "INSERT INTO messages (id, session_id, role, content, timestamp) VALUES (?, ?, ?, ?, ?)",
+      );
+      for (const message of prefix) {
+        insert.run(randomUUID(), id, message.role, message.content, message.timestamp);
+      }
+      this._db
+        .prepare("UPDATE sessions SET active_leaf_session_id = ?, updated_at = ? WHERE id = ?")
+        .run(id, now, rootId);
+    });
+    const created = this.getSession(id);
+    if (!created) throw new Error("branch was not persisted");
+    return created;
+  }
+
+  setActiveLeaf(sessionId: string, leafSessionId: string): void {
+    const rootId = describeChain(sessionId, (id) => this._parentSessionId(id)).rootId;
+    const leafRoot = describeChain(leafSessionId, (id) => this._parentSessionId(id)).rootId;
+    if (leafRoot !== rootId) throw new Error("active leaf is not in this thread family");
+    this._db
+      .prepare("UPDATE sessions SET active_leaf_session_id = ? WHERE id = ?")
+      .run(leafSessionId, rootId);
+  }
+
+  listBranchFamily(sessionId: string): ConversationSession[] {
+    const rootId = describeChain(sessionId, (id) => this._parentSessionId(id)).rootId;
+    const rows = this._db
+      .prepare("SELECT id, forked_from_session_id FROM sessions")
+      .all() as Array<{ id: string; forked_from_session_id: string | null }>;
+    const members: string[] = [];
+    for (const row of rows) {
+      try {
+        const chain = describeChain(row.id, (id) => {
+          const found = rows.find((candidate) => candidate.id === id);
+          return found?.forked_from_session_id ?? null;
+        });
+        if (chain.rootId === rootId) members.push(row.id);
+      } catch (err) {
+        if (err instanceof Error && err.name === "BranchCycleError") throw err;
+        throw err;
+      }
+    }
+    return members
+      .map((id) => this.getSession(id))
+      .filter((session): session is ConversationSession => session !== null);
+  }
+
+  deleteMessage(messageId: string): void {
+    this._db.prepare("DELETE FROM messages WHERE id = ?").run(messageId);
   }
 
   listSessions(limit = 50): ConversationSession[] {
@@ -368,5 +514,53 @@ export class ChatHistoryStore {
 
   close(): void {
     this._db.close();
+  }
+
+  private _addColumnIfMissing(table: string, column: string, definition: string): void {
+    const columns = this._db.prepare(`PRAGMA table_info(${table})`).all() as Array<{ name: string }>;
+    if (columns.some((entry) => entry.name === column)) return;
+    this._db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+  }
+
+  private _parentSessionId(sessionId: string): string | null {
+    const row = this._sessionPointer(sessionId);
+    return row?.forked_from_session_id ?? null;
+  }
+
+  private _sessionPointer(sessionId: string): SessionRow | undefined {
+    return this._db
+      .prepare(
+        `SELECT id, title, created_at, updated_at,
+                forked_from_session_id, forked_from_message_id, active_leaf_session_id
+         FROM sessions WHERE id = ?`,
+      )
+      .get(sessionId) as SessionRow | undefined;
+  }
+
+  private _chain(sessionId: string): { rootId: string; depth: number } {
+    return describeChain(sessionId, (id) => this._parentSessionId(id));
+  }
+
+  private _immediate(work: () => void): void {
+    const previousTimeout = Number(this._db.pragma("busy_timeout", { simple: true }) ?? 0);
+    this._db.pragma("busy_timeout = 200");
+    try {
+      this._db.exec("BEGIN IMMEDIATE");
+      work();
+      this._db.exec("COMMIT");
+    } catch (err) {
+      try {
+        this._db.exec("ROLLBACK");
+      } catch {
+        // A failed BEGIN has nothing to roll back.
+      }
+      const message = err instanceof Error ? err.message : String(err);
+      if (/SQLITE_BUSY|database is locked/i.test(message)) {
+        throw new Error("another branch operation is in progress");
+      }
+      throw err;
+    } finally {
+      this._db.pragma(`busy_timeout = ${previousTimeout}`);
+    }
   }
 }
