@@ -76,7 +76,13 @@ async function waitForPage() {
     if (spawnError) break;
     try {
       const list = await (await fetch(`http://127.0.0.1:${port}/json/list`, { signal: AbortSignal.timeout(2000) })).json();
-      const page = list.find((item) => item.type === "page" && item.webSocketDebuggerUrl);
+      const page = list.find(
+        (item) =>
+          item.type === "page" &&
+          item.webSocketDebuggerUrl &&
+          typeof item.url === "string" &&
+          item.url !== "about:blank",
+      );
       if (page) return page;
     } catch {
       // The debug port opens after the webview does.
