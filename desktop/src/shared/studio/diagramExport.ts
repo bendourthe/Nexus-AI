@@ -30,9 +30,6 @@ export function sanitizeExportFilename(raw: string, extension: "svg" | "png"): s
 
 export function sanitizeExportSvg(svg: string): string {
   let out = sanitizeSvg(svg);
-  out = out.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
-  out = out.replace(/<foreignObject\b[^>]*>[\s\S]*?<\/foreignObject>/gi, "");
-  out = out.replace(/\son[a-z]+\s*=\s*(?:"[^"]*"|'[^']*')/gi, "");
   out = out.replace(/url\(\s*['"]?https?:[^)]*\)/gi, "none");
   out = out.replace(/https?:\/\/[^\s"'<>)]+/gi, "");
   out = out.replace(/<!DOCTYPE[\s\S]*?>/gi, "");
