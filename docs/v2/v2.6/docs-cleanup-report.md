@@ -11,3 +11,7 @@
 ## Phase 2
 
 Audit only. Added `development/v2.6.0-phase2-evidence.md` and `development/history/2026-09-26_v2.6.0-chat-phase-2.md`. No files moved.
+
+## Phase 3
+
+Audit only. Added `development/v2.6.0-phase3-evidence.md` and `development/history/2026-09-26_v2.6.0-chat-phase-3.md`. No files moved.
