@@ -9,6 +9,7 @@
 
 import { useEffect, useState } from "react";
 import { sanitizeSvg } from "../security/sanitizeSvg";
+import { saveDiagram, type DiagramSaver } from "../studio/diagramExport";
 import {
   assessMermaidSource,
   neutralizeMermaidClicks,
@@ -36,17 +37,20 @@ export interface MermaidDiagramProps {
   readonly source: string;
   readonly messageId: string;
   readonly renderDiagram?: DiagramRenderer;
+  readonly saveExport?: DiagramSaver;
 }
 
 export function MermaidDiagram({
   source,
   messageId,
   renderDiagram = renderWithMermaid,
+  saveExport,
 }: MermaidDiagramProps): JSX.Element {
   const assessment = assessMermaidSource(source);
   const [forced, setForced] = useState(false);
   const [svg, setSvg] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [exportError, setExportError] = useState<string | null>(null);
   const overCap = !assessment.ok && !forced;
 
   useEffect(() => {
@@ -95,10 +99,45 @@ export function MermaidDiagram({
   }
 
   return (
-    <div
-      className="nexus-mermaid"
-      data-testid={`mermaid-diagram-${messageId}`}
-      dangerouslySetInnerHTML={{ __html: svg }}
-    />
+    <div>
+      <div
+        className="nexus-mermaid"
+        data-testid={`mermaid-diagram-${messageId}`}
+        dangerouslySetInnerHTML={{ __html: svg }}
+      />
+      {saveExport ? (
+        <div>
+          <button
+            type="button"
+            onClick={() => {
+              void saveDiagram(saveExport, {
+                suggestedName: `diagram-${messageId}`,
+                svg,
+                extension: "png",
+              }).catch((err: unknown) => {
+                setExportError(err instanceof Error ? err.message : "Export failed");
+              });
+            }}
+          >
+            Export PNG
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              void saveDiagram(saveExport, {
+                suggestedName: `diagram-${messageId}`,
+                svg,
+                extension: "svg",
+              }).catch((err: unknown) => {
+                setExportError(err instanceof Error ? err.message : "Export failed");
+              });
+            }}
+          >
+            Export SVG
+          </button>
+          {exportError ? <p role="alert">{exportError}</p> : null}
+        </div>
+      ) : null}
+    </div>
   );
 }
