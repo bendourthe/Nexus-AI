@@ -390,6 +390,11 @@ jobs:
         with:
           node-version: "22"
       - run: node scripts/check-command-parity.mjs
+      - run: node scripts/ci-profile.mjs --profile fast --list --json
+      - run: node scripts/ci-profile.mjs --profile full --list --json
+      - run: node scripts/ci-profile.mjs --profile platform --list --json
+      - run: node scripts/ci-profile.mjs --profile report --list --json
+      - run: node scripts/ci-profile.mjs --profile release --list --json
 
   check-release-assets:
     name: check-release-assets
@@ -676,3 +681,69 @@ jobs:
           name: audit-runtimes
           path: audit-*.json
           retention-days: 30
+
+  # One always-resolving aggregate. Branch protection should require this
+  # context rather than a per-job or per-matrix-leg name. Skipped is allowed
+  # because a job-level condition reports success-by-skip; every other result
+  # fails closed.
+  ci-required:
+    name: ci-required
+    needs:
+      - lint-ts
+      - test-ts
+      - build-ts
+      - catalog-sync
+      - coverage-gate
+      - nexus-check
+      - fast-bench
+      - check-prompts
+      - package-vsix
+      - check-feature-drift
+      - check-command-parity
+      - check-release-assets
+      - check-architecture
+      - init-check-posix
+      - init-check-windows
+      - test-python-runtimes
+      - audit-ts
+      - audit-ts-dev
+      - audit-py
+      - audit-runtimes
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Allowlist job results
+        env:
+          R_lint_ts: ${{ needs.lint-ts.result }}
+          R_test_ts: ${{ needs.test-ts.result }}
+          R_build_ts: ${{ needs.build-ts.result }}
+          R_catalog_sync: ${{ needs.catalog-sync.result }}
+          R_coverage_gate: ${{ needs.coverage-gate.result }}
+          R_nexus_check: ${{ needs.nexus-check.result }}
+          R_fast_bench: ${{ needs.fast-bench.result }}
+          R_check_prompts: ${{ needs.check-prompts.result }}
+          R_package_vsix: ${{ needs.package-vsix.result }}
+          R_check_feature_drift: ${{ needs.check-feature-drift.result }}
+          R_check_command_parity: ${{ needs.check-command-parity.result }}
+          R_check_release_assets: ${{ needs.check-release-assets.result }}
+          R_check_architecture: ${{ needs.check-architecture.result }}
+          R_init_check_posix: ${{ needs.init-check-posix.result }}
+          R_init_check_windows: ${{ needs.init-check-windows.result }}
+          R_test_python_runtimes: ${{ needs.test-python-runtimes.result }}
+          R_audit_ts: ${{ needs.audit-ts.result }}
+          R_audit_ts_dev: ${{ needs.audit-ts-dev.result }}
+          R_audit_py: ${{ needs.audit-py.result }}
+          R_audit_runtimes: ${{ needs.audit-runtimes.result }}
+        run: |
+          set -uo pipefail
+          fail=0
+          for var in $(env | sed -n 's/^\(R_[A-Za-z0-9_]*\)=.*/\1/p' | sort); do
+            eval "result=\${${var}-}"
+            case "${result}" in
+              success|skipped) ;;
+              *) echo "FAIL: ${var#R_}=${result:-<empty>}"; fail=1 ;;
+            esac
+          done
+          exit "$fail"
