@@ -61,6 +61,7 @@ import {
   MessageList,
   chatComposerAccept,
   composerSessionUsage,
+  partitionAttachments,
   useStickToBottom,
   withLiveTimestamp,
   type ChatMessage,
@@ -103,8 +104,12 @@ import {
 } from "../../../../core/video/continuation";
 import {
   OFFICIAL_AVATAR_MODEL_ID,
+  OFFICIAL_AVATAR_REPO,
   avatarAvailable,
+  avatarInstallRefusal,
+  avatarOffered,
   assertAvatarAllowed,
+  officialAvatarInstalled,
 } from "../../../../core/video/avatarGate";
 import type { RationalFrameRate } from "../../../../core/video/VideoEnhancement";
 import {
@@ -286,7 +291,7 @@ export function VideoLabPage({
   mediaRuntimeClient: mediaRuntimeOverride,
 }: VideoLabPageProps = {}): JSX.Element {
   const tierClip = getDiffusionTierConfig(diffusionTier).video.clipSeconds || 4;
-  const canAvatar = avatarAvailable(diffusionTier, vramGB);
+  const hardwareAllowsAvatar = avatarAvailable(diffusionTier, vramGB);
   const [client] = useState<VideoClient>(
     () => clientOverride ?? createIpcVideoClient(),
   );
@@ -302,6 +307,12 @@ export function VideoLabPage({
   const [models, setModels] = useState<readonly ListedModelDto[]>([
     FALLBACK_MODEL,
   ]);
+  // Raw modelsClient.list() result. Null until the list resolves. The studio
+  // feed below drops rows the user does not own, so the avatar install check
+  // reads this list instead.
+  const [rawModels, setRawModels] = useState<readonly ListedModelDto[] | null>(
+    null,
+  );
   const [selection, setSelection] = useState<SelectionSnapshot | null>(null);
   const userChangedModelRef = useRef(false);
   const [noneInstalled, setNoneInstalled] = useState(false);
@@ -390,6 +401,23 @@ export function VideoLabPage({
     setValues((prev) => ({ ...prev, ...patch }));
     setFormEpoch((n) => n + 1);
   }, []);
+  const offered = avatarOffered(
+    diffusionTier,
+    vramGB,
+    officialAvatarInstalled(rawModels),
+  );
+  const offeredWas = useRef<boolean | null>(null);
+  useEffect(() => {
+    if (offeredWas.current === true && !offered) {
+      setValues((prev) => ({
+        ...prev,
+        confirmLocalAvatar: false,
+        mode: prev.mode === "audio2video" ? "text2video" : prev.mode,
+      }));
+      setFormEpoch((n) => n + 1);
+    }
+    offeredWas.current = offered;
+  }, [offered]);
 
   /**
    * v2.4.9 -- what THIS video model can render.
@@ -509,6 +537,7 @@ export function VideoLabPage({
         const snap = source.lastSelection ?? null;
         const video = installedModelsForType(all, "video", ownedIdSet(snap));
         if (cancelled) return;
+        setRawModels(all);
         setSelection(snap);
         const first = video[0];
         if (first) {
@@ -529,6 +558,7 @@ export function VideoLabPage({
         if (!cancelled) {
           const message = err instanceof Error ? err.message : String(err);
           const backendFailed = isSidecarFailureMessage(message);
+          setRawModels([]);
           if (backendFailed) {
             setModels([]);
             setNoneInstalled(false);
@@ -1165,6 +1195,45 @@ export function VideoLabPage({
     ): Promise<void> => {
       stickNow();
       if (isGenerating) return;
+      const { images, audio } = partitionAttachments(attachments);
+      const photo =
+        images[0] ?? (audio.length === 0 ? attachments[0] : undefined);
+      const photoPlusAudio = Boolean(photo && audio[0]);
+      const installRefusal = avatarInstallRefusal({
+        tierId: diffusionTier,
+        vramGB,
+        installed: officialAvatarInstalled(rawModels),
+        hasAudio: audio.length > 0,
+      });
+      if (installRefusal) {
+        const userMsg: ChatMessage = {
+          id: nextId("vuser"),
+          role: "user",
+          content: text,
+          ...(attachments.length > 0 ? { attachments: [...attachments] } : {}),
+        };
+        const assistantMsg: ChatMessage = {
+          id: nextId("vassistant"),
+          role: "assistant",
+          content: installRefusal,
+        };
+        setMessages((prev) => [
+          ...prev,
+          withLiveTimestamp(userMsg),
+          withLiveTimestamp(assistantMsg),
+        ]);
+        await ensureSession(text);
+        persistTurn({ role: "user", content: text });
+        persistTurn({ role: "assistant", content: installRefusal });
+        return;
+      }
+      const avatarTurn = photoPlusAudio && offered;
+      const targetModelId = avatarTurn
+        ? OFFICIAL_AVATAR_MODEL_ID
+        : selectedModelId;
+      const targetRow = avatarTurn
+        ? rawModels?.find((m) => m.id === OFFICIAL_AVATAR_MODEL_ID)
+        : models.find((m) => m.id === selectedModelId);
       // v2.4.8 follow-up: another task holds the GPU (often a job from a
       // session no longer on screen) or simply still loaded on it (Ollama
       // keeps a chat model resident for minutes after its last reply). Ask
@@ -1173,8 +1242,11 @@ export function VideoLabPage({
       if (!busyApproved && !residencyApproved && askBeforeModelSwitch()) {
         const holder = await resolveGpuHolder({
           active: activeSchedulerJob,
-          targetModelId: selectedModelId,
-          nameFor: (id) => models.find((m) => m.id === id)?.displayName ?? id,
+          targetModelId,
+          nameFor: (id) =>
+            rawModels?.find((m) => m.id === id)?.displayName ??
+            models.find((m) => m.id === id)?.displayName ??
+            id,
         });
         if (holder) {
           setBusyConfirm({
@@ -1188,15 +1260,14 @@ export function VideoLabPage({
         }
       }
       if (!residencyApproved) {
-        const selected = models.find((m) => m.id === selectedModelId);
         const verdict = residency.request({
-          targetModelId: selectedModelId,
-          targetVramGB: modelVramEstimate(selected?.vramGB),
+          targetModelId,
+          targetVramGB: modelVramEstimate(targetRow?.vramGB),
           requestingModule: "video",
           resident: residentModelsFromScheduler(activeSchedulerJob),
           freeVramGB: hostVramFreeGB,
           activeJob: busyContextFromScheduler(activeSchedulerJob),
-          installed: Boolean(selected?.installed),
+          installed: Boolean(targetRow?.installed),
         });
         if (verdict.kind === "confirm" && !busyApproved) {
           pendingPromptRef.current = { text, attachments };
@@ -1213,8 +1284,8 @@ export function VideoLabPage({
               role: "assistant",
               content:
                 verdict.kind === "not-installed"
-                  ? `${selectedModelId} is not installed. Install it in Settings > Models.`
-                  : `Cannot load ${selectedModelId} right now: ${verdict.reason}`,
+                  ? `${targetModelId} is not installed. Install it in Settings > Models.`
+                  : `Cannot load ${targetModelId} right now: ${verdict.reason}`,
             }),
           ]);
           return;
@@ -1248,7 +1319,7 @@ export function VideoLabPage({
       const intent = inferVideoIntent({
         text,
         attachments,
-        avatarEnabled: canAvatar,
+        avatarEnabled: offered,
       });
       const userMsg: ChatMessage = {
         id: nextId("vuser"),
@@ -1323,6 +1394,7 @@ export function VideoLabPage({
           vramGB,
           confirmed: values.confirmLocalAvatar,
           modelId: OFFICIAL_AVATAR_MODEL_ID,
+          weightRepo: OFFICIAL_AVATAR_REPO,
         });
         if (!gate.ok) {
           patchMessage(assistantId, { pending: false, content: gate.message });
@@ -1438,7 +1510,8 @@ export function VideoLabPage({
       selectedModelId,
       client,
       patchMessage,
-      canAvatar,
+      offered,
+      rawModels,
       diffusionTier,
       vramGB,
       tierClip,
@@ -1825,7 +1898,7 @@ export function VideoLabPage({
             <p data-testid="video-empty" style={{ color: "var(--fg-muted)" }}>
               Describe a video to generate it, or drop an image and ask to
               animate it.
-              {canAvatar
+              {hardwareAllowsAvatar
                 ? " On this diffusion-pro host, attach a photo and an audio track for a local talking-head."
                 : ""}
             </p>
@@ -1980,7 +2053,7 @@ export function VideoLabPage({
           <MediaComposer
             disabled={isGenerating}
             placeholder={
-              canAvatar
+              hardwareAllowsAvatar
                 ? "Describe the video, drop an image to animate, or add a photo plus audio for a talking-head..."
                 : "Describe the video you want, or drop an image to animate..."
             }
@@ -1993,11 +2066,11 @@ export function VideoLabPage({
             seededAttachment={seededAttachment}
             streaming={isGenerating}
             accept={
-              canAvatar
+              hardwareAllowsAvatar
                 ? chatComposerAccept({ allowImages: true, allowAudio: true })
                 : "image/*"
             }
-            audioEnabled={canAvatar}
+            audioEnabled={hardwareAllowsAvatar}
             audioHint="Photo plus audio stay on this device."
           />
           <ComposerContextRow
@@ -2107,7 +2180,7 @@ export function VideoLabPage({
                 onChange={setValues}
                 disabled={isGenerating}
                 hideMode
-                avatarAvailable={canAvatar}
+                avatarAvailable={offered}
                 diffusionTier={diffusionTier}
               />
               <GenerationQueueBar

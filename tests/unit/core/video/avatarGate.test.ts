@@ -1,9 +1,15 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  AVATAR_INSTALL_SENTENCE,
   AVATAR_MIN_VRAM_GB,
+  OFFICIAL_AVATAR_MODEL_ID,
+  OFFICIAL_AVATAR_REPO,
   assertAvatarAllowed,
   avatarAvailable,
+  avatarInstallRefusal,
+  avatarOffered,
+  officialAvatarInstalled,
 } from "../../../../core/video/avatarGate.js";
 import { buildAvatarProvenance, shortPayloadHash } from "../../../../core/video/avatarProvenance.js";
 
@@ -57,6 +63,77 @@ describe("avatarAvailable", () => {
     expect(avatarAvailable("diffusion-pro", 20)).toBe(true);
     expect(avatarAvailable("diffusion-pro", 19.9)).toBe(false);
     expect(avatarAvailable("diffusion-high", 24)).toBe(false);
+  });
+});
+
+describe("avatarOffered", () => {
+  it("requires hardware and a strict installed flag", () => {
+    expect(avatarOffered("diffusion-pro", 24, true)).toBe(true);
+    expect(avatarOffered("diffusion-pro", 24, false)).toBe(false);
+    expect(avatarOffered("diffusion-mid", 24, true)).toBe(false);
+    expect(avatarOffered("diffusion-pro", 16, true)).toBe(false);
+    expect(avatarOffered("diffusion-pro", 24, undefined as unknown as boolean)).toBe(false);
+  });
+});
+
+describe("officialAvatarInstalled", () => {
+  const registryRow = {
+    id: OFFICIAL_AVATAR_MODEL_ID,
+    installed: true,
+    source: "registry",
+  };
+
+  it("accepts the official registry row with or without a meituan-longcat repo", () => {
+    expect(officialAvatarInstalled([registryRow])).toBe(true);
+    expect(
+      officialAvatarInstalled([{ ...registryRow, repo: OFFICIAL_AVATAR_REPO }]),
+    ).toBe(true);
+  });
+
+  it("rejects an unloaded list, a non-registry source, and any other id", () => {
+    expect(officialAvatarInstalled(null)).toBe(false);
+    expect(officialAvatarInstalled(undefined)).toBe(false);
+    expect(officialAvatarInstalled([])).toBe(false);
+    expect(officialAvatarInstalled([{ ...registryRow, installed: false }])).toBe(false);
+    expect(officialAvatarInstalled([{ ...registryRow, installed: "true" }])).toBe(false);
+    expect(officialAvatarInstalled([{ id: OFFICIAL_AVATAR_MODEL_ID, installed: true }])).toBe(
+      false,
+    );
+    expect(officialAvatarInstalled([{ ...registryRow, source: "" }])).toBe(false);
+    expect(officialAvatarInstalled([{ ...registryRow, source: "catalog-only" }])).toBe(false);
+    expect(officialAvatarInstalled([{ ...registryRow, source: "external" }])).toBe(false);
+    expect(
+      officialAvatarInstalled([{ ...registryRow, repo: "someone/LongCat-Video-FP8" }]),
+    ).toBe(false);
+    expect(officialAvatarInstalled([{ ...registryRow, repo: "" }])).toBe(false);
+    expect(
+      officialAvatarInstalled([
+        { id: "wan2.1-t2v-1.3b", installed: true, source: "registry" },
+      ]),
+    ).toBe(false);
+  });
+});
+
+describe("avatarInstallRefusal", () => {
+  const capable = {
+    tierId: "diffusion-pro" as const,
+    vramGB: 24,
+    installed: false,
+    hasAudio: true,
+  };
+
+  it("names the weights and Settings when a capable host lacks them and has audio", () => {
+    const sentence = avatarInstallRefusal(capable);
+    expect(sentence).toBe(AVATAR_INSTALL_SENTENCE);
+    expect(sentence).toContain("longcat-video-avatar-1.5");
+    expect(sentence).toContain("Settings > Models");
+    expect(avatarInstallRefusal({ ...capable, hasAudio: false })).toBeNull();
+  });
+
+  it("returns null below the hardware gate and when the offer is already true", () => {
+    expect(avatarInstallRefusal({ ...capable, tierId: "diffusion-mid" })).toBeNull();
+    expect(avatarInstallRefusal({ ...capable, vramGB: 12 })).toBeNull();
+    expect(avatarInstallRefusal({ ...capable, installed: true })).toBeNull();
   });
 });
 

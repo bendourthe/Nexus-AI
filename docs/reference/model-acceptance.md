@@ -168,6 +168,12 @@ The same test applies in the other direction. An entry that no longer holds its 
 | `Qwen/Qwen3.8-27B` | 27B dense | hybrid groups of three Gated DeltaNet blocks plus one gated-attention block | `qwen35` | about 17 GB at Q4-class | not admitted |
 | `Qwen/Qwen3-8B` | dense 8B, unrelated to this family | dense | not a Qwen3.8 architecture id | official Ollama tag `qwen3:8b` | not proposed |
 
+### Empero 35B-A3B distill
+
+`empero-ai/Qwen3.8-35B-A3B-Distill` is a community distill into a Qwen3.6-35B-A3B shape (about 3B active), not the 27B dense model in the table above. It does not take the 24 GB MoE job held by `nemotron-lightning:30b-a3b`, because Nexus has no measurement of this distill. Vision needs a separate `mmproj`, and Ollama does not load that as a sidecar file. The parent card says some training prompts came from a free community endpoint. The teacher list includes Qwen3.8 Flash Next, which [the v2.3.0 admission record](../archive/v2/v2.3/development/model-admission-qwen38.md) already refused. The license chain is unreviewed.
+
+Not admitted, no catalog row.
+
 ### Contested job
 
 Qwen3.8-27B, if proposed, would contest the 24 GB coding-specialist fallback job held by `qwen3-coder:30b`. Taking that job requires measured numbers from this project's own hardware, on the terms in "Taking a job" above.
