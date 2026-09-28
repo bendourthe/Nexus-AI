@@ -1,3 +1,13 @@
+# [2.10.0](https://github.com/bendourthe/Nexus-AI/compare/v2.9.0...v2.10.0) (2026-09-28)
+
+
+### Documentation
+
+* record hosted Jev, Laya, and Kev as not admitted ([f4d126f](https://github.com/bendourthe/Nexus-AI/commit/f4d126fc))
+
+This release changes no opt-in capability, installer flag, or host surface.
+
+
 # [2.9.0](https://github.com/bendourthe/Nexus-AI/compare/v2.8.0...v2.9.0) (2026-09-27)
 
 

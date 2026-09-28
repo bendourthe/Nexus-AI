@@ -183,4 +183,14 @@ Phase 1 Vitest: 11 passed.
 
 ## Publication and integration
 
-Not published yet. This section is completed after the single push, the required checks, and the merge.
+Branch `feat/v2.10.0-system-one-models` was pushed once. Pull request: https://github.com/bendourthe/Nexus-AI/pull/88 against `develop`.
+
+Required check `ci-required` passed on the pull_request run `36438491018` (head `e61fd25d`) and the branch push run `36438420561`. The Submission Checklist gate passed on the rerun of run `36438491005`. Merged 2026-09-28T14:58:16Z. Merge commit `7a4b57c41313944c83d6a05408775a9ab66a4a04`.
+
+The develop push of that merge started CI run `36440003074`, which completed with conclusion `success`. That rerun is the existing `ci.yml` push trigger. `mergeStateStatus` was `UNSTABLE` because the Windows installer rehearsal was still pending. That job is not a required check. `mergeable` was `MERGEABLE`.
+
+## Worktree teardown
+
+`git merge-base --is-ancestor feat/v2.10.0-system-one-models origin/develop` exited 0 and `git log origin/develop..feat/v2.10.0-system-one-models` was empty. `git status --porcelain` in the worktree was empty.
+
+The `node_modules` junction was removed with `rmdir` so the main checkout's modules stayed in place. `git worktree remove` then printed nothing and the directory was absent. `git worktree list` shows only `C:/Users/bdour/Documents/Projects/Development/Nexus-AI`. The local branch was deleted. The remote branch delete follows this commit, because the pre-push hook refuses a push while the release edits are uncommitted.

@@ -120,6 +120,12 @@ Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" c
 
 Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.9 live under `docs/archive/v2/`. v2.10 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.10/known-gaps.md](docs/v2/v2.10/known-gaps.md).
 
+### What's new in v2.10.0
+
+Hosted Jev, Laya 0.3.20, and the Kev family (0.8B, 4B, 9B, and 27B) are not admitted. The record is one known-gap row, DF-v210-1. None of them is a catalog id, a runtime, an API client, or a download. The Nimble refusal stays in the v2.8.0 plan.
+
+Plan: [System One exclusion](docs/v2/v2.10/plans/v2.10.0-adoption-system-one-models.md).
+
 ### What's new in v2.9.0
 
 CrisperWhisper 2.0 is not admitted. The acceptance bar has no v2.8.0 exclusion sentences, so the record is one known-gap row, DF-v290-1. It is not a catalog id, a runtime fork, or a download. Word timestamps stay a Faster-Whisper gap.
