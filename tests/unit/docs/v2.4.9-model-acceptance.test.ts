@@ -205,7 +205,7 @@ describe("v2.4.9 model and runtime acceptance bar", () => {
 
   it("records CrisperWhisper as one v2.9.0 wait row, not a bar subsection", () => {
     const gaps = readFileSync(
-      join(REPO_ROOT, "docs/v2/v2.9/known-gaps.md"),
+      join(REPO_ROOT, "docs/archive/v2/v2.9/known-gaps.md"),
       "utf8",
     );
     expect(gaps).toContain("CrisperWhisper 2.0 is not admitted");
