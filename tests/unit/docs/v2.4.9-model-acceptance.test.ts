@@ -20,7 +20,7 @@ const REPO_ROOT = resolve(HERE, "../../..");
 const BAR = join(REPO_ROOT, "docs/reference/model-acceptance.md");
 const CATALOG = join(REPO_ROOT, "core/registry/catalog.json");
 const RECOMMENDED = join(REPO_ROOT, "core/registry/recommended.json");
-const V280_GAPS = join(REPO_ROOT, "docs/v2/v2.8/known-gaps.md");
+const V280_GAPS = join(REPO_ROOT, "docs/archive/v2/v2.8/known-gaps.md");
 
 interface JobRow {
   readonly job: string;
