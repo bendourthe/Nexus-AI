@@ -1,3 +1,13 @@
+# [2.8.0](https://github.com/bendourthe/Nexus-AI/compare/v2.7.0...v2.8.0) (2026-09-27)
+
+
+### Documentation
+
+* record the community Qwen-Image-2.1 GGUF and Bespoke Nimble as not admitted ([40c86b7](https://github.com/bendourthe/Nexus-AI/commit/40c86b7097d2b53fea6cca0123507c7284ba802b))
+
+This release changes no opt-in capability, installer flag, or host surface.
+
+
 # [2.7.0](https://github.com/bendourthe/Nexus-AI/compare/v2.6.0...v2.7.0) (2026-09-27)
 
 
@@ -1965,20 +1975,20 @@ Major architectural evolution: Gemma 4 native protocol, dynamic prompt engineeri
 
 ---
 
-## [0.1.0] — 2026-04-07
+## [0.1.0] - 2026-04-07
 
-First stable release of Gemma Code — a fully offline, agentic coding assistant for VS Code powered by Google's Gemma 4 via Ollama.
+First stable release of Gemma Code - a fully offline, agentic coding assistant for VS Code powered by Google's Gemma 4 via Ollama.
 
 ### Added
 
-**Phase 1 — Extension Skeleton & Ollama Client**
+**Phase 1 - Extension Skeleton & Ollama Client**
 - VS Code extension scaffold with TypeScript, tsconfig, ESLint, and Vitest
 - `OllamaClient` with streaming chat support (`streamChat`), health check (`checkHealth`), and model listing (`listModels`)
 - Extension activation/deactivation lifecycle with an Output channel ("Gemma Code")
 - `gemma-code.ping` command for verifying Ollama connectivity
 - Unit tests for the Ollama client; integration smoke test for live Ollama health checks
 
-**Phase 2 — Chat Engine & Streaming UI**
+**Phase 2 - Chat Engine & Streaming UI**
 - `ConversationManager` maintaining ordered message history with token-count trimming and `onDidChange` events
 - Webview chat panel (`GemmaCodePanel`) registered as a VS Code sidebar view
 - Bidirectional postMessage protocol between extension host and webview
@@ -1986,16 +1996,16 @@ First stable release of Gemma Code — a fully offline, agentic coding assistant
 - Vanilla TypeScript webview UI with streaming bubbles, Shift+Enter newlines, and auto-scroll
 - Retry on stream failure within the first 3 tokens
 
-**Phase 3 — Agentic Tool Layer**
+**Phase 3 - Agentic Tool Layer**
 - Tool-call protocol: model emits `<tool_call>` XML blocks; extension parses, executes, and injects `<tool_result>` messages
 - Tool handlers: `read_file`, `write_file`, `create_file`, `delete_file`, `edit_file`, `list_directory`, `grep_codebase`, `run_terminal`, `web_search`, `fetch_page`
 - Path traversal protection on all file system tools (workspace-root boundary check)
 - `ConfirmationGate` for user-approved tool execution (edit and terminal)
 - `AgentLoop` with configurable `maxAgentIterations` (default 20) and stop-signal on overflow
-- Tool progress indicators in the webview ("Using tool: …")
+- Tool progress indicators in the webview ("Using tool: ...")
 - Web search via DuckDuckGo HTML endpoint (no API key required)
 
-**Phase 4 — Skills, Commands & DevAI-Hub Integration**
+**Phase 4 - Skills, Commands & DevAI-Hub Integration**
 - `SkillLoader` parsing SKILL.md frontmatter; hot-reloads from `~/.gemma-code/skills/`
 - Built-in skill catalog: `commit`, `review-pr`, `generate-readme`, `generate-changelog`, `generate-tests`, `analyze-codebase`, `setup-project`
 - `CommandRouter` parsing slash commands and routing to built-in handlers or skill executor
@@ -2003,7 +2013,7 @@ First stable release of Gemma Code — a fully offline, agentic coding assistant
 - Inline autocomplete popup for slash commands in the webview chat input
 - `PlanMode` with numbered-plan detection heuristic and step-by-step approval workflow
 
-**Phase 5 — Advanced UX Features**
+**Phase 5 - Advanced UX Features**
 - SQLite-backed chat history (`ChatHistoryStore`) with session create/save/list/search/delete
 - `/history` command showing past sessions; click to resume
 - `ContextCompactor` with 80%-threshold auto-compact and `/compact` command
@@ -2014,13 +2024,13 @@ First stable release of Gemma Code — a fully offline, agentic coding assistant
 - Code block "Copy" button and collapsible tool-result blocks
 - Incremental streaming render: raw text during stream, full Markdown after completion
 
-**Phase 6 — Python Backend & Inference Optimisation**
+**Phase 6 - Python Backend & Inference Optimisation**
 - FastAPI backend (`src/backend/`) with `/health`, `/models`, and `/chat/stream` (SSE) endpoints
-- Gemma chat template formatting (`<start_of_turn>user … <end_of_turn>`) applied server-side
+- Gemma chat template formatting (`<start_of_turn>user ... <end_of_turn>`) applied server-side
 - `BackendManager` in TypeScript: auto-starts the Python process on activation, falls back to direct Ollama on failure
 - `gemma-code.useBackend`, `gemma-code.backendPort`, and `gemma-code.pythonPath` settings
 
-**Phase 7 — Installer & Distribution**
+**Phase 7 - Installer & Distribution**
 - VSIX build pipeline (`scripts/build-vsix.ps1`) producing `gemma-code-0.1.0.vsix`
 - NSIS installer script (`scripts/installer/setup.nsi`) for Windows 10/11
   - Installs Ollama silently if not present
@@ -2033,15 +2043,15 @@ First stable release of Gemma Code — a fully offline, agentic coding assistant
 - CI documentation in `docs/archive/versions/v0/v0.1.0/ci-setup.md`
 - E2E smoke test verifying the extension loads in VS Code without a running Ollama instance
 
-**Phase 8 — Hardening, CI/CD & Release**
-- Global `unhandledRejection` handler in `extension.ts` — logs to the Output channel instead of crashing the extension host
+**Phase 8 - Hardening, CI/CD & Release**
+- Global `unhandledRejection` handler in `extension.ts` - logs to the Output channel instead of crashing the extension host
 - Ollama availability poller: polls every 5 seconds; posts a recovery notification when Ollama comes back online; posts an error banner when it goes offline
 - Startup health check with actionable error messaging and a "Pull model" quick action
 - SSRF protection in `FetchPageTool`: rejects localhost, loopback, link-local, and all RFC-1918 private IP ranges; blocks non-HTTP(S) schemes
 - Terminal blocklist hardening: blocklist now checks every shell-metacharacter-separated segment to prevent chain-bypass attacks
 - `GemmaCodePanel.postStatus()` and `postError()` public methods for external error signalling
 - Python backend crash detection with VS Code notification and graceful fallback to direct Ollama
-- Performance benchmark suite: `time-to-first-token`, `context-compaction`, `tool-execution`, `skill-loading`, `markdown-rendering` — all integrated into nightly CI
+- Performance benchmark suite: `time-to-first-token`, `context-compaction`, `tool-execution`, `skill-loading`, `markdown-rendering` - all integrated into nightly CI
 - Security audit documentation (`docs/archive/versions/v0/v0.1.0/security-audit.md`) with findings and remediations
 - Performance benchmark documentation (`docs/archive/versions/v0/v0.1.0/performance-benchmarks.md`)
 - Architecture documentation (`docs/archive/versions/v0/v0.1.0/architecture.md`) with component descriptions and data-flow diagrams

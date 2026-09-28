@@ -216,8 +216,16 @@ Phase 1 Vitest re-run after the phase docs: 7 passed.
 
 ## Publication and integration
 
-Not started in this section's first write. T012 pushes this branch once, opens the pull request against `develop`, and waits for required checks. The merge SHA is added when that result exists.
+Branch `feat/v2.8.0-qwen-image-nimble` was pushed once. Pull request: https://github.com/bendourthe/Nexus-AI/pull/84 against `develop`.
+
+Required check `ci-required` passed on the pull request run `36376310961` and the branch push run `36376292253`. The Submission Checklist gate passed after the body gained a `## Submission Checklist` section. `diff-cover` failed with `fatal: origin/main...HEAD: no merge base` (shallow fetch of `main`), which is not a required check. `mergeStateStatus` was `UNSTABLE` and `mergeable` was `MERGEABLE`.
+
+Merged 2026-09-28T04:20:53Z. Merge commit `8d63576178a46e6bd1371747d96f93db885daf44`.
+
+The develop push of that merge started CI run `36377320501`, which completed with conclusion `success`. That rerun is the existing `ci.yml` push trigger. This plan did not add it.
 
 ## Worktree teardown
 
-Not started. The worktree stays until the merge is green.
+`git log origin/develop..feat/v2.8.0-qwen-image-nimble` was empty and `git merge-base --is-ancestor` exited 0. `git status --porcelain` in the worktree was empty.
+
+`git worktree remove` reported `Directory not empty` for `C:\Users\bdour\Documents\Projects\Development\Nexus-AI-v2.8.0-qwen-image-nimble` after unregistering the worktree. `Remove-Item -Recurse` then printed `DIR_ABSENT`. `git worktree list` shows only `C:/Users/bdour/Documents/Projects/Development/Nexus-AI`. The local branch was deleted. `git push origin --delete feat/v2.8.0-qwen-image-nimble` deleted the remote branch.
