@@ -14,3 +14,7 @@ Scratch docs created: this report and `development/history/2026-09-27_v2.8.0-qwe
 ## Moves
 
 None. A repo-wide layout migration was not applied.
+
+## Phase 2 audit
+
+Empty-directory count was 0. `npm run check:docs-layout` reported canonical layout OK. No paths moved in Phase 2.

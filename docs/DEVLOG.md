@@ -9,6 +9,24 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-27] v2.8.0 Phase 2 - Evidence for the exclusion note
+
+Index: [plan](v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md), [evidence](v2/v2.8/development/last-phase-evidence.md), history [P2](v2/v2.8/development/history/2026-09-27_v2.8.0-qwen-image-nimble-phase-2.md).
+
+### What Changed
+
+- **The refusal stays a known-gap row.** DF-11 stays open. The pipeline was not rewritten. Handbook HTML was not regenerated.
+
+### Verification
+
+Full Vitest: 5924 passed, 8 timeouts. Those four files passed on a dedicated re-run (14 tests). Model-acceptance file: 7 passed.
+
+### Known gaps
+
+No new row. `QG-v270-1`, `QG-v270-2`, `QG-v270-3`, and DF-v280-1 stay as written.
+
+---
+
 ## [2026-09-27] v2.8.0 Phase 1 - Qwen-Image and Nimble exclusion note
 
 Index: [plan](v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md), history [P1](v2/v2.8/development/history/2026-09-27_v2.8.0-qwen-image-nimble-phase-1.md).
