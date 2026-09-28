@@ -2,18 +2,19 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
-- 2026-09-27 v2.9: CrisperWhisper 2.0 is not admitted (DF-v290-1). Plan: [v2.9.0-adoption-crisperwhisper.md](v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md). History: [development/history](v2/v2.9/development/history/). Gaps: [known-gaps.md](v2/v2.9/known-gaps.md).
-- 2026-09-27 v2.8: the Qwen-Image and Nimble plan is archived at `docs/archive/v2/v2.8/`. v2.8.0 is published. Still-open items: `docs/v2/v2.9/known-gaps.md`.
-- 2026-09-27 v2.7: the avatar install gate plan is archived at `docs/archive/v2/v2.7/`. v2.7.0 is published. Still-open items: `docs/v2/v2.9/known-gaps.md`.
-- 2026-09-27 v2.6: the chat-surface and Qwen3.8 plans are archived at `docs/archive/v2/v2.6/`. v2.6.0 is published. Still-open items: `docs/v2/v2.9/known-gaps.md`.
-- 2026-09-26 v2.5: the three v2.5 plans are archived at `docs/archive/v2/v2.5/`. v2.5.0 and v2.5.1 are already published. Still-open items: `docs/v2/v2.9/known-gaps.md`.
-- 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.9/known-gaps.md`.
+- 2026-09-28 v2.10: hosted Jev, Laya, and Kev are not admitted (DF-v210-1). Plan: [v2.10.0-adoption-system-one-models.md](v2/v2.10/plans/v2.10.0-adoption-system-one-models.md). History: [development/history](v2/v2.10/development/history/). Gaps: [known-gaps.md](v2/v2.10/known-gaps.md).
+- 2026-09-27 v2.9: the CrisperWhisper plan is archived at `docs/archive/v2/v2.9/`. v2.9.0 is published. Still-open items: `docs/v2/v2.10/known-gaps.md`.
+- 2026-09-27 v2.8: the Qwen-Image and Nimble plan is archived at `docs/archive/v2/v2.8/`. v2.8.0 is published. Still-open items: `docs/v2/v2.10/known-gaps.md`.
+- 2026-09-27 v2.7: the avatar install gate plan is archived at `docs/archive/v2/v2.7/`. v2.7.0 is published. Still-open items: `docs/v2/v2.10/known-gaps.md`.
+- 2026-09-27 v2.6: the chat-surface and Qwen3.8 plans are archived at `docs/archive/v2/v2.6/`. v2.6.0 is published. Still-open items: `docs/v2/v2.10/known-gaps.md`.
+- 2026-09-26 v2.5: the three v2.5 plans are archived at `docs/archive/v2/v2.5/`. v2.5.0 and v2.5.1 are already published. Still-open items: `docs/v2/v2.10/known-gaps.md`.
+- 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.10/known-gaps.md`.
 
 ---
 
 ## [2026-09-27] v2.9.0 Phase 2 - Evidence for the exclusion note
 
-Index: [plan](v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md), [evidence](v2/v2.9/development/last-phase-evidence.md), history [P2](v2/v2.9/development/history/2026-09-27_v2.9.0-crisperwhisper-phase-2.md).
+Index: [plan](archive/v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md), [evidence](archive/v2/v2.9/development/last-phase-evidence.md), history [P2](archive/v2/v2.9/development/history/2026-09-27_v2.9.0-crisperwhisper-phase-2.md).
 
 ### What Changed
 
@@ -31,11 +32,11 @@ No new row besides DF-v290-1. `QG-v270-1`, `QG-v270-2`, and `QG-v270-3` stay as 
 
 ## [2026-09-27] v2.9.0 Phase 1 - CrisperWhisper exclusion note
 
-Index: [plan](v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md), history [P1](v2/v2.9/development/history/2026-09-27_v2.9.0-crisperwhisper-phase-1.md).
+Index: [plan](archive/v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md), history [P1](archive/v2/v2.9/development/history/2026-09-27_v2.9.0-crisperwhisper-phase-1.md).
 
 ### What Changed
 
-- **CrisperWhisper 2.0 is not admitted.** The acceptance bar has no v2.8.0 exclusion sentences, so the record is DF-v290-1 in `docs/v2/v2.9/known-gaps.md`. No catalog row was added.
+- **CrisperWhisper 2.0 is not admitted.** The acceptance bar has no v2.8.0 exclusion sentences, so the record is DF-v290-1 in `docs/archive/v2/v2.9/known-gaps.md`. No catalog row was added.
 
 ### Verification
 
