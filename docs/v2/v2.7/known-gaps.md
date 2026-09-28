@@ -3,6 +3,23 @@
 **Status**: in-progress
 **Last updated**: 2026-09-27
 
+## v2.7.0
+
+### Summary
+
+| Category | Open | Resolved |
+|---|---|---|
+| Not implemented (NI) | 0 | 0 |
+| Deferred (DF) | 0 | 0 |
+| Bugs / regressions (BG) | 0 | 0 |
+| Warnings (WN) | 0 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
+| Quality-gate gaps (QG) | 0 | 0 |
+
+### Open Items
+
+Phase 1 of `v2.7.0-adoption-avatar-install-gate` added no gap. The carry-forward table above is unchanged and is not a defect from this phase. DF-8 (no sampled LongCat clip) stays in `docs/archive/v2/v2.0/known-gaps.md`.
+
 v2.6 moved to `docs/archive/v2/v2.6/`. v2.6.0 is published, and the asset build attached the VSIX files, `NexusSetup.exe`, and `SHA256SUMS.txt`. The rows below were not closed. They are not fixed. The archived file remains the detailed record.
 
 | ID | Why it is still open | Archived record |

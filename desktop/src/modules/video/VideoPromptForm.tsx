@@ -73,7 +73,7 @@ export interface VideoPromptFormProps {
    * other consumer keeps the original form.
    */
   readonly hideMode?: boolean;
-  /** v2.0.0 Phase 3 -- show the talking-head confirm checkbox and mode. */
+  /** Offer, not hardware: show the talking-head option and confirm only when weights are installed. */
   readonly avatarAvailable?: boolean;
   readonly diffusionTier?: DiffusionTierId;
 }
