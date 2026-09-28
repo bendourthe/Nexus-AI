@@ -120,6 +120,12 @@ Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" c
 
 Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.8 live under `docs/archive/v2/`. v2.9 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.9/known-gaps.md](docs/v2/v2.9/known-gaps.md).
 
+### What's new in v2.9.0
+
+CrisperWhisper 2.0 is not admitted. The acceptance bar has no v2.8.0 exclusion sentences, so the record is one known-gap row, DF-v290-1. It is not a catalog id, a runtime fork, or a download. Word timestamps stay a Faster-Whisper gap.
+
+Plan: [CrisperWhisper exclusion](docs/v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md).
+
 ### What's new in v2.8.0
 
 The community Qwen-Image-2.1 GGUF and Bespoke Nimble are not admitted. The acceptance bar has no v2.7.0 exclusion subsection, so the record is one known-gap row, DF-v280-1. Neither name is a catalog id, a runtime, or a download. DF-11 stays open.

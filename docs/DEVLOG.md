@@ -2,6 +2,7 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
+- 2026-09-27 v2.9: CrisperWhisper 2.0 is not admitted (DF-v290-1). Plan: [v2.9.0-adoption-crisperwhisper.md](v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md). History: [development/history](v2/v2.9/development/history/). Gaps: [known-gaps.md](v2/v2.9/known-gaps.md).
 - 2026-09-27 v2.8: the Qwen-Image and Nimble plan is archived at `docs/archive/v2/v2.8/`. v2.8.0 is published. Still-open items: `docs/v2/v2.9/known-gaps.md`.
 - 2026-09-27 v2.7: the avatar install gate plan is archived at `docs/archive/v2/v2.7/`. v2.7.0 is published. Still-open items: `docs/v2/v2.9/known-gaps.md`.
 - 2026-09-27 v2.6: the chat-surface and Qwen3.8 plans are archived at `docs/archive/v2/v2.6/`. v2.6.0 is published. Still-open items: `docs/v2/v2.9/known-gaps.md`.

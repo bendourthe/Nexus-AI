@@ -1,3 +1,13 @@
+# [2.9.0](https://github.com/bendourthe/Nexus-AI/compare/v2.8.0...v2.9.0) (2026-09-27)
+
+
+### Documentation
+
+* record CrisperWhisper 2.0 as not admitted ([d5cf4bf](https://github.com/bendourthe/Nexus-AI/commit/d5cf4bf6))
+
+This release changes no opt-in capability, installer flag, or host surface.
+
+
 # [2.8.0](https://github.com/bendourthe/Nexus-AI/compare/v2.7.0...v2.8.0) (2026-09-27)
 
 
