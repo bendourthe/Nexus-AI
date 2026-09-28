@@ -2,9 +2,10 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
-- 2026-09-27 v2.6: the chat-surface and Qwen3.8 plans are archived at `docs/archive/v2/v2.6/`. v2.6.0 is published. Still-open items: `docs/v2/v2.7/known-gaps.md`.
-- 2026-09-26 v2.5: the three v2.5 plans are archived at `docs/archive/v2/v2.5/`. v2.5.0 and v2.5.1 are already published. Still-open items: `docs/v2/v2.7/known-gaps.md`.
-- 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.7/known-gaps.md`.
+- 2026-09-27 v2.7: the avatar install gate plan is archived at `docs/archive/v2/v2.7/`. v2.7.0 is published. Still-open items: `docs/v2/v2.8/known-gaps.md`.
+- 2026-09-27 v2.6: the chat-surface and Qwen3.8 plans are archived at `docs/archive/v2/v2.6/`. v2.6.0 is published. Still-open items: `docs/v2/v2.8/known-gaps.md`.
+- 2026-09-26 v2.5: the three v2.5 plans are archived at `docs/archive/v2/v2.5/`. v2.5.0 and v2.5.1 are already published. Still-open items: `docs/v2/v2.8/known-gaps.md`.
+- 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.8/known-gaps.md`.
 
 ---
 
