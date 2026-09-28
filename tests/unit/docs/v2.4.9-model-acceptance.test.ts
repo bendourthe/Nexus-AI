@@ -150,4 +150,18 @@ describe("v2.4.9 model and runtime acceptance bar", () => {
     const missing = [...preTicked].filter((id) => !held.has(id));
     expect(missing).toStrictEqual([]);
   });
+
+  it("names the Empero 35B-A3B distill as not admitted and not a catalog id", () => {
+    const bar = readBar();
+    expect(bar).toContain("### Empero 35B-A3B distill");
+    expect(bar).toContain("`empero-ai/Qwen3.8-35B-A3B-Distill`");
+    expect(bar).toContain("not the 27B dense model");
+    expect(bar).toContain("Not admitted, no catalog row.");
+    const catalog = readFileSync(CATALOG, "utf8");
+    const recommended = readFileSync(RECOMMENDED, "utf8");
+    expect(catalog.toLowerCase()).not.toContain("empero");
+    expect(catalog).not.toContain("Qwen3.8-35B-A3B");
+    expect(recommended.toLowerCase()).not.toContain("empero");
+    expect(recommended).not.toContain("Qwen3.8-35B-A3B");
+  });
 });
