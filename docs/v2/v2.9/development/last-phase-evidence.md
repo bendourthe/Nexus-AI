@@ -163,8 +163,14 @@ Phase 1 Vitest: 8 passed. `npm run lint` (`eslint src modules`) is outside the c
 
 ## Publication and integration
 
-Not started in this section's first write. T012 pushes this branch once and opens the pull request against `develop`.
+Branch `feat/v2.9.0-crisperwhisper` was pushed once. Pull request: https://github.com/bendourthe/Nexus-AI/pull/86 against `develop`.
+
+Required check `ci-required` passed on runs `36384286569` and `36384394374`. The Submission Checklist gate passed. Merged 2026-09-28T06:09:03Z. Merge commit `72986fa20a5c4f423f0ee40dc47faf8f4a1928f6`.
+
+The develop push of that merge started CI run `36385035932`, which completed with conclusion `success`. That rerun is the existing `ci.yml` push trigger.
 
 ## Worktree teardown
 
-Not started. The worktree stays until the merge is green.
+`git merge-base --is-ancestor feat/v2.9.0-crisperwhisper origin/develop` exited 0 and `git log origin/develop..feat/v2.9.0-crisperwhisper` was empty. `git status --porcelain` in the worktree was empty.
+
+`git worktree remove` reported `Directory not empty`. `Remove-Item -Recurse` then printed `DIR_ABSENT`. `git worktree list` shows only `C:/Users/bdour/Documents/Projects/Development/Nexus-AI`. The local branch was deleted. `git push origin --delete feat/v2.9.0-crisperwhisper` deleted the remote branch.
