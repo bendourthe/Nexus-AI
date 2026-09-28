@@ -20,6 +20,7 @@ const REPO_ROOT = resolve(HERE, "../../..");
 const BAR = join(REPO_ROOT, "docs/reference/model-acceptance.md");
 const CATALOG = join(REPO_ROOT, "core/registry/catalog.json");
 const RECOMMENDED = join(REPO_ROOT, "core/registry/recommended.json");
+const V280_GAPS = join(REPO_ROOT, "docs/v2/v2.8/known-gaps.md");
 
 interface JobRow {
   readonly job: string;
@@ -163,5 +164,42 @@ describe("v2.4.9 model and runtime acceptance bar", () => {
     expect(catalog).not.toContain("Qwen3.8-35B-A3B");
     expect(recommended.toLowerCase()).not.toContain("empero");
     expect(recommended).not.toContain("Qwen3.8-35B-A3B");
+  });
+
+  it("records Qwen-Image and Nimble as one v2.8.0 wait row, not a bar subsection", () => {
+    const gaps = readFileSync(V280_GAPS, "utf8");
+    expect(gaps).toContain("abenzerps/Qwen-Image-2.1-Uncensored-GGUF");
+    expect(gaps).toContain("Bespoke Nimble");
+    expect(gaps).toContain("bespokelabs/Bespoke-Nimble-9B");
+    expect(gaps).toContain("not admitted, no catalog row");
+
+    const bar = readBar();
+    const headings = bar
+      .split("\n")
+      .filter((line) => /^#{1,6} /.test(line))
+      .join("\n");
+    expect(headings).not.toMatch(/Qwen-Image/i);
+    expect(headings).not.toMatch(/Nimble/i);
+    expect(bar).not.toContain("abenzerps/Qwen-Image-2.1-Uncensored-GGUF");
+    expect(bar).not.toContain("Bespoke Nimble");
+    expect(bar).not.toContain("Bespoke-Nimble-9B");
+
+    const forbidden = ["qwen-image", "abenzerps", "nimble", "bespoke"];
+    const catalog = catalogIds().map((id) => id.toLowerCase());
+    const recommended = (
+      JSON.parse(readFileSync(RECOMMENDED, "utf8")) as {
+        tiers: Record<string, Record<string, string[]>>;
+      }
+    ).tiers;
+    const preTicked: string[] = [];
+    for (const sections of Object.values(recommended)) {
+      for (const ids of Object.values(sections)) {
+        for (const id of ids) preTicked.push(id.toLowerCase());
+      }
+    }
+    for (const needle of forbidden) {
+      expect(catalog.filter((id) => id.includes(needle))).toStrictEqual([]);
+      expect(preTicked.filter((id) => id.includes(needle))).toStrictEqual([]);
+    }
   });
 });

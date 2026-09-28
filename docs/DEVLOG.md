@@ -2,10 +2,47 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
+- 2026-09-27 v2.8: Qwen-Image GGUF and Bespoke Nimble are not admitted (DF-v280-1). Plan: [v2.8.0-adoption-qwen-image-nimble.md](v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md). History: [development/history](v2/v2.8/development/history/). Gaps: [known-gaps.md](v2/v2.8/known-gaps.md).
 - 2026-09-27 v2.7: the avatar install gate plan is archived at `docs/archive/v2/v2.7/`. v2.7.0 is published. Still-open items: `docs/v2/v2.8/known-gaps.md`.
 - 2026-09-27 v2.6: the chat-surface and Qwen3.8 plans are archived at `docs/archive/v2/v2.6/`. v2.6.0 is published. Still-open items: `docs/v2/v2.8/known-gaps.md`.
 - 2026-09-26 v2.5: the three v2.5 plans are archived at `docs/archive/v2/v2.5/`. v2.5.0 and v2.5.1 are already published. Still-open items: `docs/v2/v2.8/known-gaps.md`.
 - 2026-09-23 v2.4.11: local splat viewer and optional CUDA generate, plus the untagged 2.4.2-2.4.10 field work. Plan and gaps now live under `docs/archive/v2/v2.4/`. Still-open items: `docs/v2/v2.8/known-gaps.md`.
+
+---
+
+## [2026-09-27] v2.8.0 Phase 2 - Evidence for the exclusion note
+
+Index: [plan](v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md), [evidence](v2/v2.8/development/last-phase-evidence.md), history [P2](v2/v2.8/development/history/2026-09-27_v2.8.0-qwen-image-nimble-phase-2.md).
+
+### What Changed
+
+- **The refusal stays a known-gap row.** DF-11 stays open. The pipeline was not rewritten. Handbook HTML was not regenerated.
+
+### Verification
+
+Full Vitest: 5924 passed, 8 timeouts. Those four files passed on a dedicated re-run (14 tests). Model-acceptance file: 7 passed.
+
+### Known gaps
+
+No new row. `QG-v270-1`, `QG-v270-2`, `QG-v270-3`, and DF-v280-1 stay as written.
+
+---
+
+## [2026-09-27] v2.8.0 Phase 1 - Qwen-Image and Nimble exclusion note
+
+Index: [plan](v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md), history [P1](v2/v2.8/development/history/2026-09-27_v2.8.0-qwen-image-nimble-phase-1.md).
+
+### What Changed
+
+- **The community Qwen-Image GGUF and Bespoke Nimble are not admitted.** The acceptance bar has no v2.7.0 exclusion subsection, so the record is DF-v280-1 in `docs/v2/v2.8/known-gaps.md`. No catalog row was added.
+
+### Verification
+
+`npx vitest run tests/unit/docs/v2.4.9-model-acceptance.test.ts`: 7 passed.
+
+### Known gaps
+
+DF-v280-1. Copying the sentences into the acceptance bar waits until the v2.7.0 exclusion text is there. DF-11 stays open.
 
 ---
 
