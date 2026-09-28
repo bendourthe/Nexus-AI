@@ -18,7 +18,7 @@
 
 ### Open Items
 
-Phase 1 of `v2.7.0-adoption-avatar-install-gate` added no gap. The carry-forward table above is unchanged and is not a defect from this phase. DF-8 (no sampled LongCat clip) stays in `docs/archive/v2/v2.0/known-gaps.md`.
+Phase 1 of `v2.7.0-adoption-avatar-install-gate` added no gap. Phase 2 wrote the Empero exclusion in `docs/reference/model-acceptance.md` because the Qwen3.8 family section was already there, so the wait-row fallback was not used. The carry-forward table above is unchanged. DF-8 (no sampled LongCat clip) stays in `docs/archive/v2/v2.0/known-gaps.md`.
 
 v2.6 moved to `docs/archive/v2/v2.6/`. v2.6.0 is published, and the asset build attached the VSIX files, `NexusSetup.exe`, and `SHA256SUMS.txt`. The rows below were not closed. They are not fixed. The archived file remains the detailed record.
 
