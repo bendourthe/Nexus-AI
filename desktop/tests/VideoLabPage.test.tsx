@@ -24,7 +24,7 @@ import { STUDIO_PENDING_CAPTIONS } from "../src/components/agentState/captionRot
 
 const NO_MODELS = { list: async (): Promise<ListedModelDto[]> => [] };
 
-function videoModels(): {
+function videoModels(extra: ListedModelDto[] = []): {
   lastSelection: {
     schemaVersion: 1;
     orderedIds: string[];
@@ -43,16 +43,50 @@ function videoModels(): {
       vramGB: 5.5,
       visualTokenBudget: { maxVideoFrames: 4 },
     },
+    ...extra,
   ];
   return {
     lastSelection: {
       schemaVersion: 1,
-      orderedIds: ["wan2.1-t2v-1.3b"],
+      orderedIds: models.map((model) => model.id),
       recommendedByTask: { video: "wan2.1-t2v-1.3b" },
       downloadedSinceInstall: [],
     },
     list: async () => models,
   };
+}
+
+function avatarListRow(
+  source: ListedModelDto["source"] | "omitted",
+): ListedModelDto {
+  const row: ListedModelDto = {
+    id: "longcat-video-avatar-1.5",
+    displayName: "LongCat Video Avatar 1.5",
+    type: "video",
+    installed: true,
+    source: "registry",
+    vramGB: 20,
+  };
+  if (source === "omitted") {
+    delete (row as { source?: ListedModelDto["source"] }).source;
+    return row;
+  }
+  row.source = source;
+  return row;
+}
+
+async function attachPhotoAndAudio(): Promise<void> {
+  const png = new File(["x"], "face.png", { type: "image/png" });
+  const wav = new File(["y"], "line.wav", { type: "audio/wav" });
+  await act(async () => {
+    fireEvent.change(screen.getByTestId("media-composer-file"), {
+      target: { files: [png, wav] },
+    });
+    await Promise.resolve();
+  });
+  await waitFor(() =>
+    expect(screen.getByTestId("media-composer-thumb-1")).toBeInTheDocument(),
+  );
 }
 
 describe("VideoLabPage (chat)", () => {
@@ -686,16 +720,42 @@ describe("VideoLabPage (chat)", () => {
     render(
       <VideoLabPage
         client={client}
-        modelsClient={videoModels()}
+        modelsClient={videoModels([avatarListRow("registry")])}
         drainIntervalMs={10}
         diffusionTier="diffusion-mid"
         vramGB={12}
       />,
     );
+    await waitFor(() =>
+      expect(screen.getByTestId("video-model-select")).toHaveTextContent("Wan"),
+    );
+    fireEvent.click(screen.getByTestId("video-advanced-settings"));
     expect(screen.queryByTestId("video-avatar-confirm")).toBeNull();
+    const png = new File(["x"], "face.png", { type: "image/png" });
+    await act(async () => {
+      fireEvent.change(screen.getByTestId("media-composer-file"), {
+        target: { files: [png] },
+      });
+      await Promise.resolve();
+    });
+    await waitFor(() =>
+      expect(screen.getByTestId("media-composer-thumb-0")).toBeInTheDocument(),
+    );
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "hello" },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(40);
+      await Promise.resolve();
+    });
+    await waitFor(() => expect(client.lastRequest?.mode).toBe("image2video"));
+    expect(screen.queryByText(/longcat-video-avatar-1\.5/)).toBeNull();
   });
 
-  it("runs audio2video on a confirmed diffusion-pro host", async () => {
+  it("refuses a photo plus audio on diffusion-pro when the avatar weights are not installed", async () => {
     const client = new InMemoryVideoClient();
     render(
       <VideoLabPage
@@ -706,19 +766,74 @@ describe("VideoLabPage (chat)", () => {
         vramGB={24}
       />,
     );
+    await waitFor(() =>
+      expect(screen.getByTestId("video-model-select")).toHaveTextContent("Wan"),
+    );
     fireEvent.click(screen.getByTestId("video-advanced-settings"));
-    fireEvent.click(screen.getByTestId("video-avatar-confirm"));
-    const png = new File(["x"], "face.png", { type: "image/png" });
-    const wav = new File(["y"], "line.wav", { type: "audio/wav" });
+    expect(screen.queryByTestId("video-avatar-confirm")).toBeNull();
+    expect(screen.getByTestId("media-composer-file")).toHaveAttribute(
+      "accept",
+      expect.stringContaining("audio/*"),
+    );
+    await attachPhotoAndAudio();
+    fireEvent.change(screen.getByTestId("media-composer-textarea"), {
+      target: { value: "hello" },
+    });
     await act(async () => {
-      fireEvent.change(screen.getByTestId("media-composer-file"), {
-        target: { files: [png, wav] },
-      });
+      fireEvent.click(screen.getByTestId("media-composer-submit"));
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(40);
       await Promise.resolve();
     });
-    await waitFor(() =>
-      expect(screen.getByTestId("media-composer-thumb-1")).toBeInTheDocument(),
+    expect(await screen.findByText(/Install longcat-video-avatar-1\.5/)).toBeInTheDocument();
+    expect(client.requests.some((request) => request.mode === "audio2video")).toBe(false);
+    expect(client.requests.some((request) => request.mode === "image2video")).toBe(false);
+  });
+
+  it.each(["catalog-only", "external", "omitted"] as const)(
+    "hides talking-head controls when the avatar row source is %s",
+    async (source) => {
+      render(
+        <VideoLabPage
+          client={new InMemoryVideoClient()}
+          modelsClient={videoModels([avatarListRow(source)])}
+          drainIntervalMs={10}
+          diffusionTier="diffusion-pro"
+          vramGB={24}
+        />,
+      );
+      await waitFor(() =>
+        expect(screen.getByTestId("video-model-select")).toHaveTextContent("Wan"),
+      );
+      fireEvent.click(screen.getByTestId("video-advanced-settings"));
+      expect(screen.queryByTestId("video-avatar-confirm")).toBeNull();
+      expect(screen.getByTestId("media-composer-file")).toHaveAttribute(
+        "accept",
+        expect.stringContaining("audio/*"),
+      );
+    },
+  );
+
+  it("submits audio2video when the official registry row is installed and the user confirms", async () => {
+    const client = new InMemoryVideoClient();
+    render(
+      <VideoLabPage
+        client={client}
+        modelsClient={videoModels([avatarListRow("registry")])}
+        drainIntervalMs={10}
+        diffusionTier="diffusion-pro"
+        vramGB={24}
+      />,
     );
+    await waitFor(() =>
+      expect(screen.getByTestId("video-model-select")).toHaveTextContent("Wan"),
+    );
+    fireEvent.click(screen.getByTestId("video-advanced-settings"));
+    const confirm = await screen.findByTestId("video-avatar-confirm");
+    expect(confirm).not.toBeChecked();
+    fireEvent.click(confirm);
+    await attachPhotoAndAudio();
     fireEvent.change(screen.getByTestId("media-composer-textarea"), {
       target: { value: "hello" },
     });
@@ -737,6 +852,43 @@ describe("VideoLabPage (chat)", () => {
       (client.lastRequest?.request as { confirmLocalAvatar?: boolean })
         .confirmLocalAvatar,
     ).toBe(true);
+  });
+
+  it("clears a checked confirm when the official avatar row disappears", async () => {
+    let rows = videoModels([avatarListRow("registry")]).list();
+    const modelsClient = {
+      lastSelection: videoModels().lastSelection,
+      list: () => rows,
+    };
+    const { rerender } = render(
+      <VideoLabPage
+        client={new InMemoryVideoClient()}
+        modelsClient={modelsClient}
+        drainIntervalMs={10}
+        diffusionTier="diffusion-pro"
+        vramGB={24}
+      />,
+    );
+    await waitFor(() =>
+      expect(screen.getByTestId("video-model-select")).toHaveTextContent("Wan"),
+    );
+    fireEvent.click(screen.getByTestId("video-advanced-settings"));
+    const confirm = await screen.findByTestId("video-avatar-confirm");
+    fireEvent.click(confirm);
+    expect(confirm).toBeChecked();
+    rows = videoModels().list();
+    rerender(
+      <VideoLabPage
+        client={new InMemoryVideoClient()}
+        modelsClient={{ ...modelsClient }}
+        drainIntervalMs={10}
+        diffusionTier="diffusion-pro"
+        vramGB={24}
+      />,
+    );
+    await waitFor(() =>
+      expect(screen.queryByTestId("video-avatar-confirm")).toBeNull(),
+    );
   });
 
   // v2.4.8 follow-up (2026-09-07): the inline frame-by-frame previewer was
