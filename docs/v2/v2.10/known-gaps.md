@@ -1,7 +1,7 @@
 # Known gaps carried forward
 
 **Status**: in-progress
-**Last updated**: 2026-09-27
+**Last updated**: 2026-09-28
 
 v2.9 moved to `docs/archive/v2/v2.9/`. v2.9.0 is published. The rows below were not closed. They are not fixed. The archived file remains the detailed record. DF-11 stays open in `docs/archive/v2/v2.0/known-gaps.md`.
 
@@ -29,3 +29,30 @@ v2.9 moved to `docs/archive/v2/v2.9/`. v2.9.0 is published. The rows below were 
 | QG-v270-3 | The three OS installers were not executed locally for the avatar plan. The installer matrix workflow already exists. | `docs/archive/v2/v2.7/known-gaps.md` |
 | DF-v280-1 | The community Qwen-Image GGUF and Bespoke Nimble are not admitted. No catalog row. The living-bar sentences waited. | `docs/archive/v2/v2.8/known-gaps.md` |
 | DF-v290-1 | CrisperWhisper 2.0 is not admitted. The fetched page has no weights, license, or size. No catalog row. | `docs/archive/v2/v2.9/known-gaps.md` |
+
+## v2.10.0
+
+### Summary
+
+| Category | Open | Resolved |
+|---|---|---|
+| Not implemented (NI) | 0 | 0 |
+| Deferred (DF) | 1 | 0 |
+| Bugs / regressions (BG) | 0 | 0 |
+| Warnings (WN) | 0 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
+| Quality-gate gaps (QG) | 0 | 0 |
+
+### Open Items
+
+The carry-forward table above stays open. Those rows were not introduced by this plan. DF-v210-1 is the only System One exclusion row. `docs/reference/model-acceptance.md` was not edited.
+
+#### Deferred
+
+##### DF-v210-1 - Hosted Jev, Laya, and Kev are not admitted
+
+- **Class**: DF
+- **Source phase**: Phase 1
+- **Plan reference**: `docs/v2/v2.10/plans/v2.10.0-adoption-system-one-models.md`
+- **Reason**: Hosted Jev is not a Nexus backend. A System One call would send state off the machine. Laya 0.3.20 is Apache-2.0, documents a Windows install, and is about 322M to 421M, and it is still not a catalog model: it needs a PyTorch download from Hugging Face, the base checkpoints lose to a majority-class baseline until a fine-tune, and it does not replace `PromptInjectionScanner` or close DF-11. Kev 0.8B, 4B, 9B, and 27B are not catalog models. The README serve path is CUDA, ROCm, or MLX, and the Modal deploy script is out of bounds. The Nimble refusal stays in `docs/archive/v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md`. not admitted, no catalog row.
+- **Suggested next step**: Leave the row in place. Do not copy it into `docs/reference/model-acceptance.md` until the v2.8.0 and v2.9.0 plans have finished their own edits of that file, and do not add a job-map holder when that copy happens.
