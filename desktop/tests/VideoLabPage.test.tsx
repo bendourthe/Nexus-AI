@@ -854,6 +854,43 @@ describe("VideoLabPage (chat)", () => {
     ).toBe(true);
   });
 
+  it("clears a checked confirm when the official avatar row disappears", async () => {
+    let rows = videoModels([avatarListRow("registry")]).list();
+    const modelsClient = {
+      lastSelection: videoModels().lastSelection,
+      list: () => rows,
+    };
+    const { rerender } = render(
+      <VideoLabPage
+        client={new InMemoryVideoClient()}
+        modelsClient={modelsClient}
+        drainIntervalMs={10}
+        diffusionTier="diffusion-pro"
+        vramGB={24}
+      />,
+    );
+    await waitFor(() =>
+      expect(screen.getByTestId("video-model-select")).toHaveTextContent("Wan"),
+    );
+    fireEvent.click(screen.getByTestId("video-advanced-settings"));
+    const confirm = await screen.findByTestId("video-avatar-confirm");
+    fireEvent.click(confirm);
+    expect(confirm).toBeChecked();
+    rows = videoModels().list();
+    rerender(
+      <VideoLabPage
+        client={new InMemoryVideoClient()}
+        modelsClient={{ ...modelsClient }}
+        drainIntervalMs={10}
+        diffusionTier="diffusion-pro"
+        vramGB={24}
+      />,
+    );
+    await waitFor(() =>
+      expect(screen.queryByTestId("video-avatar-confirm")).toBeNull(),
+    );
+  });
+
   // v2.4.8 follow-up (2026-09-07): the inline frame-by-frame previewer was
   // removed because it repeated the finished clip at full width under the
   // bubble that already plays it. Per-frame comments were written only by

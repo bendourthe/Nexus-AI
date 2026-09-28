@@ -14,11 +14,11 @@
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
-| Quality-gate gaps (QG) | 0 | 0 |
+| Quality-gate gaps (QG) | 3 | 0 |
 
 ### Open Items
 
-Phase 1 of `v2.7.0-adoption-avatar-install-gate` added no gap. Phase 2 wrote the Empero exclusion in `docs/reference/model-acceptance.md` because the Qwen3.8 family section was already there, so the wait-row fallback was not used. The carry-forward table above is unchanged. DF-8 (no sampled LongCat clip) stays in `docs/archive/v2/v2.0/known-gaps.md`.
+Phase 1 of `v2.7.0-adoption-avatar-install-gate` added no product gap. Phase 2 wrote the Empero exclusion in `docs/reference/model-acceptance.md` because the Qwen3.8 family section was already there, so the wait-row fallback was not used. DF-8 stays open in `docs/archive/v2/v2.0/known-gaps.md` because this plan did not import a LongCat inference tree. The carry-forward rows below stay open; they are not defects introduced by this plan.
 
 v2.6 moved to `docs/archive/v2/v2.6/`. v2.6.0 is published, and the asset build attached the VSIX files, `NexusSetup.exe`, and `SHA256SUMS.txt`. The rows below were not closed. They are not fixed. The archived file remains the detailed record.
 
@@ -41,3 +41,27 @@ v2.6 moved to `docs/archive/v2/v2.6/`. v2.6.0 is published, and the asset build 
 | DF-v260-5 | No llama.cpp serving path. | `docs/archive/v2/v2.6/known-gaps.md` |
 | DF-v260-6 | The uncensored-LLM product question is unanswered. | `docs/archive/v2/v2.6/known-gaps.md` |
 | WN-v260-1 | Release-scoped Qwen3.8 mentions under `docs/archive/` stay as written. | `docs/archive/v2/v2.6/known-gaps.md` |
+
+#### Quality-Gate Gaps
+
+##### QG-v270-1 - Handbook byte check fails on a CRLF working tree
+
+- **Source phase**: Phase 3 - Living docs architecture
+- **Plan reference**: `docs/v2/v2.7/plans/v2.7.0-adoption-avatar-install-gate.md` (T010)
+- **Reason**: `npm run docs:handbooks:check` exits 1 here because `git ls-files --eol` shows index LF and working tree CRLF for the handbook HTML. This plan did not edit handbook Markdown. Regenerating on this checkout would fight `core.autocrlf` and would not change the committed LF bytes.
+- **Suggested next step**: Compare generated HTML to the git index blobs, or run the check on an LF checkout.
+
+##### QG-v270-2 - Named CI profiles and workflow permissions were not added
+
+- **Source phase**: Phase 3 - Terminal CI/CD reconciliation
+- **Plan reference**: `docs/v2/v2.7/plans/v2.7.0-adoption-avatar-install-gate.md` (T012)
+- **Reason**: GitHub Actions is the provider. `ci-required` already always resolves and is the only required check on `main` and `develop`. `package.json` has no `fast`, `full`, `platform`, `report`, or `release` scripts. `ci.yml` has no workflow-level `permissions` block. This plan's tests already run in `test-ts` and desktop Vitest. The workflow was not rewritten.
+- **Suggested next step**: A CI-owned change can add the five profile scripts and a workflow `permissions` block after checking which jobs need more than `contents: read`.
+
+##### QG-v270-3 - Cross-OS installer executables were not run locally
+
+- **Source phase**: Phase 3 - Terminal CI/CD reconciliation
+- **Plan reference**: `docs/v2/v2.7/plans/v2.7.0-adoption-avatar-install-gate.md` (T012)
+- **Reason**: `.github/workflows/installer-matrix.yml` already calls the Windows, Linux, and macOS installer workflows and aggregates them as `installer-required`. This plan changes no installer payload. The three OS installers were not executed on this machine.
+- **Suggested next step**: Keep the installer matrix on installer-touching pulls. Do not treat this avatar plan as an installer change.
+
