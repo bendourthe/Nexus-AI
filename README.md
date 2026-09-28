@@ -118,13 +118,13 @@ Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" c
 | v2.4.1 | Field reliability, transcript reasoning, chat archives, unified models, and multi-root Agents workspaces | Tagged. Packaged Windows and live-GPU operator checks remain open in the archived gap log | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
 | v2.4.11 | Local splat viewer, optional CUDA generate, and the untagged 2.4.2-2.4.10 field work | Tagged from develop. Live NVIDIA generate and weight hashes remain open | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
 
-Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.7 live under `docs/archive/v2/`. v2.8 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.8/known-gaps.md](docs/v2/v2.8/known-gaps.md).
+Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.8 live under `docs/archive/v2/`. v2.9 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.9/known-gaps.md](docs/v2/v2.9/known-gaps.md).
 
 ### What's new in v2.8.0
 
 The community Qwen-Image-2.1 GGUF and Bespoke Nimble are not admitted. The acceptance bar has no v2.7.0 exclusion subsection, so the record is one known-gap row, DF-v280-1. Neither name is a catalog id, a runtime, or a download. DF-11 stays open.
 
-Plan: [Qwen-Image and Nimble exclusion](docs/v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md).
+Plan: [Qwen-Image and Nimble exclusion](docs/archive/v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md).
 
 ### What's new in v2.7.0
 
@@ -140,7 +140,7 @@ Image Studio can open a local `.splat` or `.ply` beside a finished image, with t
 - **Source image stays** - A splat download is a different file from the PNG.
 - **Optional generate** - Set `NEXUS_SPLAT_NVIDIA=1` and `NEXUS_SPLAT_CUDA=1` only on a machine that actually has them, and place the MIT weights yourself. The fake benchmark is `node scripts/bench-gaussian-splat.mjs`.
 
-Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/v2/v2.8/known-gaps.md).
+Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/v2/v2.9/known-gaps.md).
 
 ### What's new in v2.4.1
 
