@@ -118,7 +118,13 @@ Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" c
 | v2.4.1 | Field reliability, transcript reasoning, chat archives, unified models, and multi-root Agents workspaces | Tagged. Packaged Windows and live-GPU operator checks remain open in the archived gap log | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
 | v2.4.11 | Local splat viewer, optional CUDA generate, and the untagged 2.4.2-2.4.10 field work | Tagged from develop. Live NVIDIA generate and weight hashes remain open | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
 
-Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.6 live under `docs/archive/v2/`. v2.7 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.7/known-gaps.md](docs/v2/v2.7/known-gaps.md).
+Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.7 live under `docs/archive/v2/`. v2.8 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.8/known-gaps.md](docs/v2/v2.8/known-gaps.md).
+
+### What's new in v2.7.0
+
+Video Lab offers a talking-head only when the official LongCat Avatar 1.5 weights are installed. A diffusion-pro machine without those weights can still attach a photo and audio, and is told to install `longcat-video-avatar-1.5` instead of starting an image-to-video job. The Empero Qwen3.8-35B-A3B distill is recorded as not admitted. A confirmed submit still does not sample a clip while DF-8 is open.
+
+Plan: [avatar install gate](docs/archive/v2/v2.7/plans/v2.7.0-adoption-avatar-install-gate.md).
 
 ### What's new in v2.4.11
 
@@ -128,7 +134,7 @@ Image Studio can open a local `.splat` or `.ply` beside a finished image, with t
 - **Source image stays** - A splat download is a different file from the PNG.
 - **Optional generate** - Set `NEXUS_SPLAT_NVIDIA=1` and `NEXUS_SPLAT_CUDA=1` only on a machine that actually has them, and place the MIT weights yourself. The fake benchmark is `node scripts/bench-gaussian-splat.mjs`.
 
-Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/v2/v2.7/known-gaps.md).
+Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/v2/v2.8/known-gaps.md).
 
 ### What's new in v2.4.1
 
