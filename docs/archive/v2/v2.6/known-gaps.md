@@ -1,6 +1,6 @@
 # Known gaps carried forward
 
-**Status**: archived with v2.6.0 on 2026-09-27. Open rows are carried in `docs/v2/v2.7/known-gaps.md`.
+**Status**: archived with v2.6.0 on 2026-09-27. Open rows are carried in `docs/v2/v2.8/known-gaps.md`.
 **Last updated**: 2026-09-27
 
 v2.5 moved to `docs/archive/v2/v2.5/`. The rows below were not closed. They are not fixed. The archived files remain the detailed record.
