@@ -69,3 +69,65 @@ export function assertAvatarAllowed(input: {
 export function avatarAvailable(tierId: DiffusionTierId, vramGB: number): boolean {
   return tierId === AVATAR_REQUIRED_TIER && vramGB >= AVATAR_MIN_VRAM_GB;
 }
+
+/**
+ * A raw models-list row. `repo` is optional: the desktop DTO has no repo
+ * field, and the list check then uses the official id plus `source`.
+ */
+export interface AvatarModelRow {
+  readonly id?: string;
+  readonly installed?: unknown;
+  readonly source?: unknown;
+  readonly repo?: string | null;
+}
+
+/** Names the catalog id and Settings > Models. Returned only for the install refusal. */
+export const AVATAR_INSTALL_SENTENCE =
+  "Install longcat-video-avatar-1.5 in Settings > Models. This host can run a talking-head, but those weights are not installed.";
+
+/**
+ * True only when hardware allows avatar and the caller says the official
+ * weights are installed. A missing or non-boolean `installed` is not installed.
+ */
+export function avatarOffered(
+  tierId: DiffusionTierId,
+  vramGB: number,
+  installed: boolean,
+): boolean {
+  return avatarAvailable(tierId, vramGB) && installed === true;
+}
+
+/**
+ * Whether the raw models list (not the owned studio feed) has the official
+ * avatar weights installed from the registry. Any other video id is ignored.
+ */
+export function officialAvatarInstalled(
+  models: readonly AvatarModelRow[] | null | undefined,
+): boolean {
+  if (!Array.isArray(models)) return false;
+  const row = models.find((entry) => entry?.id === OFFICIAL_AVATAR_MODEL_ID);
+  if (!row || row.installed !== true) return false;
+  if (row.source !== "registry") return false;
+  if (!Object.prototype.hasOwnProperty.call(row, "repo")) return true;
+  return (
+    typeof row.repo === "string" &&
+    row.repo.startsWith(`${OFFICIAL_AVATAR_ORG}/`)
+  );
+}
+
+/**
+ * Install sentence when the host can run avatar, the weights are not offered,
+ * and the composer has an audio attachment. Null when hardware is false, the
+ * offer is true, or there is no audio.
+ */
+export function avatarInstallRefusal(input: {
+  readonly tierId: DiffusionTierId;
+  readonly vramGB: number;
+  readonly installed: boolean;
+  readonly hasAudio: boolean;
+}): string | null {
+  if (!avatarAvailable(input.tierId, input.vramGB)) return null;
+  if (avatarOffered(input.tierId, input.vramGB, input.installed)) return null;
+  if (!input.hasAudio) return null;
+  return AVATAR_INSTALL_SENTENCE;
+}
