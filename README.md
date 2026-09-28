@@ -120,6 +120,12 @@ Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" c
 
 Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.7 live under `docs/archive/v2/`. v2.8 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.8/known-gaps.md](docs/v2/v2.8/known-gaps.md).
 
+### What's new in v2.8.0
+
+The community Qwen-Image-2.1 GGUF and Bespoke Nimble are not admitted. The acceptance bar has no v2.7.0 exclusion subsection, so the record is one known-gap row, DF-v280-1. Neither name is a catalog id, a runtime, or a download. DF-11 stays open.
+
+Plan: [Qwen-Image and Nimble exclusion](docs/v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md).
+
 ### What's new in v2.7.0
 
 Video Lab offers a talking-head only when the official LongCat Avatar 1.5 weights are installed. A diffusion-pro machine without those weights can still attach a photo and audio, and is told to install `longcat-video-avatar-1.5` instead of starting an image-to-video job. The Empero Qwen3.8-35B-A3B distill is recorded as not admitted. A confirmed submit still does not sample a clip while DF-8 is open.
