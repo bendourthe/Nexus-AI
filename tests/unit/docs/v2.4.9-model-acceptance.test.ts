@@ -202,4 +202,29 @@ describe("v2.4.9 model and runtime acceptance bar", () => {
       expect(preTicked.filter((id) => id.includes(needle))).toStrictEqual([]);
     }
   });
+
+  it("records CrisperWhisper as one v2.9.0 wait row, not a bar subsection", () => {
+    const gaps = readFileSync(
+      join(REPO_ROOT, "docs/v2/v2.9/known-gaps.md"),
+      "utf8",
+    );
+    expect(gaps).toContain("CrisperWhisper 2.0 is not admitted");
+    expect(gaps).toContain("does not publish weights, a license, or a size");
+    expect(gaps).toContain("vendor-reported");
+    expect(gaps).toContain("CrisperWhisper 2.0 Pro ranks above");
+    expect(gaps).toContain("Faster-Whisper");
+    expect(gaps).toContain("not admitted, no catalog row");
+
+    const bar = readBar();
+    const headings = bar
+      .split("\n")
+      .filter((line) => /^#{1,6} /.test(line))
+      .join("\n");
+    expect(headings).not.toMatch(/CrisperWhisper/i);
+    expect(bar).not.toContain("CrisperWhisper");
+
+    const catalog = catalogIds().map((id) => id.toLowerCase());
+    expect(catalog.filter((id) => id.includes("crisper"))).toStrictEqual([]);
+    expect(catalog.filter((id) => id.includes("nyra"))).toStrictEqual([]);
+  });
 });
