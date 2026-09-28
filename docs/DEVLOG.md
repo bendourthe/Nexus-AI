@@ -10,6 +10,24 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-27] v2.9.0 Phase 1 - CrisperWhisper exclusion note
+
+Index: [plan](v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md), history [P1](v2/v2.9/development/history/2026-09-27_v2.9.0-crisperwhisper-phase-1.md).
+
+### What Changed
+
+- **CrisperWhisper 2.0 is not admitted.** The acceptance bar has no v2.8.0 exclusion sentences, so the record is DF-v290-1 in `docs/v2/v2.9/known-gaps.md`. No catalog row was added.
+
+### Verification
+
+`npx vitest run tests/unit/docs/v2.4.9-model-acceptance.test.ts`: 8 passed.
+
+### Known gaps
+
+DF-v290-1. Copying the sentence into the acceptance bar waits until the v2.8.0 exclusion text is there.
+
+---
+
 ## [2026-09-27] v2.8.0 Phase 2 - Evidence for the exclusion note
 
 Index: [plan](archive/v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md), [evidence](archive/v2/v2.8/development/last-phase-evidence.md), history [P2](archive/v2/v2.8/development/history/2026-09-27_v2.8.0-qwen-image-nimble-phase-2.md).
