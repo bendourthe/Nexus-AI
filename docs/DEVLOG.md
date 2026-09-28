@@ -10,6 +10,24 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-09-27] v2.9.0 Phase 2 - Evidence for the exclusion note
+
+Index: [plan](v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md), [evidence](v2/v2.9/development/last-phase-evidence.md), history [P2](v2/v2.9/development/history/2026-09-27_v2.9.0-crisperwhisper-phase-2.md).
+
+### What Changed
+
+- **The refusal stays a known-gap row.** The speech runtime was not edited. The pipeline was not rewritten.
+
+### Verification
+
+Full Vitest: 5925 passed, 8 timeouts. Those four files passed on a dedicated re-run (14 tests).
+
+### Known gaps
+
+No new row besides DF-v290-1. `QG-v270-1`, `QG-v270-2`, and `QG-v270-3` stay as written.
+
+---
+
 ## [2026-09-27] v2.9.0 Phase 1 - CrisperWhisper exclusion note
 
 Index: [plan](v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md), history [P1](v2/v2.9/development/history/2026-09-27_v2.9.0-crisperwhisper-phase-1.md).
