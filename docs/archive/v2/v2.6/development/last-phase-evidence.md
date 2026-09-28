@@ -151,7 +151,9 @@ No handbook line was added. That is the finding from sub-task 3.1, left as a fin
 
 ## Full-suite testing and stabilization
 
-Desktop suite, measured 2026-09-26: `npm test --prefix desktop` reported `Test Files  1 failed | 242 passed (243)` and `Tests  1 failed | 2218 passed | 1 skipped (2220)` in 195.17s. The failure was `sidecar-handlers.test.ts` expecting `NotImplementedError` for `chat.compact` and the other new methods, which are implemented and rejected an empty payload with `ZodError`. Those four methods were added to the implemented allowlist. Re-run: `tests/sidecar-handlers.test.ts` 26 passed. The full suite was not re-run after that one-file fix.
+Desktop suite, measured 2026-09-26: `npm test --prefix desktop` reported `Test Files  1 failed | 242 passed (243)` and `Tests  1 failed | 2218 passed | 1 skipped (2220)` in 195.17s. The failure was `sidecar-handlers.test.ts` expecting `NotImplementedError` for `chat.compact` and the other new methods, which are implemented and rejected an empty payload with `ZodError`. Those four methods were added to the implemented allowlist. Re-run: `tests/sidecar-handlers.test.ts` 26 passed.
+
+Re-run of the full desktop suite on 2026-09-27, after that allowlist fix: `Test Files  1 failed | 242 passed (243)` and `Tests  1 failed | 2218 passed | 1 skipped (2220)` in 208.00s. The sidecar file was not the failure. The one failure was `tests/chat-title-persist.test.tsx` timing out at 5000ms (`first send persists a prompt-derived fallback through renameChat and the rail follows`). Isolated re-run of that file: `Test Files  1 passed (1)`, `Tests  5 passed (5)`, the same test at 950ms. The pull-request `Test TypeScript` jobs on `e5b2b479` passed.
 
 Catalog invariant file, this session: `60 passed in 0.14s`.
 
@@ -163,4 +165,14 @@ Command parity, earlier this session after the compaction commands: `command-par
 
 Branch `feat/v2.6.0-adoption` was pushed once. Integration pull request: https://github.com/bendourthe/Nexus-AI/pull/75 against `develop`.
 
-Required check on `develop`: `ci-required`. That check was not terminal when this paragraph was written. The pull request is not merged. No tag and no GitHub Release were created.
+Required check on `develop` is `ci-required` (`strict: false`, no required reviews). `develop` also requires conversation resolution. On head `e5b2b479b67ab9d6ec9af3f433814f4a0fde0ca7`:
+
+- Push CI run 36330905774 completed with conclusion success. Job `ci-required` passed: https://github.com/bendourthe/Nexus-AI/actions/runs/36330905774/job/108653305092
+- Pull-request CI run 36330908653 completed with conclusion success on the same commit.
+- `gh pr checks 75 --watch --fail-fast` exited 0. CodeQL passed.
+
+Three open CodeQL threads about importing `nexus_installer.catalog_invariants` with both `import` and `import from` were removed in `e5b2b479` and then resolved. Those unresolved threads were what kept `mergeStateStatus` at `BLOCKED` after `ci-required` was already green.
+
+Merged 2026-09-27T16:02:57Z as `c5398a8cd3b95b9507bb96cebc6aa823c3d22470`.
+
+No tag and no GitHub Release were created by that merge. Version, changelog, tag, and the GitHub Release stay with semantic-release on push to `main`.
