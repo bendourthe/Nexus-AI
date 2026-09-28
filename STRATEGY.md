@@ -44,7 +44,7 @@ The four pillars are not equally load-bearing, but the repository has never said
 | 3 | **Image Studio** | Differentiated and GPU-heavy; the pillar most exposed to the single-GPU ceiling. |
 | 4 | **Video Lab** | Newest and most expensive per unit of output; the most defensible place to ship less. |
 
-**Confirmed 2026-09-26.** Rank 2 stands. The owner directed the v2.6.0 Chat-surface plan to be implemented in full, which is the confirmation this section was waiting for. The four features kept below are justified in Nexus-AI's own terms in `docs/v2/v2.6/development/v2.6.0-phase1-evidence.md`. None was kept only because a comparison source had it.
+**Confirmed 2026-09-26.** Rank 2 stands. The owner directed the v2.6.0 Chat-surface plan to be implemented in full, which is the confirmation this section was waiting for. The four features kept below are justified in Nexus-AI's own terms in `docs/archive/v2/v2.6/development/v2.6.0-phase1-evidence.md`. None was kept only because a comparison source had it.
 
 **Why this needed confirming**: rank 2 is exactly the question the v2.5.1 review raised. If Chat ranks second, its missing affordances (branching, diagram rendering, context control) are legitimate work. If Chat ranks lower, several of them should be dropped rather than sequenced, because they were adopted from a comparison against a product whose entire reason for existing is chat.
 
