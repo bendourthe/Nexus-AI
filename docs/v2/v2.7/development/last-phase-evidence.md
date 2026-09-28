@@ -213,4 +213,8 @@ Desktop eslint on the Phase 1 source files exited 0 before the Phase 1 commit. T
 
 ## Publication and integration
 
-Not started in this revision. The branch is local. Required check expected on the integration pull request: `ci-required`.
+Branch `feat/v2.7.0-adoption-avatar-install-gate` was pushed once. Integration pull request: https://github.com/bendourthe/Nexus-AI/pull/79 against `develop`.
+
+Required check expected: `ci-required`.
+
+The first `Submission Checklist gate` run failed because the body had no `## Submission Checklist` section (`node scripts/check-pr-checklist.mjs` exit 2). The body was rewritten with that section checked. That workflow runs on `synchronize`, not on an edit, so this commit exists to re-run it. Merge waits until `ci-required` is green.
