@@ -2,6 +2,7 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
+- 2026-09-28 v2.10: hosted Jev, Laya, and Kev are not admitted (DF-v210-1). Plan: [v2.10.0-adoption-system-one-models.md](v2/v2.10/plans/v2.10.0-adoption-system-one-models.md). History: [development/history](v2/v2.10/development/history/). Gaps: [known-gaps.md](v2/v2.10/known-gaps.md).
 - 2026-09-27 v2.9: the CrisperWhisper plan is archived at `docs/archive/v2/v2.9/`. v2.9.0 is published. Still-open items: `docs/v2/v2.10/known-gaps.md`.
 - 2026-09-27 v2.8: the Qwen-Image and Nimble plan is archived at `docs/archive/v2/v2.8/`. v2.8.0 is published. Still-open items: `docs/v2/v2.10/known-gaps.md`.
 - 2026-09-27 v2.7: the avatar install gate plan is archived at `docs/archive/v2/v2.7/`. v2.7.0 is published. Still-open items: `docs/v2/v2.10/known-gaps.md`.
