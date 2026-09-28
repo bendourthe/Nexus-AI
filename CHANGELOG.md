@@ -1,3 +1,11 @@
+# [2.7.0](https://github.com/bendourthe/Nexus-AI/compare/v2.6.0...v2.7.0) (2026-09-27)
+
+
+### Features
+
+* **video:** refuse talking-head until the official avatar weights are installed ([62b7b7f](https://github.com/bendourthe/Nexus-AI/commit/62b7b7f9))
+
+
 # [2.6.0](https://github.com/bendourthe/Nexus-AI/compare/v2.5.1...v2.6.0) (2026-09-27)
 
 
