@@ -1,0 +1,19 @@
+{
+  "file": "fenced-code.md",
+  "kind": "markdown",
+  "pageCount": 1,
+  "headings": [
+    {
+      "title": "Real Heading",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": ""
+    },
+    {
+      "title": "Second Heading",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": ""
+    }
+  ]
+}

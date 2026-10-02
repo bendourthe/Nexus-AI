@@ -12,6 +12,26 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-02] v2.11.0 Phase 2 - Outline feasibility and decisions
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), [feasibility](v2/v2.11/development/outline-feasibility.md), history [P2](v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-2.md).
+
+### What Changed
+
+- **Fixtures and measurement.** A seeded generator and a scan rasterizer produce 12 original fixtures; a measurement script runs them through the real OCR runtime and the direct readers.
+- **Decisions.** 2.3: Option B (pass `pages` through, outline-only cap up to 200). 2.4: headings for markdown, text, and DOCX (100% recall); page windows for PDFs and scans (RapidOCR recall 47-50%, scan 0% with the measurement detector).
+- **Stop rule.** Criterion (c) fails: the 60-page first call took 441 s on the CPU OCR engine against a 300 s bound. The run is blocked for a maintainer decision.
+
+### Verification
+
+11 new unit tests and the 6 Phase 1 tests pass. The real measurement ran end to end in 23 minutes.
+
+### Known gaps
+
+No new row yet. DF-v211-2 is written once the maintainer decides how the stop rule applies.
+
+---
+
 ## [2026-10-01] v2.11.0 Phase 1 - CLM and PageIndex exclusion note
 
 Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), [comparison](v2/v2.11/comparisons/v2.11.0-comparison-pageindex-airi-clm.md), history [P1](v2/v2.11/development/history/2026-10-01_v2.11.0-pageindex-airi-clm-phase-1.md).
