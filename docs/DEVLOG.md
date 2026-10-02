@@ -12,6 +12,24 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-01] v2.11.0 Phase 1 - CLM and PageIndex exclusion note
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), [comparison](v2/v2.11/comparisons/v2.11.0-comparison-pageindex-airi-clm.md), history [P1](v2/v2.11/development/history/2026-10-01_v2.11.0-pageindex-airi-clm-phase-1.md).
+
+### What Changed
+
+- **The refusal is one known-gap row.** DF-v211-1 records CLM-8B as not admitted, the PageIndex package and cloud as not adopted, and AIRI as re-checked through 0.12.0-beta.5. The catalog and the acceptance bar were not edited.
+
+### Verification
+
+`tests/unit/docs/v2.11.0-clm-exclusion.test.ts` plus the v2.10.0 exclusion test: 6 passed.
+
+### Known gaps
+
+No new row besides DF-v211-1.
+
+---
+
 ## [2026-09-27] v2.9.0 Phase 2 - Evidence for the exclusion note
 
 Index: [plan](archive/v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md), [evidence](archive/v2/v2.9/development/last-phase-evidence.md), history [P2](archive/v2/v2.9/development/history/2026-09-27_v2.9.0-crisperwhisper-phase-2.md).
