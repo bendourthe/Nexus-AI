@@ -66,3 +66,11 @@ Engine determinism table: `rapidocr` (portable, CPU, this host) deterministic; `
 **Outcome: STOP, as the rule is written.** Criterion (c) fails. Under the plan, Phases 3 to 5 are replaced by DF-v211-2 and the run continues at Phase 6 with DOC-1 and the CI gaps.
 
 **Open question for the maintainer (blocking).** Criterion (c) measures the OCR engine's own throughput, which `parse_document` already pays on the same pages today; the outline adds no OCR of its own. A narrower reading would compare the outline's first call against `parse_document` on the same pages and record the absolute OCR latency as a known gap. Changing a pre-registered rule after reading the result is a decision for the maintainer, not for the run, so the run stops here until it is made.
+
+## Maintainer decision (2026-10-02)
+
+The maintainer approved option B ("Approved your recommendation", recorded as the answer to blocker 0 in the run record). The plan file is not edited, because the signed run record binds its text; this section is the authoritative amendment.
+
+- **Criterion (c), amended**: the outline's first call may add at most 10% over `parse_document` on the same pages. The absolute OCR cost is the engine's, already paid by `parse_document`, and is recorded as DF-v211-3 rather than used as a viability bound. Phase 4.5 measures the overhead.
+- **Outcome under the amended rule: CONTINUE.** (a), (b), and the navigation check passed as written.
+- **Scope consequence**: markdown, text, and DOCX get headings; PDFs and scans get page windows unless the run-time predicate accepts the recovered headings, which needs space-insensitive matching for OCR text.
