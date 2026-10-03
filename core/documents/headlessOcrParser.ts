@@ -19,6 +19,19 @@ export interface BytesDocumentParser {
     readonly text: string;
     readonly markdown: string | null;
     readonly pageCount: number;
+    /**
+     * v2.11.0 Phase 3.1 -- per-page text the runtime already returns. Additive:
+     * `parse_document` ignores it, so its output is unchanged.
+     */
+    readonly pages: ReadonlyArray<{ readonly index: number; readonly text: string }>;
+    /** Number of pages actually returned. */
+    readonly pagesParsed: number;
+    /**
+     * True when the result may not cover the whole document: the page list
+     * disagrees with `pageCount`, or it reached the requested page cap (the
+     * runtime reports a capped `pageCount`, so a full cap is not proof of the end).
+     */
+    readonly partial: boolean;
   }>;
 }
 
@@ -82,11 +95,16 @@ export function createHeadlessOcrParser(
           maxPages: opts?.maxPages,
         });
         const result = await waitForJob(manager, jobId, pollMs);
+        const pages = Array.isArray(result.pages) ? result.pages : [];
+        const cap = opts?.maxPages;
         return {
           engine: result.engine,
           text: result.text,
           markdown: result.markdown,
           pageCount: result.pageCount,
+          pages,
+          pagesParsed: pages.length,
+          partial: pages.length !== result.pageCount || (cap !== undefined && pages.length >= cap),
         };
       } finally {
         inflight = false;

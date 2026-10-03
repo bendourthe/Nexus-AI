@@ -12,6 +12,25 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-02] v2.11.0 Phase 3 - Parser seam and outline core
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P3](v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-3.md).
+
+### What Changed
+
+- **Seam.** The OCR parser returns per-page text; `parse_document` ignores it and keeps its 50-page cap. The outline path may read up to 200 pages.
+- **Core.** Deterministic outline builder with a run-time quality predicate and numeric-only window fallbacks; fail-closed section reader; structure-only cache under `~/.nexus/outline-cache` with an in-memory text snapshot; per-engine determinism rules.
+
+### Verification
+
+286 blast-radius tests, build, lint, and the desktop typecheck pass. A real CPU-OCR smoke outlined a PDF and read a page-2 section.
+
+### Known gaps
+
+WN-v211-1 (no engine version from the OCR runtime).
+
+---
+
 ## [2026-10-02] v2.11.0 Phase 2 - Outline feasibility and decisions
 
 Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), [feasibility](v2/v2.11/development/outline-feasibility.md), history [P2](v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-2.md).
