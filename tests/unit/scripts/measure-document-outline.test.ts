@@ -4,6 +4,9 @@
  * because Vitest sets VITEST.
  */
 
+import { readFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -104,6 +107,14 @@ describe("generateFixtures", () => {
   it("keeps the 60-page manual at 60 pages or more", () => {
     const manual = generateFixtures(FIXTURE_SEED).find((f) => f.name === "manual-60p.pdf");
     expect(manual?.expected.pageCount).toBeGreaterThanOrEqual(60);
+  });
+
+  it("reproduces every committed fixture byte for byte", () => {
+    const docs = resolve(dirname(fileURLToPath(import.meta.url)), "../../fixtures/documents/outline/docs");
+    for (const fixture of generateFixtures(FIXTURE_SEED)) {
+      const committed = readFileSync(join(docs, fixture.name));
+      expect(fixture.bytes.equals(committed), `${fixture.name} drifted from the generator`).toBe(true);
+    }
   });
 
   it("builds the large test-time shapes on demand", () => {

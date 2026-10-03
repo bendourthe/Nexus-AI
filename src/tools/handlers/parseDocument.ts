@@ -44,6 +44,10 @@ export interface ParsedDocumentResult {
   readonly text: string;
   readonly markdown: string | null;
   readonly pageCount: number;
+  /** v2.11.0 Phase 3.1 -- optional per-page text for the outline tools; parse_document ignores it. */
+  readonly pages?: ReadonlyArray<{ readonly index: number; readonly text: string }>;
+  readonly pagesParsed?: number;
+  readonly partial?: boolean;
 }
 
 /**

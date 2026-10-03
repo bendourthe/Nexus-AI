@@ -461,7 +461,7 @@ export function generateFixtures(seed: number = FIXTURE_SEED): GeneratedFixture[
     expected: { file: "page-marker-literal.md", kind: "markdown", pageCount: 1, headings: [{ title: "Only Heading", level: 2, startPage: 1, firstWords: "" }] },
   });
 
-  const crlf = `## Windows Heading\r\n\r\n${paragraph(rand, 2)}\r\n\r\n## Second\r\n\r\n${paragraph(rand, 2)}\r\n`;
+  const crlf = `${String.fromCharCode(0xfeff)}## Windows Heading\r\n\r\n${paragraph(rand, 2)}\r\n\r\n## Second\r\n\r\n${paragraph(rand, 2)}\r\n`;
   out.push({
     name: "bom-crlf.md",
     bytes: Buffer.from(crlf, "utf8"),

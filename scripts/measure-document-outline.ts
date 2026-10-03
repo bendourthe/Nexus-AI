@@ -24,6 +24,7 @@ import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { BOM_AT_START } from "../core/documents/DocumentOutline.js";
 import { createOcrRuntimeBundle } from "../core/documents/ocrRuntimeFactory.js";
 import type { OcrParseManager, OcrParseResult } from "../core/documents/OcrParseManager.js";
 import type { ExpectedFile, ExpectedHeading } from "./generate-outline-fixtures.js";
@@ -229,7 +230,7 @@ async function measure(): Promise<{ rows: Row[]; prereq: string; capRow: string 
         continue;
       }
       if (expected.kind === "markdown" || expected.kind === "text") {
-        const text = bytes.toString("utf8").replace(/^/, "").replace(/\r\n/g, "\n");
+        const text = bytes.toString("utf8").replace(BOM_AT_START, "").replace(/\r\n/g, "\n");
         const detected = expected.kind === "markdown" ? detectMarkdownHeadings(text) : detectNumberedHeadings([text]);
         const m = matchHeadings(expected.headings, detected);
         const nav = navigationCheck(text, expected.headings, detected);
