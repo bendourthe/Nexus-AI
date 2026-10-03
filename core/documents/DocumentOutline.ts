@@ -161,7 +161,10 @@ export const BOM_AT_START = new RegExp(`^${String.fromCharCode(0xfeff)}`);
 
 export function sanitizeTitle(title: string, maxChars: number): string {
   const cleaned = title.replace(CONTROL_OR_BIDI, "").replace(/\s+/g, " ").trim();
-  return cleaned.length > maxChars ? `${cleaned.slice(0, safeBoundary(cleaned, maxChars))}...` : cleaned;
+  // Truncate so the result is at most maxChars long: screening a screened title
+  // again must return it unchanged, or the cache would refuse it.
+  if (cleaned.length <= maxChars) return cleaned;
+  return `${cleaned.slice(0, safeBoundary(cleaned, Math.max(0, maxChars - 3)))}...`;
 }
 
 /** Never split a UTF-16 surrogate pair. */

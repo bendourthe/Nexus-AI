@@ -16,6 +16,12 @@ import {
   PARSE_DOCUMENT_SETTING_KEY,
   isParseDocumentEnabled,
 } from "../../../../core/documents/parseDocumentEnabled.js";
+import {
+  DOCUMENT_OUTLINE_SETTING_KEY,
+  DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY,
+  isDocumentOutlineEnabled,
+  isDocumentOutlineSummariesEnabled,
+} from "../../../../core/documents/documentOutlineEnabled.js";
 import { nexusHome } from "../../../../core/storage/paths.js";
 import {
   evaluateDeny,
@@ -26,6 +32,7 @@ import {
   createHeadlessTools,
   type HeadlessDocumentParser,
   type HeadlessExec,
+  type HeadlessOutlineSummaryLlm,
   type HeadlessTool,
   type HeadlessToolResult,
 } from "../../../../modules/coding/runtime/headlessTools.js";
@@ -56,6 +63,15 @@ export interface SidecarHeadlessToolsOptions {
   readonly exec?: HeadlessExec;
   readonly byteCap?: number;
   readonly execSandbox?: boolean;
+  /** v2.11.0: explicit outline flag; otherwise env `NEXUS_DOCUMENT_OUTLINE` then settings.json. */
+  readonly documentOutlineEnabled?: boolean;
+  /** Injected outline settings values (tests). Skips the settings.json read. */
+  readonly outlineSettingsValue?: boolean;
+  readonly outlineSummariesSettingsValue?: boolean;
+  /** Model client for node summaries; summaries stay off without it. */
+  readonly outlineLlm?: HeadlessOutlineSummaryLlm;
+  /** Outline cache directory; `null` disables it (tests). */
+  readonly outlineCacheDir?: string | null;
   readonly ingestToMemory?: (input: {
     text: string;
     sourcePath: string;
@@ -64,18 +80,44 @@ export interface SidecarHeadlessToolsOptions {
   }) => Promise<{ stored: boolean; reason?: string }>;
 }
 
-function readParseDocumentSettingFromDisk(): boolean | undefined {
+function readBooleanSettingFromDisk(key: string): boolean | undefined {
   // Vitest must not pick up a developer `~/.nexus/settings.json` opt-in.
   if (process.env.VITEST === "true") return undefined;
   const filePath = join(nexusHome(), "settings.json");
   if (!existsSync(filePath)) return undefined;
   try {
     const data = JSON.parse(readFileSync(filePath, "utf8")) as Record<string, unknown>;
-    const value = data[PARSE_DOCUMENT_SETTING_KEY];
+    const value = data[key];
     return typeof value === "boolean" ? value : undefined;
   } catch {
     return undefined;
   }
+}
+
+function readParseDocumentSettingFromDisk(): boolean | undefined {
+  return readBooleanSettingFromDisk(PARSE_DOCUMENT_SETTING_KEY);
+}
+
+/** v2.11.0: the outline flag, resolved exactly as the extension resolves it. */
+export function resolveSidecarDocumentOutlineEnabled(
+  opts: Pick<SidecarHeadlessToolsOptions, "documentOutlineEnabled" | "env" | "outlineSettingsValue"> = {},
+): boolean {
+  if (typeof opts.documentOutlineEnabled === "boolean") return opts.documentOutlineEnabled;
+  const settingsValue =
+    typeof opts.outlineSettingsValue === "boolean"
+      ? opts.outlineSettingsValue
+      : readBooleanSettingFromDisk(DOCUMENT_OUTLINE_SETTING_KEY);
+  return isDocumentOutlineEnabled({ env: opts.env, settingsValue });
+}
+
+export function resolveSidecarOutlineSummariesEnabled(
+  opts: Pick<SidecarHeadlessToolsOptions, "env" | "outlineSummariesSettingsValue"> & { readonly outlineEnabled: boolean },
+): boolean {
+  const settingsValue =
+    typeof opts.outlineSummariesSettingsValue === "boolean"
+      ? opts.outlineSummariesSettingsValue
+      : readBooleanSettingFromDisk(DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY);
+  return isDocumentOutlineSummariesEnabled({ env: opts.env, settingsValue, outlineEnabled: opts.outlineEnabled });
 }
 
 export function resolveSidecarParseDocumentEnabled(
@@ -176,7 +218,10 @@ export function createSidecarHeadlessTools(
   options: SidecarHeadlessToolsOptions = {},
 ): HeadlessTool[] {
   const enabled = resolveSidecarParseDocumentEnabled(options);
-  const documentParser = resolveParser(enabled, options.documentParser);
+  const outlineEnabled = resolveSidecarDocumentOutlineEnabled(options);
+  const summariesEnabled = resolveSidecarOutlineSummariesEnabled({ ...options, outlineEnabled });
+  // One OCR adapter serves both tools; parse_document stays governed by its own flag.
+  const documentParser = resolveParser(enabled || outlineEnabled, options.documentParser);
   const ingestToMemory =
     options.ingestToMemory ??
     (async (input: { text: string; sourcePath: string; engine: string; workspaceId?: string }) => {
@@ -192,6 +237,9 @@ export function createSidecarHeadlessTools(
     ...(options.execSandbox !== undefined ? { execSandbox: options.execSandbox } : {}),
     documentParser,
     parseDocumentEnabled: enabled,
+    documentOutlineEnabled: outlineEnabled,
+    ...(options.outlineCacheDir !== undefined ? { outlineCacheDir: options.outlineCacheDir } : {}),
+    outlineSummaries: summariesEnabled && options.outlineLlm ? options.outlineLlm : null,
     browserEnabled: true,
     ingestToMemory,
   });

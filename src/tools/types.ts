@@ -27,6 +27,8 @@ export type BuiltinToolName =
   | "lsp_references"
   // v1.16.0 Phase 4 (adoption item A6) -- document OCR into agent context.
   | "parse_document"
+  | "document_outline"
+  | "document_read_section"
   // v1.19.1 Phase 2.8 -- read-only fs observation / integrity.
   | "watch_path"
   | "hash_file"
@@ -71,6 +73,8 @@ export const BUILTIN_TOOL_NAMES: readonly BuiltinToolName[] = [
   "lsp_definition",
   "lsp_references",
   "parse_document",
+  "document_outline",
+  "document_read_section",
   "watch_path",
   "hash_file",
   "browser_navigate",

@@ -225,7 +225,9 @@ describe("sanitizeTitle and presentOutline", () => {
   it("strips control and bidi characters and caps length", () => {
     const bidiOverride = String.fromCharCode(0x202e);
     expect(sanitizeTitle(`A${bidiOverride}evil\u0007 title`, 160)).toBe("Aevil title");
-    expect(sanitizeTitle("x".repeat(300), 10)).toBe(`${"x".repeat(10)}...`);
+    expect(sanitizeTitle("x".repeat(300), 10)).toBe(`${"x".repeat(7)}...`);
+    const once = sanitizeTitle("y".repeat(300), 160);
+    expect(sanitizeTitle(once, 160)).toBe(once);
   });
 
   it("applies the presentation budget without changing the cached tree", () => {

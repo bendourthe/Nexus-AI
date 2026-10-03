@@ -16,7 +16,8 @@ describe("TOOL_CATALOG", () => {
     // v1.16.0 Phase 4 (A6) added parse_document.
     // v1.19.1 Phase 2.8 added watch_path + hash_file.
     // v2.0.0 Phase 2 added five browser_* tools (DANGEROUS, specialty-trimmed).
-    expect(TOOL_CATALOG).toHaveLength(32);
+    // v2.11.0 Phase 4 added document_outline + document_read_section (+2, CONFIRM, specialty-trimmed).
+    expect(TOOL_CATALOG).toHaveLength(34);
   });
 
   it("every entry name matches a value from TOOL_NAMES", () => {

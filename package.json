@@ -304,6 +304,16 @@
           "default": false,
           "description": "v1.20.0 -- expose the `parse_document` agent tool, which reads a workspace PDF, image, or Office file as text. Off by default; with the toggle off the tool is not registered. PDF/image still need a document OCR model (Settings > Models). .docx / .pptx / .xlsx parse without those models. Sidecar hosts honor NEXUS_PARSE_DOCUMENT=1 or nexus.coding.parseDocument.enabled in ~/.nexus/settings.json."
         },
+        "nexus.coding.documentOutline.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "v2.11.0 -- expose `document_outline` and `document_read_section`, which list a workspace document's sections (markdown, text, PDF, DOCX, images) and read one section at a time. Off by default. PDF, DOCX, and image files need a document model (Settings > Models). Sidecar hosts honor NEXUS_DOCUMENT_OUTLINE=1 or nexus.coding.documentOutline.enabled in ~/.nexus/settings.json."
+        },
+        "nexus.coding.documentOutline.summaries.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "v2.11.0 -- add a one-line, machine-generated summary per outline section from the local chat model (loopback endpoints only). Has effect only when nexus.coding.documentOutline.enabled is on. Off by default."
+        },
         "nexus.coding.parseDocument.memoryIngest.enabled": {
           "type": "boolean",
           "default": false,

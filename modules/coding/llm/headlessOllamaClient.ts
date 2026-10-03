@@ -43,6 +43,11 @@ function parseChunk(line: string): LLMStreamChunk {
  * `checkHealth` / `listModels` / `streamChat` surface the headless agent loop
  * needs (embeddings are omitted -- the coding agent does not use them).
  */
+/** The base URL `createHeadlessOllamaClient` will call, for loopback checks by callers. */
+export function resolveHeadlessOllamaUrl(baseUrl?: string): string {
+  return baseUrl ?? process.env["NEXUS_OLLAMA_URL"] ?? DEFAULT_OLLAMA_URL;
+}
+
 export function createHeadlessOllamaClient(
   options: HeadlessOllamaClientOptions = {},
 ): LLMClient {

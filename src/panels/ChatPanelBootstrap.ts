@@ -75,6 +75,7 @@ import { defaultPermissionOptions } from "./webview/render/permissionPrompt.js";
 import type { ToolRegistry } from "../tools/ToolRegistry.js";
 import { buildToolRegistry } from "../tools/ToolRegistryBuilder.js";
 import { buildParseDocumentDeps } from "../tools/parseDocumentWiring.js";
+import { buildDocumentOutlineDeps } from "../tools/documentOutlineWiring.js";
 import { TodoState } from "../tools/handlers/todos.js";
 import { renderMarkdown } from "../../modules/coding/utils/MarkdownRenderer.js";
 import { getLogger } from "../../modules/coding/utils/logger.js";
@@ -330,6 +331,14 @@ export function bootstrapChatPanel(input: ChatPanelBootstrapInput): Bootstrapped
       parseDocumentMemoryIngestEnabled: settings.parseDocumentMemoryIngestEnabled === true,
       memoryStore: memorySubsystem.memoryStore,
       sessionId: () => manager.sessionId,
+    }),
+    documentOutline: buildDocumentOutlineDeps({
+      documentOutlineEnabled: settings.documentOutlineEnabled === true,
+      documentOutlineSummariesEnabled: settings.documentOutlineSummariesEnabled === true,
+      gate: confirmationGate,
+      extraSecretPatterns: settings.secretPathDenyExtra,
+      configuredContextTokens: () => runtime.settings.maxTokens,
+      llm: { client, model: () => runtime.settings.modelName, endpoint: settings.ollamaUrl },
     }),
   });
 
