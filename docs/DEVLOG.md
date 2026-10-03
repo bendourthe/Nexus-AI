@@ -12,6 +12,26 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-02] v2.11.0 Phase 4 - Tools, screening, both channels, summaries
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P4](v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-4.md).
+
+### What Changed
+
+- **Tools.** `document_outline` and `document_read_section` in the VS Code extension and the desktop sidecar, behind `nexus.coding.documentOutline.enabled` (default off), CONFIRM tier.
+- **Screening.** Every document-derived string is screened (whole sections before slicing), secret-redacted, and wrapped in a nonce-delimited data block; reads are limited to documents outlined in the session, with call and output caps.
+- **Summaries.** Optional, behind their own flag, loopback-only, screened on generation and on every cache read.
+
+### Verification
+
+3,339 broad root tests and the new suites pass; build, lint, desktop typecheck, and sidecar bundle pass; the egress test saw zero attempts with the trap proven armed; the built sidecar answered the new status method; the headless tools outlined and read a PDF through the real OCR runtime.
+
+### Known gaps
+
+WN-v211-2 (no summaries on the ACP path) and WN-v211-3 (loopback check is literal).
+
+---
+
 ## [2026-10-02] v2.11.0 Phase 3 - Parser seam and outline core
 
 Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P3](v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-3.md).

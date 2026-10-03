@@ -143,6 +143,11 @@ export class OutlineSession {
     return { outline, ephemeral, source: "fresh" };
   }
 
+  /** Extracted text of a live snapshot, or null when it is no longer in memory. */
+  textFor(treeHash: string): string | null {
+    return this.deps.snapshots.get(treeHash)?.text ?? null;
+  }
+
   async readSection(
     bytes: Uint8Array,
     kind: DocumentKind,

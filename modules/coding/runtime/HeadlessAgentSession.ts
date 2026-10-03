@@ -144,6 +144,8 @@ function buildSystemPrompt(
  */
 const HEADLESS_INBOUND_TOOLS = new Set([
   "parse_document",
+  "document_outline",
+  "document_read_section",
   "browser_navigate",
   "browser_click",
   "browser_type",

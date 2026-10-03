@@ -12,6 +12,8 @@ const MAX_TOOL_COUNT = 20;
  */
 const OPTIONAL_SPECIALTY_TOOLS: ReadonlySet<string> = new Set([
   "parse_document",
+  "document_outline",
+  "document_read_section",
   "watch_path",
   "hash_file",
 ]);

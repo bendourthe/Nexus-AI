@@ -13,3 +13,7 @@ Files this phase added under `docs/`: `docs/v2/v2.11/development/outline-feasibi
 ## Phase 3 (2026-10-02)
 
 Files this phase added under `docs/`: the Phase 3 session history, one known-gaps row, and one `docs/DEVLOG.md` entry. The throwaway smoke script and its temporary cache directory were deleted after use. Nothing proposed for cleanup.
+
+## Phase 4 (2026-10-02)
+
+Files this phase added under `docs/`: the Phase 4 session history, two known-gaps rows, and one `docs/DEVLOG.md` entry. The throwaway smoke and probe scripts were deleted after use. Nothing proposed for cleanup.

@@ -106,6 +106,9 @@ const INBOUND_EXTERNAL_DATA_TOOLS = new Set([
   "browser_click",
   "browser_type",
   "browser_aria_snapshot",
+  // v2.11.0 Phase 4: annotation only; the outline tools also wrap their own output.
+  "document_outline",
+  "document_read_section",
 ]);
 
 /**
