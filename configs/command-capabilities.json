@@ -140,6 +140,14 @@
       "feature": "f001"
     },
     {
+      "command": "coding.documentOutline.setEnabled",
+      "feature": "f005"
+    },
+    {
+      "command": "coding.documentOutline.status",
+      "feature": "f005"
+    },
+    {
       "command": "coding.memory.snapshot",
       "feature": "f013"
     },
