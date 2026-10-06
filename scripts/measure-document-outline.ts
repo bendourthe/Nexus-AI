@@ -11,7 +11,7 @@
  * recoverable, pages parsed versus page count, seconds per page, per-engine
  * determinism (each OCR fixture parsed twice here, never in production), and a
  * script-only navigation check. Results replace the block between the
- * measurement markers in docs/v2/v2.11/development/outline-feasibility.md.
+ * measurement markers in docs/archive/v2/v2.11/development/outline-feasibility.md.
  *
  * Run: npx vite-node scripts/measure-document-outline.ts
  * Offline: the only child process is the local OCR runtime; no network.
@@ -170,7 +170,7 @@ interface Row {
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, "..");
 const FIXTURES = join(REPO, "tests/fixtures/documents/outline");
-const REPORT = join(REPO, "docs/v2/v2.11/development/outline-feasibility.md");
+const REPORT = join(REPO, "docs/archive/v2/v2.11/development/outline-feasibility.md");
 const START = "<!-- measurements:start -->";
 const END = "<!-- measurements:end -->";
 

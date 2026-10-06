@@ -145,7 +145,7 @@ Docs: [docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md](docs/archive/
 * **Video enhancement paths:** treat Windows 8.3 and macOS `/var` tmpdir aliases as the same identity as `realpath` when the leaf is a regular file, so Shell Build Windows/macOS vitest can pass the same suite as Ubuntu. Do not retag `v2.3.1`.
 * **Windows process host:** pin the PowerShell helper PATH to System32 and .NET Framework roots so in-memory `Add-Type` can find `csc.exe`, and run desktop vitest as a single worker on Windows CI so those compiles are not starved by parallel coverage. Do not retag `v2.3.1`.
 
-Plan: [v2.4.0 splat](docs/archive/v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md). Gaps that remain open: [carried forward](docs/v2/v2.11/known-gaps.md).
+Plan: [v2.4.0 splat](docs/archive/v2/v2.4/plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting.md). Gaps that remain open: [carried forward](docs/v2/v2.12/known-gaps.md).
 
 # Unreleased
 
