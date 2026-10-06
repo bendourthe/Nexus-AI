@@ -2,8 +2,37 @@ import { describe, it, expect, vi } from "vitest";
 import {
   parseAgentToolCalls,
   stripAgentToolCalls,
+  toolCallSyntax,
   toolFormatForModel,
 } from "../../../modules/coding/llm/parseAgentToolCalls.js";
+import { TOOL_FORMAT_NAMES } from "../../../modules/coding/llm/ToolCallFormat.js";
+
+describe("toolCallSyntax", () => {
+  it.each(TOOL_FORMAT_NAMES.filter((f) => f !== "none"))(
+    "teaches %s a call its own parser reads with the arguments intact",
+    (format) => {
+      const { example } = toolCallSyntax(format);
+      const parsed = parseAgentToolCalls(example, format);
+      expect(parsed.results).toHaveLength(1);
+      const first = parsed.results[0];
+      expect(first?.ok).toBe(true);
+      if (first?.ok) {
+        expect(first.call.tool).toBe("read_file");
+        expect(first.call.parameters).toEqual({ path: "src/index.ts" });
+      }
+    },
+  );
+
+  it("never teaches Gemma JSON arguments, which its parser reads as empty", () => {
+    const parsed = parseAgentToolCalls('<|tool_call>call:read_file{"path": "src/index.ts"}<tool_call|>', "gemma4-xml");
+    expect(parsed.results[0]?.ok && parsed.results[0].call.parameters).toEqual({});
+    expect(toolCallSyntax("gemma4-xml").instruction).not.toContain('{"');
+  });
+
+  it("gives no call example to a model without tool support", () => {
+    expect(toolCallSyntax("none").example).toBe("");
+  });
+});
 
 describe("parseAgentToolCalls", () => {
   it("keeps Gemma XML parsing byte-identical for gemma4-xml", () => {

@@ -1,0 +1,79 @@
+{
+  "file": "scan-10p.pdf",
+  "kind": "scan",
+  "pageCount": 12,
+  "headings": [
+    {
+      "title": "1 Introduction",
+      "level": 1,
+      "startPage": 1,
+      "firstWords": "Signal power power sample review operator"
+    },
+    {
+      "title": "1.1 Storage Layout Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Schedule system report manual input range"
+    },
+    {
+      "title": "1.2 Troubleshooting Details",
+      "level": 2,
+      "startPage": 2,
+      "firstWords": "Setting module filter system service profile"
+    },
+    {
+      "title": "2 Installation",
+      "level": 1,
+      "startPage": 4,
+      "firstWords": "Setting control power range manual config"
+    },
+    {
+      "title": "2.1 Scheduling Details",
+      "level": 2,
+      "startPage": 4,
+      "firstWords": "Status engine device record value value"
+    },
+    {
+      "title": "2.2 Security Model Details",
+      "level": 2,
+      "startPage": 5,
+      "firstWords": "Memory channel window limit option cycle"
+    },
+    {
+      "title": "3 Configuration",
+      "level": 1,
+      "startPage": 7,
+      "firstWords": "Signal output output network range value"
+    },
+    {
+      "title": "3.1 Monitoring Details",
+      "level": 2,
+      "startPage": 7,
+      "firstWords": "Factor value control value index operator"
+    },
+    {
+      "title": "3.2 Backup and Restore Details",
+      "level": 2,
+      "startPage": 8,
+      "firstWords": "Signal network manual handle option sample"
+    },
+    {
+      "title": "4 Network Settings",
+      "level": 1,
+      "startPage": 10,
+      "firstWords": "Memory driver signal engine driver network"
+    },
+    {
+      "title": "4.1 Troubleshooting Details",
+      "level": 2,
+      "startPage": 10,
+      "firstWords": "Index factor memory channel option input"
+    },
+    {
+      "title": "4.2 Performance Tuning Details",
+      "level": 2,
+      "startPage": 11,
+      "firstWords": "Range cycle status handle handle control"
+    }
+  ]
+}

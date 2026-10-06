@@ -12,6 +12,123 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-05] v2.11.0 Phase 6 - Final-phase duties
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P6](v2/v2.11/development/history/2026-10-05_v2.11.0-pageindex-airi-clm-phase-6.md), [evidence](v2/v2.11/development/v2.11.0-last-phase-evidence.md).
+
+### What Changed
+
+- **Screening hardened** after an adversarial deep pass (two fix cycles): every flagged line is redacted in linear time, invisible format characters are stripped, and text that cannot be fully screened is withheld. Secret-path checks run on the resolved real path in both channels, the post-open real path is re-checked, and summaries are secret-redacted.
+- **Window-sized output on every sidecar path**: the desktop runner, ACP agent, and scheduled runs read the loaded model's window from Ollama.
+- **CI**: read-only default token in `ci.yml`, `installer-required` success-only, `fast`/`full`/`platform` profiles.
+- **Docs**: the outline-tools handbook; the handbook generator wraps inline code.
+
+### Verification
+
+Root 6,102 passed after giving four git-spawning suites a 30-second timeout (their 5-second timeouts also occur at the integration base), desktop 2,227 passed, both typechecks, lint, architecture check; live tool calls on both models; real OCR exercises.
+
+### Known gaps
+
+DF-v211-4 to DF-v211-7, WN-v211-6, WN-v211-7, QG-v211-1; CI-v251-1 and QG-v270-2 narrowed.
+
+---
+
+## [2026-10-03] v2.11.0 Phase 5 - Directional smoke test, and native tool calling
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P5](v2/v2.11/development/history/2026-10-03_v2.11.0-pageindex-airi-clm-phase-5.md), result [outline-eval](v2/v2.11/development/outline-eval.md).
+
+### What Changed
+
+- **Native tool calls, both channels.** On Ollama 0.32 Gemma 4 and Qwen 3.5 tool calls arrive only in `message.tool_calls`, which every client dropped; agentic coding called no tools. The stream schema keeps them, `AgentLoop` and `HeadlessAgentSession` execute them (native calls replace text calls, never both), the headless loop sends `tools`, and the LM Studio and OpenAI-compatible clients assemble streamed calls. The headless prompt now teaches each model its own call syntax.
+- **Smoke test.** An opt-in four-arm harness (`NEXUS_OUTLINE_SMOKE=1`, outside CI) on qwen3.5:9b and gemma4:12b. Past page 50 the outline tools answered 3 to 4 of 10 opening-words questions; `parse_document` and BM25 answered none. The flags stay off; the promotion criteria are not met.
+
+### Verification
+
+See the Phase 5 history, section 4.
+
+### Known gaps
+
+DF-v211-2 (review at v2.13.0), DF-v211-7 (tool results overflow the window), WN-v211-4, WN-v211-5.
+
+---
+
+## [2026-10-02] v2.11.0 Phase 4 - Tools, screening, both channels, summaries
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P4](v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-4.md).
+
+### What Changed
+
+- **Tools.** `document_outline` and `document_read_section` in the VS Code extension and the desktop sidecar, behind `nexus.coding.documentOutline.enabled` (default off), CONFIRM tier.
+- **Screening.** Every document-derived string is screened (whole sections before slicing), secret-redacted, and wrapped in a nonce-delimited data block; reads are limited to documents outlined in the session, with call and output caps.
+- **Summaries.** Optional, behind their own flag, loopback-only, screened on generation and on every cache read.
+
+### Verification
+
+3,339 broad root tests and the new suites pass; build, lint, desktop typecheck, and sidecar bundle pass; the egress test saw zero attempts with the trap proven armed; the built sidecar answered the new status method; the headless tools outlined and read a PDF through the real OCR runtime.
+
+### Known gaps
+
+WN-v211-2 (no summaries on the ACP path) and WN-v211-3 (loopback check is literal).
+
+---
+
+## [2026-10-02] v2.11.0 Phase 3 - Parser seam and outline core
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P3](v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-3.md).
+
+### What Changed
+
+- **Seam.** The OCR parser returns per-page text; `parse_document` ignores it and keeps its 50-page cap. The outline path may read up to 200 pages.
+- **Core.** Deterministic outline builder with a run-time quality predicate and numeric-only window fallbacks; fail-closed section reader; structure-only cache under `~/.nexus/outline-cache` with an in-memory text snapshot; per-engine determinism rules.
+
+### Verification
+
+286 blast-radius tests, build, lint, and the desktop typecheck pass. A real CPU-OCR smoke outlined a PDF and read a page-2 section.
+
+### Known gaps
+
+WN-v211-1 (no engine version from the OCR runtime).
+
+---
+
+## [2026-10-02] v2.11.0 Phase 2 - Outline feasibility and decisions
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), [feasibility](v2/v2.11/development/outline-feasibility.md), history [P2](v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-2.md).
+
+### What Changed
+
+- **Fixtures and measurement.** A seeded generator and a scan rasterizer produce 12 original fixtures; a measurement script runs them through the real OCR runtime and the direct readers.
+- **Decisions.** 2.3: Option B (pass `pages` through, outline-only cap up to 200). 2.4: headings for markdown, text, and DOCX (100% recall); page windows for PDFs and scans (RapidOCR recall 47-50%, scan 0% with the measurement detector).
+- **Stop rule.** Criterion (c) fails: the 60-page first call took 441 s on the CPU OCR engine against a 300 s bound. The run is blocked for a maintainer decision.
+
+### Verification
+
+11 new unit tests and the 6 Phase 1 tests pass. The real measurement ran end to end in 23 minutes.
+
+### Known gaps
+
+No new row yet. DF-v211-2 is written once the maintainer decides how the stop rule applies.
+
+---
+
+## [2026-10-01] v2.11.0 Phase 1 - CLM and PageIndex exclusion note
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), [comparison](v2/v2.11/comparisons/v2.11.0-comparison-pageindex-airi-clm.md), history [P1](v2/v2.11/development/history/2026-10-01_v2.11.0-pageindex-airi-clm-phase-1.md).
+
+### What Changed
+
+- **The refusal is one known-gap row.** DF-v211-1 records CLM-8B as not admitted, the PageIndex package and cloud as not adopted, and AIRI as re-checked through 0.12.0-beta.5. The catalog and the acceptance bar were not edited.
+
+### Verification
+
+`tests/unit/docs/v2.11.0-clm-exclusion.test.ts` plus the v2.10.0 exclusion test: 6 passed.
+
+### Known gaps
+
+No new row besides DF-v211-1.
+
+---
+
 ## [2026-09-27] v2.9.0 Phase 2 - Evidence for the exclusion note
 
 Index: [plan](archive/v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md), [evidence](archive/v2/v2.9/development/last-phase-evidence.md), history [P2](archive/v2/v2.9/development/history/2026-09-27_v2.9.0-crisperwhisper-phase-2.md).

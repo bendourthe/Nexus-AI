@@ -63,6 +63,8 @@ import {
   MediaSampleVideoFramesRequest,
   CodingParseDocumentStatusRequest,
   CodingParseDocumentSetEnabledRequest,
+  CodingDocumentOutlineStatusRequest,
+  CodingDocumentOutlineSetEnabledRequest,
   ModelsInstallRequest,
   ModelsRemoveRequest,
   ModelsInstallDrainRequest,
@@ -219,6 +221,12 @@ import {
   PARSE_DOCUMENT_SETTING_KEY,
   isParseDocumentEnabled,
 } from "../../../core/documents/parseDocumentEnabled.js";
+import {
+  DOCUMENT_OUTLINE_SETTING_KEY,
+  DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY,
+  isDocumentOutlineEnabled,
+  isDocumentOutlineSummariesEnabled,
+} from "../../../core/documents/documentOutlineEnabled.js";
 import {
   VIDEO2X_ENV_KEY,
   VIDEO2X_SETTING_KEY,
@@ -2219,6 +2227,31 @@ export const handlers: Record<Method, HandlerFn> = {
     const req = CodingParseDocumentSetEnabledRequest.parse(params ?? {});
     await resolveSettings(ctx).set(PARSE_DOCUMENT_SETTING_KEY, req.enabled);
     return { enabled: req.enabled };
+  },
+  "coding.documentOutline.status": async (params, ctx) => {
+    CodingDocumentOutlineStatusRequest.parse(params ?? {});
+    const settings = resolveSettings(ctx);
+    const enabled = isDocumentOutlineEnabled({
+      settingsValue: await settings.get<boolean>(DOCUMENT_OUTLINE_SETTING_KEY),
+    });
+    const summariesEnabled = isDocumentOutlineSummariesEnabled({
+      settingsValue: await settings.get<boolean>(DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY),
+      outlineEnabled: enabled,
+    });
+    return { enabled, summariesEnabled };
+  },
+  "coding.documentOutline.setEnabled": async (params, ctx) => {
+    const req = CodingDocumentOutlineSetEnabledRequest.parse(params ?? {});
+    const settings = resolveSettings(ctx);
+    await settings.set(DOCUMENT_OUTLINE_SETTING_KEY, req.enabled);
+    if (req.summariesEnabled !== undefined) {
+      await settings.set(DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY, req.summariesEnabled);
+    }
+    const summariesEnabled = isDocumentOutlineSummariesEnabled({
+      settingsValue: await settings.get<boolean>(DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY),
+      outlineEnabled: req.enabled,
+    });
+    return { enabled: req.enabled, summariesEnabled };
   },
 };
 

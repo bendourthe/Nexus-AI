@@ -17,6 +17,11 @@ on:
     # never was. Path filters already keep the added cost bounded.
     branches: ["main", "develop"]
 
+# v2.11.0 Phase 6.5 (QG-v270-2): read-only token by default. No step here
+# writes with GITHUB_TOKEN; a job that ever needs to must declare it.
+permissions:
+  contents: read
+
 concurrency:
   # github.head_ref is set on pull_request events; falls back to
   # github.ref on push. This collapses push/pull_request events for the

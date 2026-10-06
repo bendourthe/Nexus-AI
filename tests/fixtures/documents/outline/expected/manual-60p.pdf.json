@@ -1,0 +1,199 @@
+{
+  "file": "manual-60p.pdf",
+  "kind": "pdf",
+  "pageCount": 65,
+  "headings": [
+    {
+      "title": "1 Introduction",
+      "level": 1,
+      "startPage": 2,
+      "firstWords": "Review control signal index input output"
+    },
+    {
+      "title": "1.1 Storage Layout Details",
+      "level": 2,
+      "startPage": 2,
+      "firstWords": "Schedule sensor system limit window window"
+    },
+    {
+      "title": "1.2 Troubleshooting Details",
+      "level": 2,
+      "startPage": 4,
+      "firstWords": "Engine review review schedule limit output"
+    },
+    {
+      "title": "1.3 Performance Tuning Details",
+      "level": 2,
+      "startPage": 6,
+      "firstWords": "System layer limit report input manual"
+    },
+    {
+      "title": "2 Installation",
+      "level": 1,
+      "startPage": 10,
+      "firstWords": "Filter sensor buffer setting window cycle"
+    },
+    {
+      "title": "2.1 Scheduling Details",
+      "level": 2,
+      "startPage": 10,
+      "firstWords": "System cycle manual storage service limit"
+    },
+    {
+      "title": "2.2 Security Model Details",
+      "level": 2,
+      "startPage": 12,
+      "firstWords": "Operator schedule limit filter measure control"
+    },
+    {
+      "title": "2.3 Maintenance Details",
+      "level": 2,
+      "startPage": 15,
+      "firstWords": "Layer operator memory sensor manual service"
+    },
+    {
+      "title": "3 Configuration",
+      "level": 1,
+      "startPage": 18,
+      "firstWords": "Driver control module range layer profile"
+    },
+    {
+      "title": "3.1 Monitoring Details",
+      "level": 2,
+      "startPage": 18,
+      "firstWords": "Window channel service system filter schedule"
+    },
+    {
+      "title": "3.2 Backup and Restore Details",
+      "level": 2,
+      "startPage": 20,
+      "firstWords": "Config power filter signal sensor report"
+    },
+    {
+      "title": "3.3 Calibration Details",
+      "level": 2,
+      "startPage": 22,
+      "firstWords": "Device index control report buffer profile"
+    },
+    {
+      "title": "4 Network Settings",
+      "level": 1,
+      "startPage": 26,
+      "firstWords": "Index setting manual review channel storage"
+    },
+    {
+      "title": "4.1 Troubleshooting Details",
+      "level": 2,
+      "startPage": 26,
+      "firstWords": "Value manual manual window sensor measure"
+    },
+    {
+      "title": "4.2 Performance Tuning Details",
+      "level": 2,
+      "startPage": 28,
+      "firstWords": "Factor filter power service storage profile"
+    },
+    {
+      "title": "4.3 Reporting Details",
+      "level": 2,
+      "startPage": 30,
+      "firstWords": "Input control driver network factor status"
+    },
+    {
+      "title": "5 Storage Layout",
+      "level": 1,
+      "startPage": 34,
+      "firstWords": "Signal output manual system queue operator"
+    },
+    {
+      "title": "5.1 Security Model Details",
+      "level": 2,
+      "startPage": 34,
+      "firstWords": "Report report window cycle module device"
+    },
+    {
+      "title": "5.2 Maintenance Details",
+      "level": 2,
+      "startPage": 36,
+      "firstWords": "Handle option buffer sample config value"
+    },
+    {
+      "title": "5.3 Appendix Notes Details",
+      "level": 2,
+      "startPage": 39,
+      "firstWords": "Filter module measure stream driver status"
+    },
+    {
+      "title": "6 Scheduling",
+      "level": 1,
+      "startPage": 42,
+      "firstWords": "Service range status control output record"
+    },
+    {
+      "title": "6.1 Backup and Restore Details",
+      "level": 2,
+      "startPage": 42,
+      "firstWords": "Factor system handle input engine channel"
+    },
+    {
+      "title": "6.2 Calibration Details",
+      "level": 2,
+      "startPage": 44,
+      "firstWords": "Layer manual config driver factor status"
+    },
+    {
+      "title": "6.3 Glossary Terms Details",
+      "level": 2,
+      "startPage": 47,
+      "firstWords": "Config index option window buffer engine"
+    },
+    {
+      "title": "7 Monitoring",
+      "level": 1,
+      "startPage": 50,
+      "firstWords": "Range system record network memory signal"
+    },
+    {
+      "title": "7.1 Performance Tuning Details",
+      "level": 2,
+      "startPage": 50,
+      "firstWords": "Layer driver queue status signal storage"
+    },
+    {
+      "title": "7.2 Reporting Details",
+      "level": 2,
+      "startPage": 52,
+      "firstWords": "Schedule stream service manual signal range"
+    },
+    {
+      "title": "7.3 Introduction Details",
+      "level": 2,
+      "startPage": 55,
+      "firstWords": "System schedule operator index range review"
+    },
+    {
+      "title": "8 Troubleshooting",
+      "level": 1,
+      "startPage": 58,
+      "firstWords": "Profile range module power range cycle"
+    },
+    {
+      "title": "8.1 Maintenance Details",
+      "level": 2,
+      "startPage": 58,
+      "firstWords": "Storage control config module measure cycle"
+    },
+    {
+      "title": "8.2 Appendix Notes Details",
+      "level": 2,
+      "startPage": 60,
+      "firstWords": "Output input record record layer output"
+    },
+    {
+      "title": "8.3 Installation Details",
+      "level": 2,
+      "startPage": 63,
+      "firstWords": "Profile config value index measure config"
+    }
+  ]
+}

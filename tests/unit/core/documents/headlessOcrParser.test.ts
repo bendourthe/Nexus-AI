@@ -58,6 +58,34 @@ describe("createHeadlessOcrParser", () => {
     await expect(parser.parse("QUFB")).rejects.toThrow(/install RapidOCR/);
   });
 
+  it("passes the runtime's per-page text through (v2.11.0 Phase 3.1)", async () => {
+    runtime.setResponse(
+      "parse",
+      okEnvelope({ pageCount: 2, pages: [{ index: 0, text: "a" }, { index: 1, text: "b" }] }),
+    );
+    const parser = createHeadlessOcrParser(new OcrParseManager(runtime), { pollMs: 0 });
+    const result = await parser.parse("QUFB", { maxPages: 200 });
+    expect(result.pages.map((p) => p.text)).toStrictEqual(["a", "b"]);
+    expect(result.pagesParsed).toBe(2);
+    expect(result.partial).toBe(false);
+  });
+
+  it("marks a result partial when it reaches the cap or disagrees with pageCount", async () => {
+    runtime.setResponse("parse", okEnvelope({ pageCount: 3, pages: [{ index: 0, text: "a" }] }));
+    const parser = createHeadlessOcrParser(new OcrParseManager(runtime), { pollMs: 0 });
+    expect((await parser.parse("QUFB")).partial).toBe(true);
+    runtime.setResponse("parse", okEnvelope({ pageCount: 2, pages: [{ index: 0, text: "a" }, { index: 1, text: "b" }] }));
+    expect((await parser.parse("QUFB", { maxPages: 2 })).partial).toBe(true);
+  });
+
+  it("returns an empty page list rather than failing when the runtime sends none", async () => {
+    runtime.setResponse("parse", okEnvelope({ pages: undefined }));
+    const parser = createHeadlessOcrParser(new OcrParseManager(runtime), { pollMs: 0 });
+    const result = await parser.parse("QUFB");
+    expect(result.pages).toStrictEqual([]);
+    expect(result.pagesParsed).toBe(0);
+  });
+
   it("rejects a second overlapping parse instead of interleaving RPCs", async () => {
     const original = runtime.call.bind(runtime);
     let release!: () => void;

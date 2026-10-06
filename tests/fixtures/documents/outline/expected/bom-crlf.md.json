@@ -1,0 +1,19 @@
+{
+  "file": "bom-crlf.md",
+  "kind": "markdown",
+  "pageCount": 1,
+  "headings": [
+    {
+      "title": "Windows Heading",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": ""
+    },
+    {
+      "title": "Second",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": ""
+    }
+  ]
+}

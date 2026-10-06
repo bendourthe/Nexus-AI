@@ -16,7 +16,11 @@
 // boundary check), so importing the concrete Ollama client here is permitted --
 // the sidecar is itself a composition root, like NexusCodingRuntime.
 
-import { createHeadlessOllamaClient } from "../../../../modules/coding/llm/headlessOllamaClient.js";
+import {
+  createHeadlessOllamaClient,
+  createLoadedContextProbe,
+  resolveHeadlessOllamaUrl,
+} from "../../../../modules/coding/llm/headlessOllamaClient.js";
 import type { LLMClient } from "../../../../modules/coding/llm/types.js";
 import type { HeadlessDocumentParser, HeadlessTool } from "../../../../modules/coding/runtime/headlessTools.js";
 import { createSidecarHeadlessTools } from "./sidecarHeadlessTools.js";
@@ -84,16 +88,24 @@ export function createHeadlessAgentRunner(
   options: HeadlessAgentRunnerOptions = {},
 ): AgentRunner {
   const llm = options.llm ?? createHeadlessOllamaClient();
+  // v2.11.0 Phase 4.3: outline summaries use the model of the run in progress.
+  let currentModel = "";
+  // The sidecar never sets num_ctx, so outline output is sized from the window
+  // Ollama actually loaded the run's model with (`/api/ps`), not a fixed default.
+  const loadedContext = createLoadedContextProbe();
   const tools =
     options.tools ??
     createSidecarHeadlessTools({
       documentParser: options.documentParser,
       parseDocumentEnabled: options.parseDocumentEnabled,
+      outlineLlm: { client: llm, model: () => currentModel, endpoint: resolveHeadlessOllamaUrl() },
+      outlineContextTokens: () => loadedContext(currentModel),
     });
   const session = new HeadlessAgentSession(llm, tools);
   const hookBus = options.hookBus ?? createHookBus();
 
   return async (input) => {
+    currentModel = input.model.id;
     const events: CodingSessionEventT[] = [];
     let toolSeq = 0;
     let lastCallId = "";
