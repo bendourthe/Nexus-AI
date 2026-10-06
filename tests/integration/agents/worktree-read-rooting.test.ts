@@ -106,7 +106,9 @@ function initRepo(): string {
   return repo;
 }
 
-describe("integration: write-then-read parity inside an isolated worktree (T012)", () => {
+// Spawns several git processes (init, commit, worktree add/remove); on Windows
+// under the full suite's parallel workers that exceeds the 5 s default.
+describe("integration: write-then-read parity inside an isolated worktree (T012)", { timeout: 30_000 }, () => {
   it("a worktree-isolated sub-agent reads back its own run_terminal write", async () => {
     const repo = initRepo();
     const baseDir = fs.mkdtempSync(path.join(os.tmpdir(), "wt-parity-base-"));

@@ -17,7 +17,7 @@
  */
 
 import { randomBytes } from "node:crypto";
-import { promises as fsp } from "node:fs";
+import { promises as fsp, realpathSync } from "node:fs";
 import { basename, extname } from "node:path";
 
 import {
@@ -123,6 +123,14 @@ export async function readGuardedFile(absolutePath: string, kind: DocumentKind):
     if (current.ino !== opened.ino || current.dev !== opened.dev) {
       throw new OutlineToolError("the file changed while it was being opened; try again");
     }
+    // `absolutePath` is already a real path. `stat` follows symlinks, so a
+    // component swapped to a link before `open` would pass the check above;
+    // the real path no longer matches in that case.
+    // Same realpath implementation as the hosts' resolvers; Windows paths compare case-insensitively.
+    const fold = (p: string): string => (process.platform === "win32" ? p.toLowerCase() : p);
+    if (fold(realpathSync(absolutePath)) !== fold(absolutePath)) {
+      throw new OutlineToolError("the path changed while it was being opened; try again");
+    }
     if (opened.size > cap) {
       throw new OutlineToolError(`too large for the outline tools (${opened.size} bytes; limit ${cap})`);
     }
@@ -152,32 +160,77 @@ export interface Redaction {
 }
 
 const DATA_URI_IMAGE = /data:image\/[a-z0-9.+-]+;base64,[A-Za-z0-9+/=]{64,}/gi;
-const MAX_SCREEN_PASSES = 24;
+/**
+ * Every Unicode format character: zero-width, bidi embeddings and isolates,
+ * soft hyphen, word joiner, BOM, Mongolian vowel separator. NFKC keeps them
+ * and the shared invisible-character class covers only part of the range, so
+ * "ig" + U+2066 + "nore previous instructions" would otherwise pass the scan.
+ */
+const FORMAT_CHARS = /\p{Cf}/gu;
 
 /**
- * Screen document-derived text. Invisible code points and inline base64 images
- * are removed first, so ordinary OCR output does not false-positive and split
- * payloads cannot hide behind zero-width characters. Each flagged LINE is then
- * replaced (the scanner reports a start offset only), and the result is
- * re-scanned until it is stable. Matched text is never returned.
+ * Passes of the whole-text scan, which catches a payload split across lines.
+ * The scanner reports about one finding per pattern per call, so whole-text
+ * passes alone are quadratic in the number of flagged lines (a 222 KB file
+ * took 25 s). Lines are therefore screened one by one first, and this bound
+ * applies only to the cross-line remainder.
+ */
+const MAX_CROSS_LINE_PASSES = 32;
+
+export const WITHHELD_SECTION = "[section withheld: too many injection matches to screen]";
+
+/**
+ * Screen document-derived text. Format characters and inline base64 images are
+ * removed first, so ordinary OCR output does not false-positive and split
+ * payloads cannot hide behind invisible characters. Every line is scanned on
+ * its own and each flagged LINE is replaced (the scanner reports a start offset
+ * only); then the whole text is re-scanned for payloads that span lines. If
+ * that still finds matches after the pass bound, the whole text is withheld:
+ * partial screening never returns flagged text. Matched text is never returned.
  */
 export function screenDocumentText(text: string): { text: string; redactions: Redaction[] } {
-  let current = redactInvisibleUnicode(text.normalize("NFKC")).replace(DATA_URI_IMAGE, "[image data omitted]");
+  const cleaned = redactInvisibleUnicode(text.normalize("NFKC"))
+    .replace(FORMAT_CHARS, "")
+    .replace(DATA_URI_IMAGE, "[image data omitted]");
   const redactions: Redaction[] = [];
-  for (let pass = 0; pass < MAX_SCREEN_PASSES; pass += 1) {
+  const lines = cleaned.split("\n");
+  let offset = 0;
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = lines[i] ?? "";
+    const result = scan(line);
+    const finding = result.ok ? undefined : result.findings[0];
+    if (finding) {
+      lines[i] = `[redacted: ${finding.kind}]`;
+      redactions.push({ kind: finding.kind, offset });
+    }
+    offset += (lines[i] ?? "").length + 1;
+  }
+  let current = lines.join("\n");
+  for (let pass = 0; ; pass += 1) {
     const result = scan(current);
     if (result.ok || result.findings.length === 0) break;
-    const finding = result.findings[0];
-    if (!finding) break;
-    const start = current.lastIndexOf("\n", Math.max(0, finding.index - 1)) + 1;
-    const nextNewline = current.indexOf("\n", finding.index);
-    const end = nextNewline === -1 ? current.length : nextNewline;
-    const placeholder = `[redacted: ${finding.kind}]`;
-    if (current.slice(start, end) === placeholder) break;
-    current = `${current.slice(0, start)}${placeholder}${current.slice(end)}`;
-    redactions.push({ kind: finding.kind, offset: start });
+    if (pass >= MAX_CROSS_LINE_PASSES) {
+      return { text: WITHHELD_SECTION, redactions: [...redactions, { kind: "withheld", offset: 0 }] };
+    }
+    // One replacement per flagged line, applied from the end so earlier offsets stay valid.
+    const flagged = new Map<number, { end: number; kind: string }>();
+    for (const finding of result.findings) {
+      const start = current.lastIndexOf("\n", Math.max(0, finding.index - 1)) + 1;
+      if (flagged.has(start)) continue;
+      const nextNewline = current.indexOf("\n", finding.index);
+      flagged.set(start, { end: nextNewline === -1 ? current.length : nextNewline, kind: finding.kind });
+    }
+    let changed = false;
+    for (const [start, { end, kind }] of [...flagged.entries()].sort(([a], [b]) => b - a)) {
+      const placeholder = `[redacted: ${kind}]`;
+      if (current.slice(start, end) === placeholder) continue;
+      current = `${current.slice(0, start)}${placeholder}${current.slice(end)}`;
+      redactions.push({ kind, offset: start });
+      changed = true;
+    }
+    if (!changed) break;
   }
-  return { text: current, redactions };
+  return { text: current, redactions: redactions.sort((a, b) => a.offset - b.offset) };
 }
 
 /** Title screen used inside the build and by the cache: never returns flagged text. */
@@ -223,11 +276,13 @@ export interface OutlineToolHost {
   /** Resolve a user-supplied path inside the workspace, symlink-aware; throw on escape. */
   resolvePath(userPath: string): string;
   /**
-   * Apply the channel's secret-path rule (extension: denylist plus the
-   * confirmation gate when allow_secrets is set; sidecar: the headless guards).
+   * Apply the channel's secret-path rule to both the path as given and the
+   * resolved real path that will be read (extension: denylist plus the
+   * confirmation gate when allow_secrets is set; sidecar: the headless guards
+   * cover the given path, and the host refuses a resolved-only match).
    * Resolve to a refusal message, or null to proceed.
    */
-  checkSecret(userPath: string, allowSecrets: boolean): Promise<string | null>;
+  checkSecret(userPath: string, allowSecrets: boolean, resolvedPath: string): Promise<string | null>;
   /** Parse non-text documents through the channel's OCR parser. */
   parseDocument(bytes: Buffer, maxPages: number): Promise<{
     readonly engine: string;
@@ -292,6 +347,12 @@ export function createExtractor(host: Pick<OutlineToolHost, "parseDocument">) {
 export class DocumentOutlineTools {
   /** Real paths `document_outline` returned this session; reads are limited to them. */
   private readonly outlined = new Map<string, DocumentKind>();
+  /**
+   * Screened sections keyed by tree_hash and node_id. Continuation reads would
+   * otherwise re-screen a large section on every call. The tree_hash binds the
+   * bytes, and an entry is stored only after `readSection` validated the text.
+   */
+  private readonly screened = new Map<string, { full: string; redactions: Redaction[] }>();
   private calls = 0;
   private outputChars = 0;
 
@@ -335,14 +396,16 @@ export class DocumentOutlineTools {
         "Unsupported document type. The outline tools read .md, .txt, .pdf, .docx, and common image files; use read_file or parse_document for others.",
       );
     }
-    const refusal = await this.host.checkSecret(userPath, allowSecrets === true);
-    if (refusal) return failure(refusal);
     let absolute: string;
     try {
       absolute = this.host.resolvePath(userPath);
     } catch (err) {
       return failure(`${err instanceof Error ? err.message : String(err)} The path must be inside the workspace.`);
     }
+    // After resolution: "./.env.md", "x/../secrets/a.txt", or a symlink to a
+    // secret file all match on the path that will actually be read.
+    const refusal = await this.host.checkSecret(userPath, allowSecrets === true, absolute);
+    if (refusal) return failure(refusal);
     try {
       return { absolute, kind, bytes: await readGuardedFile(absolute, kind) };
     } catch (err) {
@@ -440,9 +503,8 @@ export class DocumentOutlineTools {
       maxChars: Number.MAX_SAFE_INTEGER,
     });
     if (!result.ok) return failure(result.message);
-    const screened = screenDocumentText(result.text);
-    this.report("document_read_section", opened.absolute, screened.redactions);
-    const full = redactSecrets(screened.text);
+    const { full, redactions } = this.screenedSection(`${treeHash}|${nodeId}`, result.text);
+    this.report("document_read_section", opened.absolute, redactions);
     const budget = budgetChars(this.host.contextTokens(), SECTION_CONTEXT_SHARE);
     const start = Math.min(typeof from === "number" ? from : 0, full.length);
     const end = safeBoundary(full, Math.min(full.length, start + budget));
@@ -450,7 +512,7 @@ export class DocumentOutlineTools {
     const pages =
       result.startPage === null ? null : result.startPage === result.endPage ? `${result.startPage}` : `${result.startPage}-${result.endPage}`;
     const notes = [
-      screened.redactions.length > 0 ? `${screened.redactions.length} line(s) in this section were redacted by the injection screen.` : "",
+      redactions.length > 0 ? `${redactions.length} line(s) in this section were redacted by the injection screen.` : "",
       end < full.length ? `Section continues: call document_read_section again with from=${end}.` : "",
     ]
       .filter((l) => l.length > 0)
@@ -459,4 +521,19 @@ export class DocumentOutlineTools {
       `${wrapDocumentContent(body, { source: safeSourceName(opened.absolute), pages })}${notes ? `\n${notes}` : ""}`,
     );
   }
+
+  private screenedSection(key: string, text: string): { full: string; redactions: Redaction[] } {
+    const hit = this.screened.get(key);
+    if (hit) return hit;
+    const screened = screenDocumentText(text);
+    const entry = { full: redactSecrets(screened.text), redactions: screened.redactions };
+    if (this.screened.size >= SCREENED_SECTION_CACHE) {
+      const oldest = this.screened.keys().next().value;
+      if (oldest !== undefined) this.screened.delete(oldest);
+    }
+    this.screened.set(key, entry);
+    return entry;
+  }
 }
+
+const SCREENED_SECTION_CACHE = 8;

@@ -72,6 +72,8 @@ export interface SidecarHeadlessToolsOptions {
   readonly outlineLlm?: HeadlessOutlineSummaryLlm;
   /** Outline cache directory; `null` disables it (tests). */
   readonly outlineCacheDir?: string | null;
+  /** The active model's context window, read before each outline call; absent means the 8192 default. */
+  readonly outlineContextTokens?: () => Promise<number | null> | number | null;
   readonly ingestToMemory?: (input: {
     text: string;
     sourcePath: string;
@@ -239,6 +241,7 @@ export function createSidecarHeadlessTools(
     parseDocumentEnabled: enabled,
     documentOutlineEnabled: outlineEnabled,
     ...(options.outlineCacheDir !== undefined ? { outlineCacheDir: options.outlineCacheDir } : {}),
+    ...(options.outlineContextTokens ? { outlineContextTokens: options.outlineContextTokens } : {}),
     outlineSummaries: summariesEnabled && options.outlineLlm ? options.outlineLlm : null,
     browserEnabled: true,
     ingestToMemory,
