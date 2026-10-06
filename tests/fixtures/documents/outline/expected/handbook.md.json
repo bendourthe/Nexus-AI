@@ -1,0 +1,109 @@
+{
+  "file": "handbook.md",
+  "kind": "markdown",
+  "pageCount": 1,
+  "headings": [
+    {
+      "title": "Operator Handbook",
+      "level": 1,
+      "startPage": 1,
+      "firstWords": ""
+    },
+    {
+      "title": "1 Introduction",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Engine memory status signal profile stream"
+    },
+    {
+      "title": "1.1 Storage Layout Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Driver limit window network profile option"
+    },
+    {
+      "title": "1.2 Troubleshooting Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Queue operator channel power storage stream"
+    },
+    {
+      "title": "1.3 Performance Tuning Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Layer manual input device limit channel"
+    },
+    {
+      "title": "2 Installation",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Sample queue control record power power"
+    },
+    {
+      "title": "2.1 Scheduling Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Schedule limit index control index status"
+    },
+    {
+      "title": "2.2 Security Model Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Network device setting power record layer"
+    },
+    {
+      "title": "2.3 Maintenance Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Option window service driver filter channel"
+    },
+    {
+      "title": "3 Configuration",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Setting sensor factor schedule sample stream"
+    },
+    {
+      "title": "3.1 Monitoring Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Filter driver value index buffer range"
+    },
+    {
+      "title": "3.2 Backup and Restore Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Profile handle manual power network record"
+    },
+    {
+      "title": "3.3 Calibration Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Record sensor queue signal value handle"
+    },
+    {
+      "title": "4 Network Settings",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Schedule power module profile channel window"
+    },
+    {
+      "title": "4.1 Troubleshooting Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Module service service handle measure operator"
+    },
+    {
+      "title": "4.2 Performance Tuning Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Measure value config network input storage"
+    },
+    {
+      "title": "4.3 Reporting Details",
+      "level": 3,
+      "startPage": 1,
+      "firstWords": "Manual value filter power profile sample"
+    }
+  ]
+}

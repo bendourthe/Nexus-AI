@@ -32,6 +32,7 @@ import type { PostMessageFn } from "../../modules/coding/chat/StreamingPipeline.
 import type { CodeGraphHandlerDeps } from "./handlers/codegraph.js";
 import type { LspHandlerDeps } from "./handlers/lsp.js";
 import type { ParseDocumentDeps } from "./handlers/parseDocument.js";
+import type { DocumentOutlineDeps } from "./handlers/documentOutline.js";
 import type { DenyList } from "../../core/storage/PermissionsDeny.js";
 
 export interface ToolRegistryBuildOptions {
@@ -82,6 +83,8 @@ export interface ToolRegistryBuildOptions {
    * only spawns on the first parse.
    */
   readonly parseDocument?: ParseDocumentDeps;
+  /** v2.11.0 Phase 4: outline tools; present only when `nexus.coding.documentOutline.enabled` is on. */
+  readonly documentOutline?: DocumentOutlineDeps;
   /**
    * v1.4.0 Phase 8 (gap 5.3.P2.R): the parsed `.nexus/permissions.deny`
    * denylist. When supplied, the registry refuses write-capable tool calls
@@ -255,6 +258,21 @@ export function buildToolRegistry(opts: ToolRegistryBuildOptions): ToolRegistry 
     registry.registerLazy("parse_document", async () => {
       const mod = await import("./handlers/parseDocument.js");
       return new mod.ParseDocumentTool(parseDeps, gate, secretPathDenyExtra);
+    });
+  }
+
+  if (opts.documentOutline) {
+    const outlineDeps = opts.documentOutline;
+    // Tier `confirm`, like parse_document. The shared module applies the
+    // path guard, open-once read, injection screen, secret redaction, and
+    // the untrusted-content wrapper.
+    registry.registerLazy("document_outline", async () => {
+      const mod = await import("./handlers/documentOutline.js");
+      return new mod.DocumentOutlineTool(outlineDeps);
+    });
+    registry.registerLazy("document_read_section", async () => {
+      const mod = await import("./handlers/documentOutline.js");
+      return new mod.DocumentReadSectionTool(outlineDeps);
     });
   }
 

@@ -1,6 +1,9 @@
 import type { HookBus } from "../../../../core/lifecycle/HookBus.js";
 import type { LLMClient } from "../../../../modules/coding/llm/types.js";
-import { createHeadlessOllamaClient } from "../../../../modules/coding/llm/headlessOllamaClient.js";
+import {
+  createHeadlessOllamaClient,
+  createLoadedContextProbe,
+} from "../../../../modules/coding/llm/headlessOllamaClient.js";
 import type { HeadlessScheduledRun } from "../../../../modules/coding/autonomy/AgentRunScheduler.js";
 import { HeadlessAgentSession } from "../../../../modules/coding/runtime/HeadlessAgentSession.js";
 import type { HeadlessTool } from "../../../../modules/coding/runtime/headlessTools.js";
@@ -20,9 +23,13 @@ export function createScheduledHeadlessRunner(
   options: ScheduledHeadlessRunnerOptions = {},
 ): (run: HeadlessScheduledRun) => Promise<void> {
   const llm = options.llm ?? createHeadlessOllamaClient();
+  // Outline output is sized from the window the run's model was loaded with.
+  const loadedContext = createLoadedContextProbe();
   return async (run) => {
+    const model = process.env.NEXUS_SCHEDULER_MODEL ?? process.env.NEXUS_ACP_MODEL ?? "gemma4:e4b";
     const tools =
-      options.toolsForRun?.(run) ?? createSidecarHeadlessTools({ confirm: run.confirm });
+      options.toolsForRun?.(run) ??
+      createSidecarHeadlessTools({ confirm: run.confirm, outlineContextTokens: () => loadedContext(model) });
     const session = new HeadlessAgentSession(llm, tools);
     await runEnrichedHeadlessSession({
       session,
@@ -31,7 +38,7 @@ export function createScheduledHeadlessRunner(
       workspacePath: run.primaryRoot ?? run.workspacePath,
       workspaceRoots: run.workspaceRoots ?? [run.workspacePath],
       workspaceId: run.workspaceId,
-      model: process.env.NEXUS_SCHEDULER_MODEL ?? process.env.NEXUS_ACP_MODEL ?? "gemma4:e4b",
+      model,
       baseSystemInstructions: options.systemInstructions,
       catalogDir: options.catalogDir,
       hookBus: options.hookBus,

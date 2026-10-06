@@ -55,7 +55,9 @@ function writeFileCmd(name: string, content: string): string {
   return `node -e "require('fs').writeFileSync('${name}','${content}')"`;
 }
 
-describe("integration: worktree-isolated parallel sub-agent execution (A10)", () => {
+// Each test spawns several git processes (init, commit, worktree add/remove);
+// on Windows under the full suite's parallel workers that exceeds the 5 s default.
+describe("integration: worktree-isolated parallel sub-agent execution (A10)", { timeout: 30_000 }, () => {
   it("creates a detached worktree from HEAD and removes it when left unchanged", async () => {
     const repo = initRepo();
     const baseDir = makeBaseDir();

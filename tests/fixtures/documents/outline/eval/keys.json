@@ -1,0 +1,266 @@
+[
+  {
+    "id": "q01",
+    "answer": "schedule stream service",
+    "section": "7.2 Reporting Details",
+    "startPage": 52,
+    "pastPage50": true,
+    "distractors": [
+      "review control signal"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q02",
+    "answer": "system schedule operator",
+    "section": "7.3 Introduction Details",
+    "startPage": 55,
+    "pastPage50": true,
+    "distractors": [
+      "review control signal"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q03",
+    "answer": "profile range module",
+    "section": "8 Troubleshooting",
+    "startPage": 58,
+    "pastPage50": true,
+    "distractors": [
+      "review control signal"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q04",
+    "answer": "storage control config",
+    "section": "8.1 Maintenance Details",
+    "startPage": 58,
+    "pastPage50": true,
+    "distractors": [
+      "review control signal"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q05",
+    "answer": "output input record",
+    "section": "8.2 Appendix Notes Details",
+    "startPage": 60,
+    "pastPage50": true,
+    "distractors": [
+      "review control signal"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q06",
+    "answer": "profile config value",
+    "section": "8.3 Installation Details",
+    "startPage": 63,
+    "pastPage50": true,
+    "distractors": [
+      "review control signal"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q07",
+    "answer": "schedule sensor system",
+    "section": "1.1 Storage Layout Details",
+    "startPage": 2,
+    "pastPage50": false,
+    "distractors": [
+      "review control signal"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q08",
+    "answer": "engine review review",
+    "section": "1.2 Troubleshooting Details",
+    "startPage": 4,
+    "pastPage50": false,
+    "distractors": [
+      "review control signal"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q09",
+    "answer": "module manual network",
+    "section": "1.1 Storage Layout Details",
+    "startPage": 1,
+    "pastPage50": false,
+    "distractors": [
+      "measure record config"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q10",
+    "answer": "device stream profile",
+    "section": "1.1 Storage Layout Details",
+    "startPage": 1,
+    "pastPage50": false,
+    "distractors": [
+      "index device schedule"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q11",
+    "answer": "driver limit window",
+    "section": "1.1 Storage Layout Details",
+    "startPage": 1,
+    "pastPage50": false,
+    "distractors": [
+      "engine memory status"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q12",
+    "answer": "setting measure setting",
+    "section": "1.1 Storage Layout Details",
+    "startPage": 1,
+    "pastPage50": false,
+    "distractors": [
+      "operator measure control"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q13",
+    "answer": "schedule stream service",
+    "section": "7.2 Reporting Details",
+    "startPage": 52,
+    "pastPage50": true,
+    "distractors": [
+      "layer driver queue"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q14",
+    "answer": "system schedule operator",
+    "section": "7.3 Introduction Details",
+    "startPage": 55,
+    "pastPage50": true,
+    "distractors": [
+      "schedule stream service"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q15",
+    "answer": "profile range module",
+    "section": "8 Troubleshooting",
+    "startPage": 58,
+    "pastPage50": true,
+    "distractors": [
+      "system schedule operator"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q16",
+    "answer": "storage control config",
+    "section": "8.1 Maintenance Details",
+    "startPage": 58,
+    "pastPage50": true,
+    "distractors": [
+      "profile range module"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q17",
+    "answer": "system layer limit",
+    "section": "1.3 Performance Tuning Details",
+    "startPage": 6,
+    "pastPage50": false,
+    "distractors": [
+      "engine review review"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q18",
+    "answer": "filter sensor buffer",
+    "section": "2 Installation",
+    "startPage": 10,
+    "pastPage50": false,
+    "distractors": [
+      "system layer limit"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q19",
+    "answer": "system cycle manual",
+    "section": "2.1 Scheduling Details",
+    "startPage": 10,
+    "pastPage50": false,
+    "distractors": [
+      "filter sensor buffer"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q20",
+    "answer": "operator schedule limit",
+    "section": "2.2 Security Model Details",
+    "startPage": 12,
+    "pastPage50": false,
+    "distractors": [
+      "system cycle manual"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q21",
+    "answer": "https",
+    "section": "7.2 Reporting Details",
+    "startPage": 52,
+    "pastPage50": true,
+    "distractors": [
+      "http"
+    ],
+    "match": "exact"
+  },
+  {
+    "id": "q22",
+    "answer": "enabled",
+    "section": "8.2 Appendix Notes Details",
+    "startPage": 60,
+    "pastPage50": true,
+    "distractors": [
+      "disabled"
+    ],
+    "match": "exact"
+  },
+  {
+    "id": "q23",
+    "answer": "https",
+    "section": "1.2 Troubleshooting Details",
+    "startPage": 4,
+    "pastPage50": false,
+    "distractors": [
+      "http"
+    ],
+    "match": "exact"
+  },
+  {
+    "id": "q24",
+    "answer": "enabled",
+    "section": "2.2 Security Model Details",
+    "startPage": 12,
+    "pastPage50": false,
+    "distractors": [
+      "disabled"
+    ],
+    "match": "exact"
+  }
+]

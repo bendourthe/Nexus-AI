@@ -80,6 +80,16 @@ const ALLOWLIST = new Set([
   "onnxruntime-node",
   "adm-zip",
   "sharp",
+  // Same chain, install time only. onnxruntime-node requires global-agent
+  // ^3.0.0 solely in script/install.js (its binary download), which pulls
+  // roarr 2.x and sprintf-js; sprintf-js has no patched release
+  // (GHSA-hp3w-g68c-fv3c, DoS via unbounded precision specifiers; 1.1.3 is
+  // the latest), and roarr/global-agent fixes are semver-major under a
+  // pinned parent. Nothing at runtime loads them. Tracked as QG-v211-2 in
+  // docs/v2/v2.11/known-gaps.md.
+  "global-agent",
+  "roarr",
+  "sprintf-js",
 ]);
 
 const SEVERITY_RANK = {

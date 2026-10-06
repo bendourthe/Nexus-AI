@@ -14,6 +14,7 @@
 import { randomUUID } from "node:crypto";
 
 import type { AskInbox } from "../../../../modules/coding/autonomy/AskInbox.js";
+import { createLoadedContextProbe } from "../../../../modules/coding/llm/headlessOllamaClient.js";
 import type { LLMClient } from "../../../../modules/coding/llm/types.js";
 import { ActionRisk } from "../../../../modules/coding/guardrails/ActionClassifier.js";
 import { HeadlessAgentSession } from "../../../../modules/coding/runtime/HeadlessAgentSession.js";
@@ -141,6 +142,7 @@ export class AcpAgent {
   private readonly _inbox?: AskInbox;
   private readonly _confirmation: AcpConfirmationOptions;
   private _activeSessionId: string | undefined;
+  private _activeModel = "";
   private _enabled = false;
   private _initialized = false;
   private readonly _sessions = new Map<string, AcpSession>();
@@ -157,12 +159,15 @@ export class AcpAgent {
         runId: this._activeSessionId ? `acp:${this._activeSessionId}` : "acp",
         sessionId: this._activeSessionId,
       })(toolName, summary, detail, args);
+    // Outline output is sized from the window the session's model was loaded with.
+    const loadedContext = createLoadedContextProbe();
     const guarded =
       opts.tools ??
       createSidecarHeadlessTools({
         confirm,
         documentParser: opts.documentParser,
         parseDocumentEnabled: opts.parseDocumentEnabled,
+        outlineContextTokens: () => loadedContext(this._activeModel),
       });
     this._tools = wrapBlocked(guarded);
   }
@@ -346,6 +351,7 @@ export class AcpAgent {
 
     const task = promptToText(params.prompt);
     this._activeSessionId = session.id;
+    this._activeModel = session.model;
     session.abort = new AbortController();
     const signal = abortAny(ctx.signal, session.abort.signal);
     const updates: AcpSessionUpdate[] = [];
