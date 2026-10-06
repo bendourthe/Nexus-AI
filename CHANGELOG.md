@@ -1,3 +1,23 @@
+# [2.11.0](https://github.com/bendourthe/Nexus-AI/compare/v2.10.0...v2.11.0) (2026-10-06)
+
+
+### Bug Fixes
+
+* **deps:** patch production advisories in range ([eedcd7a](https://github.com/bendourthe/Nexus-AI/commit/eedcd7ac499f6c85a9984cef2843e99c1af5e465))
+* **v2.11:** bind the outline IPC methods and regenerate the module catalog ([64ef6df](https://github.com/bendourthe/Nexus-AI/commit/64ef6df9ff34fa9b26abcb0b5cb8229dbbe5de8a))
+* **v2.11:** keep outline fixture documents byte-exact on Windows checkouts ([b2e40ed](https://github.com/bendourthe/Nexus-AI/commit/b2e40ede33723da9782da5ae5801c1bc18759c9c))
+* **v2.11:** read the feasibility report without a check-then-read race ([5e5400c](https://github.com/bendourthe/Nexus-AI/commit/5e5400c7b80fe3599feb4fed99570ef5fbc0c9ba))
+* **v2.11:** store the CRLF fixture byte-exact ([389be9b](https://github.com/bendourthe/Nexus-AI/commit/389be9b0aa4a665dd20b8f37f24522a6590b2721))
+
+### Features
+
+* **v2.11:** document outline tools in both channels (phase 4) ([42f436c](https://github.com/bendourthe/Nexus-AI/commit/42f436c15cf9b81e242baca6acb6159baceef567))
+* **v2.11:** final-phase hardening, CI reconciliation, and handbook (phase 6) ([03effd2](https://github.com/bendourthe/Nexus-AI/commit/03effd24b935d17c082bc0599c713b40f937fbe9))
+* **v2.11:** measure document-outline feasibility (phase 2) ([2421ecc](https://github.com/bendourthe/Nexus-AI/commit/2421ecc5b4521f4f3754775c9a877920d7c7cf2b))
+* **v2.11:** native tool calls and the outline smoke test (phase 5) ([7c35a43](https://github.com/bendourthe/Nexus-AI/commit/7c35a43f8e06a184544e84a6b5ada9643470f53d))
+* **v2.11:** parser seam and document outline core (phase 3) ([53c60e1](https://github.com/bendourthe/Nexus-AI/commit/53c60e1c155ca4ffeceed2ac5158cf28529c7aa2))
+
+
 # [2.10.0](https://github.com/bendourthe/Nexus-AI/compare/v2.9.0...v2.10.0) (2026-09-28)
 
 
