@@ -14,7 +14,7 @@
 
 import { OllamaHttp } from "./OllamaHttp.js";
 import { instrumentStream } from "./instrumentStream.js";
-import { createOllamaMemoryProbe } from "./ollamaMemory.js";
+import { createOllamaMemoryProbe, loadedContextLength } from "./ollamaMemory.js";
 import {
   LLMError,
   LLMStreamChunkSchema,
@@ -46,6 +46,17 @@ function parseChunk(line: string): LLMStreamChunk {
 /** The base URL `createHeadlessOllamaClient` will call, for loopback checks by callers. */
 export function resolveHeadlessOllamaUrl(baseUrl?: string): string {
   return baseUrl ?? process.env["NEXUS_OLLAMA_URL"] ?? DEFAULT_OLLAMA_URL;
+}
+
+/**
+ * v2.11.0 -- the loaded model's real context window (see `loadedContextLength`),
+ * for hosts that size tool output from it but never set `num_ctx` themselves.
+ */
+export function createLoadedContextProbe(
+  options: HeadlessOllamaClientOptions = {},
+): (model: string) => Promise<number | null> {
+  const http = new OllamaHttp(resolveHeadlessOllamaUrl(options.baseUrl), options.timeoutMs ?? 5_000);
+  return (model) => (model ? loadedContextLength(http, model) : Promise.resolve(null));
 }
 
 export function createHeadlessOllamaClient(

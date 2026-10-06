@@ -60,6 +60,36 @@ describe("AgentLoop", () => {
     expect(manager.addUserMessage).toHaveBeenCalledWith(expect.stringContaining("<|tool_result>"));
   });
 
+  it("executes a call the backend returns in message.tool_calls with no text call", async () => {
+    let turn = 0;
+    const streamChat = vi.fn(async function* () {
+      turn += 1;
+      if (turn === 1) {
+        yield {
+          message: {
+            role: "assistant",
+            content: "",
+            tool_calls: [{ function: { name: "read_file", arguments: { path: "src/extension.ts" } } }],
+          },
+          done: true,
+        };
+        return;
+      }
+      yield { message: { role: "assistant", content: "Done reading." }, done: true };
+    });
+    const client = mockOf<OllamaClient>({ streamChat });
+    const loop = new AgentLoop(client, manager, registry, "gemma3:27b");
+    const { posted, postMessage } = collectMessages();
+
+    await loop.run(postMessage);
+
+    expect(registry.execute).toHaveBeenCalledOnce();
+    const call = vi.mocked(registry.execute).mock.calls[0]?.[0] as ToolCall | undefined;
+    expect(call?.tool).toBe("read_file");
+    expect(call?.parameters).toMatchObject({ path: "src/extension.ts" });
+    expect(posted.some((m) => m.type === "messageComplete")).toBe(true);
+  });
+
   it("multi-turn: two consecutive tool calls then final answer", async () => {
     const toolCall2 = '<|tool_call>call:list_directory{path:<|"|>src<|"|>}<tool_call|>';
     const client = makeMultiClient([

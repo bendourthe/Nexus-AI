@@ -14,6 +14,7 @@
 // `headlessOllamaClient.ts` records for the Ollama pair.
 
 import { instrumentStream } from "./instrumentStream.js";
+import { OpenAiToolCallAccumulator, type OpenAiToolCallDelta } from "./openAiToolCalls.js";
 import {
   LLMError,
   type LLMChatRequest,
@@ -33,7 +34,7 @@ export interface HeadlessOpenAiClientOptions {
 
 interface OpenAiStreamChunk {
   choices?: Array<{
-    delta?: { role?: string; content?: string };
+    delta?: { role?: string; content?: string; tool_calls?: OpenAiToolCallDelta[] };
     finish_reason?: string | null;
   }>;
   /**
@@ -111,6 +112,11 @@ export function createHeadlessOpenAiClient(
     const decoder = new TextDecoder();
     let buffer = "";
     let pendingUsage: OpenAiStreamChunk["usage"];
+    const toolCalls = new OpenAiToolCallAccumulator();
+    const withCalls = (message: LLMStreamChunk["message"]): LLMStreamChunk["message"] => {
+      const calls = toolCalls.drain();
+      return calls.length > 0 ? { ...message, tool_calls: calls } : message;
+    };
     try {
       for (;;) {
         const { done, value } = await reader.read();
@@ -127,7 +133,7 @@ export function createHeadlessOpenAiClient(
           const payload = rawLine.slice(5).trim();
           if (payload === "[DONE]") {
             yield {
-              message: { role: "assistant", content: "" },
+              message: withCalls({ role: "assistant", content: "" }),
               done: true,
               ...(pendingUsage ? { usage: pendingUsage } : {}),
             };
@@ -137,11 +143,12 @@ export function createHeadlessOpenAiClient(
             const parsed = JSON.parse(payload) as OpenAiStreamChunk;
             if (parsed.usage) pendingUsage = parsed.usage;
             const choice = parsed.choices?.[0];
+            toolCalls.add(choice?.delta?.tool_calls);
             const content = choice?.delta?.content ?? "";
             const role = choice?.delta?.role ?? "assistant";
             const isDone = choice?.finish_reason !== null && choice?.finish_reason !== undefined;
             yield {
-              message: { role, content },
+              message: isDone ? withCalls({ role, content }) : { role, content },
               done: isDone,
               ...(isDone && pendingUsage ? { usage: pendingUsage } : {}),
             };
