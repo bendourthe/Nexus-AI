@@ -12,6 +12,27 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-05] v2.11.0 Phase 6 - Final-phase duties
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P6](v2/v2.11/development/history/2026-10-05_v2.11.0-pageindex-airi-clm-phase-6.md), [evidence](v2/v2.11/development/v2.11.0-last-phase-evidence.md).
+
+### What Changed
+
+- **Screening hardened** after an adversarial deep pass (two fix cycles): every flagged line is redacted in linear time, invisible format characters are stripped, and text that cannot be fully screened is withheld. Secret-path checks run on the resolved real path in both channels, the post-open real path is re-checked, and summaries are secret-redacted.
+- **Window-sized output on every sidecar path**: the desktop runner, ACP agent, and scheduled runs read the loaded model's window from Ollama.
+- **CI**: read-only default token in `ci.yml`, `installer-required` success-only, `fast`/`full`/`platform` profiles.
+- **Docs**: the outline-tools handbook; the handbook generator wraps inline code.
+
+### Verification
+
+Root 6,102 passed after giving four git-spawning suites a 30-second timeout (their 5-second timeouts also occur at the integration base), desktop 2,227 passed, both typechecks, lint, architecture check; live tool calls on both models; real OCR exercises.
+
+### Known gaps
+
+DF-v211-4 to DF-v211-7, WN-v211-6, WN-v211-7, QG-v211-1; CI-v251-1 and QG-v270-2 narrowed.
+
+---
+
 ## [2026-10-03] v2.11.0 Phase 5 - Directional smoke test, and native tool calling
 
 Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P5](v2/v2.11/development/history/2026-10-03_v2.11.0-pageindex-airi-clm-phase-5.md), result [outline-eval](v2/v2.11/development/outline-eval.md).

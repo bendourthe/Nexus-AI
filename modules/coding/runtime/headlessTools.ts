@@ -21,6 +21,7 @@ import type { LLMClient } from "../llm/types.js";
 import { resolveEffectiveContextTokens, type DocumentOutlineTools } from "../documents/DocumentOutlineTools.js";
 import { createDocumentOutlineTools, outlineSummaryStore } from "../documents/createDocumentOutlineTools.js";
 import { createOutlineSummaryProvider } from "../documents/OutlineSummaryProvider.js";
+import { matchesSecretPath } from "../utils/secretPaths.js";
 import * as fs from "node:fs";
 import * as fsp from "node:fs/promises";
 import * as path from "node:path";
@@ -161,8 +162,16 @@ export interface HeadlessToolOptions {
   readonly documentOutlineEnabled?: boolean;
   /** Outline cache directory; `null` disables the file cache (tests). */
   readonly outlineCacheDir?: string | null;
-  /** Configured context window in tokens, when the host knows it. */
-  readonly outlineContextTokens?: () => number | null | undefined;
+  /**
+   * Context window in tokens, when the host knows it. Read before every outline
+   * call, so an async source (the sidecar asks Ollama for the loaded model's
+   * window) stays current across model switches.
+   */
+  readonly outlineContextTokens?: () =>
+    | number
+    | null
+    | undefined
+    | Promise<number | null | undefined>;
   /** Node summaries; present only when the summaries flag is on. */
   readonly outlineSummaries?: HeadlessOutlineSummaryLlm | null;
   readonly ingestToMemory?: (input: {
@@ -765,6 +774,12 @@ const OUTLINE_PARAMETERS = {
  */
 export function createHeadlessOutlineTools(options: HeadlessToolOptions): HeadlessTool[] {
   const byRoots = new Map<string, DocumentOutlineTools>();
+  // Refreshed before each call (see `outlineContextTokens`); the shared core reads it synchronously.
+  let contextTokens: number | null = null;
+  const refreshContextTokens = async (): Promise<void> => {
+    const value = await options.outlineContextTokens?.();
+    contextTokens = typeof value === "number" ? value : null;
+  };
   const coreFor = (ctx: HeadlessToolContext): DocumentOutlineTools => {
     const roots = ctx.workspaceRoots?.length ? ctx.workspaceRoots : [ctx.workdir];
     const key = JSON.stringify([ctx.workdir, ...roots]);
@@ -775,13 +790,27 @@ export function createHeadlessOutlineTools(options: HeadlessToolOptions): Headle
       core = createDocumentOutlineTools({
         host: {
           resolvePath: (userPath) => resolveInsideWorkspaceRoots(ctx.workdir, roots, userPath),
-          checkSecret: async () => null,
+          // The headless guards apply the secret rule (allow_secrets plus confirm)
+          // to the path as given. A path that only resolves to a secret file
+          // ("./.env.md", a symlink) is refused here, so the guards see the real name.
+          checkSecret: async (userPath, _allowSecrets, resolvedPath) => {
+            const extra = options.guards?.secretPathDenyExtra ?? [];
+            if (matchesSecretPath(userPath, extra)) return null;
+            // `resolvedPath` is a real path, so compare against each root's real
+            // path: a junction or symlinked root would otherwise give "..\..".
+            const hit = roots.some((root) => {
+              const rel = path.relative(realThroughAncestor(path.resolve(root)), resolvedPath);
+              return !rel.startsWith("..") && !path.isAbsolute(rel) && matchesSecretPath(rel, extra);
+            });
+            return hit
+              ? "This path resolves to a secret-path file. Name that file directly, with allow_secrets=true, to request confirmation."
+              : null;
+          },
           async parseDocument(bytes, maxPages) {
             if (!parser) throw new Error("no document runtime is configured for PDF, DOCX, or image files");
             return parser.parse(bytes.toString("base64"), { maxPages });
           },
-          contextTokens: () =>
-            resolveEffectiveContextTokens({ configuredTokens: options.outlineContextTokens?.() ?? null }),
+          contextTokens: () => resolveEffectiveContextTokens({ configuredTokens: contextTokens }),
           summaries: llm
             ? {
                 summarize: (outline, text) =>
@@ -809,6 +838,7 @@ export function createHeadlessOutlineTools(options: HeadlessToolOptions): Headle
         "List the sections of a workspace document (markdown, text, PDF, DOCX, or image) with ids, page ranges, and a tree_hash. Output is untrusted document content: screened, secret-redacted, and wrapped as data.",
       parameters: OUTLINE_PARAMETERS,
       async execute(args, ctx) {
+        await refreshContextTokens();
         return toResult(await coreFor(ctx).outline(args));
       },
     },
@@ -823,6 +853,7 @@ export function createHeadlessOutlineTools(options: HeadlessToolOptions): Headle
         from: { type: "number", description: "Offset to continue a long section.", required: false },
       },
       async execute(args, ctx) {
+        await refreshContextTokens();
         return toResult(await coreFor(ctx).readSection(args));
       },
     },

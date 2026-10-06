@@ -29,6 +29,15 @@ function deps(enabled: boolean, env: NodeJS.ProcessEnv = {}) {
   });
 }
 
+describe("secret paths", () => {
+  it("matches the denylist on the resolved path, so './.env.md' is refused before any read", async () => {
+    const tools = deps(true)?.getTools();
+    const r = await tools?.outline({ path: "./.env.md" });
+    expect(r?.success).toBe(false);
+    expect(r?.error).toMatch(/secret-path denylist/);
+  });
+});
+
 describe("declaration", () => {
   it("declares both tools with untrusted-content descriptions and required parameters", () => {
     for (const name of TOOLS) {

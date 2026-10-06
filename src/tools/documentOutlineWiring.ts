@@ -7,6 +7,9 @@
  * the summaries flag is also on) the summary provider are built on first use.
  */
 
+import { realpathSync } from "node:fs";
+import { relative } from "node:path";
+
 import {
   isDocumentOutlineEnabled,
   isDocumentOutlineSummariesEnabled,
@@ -42,6 +45,15 @@ export interface BuildDocumentOutlineDepsOptions {
   readonly env?: NodeJS.ProcessEnv;
 }
 
+/** The workspace root as the resolver sees it (real path), or the root itself when it cannot be resolved. */
+function realRoot(root: string): string {
+  try {
+    return realpathSync(root);
+  } catch {
+    return root;
+  }
+}
+
 export function buildDocumentOutlineDeps(opts: BuildDocumentOutlineDepsOptions): DocumentOutlineDeps | undefined {
   const env = opts.env ?? process.env;
   const enabled = isDocumentOutlineEnabled({ env, settingsValue: opts.documentOutlineEnabled });
@@ -58,8 +70,11 @@ export function buildDocumentOutlineDeps(opts: BuildDocumentOutlineDepsOptions):
 
   const host: OutlineToolHost = {
     resolvePath: (userPath) => resolveInsideWorkspace(userPath, workspaceRoot()),
-    async checkSecret(userPath, allowSecrets) {
-      if (!matchesSecretPath(userPath, extra)) return null;
+    async checkSecret(userPath, allowSecrets, resolvedPath) {
+      // The resolved path catches "./.env.md", "x/../secrets/a.txt", and symlinks to secret files.
+      // Against the root's real path: a junction or symlinked workspace folder would otherwise give "..\..".
+      const resolvedRelative = relative(realRoot(workspaceRoot()), resolvedPath);
+      if (!matchesSecretPath(userPath, extra) && !matchesSecretPath(resolvedRelative, extra)) return null;
       if (!allowSecrets) {
         return `Path "${userPath.slice(0, 200)}" matches the secret-path denylist. Pass allow_secrets=true to request explicit user confirmation, or use a non-secret path.`;
       }

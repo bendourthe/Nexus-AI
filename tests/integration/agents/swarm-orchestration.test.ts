@@ -64,7 +64,9 @@ function verifyNode(id: string): TaskNode {
 
 const OLLAMA_OPTS = { num_ctx: 131072, temperature: 1, top_p: 0.95, top_k: 64 };
 
-describe("integration: swarm orchestration dispatches write-capable nodes in worktrees (T010)", () => {
+// Each test spawns several git processes (init, commit, worktree add/remove);
+// on Windows under the full suite's parallel workers that exceeds the 5 s default.
+describe("integration: swarm orchestration dispatches write-capable nodes in worktrees (T010)", { timeout: 30_000 }, () => {
   it("dispatches a write-capable node into an isolated worktree, leaving the shared workspace untouched", async () => {
     const repo = initRepo();
     const baseDir = makeBaseDir();

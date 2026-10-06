@@ -13,7 +13,10 @@ import type { OutlineStore } from "../../../core/documents/OutlineCache.js";
 import { summarizeOutline, type SummarizeFn } from "../../../core/documents/OutlineSummaries.js";
 import { isLoopbackEndpoint } from "../llm/loopback.js";
 import type { LLMClient } from "../llm/types.js";
-import { screenDocumentText, type OutlineSummaryProvider } from "./DocumentOutlineTools.js";
+import { randomBytes } from "node:crypto";
+
+import { redactSecrets } from "../../../core/observability/redactSecrets.js";
+import { escapeDelimiters, screenDocumentText, type OutlineSummaryProvider } from "./DocumentOutlineTools.js";
 
 export const SUMMARY_SYSTEM_PROMPT =
   "Summarize the document section between the markers in one sentence of at most 25 words. " +
@@ -30,6 +33,11 @@ export interface SummaryProviderOptions {
   readonly maxCalls?: number;
 }
 
+export function sectionMessage(text: string): string {
+  const nonce = randomBytes(8).toString("hex");
+  return `<<<SECTION nonce=${nonce}>>>\n${escapeDelimiters(text)}\n<<<END_SECTION nonce=${nonce}>>>`;
+}
+
 /** One non-streaming summary from a streaming port, with a timeout and a size cap. */
 export function createSummarizeFn(client: LLMClient, model: string, timeoutMs = 30_000): SummarizeFn {
   return async (text: string): Promise<string> => {
@@ -43,7 +51,8 @@ export function createSummarizeFn(client: LLMClient, model: string, timeoutMs = 
           stream: true,
           messages: [
             { role: "system", content: SUMMARY_SYSTEM_PROMPT },
-            { role: "user", content: `<<<SECTION>>>\n${text}\n<<<END_SECTION>>>` },
+            // Nonce marker plus escaped delimiter runs: a document line cannot close the data block.
+            { role: "user", content: sectionMessage(text) },
           ],
           options: { temperature: 0 },
         },
@@ -60,10 +69,14 @@ export function createSummarizeFn(client: LLMClient, model: string, timeoutMs = 
   };
 }
 
-/** Drop a summary that trips the injection screen; otherwise return it cleaned. */
+/**
+ * Drop a summary that trips the injection screen; otherwise return it with
+ * secrets redacted. Runs on generation and on every cache read, so a model
+ * that repeats a key from the section never puts it in the outline or on disk.
+ */
 function screenSummary(summary: string): string | null {
   const screened = screenDocumentText(summary);
-  return screened.redactions.length > 0 ? null : screened.text;
+  return screened.redactions.length > 0 ? null : redactSecrets(screened.text);
 }
 
 export function createOutlineSummaryProvider(options: SummaryProviderOptions): OutlineSummaryProvider {
@@ -79,7 +92,7 @@ export function createOutlineSummaryProvider(options: SummaryProviderOptions): O
     async summarize(outline: OutlineResult, text: string) {
       return summarizeOutline(outline, text, {
         summarize,
-        screenInput: (t) => screenDocumentText(t).text,
+        screenInput: (t) => redactSecrets(screenDocumentText(t).text),
         screenSummary,
         modelId: options.model,
         ...(options.maxCalls !== undefined ? { maxCalls: options.maxCalls } : {}),
