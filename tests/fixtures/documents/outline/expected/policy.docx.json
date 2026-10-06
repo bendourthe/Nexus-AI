@@ -1,0 +1,61 @@
+{
+  "file": "policy.docx",
+  "kind": "docx",
+  "pageCount": 3,
+  "headings": [
+    {
+      "title": "1 Introduction",
+      "level": 1,
+      "startPage": 1,
+      "firstWords": "Index device schedule layer signal network"
+    },
+    {
+      "title": "1.1 Storage Layout Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Device stream profile factor device channel"
+    },
+    {
+      "title": "1.2 Troubleshooting Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Status service measure memory module status"
+    },
+    {
+      "title": "2 Installation",
+      "level": 1,
+      "startPage": 1,
+      "firstWords": "Device memory layer input option storage"
+    },
+    {
+      "title": "2.1 Scheduling Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Window system system schedule engine config"
+    },
+    {
+      "title": "2.2 Security Model Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Layer channel factor measure queue system"
+    },
+    {
+      "title": "3 Configuration",
+      "level": 1,
+      "startPage": 1,
+      "firstWords": "Buffer stream channel sensor control measure"
+    },
+    {
+      "title": "3.1 Monitoring Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Schedule schedule sensor module system control"
+    },
+    {
+      "title": "3.2 Backup and Restore Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Status option limit queue filter device"
+    }
+  ]
+}

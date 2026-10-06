@@ -24,7 +24,8 @@ export interface BuildParseDocumentDepsOptions {
   readonly createParser?: () => DocumentParser | Promise<DocumentParser>;
 }
 
-function createExtensionDocumentParser(): DocumentParser {
+/** Shared with the v2.11.0 outline wiring so both tools use one OCR runtime adapter. */
+export function createExtensionDocumentParser(): DocumentParser {
   const bundle = createOcrRuntimeBundle();
   const inner = createHeadlessOcrParser(bundle.parser);
   return {

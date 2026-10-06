@@ -40,7 +40,9 @@ jobs:
           for var in $(env | sed -n 's/^\(R_[A-Za-z0-9_]*\)=.*/\1/p' | sort); do
             eval "result=\${${var}-}"
             case "${result}" in
-              success|skipped) ;;
+              # v2.11.0 Phase 6.5 (CI-v251-1): no leg skips by design, so a
+              # skipped leg means something failed upstream, not a pass.
+              success) ;;
               *) echo "FAIL: ${var#R_}=${result:-<empty>}"; fail=1 ;;
             esac
           done

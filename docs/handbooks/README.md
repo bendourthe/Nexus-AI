@@ -12,5 +12,6 @@ Handbooks explain durable product and operator workflows. Markdown under `markdo
 - [Installer repair and runtime state](technical/installer-runtime.md)
 - [Local media runtime](technical/media-runtime.md)
 - [Transcript and Agents workspace](technical/transcript-and-workspaces.md)
+- [Document outline tools](technical/document-outline.md)
 
 Run `npm run docs:handbooks` after editing Markdown and `npm run docs:handbooks:check` in verification.

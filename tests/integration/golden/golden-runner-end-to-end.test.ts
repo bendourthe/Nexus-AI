@@ -39,7 +39,9 @@ describe("golden runner end-to-end (dry path)", () => {
   });
 });
 
-describe("golden runner end-to-end (mock-live path)", () => {
+// Copies a snapshot into a throwaway workspace and removes it; on Windows under
+// the full suite's parallel workers that can exceed the 5 s default.
+describe("golden runner end-to-end (mock-live path)", { timeout: 30_000 }, () => {
   it("runs an injected driver that creates the expected file and passes the criteria", async () => {
     const spec = loadGoldenTask(path.join(TASKS_DIR, "testgen-unit-function-01.yaml"));
     // The task asks for tests/math.test.ts covering `add` and `divide`.

@@ -16,11 +16,18 @@
 // follow-up; the import is a pure leaf (no cycle, no vscode).
 // ---------------------------------------------------------------------------
 
-import type { LLMClient, LLMMessage, LLMOptions } from "../llm/types.js";
+import type {
+  LLMClient,
+  LLMMessage,
+  LLMOptions,
+  LLMToolCall,
+  LLMToolDefinition,
+} from "../llm/types.js";
 import { formatToolResult, serializeToolDefinitions } from "../../../src/tools/Gemma4ToolFormat.js";
 import {
   parseAgentToolCalls,
   stripAgentToolCalls,
+  toolCallSyntax,
   toolFormatForModel,
 } from "../llm/parseAgentToolCalls.js";
 import type { ToolFormatName } from "../../../core/registry/ModelCatalog.js";
@@ -81,7 +88,7 @@ export interface HeadlessAgentSessionOptions {
   readonly securityPosture?: string;
   /**
    * v1.18 DF-3 -- when true, apply the harness overlay to the system prompt.
-   * Off (default) keeps BASE_SYSTEM_PROMPT byte-identical.
+   * Off (default) adds no overlay line to the base prompt.
    */
   readonly harnessSelectorEnabled?: boolean;
 }
@@ -96,20 +103,30 @@ export interface HeadlessRunResult {
   readonly error?: string;
 }
 
-const BASE_SYSTEM_PROMPT = [
-  "You are Nexus, a local coding agent operating headlessly on a working copy of a project.",
-  "Use the declared tools to inspect and modify files and run commands. Call a tool with the",
-  "format `<|tool_call>call:TOOL_NAME{\"arg\": value}<tool_call|>`. Make one focused change at a time,",
-  "verify with a tool when useful, and when the task is fully complete reply with a short summary",
-  "and NO tool call.",
-].join(" ");
+/**
+ * The call syntax comes from the model's tool format (v2.11.0): one fixed
+ * Gemma sentence with JSON arguments matched no parser, so runs ended at the
+ * first tool call.
+ */
+function baseSystemPrompt(format: ToolFormatName): string {
+  const syntax = toolCallSyntax(format);
+  return [
+    "You are Nexus, a local coding agent operating headlessly on a working copy of a project.",
+    "Use the declared tools to inspect and modify files and run commands.",
+    syntax.instruction,
+    ...(syntax.example ? [`For example: ${syntax.example}`] : []),
+    "Make one focused change at a time, verify with a tool when useful, and when the task is",
+    "fully complete reply with a short summary and NO tool call.",
+  ].join(" ");
+}
 
 function buildSystemPrompt(
   tools: HeadlessTool[],
   opts: HeadlessRunOptions,
   harnessSelectorEnabled: boolean,
+  format: ToolFormatName,
 ): string {
-  const sections = [BASE_SYSTEM_PROMPT];
+  const sections = [baseSystemPrompt(format)];
   if (harnessSelectorEnabled) {
     const overlay = defaultHarnessSelector.overlayForModel(opts.model);
     const applied = applyHarnessOverlay(true, { promptStyle: "detailed" as const, thinkingMode: true, systemPromptBudgetPercent: 30 }, overlay);
@@ -144,11 +161,33 @@ function buildSystemPrompt(
  */
 const HEADLESS_INBOUND_TOOLS = new Set([
   "parse_document",
+  "document_outline",
+  "document_read_section",
   "browser_navigate",
   "browser_click",
   "browser_type",
   "browser_aria_snapshot",
 ]);
+
+/** Native tool definitions, the same shape `ToolActivationContext.buildOllamaTools` sends. */
+function toLlmToolDefinitions(tools: readonly HeadlessTool[]): LLMToolDefinition[] {
+  return tools.map((tool) => {
+    const properties: Record<string, { type: string; description: string }> = {};
+    const required: string[] = [];
+    for (const [key, param] of Object.entries(tool.parameters)) {
+      properties[key] = { type: param.type, description: param.description };
+      if (param.required) required.push(key);
+    }
+    return {
+      type: "function" as const,
+      function: {
+        name: tool.name,
+        description: tool.description,
+        parameters: { type: "object", properties, ...(required.length > 0 ? { required } : {}) },
+      },
+    };
+  });
+}
 
 /** Adapt a headless tool result to the `ToolResult` shape `formatToolResult` expects. */
 function asToolResult(result: HeadlessToolResult): ToolResult {
@@ -228,10 +267,16 @@ export class HeadlessAgentSession {
           this._tools,
           opts,
           this._options.harnessSelectorEnabled === true,
+          format,
         ),
       },
       { role: "user", content: opts.task },
     ];
+
+    // v2.11.0: send the tools natively, as the VS Code loop already does.
+    // Ollama 0.32 parses Gemma 4 / Qwen 3.5 call tokens only when the request
+    // carries `tools`, and returns them in `message.tool_calls`.
+    const nativeTools = format === "none" ? undefined : toLlmToolDefinitions(this._tools);
 
     let iterations = 0;
     let toolCalls = 0;
@@ -254,10 +299,17 @@ export class HeadlessAgentSession {
       }
 
       let assistantText = "";
+      const nativeCalls: LLMToolCall[] = [];
       try {
         llmCalls += 1;
         for await (const chunk of this._llm.streamChat(
-          { model: opts.model, messages, stream: true, options: opts.llmOptions },
+          {
+            model: opts.model,
+            messages,
+            stream: true,
+            options: opts.llmOptions,
+            ...(nativeTools ? { tools: nativeTools } : {}),
+          },
           opts.signal,
         )) {
           const delta = chunk.message?.content ?? "";
@@ -265,6 +317,7 @@ export class HeadlessAgentSession {
             assistantText += delta;
             opts.onEvent?.({ kind: "token", text: delta });
           }
+          if (chunk.message?.tool_calls) nativeCalls.push(...chunk.message.tool_calls);
           if (chunk.done) break;
         }
       } catch (err) {
@@ -274,7 +327,7 @@ export class HeadlessAgentSession {
 
       messages.push({ role: "assistant", content: assistantText });
 
-      const parsed = parseAgentToolCalls(assistantText, format);
+      const parsed = parseAgentToolCalls(assistantText, format, nativeCalls);
       if (!parsed.hasAny) {
         const noAction = guards.recordNoAction();
         if (noAction.action === "halt") {
