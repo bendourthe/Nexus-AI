@@ -12,7 +12,7 @@ import { describe, expect, it } from "vitest";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, "../../..");
-const GAPS = join(REPO_ROOT, "docs/v2/v2.11/known-gaps.md");
+const GAPS = join(REPO_ROOT, "docs/archive/v2/v2.11/known-gaps.md");
 const CATALOG = join(REPO_ROOT, "core/registry/catalog.json");
 const BAR = join(REPO_ROOT, "docs/reference/model-acceptance.md");
 
