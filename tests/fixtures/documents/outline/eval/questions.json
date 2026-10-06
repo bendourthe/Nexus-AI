@@ -1,0 +1,146 @@
+[
+  {
+    "id": "q01",
+    "file": "manual-60p.pdf",
+    "category": "factual",
+    "question": "In manual-60p.pdf, find section \"7.2 Reporting Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q02",
+    "file": "manual-60p.pdf",
+    "category": "factual",
+    "question": "In manual-60p.pdf, find section \"7.3 Introduction Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q03",
+    "file": "manual-60p.pdf",
+    "category": "factual",
+    "question": "In manual-60p.pdf, find section \"8 Troubleshooting\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q04",
+    "file": "manual-60p.pdf",
+    "category": "factual",
+    "question": "In manual-60p.pdf, find section \"8.1 Maintenance Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q05",
+    "file": "manual-60p.pdf",
+    "category": "factual",
+    "question": "In manual-60p.pdf, find section \"8.2 Appendix Notes Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q06",
+    "file": "manual-60p.pdf",
+    "category": "factual",
+    "question": "In manual-60p.pdf, find section \"8.3 Installation Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q07",
+    "file": "manual-60p.pdf",
+    "category": "factual",
+    "question": "In manual-60p.pdf, find section \"1.1 Storage Layout Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q08",
+    "file": "manual-60p.pdf",
+    "category": "factual",
+    "question": "In manual-60p.pdf, find section \"1.2 Troubleshooting Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q09",
+    "file": "quick-guide.pdf",
+    "category": "factual",
+    "question": "In quick-guide.pdf, find section \"1.1 Storage Layout Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q10",
+    "file": "policy.docx",
+    "category": "factual",
+    "question": "In policy.docx, find section \"1.1 Storage Layout Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q11",
+    "file": "handbook.md",
+    "category": "factual",
+    "question": "In handbook.md, find section \"1.1 Storage Layout Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q12",
+    "file": "notes.txt",
+    "category": "factual",
+    "question": "In notes.txt, find section \"1.1 Storage Layout Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q13",
+    "file": "manual-60p.pdf",
+    "category": "cross-section",
+    "question": "In manual-60p.pdf, find the section that comes immediately after section \"7.1 Performance Tuning Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q14",
+    "file": "manual-60p.pdf",
+    "category": "cross-section",
+    "question": "In manual-60p.pdf, find the section that comes immediately after section \"7.2 Reporting Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q15",
+    "file": "manual-60p.pdf",
+    "category": "cross-section",
+    "question": "In manual-60p.pdf, find the section that comes immediately after section \"7.3 Introduction Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q16",
+    "file": "manual-60p.pdf",
+    "category": "cross-section",
+    "question": "In manual-60p.pdf, find the section that comes immediately after section \"8 Troubleshooting\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q17",
+    "file": "manual-60p.pdf",
+    "category": "cross-section",
+    "question": "In manual-60p.pdf, find the section that comes immediately after section \"1.2 Troubleshooting Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q18",
+    "file": "manual-60p.pdf",
+    "category": "cross-section",
+    "question": "In manual-60p.pdf, find the section that comes immediately after section \"1.3 Performance Tuning Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q19",
+    "file": "manual-60p.pdf",
+    "category": "cross-section",
+    "question": "In manual-60p.pdf, find the section that comes immediately after section \"2 Installation\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q20",
+    "file": "manual-60p.pdf",
+    "category": "cross-section",
+    "question": "In manual-60p.pdf, find the section that comes immediately after section \"2.1 Scheduling Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q21",
+    "file": "manual-60p.pdf",
+    "category": "table",
+    "question": "In manual-60p.pdf, section \"7.2 Reporting Details\" contains a port table. Which protocol does port 8443 use?"
+  },
+  {
+    "id": "q22",
+    "file": "manual-60p.pdf",
+    "category": "table",
+    "question": "In manual-60p.pdf, section \"8.2 Appendix Notes Details\" contains a port table. What is the default for port 8080?"
+  },
+  {
+    "id": "q23",
+    "file": "manual-60p.pdf",
+    "category": "table",
+    "question": "In manual-60p.pdf, section \"1.2 Troubleshooting Details\" contains a port table. Which protocol does port 8443 use?"
+  },
+  {
+    "id": "q24",
+    "file": "manual-60p.pdf",
+    "category": "table",
+    "question": "In manual-60p.pdf, section \"2.2 Security Model Details\" contains a port table. What is the default for port 8080?"
+  }
+]

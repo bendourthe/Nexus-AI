@@ -94,12 +94,25 @@ export interface LLMUsageCounters {
   };
 }
 
+/**
+ * v2.11.0 -- a structured tool call returned by a backend that was sent
+ * `tools`. Ollama 0.32 parses Gemma 4 and Qwen 3.5 call tokens itself and
+ * returns them here, never in `content`.
+ */
+export interface LLMToolCall {
+  function: {
+    name: string;
+    arguments: Record<string, unknown>;
+  };
+}
+
 export interface LLMStreamChunk extends LLMUsageCounters {
   message: {
     role: string;
     content: string;
     /** Gemma 4 thinking-in-message; stripped unless declared on the Zod schema. */
     thinking?: string;
+    tool_calls?: LLMToolCall[];
   };
   done: boolean;
   /** Model name echoed by the backend; may differ from the requested alias. */
@@ -187,6 +200,16 @@ export const LLMStreamChunkSchema = z.object({
     role: z.string(),
     content: z.string(),
     thinking: z.string().optional(),
+    tool_calls: z
+      .array(
+        z.object({
+          function: z.object({
+            name: z.string(),
+            arguments: z.record(z.unknown()),
+          }),
+        }),
+      )
+      .optional(),
   }),
   done: z.boolean(),
   model: z.string().optional(),

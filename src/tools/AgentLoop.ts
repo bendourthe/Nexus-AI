@@ -1,4 +1,5 @@
 import type {
+  LLMToolCall,
   OllamaClient,
   OllamaMessage,
   OllamaOptions,
@@ -363,6 +364,12 @@ export class AgentLoop {
   private _gitCheckpoint: GitCheckpoint | null = null;
   private _traceId = "";
   private _rootSpanId = "";
+  /**
+   * v2.11.0 -- structured calls from the last streamed turn. The client sends
+   * `tools`, and Ollama 0.32 returns Gemma 4 / Qwen 3.5 calls here rather
+   * than in the text, so reading `content` alone dropped every call.
+   */
+  private _lastNativeCalls: LLMToolCall[] = [];
 
   constructor(
     private readonly _client: OllamaClient,
@@ -845,6 +852,7 @@ export class AgentLoop {
     const { results: parseResults, hasAny } = parseAgentToolCalls(
       accumulated,
       this._toolFormat,
+      this._lastNativeCalls,
     );
 
     if (!hasAny) {
@@ -1375,6 +1383,7 @@ export class AgentLoop {
     postMessage({ type: "status", state: "streaming" });
 
     let accumulated = "";
+    this._lastNativeCalls = [];
 
     try {
       const stream = this._client.streamChat(
@@ -1395,6 +1404,7 @@ export class AgentLoop {
           postMessage({ type: "token", value: token });
           accumulated += token;
         }
+        if (chunk.message.tool_calls) this._lastNativeCalls.push(...chunk.message.tool_calls);
       }
 
       return this._cancelled ? null : accumulated;

@@ -17,3 +17,7 @@ Files this phase added under `docs/`: the Phase 3 session history, one known-gap
 ## Phase 4 (2026-10-02)
 
 Files this phase added under `docs/`: the Phase 4 session history, two known-gaps rows, and one `docs/DEVLOG.md` entry. The throwaway smoke and probe scripts were deleted after use. Nothing proposed for cleanup.
+
+## Phase 5 (2026-10-03)
+
+Files this phase added under `docs/`: `docs/v2/v2.11/development/outline-eval.md` (harness output plus the hand-written decision), the Phase 5 session history, known-gaps rows DF-v211-2, DF-v211-7, WN-v211-4, and WN-v211-5, and one `docs/DEVLOG.md` entry. Per-run diagnostics (reply tails) stayed outside the repository by design, because they contain answers to the keyed questions. Throwaway probe scripts lived in the session scratchpad only. Nothing proposed for archival.

@@ -12,6 +12,25 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-03] v2.11.0 Phase 5 - Directional smoke test, and native tool calling
+
+Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P5](v2/v2.11/development/history/2026-10-03_v2.11.0-pageindex-airi-clm-phase-5.md), result [outline-eval](v2/v2.11/development/outline-eval.md).
+
+### What Changed
+
+- **Native tool calls, both channels.** On Ollama 0.32 Gemma 4 and Qwen 3.5 tool calls arrive only in `message.tool_calls`, which every client dropped; agentic coding called no tools. The stream schema keeps them, `AgentLoop` and `HeadlessAgentSession` execute them (native calls replace text calls, never both), the headless loop sends `tools`, and the LM Studio and OpenAI-compatible clients assemble streamed calls. The headless prompt now teaches each model its own call syntax.
+- **Smoke test.** An opt-in four-arm harness (`NEXUS_OUTLINE_SMOKE=1`, outside CI) on qwen3.5:9b and gemma4:12b. Past page 50 the outline tools answered 3 to 4 of 10 opening-words questions; `parse_document` and BM25 answered none. The flags stay off; the promotion criteria are not met.
+
+### Verification
+
+See the Phase 5 history, section 4.
+
+### Known gaps
+
+DF-v211-2 (review at v2.13.0), DF-v211-7 (tool results overflow the window), WN-v211-4, WN-v211-5.
+
+---
+
 ## [2026-10-02] v2.11.0 Phase 4 - Tools, screening, both channels, summaries
 
 Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P4](v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-4.md).
