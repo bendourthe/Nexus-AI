@@ -1,0 +1,25 @@
+{
+  "file": "repeated-headings.md",
+  "kind": "markdown",
+  "pageCount": 1,
+  "headings": [
+    {
+      "title": "Overview",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": ""
+    },
+    {
+      "title": "Overview",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": ""
+    },
+    {
+      "title": "Overview",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": ""
+    }
+  ]
+}

@@ -10,3 +10,8 @@
 
 tests/snapshots/specialists/*.txt text eol=lf
 tests/snapshots/specialists/*.json text eol=lf
+
+# v2.11.0 Phase 2 -- the outline fixture documents are byte-exact inputs: the
+# PDFs carry cross-reference byte offsets and bom-crlf.md exists to test CRLF.
+# An autocrlf rewrite on a Windows checkout would corrupt both.
+tests/fixtures/documents/outline/docs/* -text

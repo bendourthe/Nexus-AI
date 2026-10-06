@@ -154,6 +154,9 @@ describe("sidecar handlers", () => {
           "media.sampleVideoFrames",
           "coding.parseDocument.status",
           "coding.parseDocument.setEnabled",
+          // v2.11.0 Phase 4 wired the outline tools flag.
+          "coding.documentOutline.status",
+          "coding.documentOutline.setEnabled",
           // v2.2.0 Phase 2 (2.4) wired real GPU telemetry (poll-based; the
           // telemetry.subscribe push channel stays unimplemented).
           "gpu.sample",

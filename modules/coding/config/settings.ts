@@ -80,6 +80,10 @@ export interface NexusSettings {
   parseDocumentEnabled: boolean;
   /** v1.16.0 Phase 4 (A6): store parsed-document text in memory. Default false. */
   parseDocumentMemoryIngestEnabled: boolean;
+  /** v2.11.0 Phase 4: `document_outline` and `document_read_section`. Default false. */
+  documentOutlineEnabled: boolean;
+  /** v2.11.0 Phase 4.4: node summaries; effective only with documentOutlineEnabled. Default false. */
+  documentOutlineSummariesEnabled: boolean;
   /**
    * v1.18.0 Phase 6 (OI-A1): wrap `run_terminal` in an OS process sandbox.
    * Off by default (rollout). When off, or when the OS backend is missing,
@@ -319,6 +323,11 @@ export function getSettings(): NexusSettings {
     ),
     parseDocumentMemoryIngestEnabled: c.get<boolean>(
       "nexus.coding.parseDocument.memoryIngest.enabled",
+      false,
+    ),
+    documentOutlineEnabled: c.get<boolean>("nexus.coding.documentOutline.enabled", false),
+    documentOutlineSummariesEnabled: c.get<boolean>(
+      "nexus.coding.documentOutline.summaries.enabled",
       false,
     ),
     inboundClassifierEnabled: c.get<boolean>(

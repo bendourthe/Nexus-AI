@@ -50,6 +50,33 @@ export function parsePsResponse(raw: unknown): ReadonlyMap<string, number> {
   return out;
 }
 
+/**
+ * v2.11.0 -- the context window a loaded model is actually running with, from
+ * `/api/ps` `context_length`. Hosts that never set `num_ctx` (the desktop
+ * sidecar) otherwise cannot know it. `null` when the model is not loaded,
+ * Ollama is unreachable, or the field is absent. Never throws.
+ */
+export async function loadedContextLength(
+  http: Pick<OllamaHttp, "get">,
+  model: string,
+): Promise<number | null> {
+  try {
+    const res = await http.get("/api/ps");
+    if (!res.ok) return null;
+    const models = ((await res.json()) as { models?: unknown }).models;
+    if (!Array.isArray(models)) return null;
+    for (const entry of models as Array<{ name?: unknown; model?: unknown; context_length?: unknown }>) {
+      const name = typeof entry.name === "string" ? entry.name : entry.model;
+      if (typeof name !== "string" || !(name === model || name.startsWith(`${model}:`))) continue;
+      const length = entry.context_length;
+      return typeof length === "number" && Number.isFinite(length) && length > 0 ? length : null;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export interface OllamaMemoryProbeOptions {
   readonly ttlMs?: number;
   /** Injected for deterministic tests. Defaults to `Date.now()`. */

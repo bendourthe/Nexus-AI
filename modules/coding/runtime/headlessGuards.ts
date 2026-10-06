@@ -71,6 +71,8 @@ const PATH_PARAMS: Readonly<Record<string, readonly string[]>> = {
   delete_file: ["path"],
   list_directory: ["path"],
   parse_document: ["path"],
+  document_outline: ["path"],
+  document_read_section: ["path"],
   hash_file: ["path"],
   watch_path: ["path"],
 };

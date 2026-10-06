@@ -199,6 +199,9 @@ export const IPC_METHODS = [
   "media.sampleVideoFrames",
   "coding.parseDocument.status",
   "coding.parseDocument.setEnabled",
+  // v2.11.0 Phase 4.3 -- outline tools flag, mirrored from the extension setting.
+  "coding.documentOutline.status",
+  "coding.documentOutline.setEnabled",
 ] as const;
 
 export type Method = (typeof IPC_METHODS)[number];
@@ -2119,6 +2122,16 @@ export const CodingParseDocumentSetEnabledRequest = z
 export const CodingParseDocumentSetEnabledResponse = z
   .object({ enabled: z.boolean() })
   .strict();
+export const CodingDocumentOutlineStatusRequest = z.object({}).strict();
+export const CodingDocumentOutlineStatusResponse = z
+  .object({ enabled: z.boolean(), summariesEnabled: z.boolean() })
+  .strict();
+export const CodingDocumentOutlineSetEnabledRequest = z
+  .object({ enabled: z.boolean(), summariesEnabled: z.boolean().optional() })
+  .strict();
+export const CodingDocumentOutlineSetEnabledResponse = z
+  .object({ enabled: z.boolean(), summariesEnabled: z.boolean() })
+  .strict();
 
 // ---- v1.1.0 Phase 11 -- VS Code extension surface ---------------------------
 
@@ -3653,6 +3666,16 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
   "coding.parseDocument.setEnabled": {
     request: CodingParseDocumentSetEnabledRequest,
     response: CodingParseDocumentSetEnabledResponse,
+    implemented: true,
+  },
+  "coding.documentOutline.status": {
+    request: CodingDocumentOutlineStatusRequest,
+    response: CodingDocumentOutlineStatusResponse,
+    implemented: true,
+  },
+  "coding.documentOutline.setEnabled": {
+    request: CodingDocumentOutlineSetEnabledRequest,
+    response: CodingDocumentOutlineSetEnabledResponse,
     implemented: true,
   },
 };

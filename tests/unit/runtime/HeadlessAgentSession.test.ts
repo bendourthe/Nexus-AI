@@ -71,6 +71,71 @@ describe("HeadlessAgentSession", () => {
     expect(written).toBe("export const x = 1;");
   });
 
+  it("teaches a qwen-json model the Qwen call syntax and runs the call it makes", async () => {
+    await fsp.writeFile(path.join(workdir, "a.txt"), "alpha", "utf8");
+    const { client, requests } = scriptedLlm([
+      '<tool_call>{"name": "read_file", "arguments": {"path": "a.txt"}}</tool_call>',
+      "Read it. Done.",
+    ]);
+    const session = new HeadlessAgentSession(client, createHeadlessTools());
+    const result = await session.run({ task: "read a.txt", workdir, model: "qwen3.5:9b" });
+
+    const system = String(requests[0]?.messages[0]?.content);
+    expect(system).toContain('<tool_call>{"name": "read_file", "arguments": {"path": "src/index.ts"}}</tool_call>');
+    expect(system).not.toContain("<|tool_call>call:");
+    expect(result.toolCalls).toBe(1);
+    expect(result.finishReason).toBe("done");
+  });
+
+  it("sends the tools natively and runs a call returned in message.tool_calls", async () => {
+    await fsp.writeFile(path.join(workdir, "a.txt"), "alpha", "utf8");
+    let turn = 0;
+    const requests: LLMChatRequest[] = [];
+    const client: LLMClient = {
+      async checkHealth() {
+        return true;
+      },
+      async listModels() {
+        return [];
+      },
+      async *streamChat(request) {
+        requests.push(request);
+        turn += 1;
+        if (turn === 1) {
+          yield {
+            message: {
+              role: "assistant",
+              content: "",
+              tool_calls: [{ function: { name: "read_file", arguments: { path: "a.txt" } } }],
+            },
+            done: true,
+          };
+          return;
+        }
+        yield { message: { role: "assistant", content: "It says alpha." }, done: true };
+      },
+    };
+    const events: HeadlessAgentEvent[] = [];
+    const session = new HeadlessAgentSession(client, createHeadlessTools());
+    const result = await session.run({ task: "read a.txt", workdir, model: "test", onEvent: (e) => events.push(e) });
+
+    expect(requests[0]?.tools?.some((t) => t.function.name === "read_file")).toBe(true);
+    expect(result.toolCalls).toBe(1);
+    expect(result.finalText).toBe("It says alpha.");
+    const toolResult = events.find((e) => e.kind === "toolResult");
+    expect(toolResult?.kind === "toolResult" && toolResult.output).toContain("alpha");
+  });
+
+  it("teaches the Gemma default the <|\"|> string syntax, not JSON arguments", async () => {
+    const { client, requests } = scriptedLlm(["Done."]);
+    const session = new HeadlessAgentSession(client, createHeadlessTools());
+    await session.run({ task: "x", workdir, model: "test" });
+
+    const system = String(requests[0]?.messages[0]?.content);
+    expect(system).toContain('<|tool_call>call:read_file{path:<|"|>src/index.ts<|"|>}<tool_call|>');
+    expect(system).not.toContain('{"arg"');
+  });
+
   it("stops at the iteration budget when the model never stops calling tools", async () => {
     const { client } = scriptedLlm(
       Array.from({ length: 10 }, () => toolCall("list_directory", {})),

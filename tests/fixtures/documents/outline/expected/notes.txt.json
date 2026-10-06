@@ -1,0 +1,61 @@
+{
+  "file": "notes.txt",
+  "kind": "text",
+  "pageCount": 1,
+  "headings": [
+    {
+      "title": "1 Introduction",
+      "level": 1,
+      "startPage": 1,
+      "firstWords": "Operator measure control handle sample measure"
+    },
+    {
+      "title": "1.1 Storage Layout Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Setting measure setting memory service handle"
+    },
+    {
+      "title": "1.2 Troubleshooting Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Device signal limit module report service"
+    },
+    {
+      "title": "2 Installation",
+      "level": 1,
+      "startPage": 1,
+      "firstWords": "Option limit layer control measure system"
+    },
+    {
+      "title": "2.1 Scheduling Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Filter profile cycle service option stream"
+    },
+    {
+      "title": "2.2 Security Model Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Status stream channel input system sensor"
+    },
+    {
+      "title": "3 Configuration",
+      "level": 1,
+      "startPage": 1,
+      "firstWords": "Queue filter storage control limit cycle"
+    },
+    {
+      "title": "3.1 Monitoring Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Network operator factor system engine layer"
+    },
+    {
+      "title": "3.2 Backup and Restore Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Channel config profile layer profile input"
+    }
+  ]
+}

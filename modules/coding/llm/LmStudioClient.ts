@@ -1,5 +1,6 @@
 import { getLogger } from "../utils/logger.js";
 import { instrumentStream } from "./instrumentStream.js";
+import { OpenAiToolCallAccumulator, type OpenAiToolCallDelta } from "./openAiToolCalls.js";
 import type {
   LLMClient,
   LLMChatRequest,
@@ -42,7 +43,11 @@ const DEFAULT_TIMEOUT_MS = 60_000;
 interface OpenAiStreamChunk {
   readonly id?: string;
   readonly choices?: ReadonlyArray<{
-    readonly delta?: { readonly content?: string; readonly role?: string };
+    readonly delta?: {
+      readonly content?: string;
+      readonly role?: string;
+      readonly tool_calls?: readonly OpenAiToolCallDelta[];
+    };
     readonly finish_reason?: string | null;
   }>;
   /** v1.16.0 Phase 2.1: forwarded to the metrics layer when the runtime sends it. */
@@ -214,6 +219,11 @@ class LmStudioClientImpl implements LLMClient {
     const decoder = new TextDecoder();
     let buffer = "";
     let pendingUsage: OpenAiStreamChunk["usage"];
+    const toolCalls = new OpenAiToolCallAccumulator();
+    const withCalls = (message: LLMStreamChunk["message"]): LLMStreamChunk["message"] => {
+      const calls = toolCalls.drain();
+      return calls.length > 0 ? { ...message, tool_calls: calls } : message;
+    };
 
     try {
       while (true) {
@@ -232,7 +242,7 @@ class LmStudioClientImpl implements LLMClient {
           const payload = rawLine.slice(5).trim();
           if (payload === "[DONE]") {
             yield {
-              message: { role: "assistant", content: "" },
+              message: withCalls({ role: "assistant", content: "" }),
               done: true,
               ...(pendingUsage ? { usage: pendingUsage } : {}),
             };
@@ -245,11 +255,12 @@ class LmStudioClientImpl implements LLMClient {
             // finish_reason, so hold it and attach it to the terminal chunk.
             if (parsed.usage) pendingUsage = parsed.usage;
             const choice = parsed.choices?.[0];
+            toolCalls.add(choice?.delta?.tool_calls);
             const content = choice?.delta?.content ?? "";
             const role = choice?.delta?.role ?? "assistant";
             const isDone = choice?.finish_reason !== null && choice?.finish_reason !== undefined;
             yield {
-              message: { role, content },
+              message: isDone ? withCalls({ role, content }) : { role, content },
               done: isDone,
               ...(isDone && pendingUsage ? { usage: pendingUsage } : {}),
             };

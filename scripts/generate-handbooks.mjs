@@ -36,7 +36,7 @@ function render(source) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="source-sha256" content="${digest}">
   <title>${title}</title>
-  <style>body{font:16px/1.6 system-ui,sans-serif;max-width:72rem;margin:auto;padding:2rem;color:#172033;background:#f7f9fc}a{color:#075eb8}code,pre{font-family:ui-monospace,monospace}pre{overflow:auto;padding:1rem;background:#e9eef6;border-radius:.5rem}table{border-collapse:collapse;width:100%}th,td{border:1px solid #bac5d6;padding:.5rem;text-align:left}</style>
+  <style>body{font:16px/1.6 system-ui,sans-serif;max-width:72rem;margin:auto;padding:2rem;color:#172033;background:#f7f9fc}a{color:#075eb8}code,pre{font-family:ui-monospace,monospace}:not(pre)>code{overflow-wrap:anywhere}pre{overflow:auto;padding:1rem;background:#e9eef6;border-radius:.5rem}table{border-collapse:collapse;width:100%}th,td{border:1px solid #bac5d6;padding:.5rem;text-align:left}</style>
 </head>
 <body>
 ${body}</body>

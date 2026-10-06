@@ -1,0 +1,43 @@
+{
+  "file": "quick-guide.pdf",
+  "kind": "pdf",
+  "pageCount": 2,
+  "headings": [
+    {
+      "title": "1 Introduction",
+      "level": 1,
+      "startPage": 1,
+      "firstWords": "Measure record config control channel review"
+    },
+    {
+      "title": "1.1 Storage Layout Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Module manual network device service device"
+    },
+    {
+      "title": "1.2 Troubleshooting Details",
+      "level": 2,
+      "startPage": 1,
+      "firstWords": "Limit schedule sample output schedule module"
+    },
+    {
+      "title": "2 Installation",
+      "level": 1,
+      "startPage": 2,
+      "firstWords": "Layer device measure factor power input"
+    },
+    {
+      "title": "2.1 Scheduling Details",
+      "level": 2,
+      "startPage": 2,
+      "firstWords": "Memory cycle output queue window storage"
+    },
+    {
+      "title": "2.2 Security Model Details",
+      "level": 2,
+      "startPage": 2,
+      "firstWords": "Input setting manual manual storage power"
+    }
+  ]
+}

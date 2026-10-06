@@ -61,6 +61,9 @@ export const TOOL_PERMISSION_MAP: Record<BuiltinToolName, PermissionTier> = {
   // subprocess (one engine executes pinned repo code), so it is not a pure
   // local read like read_file. CONFIRM, matching write_file / fetch_page.
   parse_document: PermissionTier.CONFIRM,
+  // v2.11.0 Phase 4: same tier as parse_document; they read a file and may run the OCR model.
+  document_outline: PermissionTier.CONFIRM,
+  document_read_section: PermissionTier.CONFIRM,
   watch_path: PermissionTier.AUTO_APPROVE,
   hash_file: PermissionTier.AUTO_APPROVE,
   browser_navigate: PermissionTier.DANGEROUS,

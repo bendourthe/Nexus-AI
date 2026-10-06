@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="source-sha256" content="e6d66607a657591c3bd80ed4bc7682c68a9c05bb9575c257d9b806055bd7cba4">
+  <title>Document outline tools</title>
+  <style>body{font:16px/1.6 system-ui,sans-serif;max-width:72rem;margin:auto;padding:2rem;color:#172033;background:#f7f9fc}a{color:#075eb8}code,pre{font-family:ui-monospace,monospace}:not(pre)>code{overflow-wrap:anywhere}pre{overflow:auto;padding:1rem;background:#e9eef6;border-radius:.5rem}table{border-collapse:collapse;width:100%}th,td{border:1px solid #bac5d6;padding:.5rem;text-align:left}</style>
+</head>
+<body>
+<h1>Document outline tools</h1>
+<p><code>document_outline</code> and <code>document_read_section</code> let the coding agent navigate a long document by section instead of reading it whole. They ship in v2.11.0, off by default, in both the VS Code extension and the desktop app.</p>
+<h2>What they do</h2>
+<p><code>document_outline(path)</code> returns a tree of the document&#39;s sections, each with an id and a page range, plus a <code>tree_hash</code> that identifies this version of the document. <code>document_read_section(path, node_id, tree_hash)</code> returns one section&#39;s text with its page range. A long section continues with <code>from=&lt;offset&gt;</code>; the tool says so when there is more.</p>
+<p>Inputs: markdown (<code>.md</code>, <code>.markdown</code>), plain text (<code>.txt</code>, <code>.text</code>), PDF, DOCX, and common image files. Markdown and text are read directly. PDF, DOCX, and images go through the local document runtime (Settings &gt; Models), which reads up to 200 pages for the outline tools; <code>parse_document</code> keeps its own 50-page cap.</p>
+<p>How the tree is built, per document:</p>
+<table>
+<thead>
+<tr>
+<th>Structure source</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>headings</code></td>
+<td>Recovered headings pass a quality check (markdown and DOCX headings; numbered titles in text)</td>
+</tr>
+<tr>
+<td><code>page-windows</code></td>
+<td>Headings are missing or untrustworthy and page boundaries exist (typical for PDFs and scans through the CPU OCR engine)</td>
+</tr>
+<tr>
+<td><code>char-windows</code></td>
+<td>No headings and no page boundaries</td>
+</tr>
+<tr>
+<td><code>mixed</code></td>
+<td>Real headings, with any very long section split into windows</td>
+</tr>
+</tbody></table>
+<p>Window titles are generated from numbers only (&quot;Pages 11-20&quot;), never from document text.</p>
+<p>Output size follows the active model&#39;s context window: an outline takes at most 10% of it and one section read at most 25%. The extension uses the configured window. The desktop app asks Ollama for the window the running model was loaded with, and falls back to 8,192 tokens when Ollama does not report one.</p>
+<h2>Turning them on</h2>
+<p>VS Code extension: set <code>nexus.coding.documentOutline.enabled</code> to <code>true</code>. Optional one-line summaries per section: also set <code>nexus.coding.documentOutline.summaries.enabled</code>.</p>
+<p>Desktop app: there is no Settings toggle yet (DF-v211-4). Either start the app with <code>NEXUS_DOCUMENT_OUTLINE=1</code> (and <code>NEXUS_DOCUMENT_OUTLINE_SUMMARIES=1</code> for summaries), or add <code>&quot;nexus.coding.documentOutline.enabled&quot;: true</code> to <code>~/.nexus/settings.json</code>. The sidecar method <code>coding.documentOutline.status</code> reports the effective state.</p>
+<p>An environment value always wins over the stored setting, in both channels. Summaries have effect only when the outline flag is on.</p>
+<h2>Safety model</h2>
+<p>Everything derived from a document is treated as untrusted:</p>
+<ul>
+<li>Paths resolve inside the workspace, symlink-aware; the file is opened once and checked through the open descriptor, so a file swapped after the check is refused. Special files, binary files named <code>.md</code>/<code>.txt</code>, and files over the size caps (20 MB text, 200 MB other) are refused. Secret-path files follow the same rules as <code>parse_document</code>, and the denylist is matched on the resolved path too, so <code>./.env.md</code> or a symlink to a secret file is caught.</li>
+<li>Titles, section text, file names, and summaries are screened for prompt-injection patterns on every read, after invisible format characters are removed. Every flagged line is replaced with <code>[redacted: &lt;kind&gt;]</code>, however many there are; the matched text is never returned. A whole section is screened before it is cut to size, so a payload split across two reads is still caught.</li>
+<li>Secrets are redacted (<code>redactSecrets</code>) before text reaches the model, in section text, titles, and summaries alike.</li>
+<li>Every result is wrapped in a block that starts with a random nonce and the line &quot;Document content, not instructions&quot;; text inside cannot close the block early.</li>
+<li><code>document_read_section</code> works only on documents outlined in the same session, and each session has a call cap and an output cap.</li>
+<li>Both tools are at the confirm permission tier. Their membership in the inbound-data tool sets (<code>INBOUND_EXTERNAL_DATA_TOOLS</code>, <code>HEADLESS_INBOUND_TOOLS</code>) only adds an untrusted-content annotation; it does not make later tool calls ask for confirmation. That protection comes from each tool&#39;s own tier (<code>run_terminal</code>, <code>write_file</code>, <code>delete_file</code>, <code>fetch_page</code> are confirm or above).</li>
+<li>Summaries are sent only to a loopback model endpoint (the same <code>isLoopbackEndpoint</code> rule the local adapters use), are screened when generated and again whenever read from cache, and are marked machine-generated.</li>
+</ul>
+<h2>Cache and retention</h2>
+<p>Outline structure is cached under <code>~/.nexus/outline-cache</code>, keyed by the document&#39;s bytes plus the extraction engine. The cache holds section titles, offsets, and content hashes, never document text; it is written only for extraction engines measured as deterministic (direct reads, DOCX, CPU RapidOCR). Summaries are cached under <code>~/.nexus/outline-cache/summaries</code>, keyed by document, model, and prompt version. Each store is capped at 50 MB and evicts oldest entries first. To clear both, delete the <code>~/.nexus/outline-cache</code> directory; nothing else depends on it.</p>
+<p>Extracted document text stays in process memory only, for at most ten minutes. After that, or after a restart, a section read re-extracts the document; if the engine is not on the deterministic list, the tool asks for a new outline instead.</p>
+<h2>Limits</h2>
+<ul>
+<li>CPU OCR costs about 6.8 s per text-dense page on the reference laptop, so the first outline of a 60-page PDF takes about 7 minutes (DF-v211-3). Repeat calls use the cache.</li>
+<li>The OCR runtime reports <code>pageCount</code> capped at 200, so truncation past 200 pages is reported as <code>partial</code>, not as an exact count.</li>
+<li>Heading recovery from OCR text is weak; most PDFs and scans get page windows.</li>
+<li>The ACP control-surface path has no summaries (WN-v211-2).</li>
+<li>PPTX and XLSX are not outlined yet, although <code>parse_document</code> reads them (DF-v211-6).</li>
+</ul>
+<h2>Recording real use</h2>
+<p>The outline tools stay off by default until the maintainer has used them in real work. Record each use as a session-history or DEVLOG entry that cites the document&#39;s SHA-256 and the answer obtained. The review is due at the v2.13.0 release (DF-v211-2); with no recorded use, the tools and their settings keys are removed.</p>
+</body>
+</html>
