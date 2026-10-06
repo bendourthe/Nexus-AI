@@ -39,7 +39,7 @@ import { scoreAnswer } from "../../scripts/outline-smoke-scoring.js";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, "../..");
 const FIXTURES = join(REPO, "tests/fixtures/documents/outline");
-const REPORT = join(REPO, "docs/v2/v2.11/development/outline-eval.md");
+const REPORT = join(REPO, "docs/archive/v2/v2.11/development/outline-eval.md");
 const OLLAMA = "http://127.0.0.1:11434";
 const MODELS = ["qwen3.5:9b", "gemma4:12b"];
 const CONTEXT_TOKENS = 16_384;
