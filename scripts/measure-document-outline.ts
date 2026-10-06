@@ -289,7 +289,14 @@ export function renderReport(rows: readonly Row[], prereq: string, capRow: strin
 }
 
 function writeReport(block: string): void {
-  const existing = existsSync(REPORT) ? readFileSync(REPORT, "utf8") : `# Outline feasibility (v2.11.0 Phase 2)\n\n${START}\n${END}\n`;
+  // Read directly and fall back on a missing file, rather than checking first
+  // (a check-then-read is a file-system race).
+  let existing: string;
+  try {
+    existing = readFileSync(REPORT, "utf8");
+  } catch {
+    existing = `# Outline feasibility (v2.11.0 Phase 2)\n\n${START}\n${END}\n`;
+  }
   const startAt = existing.indexOf(START);
   const endAt = existing.indexOf(END);
   const next =
