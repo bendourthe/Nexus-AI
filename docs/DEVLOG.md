@@ -13,6 +13,27 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-08] v2.12.0 Phase 1 - Kolibri-1 decline and the declined-models index
+
+Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), absorbed seed [kolibri-1](v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md), history [P1](v2/v2.12/development/history/2026-10-08_v2.12.0-outline-promotion-readiness-phase-1.md).
+
+### What Changed
+
+- **Kolibri-1 declined**: `DF-v212-1` records why (about 34 GB at the smallest community quant against a 24 GB top tier; no stock Ollama, llama.cpp, or LM Studio support) and the two conditions that must both hold to reopen it. No catalog row.
+- **Declined-models index**: `docs/reference/declined-models.md` lists every declined model proposal and links its record; the acceptance bar points to it in one sentence.
+- **Guard test**: `tests/unit/docs/v2.12.0-kolibri-exclusion.test.ts` keeps Kolibri out of the catalog, the tier defaults, and the bar, and fails on any index link that does not resolve.
+- **v2.11 housekeeping**: the archived v2.11 evidence file now records publication (PRs #91 to #95, the tag, and the release), T031 is ticked, and the seed plan is marked absorbed.
+
+### Verification
+
+Docs suite 11 files and 41 tests passed; lint clean. The guard was shown able to fail: one appended `Kolibri` line failed exactly the acceptance-bar assertion, and restoring the bytes returned the original SHA-256 and a pass.
+
+### Known gaps
+
+Opened DF-v212-1 (decline), DF-v212-2 and DF-v212-3 (parked from the seed).
+
+---
+
 ## [2026-10-05] v2.11.0 Phase 6 - Final-phase duties
 
 Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P6](v2/v2.11/development/history/2026-10-05_v2.11.0-pageindex-airi-clm-phase-6.md), [evidence](v2/v2.11/development/v2.11.0-last-phase-evidence.md).
