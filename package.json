@@ -1073,8 +1073,8 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^11.0.1",
-    "@stryker-mutator/core": "^8.7.0",
-    "@stryker-mutator/vitest-runner": "^8.7.0",
+    "@stryker-mutator/core": "^9.6.1",
+    "@stryker-mutator/vitest-runner": "^9.6.1",
     "@types/better-sqlite3": "^7.6.13",
     "@types/diff": "^5.2.3",
     "@types/node": "^20.0.0",
@@ -1093,7 +1093,7 @@
     "vitest": "^2.1.9"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@modelcontextprotocol/sdk": "^1.31.0",
     "better-sqlite3": "12.11.1",
     "diff": "^5.2.2",
     "highlight.js": "^11.11.1",
