@@ -20,6 +20,7 @@
 import type { LLMClient } from "../llm/types.js";
 import { resolveEffectiveContextTokens, type DocumentOutlineTools } from "../documents/DocumentOutlineTools.js";
 import { createDocumentOutlineTools, outlineSummaryStore } from "../documents/createDocumentOutlineTools.js";
+import { sizeParsedDocument } from "./outputBudget.js";
 import { createOutlineSummaryProvider } from "../documents/OutlineSummaryProvider.js";
 import { matchesSecretPath } from "../utils/secretPaths.js";
 import * as fs from "node:fs";
@@ -56,6 +57,12 @@ export interface HeadlessToolContext {
   readonly workspaceId?: string;
   /** Aborted when the per-task budget elapses; cooperative tools should stop. */
   readonly signal?: AbortSignal;
+  /**
+   * v2.12.0: tokens the conversation already holds when this call runs, from
+   * the loop's `TurnLedger`. Document tools size their output from the room
+   * left; absent means unknown, and they fall back to a fixed share.
+   */
+  readonly usedTokens?: number;
 }
 
 export interface HeadlessToolResult {
@@ -164,8 +171,9 @@ export interface HeadlessToolOptions {
   readonly outlineCacheDir?: string | null;
   /**
    * Context window in tokens, when the host knows it. Read before every outline
-   * call, so an async source (the sidecar asks Ollama for the loaded model's
-   * window) stays current across model switches.
+   * and `parse_document` call, so an async source (the sidecar asks Ollama for
+   * the loaded model's window) stays current across model switches. Without it,
+   * `parse_document` keeps only the byte cap.
    */
   readonly outlineContextTokens?: () =>
     | number
@@ -631,13 +639,9 @@ export function createHeadlessTools(options: HeadlessToolOptions = {}): Headless
             /* ingest is best-effort; parse still succeeds */
           }
         }
-        return ok(
-          capBytes(
-            `Parsed "${asString(args, "path")}" with ${parsed.engine} (${parsed.pageCount} page(s)):\n\n` +
-              redactSecrets(body),
-            cap,
-          ),
-        );
+        const header = `Parsed "${asString(args, "path")}" with ${parsed.engine} (${parsed.pageCount} page(s)):\n\n`;
+        const window = resolveEffectiveContextTokens({ configuredTokens: await options.outlineContextTokens?.() });
+        return ok(capBytes(sizeParsedDocument(header, redactSecrets(body), window, ctx.usedTokens), cap));
       } catch (err) {
         return fail(err instanceof Error ? err.message : String(err));
       }
@@ -839,7 +843,7 @@ export function createHeadlessOutlineTools(options: HeadlessToolOptions): Headle
       parameters: OUTLINE_PARAMETERS,
       async execute(args, ctx) {
         await refreshContextTokens();
-        return toResult(await coreFor(ctx).outline(args));
+        return toResult(await coreFor(ctx).outline(args, { usedTokens: ctx.usedTokens }));
       },
     },
     {
@@ -854,7 +858,7 @@ export function createHeadlessOutlineTools(options: HeadlessToolOptions): Headle
       },
       async execute(args, ctx) {
         await refreshContextTokens();
-        return toResult(await coreFor(ctx).readSection(args));
+        return toResult(await coreFor(ctx).readSection(args, { usedTokens: ctx.usedTokens }));
       },
     },
   ];

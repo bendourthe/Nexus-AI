@@ -164,6 +164,8 @@
 | Tasks done (v0.2.0) | 44 / 44 | 44 / 44 | 0 |
 | Tasks done (v0.3.0) | 55 / 55 | 55 / 55 | 0 |
 | Tasks done (v0.4.0) | 16 (P1) + 17 (P2) + 21 (P3) + 21 (P4) + 22 (P5) | ~135 / ~135 | in-progress |
+| Sources compared (Craft editors + EmbeddingGemma 2, 2026-10-07) | 2 / 2 | 2 / 2 | 0 |
+| v2.13 adoption plan implementation tasks (finalized, 2026-10-08) | 0 / 31 | 31 | 31 |
 
 ---
 
@@ -631,6 +633,29 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 **Branch**: all v1.9.0 UI-rework work is on `feat/v1.9.0-installer-phase-1` (operator kept both workstreams on one branch; can split at push). Phases 1-4 landed 2026-07-07, Phase 5 landed 2026-07-08, Phases 6-9 landed 2026-07-09 -- **all 9 phases code-complete**. Ready to merge to `main` (semantic-release cuts the version/CHANGELOG/tag) once the on-device visual QA passes. Open on-device items: `UIR.P7.A` (installer DoD 1-8 walk-through), `UIR.P8.A` (app aurora render + reduced-motion), `UIR.P9.A` (app DoD 9-11: disclaimer + both auroras + taskbar icon + Dashboard logo).
 
 ---
+
+## Outline promotion readiness (active v2.12.0)
+
+| Metric | Current | Target |
+|---|---|---|
+| Verified plan phases | 2 of 7 | 7 of 7 |
+| Phase 2 root test gate | 6,162 passed, 12 existing skips, no failures | Pass unchanged coverage thresholds |
+| Phase 2 coverage | 87.99% statements, 83.57% branches, 90.7% functions, 87.99% lines | Keep repository thresholds |
+| Phase 2 live gate | Passed: 11,428 -> 7,332 -> 3,448 characters; final prompt 14,430 tokens | Falling budgets and final prompt below 16,384 tokens |
+
+- [x] Record the Kolibri-1 decline and index, with its failing-then-passing guard (Phase 1, `59e16c82`).
+- [x] Reconcile the failed package update PRs through dependency repair PR #96, merged at `092ce3c2` after 60 passing checks; close superseded #48, #59, and #72.
+- [x] Verify Phase 2 document budgets with real OCR/Ollama, passing root coverage, focused tests, lint/build and desktop typecheck; save one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md)).
+- [ ] Reconcile the guarded agent-authored 14,000 -> 14,500 test count before any further edit, and preserve excluded generated benchmark changes until cleanup is agreed.
+- [ ] Complete tool-role history, compaction, Settings, evaluation and final integration in the approved [v2.12 plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), then begin v2.13.
+
+## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)
+
+- [x] Compare the four named Craft editor repositories and Google's EmbeddingGemma 2 announcement against Nexus; record source scans, code evidence, queue impact and prioritized recommendations in the [comparison](releases/v2/v2.13/comparisons/v2.13.0-comparison-craft-editors-embeddinggemma-2.md) (2026-10-07).
+- [x] Finalize the comparison's [v2.13.0 adoption plan](releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md): seven phases, 31 tasks, conditional model admission and independent image-edit work; all seven review lenses ran and drafting defects were corrected ([review](releases/v2/v2.13/development/v2.13.0-plan-review.md), 2026-10-08). The owner accepted all three recommendations on 2026-10-08; planning is complete and no implementation began.
+- [x] Select the v2.13.0 planning scope after v2.12 outline-readiness: accepted measured promotion gate, persisted Image Studio-only recipes and running-desktop-renderer export (owner: "all recommendations", 2026-10-08). Media search and video editing remain deferred.
+- [ ] Evaluate EmbeddingGemma 2 text/code retrieval through the existing local adapter, resolve its context/terms discrepancies and measure the comparison's proposed gate before changing the model job map or defaults (E1/E2).
+- [ ] Implement and verify the planned durable recipe and shared commands for existing ImageViewer edits, including restart/reopen and UI-versus-command export equivalence, before adding broader creative-editor features (C1/C2).
 
 ## Recurring Obligations
 

@@ -3,6 +3,7 @@ import { execFileSync } from "child_process";
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
+import * as vscode from "vscode";
 import { ReadFileTool, ListDirectoryTool } from "../../../src/tools/handlers/filesystem.js";
 import { WorktreeManager } from "../../../modules/coding/agents/WorktreeManager.js";
 import { SubAgentManager } from "../../../modules/coding/agents/SubAgentManager.js";
@@ -48,19 +49,26 @@ describe("read-tool worktree rooting (T012)", () => {
 
   it("read_file without a root override resolves against the workspace, not the worktree", async () => {
     const worktree = fs.mkdtempSync(path.join(os.tmpdir(), "wt-read-"));
+    const workspace = fs.mkdtempSync(path.join(os.tmpdir(), "wt-workspace-"));
+    const originalFolders = vscode.workspace.workspaceFolders;
     try {
       fs.writeFileSync(path.join(worktree, "parity.txt"), "PARITY");
+      fs.writeFileSync(path.join(workspace, "parity.txt"), "WORKSPACE");
+      Object.assign(vscode.workspace, { workspaceFolders: [{ uri: vscode.Uri.file(workspace), name: "workspace", index: 0 }] });
       delegateFsReadToDisk();
 
-      // No override: resolution falls back to the (file-less) mock workspace
-      // root, so the worktree's parity.txt is not found -- proving the override
-      // is what re-bases the read onto the worktree.
+      // The same filename in two owned roots proves which one was read,
+      // without assuming the shared mock workspace has no existing file.
       const unrooted = new ReadFileTool();
       const res = await unrooted.execute({ path: "parity.txt", _callId: "r" });
 
-      expect(res.success).toBe(false);
+      expect(res.success).toBe(true);
+      expect(res.output).toContain("WORKSPACE");
+      expect(res.output).not.toContain("PARITY");
     } finally {
+      Object.assign(vscode.workspace, { workspaceFolders: originalFolders });
       fs.rmSync(worktree, { recursive: true, force: true });
+      fs.rmSync(workspace, { recursive: true, force: true });
     }
   });
 

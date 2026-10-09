@@ -7,7 +7,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createHeadlessOpenAiClient } from "../../../modules/coding/llm/headlessOpenAiClient.js";
-import { LLMError } from "../../../modules/coding/llm/types.js";
+import { LLMError, type LLMStreamChunk } from "../../../modules/coding/llm/types.js";
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -28,6 +28,23 @@ const delta = (content: string): string =>
   `data: ${JSON.stringify({ choices: [{ delta: { content }, finish_reason: null }] })}`;
 
 describe("createHeadlessOpenAiClient", () => {
+  it.each(["sentinel", "eof"])("retains late usage after finish_reason at %s", async (ending) => {
+    const frames = [
+      delta("Hello "),
+      `data: ${JSON.stringify({ choices: [{ delta: { content: "tail" }, finish_reason: "stop" }] })}`,
+      delta("IGNORED"),
+      `data: ${JSON.stringify({ choices: [], usage: { prompt_tokens: 12_000, completion_tokens: 17 } })}`,
+      ...(ending === "sentinel" ? ["data: [DONE]"] : []),
+    ];
+    vi.stubGlobal("fetch", vi.fn(async () => sseResponse(frames)));
+    const client = createHeadlessOpenAiClient({ baseUrl: "http://127.0.0.1:1234" });
+    const chunks: LLMStreamChunk[] = [];
+    for await (const chunk of client.streamChat({ model: "m", messages: [], stream: true })) chunks.push(chunk);
+    expect(chunks.map((chunk) => chunk.message.content).join("")).toBe("Hello tail");
+    expect(chunks.filter((chunk) => chunk.done)).toHaveLength(1);
+    expect(chunks.at(-1)).toMatchObject({ done: true, prompt_eval_count: 12_000, eval_count: 17, usage: { prompt_tokens: 12_000, completion_tokens: 17 } });
+  });
+
   it("streams parsed deltas and stops at [DONE]", async () => {
     vi.stubGlobal(
       "fetch",

@@ -46,6 +46,7 @@ import {
   defaultHarnessSelector,
 } from "../orchestration/HarnessSelector.js";
 import type { HeadlessTool, HeadlessToolResult } from "./headlessTools.js";
+import { TurnLedger, type TurnCounters } from "./outputBudget.js";
 
 export const DEFAULT_HEADLESS_MAX_ITERATIONS = 12;
 
@@ -199,6 +200,13 @@ function asToolResult(result: HeadlessToolResult): ToolResult {
   };
 }
 
+/** Characters across the history, for the ledger's estimate of tokens already in the window. */
+function historyChars(messages: readonly LLMMessage[]): number {
+  let total = 0;
+  for (const message of messages) total += message.content.length;
+  return total;
+}
+
 /**
  * The headless agentic loop. Construct once with an `LLMClient` port and the
  * headless tool set, then `run` per task. Stateless across runs (each run owns
@@ -260,6 +268,9 @@ export class HeadlessAgentSession {
     const format = opts.toolFormat ?? toolFormatForModel(opts.model);
     const guards = this._options.loopGuards ?? new LoopGuards();
     guards.reset();
+    // v2.12.0: how full the window is when each tool runs, so document tools
+    // size their output from the room left (see `outputBudget.ts`).
+    const ledger = new TurnLedger();
     const messages: LLMMessage[] = [
       {
         role: "system",
@@ -300,6 +311,7 @@ export class HeadlessAgentSession {
 
       let assistantText = "";
       const nativeCalls: LLMToolCall[] = [];
+      let counters: TurnCounters | undefined;
       try {
         llmCalls += 1;
         for await (const chunk of this._llm.streamChat(
@@ -318,7 +330,10 @@ export class HeadlessAgentSession {
             opts.onEvent?.({ kind: "token", text: delta });
           }
           if (chunk.message?.tool_calls) nativeCalls.push(...chunk.message.tool_calls);
-          if (chunk.done) break;
+          if (chunk.done) {
+            counters = chunk;
+            break;
+          }
         }
       } catch (err) {
         if (opts.signal?.aborted) return finish("aborted");
@@ -326,6 +341,7 @@ export class HeadlessAgentSession {
       }
 
       messages.push({ role: "assistant", content: assistantText });
+      ledger.turnCompleted(counters, assistantText.length);
 
       const parsed = parseAgentToolCalls(assistantText, format, nativeCalls);
       if (!parsed.hasAny) {
@@ -373,6 +389,7 @@ export class HeadlessAgentSession {
             : Object.freeze([opts.workdir]),
           workspaceId: opts.workspaceId,
           signal: opts.signal,
+          usedTokens: ledger.toolBudgetTokens(historyChars(messages)),
         });
         const burst = guards.recordToolOutcome(toolResult.success);
         if (burst.action === "halt") {
@@ -393,10 +410,9 @@ export class HeadlessAgentSession {
         // `AgentLoop._screenInboundResult`: the event above still carries the raw
         // output, only the context copy is annotated.
         const contextResult = await this._screenInbound(call.tool, toolResult);
-        messages.push({
-          role: "user",
-          content: formatToolResult(call.tool, asToolResult(contextResult)),
-        });
+        const content = formatToolResult(call.tool, asToolResult(contextResult));
+        messages.push({ role: "user", content });
+        ledger.record(content.length);
       }
     }
 
