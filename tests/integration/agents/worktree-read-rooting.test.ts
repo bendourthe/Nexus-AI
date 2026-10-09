@@ -1,4 +1,5 @@
-import { describe, it, expect, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import * as vscode from "vscode";
 import { execFileSync } from "child_process";
 import * as fs from "fs";
 import * as os from "os";
@@ -18,7 +19,18 @@ import { mockFs } from "../../setup.js";
 // `vscode.workspace.fs` reads to real disk so the rooting is exercised
 // end-to-end against real files.
 
+const workspaceUri = vscode.workspace.workspaceFolders![0]!.uri as { fsPath: string };
+const originalWorkspaceRoot = workspaceUri.fsPath;
+let testWorkspace: string;
+
+beforeEach(() => {
+  testWorkspace = fs.mkdtempSync(path.join(os.tmpdir(), "wt-read-workspace-"));
+  workspaceUri.fsPath = testWorkspace;
+});
+
 afterEach(() => {
+  workspaceUri.fsPath = originalWorkspaceRoot;
+  fs.rmSync(testWorkspace, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
   mockFs.readFile.mockReset();
   mockFs.readDirectory.mockReset();
 });
@@ -52,7 +64,7 @@ describe("read-tool worktree rooting (T012)", () => {
       fs.writeFileSync(path.join(worktree, "parity.txt"), "PARITY");
       delegateFsReadToDisk();
 
-      // No override: resolution falls back to the (file-less) mock workspace
+      // No override: resolution falls back to this test's empty workspace
       // root, so the worktree's parity.txt is not found -- proving the override
       // is what re-bases the read onto the worktree.
       const unrooted = new ReadFileTool();
@@ -113,6 +125,7 @@ describe("integration: write-then-read parity inside an isolated worktree (T012)
     const repo = initRepo();
     const baseDir = fs.mkdtempSync(path.join(os.tmpdir(), "wt-parity-base-"));
     try {
+      workspaceUri.fsPath = repo;
       delegateFsReadToDisk();
       const wm = new WorktreeManager(repo, undefined, baseDir);
 
@@ -146,10 +159,17 @@ describe("integration: write-then-read parity inside an isolated worktree (T012)
 
       // The read_file tool result, surfaced via postMessage, carries the
       // worker's own in-worktree write -- proving write-then-read parity.
+      const readUse = collected.find(
+        (m) => m.type === "toolUse" && m.toolName === "read_file",
+      );
+      expect(readUse?.type).toBe("toolUse");
       const readResult = collected.find(
-        (m) => m.type === "toolResult" && JSON.stringify(m).includes("PARITY"),
+        (m) => m.type === "toolResult" && readUse?.type === "toolUse" && m.callId === readUse.callId && m.success && m.summary.includes("PARITY"),
       );
       expect(readResult).toBeDefined();
+      const retained = fs.readdirSync(baseDir);
+      expect(retained).toHaveLength(1);
+      expect(fs.readFileSync(path.join(baseDir, retained[0]!, "parity.txt"), "utf8")).toBe("PARITY");
       // And the shared workspace never received the write.
       expect(fs.existsSync(path.join(repo, "parity.txt"))).toBe(false);
     } finally {

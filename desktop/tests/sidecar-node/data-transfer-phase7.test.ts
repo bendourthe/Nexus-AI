@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * v2.2.0 Phase 7 (7.4) -- local data export / import.
  *
@@ -20,8 +21,8 @@ import {
   exportData,
   importData,
   readTar,
-} from "../../../desktop/sidecar/src/data/transferRuntime";
-import * as paths from "../../../core/storage/paths";
+} from "../../sidecar/src/data/transferRuntime.js";
+import * as paths from "../../../core/storage/paths.js";
 
 let home: string;
 

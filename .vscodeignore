@@ -13,6 +13,7 @@ assets/**
 !assets/vector.svg
 !assets/specialists/**
 coverage/**
+reports/**
 .coverage
 .coverage.*
 .pytest_cache/**
@@ -34,6 +35,7 @@ out/**/*.map
 .codex/**
 .husky/**
 .nexus/**
+.nexus-hub/**
 .github/**
 .gitignore
 .gitattributes
