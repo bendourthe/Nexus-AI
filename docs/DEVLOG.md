@@ -13,6 +13,14 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-09] v2.12.0 Phase 5 - Desktop outline Settings
+
+Settings > Security now exposes experimental, off-by-default outline tools and optional summaries. Authoritative status disables uncertain writes; environment overrides keep their controls read-only and summaries-only changes preserve the saved outline preference. DF-v211-4 is resolved without answer-quality promotion.
+
+Verified: 2,245 desktop tests pass with one existing skip, focused regression first failed then passed, strict lint/typechecking, web and guarded sidecar builds pass. Real Chromium with the actual status/setter dispatcher verifies keyboard/toggle/reload and 320/768/1,200-pixel layout with zero runtime errors. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md), [evidence](releases/v2/v2.12/development/evidence/phase-5-settings/browser.json). One local commit; no remote CI.
+
+---
+
 ## [2026-10-09] v2.12.0 Phase 4 - Shared tool-result compaction
 
 Both coding loops use caller-owned result elision while preserving system/task/newest result and native call metadata. The headless loop compacts at 60% toward 40%, rechecks real counts, and stops clearly when no safe elision remains. Desktop errors use the existing user-facing formatter; loaded-window probes remain bounded and cancellable through their response bodies. Legacy result markers survive fork/resume and remain excluded from human-turn protection.
