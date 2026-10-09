@@ -13,7 +13,7 @@ The [existing carry-forward register](../../../v2/v2.12/known-gaps.md) remains t
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 1 | 0 |
+| Deferred (DF) | 1 | 1 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 1 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -35,3 +35,4 @@ The [existing carry-forward register](../../../v2/v2.12/known-gaps.md) remains t
 | ID | Title | Resolution and evidence |
 |---|---|---|
 | WN-v211-5 | Native calls recorded as legacy user envelopes | Resolved in v2.12.0 Phase 3 for native Ollama calls. Both models completed three real reads with native assistant calls and tool-role results; persistence/resume keeps its legacy format intentionally. [History](development/history/2026-10-09_outline-promotion-readiness-phase-3.md), [evidence](development/evidence/phase-3-native-history.json). OpenAI-compatible native history remains DF-v212-4. |
+| DF-v211-4 | Missing desktop outline Settings controls | Resolved in Phase 5 with experimental, off-by-default switches, saved-preference preservation under environment overrides, and observed keyboard/toggle/reload behavior. [History](development/history/2026-10-09_outline-promotion-readiness-phase-5.md), [evidence](development/evidence/phase-5-settings/browser.json). Answer-quality promotion remains separate. |

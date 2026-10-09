@@ -10,6 +10,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button, Select, Switch, TextField } from "../../components/ui";
 import { ipcCall } from "../../lib/ipc";
+import "./SecuritySettings.css";
 
 export type DesktopSecurityPosture = "strict" | "standard" | "unattended";
 
@@ -117,16 +118,49 @@ function ipcParseDocumentClient(): ParseDocumentSettingsClient {
 
 const DEFAULT_PARSE_DOCUMENT_CLIENT = ipcParseDocumentClient();
 
+export interface DocumentOutlineStatus {
+  enabled: boolean;
+  summariesEnabled: boolean;
+  storedEnabled?: boolean;
+  environmentOverrides?: { enabled: boolean; summariesEnabled: boolean };
+}
+
+export interface DocumentOutlineSettingsClient {
+  getStatus(): Promise<DocumentOutlineStatus>;
+  setEnabled(enabled: boolean, summariesEnabled?: boolean): Promise<void>;
+}
+
+function ipcDocumentOutlineClient(): DocumentOutlineSettingsClient {
+  return {
+    async getStatus() {
+      const reply = await ipcCall<DocumentOutlineStatus>("coding.documentOutline.status", {});
+      if (!reply.ok) throw new Error(reply.message);
+      return reply.value;
+    },
+    async setEnabled(enabled, summariesEnabled) {
+      const reply = await ipcCall("coding.documentOutline.setEnabled", {
+        enabled,
+        ...(summariesEnabled !== undefined ? { summariesEnabled } : {}),
+      });
+      if (!reply.ok) throw new Error(reply.message);
+    },
+  };
+}
+
+const DEFAULT_DOCUMENT_OUTLINE_CLIENT = ipcDocumentOutlineClient();
+
 export interface SecuritySettingsProps {
   client?: SecuritySettingsClient;
   auditClient?: AuditLogClient;
   parseDocumentClient?: ParseDocumentSettingsClient;
+  documentOutlineClient?: DocumentOutlineSettingsClient;
 }
 
 export function SecuritySettings({
   client,
   auditClient,
   parseDocumentClient,
+  documentOutlineClient,
 }: SecuritySettingsProps): JSX.Element {
   const [posture, setPosture] = useState<DesktopSecurityPosture>("standard");
   const [ready, setReady] = useState(false);
@@ -138,9 +172,43 @@ export function SecuritySettings({
   const [dropped, setDropped] = useState(0);
   const [vaultAvailable, setVaultAvailable] = useState(true);
   const [parseDocumentEnabled, setParseDocumentEnabled] = useState(false);
+  const [outlineStatus, setOutlineStatus] = useState<DocumentOutlineStatus>({ enabled: false, summariesEnabled: false });
+  const [outlineReady, setOutlineReady] = useState(false);
+  const [outlinePending, setOutlinePending] = useState(false);
+  const [outlineError, setOutlineError] = useState("");
   const resolved = client ?? createLocalStorageSecurityClient();
   const audit = auditClient ?? emptyAuditClient();
   const parseDocument = parseDocumentClient ?? DEFAULT_PARSE_DOCUMENT_CLIENT;
+  const documentOutline = documentOutlineClient ?? DEFAULT_DOCUMENT_OUTLINE_CLIENT;
+
+  useEffect(() => {
+    let active = true;
+    setOutlineReady(false);
+    setOutlineError("");
+    void documentOutline.getStatus().then((status) => {
+      if (active) {
+        setOutlineStatus(status);
+        setOutlineReady(true);
+      }
+    }).catch(() => {
+      if (active) setOutlineError("Could not load document outline settings. Reopen Settings to try again.");
+    });
+    return () => { active = false; };
+  }, [documentOutline]);
+
+  const updateOutline = async (enabled: boolean, summariesEnabled?: boolean): Promise<void> => {
+    setOutlinePending(true);
+    setOutlineError("");
+    try {
+      await documentOutline.setEnabled(enabled, summariesEnabled);
+      setOutlineStatus(await documentOutline.getStatus());
+    } catch {
+      setOutlineReady(false);
+      setOutlineError("Could not confirm document outline settings. Reopen Settings to reload their current state.");
+    } finally {
+      setOutlinePending(false);
+    }
+  };
 
   useEffect(() => {
     let active = true;
@@ -246,7 +314,7 @@ export function SecuritySettings({
         <h2>Document parsing</h2>
         <p style={{ color: "var(--fg-muted)", maxWidth: 640 }}>
           Opt-in for the coding agent <code>parse_document</code> tool. Writes
-          <code> nexus.coding.parseDocument.enabled</code> in local settings.
+          <code style={{ overflowWrap: "anywhere" }}> nexus.coding.parseDocument.enabled</code> in local settings.
           Off by default.
         </p>
         <Switch
@@ -258,6 +326,35 @@ export function SecuritySettings({
           }}
           label="Enable parse_document for coding sessions"
         />
+      </section>
+      <section data-testid="document-outline-settings" className="document-outline-settings" style={{ marginTop: 32 }}>
+        <h2 id="document-outline-settings-heading">Document outline tools</h2>
+        <p style={{ color: "var(--fg-muted)" }}>
+          Experimental and off by default. Let the coding agent navigate a long document by section instead of reading it whole. Optional one-line section summaries use your local model.
+        </p>
+        <fieldset className="document-outline-switches" aria-labelledby="document-outline-settings-heading" disabled={!outlineReady || outlinePending}>
+          <Switch
+            testId="document-outline-toggle"
+            checked={outlineStatus.enabled}
+            disabled={outlineStatus.environmentOverrides?.enabled}
+            onChange={(next) => { void updateOutline(next); }}
+            label="Enable document outline tools"
+          />
+          {outlineStatus.environmentOverrides?.enabled ? (
+            <p style={{ color: "var(--fg-muted)", margin: 0 }}>NEXUS_DOCUMENT_OUTLINE controls this switch. Change that environment value and restart the app to use the stored setting.</p>
+          ) : null}
+          <Switch
+            testId="document-outline-summaries-toggle"
+            checked={outlineStatus.summariesEnabled}
+            disabled={!outlineStatus.enabled || outlineStatus.environmentOverrides?.summariesEnabled || (outlineStatus.environmentOverrides?.enabled && outlineStatus.storedEnabled === undefined)}
+            onChange={(next) => { void updateOutline(outlineStatus.storedEnabled ?? outlineStatus.enabled, next); }}
+            label="Generate one-line section summaries"
+          />
+          {outlineStatus.environmentOverrides?.summariesEnabled ? (
+            <p style={{ color: "var(--fg-muted)", margin: 0 }}>NEXUS_DOCUMENT_OUTLINE_SUMMARIES controls summaries when outline tools are on. Change that environment value and restart the app to use the stored setting.</p>
+          ) : null}
+        </fieldset>
+        {outlineError ? <p role="alert">{outlineError}</p> : null}
       </section>
       <section data-testid="audit-log-viewer" style={{ marginTop: 32 }}>
         <h2>Local audit log</h2>

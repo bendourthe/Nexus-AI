@@ -1,0 +1,1101 @@
+<!doctype html><html><head>
+  
+
+  
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Nexus outline Settings verification</title><style type="text/css" data-vite-dev-id="C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/desktop/src/pages/settings/SecuritySettings.css">.document-outline-settings {
+  max-width: min(100%, 40rem);
+}
+
+.document-outline-switches {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+  max-width: 640px;
+}
+
+.document-outline-switches label:has(input:focus-visible) {
+  outline: 2px solid var(--accent-chatbot);
+  outline-offset: 2px;
+}
+
+.document-outline-switches p {
+  overflow-wrap: anywhere;
+}
+</style><style type="text/css" data-vite-dev-id="C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/desktop/src/styles/globals.css">/* Nexus design tokens - dark-theme base + four module accent colors.
+ * Source: docs/archive/v1/v1.0/design-tokens.md, docs/archive/v1/v1.0/pivot-brief.md S3.
+ * Consumed directly as CSS custom properties. (The Tailwind bridge this
+ * comment once described does not exist: no tailwind.css ships and no
+ * Tailwind dependency is installed.) */
+
+:root {
+  /* Dark surfaces */
+  --bg-0: #0a0d14;
+  --bg-1: #11151f;
+  --bg-2: #181d2a;
+  --bg-elevated: #20263a;
+  /* Transcript roles use close neutral values, not pillar/status accents. */
+  --bubble-assistant: #141925;
+  --bubble-user: #1a2030;
+
+  /* Foreground */
+  --fg-0: #f5f7fb;
+  --fg-1: #d6dbe7;
+  --fg-muted: #8a92a6;
+  --fg-disabled: #5a6075;
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --bubble-border: rgba(255, 255, 255, 0.09);
+
+  /* v2.2.0 Phase 6 (6.4) -- compatibility aliases.
+   *
+   * 53 call sites use `--border-1` and another 18 use `--accent-primary`,
+   * `--accent-danger`, or `--accent-warning`. None of those were ever
+   * DEFINED, so every one of them silently fell through to whatever inline
+   * literal the author happened to write as the second argument of `var()`
+   * -- or to nothing at all. Aliasing them to the canonical tokens fixes the
+   * rendering today; migrating the call sites and deleting these aliases is
+   * tracked as a follow-up so this sweep does not also become a 71-file
+   * rename in the middle of a UI phase. */
+  --border-1: var(--border-subtle);
+  --accent-primary: var(--accent-chatbot);
+  --accent-danger: var(--status-err);
+  --accent-warning: var(--status-warn);
+
+  /* Module accents (locked palette per pivot-brief Section 3) */
+  --accent-chatbot: #22d3ee;
+  --accent-chatbot-soft: rgba(34, 211, 238, 0.16);
+  --accent-coding: #ec4899;
+  --accent-coding-soft: rgba(236, 72, 153, 0.16);
+  --accent-image: #f97316;
+  --accent-image-soft: rgba(249, 115, 22, 0.16);
+  --accent-video: #22c55e;
+  --accent-video-soft: rgba(34, 197, 94, 0.16);
+
+  /* Semantic */
+  --status-ok: #22c55e;
+  --status-warn: #f59e0b;
+  --status-err: #ef4444;
+  --status-info: #38bdf8;
+
+  /* Typography */
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+
+  /* Spacing scale (4 px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 3rem;
+  --space-9: 4rem;
+  --space-10: 5rem;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+
+  /* Shadow (subtle elevation) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+
+  /* ---------------------------------------------------------------------
+   * Glow layer (v1.9.0 T202) -- the guide's cyan/blue glow, signature
+   * gradient, and radial-glow background. Ported verbatim from the
+   * north-star reference (guides/interactive-guide/nexus-ai-guide.html) so
+   * the installer and the app share one look. Additive: nothing above
+   * changes. See docs/archive/v1/v1.9/design-tokens.md.
+   * ------------------------------------------------------------------- */
+
+  /* Deepest gradient stop for the radial-glow body treatment. */
+  --bg-deep: #010608;
+
+  /* Constellation node/link colors (the animated network background). */
+  --glow-cyan: #38bdf8;
+  --glow-cyan-node: #7dd3fc;
+
+  /* Floating-mark glow drop-shadows (small header mark vs. large hero mark). */
+  --glow-sm: 0 0 8px rgba(56, 189, 248, 0.45);
+  --glow-md: 0 0 16px rgba(56, 189, 248, 0.45);
+  --glow-lg: 0 0 24px rgba(56, 189, 248, 0.5);
+
+  /* Signature accent gradient (headings, active pills, strong CTAs). */
+  --grad-signature: linear-gradient(100deg, #3b82f6 0%, #38bdf8 50%, #22d3ee 100%);
+  --grad-signature-soft: linear-gradient(
+    100deg,
+    rgba(59, 130, 246, 0.16),
+    rgba(56, 189, 248, 0.16)
+  );
+
+  /* Radial-glow page background: two cyan/blue radial pools over the dark
+   * vertical gradient. Mount behind app/installer content at ~0.55 opacity. */
+  --bg-radial-glow: radial-gradient(
+      1200px 700px at 80% -10%,
+      rgba(59, 130, 246, 0.12),
+      transparent 60%
+    ),
+    radial-gradient(1100px 800px at -10% 0%, rgba(56, 189, 248, 0.12), transparent 55%),
+    linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 65%, var(--bg-deep) 100%);
+
+  /* ---------------------------------------------------------------------
+   * Motion (v1.17.0 Phase 1) -- shared durations, easings, recede opacities,
+   * and state-accent aliases consumed by agent-state orbs, surface beams,
+   * and hero metal. Aliases only: they point at the locked accents and
+   * signature gradient. Additive: nothing above changes.
+   * ------------------------------------------------------------------- */
+
+  --motion-duration-fast: 150ms;
+  --motion-duration-base: 280ms;
+  --motion-duration-slow: 500ms;
+
+  --motion-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+
+  --motion-accent-coding: var(--accent-coding);
+  --motion-accent-chatbot: var(--accent-chatbot);
+  --motion-accent-image: var(--accent-image);
+  --motion-accent-video: var(--accent-video);
+  --motion-accent-signature: var(--grad-signature);
+
+  /* Ambient glow/constellation intensity while a surface runs an effect. */
+  --motion-recede-opacity: 0.18;
+  --motion-recede-backdrop: 0.4;
+
+  color-scheme: dark;
+}
+
+/* Tailwind v4 theme bridge. The shell currently consumes tokens as CSS
+ * custom properties (see globals.css); this block maps the motion group
+ * onto `@theme inline` so a future Tailwind pipeline resolves the same
+ * values as utilities without a second palette. Unknown at-rules are
+ * ignored by the browser until that pipeline lands. */
+
+@theme inline {
+  --duration-motion-fast: var(--motion-duration-fast);
+  --duration-motion-base: var(--motion-duration-base);
+  --duration-motion-slow: var(--motion-duration-slow);
+  --ease-motion-standard: var(--motion-ease-standard);
+  --ease-motion-emphasized: var(--motion-ease-emphasized);
+  --ease-motion-in-out: var(--motion-ease-in-out);
+  --color-motion-coding: var(--motion-accent-coding);
+  --color-motion-chatbot: var(--motion-accent-chatbot);
+  --color-motion-image: var(--motion-accent-image);
+  --color-motion-video: var(--motion-accent-video);
+}
+
+/* Force dark regardless of system preference - the pivot-brief mockup is dark
+ * and v1.0.0 ships dark-only. Light theme is deferred. */
+
+html,
+body {
+  background-color: var(--bg-0);
+  color: var(--fg-0);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* v2.4.2 Phase 1 -- one scrollbar grammar for transcripts, Settings, and
+ * other overflow panes. Transparent track; thumb mixes muted foreground
+ * onto the dark surface so it stays visible without opaque OS chrome. */
+
+:root {
+  --scrollbar-size: 10px;
+  --scrollbar-thumb: color-mix(in srgb, var(--fg-muted) 45%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--fg-muted) 70%, transparent);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* v2.2.1: shared focus ring for Select / SearchInput / TextField / Button. */
+
+.nx-control:focus {
+  outline: none;
+}
+
+.nx-control:focus-visible {
+  outline: 2px solid var(--accent-chatbot);
+  outline-offset: 2px;
+}
+
+.nx-control:disabled,
+.nx-control[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Utility classes that are referenced before Tailwind v4 lands; trimmed to
+ * what Phase 1 needs so we do not block on the Tailwind pipeline. Tailwind v4
+ * will be wired in Phase 2 once the rebrand carves the build pipeline. */
+
+.nx-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.nx-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.nx-grow {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.nx-divider {
+  height: 1px;
+  background-color: var(--border-subtle);
+  margin: var(--space-3) 0;
+}
+
+.nx-card {
+  background-color: var(--bg-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+/* Floating-glow logo primitive (v1.9.0 T203). The <FloatingLogo/> mark bobs
+ * +/-9px over 7s; the glow is applied inline via the --glow-* tokens. Motion
+ * is disabled by the shared prefers-reduced-motion block at the bottom of
+ * this file, leaving a static glowing mark. */
+
+@keyframes nexus-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+.nexus-floating-logo {
+  animation: nexus-float 7s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------------------------
+ * v1.9.0 Phase 5 -- desktop app shell parity with the installer.
+ * Frameless title bar chrome, the ambient radial-glow + constellation backdrop,
+ * and the shared gradient-text / glass-surface helpers. Additive only.
+ * ------------------------------------------------------------------------- */
+
+/* Ambient page backdrop: the radial-glow gradient behind the whole shell.
+ * The <ConstellationBackground/> layers over it; foreground chrome sits above
+ * both via position + z-index. */
+
+.nexus-app-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: var(--bg-radial-glow);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.nexus-app-backdrop.nexus-ambient-recede {
+  opacity: var(--motion-recede-backdrop);
+}
+
+/* Constellation canvas: opacity is set inline; the recede class swaps it
+ * to the shared token. Transition matches the radial-glow backdrop. */
+
+.nexus-constellation {
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Signature-gradient text (brand wordmark, hero heading). */
+
+.nexus-gradient-text {
+  background: var(--grad-signature);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Translucent glass surface so the ambient glow reads through side chrome.
+ * v2.2.3 Phase 2: deeper blur + saturate + an inset top highlight so the rail
+ * reads as liquid glass. No border here -- the sidebar aside already draws an
+ * inline borderRight, and a class border would double it. */
+
+.nexus-glass {
+  background-color: color-mix(in srgb, var(--bg-1) 82%, transparent);
+  backdrop-filter: blur(16px) saturate(1.25);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+}
+
+/* v2.2.3 Phase 2 (2.1) -- one liquid-glass selected state for every module
+ * row. No per-tab accent on the icon, fill, or a left bar: the active row is
+ * a frosted fill + hairline + inset highlight, inactive rows stay quiet.
+ * Lucide icons inherit currentColor from these rules. */
+
+.nexus-nav-link {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--fg-1);
+}
+
+.nexus-nav-link[aria-current="page"] {
+  background-color: color-mix(in srgb, var(--fg-0) 10%, transparent);
+  border-color: color-mix(in srgb, var(--fg-0) 16%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 12%, transparent);
+  backdrop-filter: blur(16px);
+  color: var(--fg-0);
+}
+
+/* v2.2.4 Phase 1 (1.3) -- discrete collapse pill on the rail's right edge.
+ * Triangle left collapses; triangle right expands. Absolutely positioned so
+ * it does not consume a flex row above Chatbot. */
+
+.nexus-sidebar-collapse-pill {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(50%, -50%);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 40px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--fg-0) 16%, transparent);
+  background-color: color-mix(in srgb, var(--bg-1) 88%, transparent);
+  backdrop-filter: blur(12px) saturate(1.25);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 10%, transparent);
+  color: var(--fg-1);
+  cursor: pointer;
+}
+
+.nexus-sidebar-collapse-pill:hover {
+  color: var(--fg-0);
+  border-color: color-mix(in srgb, var(--fg-0) 28%, transparent);
+}
+
+/* v2.2.5 Phase 4 -- chats-pane pill reuses the rail treatment with a 24px
+ * hit target (plan: expand control is at least 24px). v2.2.8 Phase 2: the
+ * collapsed chats aside itself is a 56px icon rail, not an empty 24px gutter;
+ * this pill stays the 24px expand hit target on the rail edge. */
+
+.nexus-chats-collapse-pill {
+  width: 24px;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+/* v2.2.3 Phase 2 (2.3) -- shared glass icon button for studio action rows
+ * (Download / workflow / recall / use-as-source). Icon-only: the accessible
+ * name lives on aria-label + title, never a visible caption. */
+
+.nx-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--fg-0) 12%, transparent);
+  background-color: color-mix(in srgb, var(--bg-1) 70%, transparent);
+  backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+  color: var(--fg-1);
+  cursor: pointer;
+}
+
+.nx-icon-btn:hover {
+  color: var(--fg-0);
+  border-color: color-mix(in srgb, var(--fg-0) 24%, transparent);
+}
+
+/* Frameless custom title bar (T501).
+ * position + z-index give the bar its own stacking context so it renders above
+ * the fixed .nexus-app-backdrop (z-index: 0) and the constellation layer; without
+ * this the opaque backdrop paints over the whole bar and hides the window controls
+ * (v1.15.0 Phase 1 / Issue 4). */
+
+.nexus-titlebar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  flex: 0 0 40px;
+  padding: 0 var(--space-2) 0 var(--space-3);
+  background-color: color-mix(in srgb, var(--bg-1) 78%, transparent);
+  border-bottom: 1px solid var(--border-subtle);
+  user-select: none;
+}
+
+.nexus-titlebar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1 1 auto;
+  height: 100%;
+  min-width: 0;
+}
+
+.nexus-titlebar-mark {
+  display: block;
+  filter: drop-shadow(var(--glow-sm));
+  pointer-events: none;
+}
+
+.nexus-titlebar-title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--fg-0);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.nexus-titlebar-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nexus-titlebar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--fg-1);
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.nexus-titlebar-btn:hover {
+  background-color: var(--bg-elevated);
+  color: var(--fg-0);
+}
+
+.nexus-titlebar-btn-close:hover {
+  background-color: var(--status-err);
+  color: var(--fg-0);
+}
+
+/* ---------------------------------------------------------------------------
+ * v1.9.0 Phase 8 (T029/T030) -- the on-brand aurora "generating" animation for
+ * the Image Studio + Video Lab preview boxes (the <GenerationCanvas/> mark).
+ * Oversized blurred radial-gradient layers drift via transform on staggered
+ * loops (mix-blend-mode: screen) inside a rounded, overflow-hidden box, plus a
+ * sweeping shimmer bar. Built on the existing glow tokens; all motion is gated
+ * by the shared prefers-reduced-motion block (a soft static glow fallback). See
+ * docs/archive/v1/v1.9/ui-rework-design.md Section 3.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  /* The aurora's third hue (the spec's optional violet), scoped here. */
+  --aurora-violet: #a78bfa;
+}
+
+.nexus-generation-canvas {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--bg-1);
+  box-shadow: var(--glow-lg);
+  /* Contain the layers' screen blend to this box. */
+  isolation: isolate;
+}
+
+.nexus-aurora-layer {
+  position: absolute;
+  inset: -35%;
+  border-radius: 50%;
+  filter: blur(26px);
+  mix-blend-mode: screen;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.nexus-aurora-layer-1 {
+  background: radial-gradient(circle at 30% 30%, var(--glow-cyan), transparent 60%);
+  animation: nexus-aurora-1 9s ease-in-out infinite;
+}
+
+.nexus-aurora-layer-2 {
+  background: radial-gradient(circle at 70% 40%, var(--glow-cyan-node), transparent 60%);
+  animation: nexus-aurora-2 10s ease-in-out infinite;
+}
+
+.nexus-aurora-layer-3 {
+  background: radial-gradient(circle at 50% 70%, var(--aurora-violet), transparent 60%);
+  animation: nexus-aurora-3 11s ease-in-out infinite;
+}
+
+@keyframes nexus-aurora-1 {
+  0%,
+  100% {
+    transform: translate3d(-8%, -6%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(10%, 8%, 0) scale(1.15);
+  }
+}
+
+@keyframes nexus-aurora-2 {
+  0%,
+  100% {
+    transform: translate3d(8%, 4%, 0) scale(1.1);
+  }
+  50% {
+    transform: translate3d(-10%, -8%, 0) scale(1);
+  }
+}
+
+@keyframes nexus-aurora-3 {
+  0%,
+  100% {
+    transform: translate3d(-4%, 10%, 0) scale(1.05);
+  }
+  50% {
+    transform: translate3d(6%, -10%, 0) scale(1.2);
+  }
+}
+
+/* Sweeping highlight bar (the ChatGPT-style shimmer). */
+
+.nexus-aurora-shimmer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(234, 246, 248, 0.16) 50%,
+    transparent 70%
+  );
+  background-size: 300% 100%;
+  animation: nexus-aurora-shimmer 2.4s ease-in-out infinite;
+}
+
+@keyframes nexus-aurora-shimmer {
+  0% {
+    background-position: 180% 0;
+  }
+  100% {
+    background-position: -80% 0;
+  }
+}
+
+/* Live latent preview overlaid on the aurora, materializing via inline opacity. */
+
+.nexus-generation-preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+/* Arbitrary overlay content (e.g. the Video Lab thumbnail strip). */
+
+.nexus-generation-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+/* ---------------------------------------------------------------------------
+ * v1.17.0 Phase 3 -- surface-liveness beam (A2). Reverse-engineered traveling
+ * conic beam + breathing pulse. Color comes from --nexus-beam-color (a locked
+ * accent). Play/pause is opacity only so the wrapper never layout-shifts.
+ * ------------------------------------------------------------------------- */
+
+@property --nexus-beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.nexus-accent-beam {
+  position: relative;
+  border-radius: var(--nexus-beam-radius, var(--radius-md));
+}
+
+.nexus-accent-beam::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+  background: conic-gradient(
+    from var(--nexus-beam-angle),
+    transparent 0%,
+    var(--nexus-beam-color, var(--accent-coding)) 8%,
+    transparent 22%
+  );
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+}
+
+.nexus-accent-beam[data-beam-playing="true"]::before {
+  opacity: var(--nexus-beam-strength, 0.8);
+}
+
+.nexus-accent-beam[data-beam-playing="true"][data-beam-mode="traveling"]::before {
+  animation: nexus-beam-travel 2.4s linear infinite;
+}
+
+.nexus-accent-beam[data-beam-playing="true"][data-beam-mode="breathing"]::before {
+  animation: nexus-beam-breathe 2.2s var(--motion-ease-in-out) infinite;
+}
+
+/* v2.2.3 Phase 2 (2.2): breathing is a full-perimeter ring, not a conic
+ * wedge. Solid beam color on the masked border box; the keyframes pulse
+ * opacity only. Traveling keeps the 360deg conic sweep. */
+
+.nexus-accent-beam[data-beam-mode="breathing"]::before {
+  background: var(--nexus-beam-color, var(--accent-chatbot));
+}
+
+@keyframes nexus-beam-travel {
+  to {
+    --nexus-beam-angle: 360deg;
+  }
+}
+
+@keyframes nexus-beam-breathe {
+  0%,
+  100% {
+    opacity: calc(var(--nexus-beam-strength, 0.8) * 0.4);
+  }
+  50% {
+    opacity: var(--nexus-beam-strength, 0.8);
+  }
+}
+
+.nexus-accent-beam[data-reduced-motion="true"]::before {
+  animation: none;
+  background: transparent;
+  mask: none;
+  -webkit-mask: none;
+  padding: 0;
+  border: 1px solid var(--nexus-beam-color, var(--accent-coding));
+}
+
+/* v1.17.0 Phase 4 -- hero-action metal ring. The canvas overlay is GPU; the
+ * fallback class is a static accent edge used when WebGL, the instance cap,
+ * reduced-motion, or offscreen pause take the animating path away. */
+
+.nexus-metal-accent {
+  position: relative;
+  display: inline-flex;
+  isolation: isolate;
+  overflow: visible;
+}
+
+.nexus-metal-accent > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nexus-metal-fallback {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--nexus-metal-color, var(--accent-coding)) 70%, white),
+    0 0 10px color-mix(in srgb, var(--nexus-metal-color, var(--accent-coding)) 28%, transparent);
+}
+
+.nexus-metal-canvas {
+  z-index: 2;
+  border-radius: inherit;
+}
+
+/* Phase 5: when orb (or metal/beam) wins on the retained canvas, aurora
+ * becomes a static wash instead of a second looping motion. */
+
+.nexus-generation-canvas[data-motion-winner]:not([data-motion-winner="aurora"]) .nexus-aurora-layer,
+.nexus-generation-canvas[data-motion-winner]:not([data-motion-winner="aurora"]) .nexus-aurora-shimmer {
+  animation: none;
+}
+
+/* Single reduced-motion gate (v1.17.0 Phase 1). CSS animations halt here;
+ * JS-driven loops (constellation) read the matching useReducedMotion hook. */
+
+@media (prefers-reduced-motion: reduce) {
+  /* v2.4.8 follow-up: the generation bar animates its fill. */
+  .nexus-progress::-webkit-progress-value {
+    transition: none;
+  }
+  .nexus-floating-logo {
+    animation: none;
+  }
+  .nexus-aurora-layer,
+  .nexus-aurora-shimmer {
+    display: none;
+  }
+  /* Soft static cyan glow instead of the drifting aurora. */
+  .nexus-generation-canvas {
+    background:
+      radial-gradient(circle at 50% 45%, rgba(56, 189, 248, 0.22), transparent 62%),
+      var(--bg-1);
+  }
+  .nexus-app-backdrop,
+  .nexus-constellation {
+    transition: none;
+  }
+  .nexus-accent-beam::before {
+    animation: none;
+    transition: none;
+  }
+  .nexus-metal-canvas {
+    display: none;
+  }
+  /* v2.4.9: the generation bar keeps its meaning, loses its animation. */
+  .nexus-genbar-particles {
+    animation: none;
+  }
+  .nexus-genbar-fill {
+    transition: none;
+  }
+  .nexus-genbar[data-determinate="false"] .nexus-genbar-fill {
+    animation: none;
+    transform: none;
+    opacity: 0.7;
+  }
+  .nx-icon-btn-bare,
+  .nx-icon-btn-bare svg {
+    transition: none;
+  }
+}
+
+/*
+ * v2.4.8 follow-up (2026-09-07) -- the generation progress bar.
+ *
+ * Operator feedback: the default `<progress>` read as a grey system widget.
+ * It stays a real <progress> (screen readers and tests need the value), and
+ * the pseudo-elements give it the app's rounded, accented look. Width is set
+ * inline so the bar matches the caption above it.
+ */
+
+.nexus-progress {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 6px;
+  border: none;
+  border-radius: 999px;
+  overflow: hidden;
+  background-color: color-mix(in srgb, var(--fg-0) 12%, transparent);
+  color: var(--nexus-progress-accent, var(--accent-chatbot));
+  accent-color: var(--nexus-progress-accent, var(--accent-chatbot));
+}
+
+.nexus-progress::-webkit-progress-bar {
+  background-color: color-mix(in srgb, var(--fg-0) 12%, transparent);
+  border-radius: 999px;
+}
+
+.nexus-progress::-webkit-progress-value {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--nexus-progress-accent, var(--accent-chatbot)) 70%, transparent),
+    var(--nexus-progress-accent, var(--accent-chatbot))
+  );
+  border-radius: 999px;
+  transition: width 240ms ease-out;
+}
+
+.nexus-progress::-moz-progress-bar {
+  background: var(--nexus-progress-accent, var(--accent-chatbot));
+  border-radius: 999px;
+}
+
+/*
+ * v2.4.9 -- the generation bar (`.nexus-genbar`).
+ *
+ * Operator ask: a glowing capsule with moving particles, in the application's
+ * own colour family rather than a grey system widget. Three layers, all CSS so
+ * no second rAF loop competes with the orb canvas:
+ *
+ *   track     -- inset capsule, faint accent rim
+ *   fill      -- accent gradient, width = measured fraction
+ *   particles -- repeating radial dots drifting along the fill
+ *
+ * Indeterminate (`data-determinate="false"`) is what shows the instant a job
+ * starts, before any byte count exists: the fill spans the track and a band
+ * sweeps across it, so the bar is never an empty box.
+ */
+
+.nexus-genbar {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg-0, #0a0d14) 92%, transparent),
+      color-mix(in srgb, var(--bg-1, #11151f) 92%, transparent)
+    );
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 22%, transparent),
+    inset 0 1px 3px rgb(0 0 0 / 45%);
+}
+
+.nexus-genbar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 38%, transparent),
+    color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 92%, transparent)
+  );
+  box-shadow: 0 0 12px color-mix(in srgb, var(--nexus-genbar-accent, var(--accent-chatbot)) 45%, transparent);
+  overflow: hidden;
+  transition: width 260ms ease-out;
+}
+
+/*
+ * The particles. One element paints several dot sizes via layered radial
+ * gradients; the layers scroll at different rates, which reads as a drifting
+ * field rather than one sliding texture.
+ */
+
+.nexus-genbar-particles {
+  position: absolute;
+  inset: -50% -100%;
+  background-image:
+    radial-gradient(circle at 12% 50%, rgb(255 255 255 / 85%) 0 1.1px, transparent 1.6px),
+    radial-gradient(circle at 34% 32%, rgb(255 255 255 / 55%) 0 0.9px, transparent 1.4px),
+    radial-gradient(circle at 58% 68%, rgb(255 255 255 / 70%) 0 1.3px, transparent 1.8px),
+    radial-gradient(circle at 79% 40%, rgb(255 255 255 / 45%) 0 0.8px, transparent 1.3px),
+    radial-gradient(circle at 93% 60%, rgb(255 255 255 / 65%) 0 1px, transparent 1.5px);
+  background-size: 42px 100%, 66px 100%, 54px 100%, 88px 100%, 72px 100%;
+  animation: nexus-genbar-drift 2.6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes nexus-genbar-drift {
+  from {
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+  to {
+    background-position: 42px 0, -66px 0, 54px 0, -88px 0, 72px 0;
+  }
+}
+
+/*
+ * Indeterminate: no fraction yet.
+ *
+ * v2.4.11 operator report: "the loading bar appears full even when it's at
+ * 0%". It was: the fill spanned the whole track at 55% opacity with a band
+ * sweeping over it, and a dimmed full bar reads as a finished bar. A short
+ * segment travels the track instead -- unmistakably "working, amount unknown"
+ * because most of the track is visibly empty at any moment.
+ */
+
+.nexus-genbar[data-determinate="false"] .nexus-genbar-fill {
+  width: 28%;
+  transition: none;
+  /* Travels edge to edge and back, so the segment is always ON the track: a
+     sweep that leaves the track reads as a dead bar between passes. */
+  animation: nexus-genbar-slide 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes nexus-genbar-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* (100 - 28) / 28 of its own width = flush with the right edge. */
+    transform: translateX(257%);
+  }
+}
+
+/*
+ * v2.4.9 -- a bare icon button.
+ *
+ * Operator ask: "Change the 'Advanced Settings' text to a gear icon to make
+ * the button more compact (just a gear, no outline)." `.nx-icon-btn` carries a
+ * border, a glass fill and a shadow; this is the same hit area with none of
+ * that chrome, so it reads as an affordance on the row rather than a second
+ * button competing with the model picker.
+ */
+
+.nx-icon-btn-bare {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: color 140ms ease, transform 140ms ease;
+}
+
+.nx-icon-btn-bare:hover {
+  color: var(--fg-0);
+}
+
+.nx-icon-btn-bare[aria-expanded="true"] {
+  color: var(--fg-0);
+}
+
+/* The gear turns a little when its panel is open, so state is visible without
+   adding an outline back. */
+
+.nx-icon-btn-bare[aria-expanded="true"] svg {
+  transform: rotate(45deg);
+}
+
+.nx-icon-btn-bare svg {
+  transition: transform 200ms ease;
+}
+
+.nx-icon-btn-bare:focus-visible {
+  outline: 2px solid var(--accent-chatbot);
+  outline-offset: 2px;
+}
+
+/*
+ * v2.4.9 -- composer-row controls.
+ *
+ * Operator ask: "make the height of all the added settings the same as the
+ * height of the context progress bar or model selector, and with the same
+ * colour scheme."
+ *
+ * The Context pill and the studio settings were drawn by different components
+ * with different chrome: the pill is a 999px capsule on an 80% --bg-1 wash
+ * with a 14% white border, while `Select` is an 8px rounded box on
+ * --bg-elevated with --border-subtle. Side by side on one row that read as two
+ * toolbars. This is the pill treatment, applied to whatever control sits in
+ * the quick slot, so the row is one object.
+ */
+
+.nx-composer-control > select,
+.nx-composer-control > input {
+  height: 2rem;
+  box-sizing: border-box;
+  padding: 0 1.6rem 0 0.75rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--fg-0) 14%, transparent);
+  background-color: color-mix(in srgb, var(--bg-1) 80%, transparent);
+  color: var(--fg-0);
+  font-size: var(--text-xs);
+  line-height: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+/* A number field has no dropdown arrow, so it keeps symmetric padding. */
+
+.nx-composer-control > input {
+  padding-right: 0.75rem;
+}
+
+.nx-composer-control > select:hover,
+.nx-composer-control > input:hover {
+  border-color: color-mix(in srgb, var(--fg-0) 24%, transparent);
+}
+
+.nx-composer-control > select:focus-visible,
+.nx-composer-control > input:focus-visible {
+  outline: 2px solid var(--accent-chatbot);
+  outline-offset: 1px;
+}
+
+.nx-composer-control > select:disabled,
+.nx-composer-control > input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* The Context pill is the row's flexible member: it absorbs whatever the
+   fixed-width settings leave, so the row has no trailing gap. */
+
+.nx-composer-row-fill {
+  flex: 1 1 auto;
+  min-width: 8rem;
+}
+
+/* Diagram labels. The SVG sanitiser forbids embedded \3c style>, so color lives here. */
+
+.nexus-mermaid text {
+  fill: var(--fg-0);
+}
+</style></head><body><main id="root"><div data-testid="settings-security" style="padding: var(--space-6, 24px);"><h2 style="margin-top: 0px;">Security posture</h2><p style="color: var(--fg-muted); max-width: 640px;">One named dial over the existing permission tiers. Switching postures changes confirmation frequency and screening strictness. It never lowers the floor: dangerous tools still confirm, and hard-denied commands are blocked in every posture.</p><fieldset data-testid="security-posture-fieldset" style="border-width: medium; border-style: none; border-color: currentcolor; border-image: none; padding: 0px; margin: 0px; display: grid; gap: 12px;"><legend class="sr-only">Security posture</legend><label data-testid="security-posture-strict" style="display: flex; gap: 12px; align-items: flex-start; padding: 12px; border: 1px solid var(--border-1, #2a2a2a); border-radius: 8px; cursor: pointer;"><input type="radio" value="strict" name="security-posture" style=""><span><strong>Strict</strong><span style="display: block; color: var(--fg-muted); margin-top: 4px;">Confirm every file edit and terminal command. Screen all tool output for prompt injection. Verification stays on. Hard-denied commands never run.</span></span></label><label data-testid="security-posture-standard" style="display: flex; gap: 12px; align-items: flex-start; padding: 12px; border: 1px solid var(--accent-primary, #6366f1); border-radius: 8px; cursor: pointer;"><input type="radio" value="standard" checked="" name="security-posture" style=""><span><strong>Standard</strong><span style="display: block; color: var(--fg-muted); margin-top: 4px;">Confirm edits and dangerous tools. Screen web, MCP, and browser results. Hard-denied commands never run.</span></span></label><label data-testid="security-posture-unattended" style="display: flex; gap: 12px; align-items: flex-start; padding: 12px; border: 1px solid var(--border-1, #2a2a2a); border-radius: 8px; cursor: pointer;"><input type="radio" value="unattended" name="security-posture" style=""><span><strong>Unattended</strong><span style="display: block; color: var(--fg-muted); margin-top: 4px;">Fewer confirmation prompts on reversible edits so long-running jobs can proceed. Dangerous tools (terminal, web fetch) still require confirmation. Hard-denied commands never run. This is not a no-floor mode.</span></span></label></fieldset><section data-testid="parse-document-settings" style="margin-top: 32px;"><h2>Document parsing</h2><p style="color: var(--fg-muted); max-width: 640px;">Opt-in for the coding agent <code>parse_document</code> tool. Writes<code style="overflow-wrap: anywhere;"> nexus.coding.parseDocument.enabled</code> in local settings. Off by default.</p><label style="display: inline-flex; align-items: center; gap: var(--space-2, 6px); cursor: pointer; opacity: 1; font-size: var(--text-sm); position: relative;"><input data-testid="parse-document-toggle" type="checkbox" style="position: absolute; opacity: 0; width: 34px; height: 18px; margin: 0px; cursor: pointer;"><span aria-hidden="true" style="width: 34px; height: 18px; border-radius: 9px; background-color: var(--bg-2, #222); border: 1px solid var(--border-subtle); position: relative; transition: background-color 120ms; flex-shrink: 0;"><span style="position: absolute; top: 1px; left: 1px; width: 14px; height: 14px; border-radius: 50%; background-color: var(--fg-0); transition: left 120ms;"></span></span><span>Enable parse_document for coding sessions</span></label></section><section data-testid="document-outline-settings" class="document-outline-settings" style="margin-top: 32px;"><h2 id="document-outline-settings-heading">Document outline tools</h2><p style="color: var(--fg-muted);">Experimental and off by default. Let the coding agent navigate a long document by section instead of reading it whole. Optional one-line section summaries use your local model.</p><fieldset class="document-outline-switches" aria-labelledby="document-outline-settings-heading"><label style="display: inline-flex; align-items: center; gap: var(--space-2, 6px); cursor: pointer; opacity: 1; font-size: var(--text-sm); position: relative;"><input data-testid="document-outline-toggle" type="checkbox" style="position: absolute; opacity: 0; width: 34px; height: 18px; margin: 0px; cursor: pointer;" checked=""><span aria-hidden="true" style="width: 34px; height: 18px; border-radius: 9px; background-color: var(--accent-chatbot); border: 1px solid var(--border-subtle); position: relative; transition: background-color 120ms; flex-shrink: 0;"><span style="position: absolute; top: 1px; left: 17px; width: 14px; height: 14px; border-radius: 50%; background-color: var(--fg-0); transition: left 120ms;"></span></span><span>Enable document outline tools</span></label><label style="display: inline-flex; align-items: center; gap: var(--space-2, 6px); cursor: pointer; opacity: 1; font-size: var(--text-sm); position: relative;"><input data-testid="document-outline-summaries-toggle" type="checkbox" style="position: absolute; opacity: 0; width: 34px; height: 18px; margin: 0px; cursor: pointer;" checked=""><span aria-hidden="true" style="width: 34px; height: 18px; border-radius: 9px; background-color: var(--accent-chatbot); border: 1px solid var(--border-subtle); position: relative; transition: background-color 120ms; flex-shrink: 0;"><span style="position: absolute; top: 1px; left: 17px; width: 14px; height: 14px; border-radius: 50%; background-color: var(--fg-0); transition: left 120ms;"></span></span><span>Generate one-line section summaries</span></label></fieldset></section><section data-testid="audit-log-viewer" style="margin-top: 32px;"><h2>Local audit log</h2><p style="color: var(--fg-muted); max-width: 640px;">Append-only, signed on this machine. Untrusted rows failed signature verification (tamper or corruption). Dropped events are counted, never silent.</p><div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;"><label>Actor<span style="position: relative; display: inline-flex; width: 100%;"><select data-testid="audit-filter-actor" class="nx-control" style="appearance: none; background-color: var(--bg-elevated, #1b1b1b); color: var(--fg-0); border: 1px solid var(--border-subtle); border-radius: var(--radius-md, 8px); padding-top: ; padding-right: 1.75rem; padding-bottom: ; padding-left: ; font-size: var(--text-sm); font-family: var(--font-sans); outline: none; cursor: pointer; width: 100%;"><option value="">any</option><option value="app">app</option><option value="planner">planner</option><option value="critic">critic</option><option value="worker">worker</option></select><span aria-hidden="true" style="position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--fg-muted); font-size: 0.7rem;">▾</span></span></label><label>Pillar<input class="nx-control" data-testid="audit-filter-pillar" placeholder="coding" type="text" value="" style="background-color: var(--bg-elevated, #1b1b1b); color: var(--fg-0); border: 1px solid var(--border-subtle); border-radius: var(--radius-md, 8px); padding: var(--space-2, 6px) var(--space-3, 10px); font-size: var(--text-sm); font-family: var(--font-sans); outline: none; width: 100%; cursor: text;"></label><button type="button" class="nx-control" data-testid="audit-refresh" style="background-color: var(--bg-elevated, #1b1b1b); color: var(--fg-0); border: 1px solid var(--border-subtle); border-radius: var(--radius-md, 8px); padding: var(--space-2, 6px) var(--space-3, 10px); font-size: var(--text-sm); font-family: var(--font-sans); outline: none; cursor: pointer; width: auto; white-space: nowrap;">Refresh</button><span data-testid="audit-dropped-count">Dropped: 0</span></div><table style="width: 100%; font-size: 13px; border-collapse: collapse;"><thead><tr><th align="left">Time</th><th align="left">Actor</th><th align="left">Pillar</th><th align="left">Kind</th><th align="left">Trusted</th></tr></thead><tbody></tbody></table></section></div></main></body></html>

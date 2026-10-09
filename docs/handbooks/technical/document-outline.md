@@ -25,9 +25,11 @@ Output size follows the active model's context window: an outline takes at most 
 
 VS Code extension: set `nexus.coding.documentOutline.enabled` to `true`. Optional one-line summaries per section: also set `nexus.coding.documentOutline.summaries.enabled`.
 
-Desktop app: there is no Settings toggle yet (DF-v211-4). Either start the app with `NEXUS_DOCUMENT_OUTLINE=1` (and `NEXUS_DOCUMENT_OUTLINE_SUMMARIES=1` for summaries), or add `"nexus.coding.documentOutline.enabled": true` to `~/.nexus/settings.json`. The sidecar method `coding.documentOutline.status` reports the effective state.
+Desktop app: open Settings > Security > Document outline tools. Turn on "Enable document outline tools"; the tools remain experimental and off by default. "Generate one-line section summaries" is available while outline tools are on and uses the local model. Turning outline tools off keeps the summaries preference for the next time they are enabled. The controls load and re-read the effective state through `coding.documentOutline.status` after saving.
 
 An environment value always wins over the stored setting, in both channels. Summaries have effect only when the outline flag is on.
+
+For the desktop app, recognized `NEXUS_DOCUMENT_OUTLINE` and `NEXUS_DOCUMENT_OUTLINE_SUMMARIES` values make the corresponding control read-only and show the winning value. Change or remove that environment value and restart the app to use its saved preference. A failed status read disables the controls and shows an error so an uncertain setting cannot be saved over accidentally.
 
 ## Safety model
 
