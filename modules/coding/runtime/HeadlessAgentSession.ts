@@ -203,7 +203,7 @@ function asToolResult(result: HeadlessToolResult): ToolResult {
 /** Characters across the history, for the ledger's estimate of tokens already in the window. */
 function historyChars(messages: readonly LLMMessage[]): number {
   let total = 0;
-  for (const message of messages) total += message.content.length;
+  for (const message of messages) total += message.content.length + (message.tool_calls?.length ? JSON.stringify(message.tool_calls).length : 0);
   return total;
 }
 
@@ -340,10 +340,10 @@ export class HeadlessAgentSession {
         return finish("error", err instanceof Error ? err.message : String(err));
       }
 
-      messages.push({ role: "assistant", content: assistantText });
-      ledger.turnCompleted(counters, assistantText.length);
-
       const parsed = parseAgentToolCalls(assistantText, format, nativeCalls);
+      const recordedCalls = nativeCalls.length ? parsed.results.flatMap((result) => result.ok ? [{ id: result.call.id, function: { name: result.call.tool, arguments: result.call.parameters } }] : []) : undefined;
+      messages.push({ role: "assistant", content: assistantText, ...(recordedCalls ? { tool_calls: recordedCalls } : {}) });
+      ledger.turnCompleted(counters, assistantText.length + (recordedCalls ? JSON.stringify(recordedCalls).length : 0));
       if (!parsed.hasAny) {
         const noAction = guards.recordNoAction();
         if (noAction.action === "halt") {
@@ -371,13 +371,9 @@ export class HeadlessAgentSession {
         }
         const tool = toolsByName.get(call.tool);
         if (!tool) {
-          messages.push({
-            role: "user",
-            content: formatToolResult(
-              call.tool,
-              asToolResult({ success: false, output: "", error: `unknown tool: ${call.tool}` }),
-            ),
-          });
+          const content = formatToolResult(call.tool, asToolResult({ success: false, output: "", error: `unknown tool: ${call.tool}` }));
+          messages.push({ role: recordedCalls ? "tool" : "user", content, ...(recordedCalls ? { tool_name: call.tool, tool_call_id: call.id } : {}) });
+          ledger.record(content.length);
           continue;
         }
         toolCalls += 1;
@@ -411,7 +407,7 @@ export class HeadlessAgentSession {
         // output, only the context copy is annotated.
         const contextResult = await this._screenInbound(call.tool, toolResult);
         const content = formatToolResult(call.tool, asToolResult(contextResult));
-        messages.push({ role: "user", content });
+        messages.push({ role: recordedCalls ? "tool" : "user", content, ...(recordedCalls ? { tool_name: call.tool, tool_call_id: call.id } : {}) });
         ledger.record(content.length);
       }
     }

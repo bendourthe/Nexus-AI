@@ -9,6 +9,7 @@ import type {
   LLMStreamChunk,
 } from "./types.js";
 import { LLMError } from "./types.js";
+import { toRequestMessages } from "./toolHistory.js";
 
 /**
  * v0.8.0 Phase 4 sub-task 4.2 (item F1) -- second `LLMClient` adapter that
@@ -183,7 +184,7 @@ class LmStudioClientImpl implements LLMClient {
   ): AsyncGenerator<LLMStreamChunk> {
     const body: Record<string, unknown> = {
       model: request.model,
-      messages: request.messages,
+      messages: toRequestMessages(request.messages, "legacy"),
       stream: true,
     };
     if (request.options) {
