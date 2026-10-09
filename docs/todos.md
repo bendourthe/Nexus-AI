@@ -638,16 +638,19 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 
 | Metric | Current | Target |
 |---|---|---|
-| Verified plan phases | 2 of 7 | 7 of 7 |
+| Verified plan phases | 3 of 7 | 7 of 7 |
 | Phase 2 root test gate | 6,162 passed, 12 existing skips, no failures | Pass unchanged coverage thresholds |
 | Phase 2 coverage | 87.99% statements, 83.57% branches, 90.7% functions, 87.99% lines | Keep repository thresholds |
 | Phase 2 live gate | Passed: 11,428 -> 7,332 -> 3,448 characters; final prompt 14,430 tokens | Falling budgets and final prompt below 16,384 tokens |
+| Phase 3 test gate | 1,674 coding tests and 2,227 desktop tests passed | Preserve native pairs and legacy resume |
+| Phase 3 live gate | Three real reads per model; VS Code 1.134 SQLite reopen passed | Native request shapes and unchanged resumed prompt |
 
 - [x] Record the Kolibri-1 decline and index, with its failing-then-passing guard (Phase 1, `59e16c82`).
 - [x] Reconcile the failed package update PRs through dependency repair PR #96, merged at `092ce3c2` after 60 passing checks; close superseded #48, #59, and #72.
 - [x] Verify Phase 2 document budgets with real OCR/Ollama, passing root coverage, focused tests, lint/build and desktop typecheck; save one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md)).
+- [x] Verify Phase 3 native Ollama history, pair-safe compaction and real SQLite resume in the extension host; record the OpenAI compatibility gap and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md)).
 - [ ] Reconcile the guarded agent-authored 14,000 -> 14,500 test count before any further edit, and preserve excluded generated benchmark changes until cleanup is agreed.
-- [ ] Complete tool-role history, compaction, Settings, evaluation and final integration in the approved [v2.12 plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), then begin v2.13.
+- [ ] Complete shared tool-result compaction, Settings, evaluation and final integration in the approved [v2.12 plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), then begin v2.13.
 
 ## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)
 

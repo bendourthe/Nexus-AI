@@ -1,0 +1,365 @@
+{
+  "capturedAt": "2026-10-09T11:08:51.932Z",
+  "supportTier": "internal-compatible",
+  "ollamaVersion": "0.32.15",
+  "decision": {
+    "proceed": true,
+    "visibilityProbes": [
+      {
+        "runAt": "2026-10-09T06:58:37.469956+00:00",
+        "model": "qwen3.5:9b",
+        "expected": "NEXUS_ceff5488f63eef1ce6e936159879ab0e",
+        "reply": "NEXUS_ceff5488f63eef1ce6e936159879ab0e",
+        "repeated": true,
+        "sourceSha256": "22fb13fab161722e208622a6deff09d09b39a1977ae5ced3181a190cf8e57b4c"
+      },
+      {
+        "runAt": "2026-10-09T06:58:52.163116+00:00",
+        "model": "qwen3.5:9b",
+        "expected": "NEXUS_4180d8e7ee4b4be5550fdf444a0a6bb7",
+        "reply": "NEXUS_4180d8e7ee4b4be5550fdf444a0a6bb7",
+        "repeated": true,
+        "sourceSha256": "762f05cf50a8a7cd19922cd74b673a7448af705116ad9418449a025739bf8df8"
+      },
+      {
+        "runAt": "2026-10-09T06:58:55.326208+00:00",
+        "model": "qwen3.5:9b",
+        "expected": "NEXUS_30c3c9ad8d79de5eab92f84b1cd6f30f",
+        "reply": "NEXUS_30c3c9ad8d79de5eab92f84b1cd6f30f",
+        "repeated": true,
+        "sourceSha256": "05b003851a597061447d765563bf8e244b7cd02c8fffb187dfb7b91283935bb9"
+      },
+      {
+        "runAt": "2026-10-09T06:58:58.509981+00:00",
+        "model": "gemma4:12b",
+        "expected": "NEXUS_41813ab31d13fce2de36ac12eaf68048",
+        "reply": "NEXUS_41813ab31d13fce2de36ac12eaf68048",
+        "repeated": true,
+        "sourceSha256": "dd2ac4dd5751a3fa4d2b648945dbc2296c720792af82e963496af0b66e4d0c4b"
+      },
+      {
+        "runAt": "2026-10-09T06:59:11.489912+00:00",
+        "model": "gemma4:12b",
+        "expected": "NEXUS_0d36cb0bf0f2c196686c7e3b980cd3cb",
+        "reply": "NEXUS_0d36cb0bf0f2c196686c7e3b980cd3cb",
+        "repeated": true,
+        "sourceSha256": "dcade79b4e6d98120b0f64d3ba6fa68794b232a113a44897025cba63e79b1c9c"
+      },
+      {
+        "runAt": "2026-10-09T06:59:14.734490+00:00",
+        "model": "gemma4:12b",
+        "expected": "NEXUS_752bb492ca35ee62e8ab7a3ce24a8dda",
+        "reply": "NEXUS_752bb492ca35ee62e8ab7a3ce24a8dda",
+        "repeated": true,
+        "sourceSha256": "41733a6d050ec1d25fd2d0ce6975b71a45230b12fef3d2650351a6b5442a37a0"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "model": "qwen3.5:9b",
+      "started": "2026-10-09T11:01:12.330Z",
+      "finished": "2026-10-09T11:01:25.278Z",
+      "finishReason": "done",
+      "toolCalls": 3,
+      "finalText": "proof_8932b7d8ba6e520d5840a043\nproof_ae0f7b57276f8e419ab45373\nproof_ac2dc027a4544d830542323e",
+      "expectedTokens": [
+        "proof_8932b7d8ba6e520d5840a043",
+        "proof_ae0f7b57276f8e419ab45373",
+        "proof_ac2dc027a4544d830542323e"
+      ],
+      "sourceSha256": "04d1877bae3e57da468f62012b908061bcfa80f84c8320d4bf98858fb4b1da63",
+      "requests": [
+        {
+          "turn": 1,
+          "messageCount": 2,
+          "roles": [
+            "system",
+            "user"
+          ],
+          "nativeHistory": []
+        },
+        {
+          "turn": 2,
+          "messageCount": 6,
+          "roles": [
+            "system",
+            "user",
+            "assistant",
+            "tool",
+            "tool",
+            "tool"
+          ],
+          "nativeHistory": [
+            {
+              "role": "assistant",
+              "content": "",
+              "tool_calls": [
+                {
+                  "id": "750e5e2e-0988-4f38-8597-215d8ad55424",
+                  "function": {
+                    "name": "read_file",
+                    "arguments": {
+                      "path": "a.txt"
+                    }
+                  }
+                },
+                {
+                  "id": "95790a87-2116-4562-90b9-83b88ec1728c",
+                  "function": {
+                    "name": "read_file",
+                    "arguments": {
+                      "path": "b.txt"
+                    }
+                  }
+                },
+                {
+                  "id": "7efbdeb1-2b91-452d-9796-5718c6c2c6a2",
+                  "function": {
+                    "name": "read_file",
+                    "arguments": {
+                      "path": "c.txt"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "role": "tool",
+              "content": "<|tool_result>\n{\n  \"name\": \"read_file\",\n  \"origin\": \"workspace_file\",\n  \"response\": {\n    \"success\": true,\n    \"output\": \"a: proof_8932b7d8ba6e520d5840a043\\n\"\n  }\n}\n<tool_result|>",
+              "tool_name": "read_file",
+              "tool_call_id": "750e5e2e-0988-4f38-8597-215d8ad55424"
+            },
+            {
+              "role": "tool",
+              "content": "<|tool_result>\n{\n  \"name\": \"read_file\",\n  \"origin\": \"workspace_file\",\n  \"response\": {\n    \"success\": true,\n    \"output\": \"b: proof_ae0f7b57276f8e419ab45373\\n\"\n  }\n}\n<tool_result|>",
+              "tool_name": "read_file",
+              "tool_call_id": "95790a87-2116-4562-90b9-83b88ec1728c"
+            },
+            {
+              "role": "tool",
+              "content": "<|tool_result>\n{\n  \"name\": \"read_file\",\n  \"origin\": \"workspace_file\",\n  \"response\": {\n    \"success\": true,\n    \"output\": \"c: proof_ac2dc027a4544d830542323e\\n\"\n  }\n}\n<tool_result|>",
+              "tool_name": "read_file",
+              "tool_call_id": "7efbdeb1-2b91-452d-9796-5718c6c2c6a2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "model": "gemma4:12b",
+      "started": "2026-10-09T11:02:46.353Z",
+      "finished": "2026-10-09T11:03:00.788Z",
+      "finishReason": "done",
+      "toolCalls": 3,
+      "finalText": "proof_e66c13a902456ed250e580b2\nproof_314134d760f05176b947890a\nproof_87ebd3455cfa7c4a9a0eaa87",
+      "expectedTokens": [
+        "proof_e66c13a902456ed250e580b2",
+        "proof_314134d760f05176b947890a",
+        "proof_87ebd3455cfa7c4a9a0eaa87"
+      ],
+      "sourceSha256": "ad16965faa25ae39bffe721fa5ef749e23f470538c993cdfa759b1ab33581b8d",
+      "requests": [
+        {
+          "turn": 1,
+          "messageCount": 2,
+          "roles": [
+            "system",
+            "user"
+          ],
+          "nativeHistory": []
+        },
+        {
+          "turn": 2,
+          "messageCount": 4,
+          "roles": [
+            "system",
+            "user",
+            "assistant",
+            "tool"
+          ],
+          "nativeHistory": [
+            {
+              "role": "assistant",
+              "content": "",
+              "tool_calls": [
+                {
+                  "id": "eee34c09-52bf-4fde-bec6-1baa36355a4f",
+                  "function": {
+                    "name": "read_file",
+                    "arguments": {
+                      "path": "a.txt"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "role": "tool",
+              "content": "<|tool_result>\n{\n  \"name\": \"read_file\",\n  \"origin\": \"workspace_file\",\n  \"response\": {\n    \"success\": true,\n    \"output\": \"a: proof_e66c13a902456ed250e580b2\\n\"\n  }\n}\n<tool_result|>",
+              "tool_name": "read_file",
+              "tool_call_id": "eee34c09-52bf-4fde-bec6-1baa36355a4f"
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "messageCount": 6,
+          "roles": [
+            "system",
+            "user",
+            "assistant",
+            "tool",
+            "assistant",
+            "tool"
+          ],
+          "nativeHistory": [
+            {
+              "role": "assistant",
+              "content": "",
+              "tool_calls": [
+                {
+                  "id": "eee34c09-52bf-4fde-bec6-1baa36355a4f",
+                  "function": {
+                    "name": "read_file",
+                    "arguments": {
+                      "path": "a.txt"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "role": "tool",
+              "content": "<|tool_result>\n{\n  \"name\": \"read_file\",\n  \"origin\": \"workspace_file\",\n  \"response\": {\n    \"success\": true,\n    \"output\": \"a: proof_e66c13a902456ed250e580b2\\n\"\n  }\n}\n<tool_result|>",
+              "tool_name": "read_file",
+              "tool_call_id": "eee34c09-52bf-4fde-bec6-1baa36355a4f"
+            },
+            {
+              "role": "assistant",
+              "content": "",
+              "tool_calls": [
+                {
+                  "id": "314dbd16-63a3-40fe-a139-ac0742e14f78",
+                  "function": {
+                    "name": "read_file",
+                    "arguments": {
+                      "path": "b.txt"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "role": "tool",
+              "content": "<|tool_result>\n{\n  \"name\": \"read_file\",\n  \"origin\": \"workspace_file\",\n  \"response\": {\n    \"success\": true,\n    \"output\": \"b: proof_314134d760f05176b947890a\\n\"\n  }\n}\n<tool_result|>",
+              "tool_name": "read_file",
+              "tool_call_id": "314dbd16-63a3-40fe-a139-ac0742e14f78"
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "messageCount": 8,
+          "roles": [
+            "system",
+            "user",
+            "assistant",
+            "tool",
+            "assistant",
+            "tool",
+            "assistant",
+            "tool"
+          ],
+          "nativeHistory": [
+            {
+              "role": "assistant",
+              "content": "",
+              "tool_calls": [
+                {
+                  "id": "eee34c09-52bf-4fde-bec6-1baa36355a4f",
+                  "function": {
+                    "name": "read_file",
+                    "arguments": {
+                      "path": "a.txt"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "role": "tool",
+              "content": "<|tool_result>\n{\n  \"name\": \"read_file\",\n  \"origin\": \"workspace_file\",\n  \"response\": {\n    \"success\": true,\n    \"output\": \"a: proof_e66c13a902456ed250e580b2\\n\"\n  }\n}\n<tool_result|>",
+              "tool_name": "read_file",
+              "tool_call_id": "eee34c09-52bf-4fde-bec6-1baa36355a4f"
+            },
+            {
+              "role": "assistant",
+              "content": "",
+              "tool_calls": [
+                {
+                  "id": "314dbd16-63a3-40fe-a139-ac0742e14f78",
+                  "function": {
+                    "name": "read_file",
+                    "arguments": {
+                      "path": "b.txt"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "role": "tool",
+              "content": "<|tool_result>\n{\n  \"name\": \"read_file\",\n  \"origin\": \"workspace_file\",\n  \"response\": {\n    \"success\": true,\n    \"output\": \"b: proof_314134d760f05176b947890a\\n\"\n  }\n}\n<tool_result|>",
+              "tool_name": "read_file",
+              "tool_call_id": "314dbd16-63a3-40fe-a139-ac0742e14f78"
+            },
+            {
+              "role": "assistant",
+              "content": "",
+              "tool_calls": [
+                {
+                  "id": "ff9e817f-0b69-445b-881e-9ff3f46eb1ac",
+                  "function": {
+                    "name": "read_file",
+                    "arguments": {
+                      "path": "c.txt"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "role": "tool",
+              "content": "<|tool_result>\n{\n  \"name\": \"read_file\",\n  \"origin\": \"workspace_file\",\n  \"response\": {\n    \"success\": true,\n    \"output\": \"c: proof_87ebd3455cfa7c4a9a0eaa87\\n\"\n  }\n}\n<tool_result|>",
+              "tool_name": "read_file",
+              "tool_call_id": "ff9e817f-0b69-445b-881e-9ff3f46eb1ac"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "extensionHost": {
+    "verified": true,
+    "vscode": "1.134.0",
+    "electron": "42.8.1",
+    "node": "24.18.1",
+    "modules": "146",
+    "persistedRoles": [
+      "user",
+      "assistant",
+      "user",
+      "user",
+      "user"
+    ],
+    "resultBytes": [
+      156,
+      156,
+      156
+    ],
+    "nativeBindingSha256": "24e2e3ca5a829572239718fbca35b873ba4975655d29c56a93f1880e3775d9b8",
+    "sourceSha256": "1d848f761ec078863f3e45cfeb6c7749a26d2682770a9e2bd9d823acb942fb17",
+    "scope": "Real compiled ConversationManager and ChatHistoryStore with real SQLite in an isolated test extension; close and reopen the database. Full product activation and GUI were not exercised."
+  }
+}

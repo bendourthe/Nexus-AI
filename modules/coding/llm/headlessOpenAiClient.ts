@@ -14,6 +14,7 @@
 // `headlessOllamaClient.ts` records for the Ollama pair.
 
 import { instrumentStream } from "./instrumentStream.js";
+import { toRequestMessages } from "./toolHistory.js";
 import { OpenAiToolCallAccumulator, type OpenAiToolCallDelta } from "./openAiToolCalls.js";
 import {
   LLMError,
@@ -83,7 +84,7 @@ export function createHeadlessOpenAiClient(
   ): AsyncGenerator<LLMStreamChunk> {
     const body: Record<string, unknown> = {
       model: request.model,
-      messages: request.messages,
+      messages: toRequestMessages(request.messages, "legacy"),
       stream: true,
     };
     if (request.options) {

@@ -2,6 +2,8 @@ import { randomUUID } from "crypto";
 import type { Message } from "./types.js";
 import type { OllamaClient, OllamaMessage, OllamaOptions } from "../llm/types.js";
 import { countTokens } from "../config/PromptBudget.js";
+import { expandToolPairIndices, toolPairGroups } from "../llm/toolHistory.js";
+import { toLlmMessages } from "./llmMessages.js";
 
 /**
  * Compacted-summary framing prefix. Tells the model that the embedded summary
@@ -31,7 +33,7 @@ const _tokenEstimateCache = new WeakMap<Message, number>();
 
 /** Compute the per-message token estimate (bypassing the cache). */
 function _computeTokensForMessage(msg: Message): number {
-  return countTokens(msg.content);
+  return countTokens(msg.content) + (msg.tool_calls?.length ? countTokens(JSON.stringify(msg.tool_calls)) : 0);
 }
 
 /** Estimate the token count for a single message. Result is memoized. */
@@ -144,7 +146,7 @@ export class ToolResultClearing implements CompactionStrategy {
       if (!msg) continue;
 
       TOOL_RESULT_RE.lastIndex = 0;
-      const cleared = msg.content.replace(TOOL_RESULT_RE, (_match, body: string) =>
+      const cleared = msg.role === "tool" ? `[Tool result cleared: ${msg.tool_name ?? "unknown"}]` : msg.content.replace(TOOL_RESULT_RE, (_match, body: string) =>
         summarizeToolResult(body),
       );
 
@@ -158,7 +160,7 @@ export class ToolResultClearing implements CompactionStrategy {
     const indices: number[] = [];
     for (let i = 0; i < messages.length; i++) {
       const msg = messages[i];
-      if (msg && hasToolResult(msg.content)) {
+      if (msg && (msg.role === "tool" || hasToolResult(msg.content))) {
         indices.push(i);
       }
     }
@@ -215,8 +217,12 @@ export class SlidingWindow implements CompactionStrategy {
     }
     kept.push(...tail);
 
-    // Sort by timestamp to maintain chronological order.
-    kept.sort((a, b) => a.timestamp - b.timestamp);
+    const keptMessages = new Set(kept);
+    const keepIndices = expandToolPairIndices(nonSystem, new Set(nonSystem.flatMap((message, index) => keptMessages.has(message) ? [index] : [])));
+    kept.length = 0;
+    kept.push(...nonSystem.filter((_, index) => keepIndices.has(index)));
+
+    // Array order preserves call/result causality even if the wall clock changes.
 
     return [...systemMessages, ...kept];
   }
@@ -302,10 +308,7 @@ export class LlmSummary implements CompactionStrategy {
     const nonSystem = messages.filter((m) => m.role !== "system");
 
     // Build the summary request (exclude system messages).
-    const historyForSummary: OllamaMessage[] = nonSystem.map((m) => ({
-      role: m.role,
-      content: m.content,
-    }));
+    const historyForSummary: OllamaMessage[] = toLlmMessages(nonSystem, false);
     historyForSummary.push({ role: "user", content: SUMMARY_PROMPT });
 
     let summary = "";
@@ -337,7 +340,8 @@ export class LlmSummary implements CompactionStrategy {
     };
 
     // Keep last N non-system messages.
-    const tail = nonSystem.slice(-this._keepRecent);
+    const keepIndices = expandToolPairIndices(nonSystem, new Set(nonSystem.map((_, index) => index).slice(-this._keepRecent)));
+    const tail = nonSystem.filter((_, index) => keepIndices.has(index));
 
     return [...systemMessages, summaryMessage, ...tail];
   }
@@ -364,11 +368,19 @@ export class EmergencyTrim implements CompactionStrategy {
     const protectedIds = new Set(human.slice(-this._userMessageTail).map((m) => m.id));
 
     const dropped = new Set<number>();
+    const groups = toolPairGroups(messages);
     for (let i = 0; i < messages.length && Math.round(total) > budgetTokens; i++) {
       const msg = messages[i];
-      if (msg && msg.role !== "system" && !protectedIds.has(msg.id)) {
-        total -= estimateTokensForMessage(msg);
-        dropped.add(i);
+      if (msg && msg.role !== "system" && !protectedIds.has(msg.id) && !dropped.has(i)) {
+        const group = groups.get(i) ?? [i];
+        if ([...group].some((index) => protectedIds.has(messages[index]?.id ?? ""))) continue;
+        for (const index of group) {
+          const member = messages[index];
+          if (member && !dropped.has(index)) {
+            total -= estimateTokensForMessage(member);
+            dropped.add(index);
+          }
+        }
       }
     }
 

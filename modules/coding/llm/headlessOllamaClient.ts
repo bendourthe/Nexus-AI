@@ -14,6 +14,7 @@
 
 import { OllamaHttp } from "./OllamaHttp.js";
 import { instrumentStream } from "./instrumentStream.js";
+import { toRequestMessages } from "./toolHistory.js";
 import { createOllamaMemoryProbe, loadedContextLength } from "./ollamaMemory.js";
 import {
   LLMError,
@@ -73,7 +74,7 @@ export function createHeadlessOllamaClient(
   ): AsyncGenerator<LLMStreamChunk> {
       const response = await http.postJson(
         "/api/chat",
-        JSON.stringify({ ...request, stream: true }),
+        JSON.stringify({ ...request, messages: toRequestMessages(request.messages, "ollama"), stream: true }),
         signal,
       );
       if (!response.ok) {

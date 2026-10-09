@@ -13,6 +13,16 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-09] v2.12.0 Phase 3 - Native tool history
+
+Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md), [captured evidence](releases/v2/v2.12/development/evidence/phase-3-native-history.json).
+
+Both coding loops retain native assistant calls and matching tool-role results for Ollama, including screened result bytes. Compaction and range compression preserve complete batches; guarded or interrupted calls get matching failure results. Persistence keeps user-role rows and rebuilds the legacy prompt on resume. OpenAI-compatible backends keep their current history format, recorded as DF-v212-4.
+
+Verification: 1,674 coding tests and 2,227 desktop tests passed, with existing skips. Lint, both typechecks, sidecar build, architecture checking and the baselined deterministic check passed. qwen3.5:9b and gemma4:12b each completed three real reads; VS Code 1.134.0 reopened the real SQLite session and rebuilt the expected prompt. Support tier: internal-compatible; full product activation and GUI were not exercised. No pipeline change or remote publication. Next: Phase 4 shared tool-result compaction.
+
+---
+
 ## [2026-10-09] v2.12.0 Phase 2 - Window-aware document output
 
 Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md).
