@@ -84,3 +84,9 @@ Eight additional tests exercise the actual document IPC client with controlled t
 | VSIX archive inspection | 15,228 entries, 216,054,287 bytes, zero local Hub records, zero reports, nonempty compiled extension entry |
 
 Independent source reviews and their rejected candidates are recorded in [dependency-repair-review.md](dependency-repair-review.md). Local logs and artifacts remain ignored under .nexus-hub. Package inspection is not native VS Code host qualification, and the fixture MCP executor does not prove filesystem authorization. GUI observation remains unobserved. Workflow pins #42/#43, the protected generated historical fixture and remaining development advisories are still open; no exception, workflow change or release was applied.
+
+## Integration repair: benchmark reporter lifecycle
+
+PR #96 was published against develop at 8297915c. Remote rendering checks failed because bench-results.json was absent, rather than because a measured benchmark exceeded its threshold. The exact consumer command reproduced the defect locally: Vitest 4 exited successfully but never invoked the reporter's old onFinished hook, so the requested JSON file did not exist. The reporter now maps Vitest 4 onTestRunEnd modules to the existing raw-task serializer while retaining the older hook for compatibility. No workflow, permission, secret, threshold or baseline changed.
+
+The same real rendering command with the repaired reporter produced the requested JSON. The existing regression checker passed its unchanged 20% gate across four extracted benchmark records (three measured rendering cases plus their suite record). Two lifecycle tests verify both hooks write nested metrics and error records. Fresh logs are retained at .nexus-hub/rendering-before.log, rendering-after.log, rendering-after.json and rendering-ci-failure.log. Earlier full-suite counts remain the evidence for the unchanged package migration; the two added reporter cases are separate evidence.
