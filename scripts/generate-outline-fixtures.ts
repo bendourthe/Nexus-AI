@@ -26,6 +26,8 @@ export interface ExpectedHeading {
   readonly startPage: number;
   /** First words of the section body, used by the navigation check. */
   readonly firstWords: string;
+  /** Expanded-manual table values; omitted from the original fixtures. */
+  readonly table?: { readonly port: number; readonly protocol: string; readonly default: string };
 }
 
 export interface ExpectedFile {
@@ -480,6 +482,32 @@ export function generateFixtures(seed: number = FIXTURE_SEED): GeneratedFixture[
   for (let i = 0; i < binary.length; i += 1) binary[i] = Math.floor(rand() * 256);
   binary[3] = 0;
   out.push({ name: "binary-renamed.txt", bytes: binary, expected: { file: "binary-renamed.txt", kind: "binary", pageCount: 0, headings: [] } });
+
+  // Independent stream preserves every v2.11 fixture byte and expected value.
+  const expandedSections = makeSections(mulberry32(seed ^ 0x2120), 12, 4, 17).map((s, i) => {
+    const table = s.level === 2
+      ? { port: 10000 + i, protocol: `protocol-${i}`, default: `profile-${i}` }
+      : undefined;
+    return {
+      ...s,
+      table,
+      body: table ? [...s.body, "Port | Protocol | Default", `${table.port} | ${table.protocol} | ${table.default}`] : s.body,
+    };
+  });
+  const expanded = layoutPdf(expandedSections, { linesPerPage: 46, withToc: true, title: "Expanded Field Service Manual" });
+  out.push({
+    name: "manual-120p.pdf",
+    bytes: writeTextPdf(expanded.pages),
+    expected: {
+      file: "manual-120p.pdf",
+      kind: "pdf",
+      pageCount: expanded.pages.length,
+      headings: expanded.headings.map((h, i) => {
+        const table = expandedSections[i]?.table;
+        return table ? { ...h, table } : h;
+      }),
+    },
+  });
 
   return out;
 }

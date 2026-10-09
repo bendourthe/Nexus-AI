@@ -13,6 +13,12 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-09] v2.12.0 Phase 6 - Evaluation preregistration
+
+Prepared a deterministic 123-page manual and 38 expanded questions without changing the v2.11 anchor. The Phase 6 decision rule is frozen before inference. Shared deadline/cancellation and exclusive reports preserve the approved 14-hour bound and existing evidence. Fresh preparation checks: 36 tests, scoped strict lint and TypeScript pass. Results remain pending. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [preregistered rule](v2/v2.12/development/outline-eval.md). Local preregistration only; no remote CI.
+
+---
+
 ## [2026-10-09] v2.12.0 Phase 5 - Desktop outline Settings
 
 Settings > Security now exposes experimental, off-by-default outline tools and optional summaries. Authoritative status disables uncertain writes; environment overrides keep their controls read-only and summaries-only changes preserve the saved outline preference. DF-v211-4 is resolved without answer-quality promotion.
@@ -11004,7 +11010,7 @@ if (estimatedTokens > conversationBudget) {
 | `src/chat/ConversationManager.ts` (+11 lines) | Added `replaceMessages(messages)` method for atomic message array replacement by the pipeline |
 | `src/config/settings.ts` (+4 lines) | Added `compactionKeepRecent` (default 10) and `compactionToolResultsKeep` (default 8) to `GemmaCodeSettings` |
 | `package.json` (+14 lines) | Registered both new settings in VS Code configuration |
-| `tests/unit/chat/CompactionStrategy.test.ts` (new, 35 tests) | Full coverage of all strategies, pipeline orchestration, and token estimation |
+| `tests/unit/chat/CompactionStrategy.test.ts` (new, 36 tests) | Full coverage of all strategies, pipeline orchestration, and token estimation |
 | `tests/unit/chat/ContextCompactor.test.ts` (updated, 12 tests) | Updated for pipeline-based `compact()`: mocks `replaceMessages` instead of `replaceWithSummary`; added pre-compaction hook tests |
 | `tests/unit/chat/ConversationManager.test.ts` (+3 tests) | Tests for `replaceMessages()`: replacement, onDidChange firing, getHistory visibility |
 

@@ -109,6 +109,22 @@ describe("generateFixtures", () => {
     expect(manual?.expected.pageCount).toBeGreaterThanOrEqual(60);
   });
 
+  it("provides an expanded manual with late consecutive pairs and unique section tables", () => {
+    const manual = generateFixtures(FIXTURE_SEED).find((f) => f.name === "manual-120p.pdf");
+    expect(manual).toBeDefined();
+    const expectedPath = resolve(dirname(fileURLToPath(import.meta.url)), "../../fixtures/documents/outline/expected/manual-120p.pdf.json");
+    expect(JSON.parse(readFileSync(expectedPath, "utf8"))).toStrictEqual(manual?.expected);
+    const headings = manual?.expected.headings ?? [];
+    expect(headings.slice(1).filter((h) => h.startPage > 50).length).toBeGreaterThanOrEqual(24);
+    const tables = headings.flatMap((h) => h.table ? [h.table] : []);
+    expect(tables.length).toBeGreaterThanOrEqual(6);
+    for (const field of ["port", "protocol", "default"] as const) {
+      expect(new Set(tables.map((t) => t[field])).size).toBe(tables.length);
+    }
+    expect(manual?.expected.pageCount).toBeGreaterThanOrEqual(110);
+    expect(manual?.expected.pageCount).toBeLessThanOrEqual(150);
+  });
+
   it("reproduces every committed fixture byte for byte", () => {
     const docs = resolve(dirname(fileURLToPath(import.meta.url)), "../../fixtures/documents/outline/docs");
     for (const fixture of generateFixtures(FIXTURE_SEED)) {
