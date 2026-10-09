@@ -638,8 +638,9 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 
 | Metric | Current | Target |
 |---|---|---|
-| Verified plan phases | 5 of 7 | 7 of 7 |
-| Phase 6 preregistration | 123-page fixture; 38 expanded questions; 36 preparation tests passed | Commit rule before dry/full A/C inference |
+| Verified plan phases | 6 of 7 | 7 of 7 |
+| Phase 6 preregistration | Rule committed at `e8ee872d` before inference; 123-page fixture; 38 expanded questions; 36 preparation tests passed | Preserve the frozen rule through results analysis |
+| Phase 6 full-run milestones | Expanded 152/152 and anchor 96/96 validated; frozen rule yields futility; both user-outcome targets missed; zero restarts | Carry the measured disposition into Phase 7 and the v2.13 review |
 | Phase 2 root test gate | 6,162 passed, 12 existing skips, no failures | Pass unchanged coverage thresholds |
 | Phase 2 coverage | 87.99% statements, 83.57% branches, 90.7% functions, 87.99% lines | Keep repository thresholds |
 | Phase 2 live gate | Passed: 11,428 -> 7,332 -> 3,448 characters; final prompt 14,430 tokens | Falling budgets and final prompt below 16,384 tokens |
@@ -656,6 +657,7 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [ ] Reconcile the guarded agent-authored 14,000 -> 14,500 test count before any further edit, and preserve excluded generated benchmark changes until cleanup is agreed.
 - [x] Verify shared tool-result compaction in both loops, fork-resume ownership, cancellation and visible errors; complete nine live PDF section reads and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md)).
 - [x] Verify desktop outline Settings, including environment-preference preservation, real dispatcher/browser behavior, handbook update and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md)).
+- [x] After both frozen full runs finished, retain returned errors in future smoke results and qualify OCR timing prose; verify the actual patched harness with controlled adapters, preserve scored artifacts and record WN-v212-5 ([results](v2/v2.12/development/outline-eval.md)).
 - [ ] Complete evaluation and final integration in the approved [v2.12 plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), then begin v2.13.
 
 ## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)

@@ -13,6 +13,12 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-09] v2.12.0 Phase 6 - Completed evaluation
+
+Both scored runs completed within the approved ceiling, with exact coverage (expanded 152/152, anchor 96/96) and zero restarts. The unchanged preregistered rule yields futility: arm C cross-section scores are Qwen 0/20 and Gemma 4/20. Both arm A user-outcome targets were missed. The flag stays experimental and off; recommend removal or narrowing at the v2.13 review with no repeats. Post-run reporting corrections retain future returned errors and qualify uncached OCR timing. Fresh checks: 36 fixture/question tests, scoped strict TypeScript and lint, and the actual harness's controlled-adapter reporting exercise passed. Historical diagnostic limits remain WN-v212-5. [Results](v2/v2.12/development/outline-eval.md), [history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [metadata](releases/v2/v2.12/development/evidence/phase-6-evaluation.json). One local results commit; no remote CI. Phase 7 remains open.
+
+---
+
 ## [2026-10-09] v2.12.0 Phase 6 - Evaluation preregistration
 
 Prepared a deterministic 123-page manual and 38 expanded questions without changing the v2.11 anchor. The Phase 6 decision rule is frozen before inference. Shared deadline/cancellation and exclusive reports preserve the approved 14-hour bound and existing evidence. Fresh preparation checks: 36 tests, scoped strict lint and TypeScript pass. Results remain pending. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [preregistered rule](v2/v2.12/development/outline-eval.md). Local preregistration only; no remote CI.
