@@ -67,7 +67,7 @@ describe("HeadlessAgentSession", () => {
       documentParser: { parse: async () => ({ engine: "rapidocr", text: "word ".repeat(8_000), markdown: null, pageCount: 1 }) },
     }));
     const events: HeadlessAgentEvent[] = [];
-    const result = await session.run({ task: "Context ".repeat(4_000), workdir, model: "test", onEvent: (event) => events.push(event) });
+    const result = await session.run({ task: "Context ".repeat(4_000), workdir, model: "test", llmOptions: { num_ctx: 32_768 }, onEvent: (event) => events.push(event) });
     expect(result.finishReason).toBe("done");
     const outputs = events.flatMap((event) => event.kind === "toolResult" ? [event.output] : []);
     expect(outputs).toHaveLength(1);
@@ -88,7 +88,7 @@ describe("HeadlessAgentSession", () => {
       documentParser: { parse: async () => ({ engine: "rapidocr", text: "word ".repeat(16_000), markdown: null, pageCount: 1 }) },
     }));
     const events: HeadlessAgentEvent[] = [];
-    const result = await session.run({ task: "Compare the documents", workdir, model: "test", onEvent: (event) => events.push(event) });
+    const result = await session.run({ task: "Compare the documents", workdir, model: "test", llmOptions: { num_ctx: 16_384 }, onEvent: (event) => events.push(event) });
     expect(result.finishReason).toBe("done");
     const outputs = events.flatMap((event) => event.kind === "toolResult" ? [event.output] : []);
     expect(outputs).toHaveLength(3);

@@ -92,7 +92,7 @@ export class ConversationManager {
 
   private _append(role: Role, content: string, images?: readonly string[], tool?: Pick<Message, "tool_calls" | "tool_name" | "tool_call_id">): Message {
     const message: Message = {
-      id: role === "tool" ? `tool-result:${randomUUID()}` : randomUUID(),
+      id: role === "tool" || tool?.tool_name ? `tool-result:${randomUUID()}` : randomUUID(),
       role,
       content,
       timestamp: Date.now(),
@@ -127,6 +127,10 @@ export class ConversationManager {
     return this._append("user", content, images);
   }
 
+  addToolResultMessage(tool_name: string, content: string): Message {
+    return this._append("user", content, undefined, { tool_name });
+  }
+
   addAssistantMessage(content: string, tool_calls?: readonly LLMToolCall[]): Message {
     return this._append("assistant", content, undefined, tool_calls?.length ? { tool_calls } : undefined);
   }
@@ -140,7 +144,12 @@ export class ConversationManager {
   }
 
   get toolResultIndices(): readonly number[] {
-    return this._messages.flatMap((message, index) => message.role === "tool" || message.id.startsWith("tool-result:") ? [index] : []);
+    return this.toolResultIndicesFor(this._messages);
+  }
+
+  toolResultIndicesFor(messages: readonly Message[]): readonly number[] {
+    const ownedIds = new Set(this._messages.filter((message) => message.id.startsWith("tool-result:")).map((message) => message.id));
+    return messages.flatMap((message, index) => ownedIds.has(message.id) ? [index] : []);
   }
 
   addSystemMessage(content: string): Message {

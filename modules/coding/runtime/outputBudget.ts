@@ -117,6 +117,7 @@ function finiteCount(value: unknown): number | null {
 export class TurnLedger {
   private reported: number | null = null;
   private appendedChars = 0;
+  private lastPrompt: number | null = null;
 
   /** Call once per completed model turn with the final chunk's counters. */
   turnCompleted(counters: TurnCounters | undefined, responseChars: number): void {
@@ -127,6 +128,7 @@ export class TurnLedger {
       Math.ceil(responseChars / CHARS_PER_TOKEN);
     // A turn without a count keeps the earlier report: the estimate still applies.
     if (prompt !== null) {
+      this.lastPrompt = prompt;
       this.reported = prompt + response;
       this.appendedChars = 0;
     } else if (this.reported !== null) {
@@ -151,8 +153,13 @@ export class TurnLedger {
     return this.reported === null ? undefined : this.usedTokens(historyChars);
   }
 
+  possiblyTruncated(contextTokens: number): boolean {
+    return this.lastPrompt !== null && this.lastPrompt >= contextTokens - TRUNCATION_MARGIN_TOKENS;
+  }
+
   reset(): void {
     this.reported = null;
     this.appendedChars = 0;
+    this.lastPrompt = null;
   }
 }

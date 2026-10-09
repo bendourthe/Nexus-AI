@@ -110,6 +110,7 @@ export function makeConversationManager(): ConversationManager {
   return mockOf<ConversationManager>({
     getHistory: vi.fn(() => [...messages]),
     addUserMessage: vi.fn((c: string) => addMsg("user", c)),
+    addToolResultMessage: vi.fn((tool_name: string, content: string) => addMsg("user", content, { tool_name })),
     addAssistantMessage: vi.fn((c: string, tool_calls?: readonly LLMToolCall[]) => addMsg("assistant", c, tool_calls ? { tool_calls } : undefined)),
     addToolMessage: vi.fn((tool_name: string, tool_call_id: string, content: string) => addMsg("tool", content, { tool_name, tool_call_id })),
     addSystemMessage: vi.fn((c: string) => addMsg("system", c)),

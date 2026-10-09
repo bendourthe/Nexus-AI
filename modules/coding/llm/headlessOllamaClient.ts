@@ -55,9 +55,17 @@ export function resolveHeadlessOllamaUrl(baseUrl?: string): string {
  */
 export function createLoadedContextProbe(
   options: HeadlessOllamaClientOptions = {},
-): (model: string) => Promise<number | null> {
+): (model: string, signal?: AbortSignal) => Promise<number | null> {
   const http = new OllamaHttp(resolveHeadlessOllamaUrl(options.baseUrl), options.timeoutMs ?? 5_000);
-  return (model) => (model ? loadedContextLength(http, model) : Promise.resolve(null));
+  return async (model, signal) => {
+    if (!model) return null;
+    const bounded = http.combineSignal(signal);
+    try {
+      return await loadedContextLength(http, model, bounded.signal);
+    } finally {
+      bounded.dispose();
+    }
+  };
 }
 
 export function createHeadlessOllamaClient(
