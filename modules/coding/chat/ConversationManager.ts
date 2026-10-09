@@ -42,6 +42,7 @@ export class ConversationManager {
   // Maintained by every mutation path so estimators can read it in O(1)
   // without iterating the array. Divide by ~4 for a rough token estimate.
   private _totalChars = 0;
+  private _historyRevision = 0;
 
   constructor(
     systemPrompt: string,
@@ -71,6 +72,7 @@ export class ConversationManager {
    * reconfiguration (e.g. plan mode toggle, skill activation).
    */
   rebuildSystemPrompt(newPrompt: string): void {
+    this._historyRevision += 1;
     this._systemPrompt = newPrompt;
     const systemMsg = this._messages[0];
     if (systemMsg && systemMsg.role === "system") {
@@ -156,7 +158,13 @@ export class ConversationManager {
     return this._totalChars;
   }
 
+  /** Changes when existing prompt history is rewritten, rather than appended. */
+  get historyRevision(): number {
+    return this._historyRevision;
+  }
+
   clearHistory(): void {
+    this._historyRevision += 1;
     this._messages.length = 0;
     this._totalChars = 0;
     this._append("system", this._systemPrompt);
@@ -178,6 +186,7 @@ export class ConversationManager {
     const session = this._store.getSession(sessionId);
     if (!session) return false;
 
+    this._historyRevision += 1;
     this._messages.length = 0;
     this._totalChars = 0;
     // Always keep the system prompt as the first message.
@@ -210,6 +219,7 @@ export class ConversationManager {
    * The caller is responsible for preserving system messages.
    */
   replaceMessages(messages: readonly Message[]): void {
+    this._historyRevision += 1;
     this._messages.length = 0;
     this._totalChars = 0;
     for (const m of messages) {
@@ -226,6 +236,7 @@ export class ConversationManager {
    * Called by ContextCompactor after receiving a summary from the model.
    */
   replaceWithSummary(summary: string, keepMessages: number): void {
+    this._historyRevision += 1;
     const systemMessages = this._messages.filter((m) => m.role === "system");
     const nonSystem = this._messages.filter((m) => m.role !== "system");
 
@@ -280,6 +291,7 @@ export class ConversationManager {
 
     if (drop.size === 0) return;
 
+    this._historyRevision += 1;
     const kept: Message[] = [];
     for (let i = 0; i < this._messages.length; i++) {
       if (!drop.has(i)) {

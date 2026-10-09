@@ -1,5 +1,6 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { createLmStudioClient, probeLmStudio } from "../../../modules/coding/llm/LmStudioClient.js";
+import type { LLMStreamChunk } from "../../../modules/coding/llm/types.js";
 
 const realFetch = globalThis.fetch;
 
@@ -13,6 +14,23 @@ function mockFetch(impl: (url: string, init?: RequestInit) => Promise<Response>)
 }
 
 describe("LmStudioClient", () => {
+  it.each(["sentinel", "eof"])("retains late usage after finish_reason at %s", async (ending) => {
+    const frames = [
+      { choices: [{ delta: { content: "Hello " }, finish_reason: null }] },
+      { choices: [{ delta: { content: "tail" }, finish_reason: "stop" }] },
+      { choices: [{ delta: { content: "IGNORED" }, finish_reason: null }] },
+      { choices: [], usage: { prompt_tokens: 12_000, completion_tokens: 17 } },
+    ].map((frame) => `data: ${JSON.stringify(frame)}\n`);
+    if (ending === "sentinel") frames.push("data: [DONE]\n");
+    mockFetch(async () => new Response(frames.join(""), { headers: { "Content-Type": "text/event-stream" } }));
+    const client = createLmStudioClient({ baseUrl: "http://127.0.0.1:1234", timeoutMs: 1000 });
+    const chunks: LLMStreamChunk[] = [];
+    for await (const chunk of client.streamChat({ model: "m", messages: [], stream: true })) chunks.push(chunk);
+    expect(chunks.map((chunk) => chunk.message.content).join("")).toBe("Hello tail");
+    expect(chunks.filter((chunk) => chunk.done)).toHaveLength(1);
+    expect(chunks.at(-1)).toMatchObject({ done: true, prompt_eval_count: 12_000, eval_count: 17, usage: { prompt_tokens: 12_000, completion_tokens: 17 } });
+  });
+
   it("checkHealth returns true on a 200 response", async () => {
     mockFetch(async () => new Response("{}", { status: 200 }));
     const client = createLmStudioClient({

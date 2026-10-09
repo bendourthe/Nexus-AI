@@ -13,6 +13,16 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-09] v2.12.0 Phase 2 - Window-aware document output
+
+Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md).
+
+Both coding loops size each document-tool result from current prompt usage and results already added in the turn. Unknown counts retain fixed-share caps; rewritten histories invalidate stale usage. OpenAI-shaped streams retain late usage with a bounded terminal wait and preserve completed responses after a subsequent transport reset.
+
+Verification: 6,162 root tests passed with 12 existing skips; lint/build and desktop typecheck passed. Real Ollama/OCR read three sections past page 50 with within-turn allowances of 11,428, 7,332, and 3,448 characters and a final prompt of 14,430 tokens in a 16,384-token window. The answer repeated excess content, so this is budget evidence rather than an answer-quality promotion. Support tier: internal-compatible; native GUI not observed. No pipeline change or Phase 2 remote publication. Next: Phase 3 native tool-role history.
+
+---
+
 ## [2026-10-08] v2.12.0 Phase 1 - Kolibri-1 decline and the declined-models index
 
 Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), absorbed seed [kolibri-1](v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md), history [P1](v2/v2.12/development/history/2026-10-08_v2.12.0-outline-promotion-readiness-phase-1.md).
@@ -31,6 +41,45 @@ Docs suite 11 files and 41 tests passed; lint clean. The guard was shown able to
 ### Known gaps
 
 Opened DF-v212-1 (decline), DF-v212-2 and DF-v212-3 (parked from the seed).
+
+---
+
+## [2026-10-07 23:52] - Session auto-summary [auto]
+
+### What Changed
+
+- bfc0fbc6 Merge pull request #95: archive the v2.11 plan and carry open gaps to v2.12
+- 7c6f7d97 Merge main back into develop after v2.11.0
+- 131385cb docs: archive the v2.11 plan and carry open gaps to v2.12
+- 7ef4f59b Merge pull request #93: chore(release): 2.11.0
+- ab6aed11 chore(release): 2.11.0
+
+### Files Modified
+
+- `CHANGELOG.md`
+- `README.md`
+- `docs/DEVLOG.md`
+- `docs/archive/v2/v2.10/known-gaps.md`
+- `docs/archive/v2/v2.11/comparisons/v2.11.0-comparison-pageindex-airi-clm.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-01_v2.11.0-pageindex-airi-clm-phase-1.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-2.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-3.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-4.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-03_v2.11.0-pageindex-airi-clm-phase-5.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-05_v2.11.0-pageindex-airi-clm-phase-6.md`
+- `docs/archive/v2/v2.11/development/outline-eval.md`
+- `docs/archive/v2/v2.11/development/outline-feasibility.md`
+- `docs/archive/v2/v2.11/development/plan-review-findings.md`
+- `docs/archive/v2/v2.11/development/v2.11.0-last-phase-evidence.md`
+- `docs/archive/v2/v2.11/docs-cleanup-report.md`
+- `docs/archive/v2/v2.11/known-gaps.md`
+- `docs/archive/v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md`
+- `docs/archive/v2/v2.5/known-gaps.md`
+- `docs/archive/v2/v2.6/known-gaps.md`
+
+### Current Status
+
+Auto-captured at session end on branch `feat/v2.12-outline-readiness`. Review and annotate as needed.
 
 ---
 

@@ -219,15 +219,35 @@ class LmStudioClientImpl implements LLMClient {
     const decoder = new TextDecoder();
     let buffer = "";
     let pendingUsage: OpenAiStreamChunk["usage"];
+    let pendingFinalMessage: LLMStreamChunk["message"] | undefined;
+    let finishDeadline: Promise<ReadableStreamReadResult<Uint8Array>> | undefined;
+    let finishTimer: ReturnType<typeof setTimeout> | undefined;
+    let finishWaitExpired = false;
     const toolCalls = new OpenAiToolCallAccumulator();
     const withCalls = (message: LLMStreamChunk["message"]): LLMStreamChunk["message"] => {
       const calls = toolCalls.drain();
       return calls.length > 0 ? { ...message, tool_calls: calls } : message;
     };
+    const terminalChunk = (): LLMStreamChunk => ({
+      message: withCalls(pendingFinalMessage ?? { role: "assistant", content: "" }),
+      done: true,
+      ...(pendingUsage ? { usage: pendingUsage } : {}),
+      ...(pendingUsage?.prompt_tokens === undefined ? {} : { prompt_eval_count: pendingUsage.prompt_tokens }),
+      ...(pendingUsage?.completion_tokens === undefined ? {} : { eval_count: pendingUsage.completion_tokens }),
+    });
 
     try {
       while (true) {
-        const { done, value } = await reader.read();
+        const next = reader.read();
+        let read: ReadableStreamReadResult<Uint8Array>;
+        try {
+          read = await (finishDeadline ? Promise.race([next, finishDeadline]) : next);
+        } catch (err) {
+          if (!pendingFinalMessage || signal?.aborted) throw err;
+          yield terminalChunk();
+          return;
+        }
+        const { done, value } = read;
         if (done) break;
         buffer += decoder.decode(value, { stream: true });
 
@@ -241,11 +261,7 @@ class LmStudioClientImpl implements LLMClient {
 
           const payload = rawLine.slice(5).trim();
           if (payload === "[DONE]") {
-            yield {
-              message: withCalls({ role: "assistant", content: "" }),
-              done: true,
-              ...(pendingUsage ? { usage: pendingUsage } : {}),
-            };
+            yield terminalChunk();
             return;
           }
 
@@ -254,24 +270,36 @@ class LmStudioClientImpl implements LLMClient {
             // v1.16.0 Phase 2.1: usage lands on a late frame, often after
             // finish_reason, so hold it and attach it to the terminal chunk.
             if (parsed.usage) pendingUsage = parsed.usage;
+            // Ignore later model text, but keep reading for the terminal usage frame.
+            if (pendingFinalMessage) continue;
             const choice = parsed.choices?.[0];
             toolCalls.add(choice?.delta?.tool_calls);
             const content = choice?.delta?.content ?? "";
             const role = choice?.delta?.role ?? "assistant";
             const isDone = choice?.finish_reason !== null && choice?.finish_reason !== undefined;
-            yield {
-              message: isDone ? withCalls({ role, content }) : { role, content },
-              done: isDone,
-              ...(isDone && pendingUsage ? { usage: pendingUsage } : {}),
-            };
-            if (isDone) return;
+            if (isDone) {
+              pendingFinalMessage = { role, content };
+              finishDeadline = new Promise((resolve) => {
+                finishTimer = setTimeout(() => {
+                  finishWaitExpired = true;
+                  resolve({ done: true, value: undefined });
+                }, this._timeoutMs);
+              });
+              continue;
+            }
+            yield { message: { role, content }, done: false };
           } catch {
             // Ignore malformed lines so a single corrupt frame does not
             // abort the entire stream.
           }
         }
       }
+      if (pendingFinalMessage) yield terminalChunk();
     } finally {
+      clearTimeout(finishTimer);
+      if (finishWaitExpired) {
+        try { await reader.cancel(); } catch { /* The completed response remains usable if cleanup fails. */ }
+      }
       reader.releaseLock();
     }
   }

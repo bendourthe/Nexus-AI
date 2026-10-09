@@ -38,6 +38,7 @@ import type { BudgetMiddleware } from "./BudgetMiddleware.js";
 import type { ToolCall, ToolResult } from "./types.js";
 import type { InboundClassifier } from "../../modules/coding/security/InboundClassifier.js";
 import { getLogger } from "../../modules/coding/utils/logger.js";
+import { TurnLedger, type TurnCounters } from "../../modules/coding/runtime/outputBudget.js";
 import type { WorkingMemory } from "../storage/WorkingMemory.js";
 import type { EpisodicMemory } from "../storage/EpisodicMemory.js";
 import { recordToolEvent } from "../storage/EpisodicMemory.js";
@@ -370,6 +371,14 @@ export class AgentLoop {
    * than in the text, so reading `content` alone dropped every call.
    */
   private _lastNativeCalls: LLMToolCall[] = [];
+  /**
+   * v2.12.0 -- how full the window is when each tool runs, read from this
+   * loop's own stream (not the shared metrics, which mix sessions), so
+   * document tools size their output from the room left.
+   */
+  private readonly _ledger = new TurnLedger();
+  private _ledgerConversationId: string | undefined;
+  private _ledgerHistoryRevision: number | undefined;
 
   constructor(
     private readonly _client: OllamaClient,
@@ -451,6 +460,7 @@ export class AgentLoop {
    * operator switches among owned agentic ids.
    */
   setModelName(modelName: string): void {
+    if (this._modelName !== modelName) this._ledger.reset();
     this._modelName = modelName;
     this._toolFormat = toolFormatForModel(modelName);
   }
@@ -1097,10 +1107,11 @@ export class AgentLoop {
     }
     const toolStartMs = Date.now();
 
-    // Pass the call id to the handler via a special _callId parameter.
+    // Pass the call id to the handler via a special _callId parameter, and
+    // (v2.12.0) how many tokens the conversation already holds via _usedTokens.
     const result = await this._registry.execute({
       ...call,
-      parameters: { ...call.parameters, _callId: call.id },
+      parameters: { ...call.parameters, _callId: call.id, _usedTokens: this._usedTokens() },
       source: call.source ?? this._toolCallSource,
     });
 
@@ -1238,6 +1249,7 @@ export class AgentLoop {
     // tools; identical to `result` for every other tool.
     const formattedResult = formatToolResult(call.tool, contextResult);
     this._manager.addUserMessage(formattedResult);
+    this._ledger.record(formattedResult.length);
 
     const identical = this._loopGuards.recordToolCall(call);
     if (identical.action === "halt") {
@@ -1364,6 +1376,13 @@ export class AgentLoop {
     postMessage({ type: "tokenCount", count, limit: this._maxTokens });
   }
 
+  /** Budget usage stays unknown until a backend count arrives, then includes later history. */
+  private _usedTokens(): number | undefined {
+    let chars = 0;
+    for (const message of this._manager.getHistory()) chars += message.content.length;
+    return this._ledger.toolBudgetTokens(chars);
+  }
+
   /**
    * Stream one model turn. Returns the accumulated response text, or null if
    * the stream was aborted or encountered an error (error is posted to webview).
@@ -1372,6 +1391,13 @@ export class AgentLoop {
     postMessage: PostMessageFn,
   ): Promise<string | null> {
     this._abortController = new AbortController();
+    const conversationId = this._manager.getHistory()[0]?.id;
+    const historyRevision = this._manager.historyRevision;
+    if (conversationId !== this._ledgerConversationId || historyRevision !== this._ledgerHistoryRevision) {
+      this._ledger.reset();
+      this._ledgerConversationId = conversationId;
+      this._ledgerHistoryRevision = historyRevision;
+    }
 
     // v1.5.0 Phase 5 (item 33): forward image attachments only to a
     // vision-capable model; text-only models get a clean text-only request.
@@ -1383,6 +1409,7 @@ export class AgentLoop {
     postMessage({ type: "status", state: "streaming" });
 
     let accumulated = "";
+    let counters: TurnCounters | undefined;
     this._lastNativeCalls = [];
 
     try {
@@ -1405,9 +1432,12 @@ export class AgentLoop {
           accumulated += token;
         }
         if (chunk.message.tool_calls) this._lastNativeCalls.push(...chunk.message.tool_calls);
+        if (chunk.done) counters = chunk;
       }
 
-      return this._cancelled ? null : accumulated;
+      if (this._cancelled) return null;
+      this._ledger.turnCompleted(counters, accumulated.length);
+      return accumulated;
     } catch (err) {
       if (this._abortController.signal.aborted) {
         return null; // normal cancellation — no error message
