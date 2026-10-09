@@ -215,9 +215,9 @@ describe.skipIf(!ENABLED)("document outline directional smoke", () => {
     const coldSeconds = (Date.now() - coldStart) / 1000;
     process.stdout.write(`[smoke] cold OCR complete ${coldSeconds.toFixed(1)}s\n`);
     const gpuAfterOcr = gpuSample();
-    // Warm every binary document at both page caps (parse_document's 50, the
-    // outline path's 200) so each arm's per-question clock measures the model
-    // and its tools, not a one-off OCR pass. The cold cost is reported as M2.
+    // Warm every binary document at page caps 50 and 200. Other uncached
+    // caps can still require OCR inside the per-question clock. The initial
+    // cold extraction cost is reported separately as M2.
     for (const name of readdirSync(workspace).filter((f) => !/\.(md|txt)$/.test(f))) {
       const b64 = readFileSync(join(workspace, name)).toString("base64");
       for (const maxPages of [50, 200]) {
@@ -252,6 +252,7 @@ describe.skipIf(!ENABLED)("document outline directional smoke", () => {
           let reply = "";
           let toolCalls = 0;
           let finishReason = "answered";
+          let returnedError: string | undefined;
           let status: Outcome["status"] = "answered";
           let cancellationFailed = false;
           const operation = (async () => {
@@ -279,6 +280,7 @@ describe.skipIf(!ENABLED)("document outline directional smoke", () => {
               reply = result?.finalText ?? "";
               toolCalls = result?.toolCalls ?? 0;
               finishReason = result?.finishReason ?? "none";
+              returnedError = result?.error;
               if (result?.error) status = "error";
               if (result?.finishReason === "max-iterations") status = "error";
               if (result?.finishReason === "aborted") status = "timeout";
@@ -313,7 +315,7 @@ describe.skipIf(!ENABLED)("document outline directional smoke", () => {
           outcomes.push({ arm, model, id: q.id, category: q.category, pastPage50: key.pastPage50, correct, status, toolCalls, seconds: (Date.now() - t0) / 1000, nativeToolResultRequests: nativeToolResultRequests - nativeBefore, compactions: compactions - compactionsBefore });
           process.stdout.write(`[smoke] ${model} arm ${arm} ${q.id} ${correct ? "correct" : status === "answered" ? "wrong" : status} finish=${finishReason} tools=${toolCalls}\n`);
           // Diagnostics stay outside the repository: keys and replies never enter docs.
-          if (DETAIL_LOG) appendFileSync(DETAIL_LOG, `${JSON.stringify({ ...outcomes[outcomes.length - 1], finishReason, tail: reply.slice(-400) })}\n`);
+          if (DETAIL_LOG) appendFileSync(DETAIL_LOG, `${JSON.stringify({ ...outcomes[outcomes.length - 1], finishReason, error: returnedError ?? null, tail: reply.slice(-400) })}\n`);
           if (cancellationFailed) throw new Error("question cancellation did not settle; stopping smoke run");
         }
       }
@@ -381,7 +383,7 @@ function render(r: {
     `- Cold first \`document_outline\` of ${r.coldFile ?? "no PDF selected"} (CPU OCR, empty cache): ${r.coldSeconds.toFixed(1)} s.`,
     `- GPU before the run: ${r.gpuBefore}. After the cold OCR: ${r.gpuAfterOcr}. During a model call: ${r.gpuDuringModel}.`,
     "- Runs were sequential, so OCR (CPU) and the model (GPU) did not contend in this harness.",
-    "- After this measurement every PDF and DOCX was extracted at both page caps (50 and 200) before any timed question, so per-question times exclude OCR in every arm. A user's first call on a new document pays the cold cost above.",
+    "- After this measurement every PDF and DOCX was extracted at page caps 50 and 200 before timed questions. Calls at other uncached caps can include OCR in the question time. The cold observation above covers the initial extraction, not every later OCR call.",
     "",
   ].join("\n");
 }
