@@ -639,6 +639,7 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 | Metric | Current | Target |
 |---|---|---|
 | Verified plan phases | 5 of 7 | 7 of 7 |
+| Phase 6 preregistration | 123-page fixture; 38 expanded questions; 36 preparation tests passed | Commit rule before dry/full A/C inference |
 | Phase 2 root test gate | 6,162 passed, 12 existing skips, no failures | Pass unchanged coverage thresholds |
 | Phase 2 coverage | 87.99% statements, 83.57% branches, 90.7% functions, 87.99% lines | Keep repository thresholds |
 | Phase 2 live gate | Passed: 11,428 -> 7,332 -> 3,448 characters; final prompt 14,430 tokens | Falling budgets and final prompt below 16,384 tokens |
