@@ -1,14 +1,14 @@
+// @vitest-environment node
 /**
  * v2.2.6 Phase 1 -- sidecar ops for studio.session.* (in-memory store).
  *
- * Lives in the ROOT suite: StudioSessionStore uses better-sqlite3, which the
- * desktop (jsdom) environment does not load.
+ * Runs in the Node environment so the sidecar's real SQLite store is exercised.
  */
 
 import { describe, expect, it } from "vitest";
 
 import { StudioSessionStore } from "../../../core/generations/StudioSessionStore.js";
-import { createStudioSessionOps } from "../../../desktop/sidecar/src/studio/sessionRuntime.js";
+import { createStudioSessionOps } from "../../sidecar/src/studio/sessionRuntime.js";
 
 function ops() {
   const store = new StudioSessionStore(":memory:");

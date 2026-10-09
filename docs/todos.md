@@ -4,12 +4,13 @@
 
 ## Dependency PR reconciliation (2026-10-08)
 
-Local repair gates: 6,102 root tests passed / 12 skipped, 2,227 desktop tests passed / 1 skipped, lint/build/architecture and the desktop web build passed. Production audit has zero advisories. Five dependency PRs remain open after closing obsolete #44 and #45. The full development audit still reports 51 findings; visual verification is not observed because no browser surface is available. Evidence: [dependency PR reconciliation](releases/v2/v2.12/development/dependency-pr-reconciliation.md).
+Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 desktop tests / one skipped, including both unchanged coverage gates. Every relocated case remains, and 20 meaningful cases were added. Fast/platform/web, production audit, dependency/catalog/permission/test-integrity, feature-drift and docs-layout checks pass; actual MCP stdio and VSIX contents checks pass. The full development audit remains 27 findings (three low, two moderate, 22 high, zero critical); production has zero advisories. Five dependency PRs remain open after closing obsolete #44/#45. Visual and native VS Code qualification remain unobserved. Dependency tracker: six of nine tasks complete. Evidence: [dependency PR reconciliation](releases/v2/v2.12/development/dependency-pr-reconciliation.md), [independent repair review](releases/v2/v2.12/development/dependency-repair-review.md).
 
 - [x] Pair Stryker core and its Vitest runner at 9.6.1 and verify real mutation execution.
 - [x] Upgrade MCP SDK to patched 1.31.0 and verify the compiled server over stdio.
 - [x] Isolate the worktree-read integration test and assert the retained file plus the matching read result.
 - [x] Reconcile and locally verify the runtime and development dependency updates in PRs #59 and #72.
+- [x] Verify the security toolchain migration, preserved test coverage, actual MCP transport and final VSIX contents.
 - [ ] Resolve the remaining development dependency audit findings with compatible patches and individually verified major upgrades.
 - [ ] Apply approved action pins for PRs #42 and #43 and validate the workflows.
 - [x] Close obsolete archived-installer updates #44 and #45 after documenting their unused runtime path; retain their unmerged branches.
