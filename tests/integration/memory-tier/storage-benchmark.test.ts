@@ -10,17 +10,15 @@
  * The plan's headline target is a 100k-chunk fixture. That fixture takes
  * minutes to build and consumes hundreds of MB; CI cannot afford it on
  * every run. This benchmark uses a 2k-chunk fixture (1/50th scale) so it
- * runs in seconds, and writes its results to the canonical results path so
- * the per-cycle docs entry can cite a real artifact. A separate manual
+ * runs in seconds. Set NEXUS_BENCH_RESULTS_DIR to retain a uniquely named report for cycle documentation. A separate manual
  * sweep at 100k for cycle-end documentation is recorded as an MT entry in
  * `docs/archive/v1/v1.2/known-gaps.md` and runnable via
  * `NEXUS_PHASE4_BENCH_SIZE=100000 npm run test`.
  *
- * Results are written to:
- *   tests/fixtures/memory-tier-benchmark-results/2026-05-26/results.json
+ * Reports use a temporary directory by default; historical fixture reports remain unchanged.
  */
 
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 import { promises as fs } from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -28,14 +26,11 @@ import { DenseIndex } from "../../../core/memory/DenseIndex.js";
 import { PrunedDenseIndex } from "../../../core/memory/PrunedDenseIndex.js";
 import { LocalEmbedder, hashEmbed } from "../../../core/memory/LocalEmbedder.js";
 
-const RESULTS_DIR = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "fixtures",
-  "memory-tier-benchmark-results",
-  "2026-05-26",
-);
+const retainedResultsDir = process.env["NEXUS_BENCH_RESULTS_DIR"] || undefined;
+const RESULTS_DIR = retainedResultsDir ?? await fs.mkdtemp(path.join(os.tmpdir(), "nexus-memory-bench-results-"));
+afterAll(async () => {
+  if (!retainedResultsDir) await fs.rm(RESULTS_DIR, { recursive: true, force: true });
+});
 
 const DEFAULT_CORPUS_SIZE = 2_000;
 const corpusSize = Number(process.env["NEXUS_PHASE4_BENCH_SIZE"] ?? DEFAULT_CORPUS_SIZE);
@@ -139,7 +134,7 @@ describe("Phase 4.4 memory-tier storage benchmark", () => {
 
     await fs.mkdir(RESULTS_DIR, { recursive: true });
     const summary = {
-      runAt: "2026-05-26",
+      runAt: new Date().toISOString(),
       corpusSize: result.size,
       embedder: "hash-fallback",
       embeddingDim: 384,
@@ -155,9 +150,9 @@ describe("Phase 4.4 memory-tier storage benchmark", () => {
       },
     };
     await fs.writeFile(
-      path.join(RESULTS_DIR, "results.json"),
+      path.join(RESULTS_DIR, `memory-tier-${Date.now()}-${process.pid}.json`),
       JSON.stringify(summary, null, 2),
-      "utf-8",
+      { encoding: "utf-8", flag: "wx" },
     );
 
     expect(result.storageRatio).toBeLessThanOrEqual(0.2);
