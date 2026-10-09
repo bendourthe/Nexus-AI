@@ -54,11 +54,9 @@ function git(args: string[], cwd: string): void {
 function makeRepo(initialBranch: string): string {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "gemma-git-hook-"));
   git(["init", "-q", "--initial-branch", initialBranch], dir);
-  git(["config", "user.email", "test@example.com"], dir);
-  git(["config", "user.name", "Test"], dir);
   fs.writeFileSync(path.join(dir, "seed.txt"), "seed", "utf-8");
   git(["add", "seed.txt"], dir);
-  git(["commit", "-q", "-m", "seed"], dir);
+  git(["-c", "user.email=test@example.com", "-c", "user.name=Test", "commit", "-q", "-m", "seed"], dir);
   return dir;
 }
 
@@ -98,9 +96,8 @@ describe("check-git-control-plane hook", () => {
 
   it("allows on a feature branch with a clean working tree", async () => {
     if (!gitAvailable) return;
-    const repo = makeRepo("main");
+    const repo = makeRepo("feature/test");
     try {
-      git(["checkout", "-q", "-b", "feature/test"], repo);
       const result = await runHook(repo);
       expect(result.exitCode).toBe(0);
     } finally {
@@ -110,9 +107,8 @@ describe("check-git-control-plane hook", () => {
 
   it("blocks when too many files are dirty", async () => {
     if (!gitAvailable) return;
-    const repo = makeRepo("main");
+    const repo = makeRepo("feature/dirty");
     try {
-      git(["checkout", "-q", "-b", "feature/dirty"], repo);
       for (let i = 0; i < 5; i++) {
         fs.writeFileSync(path.join(repo, `dirty-${i}.txt`), String(i), "utf-8");
       }

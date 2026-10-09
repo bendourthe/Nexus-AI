@@ -1,24 +1,27 @@
+// @vitest-environment node
 /**
  * v2.2.0 Phase 5 -- chat persistence IPC ops (5.1) and auto-titling (5.3).
  *
  * Every case runs against an in-memory store, so nothing here touches the
  * developer's real ~/.nexus/chat/explorer.db.
  *
- * Lives in the ROOT suite, not desktop/tests: `ChatExplorerStore` reaches a
- * vscode-coupled logger through `src/storage/dbPermissions`, which the desktop
- * (browser-ish) test environment cannot resolve.
+ * Runs in Node with a mocked logger because `src/storage/dbPermissions` reaches the VS Code logger. Stores and persistence operations remain real.
  */
 
 import { describe, expect, it, vi } from "vitest";
 
-import { ChatExplorerStore } from "../../../modules/chat/storage/ChatExplorerStore";
-import { createChatExplorerOps } from "../../../desktop/sidecar/src/chat/explorerRuntime";
+import { ChatExplorerStore } from "../../../modules/chat/storage/ChatExplorerStore.js";
+import { createChatExplorerOps } from "../../sidecar/src/chat/explorerRuntime.js";
 import {
   fallbackTitle,
   generateChatTitle,
   sanitizeTitle,
   type TitleModelPort,
-} from "../../../desktop/sidecar/src/chat/titleGenerator";
+} from "../../sidecar/src/chat/titleGenerator.js";
+
+vi.mock("../../../modules/coding/utils/logger.js", () => ({
+  getLogger: () => ({ debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() }),
+}));
 
 function ops() {
   const store = new ChatExplorerStore(":memory:");
