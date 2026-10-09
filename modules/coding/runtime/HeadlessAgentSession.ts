@@ -47,14 +47,19 @@ import {
 } from "../orchestration/HarnessSelector.js";
 import type { HeadlessTool, HeadlessToolResult } from "./headlessTools.js";
 import { TurnLedger, type TurnCounters } from "./outputBudget.js";
+import { elideToolResults } from "./elideToolResults.js";
+import { resolveEffectiveContextTokens } from "../documents/DocumentOutlineTools.js";
 
 export const DEFAULT_HEADLESS_MAX_ITERATIONS = 12;
+export const COMPACT_AT = 0.6;
+export const COMPACT_TO = 0.4;
 
 /** Streaming event surface (the sidecar maps these to its IPC event union). */
 export type HeadlessAgentEvent =
   | { readonly kind: "token"; readonly text: string }
   | { readonly kind: "toolCall"; readonly name: string; readonly args: Record<string, unknown> }
   | { readonly kind: "toolResult"; readonly name: string; readonly success: boolean; readonly output: string }
+  | { readonly kind: "compaction"; readonly elided: number; readonly charactersSaved: number }
   | { readonly kind: "done"; readonly finishReason: HeadlessFinishReason };
 
 export type HeadlessFinishReason = "done" | "max-iterations" | "aborted" | "error";
@@ -85,6 +90,8 @@ export interface HeadlessRunOptions {
 }
 
 export interface HeadlessAgentSessionOptions {
+  /** Probe the window actually loaded by the runtime when num_ctx is unset. */
+  readonly contextTokens?: (model: string, signal?: AbortSignal) => number | null | undefined | Promise<number | null | undefined>;
   readonly loopGuards?: LoopGuards;
   readonly securityPosture?: string;
   /**
@@ -271,6 +278,7 @@ export class HeadlessAgentSession {
     // v2.12.0: how full the window is when each tool runs, so document tools
     // size their output from the room left (see `outputBudget.ts`).
     const ledger = new TurnLedger();
+    const toolResultIndices: number[] = [];
     const messages: LLMMessage[] = [
       {
         role: "system",
@@ -303,6 +311,34 @@ export class HeadlessAgentSession {
 
     while (iterations < maxIterations) {
       if (opts.signal?.aborted) return finish("aborted");
+      let contextTokens: number;
+      try {
+        const configured = opts.llmOptions?.num_ctx;
+        const loaded = typeof configured === "number" && Number.isFinite(configured) && configured > 0 ? undefined : await this._options.contextTokens?.(opts.model, opts.signal);
+        contextTokens = resolveEffectiveContextTokens({ configuredTokens: configured, catalogTokens: loaded });
+      } catch (error) {
+        if (opts.signal?.aborted) return finish("aborted");
+        return finish("error", `Could not determine context window: ${error instanceof Error ? error.message : String(error)}`);
+      }
+      if (opts.signal?.aborted) return finish("aborted");
+      const chars = historyChars(messages);
+      let used = ledger.usedTokens(chars);
+      const possiblyTruncated = ledger.possiblyTruncated(contextTokens);
+      if (used >= contextTokens * COMPACT_AT || possiblyTruncated) {
+        // Preserve the density measured by the backend while estimating the rewrite.
+        const density = Math.max(1, used / Math.max(1, Math.ceil(chars / 4)));
+        const estimate = (history: readonly LLMMessage[]): number => Math.ceil(historyChars(history) / 4 * density);
+        const compacted = elideToolResults(messages, toolResultIndices, [0, 1, toolResultIndices.at(-1) ?? -1], contextTokens * COMPACT_TO, estimate);
+        if (compacted.elided > 0) {
+          messages.splice(0, messages.length, ...compacted.messages);
+          ledger.reset();
+          opts.onEvent?.({ kind: "compaction", elided: compacted.elided, charactersSaved: compacted.charactersSaved });
+          used = estimate(messages);
+        } else if (possiblyTruncated) {
+          return finish("error", "Context window may have truncated the prompt and no more old tool results can be elided. Start a new session or use a shorter task.");
+        }
+      }
+      if (used >= contextTokens) return finish("error", "Context window is full and no more old tool results can be elided. Start a new session or use a shorter task.");
       iterations += 1;
       const ceiling = guards.recordIteration();
       if (ceiling.action === "halt") {
@@ -358,6 +394,7 @@ export class HeadlessAgentSession {
       for (const result of parsed.results) {
         if (opts.signal?.aborted) return finish("aborted");
         if (!result.ok) {
+          toolResultIndices.push(messages.length);
           messages.push({
             role: "user",
             content: `<|tool_result>\n${JSON.stringify({ error: result.error })}\n<tool_result|>`,
@@ -372,7 +409,8 @@ export class HeadlessAgentSession {
         const tool = toolsByName.get(call.tool);
         if (!tool) {
           const content = formatToolResult(call.tool, asToolResult({ success: false, output: "", error: `unknown tool: ${call.tool}` }));
-          messages.push({ role: recordedCalls ? "tool" : "user", content, ...(recordedCalls ? { tool_name: call.tool, tool_call_id: call.id } : {}) });
+          toolResultIndices.push(messages.length);
+          messages.push({ role: recordedCalls ? "tool" : "user", content, tool_name: call.tool, ...(recordedCalls ? { tool_call_id: call.id } : {}) });
           ledger.record(content.length);
           continue;
         }
@@ -407,7 +445,8 @@ export class HeadlessAgentSession {
         // output, only the context copy is annotated.
         const contextResult = await this._screenInbound(call.tool, toolResult);
         const content = formatToolResult(call.tool, asToolResult(contextResult));
-        messages.push({ role: recordedCalls ? "tool" : "user", content, ...(recordedCalls ? { tool_name: call.tool, tool_call_id: call.id } : {}) });
+        toolResultIndices.push(messages.length);
+        messages.push({ role: recordedCalls ? "tool" : "user", content, tool_name: call.tool, ...(recordedCalls ? { tool_call_id: call.id } : {}) });
         ledger.record(content.length);
       }
     }

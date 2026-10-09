@@ -234,7 +234,7 @@ describe("AgentLoop", () => {
     expect(posted.some((m) => m.type === "toolResult")).toBe(true);
     expect(posted.some((m) => m.type === "messageComplete")).toBe(true);
     // Tool result is injected as user message in Gemma 4 format
-    expect(manager.addUserMessage).toHaveBeenCalledWith(expect.stringContaining("<|tool_result>"));
+    expect(manager.addToolResultMessage).toHaveBeenCalledWith("read_file", expect.stringContaining("<|tool_result>"));
   });
 
   it("executes a call the backend returns in message.tool_calls with no text call", async () => {

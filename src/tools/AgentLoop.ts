@@ -1266,7 +1266,7 @@ export class AgentLoop {
     // tools; identical to `result` for every other tool.
     const formattedResult = formatToolResult(call.tool, contextResult);
     if (native) this._manager.addToolMessage(call.tool, call.id, formattedResult);
-    else this._manager.addUserMessage(formattedResult);
+    else this._manager.addToolResultMessage(call.tool, formattedResult);
     this._ledger.record(formattedResult.length);
 
     const identical = this._loopGuards.recordToolCall(call);

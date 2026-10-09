@@ -13,6 +13,14 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-09] v2.12.0 Phase 4 - Shared tool-result compaction
+
+Both coding loops use caller-owned result elision while preserving system/task/newest result and native call metadata. The headless loop compacts at 60% toward 40%, rechecks real counts, and stops clearly when no safe elision remains. Desktop errors use the existing user-facing formatter; loaded-window probes remain bounded and cancellable through their response bodies. Legacy result markers survive fork/resume and remain excluded from human-turn protection.
+
+Verified: 672 expanded tests, 46 targeted desktop tests, strict lint, both typechecks, scratch production runtime/core builds, guarded sidecar build, and architecture checking with zero errors/18 existing warnings. The real 65-page PDF run completed nine reads and six compactions with task retained and final answer marker present; without-elision estimate 16,729 exceeds the 16,384-token window. This is context-management evidence, not answer-quality promotion. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md), [evidence](releases/v2/v2.12/development/evidence/phase-4-compaction.json). One local phase commit; no remote CI.
+
+---
+
 ## [2026-10-09] v2.12.0 Phase 3 - Native tool history
 
 Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md), [captured evidence](releases/v2/v2.12/development/evidence/phase-3-native-history.json).

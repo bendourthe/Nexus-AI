@@ -4,6 +4,7 @@ import type { OllamaClient, OllamaMessage, OllamaOptions } from "../llm/types.js
 import { countTokens } from "../config/PromptBudget.js";
 import { expandToolPairIndices, toolPairGroups } from "../llm/toolHistory.js";
 import { toLlmMessages } from "./llmMessages.js";
+import { elideToolResults } from "../runtime/elideToolResults.js";
 
 /**
  * Compacted-summary framing prefix. Tells the model that the embedded summary
@@ -61,6 +62,7 @@ export function estimateTokensForMessages(messages: readonly Message[]): number 
 /** True for a human user turn, excluding injected tool results and system nudges. */
 export function isHumanUserMessage(msg: Message): boolean {
   if (msg.role !== "user") return false;
+  if (msg.id.startsWith("tool-result:")) return false;
   const c = msg.content;
   if (c.startsWith("<|tool_result>")) return false;
   if (c.startsWith("[Tool ")) return false;
@@ -97,74 +99,27 @@ export class CompactionPipeline {
 }
 
 // ---------------------------------------------------------------------------
-// Strategy 1: ToolResultClearing (zero cost -- regex)
+// Strategy 1: ToolResultClearing (caller-owned results only)
 // ---------------------------------------------------------------------------
-
-/** Matches `<|tool_result>\n...\n<tool_result|>` blocks. */
-const TOOL_RESULT_RE = /<\|tool_result>\n([\s\S]*?)\n<tool_result\|>/g;
-
-/** Returns true if a message contains a tool result block. */
-function hasToolResult(content: string): boolean {
-  TOOL_RESULT_RE.lastIndex = 0;
-  return TOOL_RESULT_RE.test(content);
-}
-
-/** Build a one-line summary from a tool result JSON body. */
-function summarizeToolResult(jsonBody: string): string {
-  try {
-    const parsed = JSON.parse(jsonBody) as {
-      name?: string;
-      response?: { success?: boolean };
-    };
-    const name = parsed.name ?? "unknown";
-    const status = parsed.response?.success === false ? "failed" : "succeeded";
-    return `[Tool result cleared: ${name} ${status}]`;
-  } catch {
-    return "[Tool result cleared]";
-  }
-}
 
 export class ToolResultClearing implements CompactionStrategy {
   readonly name = "ToolResultClearing";
 
-  constructor(private readonly _keepRecent: number = 8) {}
+  constructor(
+    private readonly _keepRecent: number = 8,
+    private readonly _ownedIndices: (messages: readonly Message[]) => readonly number[] = (messages) => messages.flatMap((message, index) => message.id.startsWith("tool-result:") ? [index] : []),
+  ) {}
 
   canApply(messages: readonly Message[]): boolean {
-    const toolResultIndices = this._findToolResultIndices(messages);
-    return toolResultIndices.length > this._keepRecent;
+    return this._ownedIndices(messages).length > Math.max(1, this._keepRecent);
   }
 
-  async apply(messages: readonly Message[]): Promise<Message[]> {
-    const result = [...messages];
-    const toolResultIndices = this._findToolResultIndices(result);
-
-    // Indices are ordered oldest-first. Clear all except the last N.
-    const toClear = toolResultIndices.slice(0, -this._keepRecent);
-
-    for (const idx of toClear) {
-      const msg = result[idx];
-      if (!msg) continue;
-
-      TOOL_RESULT_RE.lastIndex = 0;
-      const cleared = msg.role === "tool" ? `[Tool result cleared: ${msg.tool_name ?? "unknown"}]` : msg.content.replace(TOOL_RESULT_RE, (_match, body: string) =>
-        summarizeToolResult(body),
-      );
-
-      result[idx] = { ...msg, content: cleared };
-    }
-
-    return result;
-  }
-
-  private _findToolResultIndices(messages: readonly Message[]): number[] {
-    const indices: number[] = [];
-    for (let i = 0; i < messages.length; i++) {
-      const msg = messages[i];
-      if (msg && (msg.role === "tool" || hasToolResult(msg.content))) {
-        indices.push(i);
-      }
-    }
-    return indices;
+  async apply(messages: readonly Message[], budgetTokens: number = 0): Promise<Message[]> {
+    const indices = this._ownedIndices(messages);
+    const owned = new Set(indices);
+    const taskIndex = messages.findIndex((message, index) => message.role === "user" && !owned.has(index));
+    const protectedIndices = [taskIndex, ...indices.slice(-Math.max(1, this._keepRecent)), ...messages.flatMap((message, index) => message.role === "system" ? [index] : [])];
+    return elideToolResults(messages, indices, protectedIndices, budgetTokens, estimateTokensForMessages).messages;
   }
 }
 
