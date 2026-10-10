@@ -10,9 +10,9 @@ For the ADR-level architecture see [../ARCHITECTURE.md](../ARCHITECTURE.md) and 
 |--------|------:|----:|-------------|-------------|
 | `activation` | 5 | 981 | [src/activation/extensionOnly.ts](../src/activation/extensionOnly.ts) | `activateExtensionOnly`, `activateProxy`, `COMPAT_COMMAND_MAP` |
 | `desktop` | 2 | 299 | [src/desktop/ipcClient.ts](../src/desktop/ipcClient.ts) | `createInProcessIpcClient`, `DaemonDiscoveryOptions`, `DaemonDiscoveryResult` |
-| `panels` | 32 | 10344 | [src/panels/webview/index.ts](../src/panels/webview/index.ts) | `ACTION_TAG_FN_SOURCE`, `ActionClassificationMessage`, `actionLabelFor` |
-| `storage` | 37 | 9131 | [src/storage/eviction/index.ts](../src/storage/eviction/index.ts) | `ARCEvictor`, `ArchiveResult`, `BrokenPathIssue` |
-| `tools` | 32 | 8676 | [src/tools/AgentLoop.ts](../src/tools/AgentLoop.ts) | `_checkCacheSizeForTests`, `AgentLoop`, `AgentLoopOptions` |
+| `panels` | 32 | 10345 | [src/panels/webview/index.ts](../src/panels/webview/index.ts) | `ACTION_TAG_FN_SOURCE`, `ActionClassificationMessage`, `actionLabelFor` |
+| `storage` | 37 | 9132 | [src/storage/eviction/index.ts](../src/storage/eviction/index.ts) | `ARCEvictor`, `ArchiveResult`, `BrokenPathIssue` |
+| `tools` | 32 | 8767 | [src/tools/AgentLoop.ts](../src/tools/AgentLoop.ts) | `_checkCacheSizeForTests`, `AgentLoop`, `AgentLoopOptions` |
 
 ## Module purposes
 
