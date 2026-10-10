@@ -1,0 +1,43 @@
+nexus -- Nexus desktop CLI
+
+Usage:
+  nexus skills sync [--tag <tag>] [--apply]
+  nexus skills list [--namespace <ns>]
+  nexus skills install <namespace>/<name> [--from <url>]
+  nexus skills remove <namespace>/<name>
+  nexus skills audit [--context-tokens <N>] [--budget-percent <N>] [--months <N>] [--skills-root <dir>] [--sessions-root <dir>] [--by-root builtin|user|devai-hub] [--deep-logs] [--json]
+  nexus skills optimize <id> [--apply] [--yes] [--model <name>] [--max-rounds <N>] [--skills-root <dir>] [--json]
+  nexus skills frontier <id> [--apply] [--yes] [--model <name>] [--max-candidates <N>] [--skills-root <dir>] [--json]
+  nexus memory audit [--since <ISO>] [--tier <t>] [--scope <id>] [--session <id>] [--op <op>] [--format table|json]
+  nexus memory export --out <file> [--scope <id>] [--tier <list>] [--since <ISO>]
+  nexus memory import --in <file>
+  nexus memory decay --now
+  nexus memory compress --file <path> [--session <id>] [--model <name>] [--dry-run]
+  nexus doctor [--migration-report] [--json] [--home <dir>] [--legacy-home <dir>] [--skills-root <dir>] [--stale-days <N>]
+  nexus trace export --trace <id> --out <file> --db <path> [--title <t>]
+  nexus golden run [--task <id>] [--mode dry|live] [--model <name>]
+  nexus session new --json <body> [--token t] [--host 127.0.0.1] [--port 11500]
+  nexus session send --json <body>
+  nexus session list
+  nexus models list
+  nexus generate queue --json <body>
+  nexus generate status --id <jobId>
+  nexus context [--json] [--token t] [--host 127.0.0.1] [--port 11500]
+  nexus logs [--lines N] [--json] [--token t] [--host 127.0.0.1] [--port 11500]
+  nexus media inspect <path> [--json] [--token t] [--host 127.0.0.1] [--port 11500]
+  nexus screenshot [--out <file>] [--json] [--token t] [--host 127.0.0.1] [--port 11500]
+  nexus capture [--route <path>] [--out <file>] [--json] [--token t] [--host 127.0.0.1] [--port 11500]
+  nexus check [...]                     deterministic source-code checks
+  nexus image [...]                     image-pipeline helpers
+  nexus video [...]                     video-pipeline helpers
+
+Output:
+  --json   stdout is one JSON value, or JSON Lines for a collection. See docs/reference/cli/contract.md.
+
+Reference:
+  docs/reference/cli/README.md    one page per command group
+
+Exit codes:
+  0  success
+  1  validation error (e.g. injection scan blocked the sync) or sidecar/auth error
+  2  invalid invocation / JSON schema error

@@ -3,6 +3,7 @@ import type {
   OllamaClient,
   OllamaChatChunk,
   OllamaModel,
+  LLMToolCall,
 } from "../../modules/coding/llm/types.js";
 import type { ConversationManager } from "../../modules/coding/chat/ConversationManager.js";
 import type { ToolRegistry } from "../../src/tools/ToolRegistry.js";
@@ -37,13 +38,16 @@ export function skipIfNoOllama(): boolean {
   return skipIfMissingEnv("OLLAMA_URL");
 }
 
-export type ChatRole = "user" | "assistant" | "system";
+export type ChatRole = "user" | "assistant" | "system" | "tool";
 
 export interface TestChatMessage {
   id: string;
   role: ChatRole;
   content: string;
   timestamp: number;
+  tool_calls?: readonly LLMToolCall[];
+  tool_name?: string;
+  tool_call_id?: string;
 }
 
 export function makeMessage(
@@ -98,15 +102,17 @@ export function makeConversationManager(): ConversationManager {
     makeMessage("sys", "system", "You are Gemma Code."),
   ];
   let counter = 0;
-  const addMsg = (role: ChatRole, content: string): TestChatMessage => {
-    const msg = makeMessage(String(++counter), role, content);
+  const addMsg = (role: ChatRole, content: string, tool?: Pick<TestChatMessage, "tool_calls" | "tool_name" | "tool_call_id">): TestChatMessage => {
+    const msg = { ...makeMessage(String(++counter), role, content), ...tool };
     messages.push(msg);
     return msg;
   };
   return mockOf<ConversationManager>({
     getHistory: vi.fn(() => [...messages]),
     addUserMessage: vi.fn((c: string) => addMsg("user", c)),
-    addAssistantMessage: vi.fn((c: string) => addMsg("assistant", c)),
+    addToolResultMessage: vi.fn((tool_name: string, content: string) => addMsg("user", content, { tool_name })),
+    addAssistantMessage: vi.fn((c: string, tool_calls?: readonly LLMToolCall[]) => addMsg("assistant", c, tool_calls ? { tool_calls } : undefined)),
+    addToolMessage: vi.fn((tool_name: string, tool_call_id: string, content: string) => addMsg("tool", content, { tool_name, tool_call_id })),
     addSystemMessage: vi.fn((c: string) => addMsg("system", c)),
   });
 }

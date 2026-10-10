@@ -59,9 +59,10 @@ export function parsePsResponse(raw: unknown): ReadonlyMap<string, number> {
 export async function loadedContextLength(
   http: Pick<OllamaHttp, "get">,
   model: string,
+  signal?: AbortSignal,
 ): Promise<number | null> {
   try {
-    const res = await http.get("/api/ps");
+    const res = await http.get("/api/ps", signal);
     if (!res.ok) return null;
     const models = ((await res.json()) as { models?: unknown }).models;
     if (!Array.isArray(models)) return null;

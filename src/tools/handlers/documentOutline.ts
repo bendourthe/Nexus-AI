@@ -18,6 +18,12 @@ export interface DocumentOutlineDeps {
   readonly getTools: () => DocumentOutlineTools;
 }
 
+/** v2.12.0: tokens already in the window, injected by `AgentLoop` as `_usedTokens`; absent means unknown. */
+export function usedTokensParam(parameters: Record<string, unknown>): number | undefined {
+  const value = parameters["_usedTokens"];
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : undefined;
+}
+
 function toToolResult(id: string, result: OutlineToolResult): ToolResult {
   return result.success
     ? { id, success: true, output: result.output }
@@ -29,7 +35,7 @@ export class DocumentOutlineTool implements ToolHandler {
 
   async execute(parameters: Record<string, unknown>): Promise<ToolResult> {
     const id = (parameters["_callId"] as string | undefined) ?? "";
-    return toToolResult(id, await this._deps.getTools().outline(parameters));
+    return toToolResult(id, await this._deps.getTools().outline(parameters, { usedTokens: usedTokensParam(parameters) }));
   }
 }
 
@@ -38,6 +44,6 @@ export class DocumentReadSectionTool implements ToolHandler {
 
   async execute(parameters: Record<string, unknown>): Promise<ToolResult> {
     const id = (parameters["_callId"] as string | undefined) ?? "";
-    return toToolResult(id, await this._deps.getTools().readSection(parameters));
+    return toToolResult(id, await this._deps.getTools().readSection(parameters, { usedTokens: usedTokensParam(parameters) }));
   }
 }

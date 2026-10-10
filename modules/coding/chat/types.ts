@@ -1,9 +1,14 @@
-export type Role = "user" | "assistant" | "system";
+import type { LLMToolCall } from "../llm/types.js";
+
+export type Role = "user" | "assistant" | "system" | "tool";
 
 export interface Message {
   readonly id: string;
   readonly role: Role;
   readonly content: string;
+  readonly tool_calls?: readonly LLMToolCall[];
+  readonly tool_name?: string;
+  readonly tool_call_id?: string;
   readonly timestamp: number;
   /**
    * v1.5.0 Phase 5 (item 33) -- optional base64-encoded image attachments on a

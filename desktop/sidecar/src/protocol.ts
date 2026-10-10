@@ -2124,7 +2124,12 @@ export const CodingParseDocumentSetEnabledResponse = z
   .strict();
 export const CodingDocumentOutlineStatusRequest = z.object({}).strict();
 export const CodingDocumentOutlineStatusResponse = z
-  .object({ enabled: z.boolean(), summariesEnabled: z.boolean() })
+  .object({
+    enabled: z.boolean(),
+    summariesEnabled: z.boolean(),
+    storedEnabled: z.boolean().optional(),
+    environmentOverrides: z.object({ enabled: z.boolean(), summariesEnabled: z.boolean() }).strict().optional(),
+  })
   .strict();
 export const CodingDocumentOutlineSetEnabledRequest = z
   .object({ enabled: z.boolean(), summariesEnabled: z.boolean().optional() })

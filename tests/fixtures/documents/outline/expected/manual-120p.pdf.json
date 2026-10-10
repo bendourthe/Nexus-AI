@@ -1,0 +1,607 @@
+{
+  "file": "manual-120p.pdf",
+  "kind": "pdf",
+  "pageCount": 123,
+  "headings": [
+    {
+      "title": "1 Introduction",
+      "level": 1,
+      "startPage": 3,
+      "firstWords": "Output operator system setting profile setting"
+    },
+    {
+      "title": "1.1 Storage Layout Details",
+      "level": 2,
+      "startPage": 3,
+      "firstWords": "Memory input control device memory service",
+      "table": {
+        "port": 10001,
+        "protocol": "protocol-1",
+        "default": "profile-1"
+      }
+    },
+    {
+      "title": "1.2 Troubleshooting Details",
+      "level": 2,
+      "startPage": 5,
+      "firstWords": "Cycle power buffer module config factor",
+      "table": {
+        "port": 10002,
+        "protocol": "protocol-2",
+        "default": "profile-2"
+      }
+    },
+    {
+      "title": "1.3 Performance Tuning Details",
+      "level": 2,
+      "startPage": 8,
+      "firstWords": "Sensor range record measure profile power",
+      "table": {
+        "port": 10003,
+        "protocol": "protocol-3",
+        "default": "profile-3"
+      }
+    },
+    {
+      "title": "1.4 Reporting Details",
+      "level": 2,
+      "startPage": 10,
+      "firstWords": "Window option profile option measure manual",
+      "table": {
+        "port": 10004,
+        "protocol": "protocol-4",
+        "default": "profile-4"
+      }
+    },
+    {
+      "title": "2 Installation",
+      "level": 1,
+      "startPage": 13,
+      "firstWords": "Record buffer device network value memory"
+    },
+    {
+      "title": "2.1 Scheduling Details",
+      "level": 2,
+      "startPage": 13,
+      "firstWords": "Schedule output layer buffer value option",
+      "table": {
+        "port": 10006,
+        "protocol": "protocol-6",
+        "default": "profile-6"
+      }
+    },
+    {
+      "title": "2.2 Security Model Details",
+      "level": 2,
+      "startPage": 15,
+      "firstWords": "Stream input memory buffer status config",
+      "table": {
+        "port": 10007,
+        "protocol": "protocol-7",
+        "default": "profile-7"
+      }
+    },
+    {
+      "title": "2.3 Maintenance Details",
+      "level": 2,
+      "startPage": 17,
+      "firstWords": "Engine filter channel limit handle layer",
+      "table": {
+        "port": 10008,
+        "protocol": "protocol-8",
+        "default": "profile-8"
+      }
+    },
+    {
+      "title": "2.4 Appendix Notes Details",
+      "level": 2,
+      "startPage": 20,
+      "firstWords": "Channel setting value setting report system",
+      "table": {
+        "port": 10009,
+        "protocol": "protocol-9",
+        "default": "profile-9"
+      }
+    },
+    {
+      "title": "3 Configuration",
+      "level": 1,
+      "startPage": 23,
+      "firstWords": "Storage range cycle engine sample profile"
+    },
+    {
+      "title": "3.1 Monitoring Details",
+      "level": 2,
+      "startPage": 23,
+      "firstWords": "Window buffer queue profile limit module",
+      "table": {
+        "port": 10011,
+        "protocol": "protocol-11",
+        "default": "profile-11"
+      }
+    },
+    {
+      "title": "3.2 Backup and Restore Details",
+      "level": 2,
+      "startPage": 25,
+      "firstWords": "Manual manual record storage stream window",
+      "table": {
+        "port": 10012,
+        "protocol": "protocol-12",
+        "default": "profile-12"
+      }
+    },
+    {
+      "title": "3.3 Calibration Details",
+      "level": 2,
+      "startPage": 27,
+      "firstWords": "Service window review driver index report",
+      "table": {
+        "port": 10013,
+        "protocol": "protocol-13",
+        "default": "profile-13"
+      }
+    },
+    {
+      "title": "3.4 Glossary Terms Details",
+      "level": 2,
+      "startPage": 30,
+      "firstWords": "Buffer factor status layer service config",
+      "table": {
+        "port": 10014,
+        "protocol": "protocol-14",
+        "default": "profile-14"
+      }
+    },
+    {
+      "title": "4 Network Settings",
+      "level": 1,
+      "startPage": 33,
+      "firstWords": "Device driver service review control limit"
+    },
+    {
+      "title": "4.1 Troubleshooting Details",
+      "level": 2,
+      "startPage": 33,
+      "firstWords": "Device profile profile value power schedule",
+      "table": {
+        "port": 10016,
+        "protocol": "protocol-16",
+        "default": "profile-16"
+      }
+    },
+    {
+      "title": "4.2 Performance Tuning Details",
+      "level": 2,
+      "startPage": 35,
+      "firstWords": "Signal input operator device report report",
+      "table": {
+        "port": 10017,
+        "protocol": "protocol-17",
+        "default": "profile-17"
+      }
+    },
+    {
+      "title": "4.3 Reporting Details",
+      "level": 2,
+      "startPage": 37,
+      "firstWords": "Output range stream handle handle stream",
+      "table": {
+        "port": 10018,
+        "protocol": "protocol-18",
+        "default": "profile-18"
+      }
+    },
+    {
+      "title": "4.4 Introduction Details",
+      "level": 2,
+      "startPage": 40,
+      "firstWords": "Output profile sensor network service value",
+      "table": {
+        "port": 10019,
+        "protocol": "protocol-19",
+        "default": "profile-19"
+      }
+    },
+    {
+      "title": "5 Storage Layout",
+      "level": 1,
+      "startPage": 43,
+      "firstWords": "Queue schedule buffer factor driver engine"
+    },
+    {
+      "title": "5.1 Security Model Details",
+      "level": 2,
+      "startPage": 43,
+      "firstWords": "Operator profile window setting schedule stream",
+      "table": {
+        "port": 10021,
+        "protocol": "protocol-21",
+        "default": "profile-21"
+      }
+    },
+    {
+      "title": "5.2 Maintenance Details",
+      "level": 2,
+      "startPage": 45,
+      "firstWords": "Index option input sensor limit option",
+      "table": {
+        "port": 10022,
+        "protocol": "protocol-22",
+        "default": "profile-22"
+      }
+    },
+    {
+      "title": "5.3 Appendix Notes Details",
+      "level": 2,
+      "startPage": 47,
+      "firstWords": "Control cycle schedule manual driver device",
+      "table": {
+        "port": 10023,
+        "protocol": "protocol-23",
+        "default": "profile-23"
+      }
+    },
+    {
+      "title": "5.4 Installation Details",
+      "level": 2,
+      "startPage": 50,
+      "firstWords": "Window device signal stream device index",
+      "table": {
+        "port": 10024,
+        "protocol": "protocol-24",
+        "default": "profile-24"
+      }
+    },
+    {
+      "title": "6 Scheduling",
+      "level": 1,
+      "startPage": 53,
+      "firstWords": "Service report layer operator input service"
+    },
+    {
+      "title": "6.1 Backup and Restore Details",
+      "level": 2,
+      "startPage": 53,
+      "firstWords": "Report storage output module setting network",
+      "table": {
+        "port": 10026,
+        "protocol": "protocol-26",
+        "default": "profile-26"
+      }
+    },
+    {
+      "title": "6.2 Calibration Details",
+      "level": 2,
+      "startPage": 55,
+      "firstWords": "Setting value control engine sensor engine",
+      "table": {
+        "port": 10027,
+        "protocol": "protocol-27",
+        "default": "profile-27"
+      }
+    },
+    {
+      "title": "6.3 Glossary Terms Details",
+      "level": 2,
+      "startPage": 57,
+      "firstWords": "Option driver sensor queue power sensor",
+      "table": {
+        "port": 10028,
+        "protocol": "protocol-28",
+        "default": "profile-28"
+      }
+    },
+    {
+      "title": "6.4 Configuration Details",
+      "level": 2,
+      "startPage": 60,
+      "firstWords": "Sensor storage record memory status profile",
+      "table": {
+        "port": 10029,
+        "protocol": "protocol-29",
+        "default": "profile-29"
+      }
+    },
+    {
+      "title": "7 Monitoring",
+      "level": 1,
+      "startPage": 63,
+      "firstWords": "System power measure signal sample option"
+    },
+    {
+      "title": "7.1 Performance Tuning Details",
+      "level": 2,
+      "startPage": 63,
+      "firstWords": "Factor system option schedule option filter",
+      "table": {
+        "port": 10031,
+        "protocol": "protocol-31",
+        "default": "profile-31"
+      }
+    },
+    {
+      "title": "7.2 Reporting Details",
+      "level": 2,
+      "startPage": 65,
+      "firstWords": "Input power buffer record memory control",
+      "table": {
+        "port": 10032,
+        "protocol": "protocol-32",
+        "default": "profile-32"
+      }
+    },
+    {
+      "title": "7.3 Introduction Details",
+      "level": 2,
+      "startPage": 67,
+      "firstWords": "System network storage manual buffer config",
+      "table": {
+        "port": 10033,
+        "protocol": "protocol-33",
+        "default": "profile-33"
+      }
+    },
+    {
+      "title": "7.4 Network Settings Details",
+      "level": 2,
+      "startPage": 70,
+      "firstWords": "Handle setting index manual limit module",
+      "table": {
+        "port": 10034,
+        "protocol": "protocol-34",
+        "default": "profile-34"
+      }
+    },
+    {
+      "title": "8 Troubleshooting",
+      "level": 1,
+      "startPage": 73,
+      "firstWords": "Status status input filter window record"
+    },
+    {
+      "title": "8.1 Maintenance Details",
+      "level": 2,
+      "startPage": 73,
+      "firstWords": "Output report setting output manual range",
+      "table": {
+        "port": 10036,
+        "protocol": "protocol-36",
+        "default": "profile-36"
+      }
+    },
+    {
+      "title": "8.2 Appendix Notes Details",
+      "level": 2,
+      "startPage": 75,
+      "firstWords": "Handle status layer profile handle channel",
+      "table": {
+        "port": 10037,
+        "protocol": "protocol-37",
+        "default": "profile-37"
+      }
+    },
+    {
+      "title": "8.3 Installation Details",
+      "level": 2,
+      "startPage": 77,
+      "firstWords": "Sensor channel value output engine range",
+      "table": {
+        "port": 10038,
+        "protocol": "protocol-38",
+        "default": "profile-38"
+      }
+    },
+    {
+      "title": "8.4 Storage Layout Details",
+      "level": 2,
+      "startPage": 80,
+      "firstWords": "Operator module driver network output stream",
+      "table": {
+        "port": 10039,
+        "protocol": "protocol-39",
+        "default": "profile-39"
+      }
+    },
+    {
+      "title": "9 Security Model",
+      "level": 1,
+      "startPage": 83,
+      "firstWords": "Profile handle limit output storage channel"
+    },
+    {
+      "title": "9.1 Calibration Details",
+      "level": 2,
+      "startPage": 83,
+      "firstWords": "Power output report storage driver filter",
+      "table": {
+        "port": 10041,
+        "protocol": "protocol-41",
+        "default": "profile-41"
+      }
+    },
+    {
+      "title": "9.2 Glossary Terms Details",
+      "level": 2,
+      "startPage": 85,
+      "firstWords": "Operator report memory factor input signal",
+      "table": {
+        "port": 10042,
+        "protocol": "protocol-42",
+        "default": "profile-42"
+      }
+    },
+    {
+      "title": "9.3 Configuration Details",
+      "level": 2,
+      "startPage": 87,
+      "firstWords": "Memory config network power layer power",
+      "table": {
+        "port": 10043,
+        "protocol": "protocol-43",
+        "default": "profile-43"
+      }
+    },
+    {
+      "title": "9.4 Scheduling Details",
+      "level": 2,
+      "startPage": 90,
+      "firstWords": "Report value memory schedule service range",
+      "table": {
+        "port": 10044,
+        "protocol": "protocol-44",
+        "default": "profile-44"
+      }
+    },
+    {
+      "title": "10 Backup and Restore",
+      "level": 1,
+      "startPage": 93,
+      "firstWords": "Config index network output driver queue"
+    },
+    {
+      "title": "10.1 Reporting Details",
+      "level": 2,
+      "startPage": 93,
+      "firstWords": "Input option range driver range filter",
+      "table": {
+        "port": 10046,
+        "protocol": "protocol-46",
+        "default": "profile-46"
+      }
+    },
+    {
+      "title": "10.2 Introduction Details",
+      "level": 2,
+      "startPage": 95,
+      "firstWords": "Signal queue index driver stream control",
+      "table": {
+        "port": 10047,
+        "protocol": "protocol-47",
+        "default": "profile-47"
+      }
+    },
+    {
+      "title": "10.3 Network Settings Details",
+      "level": 2,
+      "startPage": 97,
+      "firstWords": "Network operator value operator report record",
+      "table": {
+        "port": 10048,
+        "protocol": "protocol-48",
+        "default": "profile-48"
+      }
+    },
+    {
+      "title": "10.4 Monitoring Details",
+      "level": 2,
+      "startPage": 100,
+      "firstWords": "Storage record limit factor option option",
+      "table": {
+        "port": 10049,
+        "protocol": "protocol-49",
+        "default": "profile-49"
+      }
+    },
+    {
+      "title": "11 Performance Tuning",
+      "level": 1,
+      "startPage": 103,
+      "firstWords": "Power filter input schedule handle channel"
+    },
+    {
+      "title": "11.1 Appendix Notes Details",
+      "level": 2,
+      "startPage": 103,
+      "firstWords": "Setting channel limit factor value value",
+      "table": {
+        "port": 10051,
+        "protocol": "protocol-51",
+        "default": "profile-51"
+      }
+    },
+    {
+      "title": "11.2 Installation Details",
+      "level": 2,
+      "startPage": 105,
+      "firstWords": "Review status schedule option signal window",
+      "table": {
+        "port": 10052,
+        "protocol": "protocol-52",
+        "default": "profile-52"
+      }
+    },
+    {
+      "title": "11.3 Storage Layout Details",
+      "level": 2,
+      "startPage": 107,
+      "firstWords": "Index manual handle measure buffer window",
+      "table": {
+        "port": 10053,
+        "protocol": "protocol-53",
+        "default": "profile-53"
+      }
+    },
+    {
+      "title": "11.4 Troubleshooting Details",
+      "level": 2,
+      "startPage": 110,
+      "firstWords": "Setting profile queue manual service stream",
+      "table": {
+        "port": 10054,
+        "protocol": "protocol-54",
+        "default": "profile-54"
+      }
+    },
+    {
+      "title": "12 Maintenance",
+      "level": 1,
+      "startPage": 113,
+      "firstWords": "Record network limit value filter buffer"
+    },
+    {
+      "title": "12.1 Glossary Terms Details",
+      "level": 2,
+      "startPage": 113,
+      "firstWords": "System cycle handle network config window",
+      "table": {
+        "port": 10056,
+        "protocol": "protocol-56",
+        "default": "profile-56"
+      }
+    },
+    {
+      "title": "12.2 Configuration Details",
+      "level": 2,
+      "startPage": 115,
+      "firstWords": "Input operator factor control report driver",
+      "table": {
+        "port": 10057,
+        "protocol": "protocol-57",
+        "default": "profile-57"
+      }
+    },
+    {
+      "title": "12.3 Scheduling Details",
+      "level": 2,
+      "startPage": 118,
+      "firstWords": "Record power profile record storage setting",
+      "table": {
+        "port": 10058,
+        "protocol": "protocol-58",
+        "default": "profile-58"
+      }
+    },
+    {
+      "title": "12.4 Security Model Details",
+      "level": 2,
+      "startPage": 120,
+      "firstWords": "System stream operator record range cycle",
+      "table": {
+        "port": 10059,
+        "protocol": "protocol-59",
+        "default": "profile-59"
+      }
+    }
+  ]
+}

@@ -54,6 +54,12 @@ function scriptedLlm(responses: string[]): LLMClient {
 }
 
 describe("createHeadlessAgentRunner", () => {
+  it("shows the context-full recovery instruction in the desktop event stream", async () => {
+    const runner = createHeadlessAgentRunner({ llm: scriptedLlm(["Done."]), tools: [], workspace });
+    const events = await runner({ sessionId: "context-full", message: "protected ".repeat(120_000), model: requireModel("gemma4:e4b") });
+    expect(events).toContainEqual({ kind: "token", text: expect.stringContaining("Context window is full") });
+    expect(events.at(-1)).toEqual({ kind: "done", finishReason: "error" });
+  });
   it("maps a real agent turn onto the CodingSessionEvent IPC union, scoped to the session workspace", async () => {
     const runner = createHeadlessAgentRunner({
       llm: scriptedLlm([
@@ -98,7 +104,7 @@ describe("createHeadlessAgentRunner", () => {
       },
       // eslint-disable-next-line require-yield
       async *streamChat() {
-        throw new Error("stream down");
+        throw new Error(`stream down at /private/workspace/secret.txt ghp_${"a".repeat(36)}`);
       },
     };
     const runner = createHeadlessAgentRunner({ llm: failing, workspace });
@@ -108,6 +114,7 @@ describe("createHeadlessAgentRunner", () => {
       model: requireModel("gemma4:e4b"),
     });
     expect(events.at(-1)?.kind).toBe("done");
+    expect(events).toContainEqual({ kind: "token", text: "stream down at <path> <redacted-github-token>" });
   });
 
   it("refuses to fall back to the sidecar working directory when no workspace is supplied", async () => {

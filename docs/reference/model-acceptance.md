@@ -158,6 +158,8 @@ Every entry above is a maintenance commitment on three platforms. When a proposa
 
 The same test applies in the other direction. An entry that no longer holds its job, because something took it or because the job stopped existing, is a removal candidate. The map is the record of which entries still have a reason.
 
+Declined proposals and the conditions that would reopen them are listed in [declined-models.md](declined-models.md).
+
 ## Qwen3.8 family
 
 "3.8" is a release line, not a parameter count. That mislabel has been observed twice. Evidence for one row never transfers to another.

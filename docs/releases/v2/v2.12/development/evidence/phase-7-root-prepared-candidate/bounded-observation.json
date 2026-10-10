@@ -1,0 +1,73 @@
+{
+  "started_at": "2026-10-10T01:25:29.414425+00:00",
+  "finished_at": "2026-10-10T01:27:28.350819+00:00",
+  "exit": 0,
+  "command": [
+    "node",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "configs/vitest.config.ts",
+    "--coverage",
+    "--coverage.reportsDirectory=after/coverage-bounded",
+    "--maxWorkers=4",
+    "--reporter=json",
+    "--reporter=verbose",
+    "--outputFile=after/root-tests-bounded.json"
+  ],
+  "log_sha256": "c84bf0f99a2566cbd8ee08d5872259f79f1ed24e50431071eae41f029d8975ab",
+  "scope": "Complete prepared candidate root suite and unchanged coverage thresholds with four workers; original source not edited",
+  "diagnostic_basis": "All six default-worker failing files pass with four workers and unchanged assertions/timeouts; default complete run retained separately",
+  "input_manifest_sha256": "6242a44b5eae301295d3ec8f287114bcd42cabf33cf742e0fe41f8f1311613fc",
+  "tests": {
+    "success": true,
+    "numTotalTests": 6227,
+    "numPassedTests": 6215,
+    "numFailedTests": 0,
+    "numPendingTests": 12,
+    "numTotalTestSuites": 1977,
+    "numPassedTestSuites": 1977,
+    "numFailedTestSuites": 0,
+    "numPendingTestSuites": 0
+  },
+  "test_files": {
+    "total": 579,
+    "passed": 579,
+    "failed": 0
+  },
+  "failed_files": [],
+  "coverage": {
+    "lines": {
+      "total": 25771,
+      "covered": 22496,
+      "skipped": 0,
+      "pct": 87.29
+    },
+    "statements": {
+      "total": 28894,
+      "covered": 24598,
+      "skipped": 0,
+      "pct": 85.13
+    },
+    "functions": {
+      "total": 4867,
+      "covered": 4249,
+      "skipped": 0,
+      "pct": 87.3
+    },
+    "branches": {
+      "total": 18476,
+      "covered": 14132,
+      "skipped": 0,
+      "pct": 76.48
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "changed_candidate_source": [],
+  "changed_original_source": []
+}

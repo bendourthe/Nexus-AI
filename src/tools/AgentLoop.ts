@@ -38,6 +38,7 @@ import type { BudgetMiddleware } from "./BudgetMiddleware.js";
 import type { ToolCall, ToolResult } from "./types.js";
 import type { InboundClassifier } from "../../modules/coding/security/InboundClassifier.js";
 import { getLogger } from "../../modules/coding/utils/logger.js";
+import { TurnLedger, type TurnCounters } from "../../modules/coding/runtime/outputBudget.js";
 import type { WorkingMemory } from "../storage/WorkingMemory.js";
 import type { EpisodicMemory } from "../storage/EpisodicMemory.js";
 import { recordToolEvent } from "../storage/EpisodicMemory.js";
@@ -370,6 +371,14 @@ export class AgentLoop {
    * than in the text, so reading `content` alone dropped every call.
    */
   private _lastNativeCalls: LLMToolCall[] = [];
+  /**
+   * v2.12.0 -- how full the window is when each tool runs, read from this
+   * loop's own stream (not the shared metrics, which mix sessions), so
+   * document tools size their output from the room left.
+   */
+  private readonly _ledger = new TurnLedger();
+  private _ledgerConversationId: string | undefined;
+  private _ledgerHistoryRevision: number | undefined;
 
   constructor(
     private readonly _client: OllamaClient,
@@ -451,6 +460,7 @@ export class AgentLoop {
    * operator switches among owned agentic ids.
    */
   setModelName(modelName: string): void {
+    if (this._modelName !== modelName) this._ledger.reset();
     this._modelName = modelName;
     this._toolFormat = toolFormatForModel(modelName);
   }
@@ -912,29 +922,35 @@ export class AgentLoop {
       return "done";
     }
 
-    // Commit the assistant's "reasoning" turn with tool calls stripped.
-    this._manager.addAssistantMessage(
-      stripAgentToolCalls(accumulated, this._toolFormat),
-    );
-
     const executable = parseResults.filter((p) => p.ok);
+    const nativeCalls = this._lastNativeCalls.length ? executable.map((parsed) => ({ id: parsed.call.id, function: { name: parsed.call.tool, arguments: parsed.call.parameters } })) : undefined;
+    const assistantMessage = nativeCalls
+      ? this._manager.addAssistantMessage(stripAgentToolCalls(accumulated, this._toolFormat), nativeCalls)
+      : this._manager.addAssistantMessage(stripAgentToolCalls(accumulated, this._toolFormat));
+    const ownsBatch = (): boolean => !nativeCalls || this._manager.getHistory().some((message) => message.id === assistantMessage.id && message.tool_calls === nativeCalls);
     const admitted = this._loopGuards.admit(executable.length);
     if (admitted.dropped > 0 && admitted.verdict.message) {
       this._manager.addUserMessage(`[SYSTEM] ${admitted.verdict.message}`);
     }
     const toRun = executable.slice(0, admitted.admitted);
 
-    for (const parsed of toRun) {
-      const verdict = await this._runToolCall(
-        parsed.call,
-        iteration,
-        iterSpanId,
-        tracer,
-        postMessage,
-      );
-      if (verdict === "abort") {
-        tracer.endSpan(iterSpanId, "error", { reason: "tool loop terminated" });
-        return "abort";
+    try {
+      for (const parsed of toRun) {
+        const verdict = await this._runToolCall(parsed.call, iteration, iterSpanId, tracer, postMessage, nativeCalls !== undefined, ownsBatch);
+        if (verdict === "abort") {
+          tracer.endSpan(iterSpanId, "error", { reason: "tool loop terminated" });
+          return "abort";
+        }
+      }
+    } finally {
+      // Rejected or interrupted batches must not leave unmatched calls in live history.
+      for (const call of nativeCalls ?? []) {
+        if (!ownsBatch()) break;
+        if (!this._manager.getHistory().some((message) => message.role === "tool" && message.tool_call_id === call.id)) {
+          const content = formatToolResult(call.function.name, { id: call.id, success: false, output: "", error: "Tool call was not executed because the batch stopped or exceeded the call limit." });
+          this._manager.addToolMessage(call.function.name, call.id, content);
+          this._ledger.record(content.length);
+        }
       }
     }
 
@@ -1038,7 +1054,10 @@ export class AgentLoop {
     iterSpanId: string,
     tracer: Tracer,
     postMessage: PostMessageFn,
+    native = false,
+    ownsBatch: () => boolean = () => true,
   ): Promise<"continue" | "abort"> {
+    if (!ownsBatch()) return "abort";
     // Action classification: check risk level before execution.
     const classification = classifyAction(call, {
       execSandboxEnabled: isExecSandboxEnabled(getSettings().execSandbox),
@@ -1057,9 +1076,14 @@ export class AgentLoop {
         success: false,
         summary: `Blocked: ${classification.reason}`,
       });
-      this._manager.addUserMessage(
-        `[Tool ${call.tool}] Error: Action blocked for safety. ${classification.reason}`,
-      );
+      const content = `[Tool ${call.tool}] Error: Action blocked for safety. ${classification.reason}`;
+      if (native) {
+        const envelope = formatToolResult(call.tool, { id: call.id, success: false, output: "", error: content });
+        this._manager.addToolMessage(call.tool, call.id, envelope);
+        this._ledger.record(envelope.length);
+      } else {
+        this._manager.addUserMessage(content);
+      }
       const burst = this._loopGuards.recordToolOutcome(false);
       if (burst.action === "halt") {
         postMessage({
@@ -1096,17 +1120,20 @@ export class AgentLoop {
       });
     }
     const toolStartMs = Date.now();
+    if (!ownsBatch()) return "abort";
 
-    // Pass the call id to the handler via a special _callId parameter.
+    // Pass the call id to the handler via a special _callId parameter, and
+    // (v2.12.0) how many tokens the conversation already holds via _usedTokens.
     const result = await this._registry.execute({
       ...call,
-      parameters: { ...call.parameters, _callId: call.id },
+      parameters: { ...call.parameters, _callId: call.id, _usedTokens: this._usedTokens() },
       source: call.source ?? this._toolCallSource,
     });
 
     tracer.endSpan(toolSpanId, result.success ? "ok" : "error", {
       success: result.success,
     });
+    if (!ownsBatch()) return "abort";
 
     // v1.1.0 Phase 4.3 -- emit lifecycle.tool.post (always) and
     // lifecycle.tool.failed (additionally on failure). The error text is
@@ -1153,6 +1180,7 @@ export class AgentLoop {
     // annotated) output that the agent and the rolling result window see; the
     // real `result` still drives outcome tracking and telemetry above.
     const contextResult = await this._screenInboundResult(call, result);
+    if (!ownsBatch()) return "abort";
 
     postMessage({
       type: "toolResult",
@@ -1237,7 +1265,9 @@ export class AgentLoop {
     // `contextResult` is the screened/annotated form for inbound external-data
     // tools; identical to `result` for every other tool.
     const formattedResult = formatToolResult(call.tool, contextResult);
-    this._manager.addUserMessage(formattedResult);
+    if (native) this._manager.addToolMessage(call.tool, call.id, formattedResult);
+    else this._manager.addToolResultMessage(call.tool, formattedResult);
+    this._ledger.record(formattedResult.length);
 
     const identical = this._loopGuards.recordToolCall(call);
     if (identical.action === "halt") {
@@ -1364,6 +1394,13 @@ export class AgentLoop {
     postMessage({ type: "tokenCount", count, limit: this._maxTokens });
   }
 
+  /** Budget usage stays unknown until a backend count arrives, then includes later history. */
+  private _usedTokens(): number | undefined {
+    let chars = 0;
+    for (const message of this._manager.getHistory()) chars += message.content.length + (message.tool_calls?.length ? JSON.stringify(message.tool_calls).length : 0);
+    return this._ledger.toolBudgetTokens(chars);
+  }
+
   /**
    * Stream one model turn. Returns the accumulated response text, or null if
    * the stream was aborted or encountered an error (error is posted to webview).
@@ -1372,6 +1409,13 @@ export class AgentLoop {
     postMessage: PostMessageFn,
   ): Promise<string | null> {
     this._abortController = new AbortController();
+    const conversationId = this._manager.getHistory()[0]?.id;
+    const historyRevision = this._manager.historyRevision;
+    if (conversationId !== this._ledgerConversationId || historyRevision !== this._ledgerHistoryRevision) {
+      this._ledger.reset();
+      this._ledgerConversationId = conversationId;
+      this._ledgerHistoryRevision = historyRevision;
+    }
 
     // v1.5.0 Phase 5 (item 33): forward image attachments only to a
     // vision-capable model; text-only models get a clean text-only request.
@@ -1383,6 +1427,7 @@ export class AgentLoop {
     postMessage({ type: "status", state: "streaming" });
 
     let accumulated = "";
+    let counters: TurnCounters | undefined;
     this._lastNativeCalls = [];
 
     try {
@@ -1405,9 +1450,12 @@ export class AgentLoop {
           accumulated += token;
         }
         if (chunk.message.tool_calls) this._lastNativeCalls.push(...chunk.message.tool_calls);
+        if (chunk.done) counters = chunk;
       }
 
-      return this._cancelled ? null : accumulated;
+      if (this._cancelled) return null;
+      this._ledger.turnCompleted(counters, accumulated.length + (this._lastNativeCalls.length ? JSON.stringify(this._lastNativeCalls).length : 0));
+      return accumulated;
     } catch (err) {
       if (this._abortController.signal.aborted) {
         return null; // normal cancellation — no error message

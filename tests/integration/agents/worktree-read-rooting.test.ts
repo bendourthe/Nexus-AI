@@ -62,15 +62,16 @@ describe("read-tool worktree rooting (T012)", () => {
     const worktree = fs.mkdtempSync(path.join(os.tmpdir(), "wt-read-"));
     try {
       fs.writeFileSync(path.join(worktree, "parity.txt"), "PARITY");
+      fs.writeFileSync(path.join(testWorkspace, "parity.txt"), "WORKSPACE");
       delegateFsReadToDisk();
 
-      // No override: resolution falls back to this test's empty workspace
-      // root, so the worktree's parity.txt is not found -- proving the override
-      // is what re-bases the read onto the worktree.
+      // The same filename in two owned roots proves which one was read.
       const unrooted = new ReadFileTool();
       const res = await unrooted.execute({ path: "parity.txt", _callId: "r" });
 
-      expect(res.success).toBe(false);
+      expect(res.success).toBe(true);
+      expect(res.output).toContain("WORKSPACE");
+      expect(res.output).not.toContain("PARITY");
     } finally {
       fs.rmSync(worktree, { recursive: true, force: true });
     }

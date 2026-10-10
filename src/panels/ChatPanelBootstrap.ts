@@ -331,6 +331,7 @@ export function bootstrapChatPanel(input: ChatPanelBootstrapInput): Bootstrapped
       parseDocumentMemoryIngestEnabled: settings.parseDocumentMemoryIngestEnabled === true,
       memoryStore: memorySubsystem.memoryStore,
       sessionId: () => manager.sessionId,
+      configuredContextTokens: () => runtime.settings.maxTokens,
     }),
     documentOutline: buildDocumentOutlineDeps({
       documentOutlineEnabled: settings.documentOutlineEnabled === true,

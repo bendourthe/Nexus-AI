@@ -226,6 +226,7 @@ import {
   DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY,
   isDocumentOutlineEnabled,
   isDocumentOutlineSummariesEnabled,
+  documentOutlineEnvironmentOverrides,
 } from "../../../core/documents/documentOutlineEnabled.js";
 import {
   VIDEO2X_ENV_KEY,
@@ -2231,14 +2232,19 @@ export const handlers: Record<Method, HandlerFn> = {
   "coding.documentOutline.status": async (params, ctx) => {
     CodingDocumentOutlineStatusRequest.parse(params ?? {});
     const settings = resolveSettings(ctx);
-    const enabled = isDocumentOutlineEnabled({
-      settingsValue: await settings.get<boolean>(DOCUMENT_OUTLINE_SETTING_KEY),
-    });
+    const storedValue = await settings.get<boolean>(DOCUMENT_OUTLINE_SETTING_KEY);
+    const enabled = isDocumentOutlineEnabled({ settingsValue: storedValue });
     const summariesEnabled = isDocumentOutlineSummariesEnabled({
       settingsValue: await settings.get<boolean>(DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY),
       outlineEnabled: enabled,
     });
-    return { enabled, summariesEnabled };
+    const environmentOverrides = documentOutlineEnvironmentOverrides();
+    return {
+      enabled,
+      summariesEnabled,
+      ...(environmentOverrides.enabled ? { storedEnabled: isDocumentOutlineEnabled({ env: {}, settingsValue: storedValue }) } : {}),
+      ...(environmentOverrides.enabled || environmentOverrides.summariesEnabled ? { environmentOverrides } : {}),
+    };
   },
   "coding.documentOutline.setEnabled": async (params, ctx) => {
     const req = CodingDocumentOutlineSetEnabledRequest.parse(params ?? {});

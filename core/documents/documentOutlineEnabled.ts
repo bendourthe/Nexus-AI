@@ -19,6 +19,14 @@ function parseFlag(raw: string | undefined): boolean | undefined {
   return undefined;
 }
 
+/** Recognized environment values own the effective state shown in Settings. */
+export function documentOutlineEnvironmentOverrides(env: NodeJS.ProcessEnv = process.env): { enabled: boolean; summariesEnabled: boolean } {
+  return {
+    enabled: parseFlag(env[DOCUMENT_OUTLINE_ENV]) !== undefined,
+    summariesEnabled: parseFlag(env[DOCUMENT_OUTLINE_SUMMARIES_ENV]) !== undefined,
+  };
+}
+
 export interface FlagSources {
   readonly env?: NodeJS.ProcessEnv;
   /** Stored setting; anything but a real boolean `true` counts as off. */
