@@ -213,10 +213,12 @@ export function decompressBlockInConversation(
     return { ok: false, reason: `placeholder for ${blockId} not found in conversation` };
   }
   const result = state.decompressBlock(blockId);
+  // Protected native batches stayed beside the block; replace those copies on undo.
+  const retainedNativeIds = new Set(result.restoredMessages.filter((m) => m.role === "tool" || m.tool_calls?.length).map((m) => m.id));
   const next: Message[] = [
     ...messages.slice(0, placeholderIdx),
     ...result.restoredMessages,
-    ...messages.slice(placeholderIdx + 1),
+    ...messages.slice(placeholderIdx + 1).filter((m) => !retainedNativeIds.has(m.id)),
   ];
   manager.replaceMessages(next);
   return { ok: true, restored: result.restoredMessages.length };

@@ -38,7 +38,7 @@
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 import { CommandCompressor } from "../../../core/observability/CommandCompressor.js";
 import { CodeGraphMcpServer } from "../../../core/codegraph/mcp/index.js";
 import { SqliteGraphStore } from "../../../core/codegraph/store/index.js";
@@ -51,14 +51,12 @@ const FIXTURE_REPO = path.resolve(
   "fixtures",
   "codegraph-benchmark-repo",
 );
-const RESULTS_DIR = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "fixtures",
-  "coding-pillar-token-usage-results",
-  "2026-05-26",
-);
+const retainedResults = process.env["NEXUS_BENCH_RESULTS_DIR"];
+if (retainedResults) fs.mkdirSync(retainedResults, { recursive: true });
+const RESULTS_DIR = fs.mkdtempSync(path.join(retainedResults ?? os.tmpdir(), "token-usage-results-"));
+afterAll(() => {
+  if (!retainedResults) fs.rmSync(RESULTS_DIR, { recursive: true, force: true, maxRetries: 3, retryDelay: 50 });
+});
 
 interface WorkloadStep {
   readonly step: number;

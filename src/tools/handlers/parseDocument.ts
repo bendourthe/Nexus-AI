@@ -37,6 +37,9 @@ import type { ToolHandler, ToolResult } from "../types.js";
 import { matchesSecretPath } from "../../../modules/coding/utils/secretPaths.js";
 import { redactSecrets } from "../../../core/observability/redactSecrets.js";
 import { resolveInsideWorkspace, workspaceRoot } from "./pathGuard.js";
+import { resolveEffectiveContextTokens } from "../../../modules/coding/documents/DocumentOutlineTools.js";
+import { sizeParsedDocument } from "../../../modules/coding/runtime/outputBudget.js";
+import { usedTokensParam } from "./documentOutline.js";
 
 /** What the tool needs back from a parse. Mirrors `OcrParseResult` in core. */
 export interface ParsedDocumentResult {
@@ -66,6 +69,12 @@ export interface ParseDocumentDeps {
   readonly resolveParser: () => Promise<DocumentParser> | DocumentParser;
   /** Optional opt-in memory ingestion (v1.16.0 Phase 4.2). Off unless wired. */
   readonly ingestToMemory?: DocumentMemoryIngestor;
+  /**
+   * v2.12.0: the configured context window (settings.maxTokens / num_ctx). The
+   * output is sized from the room left in it; unknown falls back to the
+   * default window the outline tools use.
+   */
+  readonly contextTokens?: () => number | null | undefined;
 }
 
 /** Opt-in sink that stores parsed text as a memory observation. */
@@ -221,13 +230,19 @@ export class ParseDocumentTool implements ToolHandler {
       }
     }
 
+    // v2.12.0: size the text from the room left in the window, exactly as the
+    // headless twin does, so one large document cannot fill the conversation.
+    const window = resolveEffectiveContextTokens({ configuredTokens: this._deps.contextTokens?.() ?? null });
     return {
       id,
       success: true,
       output:
-        `Parsed "${p.path}" with ${parsed.engine} (${parsed.pageCount} page(s)):\n\n` +
-        safe +
-        memoryNote,
+        sizeParsedDocument(
+          `Parsed "${p.path}" with ${parsed.engine} (${parsed.pageCount} page(s)):\n\n`,
+          safe,
+          window,
+          usedTokensParam(parameters),
+        ) + memoryNote,
     };
   }
 }

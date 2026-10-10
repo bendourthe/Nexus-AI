@@ -14,6 +14,7 @@
 
 import { OllamaHttp } from "./OllamaHttp.js";
 import { instrumentStream } from "./instrumentStream.js";
+import { toRequestMessages } from "./toolHistory.js";
 import { createOllamaMemoryProbe, loadedContextLength } from "./ollamaMemory.js";
 import {
   LLMError,
@@ -54,9 +55,17 @@ export function resolveHeadlessOllamaUrl(baseUrl?: string): string {
  */
 export function createLoadedContextProbe(
   options: HeadlessOllamaClientOptions = {},
-): (model: string) => Promise<number | null> {
+): (model: string, signal?: AbortSignal) => Promise<number | null> {
   const http = new OllamaHttp(resolveHeadlessOllamaUrl(options.baseUrl), options.timeoutMs ?? 5_000);
-  return (model) => (model ? loadedContextLength(http, model) : Promise.resolve(null));
+  return async (model, signal) => {
+    if (!model) return null;
+    const bounded = http.combineSignal(signal);
+    try {
+      return await loadedContextLength(http, model, bounded.signal);
+    } finally {
+      bounded.dispose();
+    }
+  };
 }
 
 export function createHeadlessOllamaClient(
@@ -73,7 +82,7 @@ export function createHeadlessOllamaClient(
   ): AsyncGenerator<LLMStreamChunk> {
       const response = await http.postJson(
         "/api/chat",
-        JSON.stringify({ ...request, stream: true }),
+        JSON.stringify({ ...request, messages: toRequestMessages(request.messages, "ollama"), stream: true }),
         signal,
       );
       if (!response.ok) {

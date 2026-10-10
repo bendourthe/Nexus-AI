@@ -1,0 +1,195 @@
+{
+  "scope": "Partial Phase 7 local validation; root coverage and final artifact gate pending",
+  "recorded_at": "2026-10-10T00:07:20.970887+00:00",
+  "desktop": {
+    "command": "node ../node_modules/vitest/vitest.mjs run --config vitest.config.ts --coverage --coverage.reporter=json-summary --coverage.reporter=lcov --reporter=dot --maxWorkers=4",
+    "exit": 0,
+    "files_passed": 249,
+    "tests_passed": 2287,
+    "tests_skipped": 1,
+    "coverage": {
+      "lines": {
+        "total": 16125,
+        "covered": 13358,
+        "skipped": 0,
+        "pct": 82.84
+      },
+      "statements": {
+        "total": 18001,
+        "covered": 14434,
+        "skipped": 0,
+        "pct": 80.18
+      },
+      "functions": {
+        "total": 4217,
+        "covered": 3388,
+        "skipped": 0,
+        "pct": 80.34
+      },
+      "branches": {
+        "total": 13752,
+        "covered": 10023,
+        "skipped": 0,
+        "pct": 72.88
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "log": ".nexus-hub/phase7-desktop-coverage-repair-20261009T235309Z.log"
+  },
+  "lint": {
+    "root": "pass (previous retained milestone)",
+    "desktop_exit": 0,
+    "focused_security_exit": 0,
+    "focused_benchmarks_exit": 0
+  },
+  "architecture": {
+    "exit": 0,
+    "errors": 0,
+    "warnings": 18,
+    "modules": 504,
+    "dependencies": 1753
+  },
+  "benchmark_retention": {
+    "exit": 0,
+    "tests_passed": 5,
+    "test_files_passed": 4,
+    "new_run_directories": 4,
+    "new_reports": 9,
+    "historical_files_preserved": 10,
+    "historical_files_changed": [],
+    "retained_parent": "C:/Users/bdour/AppData/Local/Temp/nexus-v212-benchmark-retained-0bjpa_yj",
+    "log": ".nexus-hub/phase7-benchmark-preservation-20261010T000122Z.log"
+  },
+  "unmet": [
+    "Guarded context fixture approval and complete repaired root coverage",
+    "Original handbook replacement approval and canonical final-output receipts",
+    "Tier 3 deep pass, terminal CI disposition, final Goal review",
+    "Integration, installed qualification, M5, release and remaining-plan/gap closure"
+  ],
+  "isolated_build": {
+    "source_file_count": 1760,
+    "results": [
+      {
+        "command": "npm.cmd run build --silent",
+        "cwd": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-phase7-build-4cnygt47",
+        "exit": 0,
+        "started_at": "2026-10-10T00:11:23.288614+00:00",
+        "finished_at": "2026-10-10T00:11:32.362429+00:00",
+        "log": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-phase7-build-4cnygt47\\root-build.log"
+      },
+      {
+        "command": "npm.cmd run build:sidecar --silent",
+        "cwd": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-phase7-build-4cnygt47",
+        "exit": 0,
+        "started_at": "2026-10-10T00:11:32.720875+00:00",
+        "finished_at": "2026-10-10T00:11:38.625818+00:00",
+        "log": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-phase7-build-4cnygt47\\sidecar-build.log"
+      }
+    ],
+    "provenance": "phase-7-build-provenance.json",
+    "source_snapshot_drift": [],
+    "source_checkout_outputs_overwritten": false
+  },
+  "cli_help_smoke": {
+    "exit": 0,
+    "evidence": "phase-7-cli-help.json",
+    "scope": "help output only"
+  },
+  "canonical_gap_counts": {
+    "NI": [
+      0,
+      0
+    ],
+    "DF": [
+      1,
+      1
+    ],
+    "BG": [
+      0,
+      0
+    ],
+    "WN": [
+      3,
+      1
+    ],
+    "MT": [
+      0,
+      0
+    ],
+    "QG": [
+      1,
+      0
+    ]
+  },
+  "canonical_gap_totals": {
+    "open": 5,
+    "resolved": 2
+  },
+  "layout_scan": {
+    "selected_paths": 135,
+    "cat3": 25,
+    "cat4": 39,
+    "source_test_tooling": 71,
+    "moves": 0,
+    "archives": 0,
+    "deletions": 0,
+    "evidence": "phase-7-layout-scan.json"
+  },
+  "link_gate": {
+    "before": 3770,
+    "after": 3770,
+    "newly_broken": 0,
+    "fixed": 0,
+    "existing_unchanged": 3770,
+    "scope": "no new breakage, historical unresolved links remain"
+  },
+  "ci_comparison": {
+    "fields": 23,
+    "PASS": 6,
+    "FAIL": 11,
+    "PARTIAL": 3,
+    "NOT_PROVEN": 3,
+    "inputs": "phase-7-ci-inputs.json",
+    "status": "incomplete gate, migration decisions pending"
+  },
+  "handbook_final_candidate": {
+    "pages": 6,
+    "active_slide_states": 200,
+    "viewports": 8,
+    "contrast_brand_checks": 248,
+    "manifest": "phase-7-handbooks/cycle1-final-c5673074/final-candidate-manifest.json",
+    "source_review": "phase-7-handbooks/source-review.json",
+    "original_outputs_replaced": false,
+    "actual_output_receipts_complete": false,
+    "additional_accessibility": "phase-7-handbooks/accessibility-cycle1-final-observations.json",
+    "accessibility_findings": 0,
+    "cycle": 1
+  },
+  "deep_pass": {
+    "status": "incomplete NO-GO",
+    "inventory_rows": 31,
+    "rows_with_some_observed_evidence_including_partial_proposal_and_readonly": 29,
+    "rows_without_completed_installed_representative_exercise": 2,
+    "inventory": "../phase-7-deep-initial-findings.md",
+    "fix_rerun_cycles_used": 1,
+    "max": 3,
+    "cycle_results": "../phase-7-deep-cycle-1-results.md",
+    "headless_baseline": "phase-7-headless-loopback.json",
+    "headless_hostile": "phase-7-headless-adversarial.json",
+    "pdf_corrected": "phase-7-pdf-section-consumer.json",
+    "pdf_headings": 92,
+    "pdf_tables": 48,
+    "pdf_hashes_preserved": true
+  },
+  "budget_proposal": {
+    "tests_passed": 6,
+    "original_edited": false,
+    "receipt": "phase-7-budget-proposal-verified.json",
+    "approval_pending": true
+  }
+}

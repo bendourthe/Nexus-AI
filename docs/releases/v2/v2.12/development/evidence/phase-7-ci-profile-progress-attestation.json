@@ -1,0 +1,39 @@
+{
+  "created_at": "2026-10-10T01:17:43.475212+00:00",
+  "status": "PROPOSAL_VERIFIED_APPLICATION_PENDING",
+  "prior_terminal_manifest_sha256": "b67710b7e6d62eed816580b1ed473095c56dd4cd6e6bdd6ed7bb2ab845fb968f",
+  "prior_pins_checked": 198,
+  "intentional_changes_since_terminal": [
+    {
+      "path": "docs/todos.md",
+      "before": "35b0010c2393b7330912e04dab08acf282416b991acca88c201cb70ab752c853",
+      "after": "390015e20a10cfb2bad930dff9cdd73a3995fffd8c1d4b9475e53cf108b6460f"
+    }
+  ],
+  "unexpected_changes": [],
+  "new_retained_content": {
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-profile-proposal/ci-profile-correctness.patch": "308e00adc36fcaaaa01c2b3163a723e80ccfde760252d437f8b010d2d0cee6aa",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-profile-proposal/ci-profile-report.test.ts": "4d00d0e69fe3f8b00dc6d4826b81dca8d6665c3c39f36a7bb3254533f7f0c4ec",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-profile-proposal/ci-profile.proposed.mjs": "07f218aed5ec635d92621e9b9a57b5dacdf4cb88da75966202bfa8531dd828a9",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-profile-proposal/profile-tests.json": "3812d089cd0f5009011e8a72e5816c6bb9f7b459d0b3db4e3a7a0199deb4a2d1",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-profile-proposal/real-fast-observation.json": "67545fe613b40158ac4243ad054345fe99b862310580283855763363d4b6af12",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-profile-proposal/real-fast.log": "540d1cc12f2658cd71f95743fe7535e8d7f5e47fa0e6d408027e2fb74b8a6d73",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-profile-proposal/report-regressions.json": "6288453ad9232545b5f22652bdbb5eb4f8c6d88e3a617034557089a9859a46fd",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-profile-proposal/spawn-failure-observation.json": "d26dd84d5a08819dfdfc7202fafd4c856ab8b122df68d1956e2b36cd525b8b96",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-profile-proposal/verification.json": "9efd8f4072f807e8ae2a1d79e52d39ea3af0e5a8535273d867130edb9238edc4",
+    "docs/releases/v2/v2.12/development/phase-7-ci-profile-correctness-proposal.md": "6c7d30748eeff776b2517dd47107f39f1328c649fe067b2a4ffba60ae0c27a8a",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-profile-before.json": "eceb76dbf42e79b840309e58a8c8db7a05028467e47281d25e2ebcfbdc822cc3"
+  },
+  "verification_summary": {
+    "focus_tests": 16,
+    "actual_report_cli_observations": 26,
+    "real_windows_fast_groups": 5,
+    "real_windows_fast_exit": 0,
+    "patch_application_check_exit": 0,
+    "original_ci_profile_unchanged": true
+  },
+  "no_accepts_this_checkpoint": true,
+  "approval_question": "Exact CI profile patch and new regression test; no workflow/settings/permission/secret/publication changes",
+  "earlier_holds": "Budget fixture, original HTML replacements, handoff and publication approvals remain unanswered",
+  "whole_goal": "Incomplete; do not infer full CI or release success from temporary fast profile pass"
+}

@@ -22,6 +22,8 @@ export interface BuildParseDocumentDepsOptions {
   readonly sessionId?: string | (() => string | null | undefined);
   /** Tests inject a stub. Production builds an OCR-runtime adapter. */
   readonly createParser?: () => DocumentParser | Promise<DocumentParser>;
+  /** v2.12.0: configured runtime window (settings.maxTokens / num_ctx), when known. */
+  readonly configuredContextTokens?: () => number | null | undefined;
 }
 
 /** Shared with the v2.11.0 outline wiring so both tools use one OCR runtime adapter. */
@@ -71,5 +73,9 @@ export function buildParseDocumentDeps(
       })
     : undefined;
 
-  return { resolveParser, ingestToMemory };
+  return {
+    resolveParser,
+    ingestToMemory,
+    ...(opts.configuredContextTokens ? { contextTokens: opts.configuredContextTokens } : {}),
+  };
 }

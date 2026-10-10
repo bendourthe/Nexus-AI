@@ -297,7 +297,8 @@ export class ChatHistoryStore {
         "INSERT INTO messages (id, session_id, role, content, timestamp) VALUES (?, ?, ?, ?, ?)",
       );
       for (const message of prefix) {
-        insert.run(randomUUID(), id, message.role, message.content, message.timestamp);
+        const copiedId = message.id.startsWith("tool-result:") ? `tool-result:${randomUUID()}` : randomUUID();
+        insert.run(copiedId, id, message.role, message.content, message.timestamp);
       }
       this._db
         .prepare("UPDATE sessions SET active_leaf_session_id = ?, updated_at = ? WHERE id = ?")

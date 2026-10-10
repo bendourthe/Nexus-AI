@@ -14,6 +14,7 @@
 // `headlessOllamaClient.ts` records for the Ollama pair.
 
 import { instrumentStream } from "./instrumentStream.js";
+import { toRequestMessages } from "./toolHistory.js";
 import { OpenAiToolCallAccumulator, type OpenAiToolCallDelta } from "./openAiToolCalls.js";
 import {
   LLMError,
@@ -83,7 +84,7 @@ export function createHeadlessOpenAiClient(
   ): AsyncGenerator<LLMStreamChunk> {
     const body: Record<string, unknown> = {
       model: request.model,
-      messages: request.messages,
+      messages: toRequestMessages(request.messages, "legacy"),
       stream: true,
     };
     if (request.options) {
@@ -112,14 +113,34 @@ export function createHeadlessOpenAiClient(
     const decoder = new TextDecoder();
     let buffer = "";
     let pendingUsage: OpenAiStreamChunk["usage"];
+    let pendingFinalMessage: LLMStreamChunk["message"] | undefined;
+    let finishDeadline: Promise<ReadableStreamReadResult<Uint8Array>> | undefined;
+    let finishTimer: ReturnType<typeof setTimeout> | undefined;
+    let finishWaitExpired = false;
     const toolCalls = new OpenAiToolCallAccumulator();
     const withCalls = (message: LLMStreamChunk["message"]): LLMStreamChunk["message"] => {
       const calls = toolCalls.drain();
       return calls.length > 0 ? { ...message, tool_calls: calls } : message;
     };
+    const terminalChunk = (): LLMStreamChunk => ({
+      message: withCalls(pendingFinalMessage ?? { role: "assistant", content: "" }),
+      done: true,
+      ...(pendingUsage ? { usage: pendingUsage } : {}),
+      ...(pendingUsage?.prompt_tokens === undefined ? {} : { prompt_eval_count: pendingUsage.prompt_tokens }),
+      ...(pendingUsage?.completion_tokens === undefined ? {} : { eval_count: pendingUsage.completion_tokens }),
+    });
     try {
       for (;;) {
-        const { done, value } = await reader.read();
+        const next = reader.read();
+        let read: ReadableStreamReadResult<Uint8Array>;
+        try {
+          read = await (finishDeadline ? Promise.race([next, finishDeadline]) : next);
+        } catch (err) {
+          if (!pendingFinalMessage || signal?.aborted) throw err;
+          yield terminalChunk();
+          return;
+        }
+        const { done, value } = read;
         if (done) break;
         buffer += decoder.decode(value, { stream: true });
 
@@ -132,33 +153,41 @@ export function createHeadlessOpenAiClient(
 
           const payload = rawLine.slice(5).trim();
           if (payload === "[DONE]") {
-            yield {
-              message: withCalls({ role: "assistant", content: "" }),
-              done: true,
-              ...(pendingUsage ? { usage: pendingUsage } : {}),
-            };
+            yield terminalChunk();
             return;
           }
           try {
             const parsed = JSON.parse(payload) as OpenAiStreamChunk;
             if (parsed.usage) pendingUsage = parsed.usage;
+            // Ignore later model text, but keep reading for the terminal usage frame.
+            if (pendingFinalMessage) continue;
             const choice = parsed.choices?.[0];
             toolCalls.add(choice?.delta?.tool_calls);
             const content = choice?.delta?.content ?? "";
             const role = choice?.delta?.role ?? "assistant";
             const isDone = choice?.finish_reason !== null && choice?.finish_reason !== undefined;
-            yield {
-              message: isDone ? withCalls({ role, content }) : { role, content },
-              done: isDone,
-              ...(isDone && pendingUsage ? { usage: pendingUsage } : {}),
-            };
-            if (isDone) return;
+            if (isDone) {
+              pendingFinalMessage = { role, content };
+              finishDeadline = new Promise((resolve) => {
+                finishTimer = setTimeout(() => {
+                  finishWaitExpired = true;
+                  resolve({ done: true, value: undefined });
+                }, timeoutMs);
+              });
+              continue;
+            }
+            yield { message: { role, content }, done: false };
           } catch {
             // Ignore a malformed frame rather than aborting the whole stream.
           }
         }
       }
+      if (pendingFinalMessage) yield terminalChunk();
     } finally {
+      clearTimeout(finishTimer);
+      if (finishWaitExpired) {
+        try { await reader.cancel(); } catch { /* The completed response remains usable if cleanup fails. */ }
+      }
       reader.releaseLock();
     }
   }

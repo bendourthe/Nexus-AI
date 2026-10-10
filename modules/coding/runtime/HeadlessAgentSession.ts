@@ -46,14 +46,20 @@ import {
   defaultHarnessSelector,
 } from "../orchestration/HarnessSelector.js";
 import type { HeadlessTool, HeadlessToolResult } from "./headlessTools.js";
+import { TurnLedger, type TurnCounters } from "./outputBudget.js";
+import { elideToolResults } from "./elideToolResults.js";
+import { resolveEffectiveContextTokens } from "../documents/DocumentOutlineTools.js";
 
 export const DEFAULT_HEADLESS_MAX_ITERATIONS = 12;
+export const COMPACT_AT = 0.6;
+export const COMPACT_TO = 0.4;
 
 /** Streaming event surface (the sidecar maps these to its IPC event union). */
 export type HeadlessAgentEvent =
   | { readonly kind: "token"; readonly text: string }
   | { readonly kind: "toolCall"; readonly name: string; readonly args: Record<string, unknown> }
   | { readonly kind: "toolResult"; readonly name: string; readonly success: boolean; readonly output: string }
+  | { readonly kind: "compaction"; readonly elided: number; readonly charactersSaved: number }
   | { readonly kind: "done"; readonly finishReason: HeadlessFinishReason };
 
 export type HeadlessFinishReason = "done" | "max-iterations" | "aborted" | "error";
@@ -84,6 +90,8 @@ export interface HeadlessRunOptions {
 }
 
 export interface HeadlessAgentSessionOptions {
+  /** Probe the window actually loaded by the runtime when num_ctx is unset. */
+  readonly contextTokens?: (model: string, signal?: AbortSignal) => number | null | undefined | Promise<number | null | undefined>;
   readonly loopGuards?: LoopGuards;
   readonly securityPosture?: string;
   /**
@@ -199,6 +207,13 @@ function asToolResult(result: HeadlessToolResult): ToolResult {
   };
 }
 
+/** Characters across the history, for the ledger's estimate of tokens already in the window. */
+function historyChars(messages: readonly LLMMessage[]): number {
+  let total = 0;
+  for (const message of messages) total += message.content.length + (message.tool_calls?.length ? JSON.stringify(message.tool_calls).length : 0);
+  return total;
+}
+
 /**
  * The headless agentic loop. Construct once with an `LLMClient` port and the
  * headless tool set, then `run` per task. Stateless across runs (each run owns
@@ -260,6 +275,10 @@ export class HeadlessAgentSession {
     const format = opts.toolFormat ?? toolFormatForModel(opts.model);
     const guards = this._options.loopGuards ?? new LoopGuards();
     guards.reset();
+    // v2.12.0: how full the window is when each tool runs, so document tools
+    // size their output from the room left (see `outputBudget.ts`).
+    const ledger = new TurnLedger();
+    const toolResultIndices: number[] = [];
     const messages: LLMMessage[] = [
       {
         role: "system",
@@ -292,6 +311,34 @@ export class HeadlessAgentSession {
 
     while (iterations < maxIterations) {
       if (opts.signal?.aborted) return finish("aborted");
+      let contextTokens: number;
+      try {
+        const configured = opts.llmOptions?.num_ctx;
+        const loaded = typeof configured === "number" && Number.isFinite(configured) && configured > 0 ? undefined : await this._options.contextTokens?.(opts.model, opts.signal);
+        contextTokens = resolveEffectiveContextTokens({ configuredTokens: configured, catalogTokens: loaded });
+      } catch (error) {
+        if (opts.signal?.aborted) return finish("aborted");
+        return finish("error", `Could not determine context window: ${error instanceof Error ? error.message : String(error)}`);
+      }
+      if (opts.signal?.aborted) return finish("aborted");
+      const chars = historyChars(messages);
+      let used = ledger.usedTokens(chars);
+      const possiblyTruncated = ledger.possiblyTruncated(contextTokens);
+      if (used >= contextTokens * COMPACT_AT || possiblyTruncated) {
+        // Preserve the density measured by the backend while estimating the rewrite.
+        const density = Math.max(1, used / Math.max(1, Math.ceil(chars / 4)));
+        const estimate = (history: readonly LLMMessage[]): number => Math.ceil(historyChars(history) / 4 * density);
+        const compacted = elideToolResults(messages, toolResultIndices, [0, 1, toolResultIndices.at(-1) ?? -1], contextTokens * COMPACT_TO, estimate);
+        if (compacted.elided > 0) {
+          messages.splice(0, messages.length, ...compacted.messages);
+          ledger.reset();
+          opts.onEvent?.({ kind: "compaction", elided: compacted.elided, charactersSaved: compacted.charactersSaved });
+          used = estimate(messages);
+        } else if (possiblyTruncated) {
+          return finish("error", "Context window may have truncated the prompt and no more old tool results can be elided. Start a new session or use a shorter task.");
+        }
+      }
+      if (used >= contextTokens) return finish("error", "Context window is full and no more old tool results can be elided. Start a new session or use a shorter task.");
       iterations += 1;
       const ceiling = guards.recordIteration();
       if (ceiling.action === "halt") {
@@ -300,6 +347,7 @@ export class HeadlessAgentSession {
 
       let assistantText = "";
       const nativeCalls: LLMToolCall[] = [];
+      let counters: TurnCounters | undefined;
       try {
         llmCalls += 1;
         for await (const chunk of this._llm.streamChat(
@@ -318,16 +366,20 @@ export class HeadlessAgentSession {
             opts.onEvent?.({ kind: "token", text: delta });
           }
           if (chunk.message?.tool_calls) nativeCalls.push(...chunk.message.tool_calls);
-          if (chunk.done) break;
+          if (chunk.done) {
+            counters = chunk;
+            break;
+          }
         }
       } catch (err) {
         if (opts.signal?.aborted) return finish("aborted");
         return finish("error", err instanceof Error ? err.message : String(err));
       }
 
-      messages.push({ role: "assistant", content: assistantText });
-
       const parsed = parseAgentToolCalls(assistantText, format, nativeCalls);
+      const recordedCalls = nativeCalls.length ? parsed.results.flatMap((result) => result.ok ? [{ id: result.call.id, function: { name: result.call.tool, arguments: result.call.parameters } }] : []) : undefined;
+      messages.push({ role: "assistant", content: assistantText, ...(recordedCalls ? { tool_calls: recordedCalls } : {}) });
+      ledger.turnCompleted(counters, assistantText.length + (recordedCalls ? JSON.stringify(recordedCalls).length : 0));
       if (!parsed.hasAny) {
         const noAction = guards.recordNoAction();
         if (noAction.action === "halt") {
@@ -342,6 +394,7 @@ export class HeadlessAgentSession {
       for (const result of parsed.results) {
         if (opts.signal?.aborted) return finish("aborted");
         if (!result.ok) {
+          toolResultIndices.push(messages.length);
           messages.push({
             role: "user",
             content: `<|tool_result>\n${JSON.stringify({ error: result.error })}\n<tool_result|>`,
@@ -355,13 +408,10 @@ export class HeadlessAgentSession {
         }
         const tool = toolsByName.get(call.tool);
         if (!tool) {
-          messages.push({
-            role: "user",
-            content: formatToolResult(
-              call.tool,
-              asToolResult({ success: false, output: "", error: `unknown tool: ${call.tool}` }),
-            ),
-          });
+          const content = formatToolResult(call.tool, asToolResult({ success: false, output: "", error: `unknown tool: ${call.tool}` }));
+          toolResultIndices.push(messages.length);
+          messages.push({ role: recordedCalls ? "tool" : "user", content, tool_name: call.tool, ...(recordedCalls ? { tool_call_id: call.id } : {}) });
+          ledger.record(content.length);
           continue;
         }
         toolCalls += 1;
@@ -373,6 +423,7 @@ export class HeadlessAgentSession {
             : Object.freeze([opts.workdir]),
           workspaceId: opts.workspaceId,
           signal: opts.signal,
+          usedTokens: ledger.toolBudgetTokens(historyChars(messages)),
         });
         const burst = guards.recordToolOutcome(toolResult.success);
         if (burst.action === "halt") {
@@ -393,10 +444,10 @@ export class HeadlessAgentSession {
         // `AgentLoop._screenInboundResult`: the event above still carries the raw
         // output, only the context copy is annotated.
         const contextResult = await this._screenInbound(call.tool, toolResult);
-        messages.push({
-          role: "user",
-          content: formatToolResult(call.tool, asToolResult(contextResult)),
-        });
+        const content = formatToolResult(call.tool, asToolResult(contextResult));
+        toolResultIndices.push(messages.length);
+        messages.push({ role: recordedCalls ? "tool" : "user", content, tool_name: call.tool, ...(recordedCalls ? { tool_call_id: call.id } : {}) });
+        ledger.record(content.length);
       }
     }
 

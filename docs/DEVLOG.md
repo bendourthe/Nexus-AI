@@ -13,6 +13,114 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-09] v2.12.0 Phase 6 - Completed evaluation
+
+Both scored runs completed within the approved ceiling, with exact coverage (expanded 152/152, anchor 96/96) and zero restarts. The unchanged preregistered rule yields futility: arm C cross-section scores are Qwen 0/20 and Gemma 4/20. Both arm A user-outcome targets were missed. The flag stays experimental and off; recommend removal or narrowing at the v2.13 review with no repeats. Post-run reporting corrections retain future returned errors and qualify uncached OCR timing. Fresh checks: 36 fixture/question tests, scoped strict TypeScript and lint, and the actual harness's controlled-adapter reporting exercise passed. Historical diagnostic limits remain WN-v212-5. [Results](v2/v2.12/development/outline-eval.md), [history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [metadata](releases/v2/v2.12/development/evidence/phase-6-evaluation.json). One local results commit; no remote CI. Phase 7 remains open.
+
+---
+
+## [2026-10-09] v2.12.0 Phase 6 - Evaluation preregistration
+
+Prepared a deterministic 123-page manual and 38 expanded questions without changing the v2.11 anchor. The Phase 6 decision rule is frozen before inference. Shared deadline/cancellation and exclusive reports preserve the approved 14-hour bound and existing evidence. Fresh preparation checks: 36 tests, scoped strict lint and TypeScript pass. Results remain pending. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [preregistered rule](v2/v2.12/development/outline-eval.md). Local preregistration only; no remote CI.
+
+---
+
+## [2026-10-09] v2.12.0 Phase 5 - Desktop outline Settings
+
+Settings > Security now exposes experimental, off-by-default outline tools and optional summaries. Authoritative status disables uncertain writes; environment overrides keep their controls read-only and summaries-only changes preserve the saved outline preference. DF-v211-4 is resolved without answer-quality promotion.
+
+Verified: 2,245 desktop tests pass with one existing skip, focused regression first failed then passed, strict lint/typechecking, web and guarded sidecar builds pass. Real Chromium with the actual status/setter dispatcher verifies keyboard/toggle/reload and 320/768/1,200-pixel layout with zero runtime errors. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md), [evidence](releases/v2/v2.12/development/evidence/phase-5-settings/browser.json). One local commit; no remote CI.
+
+---
+
+## [2026-10-09] v2.12.0 Phase 4 - Shared tool-result compaction
+
+Both coding loops use caller-owned result elision while preserving system/task/newest result and native call metadata. The headless loop compacts at 60% toward 40%, rechecks real counts, and stops clearly when no safe elision remains. Desktop errors use the existing user-facing formatter; loaded-window probes remain bounded and cancellable through their response bodies. Legacy result markers survive fork/resume and remain excluded from human-turn protection.
+
+Verified: 672 expanded tests, 46 targeted desktop tests, strict lint, both typechecks, scratch production runtime/core builds, guarded sidecar build, and architecture checking with zero errors/18 existing warnings. The real 65-page PDF run completed nine reads and six compactions with task retained and final answer marker present; without-elision estimate 16,729 exceeds the 16,384-token window. This is context-management evidence, not answer-quality promotion. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md), [evidence](releases/v2/v2.12/development/evidence/phase-4-compaction.json). One local phase commit; no remote CI.
+
+---
+
+## [2026-10-09] v2.12.0 Phase 3 - Native tool history
+
+Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md), [captured evidence](releases/v2/v2.12/development/evidence/phase-3-native-history.json).
+
+Both coding loops retain native assistant calls and matching tool-role results for Ollama, including screened result bytes. Compaction and range compression preserve complete batches; guarded or interrupted calls get matching failure results. Persistence keeps user-role rows and rebuilds the legacy prompt on resume. OpenAI-compatible backends keep their current history format, recorded as DF-v212-4.
+
+Verification: 1,674 coding tests and 2,227 desktop tests passed, with existing skips. Lint, both typechecks, sidecar build, architecture checking and the baselined deterministic check passed. qwen3.5:9b and gemma4:12b each completed three real reads; VS Code 1.134.0 reopened the real SQLite session and rebuilt the expected prompt. Support tier: internal-compatible; full product activation and GUI were not exercised. No pipeline change or remote publication. Next: Phase 4 shared tool-result compaction.
+
+---
+
+## [2026-10-09] v2.12.0 Phase 2 - Window-aware document output
+
+Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md).
+
+Both coding loops size each document-tool result from current prompt usage and results already added in the turn. Unknown counts retain fixed-share caps; rewritten histories invalidate stale usage. OpenAI-shaped streams retain late usage with a bounded terminal wait and preserve completed responses after a subsequent transport reset.
+
+Verification: 6,162 root tests passed with 12 existing skips; lint/build and desktop typecheck passed. Real Ollama/OCR read three sections past page 50 with within-turn allowances of 11,428, 7,332, and 3,448 characters and a final prompt of 14,430 tokens in a 16,384-token window. The answer repeated excess content, so this is budget evidence rather than an answer-quality promotion. Support tier: internal-compatible; native GUI not observed. No pipeline change or Phase 2 remote publication. Next: Phase 3 native tool-role history.
+
+---
+
+## [2026-10-08] v2.12.0 Phase 1 - Kolibri-1 decline and the declined-models index
+
+Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), absorbed seed [kolibri-1](v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md), history [P1](v2/v2.12/development/history/2026-10-08_v2.12.0-outline-promotion-readiness-phase-1.md).
+
+### What Changed
+
+- **Kolibri-1 declined**: `DF-v212-1` records why (about 34 GB at the smallest community quant against a 24 GB top tier; no stock Ollama, llama.cpp, or LM Studio support) and the two conditions that must both hold to reopen it. No catalog row.
+- **Declined-models index**: `docs/reference/declined-models.md` lists every declined model proposal and links its record; the acceptance bar points to it in one sentence.
+- **Guard test**: `tests/unit/docs/v2.12.0-kolibri-exclusion.test.ts` keeps Kolibri out of the catalog, the tier defaults, and the bar, and fails on any index link that does not resolve.
+- **v2.11 housekeeping**: the archived v2.11 evidence file now records publication (PRs #91 to #95, the tag, and the release), T031 is ticked, and the seed plan is marked absorbed.
+
+### Verification
+
+Docs suite 11 files and 41 tests passed; lint clean. The guard was shown able to fail: one appended `Kolibri` line failed exactly the acceptance-bar assertion, and restoring the bytes returned the original SHA-256 and a pass.
+
+### Known gaps
+
+Opened DF-v212-1 (decline), DF-v212-2 and DF-v212-3 (parked from the seed).
+
+---
+
+## [2026-10-07 23:52] - Session auto-summary [auto]
+
+### What Changed
+
+- bfc0fbc6 Merge pull request #95: archive the v2.11 plan and carry open gaps to v2.12
+- 7c6f7d97 Merge main back into develop after v2.11.0
+- 131385cb docs: archive the v2.11 plan and carry open gaps to v2.12
+- 7ef4f59b Merge pull request #93: chore(release): 2.11.0
+- ab6aed11 chore(release): 2.11.0
+
+### Files Modified
+
+- `CHANGELOG.md`
+- `README.md`
+- `docs/DEVLOG.md`
+- `docs/archive/v2/v2.10/known-gaps.md`
+- `docs/archive/v2/v2.11/comparisons/v2.11.0-comparison-pageindex-airi-clm.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-01_v2.11.0-pageindex-airi-clm-phase-1.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-2.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-3.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-4.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-03_v2.11.0-pageindex-airi-clm-phase-5.md`
+- `docs/archive/v2/v2.11/development/history/2026-10-05_v2.11.0-pageindex-airi-clm-phase-6.md`
+- `docs/archive/v2/v2.11/development/outline-eval.md`
+- `docs/archive/v2/v2.11/development/outline-feasibility.md`
+- `docs/archive/v2/v2.11/development/plan-review-findings.md`
+- `docs/archive/v2/v2.11/development/v2.11.0-last-phase-evidence.md`
+- `docs/archive/v2/v2.11/docs-cleanup-report.md`
+- `docs/archive/v2/v2.11/known-gaps.md`
+- `docs/archive/v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md`
+- `docs/archive/v2/v2.5/known-gaps.md`
+- `docs/archive/v2/v2.6/known-gaps.md`
+
+### Current Status
+
+Auto-captured at session end on branch `feat/v2.12-outline-readiness`. Review and annotate as needed.
+
+---
+
 ## [2026-10-05] v2.11.0 Phase 6 - Final-phase duties
 
 Index: [plan](v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md), history [P6](v2/v2.11/development/history/2026-10-05_v2.11.0-pageindex-airi-clm-phase-6.md), [evidence](v2/v2.11/development/v2.11.0-last-phase-evidence.md).
@@ -10908,7 +11016,7 @@ if (estimatedTokens > conversationBudget) {
 | `src/chat/ConversationManager.ts` (+11 lines) | Added `replaceMessages(messages)` method for atomic message array replacement by the pipeline |
 | `src/config/settings.ts` (+4 lines) | Added `compactionKeepRecent` (default 10) and `compactionToolResultsKeep` (default 8) to `GemmaCodeSettings` |
 | `package.json` (+14 lines) | Registered both new settings in VS Code configuration |
-| `tests/unit/chat/CompactionStrategy.test.ts` (new, 35 tests) | Full coverage of all strategies, pipeline orchestration, and token estimation |
+| `tests/unit/chat/CompactionStrategy.test.ts` (new, 36 tests) | Full coverage of all strategies, pipeline orchestration, and token estimation |
 | `tests/unit/chat/ContextCompactor.test.ts` (updated, 12 tests) | Updated for pipeline-based `compact()`: mocks `replaceMessages` instead of `replaceWithSummary`; added pre-compaction hook tests |
 | `tests/unit/chat/ConversationManager.test.ts` (+3 tests) | Tests for `replaceMessages()`: replacement, onDidChange firing, getHistory visibility |
 

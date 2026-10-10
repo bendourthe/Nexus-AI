@@ -19,7 +19,7 @@ describe("LLMStreamChunkSchema", () => {
       },
       done: true,
     });
-    expect(chunk.message.tool_calls).toEqual([{ function: { name: "document_outline", arguments: { path: "a.md" } } }]);
+    expect(chunk.message.tool_calls).toEqual([{ id: "call_1", function: { name: "document_outline", arguments: { path: "a.md" } } }]);
   });
 });
 

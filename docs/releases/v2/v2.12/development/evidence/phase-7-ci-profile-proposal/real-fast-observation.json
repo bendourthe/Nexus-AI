@@ -1,0 +1,38 @@
+{
+  "started_at": "2026-10-10T01:13:05.577822+00:00",
+  "finished_at": "2026-10-10T01:13:15.696132+00:00",
+  "exit": 0,
+  "summary": {
+    "profile": "fast",
+    "status": "PASS",
+    "groups": [
+      {
+        "name": "npm run lint",
+        "status": "PASS",
+        "durationMs": 7650
+      },
+      {
+        "name": "node bin/nexus-check.mjs --baseline configs/nexus-check-baseline.json",
+        "status": "PASS",
+        "durationMs": 2167
+      },
+      {
+        "name": "node scripts/check-command-parity.mjs",
+        "status": "PASS",
+        "durationMs": 118
+      },
+      {
+        "name": "node scripts/check-release-assets.mjs",
+        "status": "PASS",
+        "durationMs": 56
+      },
+      {
+        "name": "node scripts/check-docs-layout.mjs",
+        "status": "PASS",
+        "durationMs": 55
+      }
+    ]
+  },
+  "log_path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-ci-profile-proposal-7dl0wn5a\\after\\real-fast.log",
+  "log_sha256": "540d1cc12f2658cd71f95743fe7535e8d7f5e47fa0e6d408027e2fb74b8a6d73"
+}

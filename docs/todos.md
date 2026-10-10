@@ -1,10 +1,26 @@
 # Nexus - Progress Dashboard
 
-**Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.12-outline-readiness`. Product version remains **2.11.0** until `/update release`; the independent dependency repair runs in `fix/stryker-pairing`.
+**Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.12-outline-continuation`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
+
+## v2.12 Phase 7 gates (2026-10-09)
+
+| Gate | Current evidence | Completion condition |
+|---|---|---|
+| Root full suite | Actual source (2026-10-10): 579 files, 6,215 passed, 0 failed, 12 existing skips; coverage 85.09/76.43/87.22/87.26 under unchanged gates | Done; rerun only if source changes before commit |
+| Desktop full suite | Final tree (2026-10-10): 249 files, 2,287 passed, one skipped; coverage 80.17/72.88/80.31/82.83; first run had one host-load ESLint timeout, test unchanged | Done |
+| Scoped regression checks | 40 merge/fixture tests, 14 security tests, five benchmark checks passed | Retain final-tree evidence |
+| Historical benchmark preservation | Default and explicit-retention runs pass; ten historical hashes preserved, four new run directories and nine new reports retained | Full root rerun also preserves them |
+| Lint and architecture | Root, desktop and focused changed-test lint pass; architecture has zero errors and 18 warnings | Preserve visible warning disposition and final build evidence |
+| Handbooks | Six approved HTML files installed with matching hashes; `docs:handbooks:check` passes; installed pages rendered at 1280 px and 390 px | Done |
+| CI profile and action pins | Approved patch, new test and five action pins applied; 16 + 70 tests pass; real fast profile PASS x5 | Hosted validation at integration; broader migration stays QG-v212-1 |
+| Approval gate | Superseded 2026-10-10: owner replied "All approved" for the exact prepared changes, which are now applied (earlier unanswered-approval records kept as history) | Branch push still needs its own explicit approval |
+| Publication | Final local gates pass; independent Goal review finds no code gap; local merge and final commit pending | Final local commit, then explicit push approval |
+
+Evidence: [Phase 7 record](releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md).
 
 ## Dependency PR reconciliation (2026-10-08)
 
-Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 desktop tests / one skipped, including both unchanged coverage gates. Every relocated case remains, and 20 meaningful cases were added. Fast/platform/web, production audit, dependency/catalog/permission/test-integrity, feature-drift and docs-layout checks pass; actual MCP stdio and VSIX contents checks pass. The full development audit remains 27 findings (three low, two moderate, 22 high, zero critical); production has zero advisories. Five dependency PRs remain open after closing obsolete #44/#45. Visual and native VS Code qualification remain unobserved. Dependency tracker: six of nine tasks complete. Evidence: [dependency PR reconciliation](releases/v2/v2.12/development/dependency-pr-reconciliation.md), [independent repair review](releases/v2/v2.12/development/dependency-repair-review.md).
+Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 desktop tests / one skipped, including both unchanged coverage gates. Every relocated case remains, and 20 meaningful cases were added. Fast/platform/web, production audit, dependency/catalog/permission/test-integrity, feature-drift and docs-layout checks pass; actual MCP stdio and VSIX contents checks pass. The full development audit remains 27 findings (three low, two moderate, 22 high, zero critical); production has zero advisories. The historical pre-publication check had five dependency PRs open after closing obsolete #44/#45; the fresh 2026-10-09 query has only #42 and #43 open. Visual and native VS Code qualification remain unobserved. Dependency tracker: seven of nine tasks complete. Evidence: [dependency PR reconciliation](releases/v2/v2.12/development/dependency-pr-reconciliation.md), [independent repair review](releases/v2/v2.12/development/dependency-repair-review.md).
 
 - [x] Pair Stryker core and its Vitest runner at 9.6.1 and verify real mutation execution.
 - [x] Upgrade MCP SDK to patched 1.31.0 and verify the compiled server over stdio.
@@ -14,7 +30,7 @@ Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 des
 - [ ] Resolve the remaining development dependency audit findings with compatible patches and individually verified major upgrades.
 - [ ] Apply approved action pins for PRs #42 and #43 and validate the workflows.
 - [x] Close obsolete archived-installer updates #44 and #45 after documenting their unused runtime path; retain their unmerged branches.
-- [ ] Publish the verified dependency repair through `develop` and close superseded PR #48.
+- [x] Publish the verified dependency repair through `develop` and close superseded PR #48; PR #96 merged at `092ce3c2` on 2026-10-09, and #48 closed.
 
 > **STUDIO UX PASS 2 AND ONE PROGRESS-BAR DESIGN (2026-09-10, round 12)** -- second operator screenshot batch. Progress: alignment is decided by PHASE, not tab (loading centered everywhere, generating the left pill everywhere); round 10 had made everything left, which fixed the studio/chat mismatch but flattened this distinction. The cost-model line is gone -- the up-front estimate is now shown directly as the remaining figure, counted down by elapsed time, and says `almost done` past the estimate rather than promising a number it missed. Time units are spelled out app-wide. Video durations: the options mutated on every model switch (2/3/4/5 -> 2/3/4 -> 2/3) because they were per-pass native lengths narrowed by frame budget. A long clip is a CHAIN (`planVideoContinuation`, 120 s cap), so the offered set is one constant 4/6/8/10 on every model, never under 3 s, and the frame budget now decides the SEGMENT length (`nativeClipSeconds`). Segments respect BOTH ceilings: Wan 2.2's 121 frames would be 7.5 s at 16 fps, past its 5 s coherence budget, so the smaller wins. The `Adjusted for X` sentence is gone from both studios. Composer row: one control treatment (Context pill height/radius/border/fill), settings sized to content so a long option cannot crop, pill absorbs the slack so the row has no trailing gap. Image viewer: one Save and one Copy, each asking which version. The studio icon row is no longer rendered there -- but TWO of those buttons DID work (Copy Workflow, Use as Source) and only when workflow metadata existed, which is indistinguishable from broken when it does not; they moved to the transcript row and render only when they have something to act on, rather than being deleted. Personas: named library with a composer dropdown, save-as, the active name beside the Persona button, and a Personas settings tab (table, Markdown editor + preview, import .md, export, rename, delete). The preview renders React elements, not an HTML string, so there is no `dangerouslySetInnerHTML`. Installer bar: `.nexus-genbar` ported into the Qt widget -- dark inset capsule, accent ramp, outer glow, five drifting particle layers. The old sweeping sheen and glass ramp were removed; beside the desktop bar they washed the fill into a pale band that read as a different control. Percent badge and 30px height kept, because this is the installer's only progress readout. Sixth installer rebuild (2026-09-11 07:0x): `build:shell` then `build-windows.ps1 -SkipSign` -> `dist/NexusSetup.exe` 242.7 MB, SHA256 B8BAD215...4A8D89C0, payload sha256 9f315a936f64, snapshot embedded (3301 KB, tag 4.9.0). `smoke-windows-exe.ps1` 5/5. Verified: tsc + eslint --max-warnings=0 + vite build clean; desktop vitest 2138 tests at the 36-failure better-sqlite3 ABI baseline; installer ruff + full pytest green. Progress states and the installer bar rendered and inspected. Open: personas persist to `localStorage` (per-machine, no sync, lost on a profile reset) and the persona name is not yet written into the transcript itself, only the composer; the composer row and image viewer are code-verified but not screenshotted; the frozen exe was captured at 0% so its bar FILL and particles are verified only by the in-process render; QG-1 (no live GPU run) still stands.
 
@@ -178,6 +194,8 @@ Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 des
 | Tasks done (v0.2.0) | 44 / 44 | 44 / 44 | 0 |
 | Tasks done (v0.3.0) | 55 / 55 | 55 / 55 | 0 |
 | Tasks done (v0.4.0) | 16 (P1) + 17 (P2) + 21 (P3) + 21 (P4) + 22 (P5) | ~135 / ~135 | in-progress |
+| Sources compared (Craft editors + EmbeddingGemma 2, 2026-10-07) | 2 / 2 | 2 / 2 | 0 |
+| v2.13 adoption plan implementation tasks (finalized, 2026-10-08) | 0 / 31 | 31 | 31 |
 
 ---
 
@@ -645,6 +663,52 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 **Branch**: all v1.9.0 UI-rework work is on `feat/v1.9.0-installer-phase-1` (operator kept both workstreams on one branch; can split at push). Phases 1-4 landed 2026-07-07, Phase 5 landed 2026-07-08, Phases 6-9 landed 2026-07-09 -- **all 9 phases code-complete**. Ready to merge to `main` (semantic-release cuts the version/CHANGELOG/tag) once the on-device visual QA passes. Open on-device items: `UIR.P7.A` (installer DoD 1-8 walk-through), `UIR.P8.A` (app aurora render + reduced-motion), `UIR.P9.A` (app DoD 9-11: disclaimer + both auroras + taskbar icon + Dashboard logo).
 
 ---
+
+## Outline promotion readiness (active v2.12.0)
+
+| Metric | Current | Target |
+|---|---|---|
+| Verified plan phases | 6 of 7 | 7 of 7 |
+| Phase 6 preregistration | Rule committed at `e8ee872d` before inference; 123-page fixture; 38 expanded questions; 36 preparation tests passed | Preserve the frozen rule through results analysis |
+| Phase 6 full-run milestones | Expanded 152/152 and anchor 96/96 validated; frozen rule yields futility; both user-outcome targets missed; zero restarts | Carry the measured disposition into Phase 7 and the v2.13 review |
+| Phase 2 root test gate | 6,162 passed, 12 existing skips, no failures | Pass unchanged coverage thresholds |
+| Phase 2 coverage | 87.99% statements, 83.57% branches, 90.7% functions, 87.99% lines | Keep repository thresholds |
+| Phase 2 live gate | Passed: 11,428 -> 7,332 -> 3,448 characters; final prompt 14,430 tokens | Falling budgets and final prompt below 16,384 tokens |
+| Phase 3 test gate | 1,674 coding tests and 2,227 desktop tests passed | Preserve native pairs and legacy resume |
+| Phase 3 live gate | Three real reads per model; VS Code 1.134 SQLite reopen passed | Native request shapes and unchanged resumed prompt |
+| Phase 4 test gate | 672 expanded tests and 46 targeted desktop tests passed | Keep task/result ownership and native pairs |
+| Phase 4 live gate | Nine real section reads, six compactions, final task retained | Answer completes below the 16,384-token window |
+| Phase 5 Settings gate | 2,245 desktop tests passed; real IPC/browser toggles, reload and three widths verified | Preserve saved preferences and disabled unknown state |
+| Phase 7 desktop coverage | 249 files, 2,287 passed, one skipped; unchanged coverage gates passed | Root coverage still pending guarded context fixture |
+| Phase 7 isolated builds | Root and sidecar commands exited 0; all 1,760 original source hashes preserved; CLI help passed | Final real-boundary and integrated installer verification remain |
+| Phase 7 handbook candidates | Six final sources and HTML candidates passed; 200 slide states, eight widths, 248 contrast/brand checks | Approved original-output replacement and current-output receipts |
+| Phase 7 layout/link scan | 135 paths classified; no proposed moves/deletions; zero new broken links, 3,770 existing unresolved | Preserve approved legacy evaluation paths |
+| Phase 7 CI comparison | 23 fields assessed: six PASS, eleven FAIL, three PARTIAL, three NOT PROVEN | Exact migration decisions and complete reconciliation before publication |
+| Phase 7 CI profile repair | Verified proposal: five real fast validators, 16 focused tests, 26 CLI observations; original source unchanged | Approve [exact patch](releases/v2/v2.12/development/phase-7-ci-profile-correctness-proposal.md), apply and verify in the continuation worktree |
+| Phase 7 canonical gaps | Five open and two resolved, counts derived from ledger | Do not treat incomplete CI or answer-quality targets as accepted bypasses |
+| Phase 7 deep-pass cycle | 31-row inventory; cycle 1 resolves candidate accessibility and PDF sampling; controlled headless native protocol passes | Root/actual-output/CI/installed/integration gates remain open |
+| Phase 7 PDF consumer | 92 headings and all 48 exact table rows pass over full sections; both frozen PDF hashes preserved | No inference repeat, rescore or visual PDF certification |
+| Phase 7 prepared root candidate | 579 files, 6,215 passed, 12 skipped; lines 87.29%, branches 76.48%, functions 87.30%; four workers | Approve/apply prepared changes, then verify the original tree ([evidence](releases/v2/v2.12/development/phase-7-root-prepared-candidate.md)) |
+
+- [x] Record the Kolibri-1 decline and index, with its failing-then-passing guard (Phase 1, `59e16c82`).
+- [x] Reconcile the failed package update PRs through dependency repair PR #96, merged at `092ce3c2` after 60 passing checks; close superseded #48, #59, and #72.
+- [x] Verify Phase 2 document budgets with real OCR/Ollama, passing root coverage, focused tests, lint/build and desktop typecheck; save one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md)).
+- [x] Verify Phase 3 native Ollama history, pair-safe compaction and real SQLite resume in the extension host; record the OpenAI compatibility gap and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md)).
+- [x] Reconcile the guarded agent-authored 14,000 -> 14,500 test count: kept 14,500 and applied the approved context line (2026-10-10). Excluded generated benchmark changes stay preserved until cleanup is agreed.
+- [x] Apply the [verified CI profile correctness patch](releases/v2/v2.12/development/phase-7-ci-profile-correctness-proposal.md) after exact approval (applied 2026-10-10); remaining CI contract differences stay open under QG-v212-1.
+- [ ] Resolve the [remaining CI action updates](releases/v2/v2.12/development/phase-7-ci-action-update-proposal.md): approved pins applied locally 2026-10-10; still reconcile PRs #42 and #43 against green integrated source.
+- [x] Verify shared tool-result compaction in both loops, fork-resume ownership, cancellation and visible errors; complete nine live PDF section reads and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md)).
+- [x] Verify desktop outline Settings, including environment-preference preservation, real dispatcher/browser behavior, handbook update and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md)).
+- [x] After both frozen full runs finished, retain returned errors in future smoke results and qualify OCR timing prose; verify the actual patched harness with controlled adapters, preserve scored artifacts and record WN-v212-5 ([results](v2/v2.12/development/outline-eval.md)).
+- [ ] Complete evaluation and final integration in the approved [v2.12 plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), then begin v2.13.
+
+## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)
+
+- [x] Compare the four named Craft editor repositories and Google's EmbeddingGemma 2 announcement against Nexus; record source scans, code evidence, queue impact and prioritized recommendations in the [comparison](releases/v2/v2.13/comparisons/v2.13.0-comparison-craft-editors-embeddinggemma-2.md) (2026-10-07).
+- [x] Finalize the comparison's [v2.13.0 adoption plan](releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md): seven phases, 31 tasks, conditional model admission and independent image-edit work; all seven review lenses ran and drafting defects were corrected ([review](releases/v2/v2.13/development/v2.13.0-plan-review.md), 2026-10-08). The owner accepted all three recommendations on 2026-10-08; planning is complete and no implementation began.
+- [x] Select the v2.13.0 planning scope after v2.12 outline-readiness: accepted measured promotion gate, persisted Image Studio-only recipes and running-desktop-renderer export (owner: "all recommendations", 2026-10-08). Media search and video editing remain deferred.
+- [ ] Evaluate EmbeddingGemma 2 text/code retrieval through the existing local adapter, resolve its context/terms discrepancies and measure the comparison's proposed gate before changing the model job map or defaults (E1/E2).
+- [ ] Implement and verify the planned durable recipe and shared commands for existing ImageViewer edits, including restart/reopen and UI-versus-command export equivalence, before adding broader creative-editor features (C1/C2).
 
 ## Recurring Obligations
 

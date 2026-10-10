@@ -1,0 +1,138 @@
+{
+  "verified": true,
+  "browser": "153.0.8010.12",
+  "measurements": [
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "section": {
+        "left": 32,
+        "right": 288,
+        "width": 256
+      },
+      "focusOutline": "2px",
+      "focusStyle": "solid"
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "section": {
+        "left": 32,
+        "right": 672,
+        "width": 640
+      },
+      "focusOutline": "2px",
+      "focusStyle": "solid"
+    },
+    {
+      "width": 1200,
+      "scrollWidth": 1200,
+      "section": {
+        "left": 32,
+        "right": 672,
+        "width": 640
+      },
+      "focusOutline": "2px",
+      "focusStyle": "solid"
+    }
+  ],
+  "runtimeErrors": [],
+  "observed": {
+    "requests": [
+      {
+        "method": "coding.documentOutline.status",
+        "params": {},
+        "value": {
+          "enabled": false,
+          "summariesEnabled": false
+        }
+      },
+      {
+        "method": "coding.documentOutline.setEnabled",
+        "params": {
+          "enabled": true
+        },
+        "value": {
+          "enabled": true,
+          "summariesEnabled": false
+        }
+      },
+      {
+        "method": "coding.documentOutline.status",
+        "params": {},
+        "value": {
+          "enabled": true,
+          "summariesEnabled": false
+        }
+      },
+      {
+        "method": "coding.documentOutline.setEnabled",
+        "params": {
+          "enabled": true,
+          "summariesEnabled": true
+        },
+        "value": {
+          "enabled": true,
+          "summariesEnabled": true
+        }
+      },
+      {
+        "method": "coding.documentOutline.status",
+        "params": {},
+        "value": {
+          "enabled": true,
+          "summariesEnabled": true
+        }
+      },
+      {
+        "method": "coding.documentOutline.setEnabled",
+        "params": {
+          "enabled": false
+        },
+        "value": {
+          "enabled": false,
+          "summariesEnabled": false
+        }
+      },
+      {
+        "method": "coding.documentOutline.status",
+        "params": {},
+        "value": {
+          "enabled": false,
+          "summariesEnabled": false
+        }
+      },
+      {
+        "method": "coding.documentOutline.setEnabled",
+        "params": {
+          "enabled": true
+        },
+        "value": {
+          "enabled": true,
+          "summariesEnabled": true
+        }
+      },
+      {
+        "method": "coding.documentOutline.status",
+        "params": {},
+        "value": {
+          "enabled": true,
+          "summariesEnabled": true
+        }
+      },
+      {
+        "method": "coding.documentOutline.status",
+        "params": {},
+        "value": {
+          "enabled": true,
+          "summariesEnabled": true
+        }
+      }
+    ],
+    "status": {
+      "enabled": true,
+      "summariesEnabled": true
+    }
+  },
+  "sourceSha256": "44ddb2db12a5d960a2efa4cce3d0aa82ed2890e5f455962203589a4fc86908bf"
+}
