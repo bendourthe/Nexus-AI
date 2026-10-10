@@ -1,0 +1,140 @@
+{
+  "created_at": "2026-10-10T01:30:26.698048+00:00",
+  "scope": "Complete prepared candidate, not original-tree or integration certification",
+  "candidate_input_manifest_sha256": "6242a44b5eae301295d3ec8f287114bcd42cabf33cf742e0fe41f8f1311613fc",
+  "retained_sha256": {
+    "initial-observation.json": "3c77165d2c005250d6c445b0873c797ba424702a2266ce9969f197eb30a915db",
+    "initial-tests.json": "ab26fad20b942c1e32a4f7cbfdc56db69aec9fc56fd5a3c669066e47fa6bfce0",
+    "initial-coverage.log": "1a3727a93f5f98a33060571b8f276c25243ddae90ef9bf2ec6adfa0f4f9f7ec7",
+    "failure-diagnostics.json": "6304187f8debafc0fc6b13a111aa8b03fd91c0864cf13c701e3195eff5b08d5e",
+    "failure-diagnostics.log": "5db83a25ca595eb09472bbc8b6bccf6a6047ce609f86286e9a8d972ed6c1c524",
+    "bounded-observation.json": "5efb35c1e6d3cb33ab5f082d9bd5ae7d40eb8a5c7a36719ef4ef925091028152",
+    "bounded-tests.json": "7d044458421f13712802c9faa9ce8eef5643fe3ea26cf2fd5891a4be1af8e5a7",
+    "bounded-coverage.log": "c84bf0f99a2566cbd8ee08d5872259f79f1ed24e50431071eae41f029d8975ab",
+    "coverage-summary.json": "843386055a3eb8b5359b8bd70668a2f38cfdda39790cebdc393ddd35ab0e0534",
+    "lcov.info": "ba51468be423dcc7fdf9974c005cd3cc9420ed749b6b7f01ab2cfa9b4df65de7",
+    "benchmarks/benchmark-results/codegraph-results-snEFyI/summary.json": "2d14caace26bf302ab77442c60704b4e0080254c7b47ca6e6d26d4f5a274c0c0",
+    "benchmarks/benchmark-results/codegraph-results-snEFyI/with-codegraph.json": "bc788af977732164b8b34f9687467af163d59d6ca91f6acf6ef51824b132119a",
+    "benchmarks/benchmark-results/codegraph-results-snEFyI/without-codegraph.json": "d7f6d836d31b8c6f95485bddbb7266b8380623b10efbe4498b92fd1069949c10",
+    "benchmarks/benchmark-results/compressor-results-fnXabK/with-compressor.json": "5ff397e699f74de0f246aab1e3290d91ab1002214883a67383204dba74c1c4a6",
+    "benchmarks/benchmark-results/compressor-results-fnXabK/without-compressor.json": "8f408fd41cd8c2ff15432518d2dfaff33c7726e992e6476c9fe9ea7b1c0822b0",
+    "benchmarks/benchmark-results/memory-tier-1791595288763-46044.json": "12a4c09a79baad456630210a302e6ad318bf0bbc22f6fca913ad52460c195469",
+    "benchmarks/benchmark-results/session-dehydration-1791595331022-45356.json": "ecda4aeee80d8ba85484ce2907f7130616e4b8a05487b86bbecc1d55cc8d12b7",
+    "benchmarks/benchmark-results/storage-extended-results-i0l87w/summary.json": "fbe74e4b43e3a43454d757b1e632dcef694e6dd0d1fadd554b39511ca80e8f0b",
+    "benchmarks/benchmark-results/token-usage-results-IiMMOX/summary.json": "160fbc85a1fb94b67a14324957ed47d8072f4d2866d7c346c00847edc261e5ff",
+    "benchmarks/benchmark-results/token-usage-results-IiMMOX/with-adoption.json": "e119ec269baafeddf37c033f35428c6b708b25ffaed46dfdbe2c440da7d9f20f",
+    "benchmarks/benchmark-results/token-usage-results-IiMMOX/without-adoption.json": "e026308e6029c7d27c41bdf605bf705eac07b7a1dab58ef0f443d53cd9ff5b83",
+    "benchmarks/benchmark-results-bounded/codegraph-results-mAcfsv/summary.json": "2d14caace26bf302ab77442c60704b4e0080254c7b47ca6e6d26d4f5a274c0c0",
+    "benchmarks/benchmark-results-bounded/codegraph-results-mAcfsv/with-codegraph.json": "bc788af977732164b8b34f9687467af163d59d6ca91f6acf6ef51824b132119a",
+    "benchmarks/benchmark-results-bounded/codegraph-results-mAcfsv/without-codegraph.json": "d7f6d836d31b8c6f95485bddbb7266b8380623b10efbe4498b92fd1069949c10",
+    "benchmarks/benchmark-results-bounded/compressor-results-WOtoI3/with-compressor.json": "5ff397e699f74de0f246aab1e3290d91ab1002214883a67383204dba74c1c4a6",
+    "benchmarks/benchmark-results-bounded/compressor-results-WOtoI3/without-compressor.json": "8f408fd41cd8c2ff15432518d2dfaff33c7726e992e6476c9fe9ea7b1c0822b0",
+    "benchmarks/benchmark-results-bounded/memory-tier-1791595553652-34108.json": "a85c8250b7d29baa73e763fd63034c0c0af9dba824d2520ed59b36c9a69ef863",
+    "benchmarks/benchmark-results-bounded/session-dehydration-1791595598360-21976.json": "661b82d5832a943e61bf6bfecb48878af64d50b24aa757ea322ad81b7212558e",
+    "benchmarks/benchmark-results-bounded/storage-extended-results-bYRZk6/summary.json": "fbe74e4b43e3a43454d757b1e632dcef694e6dd0d1fadd554b39511ca80e8f0b",
+    "benchmarks/benchmark-results-bounded/token-usage-results-ash0GH/summary.json": "160fbc85a1fb94b67a14324957ed47d8072f4d2866d7c346c00847edc261e5ff",
+    "benchmarks/benchmark-results-bounded/token-usage-results-ash0GH/with-adoption.json": "e119ec269baafeddf37c033f35428c6b708b25ffaed46dfdbe2c440da7d9f20f",
+    "benchmarks/benchmark-results-bounded/token-usage-results-ash0GH/without-adoption.json": "e026308e6029c7d27c41bdf605bf705eac07b7a1dab58ef0f443d53cd9ff5b83"
+  },
+  "initial_default_worker_run": {
+    "exit": 1,
+    "passed": 6206,
+    "failed": 9,
+    "skipped": 12,
+    "files_with_failures": 6
+  },
+  "diagnostic_four_worker_rerun": {
+    "test_exit": 0,
+    "wrapper_exit": 1,
+    "wrapper_issue": "Only final console print failed to encode a check-mark in Windows cp1252 after result and log were saved; tests were not rerun for this print error"
+  },
+  "complete_four_worker_run": {
+    "exit": 0,
+    "test_files": {
+      "total": 579,
+      "passed": 579,
+      "failed": 0
+    },
+    "tests": {
+      "success": true,
+      "numTotalTests": 6227,
+      "numPassedTests": 6215,
+      "numFailedTests": 0,
+      "numPendingTests": 12,
+      "numTotalTestSuites": 1977,
+      "numPassedTestSuites": 1977,
+      "numFailedTestSuites": 0,
+      "numPendingTestSuites": 0
+    },
+    "coverage": {
+      "lines": {
+        "total": 25771,
+        "covered": 22496,
+        "skipped": 0,
+        "pct": 87.29
+      },
+      "statements": {
+        "total": 28894,
+        "covered": 24598,
+        "skipped": 0,
+        "pct": 85.13
+      },
+      "functions": {
+        "total": 4867,
+        "covered": 4249,
+        "skipped": 0,
+        "pct": 87.3
+      },
+      "branches": {
+        "total": 18476,
+        "covered": 14132,
+        "skipped": 0,
+        "pct": 76.48
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "thresholds": {
+      "lines": 80,
+      "branches": 75,
+      "functions": 80
+    },
+    "assertions_and_timeouts": "unchanged"
+  },
+  "source_preservation": {
+    "candidate_source_changes": [],
+    "original_source_changes": [],
+    "captured_original_paths": 3522,
+    "historical_fixture_hashes": {
+      "tests/fixtures/codegraph-benchmark-results/2026-05-26/summary.json": "2d14caace26bf302ab77442c60704b4e0080254c7b47ca6e6d26d4f5a274c0c0",
+      "tests/fixtures/codegraph-benchmark-results/2026-05-26/with-codegraph.json": "bc788af977732164b8b34f9687467af163d59d6ca91f6acf6ef51824b132119a",
+      "tests/fixtures/codegraph-benchmark-results/2026-05-26/without-codegraph.json": "d7f6d836d31b8c6f95485bddbb7266b8380623b10efbe4498b92fd1069949c10",
+      "tests/fixtures/coding-pillar-benchmark-results/2026-05-26/with-compressor.json": "5ff397e699f74de0f246aab1e3290d91ab1002214883a67383204dba74c1c4a6",
+      "tests/fixtures/coding-pillar-benchmark-results/2026-05-26/without-compressor.json": "8f408fd41cd8c2ff15432518d2dfaff33c7726e992e6476c9fe9ea7b1c0822b0",
+      "tests/fixtures/coding-pillar-token-usage-results/2026-05-26/summary.json": "160fbc85a1fb94b67a14324957ed47d8072f4d2866d7c346c00847edc261e5ff",
+      "tests/fixtures/coding-pillar-token-usage-results/2026-05-26/with-adoption.json": "e119ec269baafeddf37c033f35428c6b708b25ffaed46dfdbe2c440da7d9f20f",
+      "tests/fixtures/coding-pillar-token-usage-results/2026-05-26/without-adoption.json": "e026308e6029c7d27c41bdf605bf705eac07b7a1dab58ef0f443d53cd9ff5b83",
+      "tests/fixtures/memory-storage-extended-results/2026-05-26/summary.json": "fbe74e4b43e3a43454d757b1e632dcef694e6dd0d1fadd554b39511ca80e8f0b",
+      "tests/fixtures/memory-tier-benchmark-results/2026-05-26/README.md": "bac1519bac4a1d764047ba1871da88228c51f12ad841d670df4cde48868b7909",
+      "tests/fixtures/memory-tier-benchmark-results/2026-05-26/results.json": "076dba6b83b6774bedb6b6f025abc1474614c4e44aa7a63319d794adf8f39e60"
+    }
+  },
+  "host": {
+    "node": "v24.13.0",
+    "available_parallelism": 20,
+    "logical_cpus": 20,
+    "total_memory_gib": 32,
+    "free_memory_gib_observed": 10
+  },
+  "limitations": [
+    "Pending repairs remain only in the temporary candidate",
+    "The original working-tree full gate remains pending approval/application",
+    "Default-worker full run failed and is retained",
+    "Hosted matrix, integration and installed-product observations remain open"
+  ],
+  "support_tier": "internal-compatible prepared candidate"
+}

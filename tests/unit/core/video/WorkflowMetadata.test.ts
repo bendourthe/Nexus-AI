@@ -13,7 +13,7 @@ import {
   serializeVideoWorkflowMetadata,
   type VideoEnhancementEmbeddedProvenance,
   type VideoWorkflowMetadata,
-} from "../../core/video/WorkflowMetadata";
+} from "../../../../core/video/WorkflowMetadata.js";
 
 type SpawnFn = typeof import("node:child_process").spawn;
 

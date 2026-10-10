@@ -1,0 +1,11 @@
+{
+  "scope": "CLI help smoke only, not document/native/installed functional certification",
+  "command": "node bin/nexus.mjs --help",
+  "cwd": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-phase7-build-4cnygt47",
+  "exit": 0,
+  "isolated_home": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-phase7-build-4cnygt47\\isolated-state",
+  "expected_banner": true,
+  "expected_skill_audit_command": true,
+  "stderr": "",
+  "source_snapshot_drift": []
+}

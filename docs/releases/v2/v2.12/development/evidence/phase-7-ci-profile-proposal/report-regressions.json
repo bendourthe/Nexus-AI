@@ -1,0 +1,360 @@
+[
+  {
+    "case": "partial",
+    "repeat": 1,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "partial",
+    "repeat": 2,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "unknown",
+    "repeat": 1,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "unknown",
+    "repeat": 2,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "empty",
+    "repeat": 1,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "report",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "empty",
+    "repeat": 2,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "report",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "self_only",
+    "repeat": 1,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "report",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "self_only",
+    "repeat": 2,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "report",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "pass",
+    "repeat": 1,
+    "exit": 0,
+    "status": "PASS",
+    "groups": [
+      {
+        "name": "full",
+        "status": "PASS",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "pass",
+    "repeat": 2,
+    "exit": 0,
+    "status": "PASS",
+    "groups": [
+      {
+        "name": "full",
+        "status": "PASS",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "fail",
+    "repeat": 1,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "fail",
+    "repeat": 2,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "mixed_partial",
+    "repeat": 1,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "PASS",
+        "durationMs": 0
+      },
+      {
+        "name": "platform",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "mixed_partial",
+    "repeat": 2,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "PASS",
+        "durationMs": 0
+      },
+      {
+        "name": "platform",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "mixed_fail",
+    "repeat": 1,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "PARTIAL",
+        "durationMs": 0
+      },
+      {
+        "name": "platform",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "mixed_fail",
+    "repeat": 2,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "PARTIAL",
+        "durationMs": 0
+      },
+      {
+        "name": "platform",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "missing_status",
+    "repeat": 1,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "missing_status",
+    "repeat": 2,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "malformed",
+    "repeat": 1,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full.json",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "malformed",
+    "repeat": 2,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full.json",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "null",
+    "repeat": 1,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full.json",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "null",
+    "repeat": 2,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full.json",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "summary_only",
+    "repeat": 1,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "report",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "summary_only",
+    "repeat": 2,
+    "exit": 1,
+    "status": "PARTIAL",
+    "groups": [
+      {
+        "name": "report",
+        "status": "PARTIAL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "prior_aggregate",
+    "repeat": 1,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  },
+  {
+    "case": "prior_aggregate",
+    "repeat": 2,
+    "exit": 1,
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "full",
+        "status": "FAIL",
+        "durationMs": 0
+      }
+    ]
+  }
+]

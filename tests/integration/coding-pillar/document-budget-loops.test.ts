@@ -63,6 +63,7 @@ describe.each(["headless", "extension"] as const)("%s section budget in the agen
         task: counts[0] === undefined ? "Context ".repeat(4_000) : "Read the section repeatedly",
         workdir,
         model: "gemma4:12b",
+        llmOptions: { num_ctx: counts[0] === undefined ? 16_384 : contextTokens },
         onEvent: (event) => {
           if (event.kind === "toolResult") {
             expect(event.success).toBe(true);

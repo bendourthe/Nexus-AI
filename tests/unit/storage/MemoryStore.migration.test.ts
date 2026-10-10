@@ -34,9 +34,11 @@ function seedLegacyDb(rowCount: number): string {
      VALUES (?, ?, ?, ?, ?, ?, ?)`,
   );
   const now = Date.now();
-  for (let i = 0; i < rowCount; i++) {
-    insert.run(`legacy-${i}`, null, `legacy entry ${i}`, "fact", null, now, now);
-  }
+  db.transaction(() => {
+    for (let i = 0; i < rowCount; i++) {
+      insert.run(`legacy-${i}`, null, `legacy entry ${i}`, "fact", null, now, now);
+    }
+  })();
   db.close();
   return dbPath;
 }

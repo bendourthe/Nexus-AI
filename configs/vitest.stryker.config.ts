@@ -20,7 +20,7 @@ export default defineConfig({
     },
     coverage: {
       provider: "v8",
-      include: ["src/**/*.ts"],
+      include: ["src/**/*.ts", "modules/coding/**/*.ts"],
       reporter: ["text"],
     },
   },

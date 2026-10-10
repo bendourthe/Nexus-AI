@@ -1,0 +1,21 @@
+{
+  "scope": "Local application of approved cache and SARIF pin patches (handoff Next step 4, local part). Hosted integration and PR 42/43 reconciliation not yet done.",
+  "applied": {
+    "actions/cache": "27d5ce7f107fe9357f9df03efb73ab90386fccae (v5.0.5) -> 55cc8345863c7cc4c66a329aec7e433d2d1c52a9 (v6.1.0) at ci.yml x2, release.yml x1, shell-build.yml x1",
+    "upload-sarif": "f411752efdf656cb71aa17b755b22c890960da1d -> 458d36d7d4f47d0dd16ca424c1d3cda0060f1360 at scorecard.yml x1, comment v3.35.5 retained"
+  },
+  "matches_proposed_copies_lf_normalized": true,
+  "correction": "f411752e... is the annotated tag object of github/codeql-action v3.35.5 (git/tags API: tag v3.35.5 -> commit 458d36d7...). The commits API returns HTTP 422 because it is not a commit, not because the pin is unresolvable. The SARIF change is therefore code-equivalent: tag-object pin replaced by the commit it points to. This supersedes the 'unresolved pin' wording in phase-7-ci-action-update-proposal.md.",
+  "out_of_scope_observation": "codeql.yml init/analyze still pin the same tag object f411752e...; CodeQL runs on develop succeed with it (run 37913102464). Not changed: outside the approved change set.",
+  "checks": {
+    "workflow_tests": "6 files / 70 tests passed",
+    "fast_profile": "exit 0, PASS x5",
+    "yaml_parse": "4/4 ok"
+  },
+  "workflow_sha256": {
+    ".github/workflows/ci.yml": "ae8a533d5807eddd058ab23a3352a8a2352416a6874b16de27dd77865faf68e9",
+    ".github/workflows/release.yml": "4830b08d9e486c4d8e3ce998d441b6733178b3566cb6e5e959b4c9d40f25edc3",
+    ".github/workflows/scorecard.yml": "05eabc2c7398cb0249f7a7bcf73e7342f491236b27140b07c13c21d1405b547f",
+    ".github/workflows/shell-build.yml": "52f4d5fd97aa35afb0d69b7e67083a7080f8357fcaa01294ee7ff8140292f63d"
+  }
+}
