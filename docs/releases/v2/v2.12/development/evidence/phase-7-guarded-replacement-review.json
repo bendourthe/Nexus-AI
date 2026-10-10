@@ -1,0 +1,94 @@
+{
+  "created_at": "2026-10-10T01:00:32.000945+00:00",
+  "status": "specific user agreement pending; no originals accepted or written",
+  "proposal_fixture": "phase-7-budget-proposal.patch",
+  "proposal_fixture_tests": 6,
+  "proposal_html_manifest": "phase-7-handbooks/cycle1-final-c5673074/final-candidate-manifest.json",
+  "handoff_difference_qualification": "The fresh official diff includes header/history timestamps, a navigation-boundary checkpoint, updated anchor progress and a files-touched entry. Earlier metadata-only summaries are incomplete as a description of this current diff. Preserve every current entry when appending the completed milestones.",
+  "rows": [
+    {
+      "path": "docs/handbooks/html/atlas.html",
+      "comparison": "official edit_guard diff against exact HEAD copy",
+      "diff_exit": 0,
+      "diff_text": "\n",
+      "current_raw_sha256": "d8ac4d849fedb081d3c52c62c2932f3bef91ee219214d5eeffe79027a461bddb",
+      "head_raw_sha256": "89f16baf0efba0ddd6151bbec2d65e734f5cb34242621528f10ba594e4d7d0f4",
+      "current_crlf_count": 69,
+      "head_crlf_count": 0,
+      "accept_performed": false
+    },
+    {
+      "path": "docs/handbooks/html/generation-recovery.html",
+      "comparison": "official edit_guard diff against exact HEAD copy",
+      "diff_exit": 0,
+      "diff_text": "\n",
+      "current_raw_sha256": "0b6a1e2c736c390f41409c97fa1a0ba6b8adfe4c527a53b353f0f4eaaaf4ee27",
+      "head_raw_sha256": "2512ec9f12c72424f259312ae4316ca9c83a1f12fe54cfc8cb94b1960c484e07",
+      "current_crlf_count": 32,
+      "head_crlf_count": 0,
+      "accept_performed": false
+    },
+    {
+      "path": "docs/handbooks/html/technical/document-outline.html",
+      "comparison": "official edit_guard diff against exact HEAD copy",
+      "diff_exit": 0,
+      "diff_text": "\n",
+      "current_raw_sha256": "9d0491664eb3f91cea705019515fa71bfbc70967a31610ef1c29608626edf486",
+      "head_raw_sha256": "bc4a222d4a44d482aa354e4819e8717d94f38ba694ff2f12e2d14f4871cb8506",
+      "current_crlf_count": 72,
+      "head_crlf_count": 0,
+      "accept_performed": false
+    },
+    {
+      "path": "docs/handbooks/html/technical/installer-runtime.html",
+      "comparison": "official edit_guard diff against exact HEAD copy",
+      "diff_exit": 0,
+      "diff_text": "\n",
+      "current_raw_sha256": "bd8f6dcc495c0e060279659705c4ddfedfa98e9cb8e38da23f80d279a3badc62",
+      "head_raw_sha256": "77eaa371e143591faebf678e1addfaf32be774a77aa17ecf7576aaece849a45d",
+      "current_crlf_count": 16,
+      "head_crlf_count": 0,
+      "accept_performed": false
+    },
+    {
+      "path": "docs/handbooks/html/technical/media-runtime.html",
+      "comparison": "official edit_guard diff against exact HEAD copy",
+      "diff_exit": 0,
+      "diff_text": "\n",
+      "current_raw_sha256": "b5700ed427d43f1a802fc29db683125ff017a9a6d3d5d2cfbd21d9b185fb6789",
+      "head_raw_sha256": "c47b7fca1dc2d0d3cce6034774b7a630c19fa45d1f67523d45ff407930b4054d",
+      "current_crlf_count": 16,
+      "head_crlf_count": 0,
+      "accept_performed": false
+    },
+    {
+      "path": "docs/handbooks/html/technical/transcript-and-workspaces.html",
+      "comparison": "official edit_guard diff against exact HEAD copy",
+      "diff_exit": 0,
+      "diff_text": "\n",
+      "current_raw_sha256": "f715fccb8d42ddf2e8d2542a5c63c2eb34896448b097c923b981cb5e32f3113d",
+      "head_raw_sha256": "da7a4451e7577073310c1eb6d2505e1ffb0e5df339dfd4aa2b7becbd143e94a7",
+      "current_crlf_count": 16,
+      "head_crlf_count": 0,
+      "accept_performed": false
+    },
+    {
+      "path": "tests/integration/coding-pillar/document-budget-loops.test.ts",
+      "comparison": "official edit_guard stored baseline diff",
+      "diff_exit": 0,
+      "diff_text": "--- agent version\n+++ current\n@@ -120,7 +120,7 @@\n       async *streamChat() {\n         const current = turn++;\n         const calls = current === 0 ? 1 : current === 1 ? 2 : 0;\n-        yield { message: { role: \"assistant\", content: calls ? \"\" : \"Done.\", tool_calls: Array.from({ length: calls }, () => ({ function: { name: \"document_outline\", arguments: { path: \"many.md\" } } })) }, done: true, prompt_eval_count: current === 0 ? 0 : 14_000 };\n+        yield { message: { role: \"assistant\", content: calls ? \"\" : \"Done.\", tool_calls: Array.from({ length: calls }, () => ({ function: { name: \"document_outline\", arguments: { path: \"many.md\" } } })) }, done: true, prompt_eval_count: current === 0 ? 0 : 14_500 };\n       },\n     };\n     const outputs: string[] = [];\n",
+      "current_raw_sha256": "b58391268d5ee95fae4cf31667f35845e3172bff34423e4cbbf4a67ba8fc122f",
+      "accept_performed": false
+    },
+    {
+      "path": ".nexus-hub/handoff.md",
+      "comparison": "official edit_guard stored baseline diff",
+      "diff_exit": 0,
+      "diff_text": "--- agent version\n+++ current\n@@ -1,6 +1,6 @@\n-# Handoff | 2026-10-09T22:24:43Z | codex | checkpoint\n+# Handoff | 2026-10-09T22:41:25Z | codex | checkpoint\n \n-Previous handoffs: 2026-10-09T22:20:50Z codex checkpoint; 2026-10-09T22:10:28Z codex checkpoint; 2026-10-09T21:52:56Z codex checkpoint; 2026-10-09T21:46:56Z codex checkpoint; 2026-10-09T21:20:25Z codex checkpoint\n+Previous handoffs: 2026-10-09T22:24:43Z codex checkpoint; 2026-10-09T22:20:50Z codex checkpoint; 2026-10-09T22:10:28Z codex checkpoint; 2026-10-09T21:52:56Z codex checkpoint; 2026-10-09T21:46:56Z codex checkpoint\n \n ## Goal\n \n@@ -8,6 +8,7 @@\n \n ## Done and verified\n \n+- Outline-navigation public-boundary checkpoint at 2026-10-09T22:41:25Z: node node_modules/vite-node/vite-node.mjs .nexus-hub/outline-navigation-boundary.ts exits 0. It invokes the real createHeadlessOutlineTools API on local synthetic Markdown containing all 60 expanded-fixture titles, with no OCR/model inference. At context 16,384 and usedTokens 0, all 60 headings, including the last fixture heading, are displayed; at usedTokens 15,000, 21 are displayed with truncated=true. Repeating the tight budget returns the same IDs; restoring a fresh budget restores all 60. A previously known hidden ID remains readable from the cached tree, and an invalid ID is rejected. The outline parameter schema has path and allow_secrets only; section continuation is a separate API. Observation, source hashes and exact command are in C:/Users/bdour/AppData/Local/Temp/nexus-v212-outline-navigation-k0NgcY/observation.json. This does not establish the original PDF/OCR topology or the cause of historical GPU answer failures; do not claim that initial omission of the fixture's last headings explains those failures. All frozen-input checks still pass. Latest live poll at 2026-10-09T22:41:24Z found 89/96 anchor outcomes, runner 45936 and child 2288 live, restart count 0.\n - Anchor Gemma arm A coverage checkpoint at 2026-10-09T22:24:43Z: phase6-result-summary.py validates all 24 unique Gemma A outcomes and frozen metadata (8 cross-section, 12 late). Counts: 8 correct, 0/8 cross correct, 2/12 late correct, statuses {\"timeout\": 15, \"answered\": 9}, 15 error/no-answer including timeouts, 43 native-result requests and 3 compactions. Both Qwen arms remain complete at 24 each; Gemma C has 5/24 saved outcomes, so the anchor subset validates 77/96 and full coverage remains false. Fresh checks match all seven fixture hashes and unchanged procedure, harness and generators. Win32_Process confirms runner 45936 and child 2288 live at 2026-10-09T22:24:41Z; restart count remains 0. The Gemma A user-outcome threshold is not met, but the final anchor comparison and frozen overall decision remain unfinished until Gemma C completes.\n - Whole-goal queue checkpoint at 2026-10-09T22:20:50Z: ran the owner-provided C:/Users/bdour/.nexus-hub/src/scripts/enumerate_plan_queue.py --root . --json, exit 0. It lists the canonical v2.13 plan with 31 open tasks and no read errors; source inspection confirms its docs/releases scope. All-layout non-archived plan enumeration and direct declared-status reads identify exactly three plans: current v2.12 outline readiness, its absorbed Kolibri seed, and queued v2.13. Written, ASCII-checked snapshot .nexus-hub/goal-queue-assessment-20261009T221706Z.md names the explicit integration dependency, conditional shared model-acceptance path, refresh requirement, no parallel group and no renumber. It preserves the whole Goal's additional carry-forward scope, including DF-v240-3's older archived operator/hardware items and separately open DF-11. No known gap is closed by this assessment. Fresh Win32_Process poll at 2026-10-09T22:20:48Z confirms runner 45936 and child 2288 live, 68/96 saved anchor outcomes, restart count 0.\n - Controlled reporting boundary checkpoint at 2026-10-09T22:10:28Z: invoked the existing smoke harness through node node_modules/vitest/vitest.mjs run --config .nexus-hub/reporting-boundary.config.ts --reporter=dot. Scratch adapters replace OCR, model inference, network and GPU sampling. The original and candidate each wrote eight outcomes; original omitted all four returned errors, while the candidate retained all four and explicitly recorded null for four normal done finishes. Parsed JSONL and result JSON agree, selected outcome/scoring fields are unchanged, and generated M2 prose qualifies uncached page caps. LIMIT=-1 exits 1 with the expected validation error before writing any result artifact. Both valid runs exit 0. The scratch fixture's initial invalid completion reason was corrected to done before these final runs; corrected evidence supersedes preliminary evidence. Proof and six valid-run outputs plus malformed log are in C:/Users/bdour/AppData/Local/Temp/nexus-v212-reporting-boundary-l7yhisb0/corrected/reporting-boundary-observation.json and its directory. This proves controlled reporting only, not real inference or performance. The candidate remains unapplied; rerun the affected boundary after actual application and on the final integrated revision. Frozen inputs still match e8. Latest live poll at 2026-10-09T22:09:47Z: 65/96 anchor outcomes, runner 45936 and child 2288 live, restart count 0.\n@@ -30,7 +31,7 @@\n \n ## In progress\n \n-- At 2026-10-09T22:24:41Z, full-expanded is complete with 152/152 validated outcomes. Both Qwen anchor arms and Gemma A are complete at 24/24; full-anchor has 77/96 saved outcomes, including Gemma C 5/24. The fresh subset validation covers all 77 saved outcomes; full anchor coverage remains false. Gemma C, the final user-outcome comparison, frozen decision write-up, Phase 6 results commit and later whole-goal work remain unfinished.\n+- At 2026-10-09T22:41:24Z, full-expanded is complete with 152/152 validated outcomes. Both Qwen anchor arms and Gemma A are complete at 24/24; full-anchor has 89/96 saved outcomes, including Gemma C 17/24. The most recent subset validation at 2026-10-09T22:29 covers 84 outcomes; full anchor coverage remains false. Gemma C, the final user-outcome comparison, frozen decision write-up, Phase 6 results commit and later whole-goal work remain unfinished.\n - Detached runner PID 45936 is running full-anchor with Node child 2288; full-expanded exited 0 with exact 152-outcome coverage. Both dry runs are complete. Authoritative state: C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\state.json. All reports and raw diagnostics are outside the repository: C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3. Shared deadline 1791604052665 reserves one minute within the signed 14-hour bound. No automatic restart. Do not modify active harness, fixtures, frozen rule or model settings; do not launch competing OCR/model jobs.\n - Phase 6 T019/T020 and exit checklist remain unchecked. Phase 7 is preparation only. Its source refresh still needs ledger/native-history/compaction explanations, six native HTML outputs, a full source/output map and browser evidence.\n \n@@ -44,6 +45,7 @@\n \n ## Files touched\n \n+- This 2026-10-09T22:41:25Z checkpoint creates ignored .nexus-hub/outline-navigation-boundary.ts and a separate temporary input/observation directory above, and updates .nexus-hub/handoff.md. No product source, frozen input, model setting, fixture, dependency, workflow, branch or worktree was changed. docs/todos.md remains pending the Phase 6 results commit. All five unfinished Next steps are carried unchanged from the 2026-10-09T22:24:43Z handoff; the broader whole-goal gap audit and missing returned-error limitation remain intact.\n - This 2026-10-09T22:24:43Z checkpoint changes only .nexus-hub/handoff.md. docs/todos.md remains pending the Phase 6 results commit. No source, frozen input, plan order, dependency, workflow, branch or worktree was changed. All five unfinished Next steps are carried unchanged from the 2026-10-09T22:20:50Z handoff, including the broader whole-goal gap audit preserved in Open questions and blockers.\n - This 2026-10-09T22:20:50Z checkpoint creates ignored .nexus-hub/goal-queue-assessment-20261009T221706Z.md and updates .nexus-hub/handoff.md. docs/todos.md remains pending the Phase 6 results commit. No source, frozen input, plan order, dependency, workflow, branch or worktree was changed. All five unfinished Next steps are carried unchanged from the 2026-10-09T22:10:28Z handoff.\n - This 2026-10-09T22:10:28Z checkpoint creates ignored scratch .nexus-hub/reporting-boundary.setup.ts and reporting-boundary.config.ts, a patched candidate copy and controlled reports under the separate temporary directory above, and updates .nexus-hub/handoff.md. No permanent test or dependency was added. docs/todos.md remains pending the Phase 6 results commit. All five unfinished Next steps are carried unchanged from the 2026-10-09T21:52:56Z handoff. Do not rerun the saved commands against their existing output names: the harness correctly refuses overwrites. For post-application verification, use a fresh output prefix and clear NEXUS_REPORTING_CANDIDATE to exercise the actual changed source.\n",
+      "current_raw_sha256": "acddf1565937cf1c0f4955dfb6299107fbba34678c07de50f64d65de43d318b3",
+      "accept_performed": false
+    }
+  ],
+  "skill": "C:/Users/bdour/.agents/skills/user-edit-preservation/SKILL.md",
+  "blocking_instruction": "Write only after the user says yes"
+}

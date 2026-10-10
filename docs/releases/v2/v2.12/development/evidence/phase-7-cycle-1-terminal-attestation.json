@@ -1,0 +1,30 @@
+{
+  "created_at": "2026-10-10T01:04:12.117003+00:00",
+  "status": "incomplete NO-GO; REQUEST_CHANGES",
+  "terminal_manifest_sha256": "b67710b7e6d62eed816580b1ed473095c56dd4cd6e6bdd6ed7bb2ab845fb968f",
+  "captured_paths": 198,
+  "captured_content_drift": [],
+  "bounded_additions": {
+    "docs/releases/v2/v2.12/development/phase-7-independent-cycle-1-review.md": "4b95012c2335316dbad74ba7ae49749d5b672ee560c74bc6aeb5c6eb7bfdf34f",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-guarded-replacement-review.json": "f52d945e4cd22f914306eaf80c187b26297ac05409db7e08ecbd8e514adab9fe"
+  },
+  "fix_rerun_cycles_used": 1,
+  "max": 3,
+  "supersedes": [
+    "Initial adversarial report pending PDF/counter zero: full-section consumer passes92headings48tables, cycle1 of3 now used.",
+    "Earlier metadata-only handoff summary: fresh official diff also adds navigation checkpoint, evaluation progress and files-touched entry; all current content is preserved.",
+    "Earlier last-phase instruction to refresh review against terminalpins: independent T027 cycle1 refresh now delivered and retained; further material changes still require refresh."
+  ],
+  "remaining": [
+    "Guarded original context fixture and complete root coverage",
+    "Six original HTML replacements and actual-output receipts",
+    "CI migration decisions",
+    "Concrete installed M5 request/use",
+    "Exact continuation publication binding, green develop integration and integrated installer",
+    "Broader active goal: v2.13, remaining gaps, field-tested release and safe cleanup"
+  ],
+  "new_original_accepts": 0,
+  "original_mutations": 0,
+  "frozen_evaluation_mutations": 0,
+  "commits_or_remote_publication": 0
+}

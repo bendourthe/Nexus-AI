@@ -1,5 +1,5 @@
 /**
- * Custom Vitest 1.x reporter that writes benchmark results to a JSON file.
+ * Custom Vitest reporter that writes benchmark results to a JSON file.
  *
  * Why this exists:
  *   `vitest bench` in Vitest 1.x only ships two built-in reporters: `default`
@@ -77,6 +77,10 @@ function serializeFile(file) {
 export default class BenchJsonReporter {
   onInit(ctx) {
     this.ctx = ctx;
+  }
+
+  onTestRunEnd(testModules, errors) {
+    this.onFinished(testModules.map((module) => module.task), errors);
   }
 
   onFinished(files, errors) {

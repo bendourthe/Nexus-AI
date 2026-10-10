@@ -1,0 +1,3594 @@
+[
+  {
+    "file": "atlas.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 2,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 2,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 2,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "atlas.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 2,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 3,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 3,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 3,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 3,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 3,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 3,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 3,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "generation-recovery.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 3,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 3,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 4,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 5,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 6,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 7,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 8,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 9,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 10,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 11,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 3,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 4,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 5,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 6,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 7,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 8,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 9,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 10,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 11,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 3,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 4,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 5,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 6,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 7,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 8,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 9,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 10,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 11,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 3,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 4,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 5,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 6,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 7,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 8,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 9,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 10,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 11,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 3,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 4,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 5,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 6,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 7,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 8,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 9,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 10,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 11,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 3,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 4,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 5,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 6,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 7,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 8,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 9,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 10,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 11,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 3,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 4,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 5,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 6,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 7,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 8,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 9,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 10,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 11,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 2,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 3,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 4,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 5,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 6,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 7,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 8,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 9,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 10,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/document-outline.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 11,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/installer-runtime.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 1,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 0,
+    "contrastMinimum": 7.360539063711663,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/media-runtime.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 73.90625,
+        "height": 73.90625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      2560,
+      1300
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 61.4375,
+        "height": 61.4375,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 50.625,
+        "height": 50.625,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      1024,
+      640
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      761,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      760,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      759,
+      768
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": -1,
+    "contrastMinimum": 6.029445117060222,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 0,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": [
+      {
+        "width": 48,
+        "height": 48,
+        "decoded": true,
+        "aspectPreserved": true,
+        "inBounds": true,
+        "collisions": []
+      }
+    ]
+  },
+  {
+    "file": "technical/transcript-and-workspaces.html",
+    "viewport": [
+      390,
+      844
+    ],
+    "index": 1,
+    "contrastMinimum": 15.424656675972026,
+    "contrastPass": true,
+    "brand": []
+  }
+]

@@ -1,0 +1,110 @@
+{
+  "cycle": 1,
+  "status": "Final current-source candidate",
+  "candidate_root": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074",
+  "proof_root": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811",
+  "retained_files": [
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/brand-contrast-observations.json",
+      "sha256": "84eb6b84a6b4458f02c9c270304e9736a4dbcf6c8e64586381709abd8c2c6414"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/final-candidate-manifest.json",
+      "sha256": "d3c26320ebb50a37520e1eeb1cd71f377b731892c3a2d06cf4d3806f9d06b19c"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/final-visual-original-review.json",
+      "sha256": "4a93a922dfa642e60a25183d6508a49788467c5793917d85ec116f1d1814f40f"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/render-observations.json",
+      "sha256": "a6dbedc0105073a8539aa467e16053b455240ff61de9828d14bd11239c938de0"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/source-build-geometry.json",
+      "sha256": "1fb842b496170e9d2720f3e87117b1fca6cd9f103f51c7221faccc3db6519b8e"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/atlas-geometric.txt",
+      "sha256": "af88b8fa0ebf4139559618ed0a0bd3d2dfbba46ca5b2dd915388cb8f739e76ad"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/document-outline-geometric.txt",
+      "sha256": "48307427a6282f5a9b16bb15131d2ceedafedf76e5acdd4ead192b1cba300294"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/generation-recovery-geometric.txt",
+      "sha256": "241defbee06da9493fcc90eb66bc2e37106c9e6ee7bfed2878ad32b430bdda1e"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/installer-runtime-geometric.txt",
+      "sha256": "c7faa5f569bbbaad79dc6008db7266f429c00e4c8f9a78f279dce00ccf29d608"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/media-runtime-geometric.txt",
+      "sha256": "f6972cb15a6b4be1d64b0c93377ff54503cc47d8674b5722e17c7848c083dd9a"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/transcript-and-workspaces-geometric.txt",
+      "sha256": "b8f76887fa038684f712ea8b6c096060a8d70abb18cecd59d06c8b43da7bed87"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/atlas.pdf",
+      "sha256": "0aa79e214dec744f657fcc92231a7d0ffac890fe3394dad96b0449024526d7f4"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/document-outline.pdf",
+      "sha256": "ccc91b074428cab19ae5ff3e5b3bb83efaf0637559a383993961c103c990d4ee"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/generation-recovery.pdf",
+      "sha256": "7e767f0954cd01d379e684f8490e074d73a4eea971908f482bdcf29a21d26d96"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/installer-runtime.pdf",
+      "sha256": "3902e98ee18b168c6bbcf83af706e689a61dbae59f7bf27ad440ce992d87abe1"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/media-runtime.pdf",
+      "sha256": "7df825212b255d201fe0a89d058b70433163a127f45f62652785e0e40552ef7e"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/transcript-and-workspaces.pdf",
+      "sha256": "18865f10da966008afef4d63ce97c4d72ff042452a1e42b8dc9635ce7db96a8d"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/contact-desktop.png",
+      "sha256": "b495e07cd270a9cd8300d66bb13e973dc1dc767a0b2fa7e33d948f64497e70ae"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/contact-phone.png",
+      "sha256": "60b918772221bef306ceccd959db8f46dd9bccfc7e4292f8112094aff760ef61"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/contact-reading.png",
+      "sha256": "2f5890cdfdd310b6f0a82bd4d785243e18ddccafd4a9318dc3aa9a4b37f941c3"
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/portability-observations.json",
+      "sha256": "a39e8b71d2505eae6abdc90ecde3f1152d94ca56758d12146e8bc7682dc838b5"
+    }
+  ],
+  "current_builder_pins": [
+    {
+      "path": "scripts/handbook-renderer.mjs",
+      "raw_sha256": "05ba5507ff47b3bc62647ef32377c5ba301bea63af0375ace316205e89d132fa",
+      "normalized_sha256": "05ba5507ff47b3bc62647ef32377c5ba301bea63af0375ace316205e89d132fa"
+    },
+    {
+      "path": "docs/handbooks/_sources/handbook.css",
+      "raw_sha256": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf",
+      "normalized_sha256": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf"
+    }
+  ],
+  "pin_limit": "Current builder pins apply only to final candidate; initial candidate was built before the CSS selector correction",
+  "limitations": [
+    "Generated handbook behavior only",
+    "Root owns additional accessibility probes, canonical receipts and original replacement authorization",
+    "No installed/GPU/packaged-binding/M5 product observation"
+  ]
+}

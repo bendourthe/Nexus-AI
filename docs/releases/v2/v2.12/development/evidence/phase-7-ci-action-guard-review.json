@@ -1,0 +1,39 @@
+{
+  "created_at": "2026-10-10T01:31:14.042726+00:00",
+  "scope": "Original workflows reviewed without mutation or accept; no-baseline files await exact patch approval",
+  "rows": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "96327d4a6183eefc718d67a040c91d08ebb0b22e1e1fd5b68d616e02d059deb3",
+      "check_exit": 4,
+      "check_message": "no record: the agent never recorded C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-worktrees\\v2.12-outline-continuation\\.github\\workflows\\ci.yml\n",
+      "diff_exit": 0,
+      "diff_message": "unchanged since the agent last saw this file\n"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "4aaaf4b53d06fd3b336998d865d052b59559edf551b842b537aac606b099d92e",
+      "check_exit": 4,
+      "check_message": "no record: the agent never recorded C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-worktrees\\v2.12-outline-continuation\\.github\\workflows\\release.yml\n",
+      "diff_exit": 0,
+      "diff_message": "unchanged since the agent last saw this file\n"
+    },
+    {
+      "path": ".github/workflows/shell-build.yml",
+      "sha256": "a2f51f2ac7a5efb4a7636a70a316e531be216edd7a4c88912159823ddbb30b73",
+      "check_exit": 4,
+      "check_message": "no record: the agent never recorded C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-worktrees\\v2.12-outline-continuation\\.github\\workflows\\shell-build.yml\n",
+      "diff_exit": 0,
+      "diff_message": "unchanged since the agent last saw this file\n"
+    },
+    {
+      "path": ".github/workflows/scorecard.yml",
+      "sha256": "96147f683a8e46086f4746857837c2de6c4e4f3f9e461fcee03801b7b91b3e46",
+      "check_exit": 4,
+      "check_message": "no record: the agent never recorded C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-worktrees\\v2.12-outline-continuation\\.github\\workflows\\scorecard.yml\n",
+      "diff_exit": 0,
+      "diff_message": "unchanged since the agent last saw this file\n"
+    }
+  ],
+  "no_accepts": true
+}

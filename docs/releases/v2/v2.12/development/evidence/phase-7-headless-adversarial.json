@@ -1,0 +1,336 @@
+{
+  "supportTier": "internal-compatible",
+  "scope": "Real public HeadlessAgentSession, real headless Ollama HTTP serializer and real workspace Markdown tools against a controlled loopback NDJSON fixture; hostile document screening, forged envelope/placeholder, outside-workspace and secret-path rejection, pre-outline read rejection, and orphan-native rejection were exercised. No actual Ollama inference, extension host, installed app, answer-quality score or M5 qualification.",
+  "expected": {
+    "finishReason": "done",
+    "finalText": "PROTOCOL_DONE",
+    "httpTurns": 4,
+    "toolResults": 4,
+    "sameTurnSecondReadSmaller": true,
+    "compactionObserved": true,
+    "originalTaskRetained": true,
+    "nativePairsIntact": true,
+    "onlyLoopback": true
+  },
+  "actual": {
+    "result": {
+      "finishReason": "done",
+      "iterations": 4,
+      "toolCalls": 4,
+      "llmCalls": 4,
+      "finalText": "PROTOCOL_DONE"
+    },
+    "httpTurns": 4,
+    "toolResults": 4,
+    "adversarialBoundaries": [
+      {
+        "kind": "adversarial",
+        "name": "path-and-orphan-boundaries",
+        "outsideResult": {
+          "success": false,
+          "output": "",
+          "error": "path \"C:\\Users\\bdour\\AppData\\Local\\Temp\\outside-nexus-v212-protocol-workspace-O0tVNO.md\" resolves outside the selected workspace roots. The path must be inside the workspace."
+        },
+        "secretResult": {
+          "success": false,
+          "output": "",
+          "error": "Path \".env.md\" matches the secret-path denylist. Usage: pass allow_secrets=true to request explicit approval, or use a non-secret path."
+        },
+        "beforeOutline": {
+          "success": false,
+          "output": "",
+          "error": "Call document_outline on this path first; document_read_section reads only documents outlined in this session."
+        },
+        "orphanRejectedBeforeChat": true
+      }
+    ],
+    "hostileDirectiveAbsent": true,
+    "redactionObserved": true,
+    "forgedEnvelopeRemainsData": true,
+    "readOutputLengths": [
+      16719,
+      4882,
+      13771
+    ],
+    "compactions": [
+      {
+        "kind": "compaction",
+        "elided": 2,
+        "charactersSaved": 18126
+      },
+      {
+        "kind": "compaction",
+        "elided": 1,
+        "charactersSaved": 4953
+      }
+    ],
+    "originalTaskRetained": true,
+    "nativePairsIntact": true,
+    "fetches": [
+      "http://127.0.0.1:58477/api/ps",
+      "http://127.0.0.1:58477/api/chat",
+      "http://127.0.0.1:58477/api/chat",
+      "http://127.0.0.1:58477/api/chat",
+      "http://127.0.0.1:58477/api/chat"
+    ]
+  },
+  "environment": {
+    "node": "v24.13.0",
+    "platform": "win32",
+    "workdir": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-protocol-workspace-O0tVNO",
+    "endpoint": "http://127.0.0.1:58477"
+  },
+  "taskSha256": "41eba5483e2d2f06d37634da0ddeb5c8a99fe4004c4def8717a6bf714b5bfef9",
+  "documentSha256": "afce2e595a1e2dcd35bd3a0d5a43344949526971f4ee2b3afb9331432855d88d",
+  "requests": [
+    {
+      "options": {
+        "num_ctx": 16384
+      },
+      "messages": [
+        {
+          "role": "system",
+          "characters": 2246,
+          "contentSha256": "a884970ff8891df467bc57cfc61f9a7f903fdb147a7910a8a2496b3937186f63"
+        },
+        {
+          "role": "user",
+          "characters": 5180,
+          "contentSha256": "41eba5483e2d2f06d37634da0ddeb5c8a99fe4004c4def8717a6bf714b5bfef9"
+        }
+      ]
+    },
+    {
+      "options": {
+        "num_ctx": 16384
+      },
+      "messages": [
+        {
+          "role": "system",
+          "characters": 2246,
+          "contentSha256": "a884970ff8891df467bc57cfc61f9a7f903fdb147a7910a8a2496b3937186f63"
+        },
+        {
+          "role": "user",
+          "characters": 5180,
+          "contentSha256": "41eba5483e2d2f06d37634da0ddeb5c8a99fe4004c4def8717a6bf714b5bfef9"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "b9f1d0c7-2b56-41f2-b75f-97ba8cb0c168",
+              "function": {
+                "name": "document_outline",
+                "arguments": {
+                  "path": "manual.md"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 1428,
+          "contentSha256": "347c636255e4578de1ba8f5122cc0cc63b51c57122ccd46af0c8d85dd5490bf2",
+          "tool_name": "document_outline",
+          "tool_call_id": "b9f1d0c7-2b56-41f2-b75f-97ba8cb0c168"
+        }
+      ]
+    },
+    {
+      "options": {
+        "num_ctx": 16384
+      },
+      "messages": [
+        {
+          "role": "system",
+          "characters": 2246,
+          "contentSha256": "a884970ff8891df467bc57cfc61f9a7f903fdb147a7910a8a2496b3937186f63"
+        },
+        {
+          "role": "user",
+          "characters": 5180,
+          "contentSha256": "41eba5483e2d2f06d37634da0ddeb5c8a99fe4004c4def8717a6bf714b5bfef9"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "b9f1d0c7-2b56-41f2-b75f-97ba8cb0c168",
+              "function": {
+                "name": "document_outline",
+                "arguments": {
+                  "path": "manual.md"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 92,
+          "contentSha256": "6b4107a63c9e99c88996ebb2be7bfbcfb2027ada8885c02a691a0f6249aa302c",
+          "tool_name": "document_outline",
+          "tool_call_id": "b9f1d0c7-2b56-41f2-b75f-97ba8cb0c168"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "4221024f-7a07-4d52-abd7-13cba177a7ea",
+              "function": {
+                "name": "document_read_section",
+                "arguments": {
+                  "path": "manual.md",
+                  "node_id": "421c549f-9321072f5c64",
+                  "tree_hash": "12c9431ae2250d36869292e3a7387c2f355ba22d31916567cb969eb86cdfc263"
+                }
+              }
+            },
+            {
+              "id": "b1c2e37b-9653-42c2-a0dc-bc7d8955edeb",
+              "function": {
+                "name": "document_read_section",
+                "arguments": {
+                  "path": "manual.md",
+                  "node_id": "421c549f-9321072f5c64",
+                  "tree_hash": "12c9431ae2250d36869292e3a7387c2f355ba22d31916567cb969eb86cdfc263"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 97,
+          "contentSha256": "c1a50275f6071d74c1b79624eb8203fb2d1318f4a5d9399f9f72bcc2ab917469",
+          "tool_name": "document_read_section",
+          "tool_call_id": "4221024f-7a07-4d52-abd7-13cba177a7ea"
+        },
+        {
+          "role": "tool",
+          "characters": 5050,
+          "contentSha256": "ae1c4812f4ae903692e54addda37d359b6bbfe511e13bc8dd145cc0bf35bec40",
+          "tool_name": "document_read_section",
+          "tool_call_id": "b1c2e37b-9653-42c2-a0dc-bc7d8955edeb"
+        }
+      ]
+    },
+    {
+      "options": {
+        "num_ctx": 16384
+      },
+      "messages": [
+        {
+          "role": "system",
+          "characters": 2246,
+          "contentSha256": "a884970ff8891df467bc57cfc61f9a7f903fdb147a7910a8a2496b3937186f63"
+        },
+        {
+          "role": "user",
+          "characters": 5180,
+          "contentSha256": "41eba5483e2d2f06d37634da0ddeb5c8a99fe4004c4def8717a6bf714b5bfef9"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "b9f1d0c7-2b56-41f2-b75f-97ba8cb0c168",
+              "function": {
+                "name": "document_outline",
+                "arguments": {
+                  "path": "manual.md"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 92,
+          "contentSha256": "6b4107a63c9e99c88996ebb2be7bfbcfb2027ada8885c02a691a0f6249aa302c",
+          "tool_name": "document_outline",
+          "tool_call_id": "b9f1d0c7-2b56-41f2-b75f-97ba8cb0c168"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "4221024f-7a07-4d52-abd7-13cba177a7ea",
+              "function": {
+                "name": "document_read_section",
+                "arguments": {
+                  "path": "manual.md",
+                  "node_id": "421c549f-9321072f5c64",
+                  "tree_hash": "12c9431ae2250d36869292e3a7387c2f355ba22d31916567cb969eb86cdfc263"
+                }
+              }
+            },
+            {
+              "id": "b1c2e37b-9653-42c2-a0dc-bc7d8955edeb",
+              "function": {
+                "name": "document_read_section",
+                "arguments": {
+                  "path": "manual.md",
+                  "node_id": "421c549f-9321072f5c64",
+                  "tree_hash": "12c9431ae2250d36869292e3a7387c2f355ba22d31916567cb969eb86cdfc263"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 97,
+          "contentSha256": "c1a50275f6071d74c1b79624eb8203fb2d1318f4a5d9399f9f72bcc2ab917469",
+          "tool_name": "document_read_section",
+          "tool_call_id": "4221024f-7a07-4d52-abd7-13cba177a7ea"
+        },
+        {
+          "role": "tool",
+          "characters": 97,
+          "contentSha256": "c1a50275f6071d74c1b79624eb8203fb2d1318f4a5d9399f9f72bcc2ab917469",
+          "tool_name": "document_read_section",
+          "tool_call_id": "b1c2e37b-9653-42c2-a0dc-bc7d8955edeb"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "92136b61-efc8-4397-b232-d9befa44c053",
+              "function": {
+                "name": "document_read_section",
+                "arguments": {
+                  "path": "manual.md",
+                  "node_id": "421c549f-9321072f5c64",
+                  "tree_hash": "12c9431ae2250d36869292e3a7387c2f355ba22d31916567cb969eb86cdfc263"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 13939,
+          "contentSha256": "3ac40779f82699cd971835399fe6e313ce3ca222771aa7854b043db8f247b314",
+          "tool_name": "document_read_section",
+          "tool_call_id": "92136b61-efc8-4397-b232-d9befa44c053"
+        }
+      ]
+    }
+  ],
+  "comparison": "matches"
+}

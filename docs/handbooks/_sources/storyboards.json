@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "settings": {
+    "reading": {"layout": "standard", "theme": "light", "coverage": "comprehensive", "origin": "retained native generator and session instruction"},
+    "presentation": {"enabled": true, "theme": "light", "depth": "balanced", "initial_slide": 1, "compact_breakpoint": 760, "origin": "session instruction and noninteractive default"},
+    "imagery": {"additional": "none", "network_consent": false, "origin": "session instruction"},
+    "interactivity": {"value": "restrained", "origin": "technical handbook default"},
+    "content_intent": {"source_relationship": "standalone", "decision_to_enable": "Navigate local runtime and document-tool ownership, operation and limits", "scope_class": "existing product handbook", "assumptions": ["Reading retains every source block", "Presentation is an additional view", "Brand asset is the local Nexus mark"], "exclusions": ["No new product capabilities or invented data", "No external imagery"]}
+  },
+  "handbooks": {
+    "atlas": {"ceiling": 3, "slides": [{"id": "overview", "section": "intro", "blocks": [0]}, {"id": "owners", "section": "intro", "title": "Flow ownership", "blocks": [1]}, {"id": "end-to-end", "section": "end-to-end-path", "blocks": [0]}], "omissions": {"end-to-end-path:1": "Release-log placement remains in reading view"}},
+    "generation-recovery": {"ceiling": 4, "slides": [{"id": "overview", "section": "intro", "blocks": [0]}, {"id": "recover", "section": "recover-the-runtime", "blocks": [0]}, {"id": "validate", "section": "validate-image-and-video-generation", "blocks": [0,1]}, {"id": "failures", "section": "interpret-failures", "blocks": [0,1]}], "omissions": {}},
+    "installer-runtime": {"ceiling": 2, "slides": [{"id": "overview", "section": "intro", "blocks": [0]}, {"id": "lease-and-access", "section": "intro", "title": "Lease, runtime state and model access", "blocks": [1,2]}], "omissions": {}},
+    "media-runtime": {"ceiling": 2, "slides": [{"id": "overview", "section": "intro", "blocks": [0]}, {"id": "validation", "section": "intro", "title": "Validate before reporting success", "blocks": [1,2]}], "omissions": {}},
+    "transcript-and-workspaces": {"ceiling": 2, "slides": [{"id": "overview", "section": "intro", "blocks": [0,1]}, {"id": "workspace", "section": "intro", "title": "Agents workspace", "blocks": [2]}], "omissions": {}},
+    "document-outline": {"ceiling": 12, "slides": [{"id": "overview", "section": "intro", "blocks": [0]}, {"id": "tools", "section": "what-they-do", "blocks": [0,1]}, {"id": "structure", "section": "what-they-do", "title": "Recovering section structure", "blocks": [2,3,4]}, {"id": "budget", "section": "what-they-do", "title": "Document output and window budgets", "blocks": [5,6]}, {"id": "compaction", "section": "managing-conversation-space", "blocks": [0,1]}, {"id": "history", "section": "tool-results-and-saved-sessions", "blocks": [0,1]}, {"id": "settings", "section": "turning-them-on", "blocks": [0,1,2,3]}, {"id": "safety", "section": "safety-model", "blocks": [0], "list_items": {"1": [0,1,2,3]}}, {"id": "permissions", "section": "safety-model", "title": "Session, permission and summary boundaries", "list_items": {"1": [4,5,6]}}, {"id": "retention", "section": "cache-and-retention", "blocks": [0,1]}, {"id": "limits", "section": "limits", "blocks": [0]}, {"id": "real-use", "section": "recording-real-use", "blocks": [0,1,2]}], "omissions": {}}
+  }
+}

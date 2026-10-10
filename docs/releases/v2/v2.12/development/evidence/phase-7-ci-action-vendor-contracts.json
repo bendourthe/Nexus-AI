@@ -1,0 +1,46 @@
+{
+  "created_at": "2026-10-10T01:27:30.380711+00:00",
+  "scope": "Official GitHub API read of exact action pins proposed by open PRs; no workflow mutation",
+  "observations": [
+    {
+      "repository": "actions/cache",
+      "sha": "27d5ce7f107fe9357f9df03efb73ab90386fccae",
+      "status": "RESOLVED",
+      "commit_message": "Merge pull request #1747 from actions/yacaovsnc/update-dependency\n\nUpdate ts-http-runtime dependency",
+      "commit_date": "2026-04-13T15:36:02Z",
+      "commit_url": "https://github.com/actions/cache/commit/27d5ce7f107fe9357f9df03efb73ab90386fccae",
+      "definition_path": "action.yml",
+      "definition_blob_sha": "2606455d4cedc2a06e05c1bf7feb8cc41aaf28f9",
+      "definition_content": "name: 'Cache'\ndescription: 'Cache artifacts like dependencies and build outputs to improve workflow execution time'\nauthor: 'GitHub'\ninputs:\n  path:\n    description: 'A list of files, directories, and wildcard patterns to cache and restore'\n    required: true\n  key:\n    description: 'An explicit key for restoring and saving the cache'\n    required: true\n  restore-keys:\n    description: 'An ordered multiline string listing the prefix-matched keys, that are used for restoring stale cache if no cache hit occurred for key. Note `cache-hit` returns false in this case.'\n    required: false\n  upload-chunk-size:\n    description: 'The chunk size used to split up large files during upload, in bytes'\n    required: false\n  enableCrossOsArchive:\n    description: 'An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms'\n    default: 'false'\n    required: false\n  fail-on-cache-miss:\n    description: 'Fail the workflow if cache entry is not found'\n    default: 'false'\n    required: false\n  lookup-only:\n    description: 'Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache'\n    default: 'false'\n    required: false\n  save-always:\n    description: 'Run the post step to save the cache even if another step before fails'\n    default: 'false'\n    required: false\n    deprecationMessage: |\n      save-always does not work as intended and will be removed in a future release.\n      A separate `actions/cache/restore` step should be used instead.\n      See https://github.com/actions/cache/tree/main/save#always-save-cache for more details.\noutputs:\n  cache-hit:\n    description: 'A boolean value to indicate an exact match was found for the primary key'\nruns:\n  using: 'node24'\n  main: 'dist/restore/index.js'\n  post: 'dist/save/index.js'\n  post-if: \"success()\"\nbranding:\n  icon: 'archive'\n  color: 'gray-dark'\n"
+    },
+    {
+      "repository": "actions/cache",
+      "sha": "55cc8345863c7cc4c66a329aec7e433d2d1c52a9",
+      "status": "RESOLVED",
+      "commit_message": "Merge pull request #1768 from jasongin/readonly-cache\n\nBump @actions/cache to v6.1.0 - handle read-only cache access",
+      "commit_date": "2026-06-23T20:30:28Z",
+      "commit_url": "https://github.com/actions/cache/commit/55cc8345863c7cc4c66a329aec7e433d2d1c52a9",
+      "definition_path": "action.yml",
+      "definition_blob_sha": "2606455d4cedc2a06e05c1bf7feb8cc41aaf28f9",
+      "definition_content": "name: 'Cache'\ndescription: 'Cache artifacts like dependencies and build outputs to improve workflow execution time'\nauthor: 'GitHub'\ninputs:\n  path:\n    description: 'A list of files, directories, and wildcard patterns to cache and restore'\n    required: true\n  key:\n    description: 'An explicit key for restoring and saving the cache'\n    required: true\n  restore-keys:\n    description: 'An ordered multiline string listing the prefix-matched keys, that are used for restoring stale cache if no cache hit occurred for key. Note `cache-hit` returns false in this case.'\n    required: false\n  upload-chunk-size:\n    description: 'The chunk size used to split up large files during upload, in bytes'\n    required: false\n  enableCrossOsArchive:\n    description: 'An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms'\n    default: 'false'\n    required: false\n  fail-on-cache-miss:\n    description: 'Fail the workflow if cache entry is not found'\n    default: 'false'\n    required: false\n  lookup-only:\n    description: 'Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache'\n    default: 'false'\n    required: false\n  save-always:\n    description: 'Run the post step to save the cache even if another step before fails'\n    default: 'false'\n    required: false\n    deprecationMessage: |\n      save-always does not work as intended and will be removed in a future release.\n      A separate `actions/cache/restore` step should be used instead.\n      See https://github.com/actions/cache/tree/main/save#always-save-cache for more details.\noutputs:\n  cache-hit:\n    description: 'A boolean value to indicate an exact match was found for the primary key'\nruns:\n  using: 'node24'\n  main: 'dist/restore/index.js'\n  post: 'dist/save/index.js'\n  post-if: \"success()\"\nbranding:\n  icon: 'archive'\n  color: 'gray-dark'\n"
+    },
+    {
+      "repository": "github/codeql-action",
+      "sha": "f411752efdf656cb71aa17b755b22c890960da1d",
+      "status": "UNRESOLVED",
+      "error": "gh: No commit found for SHA: f411752efdf656cb71aa17b755b22c890960da1d (HTTP 422)\n",
+      "definition_path": "upload-sarif/action.yml"
+    },
+    {
+      "repository": "github/codeql-action",
+      "sha": "458d36d7d4f47d0dd16ca424c1d3cda0060f1360",
+      "status": "RESOLVED",
+      "commit_message": "Merge pull request #3907 from github/backport-v3.35.5-9e0d7b8d2\n\nMerge releases/v4 into releases/v3",
+      "commit_date": "2026-05-15T12:40:29Z",
+      "commit_url": "https://github.com/github/codeql-action/commit/458d36d7d4f47d0dd16ca424c1d3cda0060f1360",
+      "definition_path": "upload-sarif/action.yml",
+      "definition_blob_sha": "93a36e4f9fc07e8d48661397525165df1f8dcdde",
+      "definition_content": "name: 'Code Scanning : Upload SARIF'\ndescription: 'Upload the analysis results'\nauthor: 'GitHub'\ninputs:\n  sarif_file:\n    description: |\n      The SARIF file or directory of SARIF files to be uploaded to GitHub code scanning.\n      See https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github#uploading-a-code-scanning-analysis-with-github-actions\n      for information on the maximum number of results and maximum file size supported by code scanning.\n    required: false\n    default: '../results'\n  checkout_path:\n    description: \"The path at which the analyzed repository was checked out. Used to relativize any absolute paths in the uploaded SARIF file.\"\n    required: false\n    default: ${{ github.workspace }}\n  ref:\n    description: \"The ref where results will be uploaded. If not provided, the Action will use the GITHUB_REF environment variable. If provided, the sha input must be provided as well. This input is ignored for pull requests from forks. Expected format: refs/heads/<branch name>, refs/tags/<tag>, refs/pull/<number>/merge, or refs/pull/<number>/head.\"\n    required: false\n  sha:\n    description: \"The sha of the HEAD of the ref where results will be uploaded. If not provided, the Action will use the GITHUB_SHA environment variable. If provided, the ref input must be provided as well. This input is ignored for pull requests from forks.\"\n    required: false\n  token:\n    description: \"GitHub token to use for authenticating with this instance of GitHub. The token must be the built-in GitHub Actions token, and the workflow must have the `security-events: write` permission. Most of the time it is advisable to avoid specifying this input so that the workflow falls back to using the default value.\"\n    required: false\n    default: ${{ github.token }}\n  matrix:\n    default: ${{ toJson(matrix) }}\n  category:\n    description: String used by Code Scanning for matching the analyses\n    required: false\n  wait-for-processing:\n    description: If true, the Action will wait for the uploaded SARIF to be processed before completing.\n    required: true\n    default: \"true\"\noutputs:\n  sarif-id:\n    description: The ID of the uploaded Code Scanning SARIF file, if any.\n  sarif-ids:\n    description: |\n      A stringified JSON object containing the SARIF ID for each kind of analysis. For example:\n\n      { \"code-scanning\": \"some-id\", \"code-quality\": \"some-other-id\" }\nruns:\n  using: node20\n  main: '../lib/upload-sarif-entry.js'\n  post: '../lib/upload-sarif-post-entry.js'\n"
+    }
+  ]
+}

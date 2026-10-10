@@ -1,0 +1,4072 @@
+{
+  "scope": "Read-only terminal CI input inventory; no workflow/settings changes",
+  "recorded_at": "2026-10-10T00:14:12.122792+00:00",
+  "provider": "GitHub Actions",
+  "repository": "bendourthe/Nexus-AI",
+  "workflows": [
+    {
+      "path": ".github/workflows/branch-cleanup.yml",
+      "sha256": "d1e02f3a2ff8a2bfe2991bb2a716861d9fd002dee344acc44927e13bf749b64c",
+      "events": {
+        "workflow_dispatch": {
+          "inputs": {
+            "dry_run": {
+              "description": "Dry run only (list candidates without deleting)",
+              "type": "boolean",
+              "default": "true"
+            },
+            "max_age_days": {
+              "description": "Minimum age in days before a branch is eligible",
+              "type": "number",
+              "default": "30"
+            }
+          }
+        },
+        "schedule": [
+          {
+            "cron": "0 6 * * 0"
+          }
+        ]
+      },
+      "permissions": {
+        "contents": "write"
+      },
+      "concurrency": null,
+      "jobs": {
+        "cleanup": {
+          "name": "Identify and (optionally) delete stale branches",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+              "with": {
+                "fetch-depth": "0"
+              }
+            },
+            {
+              "name": "Configure dry-run flag",
+              "id": "config",
+              "env": {
+                "INPUT_DRY_RUN": "${{ inputs.dry_run }}",
+                "INPUT_MAX_AGE_DAYS": "${{ inputs.max_age_days }}"
+              },
+              "run": "# Scheduled runs are always dry-run during the rollout window.\n# Manual dispatches honor the input.\nif [[ \"${{ github.event_name }}\" == \"schedule\" ]]; then\n  echo \"dry_run=true\" >> \"$GITHUB_OUTPUT\"\n  echo \"max_age_days=30\" >> \"$GITHUB_OUTPUT\"\nelse\n  echo \"dry_run=${INPUT_DRY_RUN:-true}\" >> \"$GITHUB_OUTPUT\"\n  echo \"max_age_days=${INPUT_MAX_AGE_DAYS:-30}\" >> \"$GITHUB_OUTPUT\"\nfi\n"
+            },
+            {
+              "name": "Identify candidate branches",
+              "id": "candidates",
+              "env": {
+                "MAX_AGE_DAYS": "${{ steps.config.outputs.max_age_days }}"
+              },
+              "shell": "bash",
+              "run": "set -euo pipefail\ngit fetch origin --prune --quiet\n\n# Cutoff in seconds-since-epoch.\ncutoff=$(($(date +%s) - MAX_AGE_DAYS * 86400))\npatterns='^(dependabot|copilot|feature)/.+$'\n\ncandidates=()\nwhile IFS=$'\\t' read -r ref committerdate; do\n  branch=\"${ref#refs/remotes/origin/}\"\n  # Skip protected names defensively, even though the regex above\n  # already excludes them.\n  case \"$branch\" in\n    main|master|develop|HEAD) continue ;;\n    release/*|hotfix/*) continue ;;\n  esac\n  if ! [[ \"$branch\" =~ $patterns ]]; then\n    continue\n  fi\n  if [[ \"$committerdate\" -ge \"$cutoff\" ]]; then\n    continue\n  fi\n\n  # Must be already merged into origin/main.\n  if ! git merge-base --is-ancestor \"origin/$branch\" origin/main; then\n    continue\n  fi\n\n  # Skip if the tip commit message contains 'WIP:' (escape hatch).\n  tip_msg=$(git log -1 --format=%B \"origin/$branch\" || true)\n  if printf '%s' \"$tip_msg\" | grep -q 'WIP:'; then\n    continue\n  fi\n\n  candidates+=(\"$branch\")\ndone < <(git for-each-ref --format='%(refname)\\t%(committerdate:unix)' refs/remotes/origin/)\n\n{\n  echo \"## Branch cleanup candidates\"\n  echo \"\"\n  echo \"- dry_run: ${{ steps.config.outputs.dry_run }}\"\n  echo \"- max_age_days: $MAX_AGE_DAYS\"\n  echo \"- candidate count: ${#candidates[@]}\"\n  echo \"\"\n  if [[ ${#candidates[@]} -eq 0 ]]; then\n    echo \"_No candidates._\"\n  else\n    echo \"| Branch | Last commit |\"\n    echo \"|--------|-------------|\"\n    for b in \"${candidates[@]}\"; do\n      d=$(git log -1 --format=%ci \"origin/$b\")\n      echo \"| \\`$b\\` | $d |\"\n    done\n  fi\n} >> \"$GITHUB_STEP_SUMMARY\"\n\n# Persist the list for the delete step.\nprintf '%s\\n' \"${candidates[@]}\" > /tmp/branch-cleanup-candidates.txt\necho \"count=${#candidates[@]}\" >> \"$GITHUB_OUTPUT\"\n"
+            },
+            {
+              "name": "Delete branches (skipped on dry_run)",
+              "if": "steps.config.outputs.dry_run != 'true' && steps.candidates.outputs.count != '0'",
+              "env": {
+                "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+              },
+              "shell": "bash",
+              "run": "set -euo pipefail\nwhile IFS= read -r branch; do\n  [[ -z \"$branch\" ]] && continue\n  echo \"Deleting origin/$branch\"\n  git push origin --delete \"$branch\"\ndone < /tmp/branch-cleanup-candidates.txt\n"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "96327d4a6183eefc718d67a040c91d08ebb0b22e1e1fd5b68d616e02d059deb3",
+      "events": {
+        "push": {
+          "branches-ignore": [
+            "dependabot/**"
+          ]
+        },
+        "pull_request": {
+          "branches": [
+            "main",
+            "develop"
+          ]
+        }
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "concurrency": {
+        "group": "ci-${{ github.workflow }}-${{ github.head_ref || github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "lint-ts": {
+          "name": "Lint TypeScript (Node ${{ matrix.node }})",
+          "runs-on": "ubuntu-latest",
+          "strategy": {
+            "fail-fast": "false",
+            "matrix": {
+              "node": [
+                "22.x",
+                "24.x"
+              ]
+            }
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "${{ matrix.node }}",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "run": "npm run lint"
+            }
+          ]
+        },
+        "test-ts": {
+          "name": "Test TypeScript (Node ${{ matrix.node }})",
+          "runs-on": "ubuntu-latest",
+          "strategy": {
+            "fail-fast": "false",
+            "matrix": {
+              "node": [
+                "22.x",
+                "24.x"
+              ]
+            }
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "${{ matrix.node }}",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "run": "npm run test -- --reporter=verbose --coverage",
+              "env": {
+                "CI": "true"
+              }
+            },
+            {
+              "name": "Desktop vitest (Node 22)",
+              "if": "matrix.node == '22.x'",
+              "run": "npm run test:shell",
+              "env": {
+                "CI": "true"
+              }
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always() && matrix.node == '22.x'",
+              "with": {
+                "name": "ts-coverage",
+                "path": "coverage/",
+                "retention-days": "7"
+              }
+            }
+          ]
+        },
+        "build-ts": {
+          "name": "Build TypeScript (Node ${{ matrix.node }})",
+          "runs-on": "ubuntu-latest",
+          "strategy": {
+            "fail-fast": "false",
+            "matrix": {
+              "node": [
+                "22.x",
+                "24.x"
+              ]
+            }
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "${{ matrix.node }}",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "run": "npm run build"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "matrix.node == '22.x'",
+              "with": {
+                "name": "ts-build",
+                "path": "out/",
+                "retention-days": "7"
+              }
+            }
+          ]
+        },
+        "catalog-sync": {
+          "name": "docs/index.md sync check",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "name": "Regenerate module catalog",
+              "run": "node scripts/generate-catalog.mjs"
+            },
+            {
+              "name": "Diff committed vs regenerated",
+              "run": "if ! git diff --exit-code docs/index.md; then\n  echo \"\"\n  echo \"docs/index.md is out of sync with src/.\"\n  echo \"Run \\`npm run catalog\\` and commit the regenerated file.\"\n  exit 1\nfi\n"
+            },
+            {
+              "name": "Safety-surface SSOT drift gate (perm tiers + egress denylist + secret paths)",
+              "run": "npm run security:check"
+            }
+          ]
+        },
+        "coverage-gate": {
+          "name": "Coverage gate (80%)",
+          "needs": [
+            "test-ts"
+          ],
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+              "with": {
+                "name": "ts-coverage",
+                "path": "coverage/"
+              }
+            },
+            {
+              "name": "Check TypeScript coverage threshold",
+              "run": "set -euo pipefail\nsummary=coverage/coverage-summary.json\nif [ ! -f \"$summary\" ]; then\n  echo \"Missing $summary -- the test job must emit the json-summary reporter.\"\n  exit 1\nfi\nlines=$(jq -r '.total.lines.pct' \"$summary\")\nbranches=$(jq -r '.total.branches.pct' \"$summary\")\nfunctions=$(jq -r '.total.functions.pct' \"$summary\")\nprintf 'TS line coverage:     %s%%\\n' \"$lines\"\nprintf 'TS branch coverage:   %s%%\\n' \"$branches\"\nprintf 'TS function coverage: %s%%\\n' \"$functions\"\nawk -v v=\"$lines\"     'BEGIN { exit (v + 0 < 80) }' || { echo \"TS line coverage $lines% is below the 80% threshold\"; exit 1; }\nawk -v v=\"$branches\"  'BEGIN { exit (v + 0 < 75) }' || { echo \"TS branch coverage $branches% is below the 75% threshold\"; exit 1; }\nawk -v v=\"$functions\" 'BEGIN { exit (v + 0 < 80) }' || { echo \"TS function coverage $functions% is below the 80% threshold\"; exit 1; }\necho \"TS coverage gates: OK\"\n"
+            }
+          ]
+        },
+        "nexus-check": {
+          "name": "nexus-check (repository)",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22"
+              }
+            },
+            {
+              "run": "npm run check"
+            },
+            {
+              "name": "nexus-check (test-tampering rules)",
+              "run": "npm run check:tampering"
+            },
+            {
+              "name": "naming gate (no devai-hub enum value)",
+              "run": "npm run check:naming"
+            },
+            {
+              "name": "docs-layout gate (canonical version dirs)",
+              "run": "npm run check:docs-layout"
+            }
+          ]
+        },
+        "fast-bench": {
+          "name": "fast-bench (rendering)",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "run": "npm run build"
+            },
+            {
+              "name": "Run rendering benches",
+              "run": "npm run bench -- -t render --reporter=verbose --reporter=./scripts/vitest-bench-json-reporter.mjs --outputFile=bench-results.json 2>&1 | tee bench-results.txt"
+            },
+            {
+              "name": "Check rendering bench regressions",
+              "run": "node scripts/check-bench-regressions.mjs \\\n  --baseline tests/benchmarks/baselines/v0.7.0.json \\\n  --current bench-results.json \\\n  --regression-pct 20 \\\n  --fail-on-regression\n"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always()",
+              "with": {
+                "name": "fast-bench-results",
+                "path": "bench-results.txt\nbench-results.json\n",
+                "retention-days": "14"
+              }
+            }
+          ]
+        },
+        "check-prompts": {
+          "name": "check-prompts",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "run": "npm run check:prompts"
+            }
+          ]
+        },
+        "package-vsix": {
+          "name": "Package VSIX (smoke)",
+          "needs": [
+            "build-ts"
+          ],
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "name": "Build VSIX with Electron native modules",
+              "shell": "pwsh",
+              "run": "./scripts/build-vsix.ps1 -SkipTests"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "with": {
+                "name": "vsix-smoke",
+                "path": "nexus-coding-*.vsix",
+                "retention-days": "7"
+              }
+            }
+          ]
+        },
+        "check-feature-drift": {
+          "name": "check-feature-drift",
+          "runs-on": "ubuntu-latest",
+          "permissions": {
+            "contents": "read"
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22"
+              }
+            },
+            {
+              "run": "node scripts/check-feature-drift.mjs"
+            }
+          ]
+        },
+        "check-command-parity": {
+          "name": "check-command-parity",
+          "runs-on": "ubuntu-latest",
+          "permissions": {
+            "contents": "read"
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22"
+              }
+            },
+            {
+              "run": "node scripts/check-command-parity.mjs"
+            },
+            {
+              "run": "node scripts/ci-profile.mjs --profile fast --list --json"
+            },
+            {
+              "run": "node scripts/ci-profile.mjs --profile full --list --json"
+            },
+            {
+              "run": "node scripts/ci-profile.mjs --profile platform --list --json"
+            },
+            {
+              "run": "node scripts/ci-profile.mjs --profile report --list --json"
+            },
+            {
+              "run": "node scripts/ci-profile.mjs --profile release --list --json"
+            }
+          ]
+        },
+        "check-release-assets": {
+          "name": "check-release-assets",
+          "runs-on": "ubuntu-latest",
+          "permissions": {
+            "contents": "read"
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22"
+              }
+            },
+            {
+              "run": "node scripts/check-release-assets.mjs"
+            }
+          ]
+        },
+        "check-architecture": {
+          "name": "check-architecture",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "name": "Install graphviz",
+              "run": "sudo apt-get update && sudo apt-get install -y --no-install-recommends graphviz"
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "run": "bash scripts/check-architecture.sh"
+            },
+            {
+              "name": "Regenerate dependency graph SVG",
+              "run": "npm run deps:graph"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "with": {
+                "name": "dep-graph-svg",
+                "path": "docs/archive/v0/v0.5/dep-graph.svg",
+                "retention-days": "7"
+              }
+            }
+          ]
+        },
+        "init-check-posix": {
+          "name": "init.sh (Linux)",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "bash scripts/init.sh"
+            }
+          ]
+        },
+        "init-check-windows": {
+          "name": "init.ps1 (Windows)",
+          "runs-on": "windows-latest",
+          "if": "${{ github.event_name != 'pull_request' }}",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "pwsh -File scripts/init.ps1",
+              "shell": "pwsh"
+            }
+          ]
+        },
+        "test-python-runtimes": {
+          "name": "pytest (runtimes/)",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12",
+                "cache": "pip"
+              }
+            },
+            {
+              "name": "Install portable runtime deps (no torch, no GPU)",
+              "run": "python -m pip install --quiet --upgrade pip\npython -m pip install --quiet pytest\npython -m pip install --quiet -r runtimes/ocr/requirements.txt\n"
+            },
+            {
+              "name": "Run runtime tests",
+              "run": "python -m pytest tests/python -q",
+              "env": {
+                "NEXUS_AUDIO_STUB": "1"
+              }
+            }
+          ]
+        },
+        "audit-ts": {
+          "name": "npm audit (production deps)",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "name": "npm audit (production deps, allowlisted)",
+              "run": "npm run check:audit-prod"
+            }
+          ]
+        },
+        "audit-ts-dev": {
+          "name": "npm audit (dev + prod, non-blocking)",
+          "runs-on": "ubuntu-latest",
+          "continue-on-error": "true",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "name": "npm audit --audit-level=high (json)",
+              "continue-on-error": "true",
+              "run": "npm audit --audit-level=high --json > audit-dev.json || true"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always()",
+              "with": {
+                "name": "audit-dev",
+                "path": "audit-dev.json",
+                "retention-days": "30"
+              }
+            }
+          ]
+        },
+        "audit-py": {
+          "name": "pip-audit (installer venv)",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "uses": "astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f",
+              "with": {
+                "version": "latest"
+              }
+            },
+            {
+              "name": "Cache pip-audit advisory DB",
+              "uses": "actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae",
+              "with": {
+                "path": "~/.cache/pip-audit",
+                "key": "pip-audit-${{ runner.os }}-${{ hashFiles('scripts/installer/uv.lock') }}"
+              }
+            },
+            {
+              "name": "Export installer dependencies to requirements-audit.txt",
+              "run": "cd scripts/installer\nuv export \\\n  --no-hashes \\\n  --no-annotate \\\n  --format requirements-txt \\\n  --no-emit-project \\\n  > requirements-audit.txt\n"
+            },
+            {
+              "name": "Run pip-audit",
+              "run": "cd scripts/installer\nuv run --with pip-audit -- pip-audit --strict -r requirements-audit.txt\n"
+            }
+          ]
+        },
+        "audit-runtimes": {
+          "name": "pip-audit (model runtimes)",
+          "runs-on": "ubuntu-latest",
+          "permissions": {
+            "contents": "read"
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "name": "Cache pip-audit advisory DB",
+              "uses": "actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae",
+              "with": {
+                "path": "~/.cache/pip-audit",
+                "key": "pip-audit-runtimes-${{ runner.os }}-${{ hashFiles('runtimes/*/requirements.txt') }}"
+              }
+            },
+            {
+              "name": "Install pip-audit",
+              "run": "python -m pip install --disable-pip-version-check pip-audit"
+            },
+            {
+              "name": "Audit each runtime requirement set",
+              "run": "set -u\nstatus=0\n# Unfixable upstream advisories go here with a dated reason, so one\n# of them cannot hold every merge hostage. Empty today.\nIGNORE_VULNS=\"\"\nIGNORE_ARGS=\"\"\nfor vuln in $IGNORE_VULNS; do\n  IGNORE_ARGS=\"$IGNORE_ARGS --ignore-vuln $vuln\"\ndone\nfor set_name in audio diffusion ocr; do\n  req=\"runtimes/${set_name}/requirements.txt\"\n  if [ ! -f \"$req\" ]; then\n    echo \"::error file=${req}::runtime requirement set is missing\"\n    status=1\n    continue\n  fi\n  echo \"::group::pip-audit ${req}\"\n  if ! python -m pip_audit -r \"$req\" --progress-spinner off                  ${IGNORE_ARGS}                  --format json --output \"audit-${set_name}.json\"; then\n    echo \"::error file=${req}::pip-audit reported advisories for ${set_name}\"\n    status=1\n  fi\n  python - \"$set_name\" <<'PYCOUNT'\nimport json, sys\nname = sys.argv[1]\nwith open(f\"audit-{name}.json\", encoding=\"utf-8\") as fh:\n    report = json.load(fh)\ndeps = report.get(\"dependencies\", [])\nflagged = [d for d in deps if d.get(\"vulns\")]\nprint(f\"{name}: {len(deps)} packages audited, {len(flagged)} with advisories\")\nfor dep in flagged:\n    ids = \", \".join(v.get(\"id\", \"?\") for v in dep[\"vulns\"])\n    print(f\"  - {dep['name']} {dep.get('version')}: {ids}\")\nPYCOUNT\n  echo \"::endgroup::\"\ndone\nexit \"$status\"\n"
+            },
+            {
+              "name": "Upload runtime audit reports",
+              "if": "always()",
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "with": {
+                "name": "audit-runtimes",
+                "path": "audit-*.json",
+                "retention-days": "30"
+              }
+            }
+          ]
+        },
+        "ci-required": {
+          "name": "ci-required",
+          "needs": [
+            "lint-ts",
+            "test-ts",
+            "build-ts",
+            "catalog-sync",
+            "coverage-gate",
+            "nexus-check",
+            "fast-bench",
+            "check-prompts",
+            "package-vsix",
+            "check-feature-drift",
+            "check-command-parity",
+            "check-release-assets",
+            "check-architecture",
+            "init-check-posix",
+            "init-check-windows",
+            "test-python-runtimes",
+            "audit-ts",
+            "audit-ts-dev",
+            "audit-py",
+            "audit-runtimes"
+          ],
+          "if": "always()",
+          "runs-on": "ubuntu-latest",
+          "permissions": {
+            "contents": "read"
+          },
+          "steps": [
+            {
+              "name": "Allowlist job results",
+              "env": {
+                "R_lint_ts": "${{ needs.lint-ts.result }}",
+                "R_test_ts": "${{ needs.test-ts.result }}",
+                "R_build_ts": "${{ needs.build-ts.result }}",
+                "R_catalog_sync": "${{ needs.catalog-sync.result }}",
+                "R_coverage_gate": "${{ needs.coverage-gate.result }}",
+                "R_nexus_check": "${{ needs.nexus-check.result }}",
+                "R_fast_bench": "${{ needs.fast-bench.result }}",
+                "R_check_prompts": "${{ needs.check-prompts.result }}",
+                "R_package_vsix": "${{ needs.package-vsix.result }}",
+                "R_check_feature_drift": "${{ needs.check-feature-drift.result }}",
+                "R_check_command_parity": "${{ needs.check-command-parity.result }}",
+                "R_check_release_assets": "${{ needs.check-release-assets.result }}",
+                "R_check_architecture": "${{ needs.check-architecture.result }}",
+                "R_init_check_posix": "${{ needs.init-check-posix.result }}",
+                "R_init_check_windows": "${{ needs.init-check-windows.result }}",
+                "R_test_python_runtimes": "${{ needs.test-python-runtimes.result }}",
+                "R_audit_ts": "${{ needs.audit-ts.result }}",
+                "R_audit_ts_dev": "${{ needs.audit-ts-dev.result }}",
+                "R_audit_py": "${{ needs.audit-py.result }}",
+                "R_audit_runtimes": "${{ needs.audit-runtimes.result }}"
+              },
+              "run": "set -uo pipefail\nfail=0\nfor var in $(env | sed -n 's/^\\(R_[A-Za-z0-9_]*\\)=.*/\\1/p' | sort); do\n  eval \"result=\\${${var}-}\"\n  case \"${result}\" in\n    success|skipped) ;;\n    *) echo \"FAIL: ${var#R_}=${result:-<empty>}\"; fail=1 ;;\n  esac\ndone\nexit \"$fail\"\n"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/codeql.yml",
+      "sha256": "51996c6753e136d500421af3a20f9c8ebad454a2931e25957b128d35cc295bf3",
+      "events": {
+        "push": {
+          "branches": [
+            "main",
+            "develop"
+          ]
+        },
+        "pull_request": {
+          "branches": [
+            "main",
+            "develop"
+          ]
+        },
+        "schedule": [
+          {
+            "cron": "27 4 * * 1"
+          }
+        ]
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "codeql-${{ github.workflow }}-${{ github.head_ref || github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "analyze": {
+          "name": "Analyze (${{ matrix.language }})",
+          "runs-on": "ubuntu-latest",
+          "if": "${{ github.actor != 'dependabot[bot]' }}",
+          "permissions": {
+            "actions": "read",
+            "contents": "read",
+            "security-events": "write"
+          },
+          "strategy": {
+            "fail-fast": "false",
+            "matrix": {
+              "include": [
+                {
+                  "language": "javascript-typescript",
+                  "build-mode": "none"
+                },
+                {
+                  "language": "python",
+                  "build-mode": "none"
+                }
+              ]
+            }
+          },
+          "continue-on-error": "true",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "name": "Initialize CodeQL",
+              "uses": "github/codeql-action/init@f411752efdf656cb71aa17b755b22c890960da1d",
+              "with": {
+                "languages": "${{ matrix.language }}",
+                "build-mode": "${{ matrix.build-mode }}",
+                "config": "paths-ignore:\n  - '**/.venv/**'\n  - '**/node_modules/**'\n  - 'out/**'\n  - 'dist/**'\n",
+                "queries": "security-and-quality"
+              }
+            },
+            {
+              "name": "Perform CodeQL Analysis",
+              "uses": "github/codeql-action/analyze@f411752efdf656cb71aa17b755b22c890960da1d",
+              "with": {
+                "category": "/language:${{ matrix.language }}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/commitlint.yml",
+      "sha256": "12f8205d71e5c72dbc867c0938dbf8346607f2cbb5a8d87faa456efe292d9f28",
+      "events": {
+        "pull_request": {
+          "types": [
+            "opened",
+            "synchronize",
+            "reopened"
+          ]
+        }
+      },
+      "permissions": {
+        "contents": "read",
+        "pull-requests": "read"
+      },
+      "concurrency": {
+        "group": "commitlint-${{ github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "lint-commits": {
+          "name": "Lint commit messages",
+          "runs-on": "ubuntu-latest",
+          "if": "${{ github.actor != 'dependabot[bot]' }}",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+              "with": {
+                "fetch-depth": "0"
+              }
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "name": "Lint pull request commits",
+              "run": "npx commitlint --from \"${{ github.event.pull_request.base.sha }}\" --to HEAD --verbose"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/coverage-diff.yml",
+      "sha256": "18eed1d8b199089d0c83b9d4aa9997e947332d358ca4d0d584340d9ebb742dd5",
+      "events": {
+        "pull_request": {
+          "types": [
+            "opened",
+            "synchronize",
+            "reopened"
+          ],
+          "branches": [
+            "main",
+            "develop"
+          ]
+        }
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "coverage-diff-${{ github.head_ref || github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "diff-cover": {
+          "name": "diff-cover (80% on changed lines)",
+          "runs-on": "ubuntu-latest",
+          "if": "${{ github.actor != 'dependabot[bot]' }}",
+          "permissions": {
+            "contents": "read",
+            "pull-requests": "write"
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+              "with": {
+                "fetch-depth": "0"
+              }
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "name": "Run vitest with coverage",
+              "run": "npm run test -- --coverage",
+              "env": {
+                "CI": "true"
+              }
+            },
+            {
+              "name": "Install diff-cover (pinned)",
+              "run": "python -m pip install --quiet \"diff-cover==9.2.0\""
+            },
+            {
+              "name": "Fetch base branch for diff",
+              "run": "git fetch origin main --depth=1"
+            },
+            {
+              "name": "Run diff-cover on changed lines",
+              "id": "diff-cover",
+              "continue-on-error": "true",
+              "run": "set -euo pipefail\nif [ ! -f coverage/lcov.info ]; then\n  echo \"::error::coverage/lcov.info missing -- vitest must emit the lcov reporter\"\n  exit 1\nfi\ndiff-cover coverage/lcov.info \\\n  --compare-branch=origin/main \\\n  --fail-under=80 \\\n  --markdown-report=diff-coverage.md \\\n  --html-report=diff-coverage.html\n"
+            },
+            {
+              "name": "Upload diff-cover reports",
+              "if": "always()",
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "with": {
+                "name": "diff-coverage",
+                "path": "diff-coverage.md\ndiff-coverage.html\n",
+                "retention-days": "14"
+              }
+            },
+            {
+              "name": "Comment diff-cover report on PR (on failure only)",
+              "if": "steps.diff-cover.outcome == 'failure' && github.event.pull_request.number",
+              "env": {
+                "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
+                "PR_NUMBER": "${{ github.event.pull_request.number }}"
+              },
+              "run": "if [ -f diff-coverage.md ]; then\n  gh pr comment \"$PR_NUMBER\" --body-file diff-coverage.md\nelse\n  gh pr comment \"$PR_NUMBER\" --body \"diff-cover failed but no markdown report was produced. Check the workflow logs.\"\nfi\n"
+            },
+            {
+              "name": "Fail job when diff-cover failed",
+              "if": "steps.diff-cover.outcome == 'failure'",
+              "run": "echo \"::error::Changed-lines coverage is below 80% (see diff-coverage.md artifact and PR comment)\"\nexit 1\n"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/docs-drift.yml",
+      "sha256": "a90fd19bbf3483be74e2952a4bf25f23edba253b203bee675de49772769a919c",
+      "events": {
+        "schedule": [
+          {
+            "cron": "0 6 * * *"
+          }
+        ],
+        "workflow_dispatch": {}
+      },
+      "permissions": {
+        "contents": "read",
+        "issues": "write"
+      },
+      "concurrency": {
+        "group": "docs-drift",
+        "cancel-in-progress": "false"
+      },
+      "jobs": {
+        "drift": {
+          "name": "Feature inventory drift",
+          "runs-on": "ubuntu-latest",
+          "timeout-minutes": "10",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22"
+              }
+            },
+            {
+              "name": "Check feature inventory drift",
+              "id": "check",
+              "run": "set -u\nif node scripts/check-feature-drift.mjs > drift.txt 2>&1; then\n  echo \"drifted=false\" >> \"$GITHUB_OUTPUT\"\nelse\n  echo \"drifted=true\" >> \"$GITHUB_OUTPUT\"\nfi\ncat drift.txt\n"
+            },
+            {
+              "name": "Open, update, or close the rolling issue",
+              "uses": "actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b",
+              "env": {
+                "DRIFTED": "${{ steps.check.outputs.drifted }}"
+              },
+              "with": {
+                "script": "const fs = require(\"node:fs\");\nconst LABEL = \"docs-drift\";\nconst TITLE = \"Feature inventory has drifted from README.md\";\nconst drifted = process.env.DRIFTED === \"true\";\nconst report = fs.readFileSync(\"drift.txt\", \"utf8\").trim();\n\n// Ensure the label exists, so the lookup below can rely on it.\ntry {\n  await github.rest.issues.getLabel({ ...context.repo, name: LABEL });\n} catch {\n  await github.rest.issues.createLabel({\n    ...context.repo,\n    name: LABEL,\n    color: \"d93f0b\",\n    description: \"Feature inventory and README disagree (opened by the docs-drift workflow)\",\n  });\n}\n\nconst { data: open } = await github.rest.issues.listForRepo({\n  ...context.repo,\n  state: \"open\",\n  labels: LABEL,\n  per_page: 100,\n});\n// Exclude pull requests, which this endpoint also returns.\nconst existing = open.filter((i) => !i.pull_request)[0];\n\nconst body = [\n  \"`scripts/check-feature-drift.mjs` reports that `feature_list.json` and `README.md` disagree.\",\n  \"\",\n  \"This issue is updated in place by the `docs-drift` workflow and closes itself when the check passes, so there is only ever one of it.\",\n  \"\",\n  \"```\",\n  report,\n  \"```\",\n  \"\",\n  `Last checked: ${new Date().toISOString()} (run ${context.runId}).`,\n].join(\"\\n\");\n\nif (drifted) {\n  if (existing) {\n    await github.rest.issues.update({\n      ...context.repo,\n      issue_number: existing.number,\n      body,\n    });\n    core.notice(`Updated rolling drift issue #${existing.number}`);\n  } else {\n    const { data: created } = await github.rest.issues.create({\n      ...context.repo,\n      title: TITLE,\n      body,\n      labels: [LABEL],\n    });\n    core.notice(`Opened rolling drift issue #${created.number}`);\n  }\n  return;\n}\n\nif (existing) {\n  await github.rest.issues.createComment({\n    ...context.repo,\n    issue_number: existing.number,\n    body: `Drift cleared as of ${new Date().toISOString()} (run ${context.runId}). Closing.`,\n  });\n  await github.rest.issues.update({\n    ...context.repo,\n    issue_number: existing.number,\n    state: \"closed\",\n  });\n  core.notice(`Closed rolling drift issue #${existing.number}`);\n} else {\n  core.info(\"No drift and no open issue. Nothing to do.\");\n}\n"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/golden-tasks.yml",
+      "sha256": "581e8cf83b3acc8247395ec79bd85de3bedb57ba06b9dfe4c8d2808fdcc0a355",
+      "events": {
+        "workflow_dispatch": {
+          "inputs": {
+            "model": {
+              "description": "Model tier to evaluate",
+              "default": "gemma4:e2b",
+              "type": "choice",
+              "options": [
+                "gemma4:e2b",
+                "gemma4:e4b"
+              ]
+            },
+            "categories": {
+              "description": "Task categories (comma-separated, or 'all')",
+              "default": "all"
+            }
+          }
+        },
+        "schedule": [
+          {
+            "cron": "0 4 * * 0"
+          }
+        ]
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "golden-tasks-${{ github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "run-golden-tasks": {
+          "name": "Golden tasks (${{ matrix.tier }})",
+          "runs-on": "ubuntu-latest",
+          "timeout-minutes": "90",
+          "strategy": {
+            "fail-fast": "false",
+            "matrix": {
+              "include": [
+                {
+                  "tier": "e2b",
+                  "model": "gemma4:e2b"
+                },
+                {
+                  "tier": "e4b",
+                  "model": "gemma4:e4b"
+                }
+              ]
+            }
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "name": "Install Python deps for golden tasks",
+              "run": "python -m pip install --quiet pyyaml httpx pytest"
+            },
+            {
+              "name": "Install Ollama",
+              "run": "curl -fsSL https://ollama.com/install.sh | sh"
+            },
+            {
+              "name": "Start Ollama",
+              "run": "ollama serve &\nfor i in $(seq 1 60); do\n  if curl -sf http://localhost:11434/api/tags >/dev/null; then break; fi\n  sleep 1\ndone\n"
+            },
+            {
+              "name": "Pull model",
+              "run": "ollama pull ${{ matrix.model }}"
+            },
+            {
+              "name": "Scaffold snapshots",
+              "run": "python tests/golden/snapshots/_scaffold.py"
+            },
+            {
+              "name": "Run framework tests",
+              "run": "cd tests/golden && python -m pytest framework/ -q"
+            },
+            {
+              "name": "Run golden suite against live Ollama and diff against v0.3.0 baseline",
+              "env": {
+                "OLLAMA_URL": "http://localhost:11434"
+              },
+              "run": "python tests/golden/framework/run_all.py \\\n  --model \"${{ matrix.model }}\" \\\n  --tier \"${{ matrix.tier }}\" \\\n  --baseline \"tests/golden/baselines/v0.3.0-${{ matrix.tier }}.json\" \\\n  --output \"golden-results-${{ matrix.tier }}.json\" \\\n  --report \"golden-report-${{ matrix.tier }}.md\"\n"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always()",
+              "with": {
+                "name": "golden-tasks-${{ matrix.tier }}",
+                "path": "golden-results-${{ matrix.tier }}.json\ngolden-report-${{ matrix.tier }}.md\ntests/golden/baselines/\n",
+                "retention-days": "30"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/installer-build.yml",
+      "sha256": "58b2f2d1144d83a3effb7f875ecec7265294d7723898c2b9b4d265813bdcc962",
+      "events": {
+        "workflow_call": "",
+        "workflow_dispatch": {
+          "inputs": {
+            "reason": {
+              "description": "Reason for the manual run (release rehearsal, ...)",
+              "required": "false",
+              "default": "manual rehearsal"
+            }
+          }
+        }
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "installer-build-${{ github.workflow }}-${{ github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "build-windows-installer": {
+          "name": "Build NexusSetup.exe",
+          "runs-on": "windows-latest",
+          "timeout-minutes": "120",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.11"
+              }
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22.x",
+                "cache": "npm"
+              }
+            },
+            {
+              "uses": "astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f",
+              "with": {
+                "version": "latest"
+              }
+            },
+            {
+              "name": "Resolve pinned versions",
+              "shell": "pwsh",
+              "run": "$version = (Get-Content package.json | ConvertFrom-Json).version\nWrite-Host \"package.json version: $version\"\n"
+            },
+            {
+              "name": "Build VSIX (Nexus Coding extension)",
+              "shell": "pwsh",
+              "run": "./scripts/build-vsix.ps1 -SkipTests"
+            },
+            {
+              "name": "Sync Tauri version from package.json",
+              "run": "node scripts/sync-tauri-version.mjs"
+            },
+            {
+              "name": "Build desktop sidecar (fail-fast)",
+              "working-directory": "desktop",
+              "run": "npm run build:sidecar"
+            },
+            {
+              "name": "Build current-version Windows desktop bundle",
+              "working-directory": "desktop",
+              "run": "npm run build:shell"
+            },
+            {
+              "name": "Verify exact current-version desktop bundle",
+              "shell": "pwsh",
+              "run": "$version = (Get-Content package.json | ConvertFrom-Json).version\n$bundleDir = \"desktop/src-tauri/target/release/bundle/nsis\"\n$matches = @(Get-ChildItem -LiteralPath $bundleDir -Filter \"Nexus AI Studio_${version}_x64-setup.exe\" -File)\nif ($matches.Count -ne 1) {\n  throw \"Expected exactly one Windows desktop bundle for version $version; found $($matches.Count)\"\n}\n"
+            },
+            {
+              "name": "Build NexusSetup.exe (PyInstaller onefile)",
+              "shell": "pwsh",
+              "run": "pwsh -NonInteractive -File scripts/installer/build/build-windows.ps1 -SkipSign\n"
+            },
+            {
+              "name": "Smoke-test the installer (boot the frozen exe)",
+              "shell": "pwsh",
+              "run": "pwsh -NonInteractive -File scripts/installer/build/smoke-windows-exe.ps1\n"
+            },
+            {
+              "name": "Upload artifact",
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always()",
+              "with": {
+                "name": "NexusSetup-windows",
+                "path": "dist/NexusSetup.exe",
+                "if-no-files-found": "warn",
+                "retention-days": "14"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/installer-linux.yml",
+      "sha256": "3df8f92afc6c14ee7d8dd7bb9793a04120d23681bea97e1cea477636f651908c",
+      "events": {
+        "workflow_call": "",
+        "workflow_dispatch": {
+          "inputs": {
+            "reason": {
+              "description": "Reason for the manual non-release rehearsal",
+              "required": "false",
+              "default": "manual rehearsal"
+            }
+          }
+        }
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "installer-build-linux-${{ github.workflow }}-${{ github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "build-linux-installer": {
+          "name": "Build manual Linux installer rehearsal",
+          "runs-on": "ubuntu-22.04",
+          "timeout-minutes": "120",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.11"
+              }
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22.x",
+                "cache": "npm"
+              }
+            },
+            {
+              "name": "Install AppImage tooling",
+              "run": "sudo apt-get update\nsudo apt-get install -y --no-install-recommends fuse libfuse2 libxcb-xinerama0 libxkbcommon-x11-0\nwget -O /tmp/appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage\nchmod +x /tmp/appimagetool\nsudo mv /tmp/appimagetool /usr/local/bin/appimagetool\n"
+            },
+            {
+              "name": "Build VSIX (Nexus Coding extension)",
+              "shell": "pwsh",
+              "run": "./scripts/build-vsix.ps1 -SkipTests"
+            },
+            {
+              "name": "Build non-release installer rehearsal (PyInstaller onefile + AppImage)",
+              "env": {
+                "APPIMAGE_EXTRACT_AND_RUN": "1"
+              },
+              "run": "bash scripts/installer/build/build-linux.sh"
+            },
+            {
+              "name": "Upload non-release rehearsal artifact",
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always()",
+              "with": {
+                "name": "NexusSetup-linux-rehearsal",
+                "path": "dist/NexusSetup-x86_64.AppImage",
+                "if-no-files-found": "warn",
+                "retention-days": "14"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/installer-macos.yml",
+      "sha256": "76aa696248ce2600f99cb2418a9c19cb1d144511eeb428d01b0d7a778c3f72d5",
+      "events": {
+        "workflow_call": "",
+        "workflow_dispatch": {
+          "inputs": {
+            "reason": {
+              "description": "Reason for the manual non-release rehearsal",
+              "required": "false",
+              "default": "manual rehearsal"
+            }
+          }
+        }
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "installer-build-macos-${{ github.workflow }}-${{ github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "build-macos-installer": {
+          "name": "Build manual macOS installer rehearsal",
+          "runs-on": "macos-latest",
+          "timeout-minutes": "120",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.11"
+              }
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22.x",
+                "cache": "npm"
+              }
+            },
+            {
+              "name": "Build VSIX (Nexus Coding extension)",
+              "shell": "pwsh",
+              "run": "./scripts/build-vsix.ps1 -SkipTests"
+            },
+            {
+              "name": "Build non-release installer rehearsal (PyInstaller onefile + DMG)",
+              "run": "bash scripts/installer/build/build-macos.sh"
+            },
+            {
+              "name": "Sign + notarize (best-effort)",
+              "env": {
+                "APPLE_DEVELOPER_ID": "${{ secrets.APPLE_DEVELOPER_ID }}",
+                "APPLE_NOTARY_KEY_ID": "${{ secrets.APPLE_NOTARY_KEY_ID }}",
+                "APPLE_NOTARY_ISSUER_ID": "${{ secrets.APPLE_NOTARY_ISSUER_ID }}",
+                "APPLE_NOTARY_KEY_B64": "${{ secrets.APPLE_NOTARY_KEY_B64 }}"
+              },
+              "run": "set -e\nDMG_PATH=\"dist/NexusSetup.dmg\"\nif [ -z \"$APPLE_DEVELOPER_ID\" ]; then\n  echo \"::warning::APPLE_DEVELOPER_ID not configured -- skipping codesign + notarization (unsigned DMG; see the download page caveats)\"\n  exit 0\nfi\n# Sign the staged onefile payload (bundle or bare binary), then\n# notarize + staple the shipped DMG directly.\nSTAGE=\"scripts/installer/build/stage\"\nPAYLOAD=\"$STAGE/Nexus AI Studio Setup.app\"\n[ -d \"$PAYLOAD\" ] || PAYLOAD=\"$STAGE/Nexus AI Studio Setup\"\ncodesign --force --deep --options runtime --sign \"$APPLE_DEVELOPER_ID\" \"$PAYLOAD\" || true\nKEYFILE=\"$RUNNER_TEMP/AuthKey.p8\"\necho \"$APPLE_NOTARY_KEY_B64\" | base64 -d > \"$KEYFILE\"\nxcrun notarytool submit --wait \\\n  --key \"$KEYFILE\" \\\n  --key-id \"$APPLE_NOTARY_KEY_ID\" \\\n  --issuer \"$APPLE_NOTARY_ISSUER_ID\" \\\n  \"$DMG_PATH\" || true\nxcrun stapler staple \"$DMG_PATH\" || true\n"
+            },
+            {
+              "name": "Upload non-release rehearsal artifact",
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always()",
+              "with": {
+                "name": "NexusSetup-macos-rehearsal",
+                "path": "dist/NexusSetup.dmg",
+                "if-no-files-found": "warn",
+                "retention-days": "14"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/installer-matrix.yml",
+      "sha256": "3c808b0ff34f40178ef4039ba7eb05c56212e07877a9014db59385605fa8066d",
+      "events": {
+        "pull_request": {
+          "branches": [
+            "main",
+            "develop"
+          ]
+        },
+        "workflow_dispatch": ""
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "installer-matrix-${{ github.workflow }}-${{ github.head_ref || github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "windows": {
+          "uses": "./.github/workflows/installer-build.yml",
+          "secrets": "inherit"
+        },
+        "linux": {
+          "uses": "./.github/workflows/installer-linux.yml",
+          "secrets": "inherit"
+        },
+        "macos": {
+          "uses": "./.github/workflows/installer-macos.yml",
+          "secrets": "inherit"
+        },
+        "installer-required": {
+          "name": "installer-required",
+          "needs": [
+            "windows",
+            "linux",
+            "macos"
+          ],
+          "if": "always()",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "name": "Allowlist installer results",
+              "env": {
+                "R_windows": "${{ needs.windows.result }}",
+                "R_linux": "${{ needs.linux.result }}",
+                "R_macos": "${{ needs.macos.result }}"
+              },
+              "run": "set -uo pipefail\nfail=0\nfor var in $(env | sed -n 's/^\\(R_[A-Za-z0-9_]*\\)=.*/\\1/p' | sort); do\n  eval \"result=\\${${var}-}\"\n  case \"${result}\" in\n    # v2.11.0 Phase 6.5 (CI-v251-1): no leg skips by design, so a\n    # skipped leg means something failed upstream, not a pass.\n    success) ;;\n    *) echo \"FAIL: ${var#R_}=${result:-<empty>}\"; fail=1 ;;\n  esac\ndone\nexit \"$fail\"\n"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "sha256": "d278b131488219f66df36dfe1cbce746259a797128d65b966b30c27bae09a805",
+      "events": {
+        "workflow_dispatch": {},
+        "schedule": [
+          {
+            "cron": "0 5 1 * *"
+          }
+        ],
+        "pull_request": {
+          "branches": [
+            "main",
+            "develop"
+          ],
+          "paths": [
+            "scripts/installer/**",
+            ".github/workflows/installer-smoke.yml"
+          ]
+        }
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "installer-smoke-${{ github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "smoke-windows": {
+          "name": "Windows smoke test",
+          "runs-on": "windows-latest",
+          "timeout-minutes": "30",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22"
+              }
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "name": "Install VS Code",
+              "run": "choco install vscode --no-progress -y"
+            },
+            {
+              "name": "Install installer deps",
+              "run": "pip install PyQt5 httpx"
+            },
+            {
+              "name": "Run smoke test",
+              "run": "pwsh -File tests/smoke/smoke-windows.ps1"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always()",
+              "with": {
+                "name": "smoke-windows-results",
+                "path": "tests/smoke/results/",
+                "retention-days": "14"
+              }
+            }
+          ]
+        },
+        "smoke-macos": {
+          "name": "macOS smoke test",
+          "runs-on": "macos-latest",
+          "timeout-minutes": "30",
+          "if": "${{ github.event_name != 'pull_request' }}",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "name": "Install VS Code",
+              "run": "brew install --cask visual-studio-code"
+            },
+            {
+              "name": "Install installer deps",
+              "run": "pip install PyQt5 httpx"
+            },
+            {
+              "name": "Run smoke test",
+              "run": "bash tests/smoke/smoke-macos.sh"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always()",
+              "with": {
+                "name": "smoke-macos-results",
+                "path": "tests/smoke/results/",
+                "retention-days": "14"
+              }
+            }
+          ]
+        },
+        "smoke-linux": {
+          "name": "Linux smoke test",
+          "runs-on": "ubuntu-latest",
+          "timeout-minutes": "30",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "name": "Install VS Code",
+              "run": "sudo apt-get update\nsudo apt-get install -y wget gpg libxcb-xinerama0 libxkbcommon-x11-0\nwget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg\nsudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/\necho \"deb [arch=amd64 signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main\" | sudo tee /etc/apt/sources.list.d/vscode.list\nsudo apt-get update\nsudo apt-get install -y code\n"
+            },
+            {
+              "name": "Install installer deps",
+              "run": "pip install PyQt5 httpx"
+            },
+            {
+              "name": "Run smoke test",
+              "run": "bash tests/smoke/smoke-linux.sh"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always()",
+              "with": {
+                "name": "smoke-linux-results",
+                "path": "tests/smoke/results/",
+                "retention-days": "14"
+              }
+            }
+          ]
+        },
+        "preflight-reachability": {
+          "name": "Model catalog reachability probe",
+          "runs-on": "ubuntu-latest",
+          "timeout-minutes": "10",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "name": "Install the installer package",
+              "run": "pip install ./scripts/installer"
+            },
+            {
+              "name": "Probe every catalog model's source reachability (no download)",
+              "run": "nexus-installer --reachability"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/installer-tests.yml",
+      "sha256": "b81b6655435d1abb2d01317bd551d984df12a38036664fb593b1349e10cdc5d6",
+      "events": {
+        "push": {
+          "branches-ignore": [
+            "dependabot/**"
+          ],
+          "paths": [
+            "scripts/installer/**",
+            "scripts/build-vsix.ps1",
+            "package.json",
+            "package-lock.json",
+            ".vscodeignore",
+            "desktop/src-tauri/**",
+            "desktop/sidecar/**",
+            "core/registry/catalog.json",
+            "core/registry/catalog.ts",
+            "core/registry/recommended.json",
+            "core/registry/NexusModelRegistry.ts",
+            "core/registry/ModelCatalog.ts",
+            "core/registry/models.json",
+            "core/registry/patientTier.ts",
+            "core/config/**",
+            "tests/fixtures/v2.2.8-catalog-tab-sort.json",
+            "tests/fixtures/v2.4.8-catalog-tab-order.json",
+            "tests/fixtures/v2.4.8-provider-colors.json",
+            "desktop/src/shared/models/catalogTabs.ts",
+            ".github/workflows/ci.yml",
+            ".github/workflows/release.yml",
+            ".github/workflows/installer-build.yml",
+            ".github/workflows/installer-macos.yml",
+            ".github/workflows/installer-linux.yml",
+            ".github/workflows/installer-tests.yml"
+          ]
+        },
+        "pull_request": {
+          "branches": [
+            "main",
+            "develop"
+          ],
+          "paths": [
+            "scripts/installer/**",
+            "scripts/build-vsix.ps1",
+            "package.json",
+            "package-lock.json",
+            ".vscodeignore",
+            "desktop/src-tauri/**",
+            "desktop/sidecar/**",
+            "core/registry/catalog.json",
+            "core/registry/catalog.ts",
+            "core/registry/recommended.json",
+            "core/registry/NexusModelRegistry.ts",
+            "core/registry/ModelCatalog.ts",
+            "core/registry/models.json",
+            "core/registry/patientTier.ts",
+            "core/config/**",
+            "tests/fixtures/v2.2.8-catalog-tab-sort.json",
+            "tests/fixtures/v2.4.8-catalog-tab-order.json",
+            "tests/fixtures/v2.4.8-provider-colors.json",
+            "desktop/src/shared/models/catalogTabs.ts",
+            ".github/workflows/ci.yml",
+            ".github/workflows/release.yml",
+            ".github/workflows/installer-build.yml",
+            ".github/workflows/installer-macos.yml",
+            ".github/workflows/installer-linux.yml",
+            ".github/workflows/installer-tests.yml"
+          ]
+        },
+        "workflow_dispatch": {}
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "installer-tests-${{ github.workflow }}-${{ github.head_ref || github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "test-installer": {
+          "name": "Installer tests + lint + smoke",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "uses": "astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f",
+              "with": {
+                "version": "latest",
+                "enable-cache": "true",
+                "cache-dependency-glob": "scripts/installer/pyproject.toml",
+                "ignore-nothing-to-cache": "true"
+              }
+            },
+            {
+              "name": "Install system deps for PyQt5",
+              "run": "sudo apt-get update && sudo apt-get install -y libxcb-xinerama0 libxkbcommon-x11-0"
+            },
+            {
+              "name": "Sync installer deps",
+              "run": "cd scripts/installer\nuv sync --quiet\n"
+            },
+            {
+              "name": "Run installer tests",
+              "env": {
+                "QT_QPA_PLATFORM": "offscreen"
+              },
+              "run": "cd scripts/installer\nuv run pytest tests/ -v --tb=short\n"
+            },
+            {
+              "name": "Headless-smoke result-JSON contract (network-free)",
+              "run": "set -euo pipefail\ncd scripts/installer\nuv run python -m nexus_installer.main \\\n  --headless-smoke testing/profiles/ci-linux.json \\\n  --smoke-output \"$RUNNER_TEMP/ci-smoke-result.json\"\npython3 - \"$RUNNER_TEMP/ci-smoke-result.json\" <<'PY'\nimport json, sys\nr = json.load(open(sys.argv[1], encoding=\"utf-8\"))\nassert r[\"schema\"] == \"nexus-smoke-result/v1\", r.get(\"schema\")\nassert r[\"success\"] is True, r\nassert r[\"steps_failed\"] == [], r\nprint(\"headless-smoke contract OK:\", r[\"steps_done\"])\nPY\n"
+            },
+            {
+              "name": "Ruff (advisory -- deferred NHC.P5.A baseline)",
+              "continue-on-error": "true",
+              "run": "cd scripts/installer\nuv run ruff check src tests\n"
+            },
+            {
+              "name": "mypy (advisory -- deferred NHC.P5.A baseline + PyQt5 stubs)",
+              "continue-on-error": "true",
+              "run": "cd scripts/installer\nuv run mypy src\n"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "sha256": "8d87eb4e36720af482d070b1b771774c7d9b41d96c499f3700ff2f902d84e6da",
+      "events": {
+        "schedule": [
+          {
+            "cron": "0 2 * * 0"
+          }
+        ],
+        "workflow_dispatch": ""
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "nightly-${{ github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "integration-ts": {
+          "name": "TypeScript integration tests",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "name": "Install Ollama",
+              "run": "curl -fsSL https://ollama.com/install.sh | sh\nollama serve &\n# Wait for the server to be ready\ntimeout 30 bash -c 'until curl -sf http://localhost:11434/api/tags; do sleep 1; done'\n"
+            },
+            {
+              "name": "Pull Gemma model (small variant for CI)",
+              "run": "ollama pull gemma4:e2b"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "run": "npm run build"
+            },
+            {
+              "name": "Run integration tests",
+              "env": {
+                "OLLAMA_URL": "http://localhost:11434",
+                "TEST_MODEL": "gemma4:e2b"
+              },
+              "run": "npm run test:integration -- --reporter=verbose"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always()",
+              "with": {
+                "name": "integration-results",
+                "path": "coverage/",
+                "retention-days": "14"
+              }
+            }
+          ]
+        },
+        "benchmarks": {
+          "name": "Performance benchmarks",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "run": "npm run build"
+            },
+            {
+              "name": "Run benchmarks",
+              "run": "npm run bench -- --reporter=verbose --reporter=./scripts/vitest-bench-json-reporter.mjs --outputFile=bench-results.json 2>&1 | tee bench-results.txt"
+            },
+            {
+              "name": "Check benchmark regressions against v0.7.0 baseline (v0.6.0 as floor)",
+              "run": "node scripts/check-bench-regressions.mjs \\\n  --baseline tests/benchmarks/baselines/v0.7.0.json \\\n  --floor tests/benchmarks/baselines/v0.6.0.json \\\n  --current bench-results.json \\\n  --regression-pct 20\n"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "if": "always()",
+              "with": {
+                "name": "benchmark-results",
+                "path": "bench-results.txt\nbench-results.json\n",
+                "retention-days": "30"
+              }
+            }
+          ]
+        },
+        "installer-package-check-windows": {
+          "name": "Installer package check (Windows)",
+          "runs-on": "windows-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "uses": "astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f",
+              "with": {
+                "version": "latest"
+              }
+            },
+            {
+              "name": "Run installer package checks",
+              "run": "pwsh -NonInteractive -File tests/integration/installer/test-install-pyqt.ps1"
+            }
+          ]
+        },
+        "installer-package-check-macos": {
+          "name": "Installer package check (macOS)",
+          "runs-on": "macos-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "name": "Install deps and run installer package checks",
+              "run": "python -m pip install --quiet --editable \"scripts/installer[dev]\"\nbash tests/integration/installer/test-install-pyqt-macos.sh\n"
+            }
+          ]
+        },
+        "installer-package-check-linux": {
+          "name": "Installer package check (Linux)",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "name": "Install system deps",
+              "run": "sudo apt-get update && sudo apt-get install -y libxcb-xinerama0 libxkbcommon-x11-0"
+            },
+            {
+              "name": "Install deps and run installer package checks",
+              "env": {
+                "QT_QPA_PLATFORM": "offscreen"
+              },
+              "run": "python -m pip install --quiet --editable \"scripts/installer[dev]\"\nbash tests/integration/installer/test-install-pyqt-linux.sh\n"
+            }
+          ]
+        },
+        "notify-on-failure": {
+          "name": "Notify on failure",
+          "runs-on": "ubuntu-latest",
+          "needs": [
+            "integration-ts",
+            "benchmarks",
+            "installer-package-check-windows",
+            "installer-package-check-macos",
+            "installer-package-check-linux"
+          ],
+          "if": "failure()",
+          "steps": [
+            {
+              "name": "Send failure notification",
+              "run": "if [ -n \"$SLACK_WEBHOOK_URL\" ]; then\n  curl -s -X POST \"$SLACK_WEBHOOK_URL\" \\\n    -H 'Content-type: application/json' \\\n    --data \"{\n      \\\"text\\\": \\\":x: *Gemma Code nightly* failed on \\`${{ github.ref_name }}\\`.\\nSee: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\\\"\n    }\"\nfi\n",
+              "env": {
+                "SLACK_WEBHOOK_URL": "${{ secrets.SLACK_WEBHOOK_URL }}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/packaged-window-smoke.yml",
+      "sha256": "5ce489f65dd32a010ce1cf79baffe2944e79025efe77d79d106356303462887c",
+      "events": {
+        "workflow_dispatch": "",
+        "push": {
+          "branches": [
+            "develop"
+          ],
+          "paths": [
+            ".github/workflows/packaged-window-smoke.yml",
+            "desktop/tests/packaged/launch-probe.mjs",
+            "desktop/src-tauri/src/lib.rs",
+            "desktop/src-tauri/tauri.conf.json"
+          ]
+        }
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "concurrency": {
+        "group": "packaged-window-smoke-${{ github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "windows": {
+          "name": "Launch Windows bundle and judge the probe",
+          "runs-on": "windows-latest",
+          "timeout-minutes": "45",
+          "defaults": {
+            "run": {
+              "working-directory": "desktop"
+            }
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22.x",
+                "cache": "npm",
+                "cache-dependency-path": "package-lock.json"
+              }
+            },
+            {
+              "uses": "dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8"
+            },
+            {
+              "name": "Install workspace deps",
+              "working-directory": ".",
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "name": "Build the Windows shell",
+              "run": "npm run build:shell"
+            },
+            {
+              "name": "Probe the launched window",
+              "run": "node tests/packaged/launch-probe.mjs src-tauri/target/release/nexus-shell.exe"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/pr-quality.yml",
+      "sha256": "77efa9fd8d189fe1f8d26e4d6916299f8a786122fccf7d9154b9bbe93562629e",
+      "events": {
+        "pull_request": {
+          "types": [
+            "opened",
+            "synchronize",
+            "reopened"
+          ],
+          "branches": [
+            "main",
+            "develop"
+          ]
+        }
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "pr-quality-${{ github.head_ref || github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "checklist": {
+          "name": "Submission Checklist gate",
+          "runs-on": "ubuntu-latest",
+          "if": "${{ github.actor != 'dependabot[bot]' }}",
+          "permissions": {
+            "contents": "read",
+            "pull-requests": "read"
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22"
+              }
+            },
+            {
+              "name": "Fetch PR body",
+              "id": "pr-body",
+              "env": {
+                "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
+                "PR_NUMBER": "${{ github.event.pull_request.number }}"
+              },
+              "run": "set -euo pipefail\nbody=\"$(gh pr view \"$PR_NUMBER\" --json body --jq .body || true)\"\n# Emit the body via the workflow's protected env so the next step can\n# read it directly; never echo it to the log.\n{\n  echo \"PR_BODY<<__GEMMA_EOF__\"\n  echo \"$body\"\n  echo \"__GEMMA_EOF__\"\n} >> \"$GITHUB_ENV\"\n"
+            },
+            {
+              "name": "Run check-pr-checklist",
+              "run": "node scripts/check-pr-checklist.mjs"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "4aaaf4b53d06fd3b336998d865d052b59559edf551b842b537aac606b099d92e",
+      "events": {
+        "push": {
+          "tags": [
+            "v*.*.*"
+          ]
+        },
+        "workflow_dispatch": {
+          "inputs": {
+            "tag_name": {
+              "description": "Existing tag to attach assets to (e.g. v1.19.0)",
+              "required": "true",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "concurrency": {
+        "group": "release-${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag_name || github.ref_name }}",
+        "cancel-in-progress": "false"
+      },
+      "jobs": {
+        "release-metadata": {
+          "name": "Validate release metadata",
+          "runs-on": "ubuntu-latest",
+          "outputs": {
+            "version": "${{ steps.metadata.outputs.version }}",
+            "tag_name": "${{ steps.metadata.outputs.tag_name }}"
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+              "with": {
+                "fetch-depth": "0"
+              }
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22"
+              }
+            },
+            {
+              "name": "Match package version, tag, and checked-out commit",
+              "id": "metadata",
+              "env": {
+                "RELEASE_TAG": "${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag_name || github.ref_name }}"
+              },
+              "run": "set -euo pipefail\nVERSION=$(node -p \"require('./package.json').version\")\nEXPECTED_TAG=\"v${VERSION}\"\nif [ \"$RELEASE_TAG\" != \"$EXPECTED_TAG\" ]; then\n  echo \"Release tag $RELEASE_TAG does not match package version $EXPECTED_TAG\" >&2\n  exit 1\nfi\ngit fetch --force --tags origin\nTAG_SHA=$(git rev-parse \"refs/tags/${RELEASE_TAG}^{commit}\")\nCURRENT_SHA=$(git rev-parse HEAD)\nif [ \"$TAG_SHA\" != \"$CURRENT_SHA\" ] || [ \"$TAG_SHA\" != \"$GITHUB_SHA\" ]; then\n  echo \"Release tag $RELEASE_TAG does not resolve to the checked-out workflow commit\" >&2\n  exit 1\nfi\necho \"version=$VERSION\" >> \"$GITHUB_OUTPUT\"\necho \"tag_name=$RELEASE_TAG\" >> \"$GITHUB_OUTPUT\"\n"
+            }
+          ]
+        },
+        "release-verification": {
+          "name": "Verify release source",
+          "runs-on": "ubuntu-latest",
+          "needs": "release-metadata",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "name": "Install workspace dependencies",
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "name": "Lint extension source",
+              "run": "npm run lint --silent"
+            },
+            {
+              "name": "Test extension source",
+              "run": "npm run test --silent"
+            },
+            {
+              "name": "Build extension source",
+              "run": "npm run build --silent"
+            }
+          ]
+        },
+        "build-vsix": {
+          "name": "Build VSIX (${{ matrix.platform }})",
+          "runs-on": "${{ matrix.os }}",
+          "needs": [
+            "release-metadata",
+            "release-verification"
+          ],
+          "strategy": {
+            "fail-fast": "false",
+            "matrix": {
+              "include": [
+                {
+                  "platform": "windows",
+                  "os": "windows-latest",
+                  "vsce_os": "win32",
+                  "vsce_arch": "x64"
+                },
+                {
+                  "platform": "macos",
+                  "os": "macos-15",
+                  "vsce_os": "darwin",
+                  "vsce_arch": "arm64"
+                },
+                {
+                  "platform": "linux",
+                  "os": "ubuntu-22.04",
+                  "vsce_os": "linux",
+                  "vsce_arch": "x64"
+                }
+              ]
+            }
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "name": "Build and package VSIX for VS Code Electron",
+              "shell": "pwsh",
+              "run": "$HostArch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLowerInvariant()\n$ExpectedArch = \"${{ matrix.vsce_arch }}\"\nif ($HostArch -ne $ExpectedArch) {\n  throw \"Runner architecture mismatch for ${{ matrix.platform }}: expected $ExpectedArch, found $HostArch\"\n}\n$Target = \"${{ matrix.vsce_os }}-$ExpectedArch\"\n./scripts/build-vsix.ps1 -SkipTests -Target $Target\n$Vsix = \"nexus-coding-${{ needs.release-metadata.outputs.version }}-$Target.vsix\"\nif (-not (Test-Path -LiteralPath $Vsix)) {\n  throw \"Expected VSIX was not produced: $Vsix\"\n}\n"
+            },
+            {
+              "name": "Smoke-test packaged VSIX on VS Code 1.134.0",
+              "if": "matrix.platform == 'windows'",
+              "shell": "pwsh",
+              "run": "npm run test:vsix-runtime -- --vsix \"nexus-coding-${{ needs.release-metadata.outputs.version }}-win32-x64.vsix\""
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "with": {
+                "name": "vsix-${{ matrix.platform }}",
+                "path": "nexus-coding-${{ needs.release-metadata.outputs.version }}-${{ matrix.vsce_os }}-*.vsix",
+                "if-no-files-found": "error",
+                "retention-days": "30"
+              }
+            }
+          ]
+        },
+        "build-installer-windows": {
+          "name": "Build Windows installer",
+          "runs-on": "windows-latest",
+          "needs": [
+            "build-vsix",
+            "desktop-bundle"
+          ],
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "uses": "astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f",
+              "with": {
+                "version": "latest"
+              }
+            },
+            {
+              "name": "Download VSIX artifact",
+              "uses": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+              "with": {
+                "name": "vsix-windows",
+                "path": "."
+              }
+            },
+            {
+              "name": "Download Windows desktop bundle",
+              "uses": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+              "with": {
+                "name": "desktop-bundle-windows",
+                "path": "desktop-bundle-windows"
+              }
+            },
+            {
+              "name": "Build installer",
+              "run": "pwsh -NonInteractive -File scripts/installer/build/build-windows.ps1 -SkipSign"
+            },
+            {
+              "name": "Smoke-test the installer",
+              "shell": "pwsh",
+              "run": "pwsh -NonInteractive -File scripts/installer/build/smoke-windows-exe.ps1"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "with": {
+                "name": "installer-windows",
+                "path": "dist/NexusSetup.exe",
+                "retention-days": "30"
+              }
+            }
+          ]
+        },
+        "desktop-bundle": {
+          "name": "Windows desktop payload (installer input)",
+          "runs-on": "windows-latest",
+          "needs": [
+            "release-metadata",
+            "release-verification"
+          ],
+          "timeout-minutes": "90",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "uses": "dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8"
+            },
+            {
+              "name": "Cache cargo registry + target",
+              "uses": "actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae",
+              "with": {
+                "path": "~/.cargo/registry\n~/.cargo/git\ndesktop/src-tauri/target\n",
+                "key": "windows-desktop-payload-cargo-${{ hashFiles('desktop/src-tauri/Cargo.toml') }}",
+                "restore-keys": "windows-desktop-payload-cargo-\n"
+              }
+            },
+            {
+              "name": "Install workspace deps",
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "name": "Sync tauri.conf.json version from package.json",
+              "run": "node scripts/sync-tauri-version.mjs"
+            },
+            {
+              "name": "Remove cached Tauri bundle outputs",
+              "shell": "pwsh",
+              "run": "$RepoRoot = (Resolve-Path -LiteralPath '.').Path\n$BundleDirs = @(\n  'desktop/src-tauri/target/release/bundle',\n  'desktop/src-tauri/target/universal-apple-darwin/release/bundle'\n)\nforeach ($RelativePath in $BundleDirs) {\n  $Candidate = [System.IO.Path]::GetFullPath((Join-Path $RepoRoot $RelativePath))\n  $WorkspacePrefix = $RepoRoot.TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar) + [System.IO.Path]::DirectorySeparatorChar\n  if (-not $Candidate.StartsWith($WorkspacePrefix, [System.StringComparison]::OrdinalIgnoreCase)) {\n    throw \"Refusing to remove bundle path outside the workspace: $Candidate\"\n  }\n  if (Test-Path -LiteralPath $Candidate) {\n    Remove-Item -LiteralPath $Candidate -Recurse -Force\n  }\n}\n"
+            },
+            {
+              "name": "Build sidecar bundle (fail-fast)",
+              "working-directory": "desktop",
+              "run": "npm run build:sidecar"
+            },
+            {
+              "name": "Build Windows Tauri payload",
+              "working-directory": "desktop",
+              "run": "npm run build:shell"
+            },
+            {
+              "name": "Probe the shell that this payload embeds",
+              "working-directory": "desktop",
+              "shell": "cmd",
+              "run": "node tests/packaged/launch-probe.mjs src-tauri/target/release/nexus-shell.exe > ..\\shell-smoke.json"
+            },
+            {
+              "name": "Stage current Windows payload",
+              "shell": "pwsh",
+              "run": "$v = \"${{ needs.release-metadata.outputs.version }}\"\n$BundleDir = \"desktop/src-tauri/target/release/bundle/nsis\"\n$Matches = @(Get-ChildItem -LiteralPath $BundleDir -Filter \"Nexus AI Studio_${v}_x64-setup.exe\" -File)\nif ($Matches.Count -ne 1) {\n  throw \"Expected exactly one Windows desktop bundle for version $v; found $($Matches.Count)\"\n}\nNew-Item -ItemType Directory -Force bundle-out | Out-Null\nCopy-Item -LiteralPath $Matches[0].FullName \"bundle-out/Nexus-Desktop_${v}_x64-setup.exe\"\n$smokePath = \"shell-smoke.json\"\nif (-not (Test-Path -LiteralPath $smokePath)) {\n  throw \"shell smoke report is missing\"\n}\n$smoke = Get-Content -Raw -LiteralPath $smokePath | ConvertFrom-Json\nif ($smoke.ok -ne $true) {\n  throw \"shell smoke did not pass\"\n}\nCopy-Item -LiteralPath $smokePath \"bundle-out/shell-smoke.json\"\n"
+            },
+            {
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "with": {
+                "name": "desktop-bundle-windows",
+                "path": "bundle-out/*",
+                "retention-days": "30"
+              }
+            }
+          ]
+        },
+        "create-release": {
+          "name": "Create GitHub Release",
+          "runs-on": "ubuntu-latest",
+          "needs": [
+            "release-metadata",
+            "release-verification",
+            "build-vsix",
+            "build-installer-windows"
+          ],
+          "permissions": {
+            "contents": "write"
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+              "with": {
+                "fetch-depth": "0"
+              }
+            },
+            {
+              "uses": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+              "with": {
+                "name": "vsix-windows",
+                "path": "artifacts/"
+              }
+            },
+            {
+              "uses": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+              "with": {
+                "name": "vsix-macos",
+                "path": "artifacts/"
+              }
+            },
+            {
+              "uses": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+              "with": {
+                "name": "vsix-linux",
+                "path": "artifacts/"
+              }
+            },
+            {
+              "uses": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+              "with": {
+                "name": "installer-windows",
+                "path": "artifacts/"
+              }
+            },
+            {
+              "name": "Generate SHA256SUMS.txt",
+              "run": "VERSION=\"${{ needs.release-metadata.outputs.version }}\"\ncd artifacts\nshopt -s nullglob\nVSIX_FILES=(nexus-coding-${VERSION}-*.vsix)\nif [ ${#VSIX_FILES[@]} -ne 3 ]; then\n  echo \"Expected 3 platform-specific VSIX files, found ${#VSIX_FILES[@]}\" >&2\n  exit 1\nfi\nsha256sum \\\n  \"${VSIX_FILES[@]}\" \\\n  NexusSetup.exe \\\n  > SHA256SUMS.txt\ncat SHA256SUMS.txt\n"
+            },
+            {
+              "name": "Extract release notes from CHANGELOG",
+              "id": "changelog",
+              "run": "VERSION=\"${{ needs.release-metadata.outputs.version }}\"\nNOTES=$(awk -v version=\"$VERSION\" '\n  index($0, \"# [\" version \"]\") == 1 { flag=1; next }\n  flag && /^# / { exit }\n  flag { print }\n' CHANGELOG.md)\necho \"notes<<EOF\" >> \"$GITHUB_OUTPUT\"\necho \"$NOTES\" >> \"$GITHUB_OUTPUT\"\necho \"EOF\" >> \"$GITHUB_OUTPUT\"\n"
+            },
+            {
+              "name": "Revalidate annotated tag immediately before publication",
+              "env": {
+                "RELEASE_TAG": "${{ needs.release-metadata.outputs.tag_name }}",
+                "EXPECTED_SHA": "${{ github.sha }}"
+              },
+              "run": "set -euo pipefail\nREMOTE_TAGS=$(git ls-remote --tags origin \"refs/tags/${RELEASE_TAG}\" \"refs/tags/${RELEASE_TAG}^{}\")\nTAG_SHA=$(printf '%s\\n' \"$REMOTE_TAGS\" | awk '$2 ~ /\\^\\{\\}$/ {print $1; exit}')\nif [ -z \"$TAG_SHA\" ]; then\n  TAG_SHA=$(printf '%s\\n' \"$REMOTE_TAGS\" | awk -v tag=\"refs/tags/${RELEASE_TAG}\" '$2 == tag {print $1; exit}')\nfi\nif [ -z \"$TAG_SHA\" ]; then\n  echo \"Annotated release tag ${RELEASE_TAG} is missing or has no peeled commit on origin\" >&2\n  exit 1\nfi\nif [ \"$TAG_SHA\" != \"$EXPECTED_SHA\" ]; then\n  echo \"Release tag ${RELEASE_TAG} moved during the workflow: expected ${EXPECTED_SHA}, found ${TAG_SHA}\" >&2\n  exit 1\nfi\n"
+            },
+            {
+              "name": "Create release",
+              "uses": "softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631",
+              "with": {
+                "tag_name": "${{ needs.release-metadata.outputs.tag_name }}",
+                "target_commitish": "${{ github.sha }}",
+                "name": "Nexus v${{ needs.release-metadata.outputs.version }}",
+                "body": "${{ steps.changelog.outputs.notes }}",
+                "draft": "false",
+                "prerelease": "${{ contains(needs.release-metadata.outputs.tag_name, '-') }}",
+                "fail_on_unmatched_files": "true",
+                "files": "artifacts/nexus-coding-*.vsix\nartifacts/NexusSetup.exe\nartifacts/SHA256SUMS.txt\n"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/sandbox.yml",
+      "sha256": "a9e1a3d8346a7da542e5205c33cd7024f94974505e1e87e27029bf9bcf258c91",
+      "events": {
+        "push": {
+          "branches-ignore": [
+            "dependabot/**"
+          ],
+          "paths": [
+            "modules/coding/sandbox/**",
+            "modules/coding/runtime/headlessTools.ts",
+            "modules/coding/guardrails/ActionClassifier.ts",
+            "src/tools/handlers/terminal.ts",
+            "tests/unit/sandbox/**",
+            "tests/integration/sandbox/**",
+            "tests/unit/tools/handlers/terminal.sandbox.test.ts",
+            ".github/workflows/sandbox.yml"
+          ]
+        },
+        "workflow_dispatch": {}
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "sandbox-${{ github.workflow }}-${{ github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "test-sandbox": {
+          "name": "OS sandbox (${{ matrix.os }})",
+          "runs-on": "${{ matrix.os }}",
+          "strategy": {
+            "fail-fast": "false",
+            "matrix": {
+              "os": [
+                "ubuntu-latest",
+                "macos-latest",
+                "windows-latest"
+              ]
+            }
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "name": "Run sandbox unit + integration tests",
+              "run": "npx vitest run tests/unit/sandbox tests/integration/sandbox tests/unit/tools/handlers/terminal.sandbox.test.ts --config configs/vitest.config.ts --reporter=dot",
+              "env": {
+                "CI": "true"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/scorecard.yml",
+      "sha256": "96147f683a8e46086f4746857837c2de6c4e4f3f9e461fcee03801b7b91b3e46",
+      "events": {
+        "workflow_dispatch": ""
+      },
+      "permissions": "read-all",
+      "concurrency": {
+        "group": "scorecard-${{ github.workflow }}-${{ github.head_ref || github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "analysis": {
+          "name": "Scorecard analysis",
+          "runs-on": "ubuntu-latest",
+          "permissions": {
+            "security-events": "write",
+            "id-token": "write"
+          },
+          "steps": [
+            {
+              "name": "Checkout code",
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+              "with": {
+                "persist-credentials": "false"
+              }
+            },
+            {
+              "name": "Run analysis",
+              "uses": "ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a",
+              "with": {
+                "results_file": "results.sarif",
+                "results_format": "sarif",
+                "publish_results": "true"
+              }
+            },
+            {
+              "name": "Upload artifact",
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "with": {
+                "name": "scorecard-sarif",
+                "path": "results.sarif",
+                "retention-days": "7"
+              }
+            },
+            {
+              "name": "Upload to code-scanning",
+              "uses": "github/codeql-action/upload-sarif@f411752efdf656cb71aa17b755b22c890960da1d",
+              "with": {
+                "sarif_file": "results.sarif"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/secrets.yml",
+      "sha256": "32c399edbb08dd617f0ced9ae37a3b8f8cba57a2c251ee9d1378ba145f1ae833",
+      "events": {
+        "push": {
+          "branches": [
+            "main",
+            "develop"
+          ]
+        },
+        "pull_request": {
+          "branches": [
+            "main",
+            "develop"
+          ]
+        }
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "concurrency": {
+        "group": "secrets-${{ github.workflow }}-${{ github.head_ref || github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "gitleaks": {
+          "name": "gitleaks",
+          "runs-on": "ubuntu-latest",
+          "if": "${{ github.actor != 'dependabot[bot]' }}",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+              "with": {
+                "fetch-depth": "0"
+              }
+            },
+            {
+              "name": "Run gitleaks",
+              "id": "scan",
+              "run": "set -u\nversion=\"8.30.1\"\nurl=\"https://github.com/gitleaks/gitleaks/releases/download/v${version}/gitleaks_${version}_linux_x64.tar.gz\"\ncurl -sSfL --max-time 120 \"$url\" -o gitleaks.tar.gz\ntar -xzf gitleaks.tar.gz gitleaks\n./gitleaks git \\\n  --no-banner \\\n  --redact \\\n  --config .gitleaks.toml \\\n  --report-format sarif \\\n  --report-path gitleaks.sarif \\\n  || echo \"findings=true\" >> \"$GITHUB_OUTPUT\"\n"
+            },
+            {
+              "name": "Upload gitleaks report",
+              "if": "always()",
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "with": {
+                "name": "gitleaks-sarif",
+                "path": "gitleaks.sarif",
+                "retention-days": "30"
+              }
+            },
+            {
+              "name": "Summarize",
+              "if": "always()",
+              "run": "if [ \"${{ steps.scan.outputs.findings }}\" = \"true\" ]; then\n  echo \"::warning::gitleaks reported findings. This job is reporting-only (D2 owns the gate). Download the gitleaks-sarif artifact to triage; do not widen .gitleaks.toml without confirming the value is not a live secret.\"\nelse\n  echo \"gitleaks: no findings against .gitleaks.toml\"\nfi\n"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/semantic-release.yml",
+      "sha256": "9164629434e22c3cdf2622429abdf5e3686cdd905ca72c0979bed1c98376c1f9",
+      "events": {
+        "push": {
+          "branches": [
+            "main"
+          ]
+        }
+      },
+      "permissions": {
+        "contents": "write",
+        "issues": "write",
+        "pull-requests": "write"
+      },
+      "concurrency": {
+        "group": "semantic-release-${{ github.ref }}",
+        "cancel-in-progress": "false"
+      },
+      "jobs": {
+        "release": {
+          "name": "Release",
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+              "with": {
+                "fetch-depth": "0",
+                "persist-credentials": "false"
+              }
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22",
+                "cache": "npm"
+              }
+            },
+            {
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "name": "Release artifact matrix parity",
+              "run": "node scripts/check-release-assets.mjs"
+            },
+            {
+              "name": "Run semantic-release",
+              "env": {
+                "GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+              },
+              "run": "npx semantic-release"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/shell-build.yml",
+      "sha256": "a2f51f2ac7a5efb4a7636a70a316e531be216edd7a4c88912159823ddbb30b73",
+      "events": {
+        "push": {
+          "branches": [
+            "main",
+            "develop"
+          ],
+          "paths": [
+            "desktop/**",
+            "core/**",
+            "modules/**",
+            ".github/workflows/shell-build.yml"
+          ]
+        },
+        "pull_request": {
+          "branches": [
+            "main",
+            "develop"
+          ],
+          "paths": [
+            "desktop/**",
+            "core/**",
+            "modules/**",
+            ".github/workflows/shell-build.yml"
+          ]
+        },
+        "workflow_dispatch": {}
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "shell-build-${{ github.workflow }}-${{ github.head_ref || github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "shell": {
+          "name": "Shell ${{ matrix.os }}",
+          "strategy": {
+            "fail-fast": "false",
+            "matrix": {
+              "os": "${{ (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main') && fromJSON('[\"windows-latest\",\"macos-latest\",\"ubuntu-latest\"]') || fromJSON('[\"ubuntu-latest\"]') }}"
+            }
+          },
+          "runs-on": "${{ matrix.os }}",
+          "defaults": {
+            "run": {
+              "working-directory": "desktop"
+            }
+          },
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+              "with": {
+                "node-version": "22.x",
+                "cache": "npm",
+                "cache-dependency-path": "package-lock.json"
+              }
+            },
+            {
+              "name": "Install Linux Tauri prerequisites",
+              "if": "matrix.os == 'ubuntu-latest'",
+              "run": "sudo apt-get update\nsudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev\n"
+            },
+            {
+              "uses": "dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8"
+            },
+            {
+              "name": "Cache cargo registry + target",
+              "uses": "actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae",
+              "with": {
+                "path": "~/.cargo/registry\n~/.cargo/git\ndesktop/src-tauri/target\n",
+                "key": "${{ matrix.os }}-cargo-${{ hashFiles('desktop/src-tauri/Cargo.toml') }}",
+                "restore-keys": "${{ matrix.os }}-cargo-\n"
+              }
+            },
+            {
+              "name": "Install workspace deps",
+              "working-directory": ".",
+              "run": "npm ci --prefer-offline --no-audit"
+            },
+            {
+              "name": "Lint frontend",
+              "run": "npm run lint"
+            },
+            {
+              "name": "Typecheck frontend",
+              "run": "npm run typecheck"
+            },
+            {
+              "name": "Build sidecar bundle",
+              "run": "npm run build:sidecar"
+            },
+            {
+              "name": "Vitest (frontend + sidecar) with coverage",
+              "run": "npm run test:coverage"
+            },
+            {
+              "name": "Cargo check (Tauri core)",
+              "working-directory": "desktop/src-tauri",
+              "run": "cargo check --all-targets"
+            },
+            {
+              "name": "Cargo clippy (Tauri core)",
+              "working-directory": "desktop/src-tauri",
+              "run": "cargo clippy --all-targets -- -D warnings"
+            },
+            {
+              "name": "Cargo test (Tauri core)",
+              "working-directory": "desktop/src-tauri",
+              "run": "cargo test --all-targets"
+            },
+            {
+              "name": "Build frontend bundle",
+              "run": "npm run build:web"
+            },
+            {
+              "name": "Upload coverage",
+              "if": "matrix.os == 'ubuntu-latest'",
+              "uses": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+              "with": {
+                "name": "shell-coverage",
+                "path": "desktop/coverage",
+                "if-no-files-found": "ignore"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": ".github/workflows/tuning-live.yml",
+      "sha256": "966ab282ef345efce711a42568834003b505051f08ac9e49cf31cd064ab56d9e",
+      "events": {
+        "workflow_dispatch": ""
+      },
+      "permissions": null,
+      "concurrency": {
+        "group": "tuning-live-${{ github.ref }}",
+        "cancel-in-progress": "true"
+      },
+      "jobs": {
+        "stub-train": {
+          "name": "Stub trainer (CPU)",
+          "runs-on": "ubuntu-latest",
+          "timeout-minutes": "10",
+          "steps": [
+            {
+              "uses": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd"
+            },
+            {
+              "uses": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+              "with": {
+                "python-version": "3.12"
+              }
+            },
+            {
+              "name": "Stub train.py",
+              "run": "python runtimes/tuning/train.py --job-id ci --dataset /dev/null --base-model tiny --out /tmp/nexus-tune --stub"
+            },
+            {
+              "name": "Live path is local only",
+              "run": "echo \"Live Unsloth training is not run on GitHub-hosted runners.\"\necho \"On a 16 GB NVIDIA host after Settings provision: NEXUS_TUNING_LIVE=1 python runtimes/tuning/train.py --job-id live --dataset <jsonl> --base-model <id> --out ~/.nexus/tuning/runs/live\"\n"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "third_party_references": [
+    {
+      "path": ".github/workflows/branch-cleanup.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f",
+      "immutable": true,
+      "comment": "v4"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae",
+      "immutable": true,
+      "comment": "v5.0.5"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae",
+      "immutable": true,
+      "comment": "v5.0.5"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/codeql.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/codeql.yml",
+      "reference": "github/codeql-action/init@f411752efdf656cb71aa17b755b22c890960da1d",
+      "immutable": true,
+      "comment": "v3.35.5"
+    },
+    {
+      "path": ".github/workflows/codeql.yml",
+      "reference": "github/codeql-action/analyze@f411752efdf656cb71aa17b755b22c890960da1d",
+      "immutable": true,
+      "comment": "v3.35.5"
+    },
+    {
+      "path": ".github/workflows/commitlint.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/commitlint.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/coverage-diff.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/coverage-diff.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/coverage-diff.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/coverage-diff.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/docs-drift.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/docs-drift.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/docs-drift.yml",
+      "reference": "actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b",
+      "immutable": true,
+      "comment": "v7.0.1"
+    },
+    {
+      "path": ".github/workflows/golden-tasks.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/golden-tasks.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/golden-tasks.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/golden-tasks.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/installer-build.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/installer-build.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/installer-build.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/installer-build.yml",
+      "reference": "astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f",
+      "immutable": true,
+      "comment": "v4"
+    },
+    {
+      "path": ".github/workflows/installer-build.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/installer-linux.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/installer-linux.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/installer-linux.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/installer-linux.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/installer-macos.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/installer-macos.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/installer-macos.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/installer-macos.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/installer-tests.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/installer-tests.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/installer-tests.yml",
+      "reference": "astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f",
+      "immutable": true,
+      "comment": "v4"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f",
+      "immutable": true,
+      "comment": "v4"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/packaged-window-smoke.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/packaged-window-smoke.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/packaged-window-smoke.yml",
+      "reference": "dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8",
+      "immutable": true,
+      "comment": "stable"
+    },
+    {
+      "path": ".github/workflows/pr-quality.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/pr-quality.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f",
+      "immutable": true,
+      "comment": "v4"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8",
+      "immutable": true,
+      "comment": "stable"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae",
+      "immutable": true,
+      "comment": "v5.0.5"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reference": "softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631",
+      "immutable": true,
+      "comment": "v2.2.2"
+    },
+    {
+      "path": ".github/workflows/sandbox.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/sandbox.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/scorecard.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/scorecard.yml",
+      "reference": "ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a",
+      "immutable": true,
+      "comment": "v2.4.3"
+    },
+    {
+      "path": ".github/workflows/scorecard.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/scorecard.yml",
+      "reference": "github/codeql-action/upload-sarif@f411752efdf656cb71aa17b755b22c890960da1d",
+      "immutable": true,
+      "comment": "v3.35.5"
+    },
+    {
+      "path": ".github/workflows/secrets.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/secrets.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/semantic-release.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/semantic-release.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/shell-build.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/shell-build.yml",
+      "reference": "actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/shell-build.yml",
+      "reference": "dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8",
+      "immutable": true,
+      "comment": "stable"
+    },
+    {
+      "path": ".github/workflows/shell-build.yml",
+      "reference": "actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae",
+      "immutable": true,
+      "comment": "v5.0.5"
+    },
+    {
+      "path": ".github/workflows/shell-build.yml",
+      "reference": "actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+      "immutable": true,
+      "comment": "v5.0.0"
+    },
+    {
+      "path": ".github/workflows/tuning-live.yml",
+      "reference": "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd",
+      "immutable": true,
+      "comment": "v5.0.1"
+    },
+    {
+      "path": ".github/workflows/tuning-live.yml",
+      "reference": "actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "immutable": true,
+      "comment": "v6.2.0"
+    }
+  ],
+  "protection": {
+    "main": {
+      "required_status_checks": {
+        "url": "https://api.github.com/repos/bendourthe/Nexus-AI/branches/main/protection/required_status_checks",
+        "strict": false,
+        "contexts": [
+          "ci-required"
+        ],
+        "contexts_url": "https://api.github.com/repos/bendourthe/Nexus-AI/branches/main/protection/required_status_checks/contexts",
+        "checks": [
+          {
+            "context": "ci-required",
+            "app_id": 15368
+          }
+        ]
+      },
+      "required_pull_request_reviews": null,
+      "enforce_admins": {
+        "url": "https://api.github.com/repos/bendourthe/Nexus-AI/branches/main/protection/enforce_admins",
+        "enabled": false
+      },
+      "restrictions": null
+    },
+    "develop": {
+      "required_status_checks": {
+        "url": "https://api.github.com/repos/bendourthe/Nexus-AI/branches/develop/protection/required_status_checks",
+        "strict": false,
+        "contexts": [
+          "ci-required"
+        ],
+        "contexts_url": "https://api.github.com/repos/bendourthe/Nexus-AI/branches/develop/protection/required_status_checks/contexts",
+        "checks": [
+          {
+            "context": "ci-required",
+            "app_id": 15368
+          }
+        ]
+      },
+      "required_pull_request_reviews": null,
+      "enforce_admins": {
+        "url": "https://api.github.com/repos/bendourthe/Nexus-AI/branches/develop/protection/enforce_admins",
+        "enabled": false
+      },
+      "restrictions": null
+    }
+  },
+  "rulesets": [],
+  "package_scripts": {
+    "generate:golden-tasks": "node scripts/generate-golden-tasks.mjs",
+    "prebuild": "npm run generate:golden-tasks",
+    "build": "tsc -b",
+    "dev:shell": "npm run dev:shell --workspace @nexus/desktop",
+    "build:shell": "npm run build:shell --workspace @nexus/desktop",
+    "build:sidecar": "npm run build:sidecar --workspace @nexus/desktop",
+    "lint:shell": "npm run lint --workspace @nexus/desktop",
+    "test:shell": "npm run test --workspace @nexus/desktop --",
+    "test:shell:coverage": "npm run test:coverage --workspace @nexus/desktop",
+    "watch": "tsc -b -w",
+    "dev": "tsc -b -w",
+    "pretest": "npm run generate:golden-tasks",
+    "test": "vitest run --config configs/vitest.config.ts",
+    "t": "node scripts/test.mjs",
+    "test:integration": "vitest run --config configs/vitest.config.ts --reporter=verbose tests/integration",
+    "test:vsix-runtime": "node scripts/verify-vsix-runtime.mjs",
+    "lint": "eslint src modules",
+    "fast": "npm run lint && npm run lint:shell && npm run build && npm run check-architecture",
+    "full": "npm run fast && npm test && npm run test:shell",
+    "platform": "npm run typecheck --workspace @nexus/desktop && npm run build:sidecar",
+    "package": "powershell -NonInteractive -ExecutionPolicy Bypass -File scripts/build-vsix.ps1",
+    "package:quick": "node scripts/warn-package-quick.mjs && vsce package",
+    "check": "node bin/nexus-check.mjs --baseline configs/nexus-check-baseline.json",
+    "check:raw": "node bin/nexus-check.mjs",
+    "check:prompts": "node bin/nexus-check.mjs --rule prompt-no-ascii-violation --rule prompt-oversized --rule prompt-trailing-whitespace --rule prompt-bom --rule skill-duplicate-name modules/coding/chat/prompts modules/coding/skills/catalog",
+    "check:tampering": "node bin/nexus-check.mjs --rule no-focused-tests --rule no-skipped-tests-without-reason --rule no-tautological-assertion --rule no-commented-out-assertion --rule no-disabled-ci-check tests .github/workflows",
+    "cleanup:scan": "node scripts/cleanup-scanner.mjs",
+    "cleanup:scan:json": "node scripts/cleanup-scanner.mjs --format=json",
+    "bench": "vitest bench --run --config configs/vitest.config.ts",
+    "deps:check": "depcruise --config configs/dependency-cruiser.cjs src core modules tests",
+    "check-architecture": "depcruise --config configs/dependency-cruiser.cjs src core modules",
+    "deps:graph": "depcruise --config configs/dependency-cruiser.cjs --output-type dot src | dot -Tsvg > docs/archive/v0/v0.5/dep-graph.svg",
+    "catalog": "node scripts/generate-catalog.mjs",
+    "catalog:check": "node scripts/generate-catalog.mjs && git diff --exit-code docs/index.md",
+    "perm-tier": "node scripts/generate-tool-permission-table.mjs",
+    "perm-tier:check": "node scripts/generate-tool-permission-table.mjs --check",
+    "security:gen": "node scripts/generate-tool-permission-table.mjs",
+    "security:check": "node scripts/generate-tool-permission-table.mjs --check",
+    "check:audit-prod": "node scripts/check-prod-audit.mjs",
+    "check:naming": "node scripts/check-no-devai-hub.mjs",
+    "check:docs-layout": "node scripts/check-docs-layout.mjs",
+    "check:plan-scope": "node scripts/check-plan-scope-guard.mjs",
+    "docs:handbooks": "node scripts/generate-handbooks.mjs",
+    "docs:handbooks:check": "node scripts/generate-handbooks.mjs --check",
+    "mutate": "stryker run configs/stryker.config.json",
+    "debug": "node scripts/debug/cli.mjs",
+    "work": "node scripts/work.mjs",
+    "deep-work": "node scripts/deep-work/cli.mjs",
+    "agent-batch": "node scripts/agent-batch/cli.mjs",
+    "review": "node scripts/review/cli.mjs",
+    "prepare": "husky"
+  },
+  "fields": [
+    [
+      1,
+      "Provider detected",
+      "PASS",
+      "23 workflow files define GitHub Actions jobs.",
+      "None."
+    ],
+    [
+      2,
+      "Profiles exist",
+      "FAIL",
+      "package.json has fast/full/platform script names, but no report/release and no complete five-profile contract.",
+      "Agree and prove five bounded profiles that reuse existing validators, with list/JSON/report outputs."
+    ],
+    [
+      3,
+      "No duplicated validator",
+      "FAIL",
+      "All 23 retained workflow inventories have zero profile calls; validation lists remain inline.",
+      "Replace inline lists with proven profile calls incrementally."
+    ],
+    [
+      4,
+      "Feature-push runs nothing",
+      "FAIL",
+      "ci.yml excludes only dependabot pushes; installer-tests/sandbox also accept feature pushes.",
+      "Remove ordinary feature-push validation after preserving integration-PR coverage."
+    ],
+    [
+      5,
+      "Integration gate is complete",
+      "FAIL",
+      "No complete full/platform profile calls; shell Windows/macOS are absent on integration PR.",
+      "Run full and required platform groups on the merge result and include their verdicts in the gate."
+    ],
+    [
+      6,
+      "No duplicate post-merge suite",
+      "FAIL",
+      "ci/shell run suites on both PR and protected-branch push; codeql/secrets also repeat.",
+      "Separate PR validation from minimal post-merge smoke/provenance."
+    ],
+    [
+      7,
+      "Post-merge is minimal",
+      "FAIL",
+      "Protected-branch pushes run root and desktop suites.",
+      "Keep only post-merge smoke/provenance."
+    ],
+    [
+      8,
+      "Release is separate",
+      "FAIL",
+      "release.yml reruns source validation; semantic-release publishes on main push; no release profile.",
+      "Reconcile release ownership, packaging/provenance/dry-run profile, and approved publication triggers."
+    ],
+    [
+      9,
+      "Aggregate required check",
+      "PARTIAL",
+      "ci-required and installer-required are unconditional allowlists; only ci-required is protected and it omits shell/installer aggregates.",
+      "Preserve the stable context while incorporating intended platform verdicts; separately approve settings changes."
+    ],
+    [
+      10,
+      "No per-leg required context",
+      "PASS",
+      "Fresh main/develop protection requires only ci-required.",
+      "None."
+    ],
+    [
+      11,
+      "Scoping is job-level",
+      "PARTIAL",
+      "ci.yml has no paths filter; unrequired shell and other workflows still use workflow path filters. No fresh excluded-path PR exercise.",
+      "Move relevant detection to fail-closed job scoping and observe required-context resolution."
+    ],
+    [
+      12,
+      "Runner selection",
+      "PASS",
+      "All parsed jobs are hosted or reuse local hosted workflows; no self-hosted jobs.",
+      "None."
+    ],
+    [
+      13,
+      "Expensive legs pre-merge",
+      "FAIL",
+      "shell-build selects three OS hosts only on main or dispatch; Windows init skips PR. Installer matrix does cover three OS legs on PR.",
+      "Move required shell/Windows legs to integration PR with reviewed job-level scoping."
+    ],
+    [
+      14,
+      "Immutable references",
+      "PASS",
+      "All external uses references are 40-character SHA pins with comments; reusable workflow references are local.",
+      "Separate pending cache-version updates do not invalidate pin immutability."
+    ],
+    [
+      15,
+      "Least-privilege permissions",
+      "FAIL",
+      "Eleven workflows have jobs with implicit inherited permissions.",
+      "Review explicit read defaults and necessary job writes; each permission change requires approval."
+    ],
+    [
+      16,
+      "Caching",
+      "NOT PROVEN",
+      "Manifest-keyed cache inputs exist; complete cold-install exclusion and cache-content qualification are not proven.",
+      "Inventory cache consumers and qualify exact proposed changes."
+    ],
+    [
+      17,
+      "Concurrency",
+      "PARTIAL",
+      "CI/shell/installer matrix cancel superseded validation; release and semantic-release do not cancel. Other groups are not fully qualified.",
+      "Reconcile all validation groups and retain non-cancelling release boundaries."
+    ],
+    [
+      18,
+      "Untrusted forks",
+      "NOT PROVEN",
+      "No self-hosted jobs or pull_request_target; reusable installer jobs inherit secrets. No fresh fork qualification.",
+      "Review each secret/write-capable reusable leg and prove untrusted PR behavior."
+    ],
+    [
+      19,
+      "Reports produced",
+      "FAIL",
+      "Native coverage/SARIF subsets exist, but no common summary/JUnit/SARIF index/environment metadata contract across profiles.",
+      "Produce summary and valid partial metadata on failure, reusing runner outputs."
+    ],
+    [
+      20,
+      "Reports published",
+      "FAIL",
+      "Shell coverage upload is Ubuntu-only after success and has no retention-days. Other retention periods vary.",
+      "Publish required failure evidence unconditionally with reviewed explicit retention."
+    ],
+    [
+      21,
+      "Deployment boundary",
+      "NOT PROVEN",
+      "Tag/dispatch identity checks exist; main-push semantic release has no enforced PR-review/admin boundary. Exact validated-artifact publication is not fully proven.",
+      "Reconcile release ownership and separately decide protection over validated artifacts."
+    ],
+    [
+      22,
+      "Failure recovery",
+      "PASS",
+      "New living runbook requires local reproduction, affected-gate rerun, environment investigation and release holds.",
+      "No blind remote retries."
+    ],
+    [
+      23,
+      "External settings",
+      "PASS",
+      "Fresh protection/ruleset responses are retained and documented; no automatic mutation.",
+      "Strengthening is a separate concrete approval."
+    ]
+  ],
+  "decisions": "pending"
+}

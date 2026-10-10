@@ -1,0 +1,24 @@
+{
+  "status": "pass",
+  "source": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-c4ef3396\\technical\\document-outline.html",
+  "source_sha256": "30144df7f6ec15f0e840cef2baa933bdfb982f9a083ac41f49cb322caff4dbc4",
+  "checks": [
+    "clipped-text",
+    "label-overlap",
+    "label-on-trace",
+    "legend-colour-collision",
+    "oversized-type",
+    "stroke-drift",
+    "legend-entry-not-drawn",
+    "tick-outside-range",
+    "viewbox-dead-space",
+    "callout-stripe-default",
+    "uniform-card-grid"
+  ],
+  "findings": [],
+  "errors": [],
+  "verification_scope": "rendered figure geometry in screen space",
+  "browser": "Chromium 153.0.8010.12",
+  "svg_count": 5
+}
+

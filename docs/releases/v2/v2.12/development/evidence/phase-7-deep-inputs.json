@@ -1,0 +1,830 @@
+{
+  "status": "initial evidence collection, incomplete candidate assessment",
+  "created_at": "2026-10-10T00:33:58.357897+00:00",
+  "exact_revision": {
+    "head": "30a2e47bddc1280badb91aaeaa78c3bcb9447baf",
+    "integration_base": "092ce3c2f386db020d18eab6d69c0655657b2456",
+    "merge_head": "092ce3c2f386db020d18eab6d69c0655657b2456",
+    "working_diff_sha256": "09e17c8d1d04bba35d21a52f3d62f055941b2cbc635dd69511d6709789567795",
+    "staged_diff_sha256": "843a4d52f48a876765fc05b4d5f14ca4f8489b3b2804c63ea62fad9654e54d3d",
+    "working_content": {
+      "core/documents/documentOutlineEnabled.ts": {
+        "present": true,
+        "sha256": "bc3b9d73190cd999b36a480099fd6ecc09f039d45389845a78ca2830d6ff6f8e",
+        "scope": "current candidate"
+      },
+      "desktop/sidecar/src/coding/headlessAgentRunner.ts": {
+        "present": true,
+        "sha256": "f5d82a53247be4dc56a267bc28cab670ba8e6f5bebc5dfa95ec57568a3e99127",
+        "scope": "current candidate"
+      },
+      "desktop/sidecar/src/handlers.ts": {
+        "present": true,
+        "sha256": "48818089138535b7e3af656c42618e62e9a506d60dc0241456e001939aaefc92",
+        "scope": "current candidate"
+      },
+      "desktop/sidecar/src/protocol.ts": {
+        "present": true,
+        "sha256": "da13867dfe190699f75fa22c9153140fc89fda55a6ba3dea0820548841d8c9bc",
+        "scope": "current candidate"
+      },
+      "desktop/src/pages/settings/SecuritySettings.css": {
+        "present": true,
+        "sha256": "0e8f752c532b985bf1b0ca3edc6ec91c0203fb0bfbdb1631896ae33e9fe7d908",
+        "scope": "current candidate"
+      },
+      "desktop/src/pages/settings/SecuritySettings.tsx": {
+        "present": true,
+        "sha256": "44ddb2db12a5d960a2efa4cce3d0aa82ed2890e5f455962203589a4fc86908bf",
+        "scope": "current candidate"
+      },
+      "desktop/tests/SecuritySettings.test.tsx": {
+        "present": true,
+        "sha256": "de5170e722a7fb42fe4482381c656fa044ab181859752d35539cc1325ea964c4",
+        "scope": "current candidate"
+      },
+      "desktop/tests/a11y-config.test.ts": {
+        "present": true,
+        "sha256": "97bd82f0255e05619ec47e317863315d94751c3443832ceeee5ce71be5876189",
+        "scope": "current candidate"
+      },
+      "desktop/tests/document-outline-settings.test.ts": {
+        "present": true,
+        "sha256": "ae19b3f8791b4ab00aeb9a4d4e44d699eba42a5eaa312b11a350505e92725a61",
+        "scope": "current candidate"
+      },
+      "desktop/tests/headless-agent-runner.test.ts": {
+        "present": true,
+        "sha256": "263583580539434ff0e81b454aaf022a622ee6d27dcafb09ff055f4d8f00aaa5",
+        "scope": "current candidate"
+      },
+      "docs/DEVLOG.md": {
+        "present": true,
+        "sha256": "b8d3f1879ba917799c5406ed1f2162937f459c27d0a3c288eb5ae3479e2557aa",
+        "scope": "current candidate"
+      },
+      "docs/archive/v2/v2.11/development/v2.11.0-last-phase-evidence.md": {
+        "present": true,
+        "sha256": "7376ca39d84e7f2bb411bb974851cd02d70f718c6363ad217e3c711296a4ef57",
+        "scope": "current candidate"
+      },
+      "docs/archive/v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md": {
+        "present": true,
+        "sha256": "a860a930757552bccf661fbf5ec21dfd9ee23a7f5691e360013e07dad916b5a6",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/_sources/dual-view-runtime.js": {
+        "present": true,
+        "sha256": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/_sources/dual-view.css": {
+        "present": true,
+        "sha256": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/_sources/handbook-clones.js": {
+        "present": true,
+        "sha256": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/_sources/handbook.css": {
+        "present": true,
+        "sha256": "6e9c40cb7b8723dcdadbdd292587203455cc0a7751247584aa434a19d05de852",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/_sources/storyboards.json": {
+        "present": true,
+        "sha256": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/handbooks.json": {
+        "present": true,
+        "sha256": "c4dc8411ceb9558fefe48067eba12ff55b222d185d6e38cc7909342afb433035",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/markdown/atlas.md": {
+        "present": true,
+        "sha256": "0bfbbc537989d03b4a6d509c6861411214a79136da0054a59a5294358c039463",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/markdown/generation-recovery.md": {
+        "present": true,
+        "sha256": "0913329cd30ffd855e11b7e8929810e1ff35d8d4927c32aa438538faa414f12a",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/technical/document-outline.md": {
+        "present": true,
+        "sha256": "c79662602d8c603b69af0a200043d32e4fdceafb9669eeae22ec3166ef4e99ad",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/technical/installer-runtime.md": {
+        "present": true,
+        "sha256": "52ff450cb2c511e7948b581e589c71c925d386b63817f608926d74e2883874bf",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/technical/media-runtime.md": {
+        "present": true,
+        "sha256": "b1a45f7108eeca2efdaf471ff16643ff791120e6bdb39d0fdcd3f481087be4ed",
+        "scope": "current candidate"
+      },
+      "docs/handbooks/technical/transcript-and-workspaces.md": {
+        "present": true,
+        "sha256": "5616821449709c170afbdede4f8398a53294e7cd0176435a57e2f26776f28c2a",
+        "scope": "current candidate"
+      },
+      "docs/reference/declined-models.md": {
+        "present": true,
+        "sha256": "4efef301335364d505062a787bd6dae6b6ff89224dddd0d53d61fd412ac6ac1c",
+        "scope": "current candidate"
+      },
+      "docs/reference/model-acceptance.md": {
+        "present": true,
+        "sha256": "b1078cee57e33aae994854f0389abdf1646d586fbcf3aaa040b3a7e54cd69310",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-3-native-history.json": {
+        "present": true,
+        "sha256": "8cc123b76461db50524a49e372209b84586a1a736322248925015b171de1bde1",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-4-compaction.json": {
+        "present": true,
+        "sha256": "99762060ea94ffc512c9b8f1558b1ff2ee2e4d2c9d7711846f8488eb0e725fc3",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-5-settings/browser.json": {
+        "present": true,
+        "sha256": "c38409026ebcc5733a9e677bcf573095f07b717a382126d0b0e1c59c1ca385aa",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-5-settings/settings-320.png": {
+        "present": true,
+        "sha256": "9b9f9bcfdc52d21af5f2b6f8f782eeb6912ec62f52cd7b302ae9a0e3f2edce0c",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-5-settings/settings-rendered.html": {
+        "present": true,
+        "sha256": "c45e0cc222555e3448e4e7391a66db2254589f4b4b31cbee306f5bceac8545db",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-5-settings/visual-allowlist.json": {
+        "present": true,
+        "sha256": "40ce51f860b1eec64833633ab870af90eebc30fde2d29c9c16d02da50f783162",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-5-settings/visual-report.json": {
+        "present": true,
+        "sha256": "538153806b2a99eb49baa452f7e25ee8480b05420b62f4ebd39fcc01f9718b4e",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-6-evaluation.json": {
+        "present": true,
+        "sha256": "4cc60fb1822047bef391507917ce3aaae2bf49e184e086f9b58efc62a6d529ab",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-budget-proposal-verified.json": {
+        "present": true,
+        "sha256": "8a70439420a541d6f4edb3b536fcd84a76c0a659c40ab2d897e2bf58cb5ceeec",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-budget-proposal.json": {
+        "present": true,
+        "sha256": "07a245b96b95af2453a481a413c785b3a8364be00736c19d42b808b7ef2ee9e5",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-budget-proposal.patch": {
+        "present": true,
+        "sha256": "9be9d01cfcca221305e236761f179bd6e3f85b44ecbe49f64cd0b2e862d9a71e",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-build-provenance.json": {
+        "present": true,
+        "sha256": "7de0d9ed07037691a3c370f2410fc07211d33afe67ac41786d947852a61d8212",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-ci-inputs.json": {
+        "present": true,
+        "sha256": "d12a2d20295b3ce12d0b190f17ca0dd15d368767aee1544646d27d6da8d47d1e",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-cli-help.json": {
+        "present": true,
+        "sha256": "5302958a14dc1aca7aaaf3f64e38446f647dded4f7590dfcfc1ef5b1955e6543",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-cli-help.txt": {
+        "present": true,
+        "sha256": "c9052327ccd2e9532dcf4200eecae951f96f4d0b23907c99e4c141344d04c6ed",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/brand-contrast-observations.json": {
+        "present": true,
+        "sha256": "84eb6b84a6b4458f02c9c270304e9736a4dbcf6c8e64586381709abd8c2c6414",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/contact-desktop.png": {
+        "present": true,
+        "sha256": "b495e07cd270a9cd8300d66bb13e973dc1dc767a0b2fa7e33d948f64497e70ae",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/contact-phone.png": {
+        "present": true,
+        "sha256": "60b918772221bef306ceccd959db8f46dd9bccfc7e4292f8112094aff760ef61",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/contact-reading.png": {
+        "present": true,
+        "sha256": "2f5890cdfdd310b6f0a82bd4d785243e18ddccafd4a9318dc3aa9a4b37f941c3",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/final-candidate-manifest.json": {
+        "present": true,
+        "sha256": "e09c35d86463304bbfcaa833b4718a3d950e180db9c23b4a890e56ceecfbbd6a",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/final-visual-original-review.json": {
+        "present": true,
+        "sha256": "4a93a922dfa642e60a25183d6508a49788467c5793917d85ec116f1d1814f40f",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/portability-observations.json": {
+        "present": true,
+        "sha256": "7339a68c61622618454ff67836181c39e2069335f782330a0613edb804a027ba",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/render-observations.json": {
+        "present": true,
+        "sha256": "ee3003f71bbf0ec5250659c01ab2d1a643e11631c5766e2dd6ce6f2c31deb4b4",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/source-build-geometry.json": {
+        "present": true,
+        "sha256": "2bf413efd170084c02e1b750b7334b10f17adb35a8002d28fde30d963961063e",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/source-review.json": {
+        "present": true,
+        "sha256": "79b7da97f32ffd95feb40dee9401d4d8ca33ff7819a84a24a801462cee465517",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-layout-scan.json": {
+        "present": true,
+        "sha256": "741b0367a01c4151a55a2f4a9edba728071f5c709ab23b2c34bb7048693a78a9",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/evidence/phase-7-local-validation.json": {
+        "present": true,
+        "sha256": "58632b774a3c2f6f8d47458649869e6bb370799bacd9bb994b0407cb9567842d",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md": {
+        "present": true,
+        "sha256": "290af8abcf62bf0427f5ae8c13fff96b781eeab5d8e4ad36a9d1c2880e2b2ba0",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md": {
+        "present": true,
+        "sha256": "f1301a9cc3ed4628cb4e09cb6307d1c41bb3259bf886e533ed4ba8ab87d2a461",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md": {
+        "present": true,
+        "sha256": "59f91016219af4348028dc0cbf137dfd1dbbb5e4ad788559540c8054995df158",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md": {
+        "present": true,
+        "sha256": "1973f2066816c8db779bf88c272b23c24749bb2f9a88f322edf957ed6bba6afa",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md": {
+        "present": true,
+        "sha256": "d3e7223ee986673a3fa74079e5be7532713732b638c9ba4e0eed306de9443e3c",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-7.md": {
+        "present": true,
+        "sha256": "f19b88839fe0d8b22db2825e8f3200092fbdc8e6d717a09ec5021233831a3a46",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/phase-7-ci-comparison.md": {
+        "present": true,
+        "sha256": "ed4e7f5ebe0e32369bbb81de487a7d35e314b64c6a488a82d9c13c4bbffaffd8",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/phase-7-layout-scan.md": {
+        "present": true,
+        "sha256": "aae6fb154c7adc4cdd382707f49149ddaae20871b7ef1db0dcc9ba71c34455c8",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md": {
+        "present": true,
+        "sha256": "f21c1d3f7fe3e55093b168970e89c23aafede0ded0c5df1401ae2ec56075dceb",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/docs-cleanup-report.md": {
+        "present": true,
+        "sha256": "f8d02ae761c4d7ae4d4bbecb0dc9550678d5ded829b30cd6b509c56a2eef2a77",
+        "scope": "current candidate"
+      },
+      "docs/releases/v2/v2.12/known-gaps.md": {
+        "present": true,
+        "sha256": "690f0712aef9920740b466f4e3d69f7f615cb3e3f2f54a1996abd8e71c6dd0a6",
+        "scope": "current candidate"
+      },
+      "docs/runbooks/ci-lifecycle.md": {
+        "present": true,
+        "sha256": "908db58424902cc77b23bbe3c16fa221f0899914c8da1986b2a9d309faf87c1a",
+        "scope": "current candidate"
+      },
+      "docs/todos.md": {
+        "present": true,
+        "sha256": "c87856b42b669107e19449ee9b2624add9694fdab38e9f1b2fcfddb47aafd978",
+        "scope": "current candidate"
+      },
+      "docs/v2/v2.12/comparisons/v2.12.0-comparison-kolibri-1.md": {
+        "present": true,
+        "sha256": "02e97859b4aa0e7e48097002bd746e62351c407dc3fe9dc5f77bcab40d3aa104",
+        "scope": "current candidate"
+      },
+      "docs/v2/v2.12/development/history/2026-10-08_v2.12.0-outline-promotion-readiness-phase-1.md": {
+        "present": true,
+        "sha256": "ceb9d0f3f613d58007616e8b587892502a842a958a4c72eb79f685f2a476787e",
+        "scope": "current candidate"
+      },
+      "docs/v2/v2.12/development/outline-eval.md": {
+        "present": true,
+        "sha256": "1f9be104def3251d0d21c228ea492d76eae8e0db38088c319caff6dbc84b8b45",
+        "scope": "current candidate"
+      },
+      "docs/v2/v2.12/known-gaps.md": {
+        "present": true,
+        "sha256": "186f108054e9ddd35bdc32aee69dc58a3dc52e2ea71d69ee929f798100481652",
+        "scope": "current candidate"
+      },
+      "docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md": {
+        "present": true,
+        "sha256": "f312376e173458e3610c8653f40f2074052700e9fc72b7c9603007f004bc5439",
+        "scope": "current candidate"
+      },
+      "docs/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md": {
+        "present": true,
+        "sha256": "7d0c2fc3bcd8480781cced28d2a7b9764496bf119dbbf6b1458320e0b782b131",
+        "scope": "current candidate"
+      },
+      "modules/coding/chat/CompactionStrategy.ts": {
+        "present": true,
+        "sha256": "e9027ab58f57033b788728babacc73fbac9e0832d38b299c86c9c2e89aea5bfa",
+        "scope": "current candidate"
+      },
+      "modules/coding/chat/ContextCompactor.ts": {
+        "present": true,
+        "sha256": "8becf69958187f3125c37504b30476f6f4de8d7cf9d60df5a42b229a34e4fae8",
+        "scope": "current candidate"
+      },
+      "modules/coding/chat/ConversationManager.ts": {
+        "present": true,
+        "sha256": "0397bfc6723cb1a9b7d8927e6a4249d710ce13557094f5bf8d5dcd368b8b9ccb",
+        "scope": "current candidate"
+      },
+      "modules/coding/chat/RegenerateFromSource.ts": {
+        "present": true,
+        "sha256": "7bc9a545624c9464edcae49eeddd4bd251f1aef1f0138b501ef86545dc646773",
+        "scope": "current candidate"
+      },
+      "modules/coding/chat/llmMessages.ts": {
+        "present": true,
+        "sha256": "9da023b37a7414ad82b76679ea73f77cc030137826e3d4895238bfb898531f1c",
+        "scope": "current candidate"
+      },
+      "modules/coding/chat/types.ts": {
+        "present": true,
+        "sha256": "c78886c6463efe743bd195aa10eed64aea99ede8d0aa3487484bc4d7ac22a1f3",
+        "scope": "current candidate"
+      },
+      "modules/coding/commands/compactCommand.ts": {
+        "present": true,
+        "sha256": "b6eff4f2a256ec2c186e09374b6ac847c89416b45be9a078f961a72e14fbffbf",
+        "scope": "current candidate"
+      },
+      "modules/coding/documents/DocumentOutlineTools.ts": {
+        "present": true,
+        "sha256": "4b00a5ee007ebbbcf32a16e74af612ef76df8e20e8f17ef6fdf6dd2d10869424",
+        "scope": "current candidate"
+      },
+      "modules/coding/llm/LmStudioClient.ts": {
+        "present": true,
+        "sha256": "59a349593a78b3ce3a34cddc423b157172dfaa9ab35e082daf5f18d72da3449a",
+        "scope": "current candidate"
+      },
+      "modules/coding/llm/OllamaClient.ts": {
+        "present": true,
+        "sha256": "25c5a530c34331d2bbb903a2fdf58fa876946ba39f7514c1693f27eb1a61ed72",
+        "scope": "current candidate"
+      },
+      "modules/coding/llm/headlessOllamaClient.ts": {
+        "present": true,
+        "sha256": "c865895515a0bc9612b69e6a2700871890a161567daab53d6aaca2087de37f89",
+        "scope": "current candidate"
+      },
+      "modules/coding/llm/headlessOpenAiClient.ts": {
+        "present": true,
+        "sha256": "826e66c48ddc6f43e2862295cd826ca4d938c1a94e8279ea89adf52b375de7d7",
+        "scope": "current candidate"
+      },
+      "modules/coding/llm/ollamaMemory.ts": {
+        "present": true,
+        "sha256": "441126f6594c75e4b905d14d3c7a2a34ddafa666c915a92bc751a83fb9f5e729",
+        "scope": "current candidate"
+      },
+      "modules/coding/llm/toolHistory.ts": {
+        "present": true,
+        "sha256": "bb73df6714fb698e5329a22781a43d539965b4d035acd8a12d3983fae41a6c8b",
+        "scope": "current candidate"
+      },
+      "modules/coding/llm/types.ts": {
+        "present": true,
+        "sha256": "cea401cefbeefb2b806dfddb5364abc1145813025fce72338c97bf349d968235",
+        "scope": "current candidate"
+      },
+      "modules/coding/runtime/HeadlessAgentSession.ts": {
+        "present": true,
+        "sha256": "66766a3558ea576824c7e0f10f26671555a26c001980d9b31553766360cb146f",
+        "scope": "current candidate"
+      },
+      "modules/coding/runtime/elideToolResults.ts": {
+        "present": true,
+        "sha256": "dadec96f3d5a482f236d7b02fc5ab626ba54b66a63f3a19bbfe3993bee1d653d",
+        "scope": "current candidate"
+      },
+      "modules/coding/runtime/headlessTools.ts": {
+        "present": true,
+        "sha256": "9b8e142c36abe6b7d8a0cfede935e81182f87e8053fd478ff28954af34f0578d",
+        "scope": "current candidate"
+      },
+      "modules/coding/runtime/outputBudget.ts": {
+        "present": true,
+        "sha256": "0b660cdb17cbf8c8ba23a3c36cada9437de581e73d8ec1b18f9a2638ab3d8abb",
+        "scope": "current candidate"
+      },
+      "scripts/build-outline-smoke-questions.ts": {
+        "present": true,
+        "sha256": "51fed7d38a9c8eff30f8cf6a342fe119c994d79b97e27b48dc378741b8b27b40",
+        "scope": "current candidate"
+      },
+      "scripts/generate-handbooks.mjs": {
+        "present": true,
+        "sha256": "f28c8d1ee031a30601286f28bd32b286a25ded0042946ec335eb832b18fdb1ef",
+        "scope": "current candidate"
+      },
+      "scripts/generate-outline-fixtures.ts": {
+        "present": true,
+        "sha256": "627b6f936c14ba02b91775d3ede2fdfb1706ad6efa1d5274a0d7933ce2820eda",
+        "scope": "current candidate"
+      },
+      "scripts/handbook-renderer.mjs": {
+        "present": true,
+        "sha256": "9aede8fcca5d76178d0cf91df781740295aa08d7293e2d37fbc667a324d6db7d",
+        "scope": "current candidate"
+      },
+      "src/panels/ChatPanelBootstrap.ts": {
+        "present": true,
+        "sha256": "055fa491cfc34a27c77a5bc6730fade82bd8d1c50cad2d0111a76512e77fdc90",
+        "scope": "current candidate"
+      },
+      "src/storage/ChatHistoryStore.ts": {
+        "present": true,
+        "sha256": "3269516e648a670fd2e6afc8bf7e4480ae9004747f1a42ffd24776b63b5c9ec9",
+        "scope": "current candidate"
+      },
+      "src/tools/AgentLoop.ts": {
+        "present": true,
+        "sha256": "5ca4f55ba2912887c616eb06e01670590ed3e2b1999d2d702b5c3b16fe1a457c",
+        "scope": "current candidate"
+      },
+      "src/tools/handlers/compress.ts": {
+        "present": true,
+        "sha256": "222bf13a0075e9386a8bb9486fbe9292d9d89c394fa74e9358b7294b1b480c5c",
+        "scope": "current candidate"
+      },
+      "src/tools/handlers/documentOutline.ts": {
+        "present": true,
+        "sha256": "18e764bd3ae0b0c960d7691d50ab62f85565ff6e0f6fce915c64163fb8af6791",
+        "scope": "current candidate"
+      },
+      "src/tools/handlers/parseDocument.ts": {
+        "present": true,
+        "sha256": "051de22eeb5b7cb0e8788184c5cda23a7b882c6d19daa165b93e3f3bbdaf35c3",
+        "scope": "current candidate"
+      },
+      "src/tools/parseDocumentWiring.ts": {
+        "present": true,
+        "sha256": "d66c8e6bf0a6c20a2b1313b834889773ca37ceefc0f1e3fb95b3b6260d911a05",
+        "scope": "current candidate"
+      },
+      "tests/fixtures/documents/outline/docs/manual-120p.pdf": {
+        "present": true,
+        "sha256": "bd10ab42cc14866cfebf7cc33a6aef7edea08252320cb9703b4aa18e1472f640",
+        "scope": "current candidate"
+      },
+      "tests/fixtures/documents/outline/eval/keys-manual-120p.json": {
+        "present": true,
+        "sha256": "388a47d4d196311be9700e5d1473a40c910b8267abb2e0ade96374282656fbee",
+        "scope": "current candidate"
+      },
+      "tests/fixtures/documents/outline/eval/questions-manual-120p.json": {
+        "present": true,
+        "sha256": "45fed1ba7a836bb8bd263df2df9bd5ab54bcb08d6c984c7ede9778a196a6dc13",
+        "scope": "current candidate"
+      },
+      "tests/fixtures/documents/outline/expected/manual-120p.pdf.json": {
+        "present": true,
+        "sha256": "fb70b66b354dfabb455fef55b71c9749645dc660ae4585e45f478bc966f09f14",
+        "scope": "current candidate"
+      },
+      "tests/fixtures/memory-tier-benchmark-results/2026-05-26/results.json": {
+        "present": true,
+        "sha256": "076dba6b83b6774bedb6b6f025abc1474614c4e44aa7a63319d794adf8f39e60",
+        "scope": "protected historical fixture"
+      },
+      "tests/helpers/factories.ts": {
+        "present": true,
+        "sha256": "c0831fa6e21d2c061f5478f46ec380182f44610d0c718336ee3ed790a89e1e30",
+        "scope": "current candidate"
+      },
+      "tests/integration/agents/worktree-read-rooting.test.ts": {
+        "present": true,
+        "sha256": "ac570fe9b9d3053a7703fbf243b53d312ee31fe58fe3e96d705e32913050b4fa",
+        "scope": "current candidate"
+      },
+      "tests/integration/codegraph/benchmark.test.ts": {
+        "present": true,
+        "sha256": "8cdd547faa2ef6f9bddd03128553f2109abd9db26d993d23337563d810966a37",
+        "scope": "current candidate"
+      },
+      "tests/integration/coding-pillar/command-compressor-benchmark.test.ts": {
+        "present": true,
+        "sha256": "09fbb7da73ee01908229ee221368988a3e9c78c82f76e62139165c61820ae916",
+        "scope": "current candidate"
+      },
+      "tests/integration/coding-pillar/document-budget-loops.test.ts": {
+        "present": true,
+        "sha256": "b58391268d5ee95fae4cf31667f35845e3172bff34423e4cbbf4a67ba8fc122f",
+        "scope": "current candidate"
+      },
+      "tests/integration/coding-pillar/phase-7-token-usage.test.ts": {
+        "present": true,
+        "sha256": "f60fc5709181ffdd95949f1735f05e3c09ee2c02bd3edb11a0853c4065460ce4",
+        "scope": "current candidate"
+      },
+      "tests/integration/guardrails/v1.19.1-hardening.test.ts": {
+        "present": true,
+        "sha256": "d528cab941174b931911c2108132ced9c0764f318143ad0094f5d6b7ed61df4c",
+        "scope": "current candidate"
+      },
+      "tests/integration/memory-tier/phase-7-storage-size-extended.test.ts": {
+        "present": true,
+        "sha256": "57ef12457c10e8fab33588fa495cb15fe4f5e825c158d2f85cdf1b20204abc3a",
+        "scope": "current candidate"
+      },
+      "tests/integration/security/inbound-classifier-routing.test.ts": {
+        "present": true,
+        "sha256": "ca6c222c792073788261a13914b3d48470cad1022474a4c29fdcc630e22539fc",
+        "scope": "current candidate"
+      },
+      "tests/smoke/document-outline-smoke.test.ts": {
+        "present": true,
+        "sha256": "450cc2bbedb3c9fbf25a0f70a2c10c20aaed0c6db6fc4d83f0919670f0a2edb8",
+        "scope": "current candidate"
+      },
+      "tests/smoke/outline-smoke-parser.ts": {
+        "present": true,
+        "sha256": "5173c389982b04aaaec86097292340093234e0651e0ec4e0336f2c01d6c206d6",
+        "scope": "current candidate"
+      },
+      "tests/unit/chat/CompactionStrategy.test.ts": {
+        "present": true,
+        "sha256": "71b303667c2683f80179a20b5b6412b55558e7fc38d73f41218cf54ab24ca340",
+        "scope": "current candidate"
+      },
+      "tests/unit/chat/ContextCompactor.preCompact.test.ts": {
+        "present": true,
+        "sha256": "00e2b2f8adc849ef93adfb4370769921915e86246d6e7afbe493e7ed06fe6f76",
+        "scope": "current candidate"
+      },
+      "tests/unit/chat/ContextCompactor.test.ts": {
+        "present": true,
+        "sha256": "fa820f4d8ca581d9786787d232a1dc98211021e5454721f6687d0cf2b197f4b0",
+        "scope": "current candidate"
+      },
+      "tests/unit/chat/toolResultOwnership.test.ts": {
+        "present": true,
+        "sha256": "1c53d782253477369cd2e8a8a8f3e4c11bb4f90db7fe78dbe084d9508250da00",
+        "scope": "current candidate"
+      },
+      "tests/unit/docs/v2.12.0-kolibri-exclusion.test.ts": {
+        "present": true,
+        "sha256": "c7c5115a33dcc1f653059734dc570b6ff24b128bf309af23075bf156d2abf7d8",
+        "scope": "current candidate"
+      },
+      "tests/unit/llm/LmStudioClient.test.ts": {
+        "present": true,
+        "sha256": "6f66664781ee418a024f0877c8fdbe156170eeca94e6a7c4d87061743fa3da50",
+        "scope": "current candidate"
+      },
+      "tests/unit/llm/headlessOpenAiClient.test.ts": {
+        "present": true,
+        "sha256": "c859c49cd5cc78949fbac0ca1dd73a45b6b5c3af9670bd7f0bec1d83b04f95e1",
+        "scope": "current candidate"
+      },
+      "tests/unit/llm/loadedContextProbeBoundary.test.ts": {
+        "present": true,
+        "sha256": "904a04c351e12eff0af553e8fa07f89c4cbffb5325254f6e90e81d87f28bbc73",
+        "scope": "current candidate"
+      },
+      "tests/unit/llm/openAiTerminalWait.test.ts": {
+        "present": true,
+        "sha256": "2520eeb1a666453dc5180858582a26cfc578857f511227acfba3a0b7bf5724e3",
+        "scope": "current candidate"
+      },
+      "tests/unit/llm/toolHistory.test.ts": {
+        "present": true,
+        "sha256": "bd90b4983a75dd0c7ff2ae5a7ff083070d08d44e8701ee3e0af1dfa6a70bc6ea",
+        "scope": "current candidate"
+      },
+      "tests/unit/modules/coding/documents/DocumentOutlineTools.test.ts": {
+        "present": true,
+        "sha256": "30f1279780221a83c60cd58ef1d5525264526d0047c6be435ae13a756b1dd792",
+        "scope": "current candidate"
+      },
+      "tests/unit/modules/coding/llm/nativeToolCalls.test.ts": {
+        "present": true,
+        "sha256": "016890fdbf023e9444c909e7d6c7bc00c3d9eb0fb2ff2b861f5f0fa44a27d6d7",
+        "scope": "current candidate"
+      },
+      "tests/unit/runtime/HeadlessAgentSession.test.ts": {
+        "present": true,
+        "sha256": "3750a7057326e96939cfda01f794fdc6e4c3b588bebc00c8df4e5bfebd025c11",
+        "scope": "current candidate"
+      },
+      "tests/unit/runtime/elideToolResults.test.ts": {
+        "present": true,
+        "sha256": "b40ae06d5ee5555ccb2f8471d408826c11c9aaac860686821736c99f8d87e3c6",
+        "scope": "current candidate"
+      },
+      "tests/unit/runtime/headlessCompaction.test.ts": {
+        "present": true,
+        "sha256": "8a52b3215e98aab3b45428c24284e982e64b76ba95762480ae67e11560ac4d40",
+        "scope": "current candidate"
+      },
+      "tests/unit/runtime/outputBudget.test.ts": {
+        "present": true,
+        "sha256": "bcb3f8a08debeedafceccd7ec14be9660fde051dcc7815a4eb36a6524bd795b2",
+        "scope": "current candidate"
+      },
+      "tests/unit/scripts/measure-document-outline.test.ts": {
+        "present": true,
+        "sha256": "0a942fb3115a4c2c824f27baea75337e209143d91dbd8eff356958b194200b11",
+        "scope": "current candidate"
+      },
+      "tests/unit/scripts/outline-smoke.test.ts": {
+        "present": true,
+        "sha256": "192f2dbbd0ea478c45c8680b3ec2bf229f4105dd8e7052bb9b073c175bb36716",
+        "scope": "current candidate"
+      },
+      "tests/unit/tools/AgentLoop.test.ts": {
+        "present": true,
+        "sha256": "b2ca2d9f19b2d238fc5d31eaa38217074685c83414cb1d4fe40947457eff9a01",
+        "scope": "current candidate"
+      },
+      "tests/unit/tools/handlers/parseDocument.budget.test.ts": {
+        "present": true,
+        "sha256": "3c4053e9696fe2c576359ee032098e54ed56e248befd93041ce73ab806c53eb2",
+        "scope": "current candidate"
+      }
+    },
+    "publication_commit_created": false
+  },
+  "approved_plans": {
+    "docs/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md": "7d0c2fc3bcd8480781cced28d2a7b9764496bf119dbbf6b1458320e0b782b131",
+    "docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md": "f312376e173458e3610c8653f40f2074052700e9fc72b7c9603007f004bc5439"
+  },
+  "maintainer_request": {
+    "summary": "Implement v2.12 in full, all remaining accepted plans and known gaps, update release, clear failed PRs, and return to cleared merged branches/worktrees and clean develop. Preserve explicit plan ask-first surfaces and user changes. Accepted v2.13 comparison recommendations include measured local EmbeddingGemma 2 admission, durable Image Studio recipes, and renderer export.",
+    "source": "Native active goal and user messages summarized in the durable continuation context",
+    "v212_release_exclusion": "The approved plan ends at green develop integration and exact integrated-tree field-testing installer; release follows field testing."
+  },
+  "blast_radius": {
+    "verdict": "run",
+    "triggers": [
+      "coding API/tool-budget behavior",
+      "native history and persistence compatibility",
+      "compaction/security boundaries",
+      "desktop Settings UI/configuration",
+      "generated dual-view handbook HTML/CSS/renderer tooling",
+      "evaluation scripts and fixtures"
+    ],
+    "diff_paths": [
+      "modules/coding/runtime/HeadlessAgentSession.ts",
+      "modules/coding/runtime/outputBudget.ts",
+      "modules/coding/runtime/elideToolResults.ts",
+      "modules/coding/chat/ConversationManager.ts",
+      "src/tools/AgentLoop.ts",
+      "desktop/src/pages/settings/SecuritySettings.tsx",
+      "scripts/generate-handbooks.mjs",
+      "scripts/handbook-renderer.mjs",
+      "scripts/outline-smoke.ts"
+    ]
+  },
+  "fix_rerun_cycles_used": 0,
+  "fix_rerun_cycles_max": 3,
+  "previous_phase_proofs": {
+    "phase-3-native-history.json": {
+      "sha256": "8cc123b76461db50524a49e372209b84586a1a736322248925015b171de1bde1",
+      "keys": [
+        "capturedAt",
+        "supportTier",
+        "ollamaVersion",
+        "decision",
+        "runs",
+        "extensionHost"
+      ],
+      "source_checks": [],
+      "supportTier": "internal-compatible"
+    },
+    "phase-4-compaction.json": {
+      "sha256": "99762060ea94ffc512c9b8f1558b1ff2ee2e4d2c9d7711846f8488eb0e725fc3",
+      "keys": [
+        "supportTier",
+        "scope",
+        "started",
+        "finished",
+        "model",
+        "ollamaVersion",
+        "contextTokens",
+        "result",
+        "observed",
+        "taskSha256",
+        "documentSha256",
+        "fullDiagnostics",
+        "diagnosticsSha256",
+        "calls",
+        "requests",
+        "sourceSha256"
+      ],
+      "source_checks": [],
+      "supportTier": "supported"
+    },
+    "phase-6-evaluation.json": {
+      "sha256": "4cc60fb1822047bef391507917ce3aaae2bf49e184e086f9b58efc62a6d529ab",
+      "keys": [
+        "schemaVersion",
+        "evaluatedCommit",
+        "validation",
+        "runner",
+        "reportingCorrection",
+        "decision",
+        "flagDefault",
+        "userOutcome",
+        "coldOcrSeconds",
+        "limits",
+        "artifacts",
+        "diagnostics",
+        "elapsedSeconds"
+      ],
+      "source_checks": [],
+      "supportTier": null
+    }
+  },
+  "environment": {
+    "host": "Windows 11, PowerShell, Node 22, Vitest 4.1.11",
+    "available": [
+      "owned continuation source/dependencies",
+      "owned current-source build snapshot",
+      "Chromium Playwright",
+      "prior real Ollama/OCR and extension-host receipts"
+    ],
+    "not_covered": [
+      "final installed desktop/extension field use",
+      "integrated develop/main installer binding",
+      "maintainer M5 entry",
+      "green remote integration",
+      "other physical platform/GPU qualification"
+    ]
+  },
+  "holds": [
+    "guarded document-budget original file not yet repaired",
+    "six original HTML outputs not yet replaced",
+    "CI migration decisions unresolved",
+    "handoff metadata guard not yet accepted",
+    "exact continuation publication binding unresolved"
+  ],
+  "deliberate_exclusions": [
+    "no repeated scored inference or rescoring after futility",
+    "protected queued v2.13 plan is unstarted",
+    "historical benchmark edits preserved",
+    "main checkout and other worktrees untouched",
+    "no remote workflow, permissions or settings mutations"
+  ]
+}

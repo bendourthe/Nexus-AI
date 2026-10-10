@@ -1,0 +1,55 @@
+{
+  "created_at": "2026-10-10T01:28:59.497457+00:00",
+  "scope": "Exact action-pin proposals only; no original workflow, permission, secret, required check, settings or PR mutation",
+  "groups": {
+    "cache": {
+      "changes": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "replacement_count": 2,
+          "source_sha256": "96327d4a6183eefc718d67a040c91d08ebb0b22e1e1fd5b68d616e02d059deb3",
+          "candidate_lf_sha256": "7a7551ea5924336be4ee78ca5a0b6a058a95276b666158f51d4337e46d41b4df"
+        },
+        {
+          "path": ".github/workflows/release.yml",
+          "replacement_count": 1,
+          "source_sha256": "4aaaf4b53d06fd3b336998d865d052b59559edf551b842b537aac606b099d92e",
+          "candidate_lf_sha256": "9c578efff3397250ff89a15e60a37d9f37cb2ff8210051d7fd1e53e02572b77f"
+        },
+        {
+          "path": ".github/workflows/shell-build.yml",
+          "replacement_count": 1,
+          "source_sha256": "a2f51f2ac7a5efb4a7636a70a316e531be216edd7a4c88912159823ddbb30b73",
+          "candidate_lf_sha256": "6d425561cec88fabed585ba98c81dfb5fa9d0176e49ed04216bdc8cd894fd7c8"
+        }
+      ],
+      "old": "27d5ce7f107fe9357f9df03efb73ab90386fccae",
+      "new": "55cc8345863c7cc4c66a329aec7e433d2d1c52a9",
+      "patch_sha256": "f07ad4ad5b40d8cfe10326f4aba71fa9002c2bd3590429049fd7a588136e7ca1",
+      "patch_application_check_exit": 0
+    },
+    "sarif": {
+      "changes": [
+        {
+          "path": ".github/workflows/scorecard.yml",
+          "replacement_count": 1,
+          "source_sha256": "96147f683a8e46086f4746857837c2de6c4e4f3f9e461fcee03801b7b91b3e46",
+          "candidate_lf_sha256": "1cd398477cf4913704afefbba7f5aaded9327b1c2cdbacce53eb5f9905e1bb38"
+        }
+      ],
+      "old": "f411752efdf656cb71aa17b755b22c890960da1d",
+      "new": "458d36d7d4f47d0dd16ca424c1d3cda0060f1360",
+      "patch_sha256": "5161f9ed578340d6dac39f74de59e17dc80ddb3dc4c8ec7cf7a7447b4f88eed6",
+      "patch_application_check_exit": 0
+    }
+  },
+  "vendor_evidence_sha256": "835578a817a9edc267dafbbc0e24bfe243aee2154e63c2b941845b749c063b53",
+  "compatibility": {
+    "cache_old_runtime": "node24",
+    "cache_new_runtime": "node24",
+    "sarif_new_runtime": "node20",
+    "sarif_old": "Official GitHub API returned HTTP 422 twice; current exact pin not resolved",
+    "limitation": "No hosted Actions run of these patches; semantic/cache and authenticated SARIF upload require integration CI"
+  },
+  "decision": "Separate explicit approval is pending for each group; no approvals inferred from automatic continuation"
+}
