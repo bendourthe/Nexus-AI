@@ -14,7 +14,7 @@
 | Handbooks | Six approved HTML files installed with matching hashes; `docs:handbooks:check` passes; installed pages rendered at 1280 px and 390 px | Done |
 | CI profile and action pins | Approved patch, new test and five action pins applied; 16 + 70 tests pass; real fast profile PASS x5 | Hosted validation at integration; broader migration stays QG-v212-1 |
 | Approval gate | Superseded 2026-10-10: owner replied "All approved" for the exact prepared changes, which are now applied (earlier unanswered-approval records kept as history) | Branch push still needs its own explicit approval |
-| Publication | Final local gates pass; independent Goal review finds no code gap; local merge and final commit pending | Final local commit, then explicit push approval |
+| Publication | PR #97 merged into develop at `f24eac41` (60 checks passed, post-merge develop green); #42/#43 closed as superseded; `NexusSetup.exe` SHA-256 `BCE6C301...D536` built from `f24eac41`, smoke passed | Maintainer field testing and the M5 DEVLOG entry; release only after field testing passes |
 
 Evidence: [Phase 7 record](releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md).
 
@@ -696,11 +696,12 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Verify Phase 3 native Ollama history, pair-safe compaction and real SQLite resume in the extension host; record the OpenAI compatibility gap and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md)).
 - [x] Reconcile the guarded agent-authored 14,000 -> 14,500 test count: kept 14,500 and applied the approved context line (2026-10-10). Excluded generated benchmark changes stay preserved until cleanup is agreed.
 - [x] Apply the [verified CI profile correctness patch](releases/v2/v2.12/development/phase-7-ci-profile-correctness-proposal.md) after exact approval (applied 2026-10-10); remaining CI contract differences stay open under QG-v212-1.
-- [ ] Resolve the [remaining CI action updates](releases/v2/v2.12/development/phase-7-ci-action-update-proposal.md): approved pins applied locally 2026-10-10; still reconcile PRs #42 and #43 against green integrated source.
+- [x] Resolve the [remaining CI action updates](releases/v2/v2.12/development/phase-7-ci-action-update-proposal.md): pins merged in #97 with green post-merge develop; #42 and #43 closed as superseded after source comparison.
 - [x] Verify shared tool-result compaction in both loops, fork-resume ownership, cancellation and visible errors; complete nine live PDF section reads and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md)).
 - [x] Verify desktop outline Settings, including environment-preference preservation, real dispatcher/browser behavior, handbook update and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md)).
 - [x] After both frozen full runs finished, retain returned errors in future smoke results and qualify OCR timing prose; verify the actual patched harness with controlled adapters, preserve scored artifacts and record WN-v212-5 ([results](v2/v2.12/development/outline-eval.md)).
-- [ ] Complete evaluation and final integration in the approved [v2.12 plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), then begin v2.13.
+- [x] Complete evaluation and final integration in the approved [v2.12 plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md): PR #97 merged into develop at `f24eac41`; field-testing installer handed over ([evidence](releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md)).
+- [ ] Field-test the v2.12 installer and record the M5 real-use DEVLOG entry (maintainer), then begin v2.13.
 
 ## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)
 
