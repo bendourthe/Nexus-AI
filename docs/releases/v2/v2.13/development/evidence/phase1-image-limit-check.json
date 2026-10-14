@@ -1,0 +1,9 @@
+{
+  "scope": "Engineering capacity demonstration; future reducer enforcement unimplemented",
+  "commands": 151,
+  "strokePoints": 100000,
+  "textCharactersEach": 4096,
+  "serializedBytes": 2515620,
+  "ceilingBytes": 8388608,
+  "excessDisposition": "Typed reject before persistence; no silent pruning"
+}

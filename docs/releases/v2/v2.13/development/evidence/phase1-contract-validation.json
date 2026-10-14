@@ -1,0 +1,20 @@
+{
+  "observedAt": "2026-10-14T14:59:06.172612+00:00",
+  "scope": "Phase1 static contract consumer, no candidate scoring",
+  "exit": 0,
+  "counts": {
+    "answerable": 60,
+    "hard-negative": 20,
+    "unanswerable": 20
+  },
+  "chunks": 20,
+  "sourceAndExcerptHashesMatch": true,
+  "contractSha256": "059e58aac528d2df1c6b5ee5e54e3f23e83fc685ad6ceea7da8e76a9c1e37177",
+  "heldOutMutationRejected": true,
+  "profiles": {
+    "fast": 0,
+    "platform": 0,
+    "liveDiagnostic": 0
+  },
+  "productionDefaultsChanged": false
+}
