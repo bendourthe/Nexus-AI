@@ -1,0 +1,15 @@
+# v2.13 local embedding evaluation
+
+Disposition: HOLD. Recommendation: retain embeddinggemma:300m and existing Nomic/Qwen alternatives. The candidate could not be installed on Ollama 0.32.15: its pull returned HTTP 412 requiring a newer runtime. No candidate quality, resource, precision or offline success is claimed.
+
+The preflight registry manifest identifies embeddinggemma-2:270m at SHA-256 9e1df58d197e80e5a6c12110efb67b38ba6c8e23790a5044e1cafe6bea34b8f4. Its layers plus configuration total 378346995 bytes, below the frozen 512 MiB bound. The candidate is not an installed/passing checkpoint. The registry [distribution](https://ollama.com/library/embeddinggemma-2:270m) is the provisioning target; pinned distribution terms/PUP adjudication remains open.
+
+[Machine result](embedding-eval-results.json) records the actual runtime refusal and every gate as HOLD. Attempts 01 and 02 recorded an already-resident Gemma 4 12B; attempt 03 recorded the first pull refusal. No private model aliases were created and no other session was unloaded.
+
+The evaluator validates the frozen contract/manifest, source and excerpt pins before network access. It uses a host-wide exclusive evaluation lease, fresh disposable memory databases and the existing OllamaClient/MemorySubsystem/MemoryStore searchHybrid path. It rejects missing, nonfinite, zero or mixed vectors, rewritten corpus text and incomplete paired observations. It never invokes the heuristic embedding method. Primary recall is raw recall@5; accepted recall uses the frozen 0.65 cosine rejection rule and is reported separately. This interpretation was fixed before any score.
+
+The worker applies common 2048-token context and truncation refusal through request instrumentation, task-specific candidate prefixes, 30 warm retrieval repetitions, five verified cold loads, paired query bootstrap and source-group sensitivity. It records primary lexical-prefilter retrieval and a supplemental native-HNSW attempt. These positive worker paths compile but are not proven by this failed installation. Sampled evaluator RSS and model residency do not establish whole-runtime peak RAM; a JavaScript loopback request guard does not establish OS-level offline containment.
+
+Run from the isolated v2.13 checkout. Validate with node scripts/evaluate-local-embeddings.mjs --contract docs/releases/v2/v2.13/development/embedding-eval-contract.json --validate-only. Expected: PASS plus the frozen hashes. After qualifying a compatible backend and a quiet host, explicitly provision/evaluate with node scripts/evaluate-local-embeddings.mjs --contract docs/releases/v2/v2.13/development/embedding-eval-contract.json --output docs/releases/v2/v2.13/development/embedding-eval-rerun-01.json --provision. Expected: machine result with explicit PASS/FAIL/HOLD per gate; an existing output file is refused. Installation is not triggered by CI.
+
+Support: the validation/failure boundary is internal-compatible and observed locally. Candidate positive inference and admission remain candidate/not proven here. Image phases continue independently. Defaults, catalog, job map and user indexes remain unchanged.
