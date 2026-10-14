@@ -8,3 +8,8 @@ Inherited v2.12 task/evidence paths differ; discrepancy is an input to terminal 
 ## Phase 2
 
 Evaluator source and tests use existing script/lib/test roots. All release evidence, including failed-attempt records, stays under this active release. No handbook, HTML, workflow or source/output map changed. The frozen source validator accepts only matching LF/CRLF representations of the same content; no fixture labels, thresholds or pins changed.
+
+
+## Phase 3
+
+Conditional admission/migration disposition and history remain under this active release. No existing living document moved or edited. No migration source surface was introduced. Skipped tasks stay unchecked with machine-readable disposition evidence.
