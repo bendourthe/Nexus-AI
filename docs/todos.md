@@ -1,6 +1,6 @@
 # Nexus - Progress Dashboard
 
-**Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.12-outline-continuation`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
+**Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.13-craft-retrieval`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
 
 ## v2.12 Phase 7 gates (2026-10-09)
 
@@ -195,7 +195,7 @@ Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 des
 | Tasks done (v0.3.0) | 55 / 55 | 55 / 55 | 0 |
 | Tasks done (v0.4.0) | 16 (P1) + 17 (P2) + 21 (P3) + 21 (P4) + 22 (P5) | ~135 / ~135 | in-progress |
 | Sources compared (Craft editors + EmbeddingGemma 2, 2026-10-07) | 2 / 2 | 2 / 2 | 0 |
-| v2.13 adoption plan implementation tasks (finalized, 2026-10-08) | 0 / 31 | 31 | 31 |
+| v2.13 adoption plan implementation tasks (Phase 1 local, 2026-10-14) | 3 / 31 | 31 | 28 |
 
 ---
 
@@ -704,6 +704,10 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [ ] Field-test the v2.12 installer and record the M5 real-use DEVLOG entry (maintainer), then begin v2.13.
 
 ## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)
+
+- [x] Freeze the post-v2.12 baseline, 100-query evaluation contract and image ownership/limits; fast/platform and real disposable Ollama/SQLite probe pass ([Phase 1 evidence](releases/v2/v2.13/development/v2.13.0-phase1-evidence.md)).
+- [ ] Complete the isolated paired evaluator and measured retain/admit report; no default or user-index change before all gates.
+
 
 - [x] Compare the four named Craft editor repositories and Google's EmbeddingGemma 2 announcement against Nexus; record source scans, code evidence, queue impact and prioritized recommendations in the [comparison](releases/v2/v2.13/comparisons/v2.13.0-comparison-craft-editors-embeddinggemma-2.md) (2026-10-07).
 - [x] Finalize the comparison's [v2.13.0 adoption plan](releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md): seven phases, 31 tasks, conditional model admission and independent image-edit work; all seven review lenses ran and drafting defects were corrected ([review](releases/v2/v2.13/development/v2.13.0-plan-review.md), 2026-10-08). The owner accepted all three recommendations on 2026-10-08; planning is complete and no implementation began.
