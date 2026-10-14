@@ -705,10 +705,11 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 
 ## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)
 
-**Progress**: 6/31 task checkboxes complete; Phases 1-2 verified locally, 25 tasks remain or need conditional disposition. Model admission is HOLD; image work remains independently authorized.
+**Progress**: 8/31 task checkboxes complete; Phases 1-2 verified locally, Phase 3 has an explicit retain/HOLD disposition with three skipped unchecked tasks; 20 applicable tasks remain. Model admission is HOLD; image work remains independently authorized.
 
 - [x] Freeze the post-v2.12 baseline, 100-query evaluation contract and image ownership/limits; fast/platform and real disposable Ollama/SQLite probe pass ([Phase 1 evidence](releases/v2/v2.13/development/v2.13.0-phase1-evidence.md)).
 - [x] Build and verify the isolated evaluator and explicit retain/HOLD report: Ollama 0.32.15 rejects the candidate with HTTP 412; no quality score, default change or user-index mutation is claimed ([Phase 2 evidence](releases/v2/v2.13/development/v2.13.0-phase2-evidence.md)).
+- [x] Record Phase 3 conditional retain/HOLD, verify ten unchanged production paths, and explicitly skip T008-T010 without claiming migration ([disposition](releases/v2/v2.13/development/embedding-migration-disposition.json)).
 
 
 - [x] Compare the four named Craft editor repositories and Google's EmbeddingGemma 2 announcement against Nexus; record source scans, code evidence, queue impact and prioritized recommendations in the [comparison](releases/v2/v2.13/comparisons/v2.13.0-comparison-craft-editors-embeddinggemma-2.md) (2026-10-07).
