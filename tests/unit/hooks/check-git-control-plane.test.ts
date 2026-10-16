@@ -53,7 +53,7 @@ function git(args: string[], cwd: string): void {
 
 function makeRepo(initialBranch: string): string {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "gemma-git-hook-"));
-  git(["init", "-q", "--initial-branch", initialBranch], dir);
+  git(["init", "-q", "--template=", "--initial-branch", initialBranch], dir);
   fs.writeFileSync(path.join(dir, "seed.txt"), "seed", "utf-8");
   git(["add", "seed.txt"], dir);
   git(["-c", "user.email=test@example.com", "-c", "user.name=Test", "commit", "-q", "-m", "seed"], dir);

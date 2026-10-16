@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, copyFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
-import { spawnSync } from "node:child_process";
+import { spawnSync, execFileSync } from "node:child_process";
 // Existing command helpers are JavaScript modules consumed directly by Node.
 // @ts-expect-error The standalone evaluation helper has no emitted declaration.
 import { loadEvaluation, validateVector, p95, pairedInterval, compareArms, ownedPath } from "../../../lib/embedding-eval.mjs";
@@ -10,17 +10,44 @@ import { loadEvaluation, validateVector, p95, pairedInterval, compareArms, owned
 const contractPath = "docs/releases/v2/v2.13/development/embedding-eval-contract.json";
 const checkout = resolve(__dirname, "../../..");
 const temporary: string[] = [];
+let pinnedSources: Map<string, Buffer> | undefined;
 
 function disposableFixture(): string {
   const root = mkdtempSync(join(tmpdir(), "nexus-eval-test-"));
   temporary.push(root);
   const corpus = JSON.parse(readFileSync(join(checkout, "tests/fixtures/embedding-eval/held-out.json"), "utf8"));
+  // One Git process for the immutable source snapshot; no per-case process storm.
+  if (!pinnedSources) {
+    const sources = [...new Set<string>(corpus.chunks.map((chunk: { source: string }) => chunk.source))];
+    const output = execFileSync("git", ["cat-file", "--batch"], {
+      cwd: checkout, maxBuffer: 8 * 1024 * 1024,
+      input: sources.map((path) => "90b95f2439959ddfa4c902d287a6d673df785dd9:" + path).join("\n") + "\n",
+    });
+    const captured = new Map<string, Buffer>();
+    let offset = 0;
+    for (const path of sources) {
+      const end = output.indexOf(10, offset);
+      const header = output.subarray(offset, end).toString("ascii").match(/^[a-f0-9]+ blob (\d+)$/);
+      if (end < offset || !header) throw new Error("Pinned source snapshot unavailable.");
+      const size = Number(header[1]);
+      const start = end + 1;
+      if (!Number.isSafeInteger(size) || size < 0 || output[start + size] !== 10) throw new Error("Invalid Git snapshot frame.");
+      captured.set(path, Buffer.from(output.subarray(start, start + size)));
+      offset = start + size + 1;
+    }
+    pinnedSources = captured;
+  }
   const files = [contractPath, "tests/fixtures/embedding-eval/manifest.json",
     "tests/fixtures/embedding-eval/held-out.json", "tests/fixtures/embedding-eval/tuning.json",
     ...corpus.chunks.map((chunk: { source: string }) => chunk.source)];
   for (const path of new Set<string>(files)) {
     mkdirSync(dirname(join(root, path)), { recursive: true });
-    copyFileSync(join(checkout, path), join(root, path));
+    if (path === contractPath || path.startsWith("tests/fixtures/embedding-eval/")) copyFileSync(join(checkout, path), join(root, path));
+    else {
+      const bytes = pinnedSources.get(path);
+      if (!bytes) throw new Error("Missing pinned source.");
+      writeFileSync(join(root, path), bytes);
+    }
   }
   return root;
 }
@@ -59,7 +86,15 @@ describe("local embedding evaluation evidence boundary", () => {
     expect(() => loadEvaluation(root, contractPath)).toThrow("Frozen contract bytes changed");
   });
 
-  it("refuses changed production source even when fixture bytes remain intact", () => {
+  it("reconstructs frozen source content from Git after later product work changes the checkout", () => {
+    const result = loadEvaluation(checkout, contractPath);
+    expect(result.sourceSnapshots).toEqual(expect.arrayContaining([expect.objectContaining({
+      source: "core/generations/StudioSessionStore.ts", materializedFrom: "git-baseline",
+    })]));
+    expect(result.fixture.queries).toHaveLength(100);
+  });
+
+  it("refuses changed production source when its pinned baseline is unavailable", () => {
     const root = disposableFixture();
     writeFileSync(join(root, "src/storage/MemorySubsystem.ts"), "// changed\n");
     expect(() => loadEvaluation(root, contractPath)).toThrow("Source changed");
