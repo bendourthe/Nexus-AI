@@ -14,7 +14,7 @@ import type {
 export type ImageEditFailureCode =
   | "INVALID_RECIPE" | "LIMIT_EXCEEDED" | "REVISION_CONFLICT" | "NO_UNDO" | "NO_REDO"
   | "FORBIDDEN" | "IMAGE_NOT_FOUND" | "SOURCE_CHANGED" | "UNSUPPORTED_SOURCE"
-  | "STORAGE_UNAVAILABLE" | "UNAVAILABLE";
+  | "STORAGE_UNAVAILABLE" | "RENDER_FAILED" | "UNAVAILABLE";
 
 export class ImageEditRequestError extends Error {
   constructor(readonly code: ImageEditFailureCode, message: string) {
@@ -25,7 +25,7 @@ export class ImageEditRequestError extends Error {
 
 const KNOWN = new Set<string>([
   "INVALID_RECIPE", "LIMIT_EXCEEDED", "REVISION_CONFLICT", "NO_UNDO", "NO_REDO", "FORBIDDEN",
-  "IMAGE_NOT_FOUND", "SOURCE_CHANGED", "UNSUPPORTED_SOURCE", "STORAGE_UNAVAILABLE",
+  "IMAGE_NOT_FOUND", "SOURCE_CHANGED", "UNSUPPORTED_SOURCE", "STORAGE_UNAVAILABLE", "RENDER_FAILED",
 ]);
 
 /** The sidecar formats image-edit failures as `CODE: message`. */

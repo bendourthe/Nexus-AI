@@ -11,10 +11,12 @@ import { createRoot } from "react-dom/client";
 
 import {
   createImageEditRecipe,
+  deriveImageEditState,
   reduceImageEditRecipe,
   type ImageEditRecipe,
 } from "../../../core/image/ImageEditRecipe";
 import { ImageViewer, NEUTRAL_ADJUSTMENTS, renderAdjusted } from "../../src/shared/studio/ImageViewer";
+import { renderEditedPng } from "../../src/shared/studio/imageEditRenderer";
 import type { DurableImageEdit } from "../../src/shared/studio/imageEditClient";
 
 const W = 64;
@@ -139,6 +141,12 @@ async function main(): Promise<void> {
   click("v-choice-original");
   const originalBlob = await until(() => captured[1], "original export");
 
+  // v2.13.0 Phase 6: the render bridge's path (what an agent export receives)
+  // must equal the viewer's own export, pixel for pixel.
+  const state = deriveImageEditState(recipe);
+  const commandBlob = await renderEditedPng(new Blob([source.bytes], { type: "image/png" }), state.adjustments, state.marks);
+  const commandPixels = pixels(await createImageBitmap(commandBlob));
+
   // Sharpening must change pixels in this engine, not only in the kernel test.
   const plain = document.createElement("canvas");
   plain.width = W;
@@ -153,6 +161,7 @@ async function main(): Promise<void> {
     ok: true,
     engine: navigator.userAgent,
     previewVsExport: compare(shown, exported),
+    viewerVsCommandExport: compare(exported, commandPixels),
     sharpening: { readback: sharpOk, ...compare(unsharp, sharp) },
     original: {
       sourceSha256: identity.sourceSha256,

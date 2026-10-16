@@ -41,10 +41,10 @@
 
 #### Warnings
 
-##### WN-1 - The packaged desktop restart flow is not automated
-- **Source phase**: Phase 5.
-- **Plan reference**: Phase 5 Verification Expectation; T016.
-- **Reason**: Restart is proven at the sidecar (real `sessions.db` and PNG, new store and ops), in the viewer (unmount and remount over the same state), and for pixels in headless Edge, the Chromium engine behind WebView2. No harness drives the installed Tauri window through generate, edit, quit, relaunch and export.
+##### WN-1 - The packaged desktop flows are not automated
+- **Source phase**: Phases 5 and 6.
+- **Plan reference**: Phase 5 and Phase 6 Verification Expectations; T016, T020.
+- **Reason**: Restart is proven at the sidecar (real `sessions.db` and PNG, new store and ops), in the viewer (unmount and remount over the same state), and for pixels in headless Edge, the Chromium engine behind WebView2. Agent renders are proven at the authenticated route, the bridge and the renderer's claim/answer protocol, with the shared pixel path in the same engine. No harness drives the installed Tauri window through generate, edit, quit, relaunch and export, or carries an agent render request through the real shell into a live window.
 - **Suggested next step**: Phase 7 human testing suggestions; a packaged-window driver if one is added later.
 
 #### Quality-gate gaps

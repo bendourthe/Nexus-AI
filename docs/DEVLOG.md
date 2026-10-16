@@ -13,6 +13,12 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-15] v2.13.0 Phase 6 - Authorized edit commands
+
+Agents can now edit a persisted Image Studio image with `nexus image-edit` (routes `/nexus/image-edit/*`). Access is per image and starts as an Ask inbox request; only a human approval issues a one-hour grant bound to the agent's caller id, run id and the image, and the app token alone never reaches an image. `apply` is idempotent by key; the viewer and agents share one mutation path. Previews and exports are rendered by the running Nexus window through a polled request bridge, using pixel code now shared with the viewer (`imageEditRenderer.ts`); in headless Edge the viewer's export and the bridge's render were identical. Exports go only to `~/.nexus/generations/exports`, never overwrite, and refuse linked folders or a recipe or source that changed mid-render. Decision record: `docs/releases/v2/v2.13/development/image-command-contract.md`.
+
+---
+
 ## [2026-10-15] v2.13.0 Phase 5 - Viewer reopen and export
 
 Generated Image Studio images are now saved once, content-addressed, under `~/.nexus/generations/images/`, so their turns can be reopened; the plan had assumed this already happened. The viewer edits a saved image durably through five new sidecar methods with process-bound grants: each finished gesture is committed against the last acknowledged revision, "Edits saved" appears only after acknowledgement, failures roll back with Retry and Reload, and close waits for pending saves. Chat attachments still edit in memory. In headless Edge (the WebView2 engine) preview and export pixels matched exactly with all four adjustments and both mark kinds. Open: saved images outlive their session (DF-3) and the installed window flow is not automated (WN-1). Evidence: `docs/releases/v2/v2.13/development/v2.13.0-phase5-evidence.md`.

@@ -148,6 +148,9 @@ export const IPC_METHODS = [
   "studio.image.edit.commit",
   "studio.image.edit.revision",
   "studio.image.edit.close",
+  // v2.13.0 Phase 6 -- the renderer side of the bounded render bridge.
+  "studio.image.render.claim",
+  "studio.image.render.complete",
   "data.categories",
   "data.export",
   "data.import",
@@ -1147,6 +1150,33 @@ export const StudioImageEditRevisionResponse = z
   .strict();
 export const StudioImageEditCloseRequest = StudioImageGrantRequest;
 export const StudioImageEditCloseResponse = z.object({ ok: z.literal(true) }).strict();
+export const StudioImageRenderClaimRequest = z.object({}).strict();
+export const StudioImageRenderClaimResponse = z
+  .object({
+    request: z
+      .object({
+        requestId: z.string().uuid(),
+        revision: z.number().int().nonnegative(),
+        sourceSha256: z.string().regex(/^[a-f0-9]{64}$/),
+        width: z.number().int().positive(),
+        height: z.number().int().positive(),
+        adjustments: z.record(z.string(), z.number()),
+        marks: z.array(z.record(z.string(), z.unknown())),
+        png: z.string().min(1),
+      })
+      .strict()
+      .nullable(),
+  })
+  .strict();
+export const StudioImageRenderCompleteRequest = z
+  .object({
+    requestId: z.string().uuid(),
+    ok: z.boolean(),
+    png: z.string().max(48 * 1024 * 1024).optional(),
+    message: z.string().max(2000).optional(),
+  })
+  .strict();
+export const StudioImageRenderCompleteResponse = z.object({ accepted: z.boolean() }).strict();
 
 // v2.2.0 Phase 5 (5.3) -- auto-title a chat from its first message.
 export const ChatGenerateTitleRequest = z
@@ -3509,6 +3539,16 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
   "studio.image.edit.close": {
     request: StudioImageEditCloseRequest,
     response: StudioImageEditCloseResponse,
+    implemented: true,
+  },
+  "studio.image.render.claim": {
+    request: StudioImageRenderClaimRequest,
+    response: StudioImageRenderClaimResponse,
+    implemented: true,
+  },
+  "studio.image.render.complete": {
+    request: StudioImageRenderCompleteRequest,
+    response: StudioImageRenderCompleteResponse,
     implemented: true,
   },
   "data.categories": {

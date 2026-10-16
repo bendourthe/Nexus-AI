@@ -30,7 +30,10 @@ export const NEUTRAL_IMAGE_ADJUSTMENTS = Object.freeze({
 export type ImageEditErrorCode =
   | "INVALID_RECIPE" | "LIMIT_EXCEEDED" | "REVISION_CONFLICT"
   | "NO_UNDO" | "NO_REDO" | "FORBIDDEN" | "IMAGE_NOT_FOUND"
-  | "SOURCE_CHANGED" | "UNSUPPORTED_SOURCE" | "STORAGE_UNAVAILABLE";
+  | "SOURCE_CHANGED" | "UNSUPPORTED_SOURCE" | "STORAGE_UNAVAILABLE"
+  // v2.13.0 Phase 6: agent commands, the render bridge and export.
+  | "IDEMPOTENCY_CONFLICT" | "APPROVAL_UNAVAILABLE" | "RENDERER_UNAVAILABLE"
+  | "RENDER_FAILED" | "EXPORT_EXISTS" | "EXPORT_UNSAFE";
 
 export class ImageEditError extends Error {
   constructor(readonly code: ImageEditErrorCode, message: string) {

@@ -67,6 +67,9 @@ Usage:
   nexus context [--json] [--token t] [--host 127.0.0.1] [--port 11500]
   nexus logs [--lines N] [--json] [--token t] [--host 127.0.0.1] [--port 11500]
   nexus media inspect <path> [--json] [--token t] [--host 127.0.0.1] [--port 11500]
+  nexus image-edit access|status|describe|apply|render|release --json <body>
+                                        edit a persisted Image Studio image; access needs
+                                        approval in the Nexus Ask inbox
   nexus screenshot [--out <file>] [--json] [--token t] [--host 127.0.0.1] [--port 11500]
   nexus capture [--route <path>] [--out <file>] [--json] [--token t] [--host 127.0.0.1] [--port 11500]
   nexus check [...]                     deterministic source-code checks
@@ -1549,6 +1552,29 @@ export async function runJsonCli(args, stdout = process.stdout, stderr = process
     method = "POST";
     path = `${JSON_CLI_PREFIX}/capture`;
     body = { route: typeof route === "string" ? route : null };
+  } else if (args.command === "image-edit") {
+    // Mirrors IMAGE_EDIT_SCHEMAS in core/cli/jsonCli.ts (v2.13.0 Phase 6).
+    const grant = ["callerId", "runId", "grantId"];
+    const schemas = {
+      access: { path: "access", required: ["callerId", "runId", "sessionId", "turnId"] },
+      status: { path: "access/status", required: ["requestId", "callerId", "runId"] },
+      describe: { path: "describe", required: grant },
+      apply: { path: "apply", required: [...grant, "action", "expectedRevision", "idempotencyKey"] },
+      render: { path: "render", required: [...grant, "mode", "expectedRevision"] },
+      release: { path: "release", required: grant },
+    };
+    const schema = schemas[args.subcommand ?? ""];
+    if (!schema) {
+      stderr.write(`nexus image-edit: subcommands are ${Object.keys(schemas).join(", ")}\n`);
+      return 2;
+    }
+    const parsed = parseObject();
+    if (!parsed.ok) return schemaFail(parsed.error);
+    const missing = schema.required.filter((k) => parsed.value[k] === undefined || parsed.value[k] === null || parsed.value[k] === "");
+    if (missing.length > 0) return schemaFail(`missing fields: ${missing.join(", ")}`);
+    method = "POST";
+    path = `${JSON_CLI_PREFIX}/image-edit/${schema.path}`;
+    body = parsed.value;
   } else if (args.command === "media" && args.subcommand === "inspect") {
     const mediaPath = Array.isArray(args.positional) ? args.positional[0] : "";
     if (!mediaPath) {
@@ -1735,7 +1761,8 @@ export async function main(argv) {
     args.command === "logs" ||
     args.command === "media" ||
     args.command === "screenshot" ||
-    args.command === "capture"
+    args.command === "capture" ||
+    args.command === "image-edit"
   ) {
     if (args.help) {
       process.stdout.write(HELP);

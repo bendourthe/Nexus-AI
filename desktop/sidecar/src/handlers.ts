@@ -114,6 +114,8 @@ import {
   StudioImageEditCommitRequest,
   StudioImageEditRevisionRequest,
   StudioImageEditCloseRequest,
+  StudioImageRenderClaimRequest,
+  StudioImageRenderCompleteRequest,
   StudioSessionMoveFolderRequest,
   StudioSessionMoveSessionRequest,
   StudioSessionRenameFolderRequest,
@@ -249,6 +251,7 @@ import { SPLAT_GENERATE_JOB_TYPE, prepareSplatGenerate } from "../../../core/ima
 import { probeSplatHost, promotePreparedSplat, splatJobPaths } from "./image/GaussianSplatRuntime.js";
 import { runTripoSplatAdapter } from "./image/TripoSplatAdapter.js";
 import { persistGeneratedPng } from "./studio/generatedImages.js";
+import { ImageRenderBridge } from "./studio/imageRenderBridge.js";
 import {
   createStudioRuntime,
   recordCompletion,
@@ -635,15 +638,26 @@ export function resetStudioSessionOps(): void {
 }
 
 let _imageEditOps: import("./studio/imageEditRuntime.js").ImageEditOps | null = null;
+/** v2.13.0 Phase 6: render requests the running desktop renderer claims by polling. */
+export const imageRenderBridge = new ImageRenderBridge();
 
-/** v2.13.0 Phase 5: shares the studio session store's connection and lifecycle. */
-async function imageEditOps(): Promise<import("./studio/imageEditRuntime.js").ImageEditOps> {
+/**
+ * v2.13.0 Phases 5-6: shares the studio session store's connection and
+ * lifecycle; agent access is approved through the context's Ask inbox. The
+ * control surface uses this same instance (main.ts).
+ */
+export async function imageEditOps(
+  ctx?: Pick<HandlerContext, "askInbox">,
+): Promise<import("./studio/imageEditRuntime.js").ImageEditOps> {
   if (!_imageEditOps) {
     const [{ studioSessionRuntime }, { createImageEditOps }] = await Promise.all([
       import("./studio/sessionRuntime.js"),
       import("./studio/imageEditRuntime.js"),
     ]);
-    _imageEditOps = createImageEditOps(studioSessionRuntime().store);
+    _imageEditOps = createImageEditOps(studioSessionRuntime().store, {
+      ...(ctx?.askInbox ? { askInbox: ctx.askInbox } : {}),
+      renderBridge: imageRenderBridge,
+    });
   }
   return _imageEditOps;
 }
@@ -1806,22 +1820,29 @@ export const handlers: Record<Method, HandlerFn> = {
     (await studioSessionOps()).listTurns(
       StudioSessionListTurnsRequest.parse(params ?? {}),
     ),
-  "studio.image.media": async (params) =>
-    (await imageEditOps()).media(StudioImageMediaRequest.parse(params ?? {})),
-  "studio.image.edit.open": async (params) =>
-    (await imageEditOps()).open(StudioImageEditOpenRequest.parse(params ?? {})),
-  "studio.image.edit.commit": async (params) => {
+  "studio.image.media": async (params, ctx) =>
+    (await imageEditOps(ctx)).media(StudioImageMediaRequest.parse(params ?? {})),
+  "studio.image.edit.open": async (params, ctx) =>
+    (await imageEditOps(ctx)).open(StudioImageEditOpenRequest.parse(params ?? {})),
+  "studio.image.edit.commit": async (params, ctx) => {
     const input = StudioImageEditCommitRequest.parse(params ?? {});
-    return (await imageEditOps()).commit({
+    return (await imageEditOps(ctx)).commit({
       grantId: input.grantId,
       action: input.action,
       expectedRevision: input.expectedRevision,
     });
   },
-  "studio.image.edit.revision": async (params) =>
-    (await imageEditOps()).revision(StudioImageEditRevisionRequest.parse(params ?? {})),
-  "studio.image.edit.close": async (params) =>
-    (await imageEditOps()).close(StudioImageEditCloseRequest.parse(params ?? {})),
+  "studio.image.edit.revision": async (params, ctx) =>
+    (await imageEditOps(ctx)).revision(StudioImageEditRevisionRequest.parse(params ?? {})),
+  "studio.image.edit.close": async (params, ctx) =>
+    (await imageEditOps(ctx)).close(StudioImageEditCloseRequest.parse(params ?? {})),
+  // v2.13.0 Phase 6: the running renderer claims and answers render requests.
+  "studio.image.render.claim": async (params) => {
+    StudioImageRenderClaimRequest.parse(params ?? {});
+    return { request: imageRenderBridge.claim() };
+  },
+  "studio.image.render.complete": async (params) =>
+    imageRenderBridge.complete(StudioImageRenderCompleteRequest.parse(params ?? {})),
   // v2.2.0 Phase 8 (DF-16): local data export / import.
   //
   // These load the runtime lazily. transferRuntime reaches into the storage

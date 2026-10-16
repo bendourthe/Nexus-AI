@@ -37,6 +37,10 @@ Index: `docs/reference/cli/README.md`.
 
 `nexus session`, `nexus models`, and `nexus generate` call `http://127.0.0.1:11500` unless `--host` and `--port` say otherwise. Pass `--token <value>` or set `NEXUS_SERVING_TOKEN`. The desktop writes the same value to `nexus.serving.token` in `~/.nexus/settings.json` when Local API server is enabled.
 
+## Image edits
+
+`nexus image-edit` edits a persisted Image Studio image by `sessionId` and `turnId`. Start with `access` (your `callerId` and `runId`); the user must approve it in the Nexus Ask inbox, so poll `status` until it returns a `grantId`. Then `describe`, `apply` (an action such as `{"kind":"adjustments","values":{...}}`, the current `expectedRevision`, and a fresh `idempotencyKey`), `render` (`mode` `preview` or `export`), and `release`. The original image is never changed; exports land in `~/.nexus/generations/exports`.
+
 ## Output contract
 
 With `--json`, stdout is one JSON value, or JSON Lines for a collection, and nothing else. Diagnostics go to stderr. Exit `0` is success, exit `1` is a runtime or auth or sidecar failure, exit `2` is a bad invocation or a JSON schema error. Details: `docs/reference/cli/contract.md`.

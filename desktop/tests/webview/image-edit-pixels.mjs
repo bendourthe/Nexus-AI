@@ -130,6 +130,7 @@ const failures = [];
 if (!result.ok) failures.push(`page error: ${result.error}`);
 else {
   if (result.previewVsExport.differing !== 0) failures.push(`preview and export differ in ${result.previewVsExport.differing} channel values`);
+  if (result.viewerVsCommandExport?.differing !== 0) failures.push(`viewer and command exports differ in ${result.viewerVsCommandExport?.differing} channel values`);
   if (!result.sharpening.readback) failures.push("sharpening could not read the canvas back");
   if (result.sharpening.differing === 0) failures.push("sharpening changed no pixels");
   if (result.original.downloadedSha256 !== result.original.sourceSha256) failures.push("the original download is not the source bytes");

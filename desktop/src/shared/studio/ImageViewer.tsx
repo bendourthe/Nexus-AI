@@ -30,6 +30,18 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DurableImageEdit } from "./imageEditClient";
 import { useDurableImageEdit } from "./useDurableImageEdit";
 import {
+  adjustmentFilter,
+  adjustmentsAreNeutral,
+  canvasToPng,
+  ImageRenderError,
+  NEUTRAL_ADJUSTMENTS,
+  paintMarks,
+  renderAdjusted,
+  renderEditedCanvas,
+  type EditMark,
+  type ImageAdjustments,
+} from "./imageEditRenderer";
+import {
   Brush,
   Copy,
   Contrast,
@@ -42,132 +54,15 @@ import {
   X,
 } from "lucide-react";
 
-export interface ImageAdjustments {
-  brightness: number;
-  contrast: number;
-  saturation: number;
-  sharpness: number;
-}
-
-export const NEUTRAL_ADJUSTMENTS: ImageAdjustments = {
-  brightness: 100,
-  contrast: 100,
-  saturation: 100,
-  sharpness: 0,
-};
-
-/** One painted mark. A text mark carries its string; a stroke carries points. */
-export type EditMark =
-  | {
-      readonly kind: "stroke";
-      readonly color: string;
-      readonly size: number;
-      /** Natural-image coordinates, so a stroke survives a window resize. */
-      readonly points: readonly { readonly x: number; readonly y: number }[];
-    }
-  | {
-      readonly kind: "text";
-      readonly color: string;
-      readonly size: number;
-      readonly text: string;
-      readonly x: number;
-      readonly y: number;
-    };
-
-/**
- * The CSS filter for the three adjustments CSS can express exactly.
- *
- * WN-1 (fixed): this used to fold sharpness in as a contrast lift, so the
- * preview only approximated it. Worse, the EXPORT applied that same lift AND
- * the real convolution, double-counting sharpness in the saved file. Sharpness
- * is now absent here and handled once, by `sharpenPixels`, on both paths --
- * see `renderAdjusted`, which the preview and the export share.
- */
-export function adjustmentFilter(a: ImageAdjustments): string {
-  return [
-    `brightness(${a.brightness}%)`,
-    `contrast(${a.contrast}%)`,
-    `saturate(${a.saturation}%)`,
-  ].join(" ");
-}
-
-/**
- * Paint `image` onto `ctx` with adjustments applied, sharpening last.
- *
- * ONE function for the live preview and the exported file, which is the whole
- * point: the operator sees what they save. Order matters (filter, then
- * convolve), so sharing the code is the only way to keep the two identical.
- */
-export function renderAdjusted(
-  ctx: CanvasRenderingContext2D,
-  image: CanvasImageSource,
-  width: number,
-  height: number,
-  adjustments: ImageAdjustments,
-): boolean {
-  ctx.clearRect(0, 0, width, height);
-  ctx.filter = adjustmentFilter(adjustments);
-  ctx.drawImage(image, 0, 0, width, height);
-  ctx.filter = "none";
-  if (adjustments.sharpness <= 0) return true;
-  try {
-    const raw = ctx.getImageData(0, 0, width, height);
-    raw.data.set(sharpenPixels(raw.data, width, height, adjustments.sharpness));
-    ctx.putImageData(raw, 0, 0);
-    return true;
-  } catch {
-    // A tainted canvas cannot be read back, so sharpening did not happen. The
-    // preview shows the rest; v2.13.0: the export refuses rather than save an
-    // approximation and call it the edited image.
-    return false;
-  }
-}
-
-export function adjustmentsAreNeutral(a: ImageAdjustments): boolean {
-  return (
-    a.brightness === NEUTRAL_ADJUSTMENTS.brightness &&
-    a.contrast === NEUTRAL_ADJUSTMENTS.contrast &&
-    a.saturation === NEUTRAL_ADJUSTMENTS.saturation &&
-    a.sharpness === NEUTRAL_ADJUSTMENTS.sharpness
-  );
-}
-
-/**
- * A 3x3 unsharp-mask convolution, strength 0-100.
- *
- * Deliberately takes and returns a raw pixel buffer rather than an `ImageData`:
- * that keeps the kernel testable without a DOM (jsdom has no `ImageData`) and
- * keeps the canvas plumbing at the one call site that owns it. Edge pixels are
- * copied through rather than clamped-sampled -- a one-pixel border is invisible
- * at any real image size and the loop stays readable.
- */
-export function sharpenPixels(
-  src: Uint8ClampedArray,
-  width: number,
-  height: number,
-  strength: number,
-): Uint8ClampedArray {
-  if (strength <= 0) return src;
-  const amount = Math.min(1, strength / 100);
-  const out = new Uint8ClampedArray(src);
-  const center = 1 + 4 * amount;
-  const side = -amount;
-  for (let y = 1; y < height - 1; y += 1) {
-    for (let x = 1; x < width - 1; x += 1) {
-      const i = (y * width + x) * 4;
-      for (let c = 0; c < 3; c += 1) {
-        const value =
-          src[i + c]! * center +
-          src[i - 4 + c]! * side +
-          src[i + 4 + c]! * side +
-          src[i - width * 4 + c]! * side +
-          src[i + width * 4 + c]! * side;
-        out[i + c] = value;
-      }
-    }
-  }
-  return out;
-}
+export {
+  adjustmentFilter,
+  adjustmentsAreNeutral,
+  NEUTRAL_ADJUSTMENTS,
+  renderAdjusted,
+  sharpenPixels,
+  type EditMark,
+  type ImageAdjustments,
+} from "./imageEditRenderer";
 
 export interface ImageViewerProps {
   readonly src: string;
@@ -371,22 +266,18 @@ export function ImageViewer({
   const exportEdited = useCallback(async (): Promise<Blob | null> => {
     const image = imgRef.current;
     if (!image || !natural) return null;
-    const canvas = document.createElement("canvas");
-    canvas.width = natural.w;
-    canvas.height = natural.h;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return null;
-    // The same call the live preview makes, so the file matches the screen.
-    // Marks go on afterwards, at full strength, unadjusted.
-    if (!renderAdjusted(ctx, image, canvas.width, canvas.height, adjustments)) {
-      setExportError("The edited image could not be exported: its pixels cannot be read back for sharpening.");
+    // v2.13.0: the same function the agent render bridge uses, built on the
+    // renderAdjusted call the live preview makes, so every export matches.
+    try {
+      const blob = await canvasToPng(renderEditedCanvas(image, natural.w, natural.h, adjustments, marks));
+      setExportError(null);
+      return blob;
+    } catch (error) {
+      setExportError(error instanceof ImageRenderError
+        ? error.message.replace("rendered", "exported")
+        : "The edited image could not be exported.");
       return null;
     }
-    setExportError(null);
-    paintMarks(ctx, marks);
-    return await new Promise<Blob | null>((resolve) => {
-      canvas.toBlob((blob) => resolve(blob), "image/png");
-    });
   }, [adjustments, marks, natural]);
 
   /**
@@ -829,30 +720,6 @@ export function ImageViewer({
   );
 }
 
-/** Paint a mark list onto any 2D context (overlay preview and export share it). */
-function paintMarks(ctx: CanvasRenderingContext2D, marks: readonly EditMark[]): void {
-  for (const mark of marks) {
-    if (mark.kind === "text") {
-      ctx.fillStyle = mark.color;
-      ctx.font = `${mark.size}px sans-serif`;
-      ctx.textBaseline = "top";
-      ctx.fillText(mark.text, mark.x, mark.y);
-      continue;
-    }
-    if (mark.points.length === 0) continue;
-    ctx.strokeStyle = mark.color;
-    ctx.lineWidth = mark.size;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.beginPath();
-    const [first, ...rest] = mark.points;
-    ctx.moveTo(first!.x, first!.y);
-    for (const point of rest) ctx.lineTo(point.x, point.y);
-    // A single tap is a dot, not an invisible zero-length line.
-    if (rest.length === 0) ctx.lineTo(first!.x + 0.01, first!.y);
-    ctx.stroke();
-  }
-}
 
 const labelStyle = {
   display: "inline-flex",
