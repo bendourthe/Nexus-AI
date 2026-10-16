@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync, openSync, closeSync, unlinkSync, mkdirSync, realpathSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, openSync, closeSync, unlinkSync, mkdirSync, realpathSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
-import { tmpdir } from "node:os";
+import { homedir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
 import { spawn } from "node:child_process";
@@ -76,10 +76,22 @@ export async function run(args) {
   if (!options["--output"]) throw new EvaluationError("INVALID_ARGUMENT", "--output is required.");
   const output = ownedPath(root, options["--output"]);
   ownedPath(realpathSync(root), realpathSync(dirname(output)));
-  if (existsSync(output)) throw new EvaluationError("OUTPUT_EXISTS", "Refusing to overwrite prior evidence.");
-  const leasePath = join(tmpdir(), "nexus-local-embedding-evaluation.lock");
+  // Reserve the evidence file atomically so a later write can never replace prior evidence.
+  let outputFd;
+  try { outputFd = openSync(output, "wx"); } catch (error) {
+    if (error.code === "EEXIST") throw new EvaluationError("OUTPUT_EXISTS", "Refusing to overwrite prior evidence.");
+    throw error;
+  }
+  // The lease lives in the user's own Nexus folder, not the shared temp directory.
+  const leaseDir = join(homedir(), ".nexus", "locks");
+  const leasePath = join(leaseDir, "local-embedding-evaluation.lock");
   let lease;
-  try { lease = openSync(leasePath, "wx"); } catch {
+  try {
+    mkdirSync(leaseDir, { recursive: true });
+    lease = openSync(leasePath, "wx");
+  } catch {
+    closeSync(outputFd);
+    unlinkSync(output);
     throw new EvaluationError("RUN_BUSY", "Another evaluation owns the host lease; inspect its process before removing stale lease.");
   }
   const baseUrl = "http://127.0.0.1:11434";
@@ -171,8 +183,9 @@ export async function run(args) {
       } catch (error) { report.cleanup.push({ model, removed: false, error: error.message }); }
     }
     try {
-      writeFileSync(output, JSON.stringify(report, null, 2) + "\n", { flag: "wx" });
+      writeFileSync(outputFd, JSON.stringify(report, null, 2) + "\n");
     } finally {
+      closeSync(outputFd);
       closeSync(lease);
       unlinkSync(leasePath);
     }

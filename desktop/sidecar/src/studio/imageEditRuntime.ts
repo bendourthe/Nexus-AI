@@ -12,7 +12,7 @@
  */
 
 import { createHash, randomUUID } from "node:crypto";
-import { closeSync, fsyncSync, lstatSync, mkdirSync, openSync, readFileSync, realpathSync, unlinkSync, writeSync } from "node:fs";
+import { closeSync, fstatSync, fsyncSync, lstatSync, mkdirSync, openSync, readFileSync, realpathSync, unlinkSync, writeSync } from "node:fs";
 import * as path from "node:path";
 
 import { ImageEditRecipeStore, type ImageEditAccess } from "../../../../core/generations/ImageEditRecipeStore.js";
@@ -264,12 +264,22 @@ export function createImageEditOps(
       if ((error as NodeJS.ErrnoException).code === "EEXIST") {
         // The same edit exported again: return the file already there. Anything
         // else under that name is left alone.
+        // Read through one handle, then confirm that handle is the plain file at
+        // this path, so a swap between the checks and the read is detected.
         let same = false;
+        let existing: number | undefined;
         try {
-          same = !lstatSync(target).isSymbolicLink() && realpathSync(target) === target
-            && sha256(readFileSync(target)) === digest;
+          existing = openSync(target, "r");
+          const opened = fstatSync(existing);
+          const named = lstatSync(target);
+          same = opened.isFile() && !named.isSymbolicLink()
+            && opened.dev === named.dev && opened.ino === named.ino
+            && realpathSync(target) === target
+            && sha256(readFileSync(existing)) === digest;
         } catch {
           same = false;
+        } finally {
+          if (existing !== undefined) closeSync(existing);
         }
         if (same) return target;
         throw new ImageEditError("EXPORT_EXISTS", "An export with this name already exists; it was not overwritten.");
