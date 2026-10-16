@@ -1,0 +1,420 @@
+[
+  {
+    "id": "q01",
+    "answer": "service report layer",
+    "section": "6 Scheduling",
+    "startPage": 53,
+    "pastPage50": true,
+    "distractors": [
+      "window device signal"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q02",
+    "answer": "report storage output",
+    "section": "6.1 Backup and Restore Details",
+    "startPage": 53,
+    "pastPage50": true,
+    "distractors": [
+      "service report layer"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q03",
+    "answer": "setting value control",
+    "section": "6.2 Calibration Details",
+    "startPage": 55,
+    "pastPage50": true,
+    "distractors": [
+      "report storage output"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q04",
+    "answer": "option driver sensor",
+    "section": "6.3 Glossary Terms Details",
+    "startPage": 57,
+    "pastPage50": true,
+    "distractors": [
+      "setting value control"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q05",
+    "answer": "sensor storage record",
+    "section": "6.4 Configuration Details",
+    "startPage": 60,
+    "pastPage50": true,
+    "distractors": [
+      "option driver sensor"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q06",
+    "answer": "system power measure",
+    "section": "7 Monitoring",
+    "startPage": 63,
+    "pastPage50": true,
+    "distractors": [
+      "sensor storage record"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q07",
+    "answer": "factor system option",
+    "section": "7.1 Performance Tuning Details",
+    "startPage": 63,
+    "pastPage50": true,
+    "distractors": [
+      "system power measure"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q08",
+    "answer": "input power buffer",
+    "section": "7.2 Reporting Details",
+    "startPage": 65,
+    "pastPage50": true,
+    "distractors": [
+      "factor system option"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q09",
+    "answer": "system network storage",
+    "section": "7.3 Introduction Details",
+    "startPage": 67,
+    "pastPage50": true,
+    "distractors": [
+      "input power buffer"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q10",
+    "answer": "handle setting index",
+    "section": "7.4 Network Settings Details",
+    "startPage": 70,
+    "pastPage50": true,
+    "distractors": [
+      "system network storage"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q11",
+    "answer": "status status input",
+    "section": "8 Troubleshooting",
+    "startPage": 73,
+    "pastPage50": true,
+    "distractors": [
+      "handle setting index"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q12",
+    "answer": "output report setting",
+    "section": "8.1 Maintenance Details",
+    "startPage": 73,
+    "pastPage50": true,
+    "distractors": [
+      "status status input"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q13",
+    "answer": "handle status layer",
+    "section": "8.2 Appendix Notes Details",
+    "startPage": 75,
+    "pastPage50": true,
+    "distractors": [
+      "output report setting"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q14",
+    "answer": "sensor channel value",
+    "section": "8.3 Installation Details",
+    "startPage": 77,
+    "pastPage50": true,
+    "distractors": [
+      "handle status layer"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q15",
+    "answer": "operator module driver",
+    "section": "8.4 Storage Layout Details",
+    "startPage": 80,
+    "pastPage50": true,
+    "distractors": [
+      "sensor channel value"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q16",
+    "answer": "profile handle limit",
+    "section": "9 Security Model",
+    "startPage": 83,
+    "pastPage50": true,
+    "distractors": [
+      "operator module driver"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q17",
+    "answer": "power output report",
+    "section": "9.1 Calibration Details",
+    "startPage": 83,
+    "pastPage50": true,
+    "distractors": [
+      "profile handle limit"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q18",
+    "answer": "operator report memory",
+    "section": "9.2 Glossary Terms Details",
+    "startPage": 85,
+    "pastPage50": true,
+    "distractors": [
+      "power output report"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q19",
+    "answer": "memory config network",
+    "section": "9.3 Configuration Details",
+    "startPage": 87,
+    "pastPage50": true,
+    "distractors": [
+      "operator report memory"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q20",
+    "answer": "report value memory",
+    "section": "9.4 Scheduling Details",
+    "startPage": 90,
+    "pastPage50": true,
+    "distractors": [
+      "memory config network"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q21",
+    "answer": "10046",
+    "section": "10.1 Reporting Details",
+    "startPage": 93,
+    "pastPage50": true,
+    "distractors": [
+      "10001"
+    ],
+    "match": "exact"
+  },
+  {
+    "id": "q22",
+    "answer": "10047",
+    "section": "10.2 Introduction Details",
+    "startPage": 95,
+    "pastPage50": true,
+    "distractors": [
+      "10001"
+    ],
+    "match": "exact"
+  },
+  {
+    "id": "q23",
+    "answer": "10048",
+    "section": "10.3 Network Settings Details",
+    "startPage": 97,
+    "pastPage50": true,
+    "distractors": [
+      "10001"
+    ],
+    "match": "exact"
+  },
+  {
+    "id": "q24",
+    "answer": "10049",
+    "section": "10.4 Monitoring Details",
+    "startPage": 100,
+    "pastPage50": true,
+    "distractors": [
+      "10001"
+    ],
+    "match": "exact"
+  },
+  {
+    "id": "q25",
+    "answer": "10051",
+    "section": "11.1 Appendix Notes Details",
+    "startPage": 103,
+    "pastPage50": true,
+    "distractors": [
+      "10001"
+    ],
+    "match": "exact"
+  },
+  {
+    "id": "q26",
+    "answer": "10052",
+    "section": "11.2 Installation Details",
+    "startPage": 105,
+    "pastPage50": true,
+    "distractors": [
+      "10001"
+    ],
+    "match": "exact"
+  },
+  {
+    "id": "q27",
+    "answer": "config index network",
+    "section": "10 Backup and Restore",
+    "startPage": 93,
+    "pastPage50": true,
+    "distractors": [
+      "output operator system"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q28",
+    "answer": "power filter input",
+    "section": "11 Performance Tuning",
+    "startPage": 103,
+    "pastPage50": true,
+    "distractors": [
+      "output operator system"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q29",
+    "answer": "index manual handle",
+    "section": "11.3 Storage Layout Details",
+    "startPage": 107,
+    "pastPage50": true,
+    "distractors": [
+      "output operator system"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q30",
+    "answer": "setting profile queue",
+    "section": "11.4 Troubleshooting Details",
+    "startPage": 110,
+    "pastPage50": true,
+    "distractors": [
+      "output operator system"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q31",
+    "answer": "record network limit",
+    "section": "12 Maintenance",
+    "startPage": 113,
+    "pastPage50": true,
+    "distractors": [
+      "output operator system"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q32",
+    "answer": "system cycle handle",
+    "section": "12.1 Glossary Terms Details",
+    "startPage": 113,
+    "pastPage50": true,
+    "distractors": [
+      "output operator system"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q33",
+    "answer": "input operator factor",
+    "section": "12.2 Configuration Details",
+    "startPage": 115,
+    "pastPage50": true,
+    "distractors": [
+      "output operator system"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q34",
+    "answer": "record power profile",
+    "section": "12.3 Scheduling Details",
+    "startPage": 118,
+    "pastPage50": true,
+    "distractors": [
+      "output operator system"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q35",
+    "answer": "system stream operator",
+    "section": "12.4 Security Model Details",
+    "startPage": 120,
+    "pastPage50": true,
+    "distractors": [
+      "output operator system"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q36",
+    "answer": "output operator system",
+    "section": "1 Introduction",
+    "startPage": 3,
+    "pastPage50": false,
+    "distractors": [
+      "memory input control"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q37",
+    "answer": "memory input control",
+    "section": "1.1 Storage Layout Details",
+    "startPage": 3,
+    "pastPage50": false,
+    "distractors": [
+      "output operator system"
+    ],
+    "match": "prefix"
+  },
+  {
+    "id": "q38",
+    "answer": "cycle power buffer",
+    "section": "1.2 Troubleshooting Details",
+    "startPage": 5,
+    "pastPage50": false,
+    "distractors": [
+      "output operator system"
+    ],
+    "match": "prefix"
+  }
+]

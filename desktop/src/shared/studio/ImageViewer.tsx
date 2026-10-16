@@ -27,6 +27,20 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { DurableImageEdit } from "./imageEditClient";
+import { useDurableImageEdit } from "./useDurableImageEdit";
+import {
+  adjustmentFilter,
+  adjustmentsAreNeutral,
+  canvasToPng,
+  ImageRenderError,
+  NEUTRAL_ADJUSTMENTS,
+  paintMarks,
+  renderAdjusted,
+  renderEditedCanvas,
+  type EditMark,
+  type ImageAdjustments,
+} from "./imageEditRenderer";
 import {
   Brush,
   Copy,
@@ -40,129 +54,15 @@ import {
   X,
 } from "lucide-react";
 
-export interface ImageAdjustments {
-  brightness: number;
-  contrast: number;
-  saturation: number;
-  sharpness: number;
-}
-
-export const NEUTRAL_ADJUSTMENTS: ImageAdjustments = {
-  brightness: 100,
-  contrast: 100,
-  saturation: 100,
-  sharpness: 0,
-};
-
-/** One painted mark. A text mark carries its string; a stroke carries points. */
-export type EditMark =
-  | {
-      readonly kind: "stroke";
-      readonly color: string;
-      readonly size: number;
-      /** Natural-image coordinates, so a stroke survives a window resize. */
-      readonly points: readonly { readonly x: number; readonly y: number }[];
-    }
-  | {
-      readonly kind: "text";
-      readonly color: string;
-      readonly size: number;
-      readonly text: string;
-      readonly x: number;
-      readonly y: number;
-    };
-
-/**
- * The CSS filter for the three adjustments CSS can express exactly.
- *
- * WN-1 (fixed): this used to fold sharpness in as a contrast lift, so the
- * preview only approximated it. Worse, the EXPORT applied that same lift AND
- * the real convolution, double-counting sharpness in the saved file. Sharpness
- * is now absent here and handled once, by `sharpenPixels`, on both paths --
- * see `renderAdjusted`, which the preview and the export share.
- */
-export function adjustmentFilter(a: ImageAdjustments): string {
-  return [
-    `brightness(${a.brightness}%)`,
-    `contrast(${a.contrast}%)`,
-    `saturate(${a.saturation}%)`,
-  ].join(" ");
-}
-
-/**
- * Paint `image` onto `ctx` with adjustments applied, sharpening last.
- *
- * ONE function for the live preview and the exported file, which is the whole
- * point: the operator sees what they save. Order matters (filter, then
- * convolve), so sharing the code is the only way to keep the two identical.
- */
-export function renderAdjusted(
-  ctx: CanvasRenderingContext2D,
-  image: CanvasImageSource,
-  width: number,
-  height: number,
-  adjustments: ImageAdjustments,
-): void {
-  ctx.clearRect(0, 0, width, height);
-  ctx.filter = adjustmentFilter(adjustments);
-  ctx.drawImage(image, 0, 0, width, height);
-  ctx.filter = "none";
-  if (adjustments.sharpness <= 0) return;
-  try {
-    const raw = ctx.getImageData(0, 0, width, height);
-    raw.data.set(sharpenPixels(raw.data, width, height, adjustments.sharpness));
-    ctx.putImageData(raw, 0, 0);
-  } catch {
-    // A tainted canvas cannot be read back. The un-sharpened result is still
-    // correct in every other respect, and the export path behaves the same.
-  }
-}
-
-export function adjustmentsAreNeutral(a: ImageAdjustments): boolean {
-  return (
-    a.brightness === NEUTRAL_ADJUSTMENTS.brightness &&
-    a.contrast === NEUTRAL_ADJUSTMENTS.contrast &&
-    a.saturation === NEUTRAL_ADJUSTMENTS.saturation &&
-    a.sharpness === NEUTRAL_ADJUSTMENTS.sharpness
-  );
-}
-
-/**
- * A 3x3 unsharp-mask convolution, strength 0-100.
- *
- * Deliberately takes and returns a raw pixel buffer rather than an `ImageData`:
- * that keeps the kernel testable without a DOM (jsdom has no `ImageData`) and
- * keeps the canvas plumbing at the one call site that owns it. Edge pixels are
- * copied through rather than clamped-sampled -- a one-pixel border is invisible
- * at any real image size and the loop stays readable.
- */
-export function sharpenPixels(
-  src: Uint8ClampedArray,
-  width: number,
-  height: number,
-  strength: number,
-): Uint8ClampedArray {
-  if (strength <= 0) return src;
-  const amount = Math.min(1, strength / 100);
-  const out = new Uint8ClampedArray(src);
-  const center = 1 + 4 * amount;
-  const side = -amount;
-  for (let y = 1; y < height - 1; y += 1) {
-    for (let x = 1; x < width - 1; x += 1) {
-      const i = (y * width + x) * 4;
-      for (let c = 0; c < 3; c += 1) {
-        const value =
-          src[i + c]! * center +
-          src[i - 4 + c]! * side +
-          src[i + 4 + c]! * side +
-          src[i - width * 4 + c]! * side +
-          src[i + width * 4 + c]! * side;
-        out[i + c] = value;
-      }
-    }
-  }
-  return out;
-}
+export {
+  adjustmentFilter,
+  adjustmentsAreNeutral,
+  NEUTRAL_ADJUSTMENTS,
+  renderAdjusted,
+  sharpenPixels,
+  type EditMark,
+  type ImageAdjustments,
+} from "./imageEditRenderer";
 
 export interface ImageViewerProps {
   readonly src: string;
@@ -179,6 +79,12 @@ export interface ImageViewerProps {
    */
   readonly extra?: React.ReactNode;
   readonly testId?: string;
+  /**
+   * v2.13.0: a persisted Image Studio image. Edits are saved and survive a
+   * restart, and undo/redo covers adjustments as well as marks. Without it
+   * (Chat attachments) editing stays in memory, as before.
+   */
+  readonly durable?: DurableImageEdit;
 }
 
 type Tool = "none" | "brush" | "text";
@@ -189,15 +95,29 @@ export function ImageViewer({
   downloadName = "nexus-image",
   onClose,
   testId = "image-viewer",
+  durable,
 }: ImageViewerProps): JSX.Element {
-  const [adjustments, setAdjustments] = useState<ImageAdjustments>({ ...NEUTRAL_ADJUSTMENTS });
+  const [localAdjustments, setAdjustments] = useState<ImageAdjustments>({ ...NEUTRAL_ADJUSTMENTS });
   const [tool, setTool] = useState<Tool>("none");
   const [color, setColor] = useState("#ff3b30");
   const [brushSize, setBrushSize] = useState(8);
   /** Committed marks; `redo` holds what undo popped. */
-  const [marks, setMarks] = useState<readonly EditMark[]>([]);
+  const [localMarks, setMarks] = useState<readonly EditMark[]>([]);
   const [redo, setRedo] = useState<readonly EditMark[]>([]);
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
+  const [exportError, setExportError] = useState<string | null>(null);
+
+  // v2.13.0: a persisted Image Studio image keeps its edits in the sidecar. A
+  // slider drag previews locally and commits once, on release.
+  const saved = useDurableImageEdit(durable);
+  const isDurable = saved.status !== "off" && saved.status !== "unavailable";
+  const editingLocked = isDurable && (saved.status === "loading" || saved.state === null);
+  const [dragAdjustments, setDragAdjustments] = useState<ImageAdjustments | null>(null);
+  const adjustments: ImageAdjustments = isDurable
+    ? dragAdjustments ?? saved.state?.adjustments ?? NEUTRAL_ADJUSTMENTS
+    : localAdjustments;
+  const marks: readonly EditMark[] = isDurable ? saved.state?.marks ?? [] : localMarks;
+  const shownSrc = isDurable ? saved.src : src;
 
   const imgRef = useRef<HTMLImageElement | null>(null);
   const overlayRef = useRef<HTMLCanvasElement | null>(null);
@@ -205,10 +125,21 @@ export function ImageViewer({
 
   const edited = marks.length > 0 || !adjustmentsAreNeutral(adjustments);
 
+  /** Close only after every saved edit is acknowledged; a failure stays visible. */
+  const requestClose = useCallback((): void => {
+    if (!isDurable) {
+      onClose();
+      return;
+    }
+    void saved.flush().then((ok) => {
+      if (ok) onClose();
+    });
+  }, [isDurable, onClose, saved]);
+
   // Escape closes; the backdrop click does too. Both were missing before.
   useEffect(() => {
     const onKey = (event: KeyboardEvent): void => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") requestClose();
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
         event.preventDefault();
         if (event.shiftKey) redoMark();
@@ -217,7 +148,30 @@ export function ImageViewer({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, marks, redo]);
+  }, [requestClose, localMarks, redo, isDurable, saved]);
+
+  function changeAdjustment(key: keyof ImageAdjustments, value: number): void {
+    if (editingLocked) return;
+    if (isDurable) setDragAdjustments({ ...adjustments, [key]: value });
+    else setAdjustments((a) => ({ ...a, [key]: value }));
+  }
+
+  /** Slider released: one committed command for the whole drag. */
+  function commitAdjustments(): void {
+    if (!isDurable || !dragAdjustments) return;
+    const values = dragAdjustments;
+    setDragAdjustments(null);
+    saved.apply({ kind: "adjustments", values });
+  }
+
+  function commitMark(mark: EditMark): void {
+    if (isDurable) {
+      saved.apply({ kind: "mark", mark });
+      return;
+    }
+    setMarks((prev) => [...prev, mark]);
+    setRedo([]);
+  }
 
   /** Repaint the overlay from the mark list whenever it changes. */
   const repaint = useCallback((): void => {
@@ -241,6 +195,10 @@ export function ImageViewer({
   }, [repaint]);
 
   function undoMark(): void {
+    if (isDurable) {
+      if (saved.canUndo) saved.apply({ kind: "undo" });
+      return;
+    }
     setMarks((prev) => {
       if (prev.length === 0) return prev;
       const last = prev[prev.length - 1]!;
@@ -250,6 +208,10 @@ export function ImageViewer({
   }
 
   function redoMark(): void {
+    if (isDurable) {
+      if (saved.canRedo) saved.apply({ kind: "redo" });
+      return;
+    }
     setRedo((prev) => {
       if (prev.length === 0) return prev;
       const last = prev[prev.length - 1]!;
@@ -264,23 +226,22 @@ export function ImageViewer({
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / Math.max(1, rect.width);
     const scaleY = canvas.height / Math.max(1, rect.height);
+    // v2.13.0: a drag past the edge stays on the image, so a saved mark never
+    // names a point outside its source.
+    const clamp = (value: number, max: number): number => Math.min(Math.max(value, 0), max);
     return {
-      x: (event.clientX - rect.left) * scaleX,
-      y: (event.clientY - rect.top) * scaleY,
+      x: clamp((event.clientX - rect.left) * scaleX, canvas.width),
+      y: clamp((event.clientY - rect.top) * scaleY, canvas.height),
     };
   }
 
   function onPointerDown(event: React.PointerEvent<HTMLCanvasElement>): void {
-    if (tool === "none") return;
+    if (tool === "none" || editingLocked) return;
     const point = toImagePoint(event);
     if (tool === "text") {
       const text = window.prompt("Text to add");
       if (!text) return;
-      setMarks((prev) => [
-        ...prev,
-        { kind: "text", color, size: brushSize * 4, text, x: point.x, y: point.y },
-      ]);
-      setRedo([]);
+      commitMark({ kind: "text", color, size: brushSize * 4, text, x: point.x, y: point.y });
       return;
     }
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -298,26 +259,25 @@ export function ImageViewer({
     const points = drawingRef.current;
     drawingRef.current = null;
     if (!points || points.length === 0) return;
-    setMarks((prev) => [...prev, { kind: "stroke", color, size: brushSize, points }]);
-    setRedo([]);
+    commitMark({ kind: "stroke", color, size: brushSize, points });
   }
 
   /** Composite adjustments + marks onto a canvas and hand back a PNG blob. */
   const exportEdited = useCallback(async (): Promise<Blob | null> => {
     const image = imgRef.current;
     if (!image || !natural) return null;
-    const canvas = document.createElement("canvas");
-    canvas.width = natural.w;
-    canvas.height = natural.h;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return null;
-    // The same call the live preview makes, so the file matches the screen.
-    // Marks go on afterwards, at full strength, unadjusted.
-    renderAdjusted(ctx, image, canvas.width, canvas.height, adjustments);
-    paintMarks(ctx, marks);
-    return await new Promise<Blob | null>((resolve) => {
-      canvas.toBlob((blob) => resolve(blob), "image/png");
-    });
+    // v2.13.0: the same function the agent render bridge uses, built on the
+    // renderAdjusted call the live preview makes, so every export matches.
+    try {
+      const blob = await canvasToPng(renderEditedCanvas(image, natural.w, natural.h, adjustments, marks));
+      setExportError(null);
+      return blob;
+    } catch (error) {
+      setExportError(error instanceof ImageRenderError
+        ? error.message.replace("rendered", "exported")
+        : "The edited image could not be exported.");
+      return null;
+    }
   }, [adjustments, marks, natural]);
 
   /**
@@ -333,7 +293,7 @@ export function ImageViewer({
   const save = useCallback(
     async (which: "edited" | "original"): Promise<void> => {
       const blob =
-        which === "original" ? await fetch(src).then((r) => r.blob()) : await exportEdited();
+        which === "original" ? await fetch(shownSrc ?? src).then((r) => r.blob()) : await exportEdited();
       if (!blob) return;
       // An object URL + a synthetic click is the one download path that works
       // in the Electron renderer for both a data: source and a canvas blob.
@@ -346,7 +306,7 @@ export function ImageViewer({
       anchor.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
     },
-    [downloadName, exportEdited, src],
+    [downloadName, exportEdited, shownSrc, src],
   );
 
   /** Copy either version to the clipboard as PNG bytes. */
@@ -354,7 +314,7 @@ export function ImageViewer({
     async (which: "edited" | "original"): Promise<void> => {
       const blob =
         which === "original"
-          ? await fetch(src).then((r) => r.blob())
+          ? await fetch(shownSrc ?? src).then((r) => r.blob())
           : await exportEdited();
       if (!blob) return;
       try {
@@ -365,7 +325,7 @@ export function ImageViewer({
         // Clipboard image writes are permission-gated; Save still works.
       }
     },
-    [exportEdited, src],
+    [exportEdited, shownSrc, src],
   );
 
   const runPending = useCallback(
@@ -426,7 +386,7 @@ export function ImageViewer({
       <button
         type="button"
         aria-label="Close image viewer"
-        onClick={onClose}
+        onClick={requestClose}
         style={{ position: "absolute", inset: 0, border: 0, background: "transparent" }}
       />
       {/*
@@ -510,7 +470,8 @@ export function ImageViewer({
           value={adjustments.brightness}
           min={20}
           max={200}
-          onChange={(v) => setAdjustments((a) => ({ ...a, brightness: v }))}
+          onChange={(v) => changeAdjustment("brightness", v)}
+          onCommit={commitAdjustments}
         />
         <Slider
           icon={<Contrast size={14} aria-hidden="true" />}
@@ -519,7 +480,8 @@ export function ImageViewer({
           value={adjustments.contrast}
           min={20}
           max={200}
-          onChange={(v) => setAdjustments((a) => ({ ...a, contrast: v }))}
+          onChange={(v) => changeAdjustment("contrast", v)}
+          onCommit={commitAdjustments}
         />
         <Slider
           label="Saturation"
@@ -527,7 +489,8 @@ export function ImageViewer({
           value={adjustments.saturation}
           min={0}
           max={200}
-          onChange={(v) => setAdjustments((a) => ({ ...a, saturation: v }))}
+          onChange={(v) => changeAdjustment("saturation", v)}
+          onCommit={commitAdjustments}
         />
         <Slider
           label="Sharpness"
@@ -535,7 +498,8 @@ export function ImageViewer({
           value={adjustments.sharpness}
           min={0}
           max={100}
-          onChange={(v) => setAdjustments((a) => ({ ...a, sharpness: v }))}
+          onChange={(v) => changeAdjustment("sharpness", v)}
+          onCommit={commitAdjustments}
         />
 
         <Divider />
@@ -543,7 +507,7 @@ export function ImageViewer({
         <ToolButton
           label="Undo"
           testId={`${testId}-undo`}
-          disabled={marks.length === 0}
+          disabled={isDurable ? !saved.canUndo || editingLocked : localMarks.length === 0}
           onClick={undoMark}
         >
           <Undo2 size={16} aria-hidden="true" />
@@ -551,7 +515,7 @@ export function ImageViewer({
         <ToolButton
           label="Redo"
           testId={`${testId}-redo`}
-          disabled={redo.length === 0}
+          disabled={isDurable ? !saved.canRedo || editingLocked : redo.length === 0}
           onClick={redoMark}
         >
           <Redo2 size={16} aria-hidden="true" />
@@ -559,8 +523,12 @@ export function ImageViewer({
         <ToolButton
           label="Reset edits"
           testId={`${testId}-reset`}
-          disabled={!edited}
+          disabled={!edited || editingLocked}
           onClick={() => {
+            if (isDurable) {
+              saved.apply({ kind: "reset" });
+              return;
+            }
             setMarks([]);
             setRedo([]);
             setAdjustments({ ...NEUTRAL_ADJUSTMENTS });
@@ -600,11 +568,19 @@ export function ImageViewer({
           >
             <Download size={16} aria-hidden="true" />
           </ToolButton>
-          <ToolButton label="Close" testId={`${testId}-close`} onClick={onClose}>
+          <ToolButton label="Close" testId={`${testId}-close`} onClick={requestClose}>
             <X size={16} aria-hidden="true" />
           </ToolButton>
         </div>
       </div>
+
+      <EditStatusLine
+        testId={`${testId}-save-status`}
+        status={saved.status}
+        message={exportError ?? saved.message}
+        onRetry={saved.retry}
+        onReload={saved.reload}
+      />
 
       {pendingAction ? (
         <div
@@ -692,7 +668,7 @@ export function ImageViewer({
         <div style={{ position: "relative", lineHeight: 0 }}>
           <img
             ref={imgRef}
-            src={src}
+            src={shownSrc ?? undefined}
             alt={alt ?? "Generated image"}
             data-testid={`${testId}-image`}
             crossOrigin="anonymous"
@@ -744,30 +720,6 @@ export function ImageViewer({
   );
 }
 
-/** Paint a mark list onto any 2D context (overlay preview and export share it). */
-function paintMarks(ctx: CanvasRenderingContext2D, marks: readonly EditMark[]): void {
-  for (const mark of marks) {
-    if (mark.kind === "text") {
-      ctx.fillStyle = mark.color;
-      ctx.font = `${mark.size}px sans-serif`;
-      ctx.textBaseline = "top";
-      ctx.fillText(mark.text, mark.x, mark.y);
-      continue;
-    }
-    if (mark.points.length === 0) continue;
-    ctx.strokeStyle = mark.color;
-    ctx.lineWidth = mark.size;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.beginPath();
-    const [first, ...rest] = mark.points;
-    ctx.moveTo(first!.x, first!.y);
-    for (const point of rest) ctx.lineTo(point.x, point.y);
-    // A single tap is a dot, not an invisible zero-length line.
-    if (rest.length === 0) ctx.lineTo(first!.x + 0.01, first!.y);
-    ctx.stroke();
-  }
-}
 
 const labelStyle = {
   display: "inline-flex",
@@ -840,6 +792,7 @@ function Slider({
   min,
   max,
   onChange,
+  onCommit,
 }: {
   icon?: React.ReactNode;
   label: string;
@@ -848,6 +801,8 @@ function Slider({
   min: number;
   max: number;
   onChange: (value: number) => void;
+  /** v2.13.0: the drag or key step ended; a durable viewer saves once here. */
+  onCommit?: () => void;
 }): JSX.Element {
   return (
     <label style={labelStyle} title={`${label}: ${value}`}>
@@ -861,9 +816,64 @@ function Slider({
         max={max}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
+        onPointerUp={onCommit}
+        onKeyUp={onCommit}
+        onBlur={onCommit}
         style={{ width: "5.5rem" }}
       />
     </label>
+  );
+}
+
+/** v2.13.0: whether a persisted image's edits are saved, never claimed early. */
+function EditStatusLine({
+  testId,
+  status,
+  message,
+  onRetry,
+  onReload,
+}: {
+  testId: string;
+  status: ReturnType<typeof useDurableImageEdit>["status"];
+  message: string | null;
+  onRetry: () => void;
+  onReload: () => void;
+}): JSX.Element | null {
+  const text =
+    message ??
+    (status === "loading" ? "Loading saved edits..." :
+      status === "saving" ? "Saving..." :
+        status === "saved" ? "Edits saved" : null);
+  if (!text) return null;
+  return (
+    <div
+      data-testid={testId}
+      role="status"
+      aria-live="polite"
+      style={{
+        position: "relative",
+        zIndex: 1,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "var(--space-2)",
+        padding: "var(--space-1) var(--space-3)",
+        fontSize: "var(--text-xs)",
+        color: status === "error" || status === "conflict" ? "var(--danger, #ff6b6b)" : "var(--fg-muted)",
+      }}
+    >
+      <span>{text}</span>
+      {status === "error" ? (
+        <button type="button" data-testid={`${testId}-retry`} onClick={onRetry} style={primaryButtonStyle(true)}>
+          Retry
+        </button>
+      ) : null}
+      {status === "conflict" || status === "error" ? (
+        <button type="button" data-testid={`${testId}-reload`} onClick={onReload} style={primaryButtonStyle(true)}>
+          Reload
+        </button>
+      ) : null}
+    </div>
   );
 }
 

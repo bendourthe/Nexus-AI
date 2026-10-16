@@ -4,6 +4,7 @@ import { execSync } from "child_process";
 import { randomUUID } from "crypto";
 import type { CompactionStrategy } from "./CompactionStrategy.js";
 import type { Message } from "./types.js";
+import { expandToolPairIndices } from "../llm/toolHistory.js";
 
 /**
  * Regex to extract file paths from message content.
@@ -109,7 +110,8 @@ export class RegenerateFromSource implements CompactionStrategy {
     const keepRecent = this._keepRecent;
     const systemMessages = messages.filter((m) => m.role === "system");
     const nonSystem = messages.filter((m) => m.role !== "system");
-    const kept = nonSystem.slice(-keepRecent);
+    const keep = expandToolPairIndices(nonSystem, new Set(nonSystem.map((_, index) => index).slice(-keepRecent)));
+    const kept = nonSystem.filter((_, index) => keep.has(index));
 
     return [...systemMessages, summaryMessage, ...kept];
   }

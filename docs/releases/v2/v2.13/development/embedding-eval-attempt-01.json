@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-14T16:12:35.999Z",
+  "contractSha256": "059e58aac528d2df1c6b5ee5e54e3f23e83fc685ad6ceea7da8e76a9c1e37177",
+  "fixtureManifestSha256": "09bd598eaae038e3c2b4f94dd54fd4c7fd7a7499d5377947a1df3de55227ba13",
+  "recommendation": "RETAIN",
+  "disposition": "HOLD",
+  "gates": {
+    "quality": "HOLD",
+    "latency": "HOLD",
+    "rejection": "HOLD",
+    "vectors": "HOLD",
+    "resources": "HOLD",
+    "tiers": "HOLD",
+    "coexistence": "HOLD",
+    "offline": "HOLD",
+    "terms": "HOLD",
+    "context": "HOLD"
+  },
+  "limitations": [
+    "Required cpu/8/12/24 tiers unmeasured.",
+    "Pinned distribution terms/PUP discrepancy unresolved.",
+    "OS-level non-loopback containment and packaged consumer observation not proven.",
+    "Whole-runtime peak RAM and coding coexistence not proven."
+  ],
+  "error": {
+    "code": "HOST_BUSY",
+    "message": "Loaded models already occupy the runtime; evaluator will not unload another session."
+  },
+  "cleanup": []
+}

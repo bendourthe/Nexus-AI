@@ -1,0 +1,1732 @@
+{
+  "scope": "Final offline handbook candidate proof; original tracked HTML unchanged",
+  "factual_review": "Parent confirmed independent source-only review; canonical claim inventory and approval receipts remain parent-owned",
+  "support_tiers": {
+    "implementation_mechanisms": "internal-compatible",
+    "packaged_qualification": "candidate"
+  },
+  "limitations": [
+    "No installed candidate, GPU generation, packaged installer-to-payload binding or maintainer M5 observation is attested",
+    "Browser observations cover generated handbook behavior and geometry only",
+    "Original HTML replacement awaits separate edit-guard authorization"
+  ],
+  "pages": [
+    {
+      "id": "atlas",
+      "candidate": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\atlas.html",
+      "sha256": "44c3b02a306592ca783fcbf35f88d4c98ccbca01e6f0d957b1bf4732211a25fb",
+      "inputs": [
+        {
+          "path": "docs/handbooks/markdown/atlas.md",
+          "sha256": "0bfbbc537989d03b4a6d509c6861411214a79136da0054a59a5294358c039463"
+        },
+        {
+          "path": "scripts/generate-handbooks.mjs",
+          "sha256": "f28c8d1ee031a30601286f28bd32b286a25ded0042946ec335eb832b18fdb1ef"
+        },
+        {
+          "path": "scripts/handbook-renderer.mjs",
+          "sha256": "05ba5507ff47b3bc62647ef32377c5ba301bea63af0375ace316205e89d132fa"
+        },
+        {
+          "path": "docs/handbooks/_sources/storyboards.json",
+          "sha256": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook.css",
+          "sha256": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook-clones.js",
+          "sha256": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view.css",
+          "sha256": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view-runtime.js",
+          "sha256": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c"
+        },
+        {
+          "path": "desktop/public/nexus-mark.png",
+          "sha256": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05"
+        },
+        {
+          "path": "package.json",
+          "sha256": "bc467c10a2e2c520449fcc021e6170147f82d3f6cfab5d6c1901af0da8934c9e"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "132575fa3cd6627d3a9a05f985b1c1c2da8e22cb9ca12d8dd24ce21caa55d360"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py",
+          "sha256": "cc7d4a797bfcac8f4f4385a520d6413b7736cc701fa7b1682c264209b5af4053"
+        },
+        {
+          "path": "desktop/sidecar/src/diffusion/runtimeFactory.ts",
+          "sha256": "ed231e9ee9941c3c243ccdb5486382cbc634486420501d586f547e9fc04eabb6"
+        },
+        {
+          "path": "desktop/src/modules/coding/CodingPage.tsx",
+          "sha256": "e786569e06b1be2b1dc7e9dbd8074c7526448dc55b149fbf9820c7915531b562"
+        },
+        {
+          "path": "desktop/sidecar/src/diffusion/resultGuard.ts",
+          "sha256": "ddaa8ba7ca3bc129ebc7ed715e1f3b72978dadd28894bd2ca54c580695620f84"
+        },
+        {
+          "path": "desktop/src/shared/studio/usablePayload.ts",
+          "sha256": "19695dfa106fe3f9f4e8493a6162c9459e53400a8535bafbdc22c72c9ea87938"
+        },
+        {
+          "path": "desktop/src/shared/studio/mediaRuntimeClient.ts",
+          "sha256": "d9177aa4b865365da9d8bdf350ebaf352c6c81ab0a69275323cc77efe0683e14"
+        },
+        {
+          "path": "scripts/installer/build/smoke-installed-media.ps1",
+          "sha256": "994ff59f856c07a7b98ad6f4091a5cc5e54eb84eff71677a4595f82148496762"
+        },
+        {
+          "path": "runtimes/diffusion/pipelines/base.py",
+          "sha256": "5c4ccff7a816908092a7870cface276787531f864349d132ab4d5a89b60fe52a"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py",
+          "sha256": "342858f9ba1a2bb7050eeb8aa253b64a37db0bde3639fe4809cfa52b54c60e1b"
+        },
+        {
+          "path": "scripts/installer/build/check-hf-catalog.py",
+          "sha256": "de83aa69230df378a03345a8f88ed9851df258e2fbd794fb255a35db170238ee"
+        },
+        {
+          "path": "desktop/src/shared/models/catalogTabs.ts",
+          "sha256": "cdd26d957bddab8d91a223223655c2ee5cf87f74f8b66e646172ba4c9f51bce6"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/catalog_tab_sort.py",
+          "sha256": "b38b59193fcf4a9539c19c4f26ae91cb7e6bae99a69f870e93ab803594de7978"
+        },
+        {
+          "path": "desktop/src/shared/models/selectionPolicy.ts",
+          "sha256": "8da278569b39c8cdac32731d3aca37622378e37b06ada35756942498592a2938"
+        },
+        {
+          "path": "core/chat/tokenUsage.ts",
+          "sha256": "703eb6fbee93057d7d504fe0293735734299cb9e96717d9a33dd9721a2df0e93"
+        },
+        {
+          "path": "desktop/src/shared/chat/transcriptChrome.ts",
+          "sha256": "8b246419b5d534059e499bb54660a47f6123ba19c98ca1013057b2114409df0d"
+        },
+        {
+          "path": "modules/coding/runtime/headlessTools.ts",
+          "sha256": "9b8e142c36abe6b7d8a0cfede935e81182f87e8053fd478ff28954af34f0578d"
+        },
+        {
+          "path": "runtimes/diffusion/pipelines/real_execute.py",
+          "sha256": "3e68a07dad68ea2165905518e9987a37fc90b09342c5d26f8772ebfccd01399e"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/engine/desktop_payload.py",
+          "sha256": "203fd7e130a6e6f283699cffb1da72035ad09c31443764960b5a762085cec817"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/engine/desktop_provisioner.py",
+          "sha256": "0266ae82ad604269b6dd05ef935916dda62508f9aed10b83aac0038932fab8c2"
+        },
+        {
+          "path": "core/registry/NexusModelRegistry.ts",
+          "sha256": "bbef0984a3b87f39fc40ff4d28e2d16feb1bca2f7172395734abd9b483be0453"
+        },
+        {
+          "path": "desktop/src/pages/settings/ModelsSettings.tsx",
+          "sha256": "2df195608286e57190f2f3d8d83fe475df706f864993df09661df17b125aa346"
+        },
+        {
+          "path": "desktop/sidecar/src/diffusion/dispatcher.ts",
+          "sha256": "50e6a1b30ad026a3ac7348f095ee644f808decaed04ef7ca053a72bbe2120226"
+        },
+        {
+          "path": "desktop/sidecar/src/diffusion/videoDispatcher.ts",
+          "sha256": "7ecbdfe4ac276be46030a84dcf3415b2c1bbd8812024f25ed24b3d805816de84"
+        },
+        {
+          "path": "desktop/src/pages/settings/ArchivedChatsSettings.tsx",
+          "sha256": "085c42222050e89f4ffcfe9af270b234fb741e21186353317fac2e8f13b6bb4d"
+        },
+        {
+          "path": "desktop/sidecar/src/main.ts",
+          "sha256": "0d731962476ed30d2ceade7583a7b2cfc49600dde9c9af2b4a4a38405b728537"
+        }
+      ],
+      "original_sha256": "d8ac4d849fedb081d3c52c62c2932f3bef91ee219214d5eeffe79027a461bddb"
+    },
+    {
+      "id": "generation-recovery",
+      "candidate": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\generation-recovery.html",
+      "sha256": "f12b89df38e96518389186caf202e6fc5ab992a3ab1a2aed5ee099ebfd155e23",
+      "inputs": [
+        {
+          "path": "docs/handbooks/markdown/generation-recovery.md",
+          "sha256": "0913329cd30ffd855e11b7e8929810e1ff35d8d4927c32aa438538faa414f12a"
+        },
+        {
+          "path": "scripts/generate-handbooks.mjs",
+          "sha256": "f28c8d1ee031a30601286f28bd32b286a25ded0042946ec335eb832b18fdb1ef"
+        },
+        {
+          "path": "scripts/handbook-renderer.mjs",
+          "sha256": "05ba5507ff47b3bc62647ef32377c5ba301bea63af0375ace316205e89d132fa"
+        },
+        {
+          "path": "docs/handbooks/_sources/storyboards.json",
+          "sha256": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook.css",
+          "sha256": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook-clones.js",
+          "sha256": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view.css",
+          "sha256": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view-runtime.js",
+          "sha256": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c"
+        },
+        {
+          "path": "desktop/public/nexus-mark.png",
+          "sha256": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05"
+        },
+        {
+          "path": "package.json",
+          "sha256": "bc467c10a2e2c520449fcc021e6170147f82d3f6cfab5d6c1901af0da8934c9e"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "132575fa3cd6627d3a9a05f985b1c1c2da8e22cb9ca12d8dd24ce21caa55d360"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py",
+          "sha256": "342858f9ba1a2bb7050eeb8aa253b64a37db0bde3639fe4809cfa52b54c60e1b"
+        },
+        {
+          "path": "scripts/installer/build/smoke-installed-media.ps1",
+          "sha256": "994ff59f856c07a7b98ad6f4091a5cc5e54eb84eff71677a4595f82148496762"
+        },
+        {
+          "path": "desktop/sidecar/src/diffusion/runtimeFactory.ts",
+          "sha256": "ed231e9ee9941c3c243ccdb5486382cbc634486420501d586f547e9fc04eabb6"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py",
+          "sha256": "cc7d4a797bfcac8f4f4385a520d6413b7736cc701fa7b1682c264209b5af4053"
+        },
+        {
+          "path": "desktop/src/modules/image/ImageStudioPage.tsx",
+          "sha256": "ca24abeda722b3215544877a488e8d49cd68c6215fe8eac8de27c945d7a48c4b"
+        },
+        {
+          "path": "desktop/src/modules/video/VideoLabPage.tsx",
+          "sha256": "52497b0cd39ab7d695931731f4a0a7a88a5cb83947cd56176bd4e7084b39285b"
+        }
+      ],
+      "original_sha256": "0b6a1e2c736c390f41409c97fa1a0ba6b8adfe4c527a53b353f0f4eaaaf4ee27"
+    },
+    {
+      "id": "installer-runtime",
+      "candidate": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\technical\\installer-runtime.html",
+      "sha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05",
+      "inputs": [
+        {
+          "path": "docs/handbooks/technical/installer-runtime.md",
+          "sha256": "52ff450cb2c511e7948b581e589c71c925d386b63817f608926d74e2883874bf"
+        },
+        {
+          "path": "scripts/generate-handbooks.mjs",
+          "sha256": "f28c8d1ee031a30601286f28bd32b286a25ded0042946ec335eb832b18fdb1ef"
+        },
+        {
+          "path": "scripts/handbook-renderer.mjs",
+          "sha256": "05ba5507ff47b3bc62647ef32377c5ba301bea63af0375ace316205e89d132fa"
+        },
+        {
+          "path": "docs/handbooks/_sources/storyboards.json",
+          "sha256": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook.css",
+          "sha256": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook-clones.js",
+          "sha256": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view.css",
+          "sha256": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view-runtime.js",
+          "sha256": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c"
+        },
+        {
+          "path": "desktop/public/nexus-mark.png",
+          "sha256": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05"
+        },
+        {
+          "path": "package.json",
+          "sha256": "bc467c10a2e2c520449fcc021e6170147f82d3f6cfab5d6c1901af0da8934c9e"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "132575fa3cd6627d3a9a05f985b1c1c2da8e22cb9ca12d8dd24ce21caa55d360"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py",
+          "sha256": "342858f9ba1a2bb7050eeb8aa253b64a37db0bde3639fe4809cfa52b54c60e1b"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py",
+          "sha256": "cc7d4a797bfcac8f4f4385a520d6413b7736cc701fa7b1682c264209b5af4053"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/engine/hf_auth.py",
+          "sha256": "f862caf726abad2f3e91e91ddd141e6928a39fb319c1d16ecd2afbaf42beca64"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/engine/gated_auth.py",
+          "sha256": "778a3309b7e0820bac6a19b7cfd7488848c63d88c60f6b86df3fb1a15ebf7f03"
+        },
+        {
+          "path": "runtimes/diffusion/repair.py",
+          "sha256": "4a9c64ad1aa123b37a19c449c59523dd5001e438a3832b03f484ed145d9654a5"
+        },
+        {
+          "path": "scripts/installer/src/nexus_installer/widgets/gated_auth_dialog.py",
+          "sha256": "2c5642079eb2d720f527e03aa8d691662cac2ecf7adda8ee79f213768c615df5"
+        },
+        {
+          "path": "scripts/installer/build/check-hf-catalog.py",
+          "sha256": "de83aa69230df378a03345a8f88ed9851df258e2fbd794fb255a35db170238ee"
+        }
+      ],
+      "original_sha256": "bd8f6dcc495c0e060279659705c4ddfedfa98e9cb8e38da23f80d279a3badc62"
+    },
+    {
+      "id": "media-runtime",
+      "candidate": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\technical\\media-runtime.html",
+      "sha256": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51",
+      "inputs": [
+        {
+          "path": "docs/handbooks/technical/media-runtime.md",
+          "sha256": "b1a45f7108eeca2efdaf471ff16643ff791120e6bdb39d0fdcd3f481087be4ed"
+        },
+        {
+          "path": "scripts/generate-handbooks.mjs",
+          "sha256": "f28c8d1ee031a30601286f28bd32b286a25ded0042946ec335eb832b18fdb1ef"
+        },
+        {
+          "path": "scripts/handbook-renderer.mjs",
+          "sha256": "05ba5507ff47b3bc62647ef32377c5ba301bea63af0375ace316205e89d132fa"
+        },
+        {
+          "path": "docs/handbooks/_sources/storyboards.json",
+          "sha256": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook.css",
+          "sha256": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook-clones.js",
+          "sha256": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view.css",
+          "sha256": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view-runtime.js",
+          "sha256": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c"
+        },
+        {
+          "path": "desktop/public/nexus-mark.png",
+          "sha256": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05"
+        },
+        {
+          "path": "package.json",
+          "sha256": "bc467c10a2e2c520449fcc021e6170147f82d3f6cfab5d6c1901af0da8934c9e"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "132575fa3cd6627d3a9a05f985b1c1c2da8e22cb9ca12d8dd24ce21caa55d360"
+        },
+        {
+          "path": "desktop/sidecar/src/diffusion/runtimeFactory.ts",
+          "sha256": "ed231e9ee9941c3c243ccdb5486382cbc634486420501d586f547e9fc04eabb6"
+        },
+        {
+          "path": "runtimes/diffusion/pipelines/real_execute.py",
+          "sha256": "3e68a07dad68ea2165905518e9987a37fc90b09342c5d26f8772ebfccd01399e"
+        },
+        {
+          "path": "runtimes/diffusion/pipelines/video_base.py",
+          "sha256": "e60a005e85859d059fc6ec0e71c8b4c611c84afd1c1afabc06824bb50a7ba13f"
+        },
+        {
+          "path": "desktop/sidecar/src/diffusion/resultGuard.ts",
+          "sha256": "ddaa8ba7ca3bc129ebc7ed715e1f3b72978dadd28894bd2ca54c580695620f84"
+        },
+        {
+          "path": "desktop/src/shared/studio/usablePayload.ts",
+          "sha256": "19695dfa106fe3f9f4e8493a6162c9459e53400a8535bafbdc22c72c9ea87938"
+        },
+        {
+          "path": "desktop/src/shared/studio/mediaRuntimeClient.ts",
+          "sha256": "d9177aa4b865365da9d8bdf350ebaf352c6c81ab0a69275323cc77efe0683e14"
+        },
+        {
+          "path": "scripts/installer/build/smoke-installed-media.ps1",
+          "sha256": "994ff59f856c07a7b98ad6f4091a5cc5e54eb84eff71677a4595f82148496762"
+        },
+        {
+          "path": "runtimes/diffusion/pipelines/base.py",
+          "sha256": "5c4ccff7a816908092a7870cface276787531f864349d132ab4d5a89b60fe52a"
+        },
+        {
+          "path": "desktop/sidecar/src/main.ts",
+          "sha256": "0d731962476ed30d2ceade7583a7b2cfc49600dde9c9af2b4a4a38405b728537"
+        },
+        {
+          "path": "desktop/src/modules/image/ImageStudioPage.tsx",
+          "sha256": "ca24abeda722b3215544877a488e8d49cd68c6215fe8eac8de27c945d7a48c4b"
+        },
+        {
+          "path": "desktop/src/modules/video/VideoLabPage.tsx",
+          "sha256": "52497b0cd39ab7d695931731f4a0a7a88a5cb83947cd56176bd4e7084b39285b"
+        }
+      ],
+      "original_sha256": "b5700ed427d43f1a802fc29db683125ff017a9a6d3d5d2cfbd21d9b185fb6789"
+    },
+    {
+      "id": "transcript-and-workspaces",
+      "candidate": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\technical\\transcript-and-workspaces.html",
+      "sha256": "af6bd368d18bf682b563682e8f92aafddda4f773b381a5dc5994979973c48338",
+      "inputs": [
+        {
+          "path": "docs/handbooks/technical/transcript-and-workspaces.md",
+          "sha256": "5616821449709c170afbdede4f8398a53294e7cd0176435a57e2f26776f28c2a"
+        },
+        {
+          "path": "scripts/generate-handbooks.mjs",
+          "sha256": "f28c8d1ee031a30601286f28bd32b286a25ded0042946ec335eb832b18fdb1ef"
+        },
+        {
+          "path": "scripts/handbook-renderer.mjs",
+          "sha256": "05ba5507ff47b3bc62647ef32377c5ba301bea63af0375ace316205e89d132fa"
+        },
+        {
+          "path": "docs/handbooks/_sources/storyboards.json",
+          "sha256": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook.css",
+          "sha256": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook-clones.js",
+          "sha256": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view.css",
+          "sha256": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view-runtime.js",
+          "sha256": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c"
+        },
+        {
+          "path": "desktop/public/nexus-mark.png",
+          "sha256": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05"
+        },
+        {
+          "path": "package.json",
+          "sha256": "bc467c10a2e2c520449fcc021e6170147f82d3f6cfab5d6c1901af0da8934c9e"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "132575fa3cd6627d3a9a05f985b1c1c2da8e22cb9ca12d8dd24ce21caa55d360"
+        },
+        {
+          "path": "core/chat/tokenUsage.ts",
+          "sha256": "703eb6fbee93057d7d504fe0293735734299cb9e96717d9a33dd9721a2df0e93"
+        },
+        {
+          "path": "desktop/src/shared/chat/MessageBubble.tsx",
+          "sha256": "0c12a9937f0ecab1c80255d278c6e97cf9c5f5b578e8ba8c73865c4f85e9e92d"
+        },
+        {
+          "path": "desktop/src/shared/chat/transcriptChrome.ts",
+          "sha256": "8b246419b5d534059e499bb54660a47f6123ba19c98ca1013057b2114409df0d"
+        },
+        {
+          "path": "desktop/src/shared/chat/ReasoningDisclosure.tsx",
+          "sha256": "6bb0aee9be8c12044127b0024baf48d55daa2d430665de84891a178ebcbbee2a"
+        },
+        {
+          "path": "desktop/src/modules/coding/CodingPage.tsx",
+          "sha256": "e786569e06b1be2b1dc7e9dbd8074c7526448dc55b149fbf9820c7915531b562"
+        },
+        {
+          "path": "desktop/src/modules/coding/WorkspaceSelector.tsx",
+          "sha256": "ef957bc9412969e366c49696c46317252c310cb4b3819c9ee476cd37bb8802ca"
+        },
+        {
+          "path": "modules/coding/runtime/headlessTools.ts",
+          "sha256": "9b8e142c36abe6b7d8a0cfede935e81182f87e8053fd478ff28954af34f0578d"
+        },
+        {
+          "path": "desktop/src/shared/chat/MessageList.tsx",
+          "sha256": "f06a54c086ca4721e32a52b76eff31e9839042cee75be847a8a46d9ae8bcfa8d"
+        },
+        {
+          "path": "desktop/src/shared/models/selectionPolicy.ts",
+          "sha256": "8da278569b39c8cdac32731d3aca37622378e37b06ada35756942498592a2938"
+        }
+      ],
+      "original_sha256": "f715fccb8d42ddf2e8d2542a5c63c2eb34896448b097c923b981cb5e32f3113d"
+    },
+    {
+      "id": "document-outline",
+      "candidate": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\technical\\document-outline.html",
+      "sha256": "79f1cc2240ebb4b343fe7da49c6999319d4c28e8302c8eab699a72a0648b9e4a",
+      "inputs": [
+        {
+          "path": "docs/handbooks/technical/document-outline.md",
+          "sha256": "c79662602d8c603b69af0a200043d32e4fdceafb9669eeae22ec3166ef4e99ad"
+        },
+        {
+          "path": "scripts/generate-handbooks.mjs",
+          "sha256": "f28c8d1ee031a30601286f28bd32b286a25ded0042946ec335eb832b18fdb1ef"
+        },
+        {
+          "path": "scripts/handbook-renderer.mjs",
+          "sha256": "05ba5507ff47b3bc62647ef32377c5ba301bea63af0375ace316205e89d132fa"
+        },
+        {
+          "path": "docs/handbooks/_sources/storyboards.json",
+          "sha256": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook.css",
+          "sha256": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf"
+        },
+        {
+          "path": "docs/handbooks/_sources/handbook-clones.js",
+          "sha256": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view.css",
+          "sha256": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35"
+        },
+        {
+          "path": "docs/handbooks/_sources/dual-view-runtime.js",
+          "sha256": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c"
+        },
+        {
+          "path": "desktop/public/nexus-mark.png",
+          "sha256": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05"
+        },
+        {
+          "path": "package.json",
+          "sha256": "bc467c10a2e2c520449fcc021e6170147f82d3f6cfab5d6c1901af0da8934c9e"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "132575fa3cd6627d3a9a05f985b1c1c2da8e22cb9ca12d8dd24ce21caa55d360"
+        },
+        {
+          "path": "modules/coding/documents/DocumentOutlineTools.ts",
+          "sha256": "4b00a5ee007ebbbcf32a16e74af612ef76df8e20e8f17ef6fdf6dd2d10869424"
+        },
+        {
+          "path": "modules/coding/runtime/outputBudget.ts",
+          "sha256": "0b660cdb17cbf8c8ba23a3c36cada9437de581e73d8ec1b18f9a2638ab3d8abb"
+        },
+        {
+          "path": "modules/coding/runtime/HeadlessAgentSession.ts",
+          "sha256": "66766a3558ea576824c7e0f10f26671555a26c001980d9b31553766360cb146f"
+        },
+        {
+          "path": "modules/coding/llm/toolHistory.ts",
+          "sha256": "bb73df6714fb698e5329a22781a43d539965b4d035acd8a12d3983fae41a6c8b"
+        },
+        {
+          "path": "src/tools/AgentLoop.ts",
+          "sha256": "5ca4f55ba2912887c616eb06e01670590ed3e2b1999d2d702b5c3b16fe1a457c"
+        },
+        {
+          "path": "core/documents/OutlineCache.ts",
+          "sha256": "827f7d756a8179993c2fbff8e935c7b4aa179c04f28262803f885d8939db12b7"
+        },
+        {
+          "path": "core/documents/OutlineSession.ts",
+          "sha256": "f96fedbca9a2bb14d7de2a88a0680532bafb79d6a639ba572c93101fdafe9e4f"
+        },
+        {
+          "path": "core/documents/OutlineSummaries.ts",
+          "sha256": "a773bc0f7e3735cfed1637e6a8b93b14b818dd3699b276ee3ee90ce77b009847"
+        },
+        {
+          "path": "core/storage/OutlineFileStore.ts",
+          "sha256": "2219594442d4e08ad182dde81ed9f065b8706f13c708d24cd32d399ec939f355"
+        },
+        {
+          "path": "modules/coding/documents/OutlineSummaryProvider.ts",
+          "sha256": "3cce862a6cd793c1426eff55d37cea353a9b4db74475cbce2760e4d21fdc750c"
+        },
+        {
+          "path": "modules/coding/guardrails/permissionTierMap.ts",
+          "sha256": "3b301d7f962a451322854d9b9ead1382b1daa618c9f15d7fe92ad65d93164544"
+        },
+        {
+          "path": "modules/coding/chat/ConversationManager.ts",
+          "sha256": "0397bfc6723cb1a9b7d8927e6a4249d710ce13557094f5bf8d5dcd368b8b9ccb"
+        },
+        {
+          "path": "modules/coding/chat/CompactionStrategy.ts",
+          "sha256": "e9027ab58f57033b788728babacc73fbac9e0832d38b299c86c9c2e89aea5bfa"
+        },
+        {
+          "path": "desktop/src/pages/settings/SecuritySettings.tsx",
+          "sha256": "44ddb2db12a5d960a2efa4cce3d0aa82ed2890e5f455962203589a4fc86908bf"
+        },
+        {
+          "path": "core/documents/documentOutlineEnabled.ts",
+          "sha256": "bc3b9d73190cd999b36a480099fd6ecc09f039d45389845a78ca2830d6ff6f8e"
+        },
+        {
+          "path": "modules/coding/runtime/headlessTools.ts",
+          "sha256": "9b8e142c36abe6b7d8a0cfede935e81182f87e8053fd478ff28954af34f0578d"
+        },
+        {
+          "path": "core/documents/DocumentOutline.ts",
+          "sha256": "e0e5c228caedb5c496280a7b217a0bbb997d9d915e21ff6df8b648a49856c7de"
+        },
+        {
+          "path": "modules/coding/documents/createDocumentOutlineTools.ts",
+          "sha256": "9ddb0b5e54bbcce7c7f1009c3fbc42b89ff51c0d0a849c33a33d23e22f910700"
+        },
+        {
+          "path": "src/tools/handlers/parseDocument.ts",
+          "sha256": "051de22eeb5b7cb0e8788184c5cda23a7b882c6d19daa165b93e3f3bbdaf35c3"
+        },
+        {
+          "path": "docs/v2/v2.12/development/outline-eval.md",
+          "sha256": "1f9be104def3251d0d21c228ea492d76eae8e0db38088c319caff6dbc84b8b45"
+        },
+        {
+          "path": "docs/archive/v2/v2.11/development/outline-feasibility.md",
+          "sha256": "755097c8f3e99405e500717b58e93f2e7bb3907c5198b939ddb93a71542edb97"
+        },
+        {
+          "path": "modules/coding/llm/OllamaClient.ts",
+          "sha256": "25c5a530c34331d2bbb903a2fdf58fa876946ba39f7514c1693f27eb1a61ed72"
+        },
+        {
+          "path": "modules/coding/llm/LmStudioClient.ts",
+          "sha256": "59a349593a78b3ce3a34cddc423b157172dfaa9ab35e082daf5f18d72da3449a"
+        },
+        {
+          "path": "modules/coding/llm/headlessOllamaClient.ts",
+          "sha256": "c865895515a0bc9612b69e6a2700871890a161567daab53d6aaca2087de37f89"
+        },
+        {
+          "path": "modules/coding/llm/headlessOpenAiClient.ts",
+          "sha256": "826e66c48ddc6f43e2862295cd826ca4d938c1a94e8279ea89adf52b375de7d7"
+        },
+        {
+          "path": "desktop/sidecar/src/coding/headlessAgentRunner.ts",
+          "sha256": "f5d82a53247be4dc56a267bc28cab670ba8e6f5bebc5dfa95ec57568a3e99127"
+        },
+        {
+          "path": "desktop/sidecar/src/acp/AcpAgent.ts",
+          "sha256": "084616f9ef764624c7d7ce2146952fde909eee04e2241a01b518096294e7edf0"
+        },
+        {
+          "path": "desktop/sidecar/src/handlers.ts",
+          "sha256": "48818089138535b7e3af656c42618e62e9a506d60dc0241456e001939aaefc92"
+        }
+      ],
+      "original_sha256": "9d0491664eb3f91cea705019515fa71bfbc70967a31610ef1c29608626edf486"
+    }
+  ],
+  "browser": "Chromium 153.0.8010.12",
+  "viewports": [
+    [
+      2560,
+      1300
+    ],
+    [
+      1920,
+      1080
+    ],
+    [
+      1366,
+      768
+    ],
+    [
+      1024,
+      640
+    ],
+    [
+      761,
+      768
+    ],
+    [
+      760,
+      768
+    ],
+    [
+      759,
+      768
+    ],
+    [
+      390,
+      844
+    ]
+  ],
+  "slide_states": 200,
+  "browser_failures": [],
+  "brand_states": 248,
+  "proof_files": [
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-geometric.txt",
+      "sha256": "af88b8fa0ebf4139559618ed0a0bd3d2dfbba46ca5b2dd915388cb8f739e76ad"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-reading-1920-0.png",
+      "sha256": "6d9da5dcd8d7d34b762a1cbe36c5fb42a082c15bde9ee5fa8751ca865c0eb2f3"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-reading-1920-1.png",
+      "sha256": "88bc4fc23ad6cc2b38004f0b51da56fde65fe9299c68de2d09d9712c265de346"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-reading-390-0.png",
+      "sha256": "dd09c0e4ee92132e6f3be3bb6bb9df3bec13ec8d2e35932f1befcf106008f0e1"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-reading-390-1.png",
+      "sha256": "683bcfbc55e6019d28dd2a35ac7d3fa92ba5a6cf5b9448f55f4840f69d56c030"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-1024-0.png",
+      "sha256": "b62521e956b7537aabdb498488ce3154d6b3cc697e8bbfa7a9b7e4cc71bcdd11"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-1024-1.png",
+      "sha256": "d89db39adc6579f1ced0bfc277d20b07513d4eacada2aa3b5262ec4a6d35b134"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-1024-2.png",
+      "sha256": "c1babd1b9160c52247cf732178ed575a367d469b4176fd043330c6bd232421b1"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-1366-0.png",
+      "sha256": "87402d36c0938212abc39dfdb07f20655e21b2b4aa3917b1739aa4fed66bf4e2"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-1366-1.png",
+      "sha256": "aae86de626d13f3f6344921942331beebdad7c2d43308ccca37382ac9558b414"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-1366-2.png",
+      "sha256": "8300d7fa9a2a6b72e7e6820c29c2d6504f9cbc1eb575e21a7bd25b413ee61351"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-1920-0.png",
+      "sha256": "d65e8915e8ab82f79165810a902ceedbe1e37289dd99f040941b91df8880fee5"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-1920-1.png",
+      "sha256": "a6d9f70bd60f451fe482518291352b8a5d59759cf3ef8ff6ebc63fda8f10b713"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-1920-2.png",
+      "sha256": "30fe99420b6541f060417dfd9c723b1b3c5807d5d0d526bb3a1546a590a65f0d"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-2560-0.png",
+      "sha256": "9d0f5a0638105f0b8be49435c6377796887f8e102e984ea19e4663ff24bcaab9"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-2560-1.png",
+      "sha256": "6fb49e37b8e69bc03c36f96ac7f38d1716e576382ed9ba979800e3f4825ea493"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-2560-2.png",
+      "sha256": "20c2176c38a4b767207835d4a08cbacd18eab7088c1daeac62a3723d7e571b25"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-390-0.png",
+      "sha256": "c148452dfcfe06e25c87e8e7211e63763ea7ac486cacd5817e38091d8eb1e6fa"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-390-1.png",
+      "sha256": "55a3bdf424296618b3f7c4fb702fb7bf7a0b07dc27d9197881e2bcffbdddbdb1"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-390-2.png",
+      "sha256": "50960ab7b590f729538f5a16a9f6b533ede05ffe50e85b6bd2692766549166ba"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-759-0.png",
+      "sha256": "ba9b69ddb5f16454745274900518e6fae617ab5bc86e22c6383a8db5a5f1d838"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-759-1.png",
+      "sha256": "d18162f38c98c04e1383a8e012bfc9dda2273efb3ea974c868f6f5662e58c13b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-759-2.png",
+      "sha256": "9e0370c2fb9f90dd1af74c2362ee7bea1d0802c09031fcb43edbd58d4c8ad213"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-760-0.png",
+      "sha256": "c61a72cc067da16cddff53d593b7aa275acfa2c6ed84ac22afe750d02978bfe9"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-760-1.png",
+      "sha256": "c474c08d5c0688c63e63b5bdba8c8a2156c12bbb5fd8355d43c4eb6a3cc7b331"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-760-2.png",
+      "sha256": "118b851bcf5899e77dd8a981a6d178a5cf43c7d1071600aa0f1ca5a5c1710c4f"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-761-0.png",
+      "sha256": "1de4b82a547151e476c37682b1715dead5607875df20084710c3ae8e5684f79a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-761-1.png",
+      "sha256": "c604ae0fbbd5d33f2d124f1dc710a04394345adc56f92cdcb55e2cea8ef5d7f5"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas-slide-761-2.png",
+      "sha256": "741bb407fcae578860017cad9aee575e6d557673383512da5e861e35666acdfa"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\atlas.pdf",
+      "sha256": "0aa79e214dec744f657fcc92231a7d0ffac890fe3394dad96b0449024526d7f4"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\brand-contrast-observations.json",
+      "sha256": "84eb6b84a6b4458f02c9c270304e9736a4dbcf6c8e64586381709abd8c2c6414"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\contact-desktop.png",
+      "sha256": "b495e07cd270a9cd8300d66bb13e973dc1dc767a0b2fa7e33d948f64497e70ae"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\contact-phone.png",
+      "sha256": "60b918772221bef306ceccd959db8f46dd9bccfc7e4292f8112094aff760ef61"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\contact-reading.png",
+      "sha256": "2f5890cdfdd310b6f0a82bd4d785243e18ddccafd4a9318dc3aa9a4b37f941c3"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-geometric.txt",
+      "sha256": "48307427a6282f5a9b16bb15131d2ceedafedf76e5acdd4ead192b1cba300294"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-1920-0.png",
+      "sha256": "22563706b2f2c3373d7fea818adf762bce009d11a70a679840a5a948fa40a6ed"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-1920-1.png",
+      "sha256": "0324900a678524d20fe4d8e37cf014a513d2dc646ef587f58f0a8b1cd1ff6e84"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-1920-2.png",
+      "sha256": "681673940f9aceb6711d61a8564b7ec9253103bab6174a08e2d430bf7b60d370"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-1920-3.png",
+      "sha256": "9a37362c7aac972dfcecaa3d3596c76c15893c6caeeac4219ae864519bbf53cc"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-1920-4.png",
+      "sha256": "c34828bff381911efcc72658ae19f6d3a13888ef0428f0096e3c5e2d9d2bbdeb"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-1920-5.png",
+      "sha256": "1f4ed63b8ba91e013a63fc3172142a9ac0edd50ba45b5a41151c0f6005ecb710"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-1920-6.png",
+      "sha256": "470df8b27607363a07ff84016f36f66e8078749d1057dfcefcf697645011f19e"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-1920-7.png",
+      "sha256": "663215354804218cd7539c7346c7f55e36d43876e929939a4c2d95a09a06660c"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-1920-8.png",
+      "sha256": "9e23933a3d95a4d8bd034ecfb7d0727542feb93639024a8a00b6c8e3a592a657"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-390-0.png",
+      "sha256": "1cbd669c47ef3ba96aeec8e593225c84914cc1b530fc5df7f5c2de0c415512ae"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-390-1.png",
+      "sha256": "7baccfc3deb647e4465dfe5200d8ad3b61d0879ec3313b10f0b9cd35692d95af"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-390-2.png",
+      "sha256": "66e7b3824018b3c7009a12d30257c72db5c3e2d6ca51cc326ef8ba8d3f869184"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-390-3.png",
+      "sha256": "2b962016bf5b6ebc0fb231288516b6ceda94ab0e69d222e3f314976a958070ec"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-390-4.png",
+      "sha256": "0fdb199020de3e0bc8b643e645bd6a4e215bbb43bcbe82f13b51588f710c7b65"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-390-5.png",
+      "sha256": "bcebdc12d4800b850e5a0a9d1d78552fed722dd857e89261247204d49d546603"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-390-6.png",
+      "sha256": "617c21185f8b67d1bd455fe4a250b2d3988825321c6308efdaa529818cf12443"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-390-7.png",
+      "sha256": "703ac89eb6a999e482c778a9539d938f860db8bf24fbcc77063fb061fa1ac587"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-reading-390-8.png",
+      "sha256": "3494545ab39a067e8a99cd6277957aa99f12699f501f877018e293b0beb5ff2b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-0.png",
+      "sha256": "3e5474908f5e2d1b36609272db06118a1ec24d7581248431d7f5efadf5ec23ec"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-1.png",
+      "sha256": "7ac950b7673db6022b5d5f4b4c82f3b0e0cebb83ee315a7800242203b844ec6a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-10.png",
+      "sha256": "8cd32b52b57f192afa82d7daff07c8cc77cebd6ecd49f8bb99afcb318fe9a388"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-11.png",
+      "sha256": "002a06950696436c2d1e0410c3b9091fcdd16b924514f29aeec21290aeff8492"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-2.png",
+      "sha256": "e97976a5666645bb9cdab5257258aa06fd75a9a866f8ce72333c58aafaa382a0"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-3.png",
+      "sha256": "6653c7834364e3f336c3681b5e4d0c16a4c8628d00e8f2a9ac6f622f506ecba6"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-4.png",
+      "sha256": "e83d006ab5a64cb3f95ab93cb4cebfbcb2850462b9d70c39c7a7403feacbbfd2"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-5.png",
+      "sha256": "0c9bb0ca57bf5c03c852366ca34c5fdabe1fac39dbd1ac5772580b3fa6b523c1"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-6.png",
+      "sha256": "710d274ae6446cc8f5e1aff9f00569e252d406346cbd9cb61f476f4aed54046f"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-7.png",
+      "sha256": "20902c8b7f44e29657624cb38ad48d99180d89314d9c7dbb794a7bc830df9887"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-8.png",
+      "sha256": "48a3208ee19aba4887f110b8dabb1ef69b033e78bf6b81a4eb3aeca1532a47c0"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1024-9.png",
+      "sha256": "77a009eebc78cf0b0fd564ef3b0ca86ef03d0b4eb179ace3d9bc741913319389"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-0.png",
+      "sha256": "849205e4d4e0075bb909ef5246605491ae3a11cc75266121ca8c08cde4387be5"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-1.png",
+      "sha256": "b3cc473ee43cd632e240d60ed22258bb74025f6c2d33db8bfbfef65dd54cfabc"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-10.png",
+      "sha256": "a416580b55d1d8ece7f6ef8cf234081bd609e8aee38508643133b263ed7777c0"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-11.png",
+      "sha256": "069f206d870bd73b2b6de088925a414fc8f7102c2c25a4a5432d8585c6350c5b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-2.png",
+      "sha256": "debf26c5ba9414c2e39eb546527e4784ef03565af4fdde4f558da98b3a24db25"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-3.png",
+      "sha256": "a04923d281f340f32c80dcb3f920b76508c197fb60794014bf7736bb0e720f33"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-4.png",
+      "sha256": "5d1ce6b281b56cdc0993d077f1babda4a518658abc0e7190ebaa0208dcd62fb4"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-5.png",
+      "sha256": "f96bea4873fe234600015b2caacac356d075310c51b7fa6c808bc9465aea0026"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-6.png",
+      "sha256": "1fd5326675fa6b2a8327c75b7f49141981a7d2d7b57c01ddf761d69823873ac6"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-7.png",
+      "sha256": "793004862302a48e3c8684dd2cd2bdf30af476a74dad394e6481ac274214061a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-8.png",
+      "sha256": "4199055ee318da6063e9b7d286117637c7c96db54429068792a9566af6020d88"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1366-9.png",
+      "sha256": "4f93c2b101c112bd79c43e7f90bfc8fca47ec7189aa51c385d362d5644971351"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-0.png",
+      "sha256": "f665368d0639b1d650eefb626cb807ef331959bbccf184a4df8475bbd8e30ace"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-1.png",
+      "sha256": "d73d261f48e8cc4b0ad8ca8aac1d4a5f48e3ade3763171605c68b627acf3f374"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-10.png",
+      "sha256": "de154d7277c9c3c7e7434ad033d6e9b22d3d3648c3e1269aaaa0ae4a338694b8"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-11.png",
+      "sha256": "f5152298243c96cff2ca4c94d61d171d79c59d697149b8f7979013e2a6b9fd46"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-2.png",
+      "sha256": "833f978394a9aad91d18f9f3c59646d026cb2246fb08eabb19c86f4221367f02"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-3.png",
+      "sha256": "beb5779c45e2980c6d865bc9ccb26bbd41503ba8f72aa44b6317f792cfdc94bd"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-4.png",
+      "sha256": "7ef6048cd3b0823db3b4bdb254ef19e526b5425475064750e1893bdfead4bf5f"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-5.png",
+      "sha256": "58effd0416dea4783ad8ad7c35587cfc07568d0dc132865abdc3bf2c1f234667"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-6.png",
+      "sha256": "71645de3a28797a26d422da99ac4a1e342839da2c953b49b3919e08043ef7737"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-7.png",
+      "sha256": "3b1e02ccc2672661ca89863d3f4e54739660b039ed64d54e29d458dbfbaa9ce4"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-8.png",
+      "sha256": "e895fb2f71da7b24f7283c3b2ca09b0a4f3aa222314fe49d99cfb75c0ebd47cc"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-1920-9.png",
+      "sha256": "5fcebeca2975012b26886fc45fa5f5f8b939a13504eb14011801d5bc66248e1d"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-0.png",
+      "sha256": "6f1953bfcd378599edb360d1a2f3fcb26d7d8e9875548118b8b03fcd83c41ac3"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-1.png",
+      "sha256": "52c4cdb31c5f9c868114c7813aeef21f6aadced6646fd1bd5a650b7c9dc12cba"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-10.png",
+      "sha256": "9fd82d69fb07ab2e9fc6916b168c0e2fd4a10567a379767b0e13730bacf5dd3d"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-11.png",
+      "sha256": "12fd9b81bdb61d7068ab993eb4f3b266df12940768c14a145f5288d3937f5a9b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-2.png",
+      "sha256": "0b58a8cd531b731fe092db4ec241d8b720751840e1bd38cb47c2b8dbe1ca9928"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-3.png",
+      "sha256": "ef5c05471f357c91789292cc8a9e787381c83e320e56d1b78c9433f6292d58d7"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-4.png",
+      "sha256": "72a09b87c188fac1f5f07d8ae8c424a0236b1922f4f9f7279ca9fd26caee8137"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-5.png",
+      "sha256": "833efba5476952e963b3158e82bd6190fb89076a61571d97aed00db8184d5278"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-6.png",
+      "sha256": "21bbf84b4163b01de0fdb7df12f9cc004f5f9788692c237493aad0414ec2321a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-7.png",
+      "sha256": "f1849e9d0874eaae91d881b1f5611d74a8f3783ec2a1d290b9a0be1147d4669d"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-8.png",
+      "sha256": "3ca212f34fffd75fd6172b3a1725f478a1404e1b899d9a41f762fc568b81b99e"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-2560-9.png",
+      "sha256": "9b536ad539ce379c2a803582ad4c4d20e4bb477e1b70854b24e5117af5fd719d"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-0.png",
+      "sha256": "75048602aab7db842cbf14b5e471263a1d573eae5d33f19267661a25d0353a00"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-1.png",
+      "sha256": "ba045d1660789e9c4513d1c45218e71d4d462125cb4a7208c909fafe19ef3eba"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-10.png",
+      "sha256": "41bf6573b412c80d5c7490d5947a027ba574e10f155e8c5009b7dc690944962a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-11.png",
+      "sha256": "be7fc8d634794008078fc8ff46c76ad33e89425a5b82f6f8a6188133c4f57d0b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-2.png",
+      "sha256": "146bb0dcd0d7868ec2eb250b8143b39b02ad2c18ac81952a0cb30b91cff71102"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-3.png",
+      "sha256": "217eeea1e623aa15bba4da6614fe52b42974e5cb6074515366764a99faec8d85"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-4.png",
+      "sha256": "f4e76d04f61b2c02704ce446830847ad6b9155fbbfdd51b7240d7b0e9af4f585"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-5.png",
+      "sha256": "08981fbc5c663281cf1a9b30031334a6530fad65918c6d2509e4ca37b8274558"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-6.png",
+      "sha256": "d9733796d4172a99d4bf0a47a1b154807f527c4760eeb85875b5a22522617edd"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-7.png",
+      "sha256": "6eb1b805bfe734c6e7c6bfd22674ab914aaaca2a8a4ff872adfa6c5cee26776b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-8.png",
+      "sha256": "95c35e1d08849390f778bf39dbdc4ae070a65fe544b7102d8b7026011805f250"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-390-9.png",
+      "sha256": "49b4e52b755ad0c2c6586bba2b8d6b95c5694c43c8b63d3b5f723cb9a2432f93"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-0.png",
+      "sha256": "e39dc6ea5085ddb0760754e041889215f305575236a754d85b28078fa052f540"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-1.png",
+      "sha256": "2e4fe78342e42958df1e7a10d7ba74f938d542032fd6c7f977b9f2b7169a6db8"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-10.png",
+      "sha256": "e447ec02c0d5e84a1dbed98cccb0d5bbe4defca080722377276aa28743622b85"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-11.png",
+      "sha256": "fb0d949846296ea8294e63b59ddab44fedcfe017f7b2bad911eb923bcfee2bdb"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-2.png",
+      "sha256": "7a07607464906e9fb6e75a231bf7ffca9150e6dabcbef6a6dbc7e17312c12433"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-3.png",
+      "sha256": "26267377010cce4bdfe999bc00601b3efa4806fba602f978bb0f2ac192caec53"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-4.png",
+      "sha256": "2315ed35641176c99eebdd248076c6d1895be4a5059b7b31d8e05f274f979e3a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-5.png",
+      "sha256": "72eea56c7aa6edbde850c8d12585c5d3b4739463ec10cf22ed5670f1be9829bd"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-6.png",
+      "sha256": "38bc4b9f7d9f578128aa4d3772987476af3c56779f8d20531f7fb1afd4904bfb"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-7.png",
+      "sha256": "1fd4136931361a1fd4cd8e66aca4c2f58457ed6c1f9ffc5ad83b1e698c3a109a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-8.png",
+      "sha256": "7e136d067a5fa34d054f46caefd34ad9a91bc5ed9dea71196ba3f3da3dd24c3e"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-759-9.png",
+      "sha256": "0a53dc03135c33f31a6665989d23b641aac3544728e3c9b0db1966d202864585"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-0.png",
+      "sha256": "7d446549e74adedc5bfd18f030f536c9822aad3f2c8099c3827b0dc52368e5a4"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-1.png",
+      "sha256": "38d95d7a631951337f218d2796679a44576492e439aa26eec552fe3da4c76162"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-10.png",
+      "sha256": "63b77fabff5bbad21a58575df5e983ae9c93515833b1655aaba63a3028b55919"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-11.png",
+      "sha256": "5ec9b56c207d93d5420af72ae0d086cf9bd10c5cb75c61b554e5144eec17f972"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-2.png",
+      "sha256": "9ab31addcbb9058ab52b1212bd8a276fc433553fb361ed769acf1078d4789dcd"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-3.png",
+      "sha256": "93dd1baccf8ec70e12f5c53e96fbe0baa5771c3cc012b391fe8a364005e420d2"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-4.png",
+      "sha256": "a7437d2ee5595c4e8256e08badf1904e74756127b7734d8e33b648f8129c200b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-5.png",
+      "sha256": "59ba7f23837bb8e3962cdbcc833d7abf4914011b20e0f83a586a6d3364f93b32"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-6.png",
+      "sha256": "0fbe620a6ef387315b82dd3ba6b769d6a2aa69e6924d10d04ecfcebbc951a980"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-7.png",
+      "sha256": "ba8a72f4f9d3b9084ae1916eddce33517fc8852ec5f600d950f47de643ddf115"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-8.png",
+      "sha256": "fc48d96cbde24343afcce09eec554b536e29e0da230e5d6dc0c3658cba3899a0"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-760-9.png",
+      "sha256": "5abafbb9f0365252819097c33bc106bebca4430c2b2ac29b7218ce7173a5ee6b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-0.png",
+      "sha256": "d717622df485149af0f0773374a01e12e562ebc9b5b468daf3fc34e434126a79"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-1.png",
+      "sha256": "2dee316690a675d05c164e52461cdc9bdd750c79b4f0d6d02ef9c683fcf3e79b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-10.png",
+      "sha256": "0b84e48baa3daa5ddfd11f73a4351cf410e1d36d8ad4187e24294f3252f8d55b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-11.png",
+      "sha256": "be1f13487a4c5b63e3249eb6de7da4143b07aa8cce4a3a9930e53ba3a634f6ac"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-2.png",
+      "sha256": "4f599bb34acb5dc45fe0ceb583c9c2a480c22c576329e5cd58190657fc15170f"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-3.png",
+      "sha256": "57ea1f0b7232eb98df7e246a7a9d1d77abeada979a87b43b160550079cb906d7"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-4.png",
+      "sha256": "87be8ff3938ba608bedc4356b5cb49945320cd0f77f69befc8b5677065694886"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-5.png",
+      "sha256": "4a6d9bb4408f73d5b7039b6b24733c30a39f3ce2fb0c4ecfaf4ecb06fcdc8a33"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-6.png",
+      "sha256": "112a8d4aac6b2bba8bcdbf52911c15c4c3ef10a143ab1f08d752aa75e6122a68"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-7.png",
+      "sha256": "276686900ccb03bfd9d580910be8ddb1d73081e2fcbf776646021bf9f59115d7"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-8.png",
+      "sha256": "7eb7c02199a868cde61aa3c3d564e380d16bdd2e708bd9f4907e45097fdef79b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline-slide-761-9.png",
+      "sha256": "f80821f336366e6e577b97a440ddce3bf7b369c1750e7dd178518d8fdceb18f4"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\document-outline.pdf",
+      "sha256": "ccc91b074428cab19ae5ff3e5b3bb83efaf0637559a383993961c103c990d4ee"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-geometric.txt",
+      "sha256": "241defbee06da9493fcc90eb66bc2e37106c9e6ee7bfed2878ad32b430bdda1e"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-reading-1920-0.png",
+      "sha256": "755ae8a3df7b10a08adb9da2d2fff37c6ffacf0936909e618a22266bd23ab9f8"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-reading-1920-1.png",
+      "sha256": "487124192c1750f47e21494f11a8ebfe6cb0eb8f65a242c43a84c7d2fc69fd41"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-reading-1920-2.png",
+      "sha256": "1fd853d1f8a8b1cfea109785830b514efce6977a85e39db670957659e2da82ab"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-reading-1920-3.png",
+      "sha256": "06adb91d17021db11bb3d2a4b55a05eef89e7beec7bcae71cc70fe3d3526c70d"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-reading-390-0.png",
+      "sha256": "b31635a3531a5fab8b0fa228a1d9985415a6b0f60f2738c978d7a25c72d73bc7"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-reading-390-1.png",
+      "sha256": "3e83452331d43a741798084a26e03d87d28bc8cf4a24bb3e16091114ebdd6e3f"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-reading-390-2.png",
+      "sha256": "6de8dc22da4fba47f4138bde787a8a57fd69887f3ea3c98e7fa94cd3fa5fb2b7"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-reading-390-3.png",
+      "sha256": "12ead651b6c23ee43e6bfb98e27fd04ab9fd09275119ae00ab536578e5987abc"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1024-0.png",
+      "sha256": "416231713cf30d4dcdfd62b15c4d4aac27bb851f809d838ba4b073dacc9e4daa"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1024-1.png",
+      "sha256": "e27ffca140473d71e0ed5a984249f7c09905a5dc152003a9ba5a2ace699d3cfb"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1024-2.png",
+      "sha256": "f09d09242e803895b8a2035c60ae1f102a4dd4100e1b2589db1cb7d1783f83f7"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1024-3.png",
+      "sha256": "d688f77aeff0d4c51145a4290829c26ddce8ba16ecc00d4bdcb86f3f63592d37"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1366-0.png",
+      "sha256": "56d981747a4a7aa202b6c951d6e59a3d2c5bf4a0cfc5f83b06c7025f4a75c366"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1366-1.png",
+      "sha256": "ff9b8b389fc5cd18fedbd93288519306b731579a5e9cfc88656f5ccef7777848"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1366-2.png",
+      "sha256": "dd81f805689fd1953209698fef1fc7fc767f77397a1925bc9d2045e65caf8f21"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1366-3.png",
+      "sha256": "e6abf96fefc3bb9d9602ced6a685f15986971210f8891bd822737708bbd5711e"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1920-0.png",
+      "sha256": "fb4c72c70650a709168506987e512dc4e8947d5eed213fbcbe30a5560f9872d4"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1920-1.png",
+      "sha256": "6ac44799714ddebc0fc5cbbd166cb1f8b1bb6479a6934028875aae7d6f0e3fa7"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1920-2.png",
+      "sha256": "84a39d75b3dfc59eb1b4f6a36f002b81d6e071201f35a072060aaa4e16b11da9"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-1920-3.png",
+      "sha256": "ceacf81e95e98b9833eb255bbbae77fe47038f8884917e79f66dfc32e759128e"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-2560-0.png",
+      "sha256": "34ac9ead0fa40393ddf4ec75179ae1ff8528c72fdbdfd98e0d3b7ec23aed1816"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-2560-1.png",
+      "sha256": "168a040f472e026208793d8eabb86bb37cc9724e469cc44b1bfbc405e9cfd053"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-2560-2.png",
+      "sha256": "193f658fd8ba273b5b28b3086be977fd3cae83094f3df2226e8d7b33de507fee"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-2560-3.png",
+      "sha256": "06e40c003a8c9ea91621caca9899e0cc5c0c7fad37a5a2f8c60ea4d67d0e9373"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-390-0.png",
+      "sha256": "66856c07479c70400bffb372cced31e89b1bb4821d5a1eb5be4a7369b4ace5c0"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-390-1.png",
+      "sha256": "e3ce11062a9f79a20024966e81bf8f36991ab8d3bc9a03e6bb03d3544220c512"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-390-2.png",
+      "sha256": "a59331257d9b5767ab87296550e588b19c253b7ed7ffc4efed869d5b65b940e1"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-390-3.png",
+      "sha256": "1803b550c143c7e534f2eec7ed633c01d4e508f0858c61c5bd66f60e947e3862"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-759-0.png",
+      "sha256": "2e8c135f5c53bd2d364aa53826212f029813755d72fb87d3c3702d5e4ca7855c"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-759-1.png",
+      "sha256": "a7ef931f59e7f3cbe44d5dfca1f2eb16a36671ff96e5600ef5abafade38a2b34"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-759-2.png",
+      "sha256": "ed82c751394dbfd8ed4b09ccb6397ef249901fa852f301017047fe58eedc868c"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-759-3.png",
+      "sha256": "1f7bbbcb52e98d0f7163d611ae4eeb9fe11c9edbbf4985267cd8c72d2add045e"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-760-0.png",
+      "sha256": "34d970a3d645eb6b118b2de920e0b8887044f89610405d6e9e3b940c6a77cda9"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-760-1.png",
+      "sha256": "de39e32db09abf52e5dffe2546d8db0e180974f389c2cda7a1824247b22c1477"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-760-2.png",
+      "sha256": "bf037ace41f660a5dd31c9bffdc08c61a7c23c2a12692c733ad4fa0fd515ac03"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-760-3.png",
+      "sha256": "2214a0f7e440cc1f227f3a81bf457c0e3f2086ec6e8929f7d39a073ec872cb5f"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-761-0.png",
+      "sha256": "3e4f332deafb94f0c428cb8088b4cf4a3a2438be14e39e1df2b2a643e817c42a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-761-1.png",
+      "sha256": "13ee162471efe3f07e27b2e6fe6f9386d8d261af365668d68236f08799fa15d3"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-761-2.png",
+      "sha256": "d19d362ba0ede978dd70824ab720eecc627041b820a189d9c033e969663147c0"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery-slide-761-3.png",
+      "sha256": "7d3d8ffe3808929b71c845321ba0ebdf2b3f87ea96ec1a4d3ef495e34df7006c"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\generation-recovery.pdf",
+      "sha256": "7e767f0954cd01d379e684f8490e074d73a4eea971908f482bdcf29a21d26d96"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-geometric.txt",
+      "sha256": "c7faa5f569bbbaad79dc6008db7266f429c00e4c8f9a78f279dce00ccf29d608"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-reading-1920-0.png",
+      "sha256": "75d7a84ad3117171fe0c4f4fbf9b1143353f0583c6a8ef3e132189709c8dddb4"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-reading-390-0.png",
+      "sha256": "83de47fd9d6e44a0d4b49a659632d3b401c747ea4ae2d9fd6c3c4f1d67b7c048"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-1024-0.png",
+      "sha256": "a16517ea145a7f16a01d4bce33754d806fab3d41f1b875a1ee8af8abece6844c"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-1024-1.png",
+      "sha256": "5ea2034d0dfcc2f9aecdfcfc385df668f5dae2272fafe93eaa4d99bcba2f647c"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-1366-0.png",
+      "sha256": "a28790e32113a050757dbbe9ab7d8fdd281615d6ec3be30e709bcb56cafa4180"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-1366-1.png",
+      "sha256": "cc89b197feb143c112e95271bed31e2590f43eb077e4dc0926d3ebb621c78bc2"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-1920-0.png",
+      "sha256": "552fbb4d96692b4e2a5d2596427d3837ccc4cfb9bd9b46a6bae7db9f68e8e8c4"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-1920-1.png",
+      "sha256": "2d95b4d872594039bdb41d5f0f9eb8a2a60bebf62a04d59561d5001d9a81e0d2"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-2560-0.png",
+      "sha256": "ac68e914d7b0445fc78f083e2b3932d827ecf313f61f7dba258b3046df742de0"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-2560-1.png",
+      "sha256": "d797d617df6dd115e5d67c20e2036956ee3e2913bd6e09ed9b94c20abaa4f322"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-390-0.png",
+      "sha256": "c3e56b5da3ce4c323b26ad865c6e2151f01d64a6291e10cb0d104357cb49bbee"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-390-1.png",
+      "sha256": "88780b86b1d9c0d7f0ac47091035c6e91d4728c12af86b48deee507fbd172cbb"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-759-0.png",
+      "sha256": "f390093a2413d14b34b013c8bc5b3189499ba40895f484cf594ca82b7bb992b6"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-759-1.png",
+      "sha256": "030a24c67d01ac815be212d73da83ea61509147c7cf58b89b2c29790ca964263"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-760-0.png",
+      "sha256": "9e96c93f71cbe045222c6e89696c24cf0a623e0276f0d12e619a0526193b45bc"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-760-1.png",
+      "sha256": "7337f850816d2f0222186a26bab16718ecca38e2bd2ffc2dadf2875428a2a73a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-761-0.png",
+      "sha256": "0142816b5c1db18b2c50b65dfa3a28e776d246b892abd6baf84d792945f70bf5"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime-slide-761-1.png",
+      "sha256": "6f44c132a204394ddb39000cef4009d8f5b9853c1b638f805b7119bd9ba183ac"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\installer-runtime.pdf",
+      "sha256": "3902e98ee18b168c6bbcf83af706e689a61dbae59f7bf27ad440ce992d87abe1"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-geometric.txt",
+      "sha256": "f6972cb15a6b4be1d64b0c93377ff54503cc47d8674b5722e17c7848c083dd9a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-reading-1920-0.png",
+      "sha256": "b7cc8a6215cd325ef69c2818e34279e93d970732c81c06372223fb7adbfa957f"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-reading-390-0.png",
+      "sha256": "fd316dd2e9ca14d7ee4fb05ab0ffcf210dfaee6332a2553a0d9a273a4112af2d"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-1024-0.png",
+      "sha256": "284323c835a22e3469ada253dc30906d93dda60522d4402e492482907b9cb73a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-1024-1.png",
+      "sha256": "e77ef2b76f923e1fcae0f5e44d2111f509b6fb7c5317dc8b197ca6f551aaec34"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-1366-0.png",
+      "sha256": "46ad2119b82092c5baca834c8f984cbb98209d33882cbea31846bc0702bef77a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-1366-1.png",
+      "sha256": "12e4b20893691cb62e1edf12ac5dfbccd37044f390b1ad6e0f5f50c811ed915b"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-1920-0.png",
+      "sha256": "9ddc2e989014072ddff1d9bcd092dc57bb60f084a150df5878c709a7805b88da"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-1920-1.png",
+      "sha256": "4399eb98db339ba9f68a1b53c57a2cd3d3ec41b12dc57cea2290726a3f5a31ea"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-2560-0.png",
+      "sha256": "992bf91ee295c9d22600751162d6a76cd33f9003c5d2547fd5e8f8de22aa9fab"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-2560-1.png",
+      "sha256": "dd5a9e868a6d9a5b798a7f0b4a0531477d8beae406415f61ee866cd4b1b748e1"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-390-0.png",
+      "sha256": "a734dc59d3797dbcf592826fd920fde3e1158a32eab8645b5b9428dc2530a7bb"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-390-1.png",
+      "sha256": "9a8a6d7007e68955c2df8b50c7c05b67dd472ae467ea8803ff259e4ee0309800"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-759-0.png",
+      "sha256": "3ae39af6cfc61eb782a8c7c78a60db8b251fdbd6e780bab1dcf75732d17b24ef"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-759-1.png",
+      "sha256": "2c43ab86ee8abf51295a5a757c3596fbd1f3d7a1c1ac98db22f04387d98007c9"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-760-0.png",
+      "sha256": "2784976a2b3c45482878fdf344b892445333cc9c076cc7ba2931aad14aae7f33"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-760-1.png",
+      "sha256": "fb8912ff0728b7614e8c0760e2cf903d2a843a8c156d3cc35fb45defd2254927"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-761-0.png",
+      "sha256": "f124f611a244ae0fc0b8f0e5815df6c80ec092d66b4ed56d34b34a1d761b959a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime-slide-761-1.png",
+      "sha256": "5d9e0503c885801bec46799a9d9c47c2eebf64cd93f487a9858b90493690c6f3"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\media-runtime.pdf",
+      "sha256": "7df825212b255d201fe0a89d058b70433163a127f45f62652785e0e40552ef7e"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\render-observations.json",
+      "sha256": "a6dbedc0105073a8539aa467e16053b455240ff61de9828d14bd11239c938de0"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\source-build-geometry.json",
+      "sha256": "1fb842b496170e9d2720f3e87117b1fca6cd9f103f51c7221faccc3db6519b8e"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-geometric.txt",
+      "sha256": "b8f76887fa038684f712ea8b6c096060a8d70abb18cecd59d06c8b43da7bed87"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-reading-1920-0.png",
+      "sha256": "0777df05d17a6ff3f78fd174a50127515c53ec8453bb40432a1dba1e050bb226"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-reading-390-0.png",
+      "sha256": "b0b53b22a247ab1c03536bb4f164cdafce75da63e57e1f8ce994f651b87c6a5f"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-1024-0.png",
+      "sha256": "a8ed015613216e04d010f550c93dca2325fdac3f15fa25935d673dc06cd84423"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-1024-1.png",
+      "sha256": "6c638ed6f7ab87a6be551d5f33e6d9c64d692e2eaa08d971b60e0061d0cd87fc"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-1366-0.png",
+      "sha256": "be63a3b05dee4f9165a8a1f415f8c73d03d19626e1f108a80275d4d5b8d5ac10"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-1366-1.png",
+      "sha256": "7067865eb342b7f1eae17d40442c6267cbd10e0e02bdd36d8dfbf4b76e8fc4e6"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-1920-0.png",
+      "sha256": "7519149460970723a51ca600fa4405ad5dbcf683a8266961b742d3ce2248bd99"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-1920-1.png",
+      "sha256": "716c5ffa559cad8660ee23aa0eb442a1ac2a976bccc2db8a3df382a580ee5338"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-2560-0.png",
+      "sha256": "49f2f500a1898edd6bdd2ec8dbfec051fa779ec2258aa0d8cb07ccf5fdfdcce7"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-2560-1.png",
+      "sha256": "75582545a76cd4a833d5a975c11f602ac6036385b94fbfeae5b36f305145780a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-390-0.png",
+      "sha256": "271f727e3530d9fd99f47e1525b5c76ae2c8c2981d7b447a1893452ca5612712"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-390-1.png",
+      "sha256": "0605c0c43d5e21cfe60ad544f5e273e73c00ffaf05ebad868539ff3a8271096a"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-759-0.png",
+      "sha256": "7ea09e72b702941eae5d96801eec1e8b585d51e838158686e8db015fd4a7a8e9"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-759-1.png",
+      "sha256": "0613b43804475c3cbdfc3801d14a733812085aeeeaa5aa10e51efb2c1465176f"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-760-0.png",
+      "sha256": "5fc8e05f06bb863e6128c7b4b92d4696f958e06fbacfb58e6418641c5edb8564"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-760-1.png",
+      "sha256": "1b5c193197ec8670d841ceeff88024d1fdfc08455ca42cb8f07112e9ea61b80f"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-761-0.png",
+      "sha256": "0bb63c569cae2c56f37dfc8df4a448f3d771a40032e6f86d730801367b49323f"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces-slide-761-1.png",
+      "sha256": "217b1dbc2bc9dfe128f9efede2753f8de84f440c97730902768f93d3eebd93d2"
+    },
+    {
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\proof-si8nr811\\transcript-and-workspaces.pdf",
+      "sha256": "18865f10da966008afef4d63ce97c4d72ff042452a1e42b8dc9635ce7db96a8d"
+    }
+  ],
+  "portability": {
+    "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\portability-observations.json",
+    "sha256": "a39e8b71d2505eae6abdc90ecde3f1152d94ca56758d12146e8bc7682dc838b5"
+  },
+  "map_sha256": "c4dc8411ceb9558fefe48067eba12ff55b222d185d6e38cc7909342afb433035"
+}

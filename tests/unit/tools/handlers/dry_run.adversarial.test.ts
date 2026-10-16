@@ -89,7 +89,9 @@ function buildCommand(rng: Lcg): string {
 }
 
 describe("dry_run adversarial sweep", () => {
-  it("spawn is NEVER called across 200 fuzzed run_terminal(dry_run=true) inputs", async () => {
+  // 200 sequential handler calls (about 1.5 s alone, measured 2026-10-15)
+  // exceeded the 5 s default under the full suite's workers with coverage.
+  it("spawn is NEVER called across 200 fuzzed run_terminal(dry_run=true) inputs", { timeout: 30_000 }, async () => {
     const rng = new Lcg(0xdeadbeef);
     const tool = new RunTerminalTool();
 

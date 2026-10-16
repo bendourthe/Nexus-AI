@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "scope": "Separate development material, never tune against held-out labels",
+  "chunks": [
+    {
+      "id": "dev-cache-budget",
+      "text": "Diffusion-high defaults permit 10 GiB VRAM cache, 24 GiB RAM cache and a 2 GiB working reserve."
+    },
+    {
+      "id": "dev-studio-root",
+      "text": "Studio session paths are resolved under the user generation storage root; media remains on disk."
+    }
+  ],
+  "queries": [
+    {
+      "id": "dev-1",
+      "text": "How much working memory is reserved for high diffusion?",
+      "relevant": [
+        "dev-cache-budget"
+      ]
+    },
+    {
+      "id": "dev-2",
+      "text": "Where are studio session paths based?",
+      "relevant": [
+        "dev-studio-root"
+      ]
+    },
+    {
+      "id": "dev-none",
+      "text": "What is the cloud payroll service password?",
+      "relevant": []
+    }
+  ]
+}

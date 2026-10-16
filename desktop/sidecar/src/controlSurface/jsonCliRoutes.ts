@@ -19,6 +19,8 @@ import type { StudioRuntime } from "../generations/studioRuntime.js";
 import { createWorkspaceScope } from "../../../../core/project/WorkspaceScope.js";
 import { WorkspaceScopeStore } from "../../../../core/project/WorkspaceScopeStore.js";
 import { redactSecrets } from "../../../../core/observability/redactSecrets.js";
+import { handleImageEditRoute } from "./imageEditRoutes.js";
+import type { ImageEditOps } from "../studio/imageEditRuntime.js";
 import * as nodePath from "node:path";
 
 export interface ObservationLogRecord {
@@ -108,6 +110,8 @@ export interface JsonCliRouteDeps {
   readonly captureWindow?: (request: WindowCaptureRequest) => Promise<WindowCaptureResult>;
   /** Extra literal secrets (loopback tokens) to scrub from log lines. */
   readonly redactLiterals?: readonly string[];
+  /** v2.13.0: the sidecar's image-edit runtime, shared with the desktop viewer. */
+  readonly imageEdit?: () => Promise<ImageEditOps>;
 }
 
 function queryId(path: string): string | null {
@@ -277,6 +281,8 @@ export function createJsonCliRoute(deps: JsonCliRouteDeps): ControlSurfaceRoute 
         const job = deps.studio.queue.get(id);
         return write(200, { job: job ?? null });
       }
+
+      if (await handleImageEditRoute(deps.imageEdit, ctx, path, prefix, write)) return true;
 
       return write(404, { error: { code: "unknown_route", message: `No JSON CLI route for ${ctx.method} ${path}` } });
     } catch (err) {

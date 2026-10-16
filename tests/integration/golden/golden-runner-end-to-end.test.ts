@@ -26,7 +26,10 @@ const REPO_ROOT = path.resolve(__dirname, "..", "..", "..");
 const SNAPSHOTS_ROOT = path.join(REPO_ROOT, "tests", "golden", "snapshots");
 const TASKS_DIR = path.join(REPO_ROOT, "tests", "golden", "tasks");
 
-describe("golden runner end-to-end (dry path)", () => {
+// Same snapshot copy and cleanup as the mock-live block below (about 2.5 s
+// alone, measured 2026-10-15); under the full suite's workers it exceeded the
+// 5 s default, so it gets the same bound.
+describe("golden runner end-to-end (dry path)", { timeout: 30_000 }, () => {
   it("materializes a real snapshot and reports failure for the untouched tree", async () => {
     const spec = loadGoldenTask(path.join(TASKS_DIR, "multi-file-rename-01.yaml"));
     const result = await runGoldenTask(spec, { mode: "dry", snapshotRoot: SNAPSHOTS_ROOT });

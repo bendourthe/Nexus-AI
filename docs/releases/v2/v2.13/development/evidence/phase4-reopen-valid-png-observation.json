@@ -1,0 +1,55 @@
+{
+  "observedAt": "2026-10-14T18:06:33.145368+00:00",
+  "observations": [
+    {
+      "mode": "create",
+      "pid": 43180,
+      "revision": 6,
+      "cursor": 2,
+      "commands": 3,
+      "marks": 1,
+      "originalSha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9",
+      "sameSource": true,
+      "scope": "Built store facade in separate processes; fixture-owned grant, no UI or human issuer claim."
+    },
+    {
+      "mode": "reopen",
+      "pid": 57396,
+      "revision": 7,
+      "cursor": 3,
+      "commands": 3,
+      "marks": 2,
+      "originalSha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9",
+      "sameSource": true,
+      "scope": "Built store facade in separate processes; fixture-owned grant, no UI or human issuer claim."
+    }
+  ],
+  "pngValidation": {
+    "chunks": [
+      {
+        "kind": "IHDR",
+        "validCrc": true
+      },
+      {
+        "kind": "IDAT",
+        "validCrc": true
+      },
+      {
+        "kind": "IEND",
+        "validCrc": true
+      }
+    ],
+    "decodedScanline": [
+      0,
+      255,
+      255,
+      255,
+      255
+    ]
+  },
+  "independentProcesses": true,
+  "sameCommittedHistory": true,
+  "unchangedSource": true,
+  "tier": "internal-compatible; real core facade and valid PNG fixture; fixture grant; renderer/IPC/human issuer not observed",
+  "priorFixtureDisposition": "First facade smoke used an invalid-raster PNG; its state-only evidence is retained separately and is not renderer evidence."
+}

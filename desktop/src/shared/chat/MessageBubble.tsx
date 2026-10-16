@@ -28,6 +28,7 @@ import {
 import { ReasoningDisclosure } from "./ReasoningDisclosure";
 import { BranchControl, type BranchControlProps } from "./BranchControl";
 import { MermaidDiagram } from "./MermaidDiagram";
+import type { DurableImageEdit } from "../studio/imageEditClient";
 import { splitMermaidFences } from "./mermaidLimits";
 import {
   MediaRuntimeRecoveryCard,
@@ -61,6 +62,8 @@ export interface MessageBubbleProps {
   onMediaError?: (message: ChatMessage) => void;
   /** v2.2.4 Phase 4 -- extra studio actions inside the media lightbox. */
   renderPreviewExtra?: (message: ChatMessage) => ReactNode;
+  /** v2.13.0 -- durable edits for a persisted Image Studio image. */
+  durableImageEdit?: (message: ChatMessage) => DurableImageEdit | undefined;
   /**
    * v2.4.9 -- per-message actions rendered ON the timestamp row.
    *
@@ -118,6 +121,7 @@ export function MessageBubble({
   enableTools = true,
   onMediaError,
   renderPreviewExtra,
+  durableImageEdit,
   metaActions,
   locale,
   onRepairMediaRuntime,
@@ -321,6 +325,9 @@ export function MessageBubble({
                   downloadName={`nexus-${message.id}`}
                   onClose={() => setPreviewOpen(false)}
                   testId={`message-media-dialog-${message.id}`}
+                  {...(durableImageEdit?.(message)
+                    ? { durable: durableImageEdit(message) }
+                    : {})}
                   {...(renderPreviewExtra
                     ? { extra: renderPreviewExtra(message) }
                     : {})}

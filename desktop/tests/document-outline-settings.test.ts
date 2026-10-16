@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   DOCUMENT_OUTLINE_SETTING_KEY,
@@ -11,6 +11,8 @@ import {
 } from "../sidecar/src/coding/sidecarHeadlessTools";
 import { createHandlerContext, dispatch } from "../sidecar/src/handlers";
 import { IPC_METHODS, METHOD_SCHEMAS } from "../sidecar/src/protocol";
+
+afterEach(() => { vi.unstubAllEnvs(); });
 
 describe("coding.documentOutline settings IPC", () => {
   it("declares status and setEnabled", () => {
@@ -35,6 +37,35 @@ describe("coding.documentOutline settings IPC", () => {
     };
     expect(after).toStrictEqual({ enabled: true, summariesEnabled: true });
     expect(await settings.get<boolean>(DOCUMENT_OUTLINE_SETTING_KEY)).toBe(true);
+  });
+
+  it.each(["1", " true ", "on", "yes", "0", "false", "off", "no"])("reports recognized override %s without changing stored preferences", async (value) => {
+    vi.stubEnv("NEXUS_DOCUMENT_OUTLINE", value);
+    vi.stubEnv("NEXUS_DOCUMENT_OUTLINE_SUMMARIES", "1");
+    const settings = new InMemorySettingsStore();
+    const ctx = createHandlerContext({ pid: 1, platform: process.platform });
+    ctx.settings = settings;
+    await dispatch("coding.documentOutline.setEnabled", { enabled: false, summariesEnabled: false }, ctx);
+    const status = await dispatch("coding.documentOutline.status", {}, ctx);
+    expect(status).toEqual({
+      enabled: ["1", " true ", "on", "yes"].includes(value),
+      summariesEnabled: ["1", " true ", "on", "yes"].includes(value),
+      storedEnabled: false,
+      environmentOverrides: { enabled: true, summariesEnabled: true },
+    });
+    expect(METHOD_SCHEMAS["coding.documentOutline.status"].response.parse(status)).toEqual(status);
+    expect(await settings.get(DOCUMENT_OUTLINE_SETTING_KEY)).toBe(false);
+    expect(await settings.get(DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY)).toBe(false);
+  });
+
+  it("does not claim invalid environment values override the stored state", async () => {
+    vi.stubEnv("NEXUS_DOCUMENT_OUTLINE", "invalid");
+    vi.stubEnv("NEXUS_DOCUMENT_OUTLINE_SUMMARIES", "");
+    const settings = new InMemorySettingsStore();
+    const ctx = createHandlerContext({ pid: 1, platform: process.platform });
+    ctx.settings = settings;
+    await dispatch("coding.documentOutline.setEnabled", { enabled: true, summariesEnabled: true }, ctx);
+    expect(await dispatch("coding.documentOutline.status", {}, ctx)).toEqual({ enabled: true, summariesEnabled: true });
   });
 });
 

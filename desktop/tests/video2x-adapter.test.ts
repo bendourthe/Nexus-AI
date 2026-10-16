@@ -1728,7 +1728,13 @@ describe("Video2X staged execution", () => {
         childJobId: "hash-deadline",
         signal: new AbortController().signal,
       });
-      await sourceHashStarted;
+      // A run that settles before hashing the source would otherwise leave this
+      // await pending until the test timeout; surface its result instead.
+      const settledEarly = await Promise.race([
+        sourceHashStarted.then(() => undefined),
+        runPromise,
+      ]);
+      expect(settledEarly).toBeUndefined();
       await vi.advanceTimersByTimeAsync(100);
       const runResult = await runPromise;
       expect(runResult).toMatchObject({

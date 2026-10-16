@@ -1,0 +1,311 @@
+{
+  "supportTier": "internal-compatible",
+  "scope": "Real public HeadlessAgentSession, real headless Ollama HTTP serializer and real workspace Markdown tools against a controlled loopback NDJSON fixture; no actual Ollama inference, extension host, installed app, answer-quality score or M5 qualification.",
+  "expected": {
+    "finishReason": "done",
+    "finalText": "PROTOCOL_DONE",
+    "httpTurns": 4,
+    "toolResults": 4,
+    "sameTurnSecondReadSmaller": true,
+    "compactionObserved": true,
+    "originalTaskRetained": true,
+    "nativePairsIntact": true,
+    "onlyLoopback": true
+  },
+  "actual": {
+    "result": {
+      "finishReason": "done",
+      "iterations": 4,
+      "toolCalls": 4,
+      "llmCalls": 4,
+      "finalText": "PROTOCOL_DONE"
+    },
+    "httpTurns": 4,
+    "toolResults": 4,
+    "readOutputLengths": [
+      16654,
+      4885,
+      13706
+    ],
+    "compactions": [
+      {
+        "kind": "compaction",
+        "elided": 2,
+        "charactersSaved": 18057
+      },
+      {
+        "kind": "compaction",
+        "elided": 1,
+        "charactersSaved": 4952
+      }
+    ],
+    "originalTaskRetained": true,
+    "nativePairsIntact": true,
+    "fetches": [
+      "http://127.0.0.1:50159/api/chat",
+      "http://127.0.0.1:50159/api/ps",
+      "http://127.0.0.1:50159/api/chat",
+      "http://127.0.0.1:50159/api/chat",
+      "http://127.0.0.1:50159/api/chat"
+    ]
+  },
+  "environment": {
+    "node": "v24.13.0",
+    "platform": "win32",
+    "workdir": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-protocol-workspace-ETpQSO",
+    "endpoint": "http://127.0.0.1:50159"
+  },
+  "taskSha256": "41eba5483e2d2f06d37634da0ddeb5c8a99fe4004c4def8717a6bf714b5bfef9",
+  "documentSha256": "c343868e842e9ce97fef643756d813fc756dbeb7c1903aefd362417275b05795",
+  "requests": [
+    {
+      "options": {
+        "num_ctx": 16384
+      },
+      "messages": [
+        {
+          "role": "system",
+          "characters": 2246,
+          "contentSha256": "a884970ff8891df467bc57cfc61f9a7f903fdb147a7910a8a2496b3937186f63"
+        },
+        {
+          "role": "user",
+          "characters": 5180,
+          "contentSha256": "41eba5483e2d2f06d37634da0ddeb5c8a99fe4004c4def8717a6bf714b5bfef9"
+        }
+      ]
+    },
+    {
+      "options": {
+        "num_ctx": 16384
+      },
+      "messages": [
+        {
+          "role": "system",
+          "characters": 2246,
+          "contentSha256": "a884970ff8891df467bc57cfc61f9a7f903fdb147a7910a8a2496b3937186f63"
+        },
+        {
+          "role": "user",
+          "characters": 5180,
+          "contentSha256": "41eba5483e2d2f06d37634da0ddeb5c8a99fe4004c4def8717a6bf714b5bfef9"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "99c95f8b-e624-44e2-918c-759ee19954a8",
+              "function": {
+                "name": "document_outline",
+                "arguments": {
+                  "path": "manual.md"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 1428,
+          "contentSha256": "97f1b88b4c86ae9ffb40efff6e0225e82cd1ad125aae50508a2a530f69af8fd7",
+          "tool_name": "document_outline",
+          "tool_call_id": "99c95f8b-e624-44e2-918c-759ee19954a8"
+        }
+      ]
+    },
+    {
+      "options": {
+        "num_ctx": 16384
+      },
+      "messages": [
+        {
+          "role": "system",
+          "characters": 2246,
+          "contentSha256": "a884970ff8891df467bc57cfc61f9a7f903fdb147a7910a8a2496b3937186f63"
+        },
+        {
+          "role": "user",
+          "characters": 5180,
+          "contentSha256": "41eba5483e2d2f06d37634da0ddeb5c8a99fe4004c4def8717a6bf714b5bfef9"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "99c95f8b-e624-44e2-918c-759ee19954a8",
+              "function": {
+                "name": "document_outline",
+                "arguments": {
+                  "path": "manual.md"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 92,
+          "contentSha256": "6b4107a63c9e99c88996ebb2be7bfbcfb2027ada8885c02a691a0f6249aa302c",
+          "tool_name": "document_outline",
+          "tool_call_id": "99c95f8b-e624-44e2-918c-759ee19954a8"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "0e0af14e-b2b8-43ac-8d40-5dbea1249080",
+              "function": {
+                "name": "document_read_section",
+                "arguments": {
+                  "path": "manual.md",
+                  "node_id": "29db2de9-9321072f5c64",
+                  "tree_hash": "83f86cf4e4e96ce3a4fc426c5e0051614ec6e0d00673a259e7e6d199468fc5bc"
+                }
+              }
+            },
+            {
+              "id": "92d67c29-27ca-469e-b1d4-ba7929cc9c03",
+              "function": {
+                "name": "document_read_section",
+                "arguments": {
+                  "path": "manual.md",
+                  "node_id": "29db2de9-9321072f5c64",
+                  "tree_hash": "83f86cf4e4e96ce3a4fc426c5e0051614ec6e0d00673a259e7e6d199468fc5bc"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 97,
+          "contentSha256": "c1a50275f6071d74c1b79624eb8203fb2d1318f4a5d9399f9f72bcc2ab917469",
+          "tool_name": "document_read_section",
+          "tool_call_id": "0e0af14e-b2b8-43ac-8d40-5dbea1249080"
+        },
+        {
+          "role": "tool",
+          "characters": 5049,
+          "contentSha256": "d976f5941d7f540c8e3844db156569033d34379ad6d01b478b2aadddb8ba12d4",
+          "tool_name": "document_read_section",
+          "tool_call_id": "92d67c29-27ca-469e-b1d4-ba7929cc9c03"
+        }
+      ]
+    },
+    {
+      "options": {
+        "num_ctx": 16384
+      },
+      "messages": [
+        {
+          "role": "system",
+          "characters": 2246,
+          "contentSha256": "a884970ff8891df467bc57cfc61f9a7f903fdb147a7910a8a2496b3937186f63"
+        },
+        {
+          "role": "user",
+          "characters": 5180,
+          "contentSha256": "41eba5483e2d2f06d37634da0ddeb5c8a99fe4004c4def8717a6bf714b5bfef9"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "99c95f8b-e624-44e2-918c-759ee19954a8",
+              "function": {
+                "name": "document_outline",
+                "arguments": {
+                  "path": "manual.md"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 92,
+          "contentSha256": "6b4107a63c9e99c88996ebb2be7bfbcfb2027ada8885c02a691a0f6249aa302c",
+          "tool_name": "document_outline",
+          "tool_call_id": "99c95f8b-e624-44e2-918c-759ee19954a8"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "0e0af14e-b2b8-43ac-8d40-5dbea1249080",
+              "function": {
+                "name": "document_read_section",
+                "arguments": {
+                  "path": "manual.md",
+                  "node_id": "29db2de9-9321072f5c64",
+                  "tree_hash": "83f86cf4e4e96ce3a4fc426c5e0051614ec6e0d00673a259e7e6d199468fc5bc"
+                }
+              }
+            },
+            {
+              "id": "92d67c29-27ca-469e-b1d4-ba7929cc9c03",
+              "function": {
+                "name": "document_read_section",
+                "arguments": {
+                  "path": "manual.md",
+                  "node_id": "29db2de9-9321072f5c64",
+                  "tree_hash": "83f86cf4e4e96ce3a4fc426c5e0051614ec6e0d00673a259e7e6d199468fc5bc"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 97,
+          "contentSha256": "c1a50275f6071d74c1b79624eb8203fb2d1318f4a5d9399f9f72bcc2ab917469",
+          "tool_name": "document_read_section",
+          "tool_call_id": "0e0af14e-b2b8-43ac-8d40-5dbea1249080"
+        },
+        {
+          "role": "tool",
+          "characters": 97,
+          "contentSha256": "c1a50275f6071d74c1b79624eb8203fb2d1318f4a5d9399f9f72bcc2ab917469",
+          "tool_name": "document_read_section",
+          "tool_call_id": "92d67c29-27ca-469e-b1d4-ba7929cc9c03"
+        },
+        {
+          "role": "assistant",
+          "characters": 0,
+          "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tool_calls": [
+            {
+              "id": "233a5ee8-4dd2-4e81-b196-836203817b33",
+              "function": {
+                "name": "document_read_section",
+                "arguments": {
+                  "path": "manual.md",
+                  "node_id": "29db2de9-9321072f5c64",
+                  "tree_hash": "83f86cf4e4e96ce3a4fc426c5e0051614ec6e0d00673a259e7e6d199468fc5bc"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "characters": 13870,
+          "contentSha256": "eb0b20c3071f8c5a7711c571be6f18eb0d36586aefc7bdef10fc34bf73eaaf5d",
+          "tool_name": "document_read_section",
+          "tool_call_id": "233a5ee8-4dd2-4e81-b196-836203817b33"
+        }
+      ]
+    }
+  ],
+  "comparison": "matches"
+}

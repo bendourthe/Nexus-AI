@@ -1,0 +1,118 @@
+name: Shell Build (Tauri + Vite)
+
+on:
+  # v1.16.0 Phase 1 (adoption item A1): `modules/**` joined the filter because the
+  # sidecar bundle imports from it (the serving gateway pulls the vscode-free
+  # `modules/coding/llm/loopback.ts` + `headlessOpenAiClient.ts`, and `main.ts`
+  # has long pulled `headlessOllamaClient.ts`). Without it a module-only change
+  # could break `build:sidecar` with no shell build to catch it. Cost stays
+  # bounded: PRs and develop pushes run ubuntu-only, and the macOS (10x) +
+  # Windows (2x) matrix is still gated to push-to-main or manual dispatch.
+  push:
+    branches: [main, develop]
+    paths:
+      - "desktop/**"
+      - "core/**"
+      - "modules/**"
+      - ".github/workflows/shell-build.yml"
+  pull_request:
+    # v2.4.4 Phase 7 (QG-5): `develop` joined this list because the
+    # integration pull request targets it. Without it a develop-targeted
+    # PR ran only commitlint, so the branch head was tested by the push
+    # trigger but the MERGE RESULT -- the thing that actually ships --
+    # never was. Path filters already keep the added cost bounded.
+    branches: [main, develop]
+    paths:
+      - "desktop/**"
+      - "core/**"
+      - "modules/**"
+      - ".github/workflows/shell-build.yml"
+  workflow_dispatch: {}
+
+concurrency:
+  group: shell-build-${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shell:
+    name: "Shell ${{ matrix.os }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        # Cost control: PRs and develop pushes run ubuntu-only (fast,
+        # platform-agnostic gate). The full macOS (10x) + Windows (2x) matrix
+        # runs on push-to-main and manual dispatch, where release-representative
+        # builds matter.
+        os: ${{ (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main') && fromJSON('["windows-latest","macos-latest","ubuntu-latest"]') || fromJSON('["ubuntu-latest"]') }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22.x"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install Linux Tauri prerequisites
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+
+      - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable
+
+      - name: Cache cargo registry + target
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            desktop/src-tauri/target
+          key: ${{ matrix.os }}-cargo-${{ hashFiles('desktop/src-tauri/Cargo.toml') }}
+          restore-keys: |
+            ${{ matrix.os }}-cargo-
+
+      - name: Install workspace deps
+        working-directory: .
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Lint frontend
+        run: npm run lint
+
+      - name: Typecheck frontend
+        run: npm run typecheck
+
+      - name: Build sidecar bundle
+        run: npm run build:sidecar
+
+      - name: Vitest (frontend + sidecar) with coverage
+        run: npm run test:coverage
+
+      - name: Cargo check (Tauri core)
+        working-directory: desktop/src-tauri
+        run: cargo check --all-targets
+
+      - name: Cargo clippy (Tauri core)
+        working-directory: desktop/src-tauri
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: Cargo test (Tauri core)
+        working-directory: desktop/src-tauri
+        run: cargo test --all-targets
+        # v2.2.8 Phase 6: cargo test covers rpc_timeout_for (T001: chat.send /
+        # generate minutes-class; ping stays 15s). No live GPU.
+
+      - name: Build frontend bundle
+        run: npm run build:web
+
+      - name: Upload coverage
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: shell-coverage
+          path: desktop/coverage
+          if-no-files-found: ignore

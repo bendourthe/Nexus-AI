@@ -1,0 +1,754 @@
+name: CI
+
+on:
+  # `branches-ignore: ["dependabot/**"]` (instead of `branches: ["**"]`)
+  # prevents Dependabot's branch-push from racing with the PR-open event.
+  # Dependabot PRs still get CI via the `pull_request:` trigger; the push
+  # event was producing a duplicate run that survived the concurrency
+  # cancellation because `github.ref` is `refs/heads/...` for push and
+  # `refs/pull/N/merge` for pull_request.
+  push:
+    branches-ignore: ["dependabot/**"]
+  pull_request:
+    # v2.4.4 Phase 7 (QG-5): `develop` joined this list because the
+    # integration pull request targets it. Without it a develop-targeted
+    # PR ran only commitlint, so the branch head was tested by the push
+    # trigger but the MERGE RESULT -- the thing that actually ships --
+    # never was. Path filters already keep the added cost bounded.
+    branches: ["main", "develop"]
+
+# v2.11.0 Phase 6.5 (QG-v270-2): read-only token by default. No step here
+# writes with GITHUB_TOKEN; a job that ever needs to must declare it.
+permissions:
+  contents: read
+
+concurrency:
+  # github.head_ref is set on pull_request events; falls back to
+  # github.ref on push. This collapses push/pull_request events for the
+  # same effective change into one run.
+  group: ci-${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+# v2.0.0 Phase 5: hardware-gated suites and skip flags are listed in
+# docs/archive/v2/v2.0/ci-hardware-gates.md (Playwright, GPU video, live STT/TTS,
+# patient-tier adapter). v2.1.0 extends that in docs/archive/v2/v2.1/ci-hardware-gates.md
+# (Unsloth live train, diffusion layer-streaming OOM rescue). Do not install
+# those stacks in this workflow. Phase 6 audit/JSON CLI/budget units run in
+# test-ts; desktop vitest (Node 22) covers sidecar IPC; pytest tests/python
+# covers diffusion budget.py.
+
+jobs:
+  # ── TypeScript ─────────────────────────────────────────────────────────────
+
+  lint-ts:
+    name: "Lint TypeScript (Node ${{ matrix.node }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["22.x", "24.x"]
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: "npm"
+      - run: npm ci --prefer-offline --no-audit
+      - run: npm run lint
+
+  test-ts:
+    name: "Test TypeScript (Node ${{ matrix.node }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["22.x", "24.x"]
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: "npm"
+      - run: npm ci --prefer-offline --no-audit
+      # v2.0.0 Phase 2: browser_* tests use InMemoryBrowser HTML fixtures.
+      # CI does not install Playwright or download Chromium. Live Chromium is
+      # opt-in locally via NEXUS_BROWSER_PLAYWRIGHT=1.
+      - run: npm run test -- --reporter=verbose --coverage
+        env:
+          CI: "true"
+      # v1.19.0 Phase 4: desktop picker/settings tests (FRONTEND_MODELS, LFM
+      # license chip) live in the desktop workspace. shell-build.yml only
+      # runs them on main; develop pushes need this step. Node 22 only so
+      # the 24.x matrix does not double the minutes.
+      # v2.2.4: the same `npm run test:shell` job covers chatbot-first
+      # routing, installed-catalog pickers, compact media, Models catalog
+      # tabs, and Hub skills.sync timeout copy. Do not add a live Hub clone.
+      # v2.2.5: the same job covers modelAliases, Models overflow/badges/chips,
+      # FolderTree row icons + chats-pane pill, Hub catalog latest stubs, and
+      # the scanner allowlist. Do not add a live GPU or live Hub clone.
+      # v2.2.6: the same job covers studio.session IPC, Image/Video remount
+      # hydrate and implicit last-output follow-up, Agents resume hydration,
+      # and Chatbot append-then-remount. No live GPU in PR CI.
+      # v2.2.7: the same job covers Settings Models context chips
+      # (128k / omit-on-null), chat/coding usage on done events,
+      # studio persist of visualUnits, ContextUsageBar 79/80 CTA,
+      # the composer picker row on Chat/Agents/Images/Videos, and
+      # MessageList once-per-day headings plus bubble time/tokens.
+      # v2.2.8 Phase 1: chat.send is not a 15s RPC; ping stays 15s; a slow
+      # chat fixture never surfaces sidecar response timeout; Ollama tag
+      # gemma4:12b marks catalog gemma-4-12b-it-gguf Downloaded. No live GPU
+      # in PR CI.
+      # v2.2.8 Phase 2: FolderTree collapse is a 56px icon rail (not an empty
+      # 24px gutter); Agents rename/delete go through FolderTree; Image/Video
+      # history panes share 280px + collapse; confirm-delete is rounded/quiet.
+      # v2.2.8 Phase 3: sidebar module nav has a top inset (not flush with the
+      # title bar); chat/coding pending orbs use size=bubble (not inline 20px)
+      # and are centered; image/video pending stays hero. No thinking-orbs
+      # package. No live GPU in PR CI.
+      # v2.2.8 Phase 4: Settings Models matches installer sort (family collapse,
+      # hideBelowVram, over-budget last); compact cards; Downloaded highlight;
+      # QuickModelSwitcher uses that order. No live GPU in PR CI.
+      # v2.2.8 Phase 5: Hub apply quarantines high-severity skills and still
+      # swaps Active to the fetched tag. test-ts covers NexusHubSyncer planted
+      # jailbreak + scanner-crash fail-closed; test:shell covers ipcSkillsClient,
+      # hub-catalog CLI, and SkillsSettings copy. Do not clone Hub. No live GPU.
+      # v2.2.8 Phase 6: T001-T012 stay in existing jobs. Cargo test (shell-build)
+      # covers rpc_timeout_for (chat.send != 15s, ping 15s). test:shell covers
+      # Gemma alias Downloaded, FolderTree 56px collapse, Models sort fixture,
+      # Hub quarantine apply. test-ts covers NexusHubSyncer quarantine.
+      # installer-tests covers catalog_tab_sort + stale 3.12.0 pack refusal.
+      # Do not add a live GPU or live Hub clone.
+      # v2.2.9 (T014): the same jobs cover the new contracts. test:shell covers
+      # composer chrome (recording-only mic indicator, Context flex 3 / picker
+      # 30%), meta-above-bubble full-word tokens with no pending meta, the
+      # pendingCaptionRotator pill (fixed list, reduced-motion, stable name,
+      # no thinking-orbs dependency), studio header render-when-children +
+      # Chats copy, composerSessionUsage visual budget, typed diffusion
+      # strings through resultGuard/dispatcher, modelPills + catalogTabs
+      # downloaded-first + Embeddings-first, hubTags normalize + SkillsSettings
+      # staged sync/quarantine copy. test-ts covers catalog visualTokenBudget
+      # rows and the PromptInjectionScanner one-pair waiver. pytest (runtimes/)
+      # covers the typed CUDA/weights/GPU kinds and pytest-only stub gating.
+      # installer-tests covers Embeddings-first TYPE_TABS, name-row fact pills,
+      # patient-tier visible + never-recommended, downloaded_first partition.
+      # Do not add a live GPU or live Hub clone.
+      - name: Desktop vitest (Node 22)
+        if: matrix.node == '22.x'
+        run: npm run test:shell
+        env:
+          CI: "true"
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        if: always() && matrix.node == '22.x'
+        with:
+          name: ts-coverage
+          path: coverage/
+          retention-days: 7
+
+  build-ts:
+    name: "Build TypeScript (Node ${{ matrix.node }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["22.x", "24.x"]
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: "npm"
+      - run: npm ci --prefer-offline --no-audit
+      - run: npm run build
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        if: matrix.node == '22.x'
+        with:
+          name: ts-build
+          path: out/
+          retention-days: 7
+
+  # v1.18.0 Phase 7: the three-OS sandbox matrix lives in
+  # .github/workflows/sandbox.yml (path-filtered). PRs still cover those
+  # files via this workflow's ubuntu test-ts job.
+  #
+  # v1.19.0 Phase 4: installer pytest + headless-smoke moved to
+  # .github/workflows/installer-tests.yml (path-filtered to
+  # scripts/installer + core/registry). Unrelated pushes skip PyQt/uv.
+
+  # ── Module catalog sync check ─────────────────────────────────────────────
+
+  catalog-sync:
+    name: docs/index.md sync check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci --prefer-offline --no-audit
+      - name: Regenerate module catalog
+        run: node scripts/generate-catalog.mjs
+      - name: Diff committed vs regenerated
+        run: |
+          if ! git diff --exit-code docs/index.md; then
+            echo ""
+            echo "docs/index.md is out of sync with src/."
+            echo "Run \`npm run catalog\` and commit the regenerated file."
+            exit 1
+          fi
+      - name: Safety-surface SSOT drift gate (perm tiers + egress denylist + secret paths)
+        run: npm run security:check
+
+  # ── Coverage gate ──────────────────────────────────────────────────────────
+
+  coverage-gate:
+    name: Coverage gate (80%)
+    needs: [test-ts]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          name: ts-coverage
+          path: coverage/
+
+      - name: Check TypeScript coverage threshold
+        # Reads coverage-summary.json (structured data) instead of scraping
+        # the lcov-report HTML with a regex. jq + awk is portable, single
+        # tool installation, and resilient to formatter changes upstream.
+        run: |
+          set -euo pipefail
+          summary=coverage/coverage-summary.json
+          if [ ! -f "$summary" ]; then
+            echo "Missing $summary -- the test job must emit the json-summary reporter."
+            exit 1
+          fi
+          lines=$(jq -r '.total.lines.pct' "$summary")
+          branches=$(jq -r '.total.branches.pct' "$summary")
+          functions=$(jq -r '.total.functions.pct' "$summary")
+          printf 'TS line coverage:     %s%%\n' "$lines"
+          printf 'TS branch coverage:   %s%%\n' "$branches"
+          printf 'TS function coverage: %s%%\n' "$functions"
+          awk -v v="$lines"     'BEGIN { exit (v + 0 < 80) }' || { echo "TS line coverage $lines% is below the 80% threshold"; exit 1; }
+          awk -v v="$branches"  'BEGIN { exit (v + 0 < 75) }' || { echo "TS branch coverage $branches% is below the 75% threshold"; exit 1; }
+          awk -v v="$functions" 'BEGIN { exit (v + 0 < 80) }' || { echo "TS function coverage $functions% is below the 80% threshold"; exit 1; }
+          echo "TS coverage gates: OK"
+
+  # -- nexus-check self-scan (v1.0.0; renamed from gemma-check in Phase 2.4) -
+  #
+  # Runs the standalone deterministic-checks CLI across the repository. The
+  # exact-count baseline accepts only reviewed historical fixtures; new,
+  # excess, or stale error findings fail. The CLI is LLM-free and the gate is
+  # "no unbaselined error-severity findings".
+  #
+  # v0.8.0 Phase 7 (post-CI): warnings (e.g. prompt-oversized) emit to
+  # stdout for visibility but do not flip the exit code. Run `--strict` to
+  # restore the legacy "any finding fails" behaviour (use only in
+  # zero-tolerance gates -- not the default for this surface).
+
+  nexus-check:
+    name: nexus-check (repository)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+      - run: npm run check
+      # v1.4.0 Phase 3 (A2) -- test-tampering rules over tests/ and the CI
+      # workflows themselves. nexus-check is dependency-free, so this needs no
+      # `npm ci`. Error-severity rules (no-focused-tests,
+      # no-tautological-assertion) gate the merge; the rest emit warnings.
+      - name: nexus-check (test-tampering rules)
+        run: npm run check:tampering
+      # v1.10.0 Phase 7 (T039) -- naming gate: fail if the load-bearing
+      # "devai-hub" enum value (renamed to "nexus-hub" in v1.10.0) reappears in
+      # source. Dependency-free (node:fs / node:path only), so no npm ci.
+      - name: naming gate (no devai-hub enum value)
+        run: npm run check:naming
+      # v1.10.0 Phase 8 (T048) -- docs-layout gate: fail if the retired
+      # docs/versions or docs/archive/versions wrappers reappear (canonical
+      # layout is docs/v<MAJOR>/v<MAJOR>.<MINOR>/). Dependency-free, no npm ci.
+      - name: docs-layout gate (canonical version dirs)
+        run: npm run check:docs-layout
+
+  # -- v0.9.0 Phase 7 (sub-task 7.5) -- PR-time fast-bench gate --------------
+  #
+  # Runs ONLY the MarkdownRenderer benches (`render ~*-token message`) on every
+  # push so a rendering perf regression is caught at PR time rather than next
+  # day in `nightly.yml`. The full benchmark suite (eviction, memory, hooks,
+  # tool execution, golden tasks) still runs nightly because those benches are
+  # slower, noisier on shared runners, or require Ollama.
+  fast-bench:
+    name: fast-bench (rendering)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci --prefer-offline --no-audit
+      - run: npm run build
+      - name: Run rendering benches
+        # `-t render` matches the three `render ~*-token message` bench names.
+        # The custom JSON reporter (`scripts/vitest-bench-json-reporter.mjs`)
+        # mirrors what `nightly.yml` uses because Vitest 1.x bench mode lacks a
+        # built-in JSON reporter.
+        run: npm run bench -- -t render --reporter=verbose --reporter=./scripts/vitest-bench-json-reporter.mjs --outputFile=bench-results.json 2>&1 | tee bench-results.txt
+      - name: Check rendering bench regressions
+        run: |
+          node scripts/check-bench-regressions.mjs \
+            --baseline tests/benchmarks/baselines/v0.7.0.json \
+            --current bench-results.json \
+            --regression-pct 20 \
+            --fail-on-regression
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        if: always()
+        with:
+          name: fast-bench-results
+          path: |
+            bench-results.txt
+            bench-results.json
+          retention-days: 14
+
+  # -- v0.9.0 Phase 7 (sub-task 7.3) -- dedicated prompt-quality gate -------
+  #
+  # `npm run check:prompts` runs the prompt-specific lint rules
+  # (prompt-no-ascii-violation, prompt-oversized, prompt-trailing-whitespace,
+  # prompt-bom, skill-duplicate-name) against the chat prompts and the skill
+  # catalog. A separate job keeps a regressing prompt-asset PR distinct from
+  # general gemma-check noise: when this job fails, the diff lives in the
+  # prompts surface, which is high-value and small.
+  check-prompts:
+    name: check-prompts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci --prefer-offline --no-audit
+      - run: npm run check:prompts
+
+  # -- VSIX packaging smoke check (v0.8.0 Phase 7 post-CI audit) ------------
+  #
+  # The extension ships as a `.vsix` produced by the canonical build script.
+  # Building it on every push catches `files`/`.vscodeignore` drift, missing
+  # assets, and native modules built for Node instead of VS Code Electron.
+  # The produced VSIX is uploaded as a 7-day artifact so a reviewer can pull
+  # it down and load it into VS Code to verify the install path manually.
+
+  package-vsix:
+    name: Package VSIX (smoke)
+    needs: [build-ts]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+          cache: "npm"
+      - name: Build VSIX with Electron native modules
+        shell: pwsh
+        run: ./scripts/build-vsix.ps1 -SkipTests
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: vsix-smoke
+          path: nexus-coding-*.vsix
+          retention-days: 7
+
+  # -- v0.8.0 Phase 6.5 (item C6) -------------------------------------------
+  # Architecture boundary check via dependency-cruiser. Fails fast on any
+  # violation; re-run `bash scripts/check-architecture.sh --verbose` to inspect.
+
+  # v2.4.9 Phase 3 -- the feature inventory has to stay true. feature_list.json
+  # claimed v0.8.0 against a product shipping 2.4.x and no job read it, which is
+  # how an inventory becomes decoration. This gates it in both directions: every
+  # evidence path must resolve, and the inventory and the two README regions must
+  # name the same features. No npm install needed -- the checker is dependency-free.
+  check-feature-drift:
+    name: check-feature-drift
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+      - run: node scripts/check-feature-drift.mjs
+
+  # v2.5.1 Phase 2: command parity. Not path-scoped. A skipped path-filtered
+  # job is treated as green by branch protection, and the commit that adds a
+  # command in a new file is exactly the commit this gate has to see.
+  check-command-parity:
+    name: check-command-parity
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+      - run: node scripts/check-command-parity.mjs
+      - run: node scripts/ci-profile.mjs --profile fast --list --json
+      - run: node scripts/ci-profile.mjs --profile full --list --json
+      - run: node scripts/ci-profile.mjs --profile platform --list --json
+      - run: node scripts/ci-profile.mjs --profile report --list --json
+      - run: node scripts/ci-profile.mjs --profile release --list --json
+
+  check-release-assets:
+    name: check-release-assets
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+      - run: node scripts/check-release-assets.mjs
+
+  check-architecture:
+    name: check-architecture
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+          cache: "npm"
+      # v0.9.0 Phase 7 (sub-task 7.6) -- Graphviz is required for
+      # `npm run deps:graph` (depcruise pipes DOT through `dot -Tsvg`).
+      - name: Install graphviz
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends graphviz
+      - run: npm ci --prefer-offline --no-audit
+      - run: bash scripts/check-architecture.sh
+      # v0.9.0 Phase 7 (sub-task 7.6) -- regenerate and publish the dep graph
+      # as a 7-day artifact so reviewers can download the post-refactor SVG
+      # without re-running depcruise locally.
+      - name: Regenerate dependency graph SVG
+        run: npm run deps:graph
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: dep-graph-svg
+          path: docs/archive/v0/v0.5/dep-graph.svg
+          retention-days: 7
+
+  # -- v0.8.0 Phase 2 (item C2) ---------------------------------------------
+  # Lifecycle bootstrap must exit 0 on Linux/macOS (init.sh) and Windows
+  # (init.ps1). Five verified steps before any work begins: install, lint,
+  # build, harness-files check, specialist-assets check.
+
+  init-check-posix:
+    name: init.sh (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: bash scripts/init.sh
+
+  init-check-windows:
+    name: init.ps1 (Windows)
+    runs-on: windows-latest
+    # Cost control: Windows is a 2x-minute runner. Validate the PowerShell
+    # bootstrap on push to main only, not on every PR (init.sh covers Linux on PRs).
+    if: ${{ github.event_name != 'pull_request' }}
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: pwsh -File scripts/init.ps1
+        shell: pwsh
+
+  # -- Python runtime tests --------------------------------------------------
+  #
+  # v1.16.0 Phase 3 (adoption item A5). `tests/python/` had NO CI job at all:
+  # the ~135 diffusion-runtime tests added in v1.0.0 Phase 6 have only ever been
+  # run by hand. Adding the OCR runtime made that gap load-bearing, so this job
+  # covers diffusion, OCR, (v2.0.0 Phase 1) the audio STT/TTS stub, and
+  # (v2.1.0 Phase 5) the Unsloth train.py --stub path, and (v2.1.0 Phase 6)
+  # diffusion budget + layer-streaming rescue (no GPU weights).
+  #
+  # No GPU, no model weights, and no CUDA stack: the runtimes import every heavy
+  # dependency lazily and ship stub engines, so `health`, `version`, the
+  # dispatcher, the error envelopes, the PDF path, native Office ingest, and
+  # audio STT/TTS stubs are exercised on a bare runner. Portable OCR + Office
+  # wheels come from `runtimes/ocr/requirements.txt` (pypdfium2,
+  # rapidocr-onnxruntime, python-docx, python-pptx, openpyxl). Audio tests do
+  # not install faster-whisper or Kokoro (`NEXUS_AUDIO_STUB=1` plus health
+  # without engines). torch/transformers and docling are deliberately NOT
+  # installed.
+
+  test-python-runtimes:
+    name: pytest (runtimes/)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: Install portable runtime deps (no torch, no GPU)
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest
+          python -m pip install --quiet -r runtimes/ocr/requirements.txt
+      - name: Run runtime tests
+        run: python -m pytest tests/python -q
+        env:
+          NEXUS_AUDIO_STUB: "1"
+
+  # -- Dependency audits ----------------------------------------------------
+  #
+  # Gate on known CVEs for both the TypeScript extension and the PyQt5
+  # installer. `npm audit` runs against production-only deps; `pip-audit`
+  # targets the installer venv (only remaining Python surface after ADR-0001).
+
+  audit-ts:
+    name: npm audit (production deps)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci --prefer-offline --no-audit
+      # v1.2.0 cycle close -- the bare `npm audit --omit=dev` fails on a
+      # documented transitive CVE chain (`@xenova/transformers` ->
+      # `onnxruntime-web` -> `onnx-proto` -> `protobufjs`) inherited from
+      # the v1.1.0 Phase 5 local-embedder shipment. The chain cannot be
+      # fixed without a semver-major dependency move (tracked as
+      # `docs/archive/v1/v1.2/known-gaps.md` entry 7.x.P1.D). The
+      # allowlist script below filters that chain by name and fails only
+      # on NEW non-allowlisted advisories at severity >= moderate.
+      - name: npm audit (production deps, allowlisted)
+        run: npm run check:audit-prod
+
+  # Visibility-only audit covering both prod and dev dependencies. Captures
+  # the full CVE picture (including build/test toolchain) without gating the
+  # merge -- runs with continue-on-error so a new dev-dep CVE never blocks a
+  # release. Artifact retention lets us spot drift over time.
+  audit-ts-dev:
+    name: npm audit (dev + prod, non-blocking)
+    runs-on: ubuntu-latest
+    continue-on-error: true # nexus-check-allow: no-disabled-ci-check -- visibility-only dev+prod audit; intentionally never gates a merge (see job comment above)
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci --prefer-offline --no-audit
+      - name: npm audit --audit-level=high (json)
+        continue-on-error: true # nexus-check-allow: no-disabled-ci-check -- non-gating JSON capture for the uploaded artifact; failure is tolerated by design
+        run: npm audit --audit-level=high --json > audit-dev.json || true
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        if: always()
+        with:
+          name: audit-dev
+          path: audit-dev.json
+          retention-days: 30
+
+  audit-py:
+    name: pip-audit (installer venv)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f # v4
+        with:
+          version: "latest"
+      - name: Cache pip-audit advisory DB
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/pip-audit
+          key: pip-audit-${{ runner.os }}-${{ hashFiles('scripts/installer/uv.lock') }}
+      - name: Export installer dependencies to requirements-audit.txt
+        # `--no-emit-project` excludes the local `gemma-code-installer` package
+        # from the audited set; pip-audit cannot look up an unpublished package.
+        run: |
+          cd scripts/installer
+          uv export \
+            --no-hashes \
+            --no-annotate \
+            --format requirements-txt \
+            --no-emit-project \
+            > requirements-audit.txt
+      - name: Run pip-audit
+        run: |
+          cd scripts/installer
+          uv run --with pip-audit -- pip-audit --strict -r requirements-audit.txt
+
+  # v2.4.9 Phase 2 -- the three requirement sets that actually reach a user
+  # machine. A SIBLING job, deliberately not a matrix dimension on audit-py:
+  # that job is built around a uv project (its cache key is the installer's
+  # uv.lock and it runs `uv export`), and the runtime sets are plain
+  # requirements.txt with no lock file, so neither the key nor the export
+  # transfers.
+  #
+  # Resolution strategy, decided in Phase 2 and stated here because it changes
+  # what the numbers mean: the runtime sets are audited RESOLVED, not as
+  # written. They carry no exact pins at all (runtimes/diffusion pins nothing;
+  # the other two carry only `>=` floors), so "as written" has no version to
+  # check an advisory against. Resolving is also what matches a user machine,
+  # where the installer builds the venv from wheels resolved at payload-build
+  # time. pip-audit resolves each requirement to the latest matching version,
+  # which is what a fresh install gets.
+  #
+  # Naming note: the existing installer job above deliberately keeps its
+  # original check name. Renaming it would churn a name that branch protection
+  # references, for cosmetic gain, which is the same footgun this plan flagged
+  # for the CodeQL check. This job is unambiguous on its own instead.
+  #
+  # D2 (answered 2026-09-10) made this GATING, on the strength of the
+  # measurement rather than a preference: all three sets resolve to 180
+  # packages with ZERO advisories today, so gating costs nothing now and any
+  # red is new information.
+  #
+  # The failure mode the plan worried about is real and is handled explicitly
+  # below: an unfixable upstream ML advisory must not block every merge
+  # forever. When one lands, add it to IGNORE_VULNS with a dated reason rather
+  # than turning the job off.
+  audit-runtimes:
+    name: pip-audit (model runtimes)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+      - name: Cache pip-audit advisory DB
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/pip-audit
+          key: pip-audit-runtimes-${{ runner.os }}-${{ hashFiles('runtimes/*/requirements.txt') }}
+      - name: Install pip-audit
+        run: python -m pip install --disable-pip-version-check pip-audit
+      - name: Audit each runtime requirement set
+        # Fails loudly on a missing or unparseable file, naming it, rather than
+        # skipping it silently. Advisory findings are reported, not gated.
+        run: |
+          set -u
+          status=0
+          # Unfixable upstream advisories go here with a dated reason, so one
+          # of them cannot hold every merge hostage. Empty today.
+          IGNORE_VULNS=""
+          IGNORE_ARGS=""
+          for vuln in $IGNORE_VULNS; do
+            IGNORE_ARGS="$IGNORE_ARGS --ignore-vuln $vuln"
+          done
+          for set_name in audio diffusion ocr; do
+            req="runtimes/${set_name}/requirements.txt"
+            if [ ! -f "$req" ]; then
+              echo "::error file=${req}::runtime requirement set is missing"
+              status=1
+              continue
+            fi
+            echo "::group::pip-audit ${req}"
+            if ! python -m pip_audit -r "$req" --progress-spinner off                  ${IGNORE_ARGS}                  --format json --output "audit-${set_name}.json"; then
+              echo "::error file=${req}::pip-audit reported advisories for ${set_name}"
+              status=1
+            fi
+            python - "$set_name" <<'PYCOUNT'
+          import json, sys
+          name = sys.argv[1]
+          with open(f"audit-{name}.json", encoding="utf-8") as fh:
+              report = json.load(fh)
+          deps = report.get("dependencies", [])
+          flagged = [d for d in deps if d.get("vulns")]
+          print(f"{name}: {len(deps)} packages audited, {len(flagged)} with advisories")
+          for dep in flagged:
+              ids = ", ".join(v.get("id", "?") for v in dep["vulns"])
+              print(f"  - {dep['name']} {dep.get('version')}: {ids}")
+          PYCOUNT
+            echo "::endgroup::"
+          done
+          exit "$status"
+      - name: Upload runtime audit reports
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: audit-runtimes
+          path: audit-*.json
+          retention-days: 30
+
+  # One always-resolving aggregate. Branch protection should require this
+  # context rather than a per-job or per-matrix-leg name. Skipped is allowed
+  # because a job-level condition reports success-by-skip; every other result
+  # fails closed.
+  ci-required:
+    name: ci-required
+    needs:
+      - lint-ts
+      - test-ts
+      - build-ts
+      - catalog-sync
+      - coverage-gate
+      - nexus-check
+      - fast-bench
+      - check-prompts
+      - package-vsix
+      - check-feature-drift
+      - check-command-parity
+      - check-release-assets
+      - check-architecture
+      - init-check-posix
+      - init-check-windows
+      - test-python-runtimes
+      - audit-ts
+      - audit-ts-dev
+      - audit-py
+      - audit-runtimes
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Allowlist job results
+        env:
+          R_lint_ts: ${{ needs.lint-ts.result }}
+          R_test_ts: ${{ needs.test-ts.result }}
+          R_build_ts: ${{ needs.build-ts.result }}
+          R_catalog_sync: ${{ needs.catalog-sync.result }}
+          R_coverage_gate: ${{ needs.coverage-gate.result }}
+          R_nexus_check: ${{ needs.nexus-check.result }}
+          R_fast_bench: ${{ needs.fast-bench.result }}
+          R_check_prompts: ${{ needs.check-prompts.result }}
+          R_package_vsix: ${{ needs.package-vsix.result }}
+          R_check_feature_drift: ${{ needs.check-feature-drift.result }}
+          R_check_command_parity: ${{ needs.check-command-parity.result }}
+          R_check_release_assets: ${{ needs.check-release-assets.result }}
+          R_check_architecture: ${{ needs.check-architecture.result }}
+          R_init_check_posix: ${{ needs.init-check-posix.result }}
+          R_init_check_windows: ${{ needs.init-check-windows.result }}
+          R_test_python_runtimes: ${{ needs.test-python-runtimes.result }}
+          R_audit_ts: ${{ needs.audit-ts.result }}
+          R_audit_ts_dev: ${{ needs.audit-ts-dev.result }}
+          R_audit_py: ${{ needs.audit-py.result }}
+          R_audit_runtimes: ${{ needs.audit-runtimes.result }}
+        run: |
+          set -uo pipefail
+          fail=0
+          for var in $(env | sed -n 's/^\(R_[A-Za-z0-9_]*\)=.*/\1/p' | sort); do
+            eval "result=\${${var}-}"
+            case "${result}" in
+              success|skipped) ;;
+              *) echo "FAIL: ${var#R_}=${result:-<empty>}"; fail=1 ;;
+            esac
+          done
+          exit "$fail"

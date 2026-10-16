@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-10-10T01:24:06.677612+00:00",
+  "finished_at": "2026-10-10T01:24:34.720633+00:00",
+  "exit": 0,
+  "command": [
+    "node",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "configs/vitest.config.ts",
+    "tests/integration/agents/swarm-orchestration.test.ts",
+    "tests/integration/agents/worktree-isolation.test.ts",
+    "tests/integration/agents/worktree-read-rooting.test.ts",
+    "tests/integration/golden/golden-runner-end-to-end.test.ts",
+    "tests/unit/hooks/check-git-control-plane.test.ts",
+    "tests/unit/tools/handlers/dry_run.adversarial.test.ts",
+    "--maxWorkers=4",
+    "--reporter=verbose"
+  ],
+  "scope": "Diagnostic rerun of all six failing files with four workers; no assertions/timeouts/source changed",
+  "log_sha256": "5db83a25ca595eb09472bbc8b6bccf6a6047ce609f86286e9a8d972ed6c1c524"
+}

@@ -19,10 +19,10 @@
     "fileName": "reports/stryker/mutation.json"
   },
   "mutate": [
-    "src/guardrails/**/*.ts",
+    "modules/coding/guardrails/**/*.ts",
     "src/tools/handlers/**/*.ts",
-    "src/orchestration/**/*.ts",
-    "!src/guardrails/index.ts",
+    "modules/coding/orchestration/**/*.ts",
+    "!modules/coding/guardrails/index.ts",
     "!**/*.test.ts",
     "!**/*.bench.ts"
   ],
@@ -42,7 +42,7 @@
   "timeoutMS": 60000,
   "tempDirName": ".stryker-tmp",
   "cleanTempDir": true,
-  "disableTypeChecks": "{src,tests}/**/*.{ts,tsx}",
+  "disableTypeChecks": "{src,modules,tests}/**/*.{ts,tsx}",
   "tsconfigFile": "tsconfig.json",
   "coverageAnalysis": "perTest"
 }

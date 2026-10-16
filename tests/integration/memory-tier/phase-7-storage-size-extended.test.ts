@@ -18,7 +18,7 @@
  * Plan reference: docs/archive/v1/v1.2/plans/adoption-ecosystem-2026-05.md sub-task 7.2
  */
 
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 import { promises as fs } from "node:fs";
 import * as fsSync from "node:fs";
 import * as os from "node:os";
@@ -37,14 +37,12 @@ const FIXTURE_REPO = path.resolve(
   "fixtures",
   "codegraph-benchmark-repo",
 );
-const RESULTS_DIR = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "fixtures",
-  "memory-storage-extended-results",
-  "2026-05-26",
-);
+const retainedResults = process.env["NEXUS_BENCH_RESULTS_DIR"];
+if (retainedResults) fsSync.mkdirSync(retainedResults, { recursive: true });
+const RESULTS_DIR = fsSync.mkdtempSync(path.join(retainedResults ?? os.tmpdir(), "storage-extended-results-"));
+afterAll(() => {
+  if (!retainedResults) fsSync.rmSync(RESULTS_DIR, { recursive: true, force: true, maxRetries: 3, retryDelay: 50 });
+});
 
 const DEFAULT_CORPUS_SIZE = 2_000;
 const corpusSize = Number(

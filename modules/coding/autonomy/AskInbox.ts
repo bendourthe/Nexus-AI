@@ -103,11 +103,26 @@ export class AskInbox {
     this._replay = opts.replay ?? {};
   }
 
+  // v2.13.0: concurrent first callers share one load, so an ask parked while a
+  // second load was in flight is never overwritten by that load's result.
+  private _loading: Promise<void> | null = null;
+  // v2.13.0: saves run one at a time; each writes the latest snapshot, so two
+  // concurrent writers never interleave on the same temporary file.
+  private _saving: Promise<void> = Promise.resolve();
+
   private async ensureLoaded(): Promise<void> {
     if (this._loaded) return;
-    this._items = await this._store.load();
-    this._loaded = true;
-    this.expireDue();
+    if (!this._loading) {
+      this._loading = (async () => {
+        this._items = await this._store.load();
+        this._loaded = true;
+        this.expireDue();
+      })();
+      this._loading.catch(() => {
+        this._loading = null;
+      });
+    }
+    await this._loading;
   }
 
   private expireDue(): ParkedAsk[] {
@@ -133,7 +148,9 @@ export class AskInbox {
   }
 
   private async persist(): Promise<void> {
-    await this._store.save(this._items);
+    const next = this._saving.catch(() => undefined).then(() => this._store.save(this._items));
+    this._saving = next;
+    await next;
   }
 
   async park(input: ParkAskInput): Promise<ParkedAsk> {

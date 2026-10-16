@@ -1,0 +1,4525 @@
+{
+  "created_at": "2026-10-10T00:53:04.416317+00:00",
+  "scope": "Temporary candidate browser accessibility observations; not installed-app or assistive-technology certification",
+  "browser": "153.0.8010.12",
+  "consumer": "Playwright Chromium and CDP Accessibility.getFullAXTree",
+  "fix_rerun_cycles_used": 1,
+  "initial_receipt": "accessibility-extra-observations.json",
+  "probe_corrections": [
+    "Wait for fullscreen completion and invoker focus before judging restoration",
+    "Accept measured exclusive 24px space of footer link"
+  ],
+  "zoom_method": "200% root font size plus WCAG text spacing, not browser chrome zoom",
+  "remaining_not_covered": [
+    "NVDA/JAWS actual speech",
+    "Lighthouse performance score",
+    "actual repository HTML replacement"
+  ],
+  "results": [
+    {
+      "file": "atlas.html",
+      "sha256": "4a883ff236e19ddd3e4554eda05e23ee656cf0439e2a6ee6dd7617c15f8dc64f",
+      "unchanged": true,
+      "reading320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Nexus Architecture Atlas"
+          },
+          {
+            "rank": 2,
+            "text": "End-to-end path"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 63.390625,
+            "height": 25.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Nexus Architecture Atlas",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 280.390625,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: End-to-end path",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 232.078125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 83.1875,
+            "height": 21,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false,
+        "computedNames": [
+          {
+            "role": "link",
+            "name": "Back to title"
+          },
+          {
+            "role": "link",
+            "name": "Contents"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Nexus Architecture Atlas"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: End-to-end path"
+          }
+        ]
+      },
+      "presentation320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Nexus Architecture Atlas"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Nexus Architecture Atlas2. Flow ownership3. End-to-end pa",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 160,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true,
+        "computedNames": [
+          {
+            "role": "button",
+            "name": "Previous slide"
+          },
+          {
+            "role": "button",
+            "name": "Next slide"
+          },
+          {
+            "role": "button",
+            "name": "Replay slide"
+          },
+          {
+            "role": "button",
+            "name": "Toggle fullscreen"
+          },
+          {
+            "role": "button",
+            "name": "Exit presentation"
+          },
+          {
+            "role": "combobox",
+            "name": "Choose slide"
+          }
+        ]
+      },
+      "keyboardFocus": {
+        "tag": "DIV",
+        "outline": "rgb(23, 32, 51) solid 3px",
+        "width": "3px"
+      },
+      "trapObserved": true,
+      "invokerRestored": true,
+      "text200SpacingReading": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Nexus Architecture Atlas"
+          },
+          {
+            "rank": 2,
+            "text": "End-to-end path"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 157.515625,
+            "height": 48,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Nexus Architecture Atlas",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 714.453125,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: End-to-end path",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 583.125,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 226.53125,
+            "height": 43,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false
+      },
+      "text200SpacingPresentation": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Nexus Architecture Atlas"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 243.21875,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Nexus Architecture Atlas2. Flow ownership3. End-to-end pa",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 358.390625,
+            "height": 72.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 174.765625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 209.5,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 271.890625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 399.5,
+            "height": 75.59375,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true
+      },
+      "allSlidesText200": [
+        {
+          "index": 0,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Nexus Architecture Atlas"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": true,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Nexus Architecture Atlas2. Flow ownership3. End-to-end pa",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 1,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Flow ownership"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Nexus Architecture Atlas2. Flow ownership3. End-to-end pa",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 2,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "End-to-end path"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Nexus Architecture Atlas2. Flow ownership3. End-to-end pa",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": true,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        }
+      ],
+      "issues": []
+    },
+    {
+      "file": "generation-recovery.html",
+      "sha256": "9079ed887afcbad696de293d7034c07bda31b50710cd382cb24289e75277effd",
+      "unchanged": true,
+      "reading320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Generation Recovery and Validation"
+          },
+          {
+            "rank": 2,
+            "text": "Recover the runtime"
+          },
+          {
+            "rank": 2,
+            "text": "Validate image and video generation"
+          },
+          {
+            "rank": 2,
+            "text": "Interpret failures"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 63.390625,
+            "height": 25.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Generation Recovery and Validation",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 288,
+            "height": 59.5625,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Recover the runtime",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 254.078125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Validate image and video generation",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 288,
+            "height": 59.5625,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Interpret failures",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 231.265625,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "installer runtime",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 114.46875,
+            "height": 21,
+            "inline": true
+          },
+          {
+            "tag": "A",
+            "text": "media runtime",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 103.09375,
+            "height": 21,
+            "inline": true
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 83.1875,
+            "height": 21,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false,
+        "computedNames": [
+          {
+            "role": "link",
+            "name": "Back to title"
+          },
+          {
+            "role": "link",
+            "name": "Contents"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Generation Recovery and Validation"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Recover the runtime"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Validate image and video generation"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Interpret failures"
+          },
+          {
+            "role": "link",
+            "name": "installer runtime"
+          },
+          {
+            "role": "link",
+            "name": "media runtime"
+          }
+        ]
+      },
+      "presentation320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Generation Recovery and Validation"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Generation Recovery and Validation2. Recover the runtime3",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 160,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true,
+        "computedNames": [
+          {
+            "role": "button",
+            "name": "Previous slide"
+          },
+          {
+            "role": "button",
+            "name": "Next slide"
+          },
+          {
+            "role": "button",
+            "name": "Replay slide"
+          },
+          {
+            "role": "button",
+            "name": "Toggle fullscreen"
+          },
+          {
+            "role": "button",
+            "name": "Exit presentation"
+          },
+          {
+            "role": "combobox",
+            "name": "Choose slide"
+          }
+        ]
+      },
+      "keyboardFocus": {
+        "tag": "DIV",
+        "outline": "rgb(23, 32, 51) solid 3px",
+        "width": "3px"
+      },
+      "trapObserved": true,
+      "invokerRestored": true,
+      "text200SpacingReading": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Generation Recovery and Validation"
+          },
+          {
+            "rank": 2,
+            "text": "Recover the runtime"
+          },
+          {
+            "rank": 2,
+            "text": "Validate image and video generation"
+          },
+          {
+            "rank": 2,
+            "text": "Interpret failures"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 157.515625,
+            "height": 48,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Generation Recovery and Validation",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 890.53125,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Recover the runtime",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 645.03125,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Validate image and video generation",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 911.6875,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Interpret failures",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 591.5625,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "installer runtime",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 299.328125,
+            "height": 43,
+            "inline": true
+          },
+          {
+            "tag": "A",
+            "text": "media runtime",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 261.21875,
+            "height": 43,
+            "inline": true
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 226.53125,
+            "height": 43,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false
+      },
+      "text200SpacingPresentation": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Generation Recovery and Validation"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 243.21875,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Generation Recovery and Validation2. Recover the runtime3",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 358.390625,
+            "height": 72.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 174.765625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 209.5,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 271.890625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 399.5,
+            "height": 75.59375,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true
+      },
+      "allSlidesText200": [
+        {
+          "index": 0,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Generation Recovery and Validation"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": true,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Generation Recovery and Validation2. Recover the runtime3",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 1,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Recover the runtime"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Generation Recovery and Validation2. Recover the runtime3",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 2,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Validate image and video generation"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Generation Recovery and Validation2. Recover the runtime3",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 3,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Interpret failures"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "A",
+                "text": "installer runtime",
+                "ariaLabel": null,
+                "disabled": false,
+                "width": 299.328125,
+                "height": 43,
+                "inline": true
+              },
+              {
+                "tag": "A",
+                "text": "media runtime",
+                "ariaLabel": null,
+                "disabled": false,
+                "width": 261.21875,
+                "height": 43,
+                "inline": true
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Generation Recovery and Validation2. Recover the runtime3",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": true,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        }
+      ],
+      "issues": []
+    },
+    {
+      "file": "technical/document-outline.html",
+      "sha256": "30144df7f6ec15f0e840cef2baa933bdfb982f9a083ac41f49cb322caff4dbc4",
+      "unchanged": true,
+      "reading320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Document outline tools"
+          },
+          {
+            "rank": 2,
+            "text": "What they do"
+          },
+          {
+            "rank": 2,
+            "text": "Managing conversation space"
+          },
+          {
+            "rank": 2,
+            "text": "Tool results and saved sessions"
+          },
+          {
+            "rank": 2,
+            "text": "Turning them on"
+          },
+          {
+            "rank": 2,
+            "text": "Safety model"
+          },
+          {
+            "rank": 2,
+            "text": "Cache and retention"
+          },
+          {
+            "rank": 2,
+            "text": "Limits"
+          },
+          {
+            "rank": 2,
+            "text": "Recording real use"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 63.390625,
+            "height": 25.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Document outline tools",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 274.84375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: What they do",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 213.09375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Managing conversation space",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 288,
+            "height": 59.5625,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Tool results and saved sessions",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 288,
+            "height": 59.5625,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Turning them on",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 232.796875,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Safety model",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 210.1875,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Cache and retention",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 254.25,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Limits",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 165.453125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Recording real use",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 243.53125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "evaluation record",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 123.03125,
+            "height": 21,
+            "inline": true
+          },
+          {
+            "tag": "A",
+            "text": "DEVLOG",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 59.28125,
+            "height": 21,
+            "inline": true
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 83.1875,
+            "height": 21,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false,
+        "computedNames": [
+          {
+            "role": "link",
+            "name": "Back to title"
+          },
+          {
+            "role": "link",
+            "name": "Contents"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Document outline tools"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: What they do"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Managing conversation space"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Tool results and saved sessions"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Turning them on"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Safety model"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Cache and retention"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Limits"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Recording real use"
+          },
+          {
+            "role": "link",
+            "name": "evaluation record"
+          },
+          {
+            "role": "link",
+            "name": "DEVLOG"
+          }
+        ]
+      },
+      "presentation320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Document outline tools"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Document outline tools2. What they do3. Recovering sectio",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 160,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true,
+        "computedNames": [
+          {
+            "role": "button",
+            "name": "Previous slide"
+          },
+          {
+            "role": "button",
+            "name": "Next slide"
+          },
+          {
+            "role": "button",
+            "name": "Replay slide"
+          },
+          {
+            "role": "button",
+            "name": "Toggle fullscreen"
+          },
+          {
+            "role": "button",
+            "name": "Exit presentation"
+          },
+          {
+            "role": "combobox",
+            "name": "Choose slide"
+          }
+        ]
+      },
+      "keyboardFocus": {
+        "tag": "DIV",
+        "outline": "rgb(23, 32, 51) solid 3px",
+        "width": "3px"
+      },
+      "trapObserved": true,
+      "invokerRestored": true,
+      "text200SpacingReading": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Document outline tools"
+          },
+          {
+            "rank": 2,
+            "text": "What they do"
+          },
+          {
+            "rank": 2,
+            "text": "Managing conversation space"
+          },
+          {
+            "rank": 2,
+            "text": "Tool results and saved sessions"
+          },
+          {
+            "rank": 2,
+            "text": "Turning them on"
+          },
+          {
+            "rank": 2,
+            "text": "Safety model"
+          },
+          {
+            "rank": 2,
+            "text": "Cache and retention"
+          },
+          {
+            "rank": 2,
+            "text": "Limits"
+          },
+          {
+            "rank": 2,
+            "text": "Recording real use"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 157.515625,
+            "height": 48,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Document outline tools",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 696.65625,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: What they do",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 539.546875,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Managing conversation space",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 790.65625,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Tool results and saved sessions",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 825.75,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Turning them on",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 589.015625,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Safety model",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 529.234375,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Cache and retention",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 645.359375,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Limits",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 415.15625,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Recording real use",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 620.5625,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "evaluation record",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 1080.640625,
+            "height": 91,
+            "inline": true
+          },
+          {
+            "tag": "A",
+            "text": "DEVLOG",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 141.59375,
+            "height": 43,
+            "inline": true
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 226.53125,
+            "height": 43,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false
+      },
+      "text200SpacingPresentation": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Document outline tools"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 243.21875,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Document outline tools2. What they do3. Recovering sectio",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 358.390625,
+            "height": 72.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 174.765625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 209.5,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 271.890625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 399.5,
+            "height": 75.59375,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true
+      },
+      "allSlidesText200": [
+        {
+          "index": 0,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Document outline tools"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": true,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 1,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "What they do"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 2,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Recovering section structure"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 3,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Document output and window budgets"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 4,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Managing conversation space"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 5,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Tool results and saved sessions"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 6,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Turning them on"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 7,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Safety model"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 8,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Session, permission and summary boundaries"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 9,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Cache and retention"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 10,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Limits"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 11,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Recording real use"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "A",
+                "text": "evaluation record",
+                "ariaLabel": null,
+                "disabled": false,
+                "width": 316.46875,
+                "height": 43,
+                "inline": true
+              },
+              {
+                "tag": "A",
+                "text": "DEVLOG",
+                "ariaLabel": null,
+                "disabled": false,
+                "width": 141.59375,
+                "height": 43,
+                "inline": true
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Document outline tools2. What they do3. Recovering sectio",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": true,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        }
+      ],
+      "issues": []
+    },
+    {
+      "file": "technical/installer-runtime.html",
+      "sha256": "a26fccc3767d17d52df85a7bdcd8abcf94923acdec9fca365c8600fb34246095",
+      "unchanged": true,
+      "reading320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Installer Repair and Runtime State"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 63.390625,
+            "height": 25.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Installer Repair and Runtime State",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 288,
+            "height": 59.5625,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 83.1875,
+            "height": 21,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false,
+        "computedNames": [
+          {
+            "role": "link",
+            "name": "Back to title"
+          },
+          {
+            "role": "link",
+            "name": "Contents"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Installer Repair and Runtime State"
+          }
+        ]
+      },
+      "presentation320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Installer Repair and Runtime State"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Installer Repair and Runtime State2. Lease, runtime state",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 160,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true,
+        "computedNames": [
+          {
+            "role": "button",
+            "name": "Previous slide"
+          },
+          {
+            "role": "button",
+            "name": "Next slide"
+          },
+          {
+            "role": "button",
+            "name": "Replay slide"
+          },
+          {
+            "role": "button",
+            "name": "Toggle fullscreen"
+          },
+          {
+            "role": "button",
+            "name": "Exit presentation"
+          },
+          {
+            "role": "combobox",
+            "name": "Choose slide"
+          }
+        ]
+      },
+      "keyboardFocus": {
+        "tag": "DIV",
+        "outline": "rgb(23, 32, 51) solid 3px",
+        "width": "3px"
+      },
+      "trapObserved": true,
+      "invokerRestored": true,
+      "text200SpacingReading": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Installer Repair and Runtime State"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 157.515625,
+            "height": 48,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Installer Repair and Runtime State",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 872.140625,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 226.53125,
+            "height": 43,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false
+      },
+      "text200SpacingPresentation": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Installer Repair and Runtime State"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 243.21875,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Installer Repair and Runtime State2. Lease, runtime state",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 358.390625,
+            "height": 72.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 174.765625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 209.5,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 271.890625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 399.5,
+            "height": 75.59375,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true
+      },
+      "allSlidesText200": [
+        {
+          "index": 0,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Installer Repair and Runtime State"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": true,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Installer Repair and Runtime State2. Lease, runtime state",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 1,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Lease, runtime state and model access"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Installer Repair and Runtime State2. Lease, runtime state",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": true,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        }
+      ],
+      "issues": []
+    },
+    {
+      "file": "technical/media-runtime.html",
+      "sha256": "4132579251c14fe32e03e3a4fccbfe55a5ebea386d145b00e840e76a7d210ae2",
+      "unchanged": true,
+      "reading320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Local Media Runtime"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 63.390625,
+            "height": 25.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Local Media Runtime",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 259.171875,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 83.1875,
+            "height": 21,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false,
+        "computedNames": [
+          {
+            "role": "link",
+            "name": "Back to title"
+          },
+          {
+            "role": "link",
+            "name": "Contents"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Local Media Runtime"
+          }
+        ]
+      },
+      "presentation320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Local Media Runtime"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Local Media Runtime2. Validate before reporting success",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 160,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true,
+        "computedNames": [
+          {
+            "role": "button",
+            "name": "Previous slide"
+          },
+          {
+            "role": "button",
+            "name": "Next slide"
+          },
+          {
+            "role": "button",
+            "name": "Replay slide"
+          },
+          {
+            "role": "button",
+            "name": "Toggle fullscreen"
+          },
+          {
+            "role": "button",
+            "name": "Exit presentation"
+          },
+          {
+            "role": "combobox",
+            "name": "Choose slide"
+          }
+        ]
+      },
+      "keyboardFocus": {
+        "tag": "DIV",
+        "outline": "rgb(23, 32, 51) solid 3px",
+        "width": "3px"
+      },
+      "trapObserved": true,
+      "invokerRestored": true,
+      "text200SpacingReading": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Local Media Runtime"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 157.515625,
+            "height": 48,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Local Media Runtime",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 655.21875,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 226.53125,
+            "height": 43,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false
+      },
+      "text200SpacingPresentation": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Local Media Runtime"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 243.21875,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Local Media Runtime2. Validate before reporting success",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 358.390625,
+            "height": 72.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 174.765625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 209.5,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 271.890625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 399.5,
+            "height": 75.59375,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true
+      },
+      "allSlidesText200": [
+        {
+          "index": 0,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Local Media Runtime"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": true,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Local Media Runtime2. Validate before reporting success",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 1,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Validate before reporting success"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Local Media Runtime2. Validate before reporting success",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": true,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        }
+      ],
+      "issues": []
+    },
+    {
+      "file": "technical/transcript-and-workspaces.html",
+      "sha256": "70636b4ce97485a3b5eb8f7cccb96ae4f848981285ce65bd1a69937148b1771e",
+      "unchanged": true,
+      "reading320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Transcript and Agents Workspace"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 63.390625,
+            "height": 25.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 160.3125,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Transcript and Agents Workspace",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 288,
+            "height": 59.5625,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 83.1875,
+            "height": 21,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false,
+        "computedNames": [
+          {
+            "role": "link",
+            "name": "Back to title"
+          },
+          {
+            "role": "link",
+            "name": "Contents"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Presentation Mode"
+          },
+          {
+            "role": "button",
+            "name": "Present chapter: Transcript and Agents Workspace"
+          }
+        ]
+      },
+      "presentation320": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Transcript and Agents Workspace"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Transcript and Agents Workspace2. Agents workspace",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 160,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 31.59375,
+            "height": 44,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "16px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true,
+        "computedNames": [
+          {
+            "role": "button",
+            "name": "Previous slide"
+          },
+          {
+            "role": "button",
+            "name": "Next slide"
+          },
+          {
+            "role": "button",
+            "name": "Replay slide"
+          },
+          {
+            "role": "button",
+            "name": "Toggle fullscreen"
+          },
+          {
+            "role": "button",
+            "name": "Exit presentation"
+          },
+          {
+            "role": "combobox",
+            "name": "Choose slide"
+          }
+        ]
+      },
+      "keyboardFocus": {
+        "tag": "DIV",
+        "outline": "rgb(23, 32, 51) solid 3px",
+        "width": "3px"
+      },
+      "trapObserved": true,
+      "invokerRestored": true,
+      "text200SpacingReading": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Transcript and Agents Workspace"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "A",
+            "text": "Contents",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 157.515625,
+            "height": 48,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Presentation Mode",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 389.015625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Present chapter: Transcript and Agents Workspace",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 850.984375,
+            "height": 69.59375,
+            "inline": false
+          },
+          {
+            "tag": "A",
+            "text": "Back to title",
+            "ariaLabel": null,
+            "disabled": false,
+            "width": 226.53125,
+            "height": 43,
+            "inline": true
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "BODY",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": false
+      },
+      "text200SpacingPresentation": {
+        "headings": [
+          {
+            "rank": 1,
+            "text": "Transcript and Agents Workspace"
+          }
+        ],
+        "visibleH1": 1,
+        "positiveTabIndex": 0,
+        "viewportOverflow": 0,
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "text": "Previous",
+            "ariaLabel": "Previous slide",
+            "disabled": true,
+            "width": 243.21875,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "SELECT",
+            "text": "1. Transcript and Agents Workspace2. Agents workspace",
+            "ariaLabel": "Choose slide",
+            "disabled": false,
+            "width": 358.390625,
+            "height": 72.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Next",
+            "ariaLabel": "Next slide",
+            "disabled": false,
+            "width": 174.765625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Replay",
+            "ariaLabel": "Replay slide",
+            "disabled": false,
+            "width": 209.5,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Fullscreen",
+            "ariaLabel": "Toggle fullscreen",
+            "disabled": false,
+            "width": 271.890625,
+            "height": 75.59375,
+            "inline": false
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Exit presentation",
+            "ariaLabel": "Exit presentation",
+            "disabled": false,
+            "width": 399.5,
+            "height": 75.59375,
+            "inline": false
+          }
+        ],
+        "runningAnimations": 0,
+        "rootFont": "32px",
+        "activeFocus": {
+          "tag": "H1",
+          "outline": "rgb(23, 32, 51) none 3px",
+          "width": "3px"
+        },
+        "presentationOpen": true
+      },
+      "allSlidesText200": [
+        {
+          "index": 0,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Transcript and Agents Workspace"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": true,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Transcript and Agents Workspace2. Agents workspace",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": false,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        },
+        {
+          "index": 1,
+          "view": {
+            "headings": [
+              {
+                "rank": 1,
+                "text": "Agents workspace"
+              }
+            ],
+            "visibleH1": 1,
+            "positiveTabIndex": 0,
+            "viewportOverflow": 0,
+            "controls": [
+              {
+                "tag": "BUTTON",
+                "text": "Previous",
+                "ariaLabel": "Previous slide",
+                "disabled": false,
+                "width": 243.21875,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "SELECT",
+                "text": "1. Transcript and Agents Workspace2. Agents workspace",
+                "ariaLabel": "Choose slide",
+                "disabled": false,
+                "width": 358.390625,
+                "height": 72.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Next",
+                "ariaLabel": "Next slide",
+                "disabled": true,
+                "width": 174.765625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Replay",
+                "ariaLabel": "Replay slide",
+                "disabled": false,
+                "width": 209.5,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Fullscreen",
+                "ariaLabel": "Toggle fullscreen",
+                "disabled": false,
+                "width": 271.890625,
+                "height": 75.59375,
+                "inline": false
+              },
+              {
+                "tag": "BUTTON",
+                "text": "Exit presentation",
+                "ariaLabel": "Exit presentation",
+                "disabled": false,
+                "width": 399.5,
+                "height": 75.59375,
+                "inline": false
+              }
+            ],
+            "runningAnimations": 0,
+            "rootFont": "32px",
+            "activeFocus": {
+              "tag": "H1",
+              "outline": "rgb(23, 32, 51) none 3px",
+              "width": "3px"
+            },
+            "presentationOpen": true
+          }
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "findings": []
+}
