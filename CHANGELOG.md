@@ -1,3 +1,30 @@
+# [2.12.0](https://github.com/bendourthe/Nexus-AI/compare/v2.11.0...v2.12.0) (2026-10-16)
+
+
+### Bug Fixes
+
+* **deps:** reconcile runtime and development update groups ([f223770](https://github.com/bendourthe/Nexus-AI/commit/f223770d57b62207f80ec4ff7f53373afd323176))
+* **deps:** repair Stryker and MCP SDK gates ([f13d29c](https://github.com/bendourthe/Nexus-AI/commit/f13d29c0fc2a522cd40b2665c94aebc106b8c99f)), closes [#48](https://github.com/bendourthe/Nexus-AI/issues/48) [#72](https://github.com/bendourthe/Nexus-AI/issues/72)
+* **deps:** verify security toolchain and coverage migration ([8297915](https://github.com/bendourthe/Nexus-AI/commit/8297915c8cde3c1f3c10252cb66266955b3b2a86))
+* **test:** support Vitest 4 benchmark reporter lifecycle ([c9a43c2](https://github.com/bendourthe/Nexus-AI/commit/c9a43c2c7f1bdb8afe864cf97ac291ad392424d3))
+* **v2.13:** judge an existing export only through its open handle ([b4b0722](https://github.com/bendourthe/Nexus-AI/commit/b4b07229822223cbe907c9d654dbc5a8f884d545))
+* **v2.13:** open an export name once and decide through that handle ([5e39ab0](https://github.com/bendourthe/Nexus-AI/commit/5e39ab0b7496d79b080381c13ff16cccf636b5a1))
+* **v2.13:** resolve high-severity CodeQL findings from PR 101 ([c91edb0](https://github.com/bendourthe/Nexus-AI/commit/c91edb0c2dbafaee5f817d356a175db5644973e4))
+
+### Features
+
+* **v2.12:** budget document output from current prompt usage ([5ddfe8b](https://github.com/bendourthe/Nexus-AI/commit/5ddfe8b76d967152698a07b648656586cb4a5026))
+* **v2.12:** compact caller-owned tool results in both loops ([79335f9](https://github.com/bendourthe/Nexus-AI/commit/79335f9c59ac68863788cd8de84d1b76d47cea82))
+* **v2.12:** expose experimental outline settings on desktop ([a806982](https://github.com/bendourthe/Nexus-AI/commit/a806982b6240b96742c73e0d68bc06fbed586717))
+* **v2.12:** preserve native tool call and result history ([56b05c6](https://github.com/bendourthe/Nexus-AI/commit/56b05c6e3242be304b665211f1ca2f572eb727db))
+* **v2.13:** add bounded local embedding evaluation ([2d0006c](https://github.com/bendourthe/Nexus-AI/commit/2d0006cee6235b72082fdeab2c9f6c64bfddbb10))
+* **v2.13:** authorize agent image edits through the control surface ([85af515](https://github.com/bendourthe/Nexus-AI/commit/85af51567b64f6c7fc809e32e1093bead390ca38))
+* **v2.13:** persist versioned image edit recipes with history ([0649dc4](https://github.com/bendourthe/Nexus-AI/commit/0649dc4450be48f740edda79b2fa4cb554a14f66))
+* **v2.13:** phase 7 final gate - hardening, handbooks, full suites, gap carry ([2ab9c3f](https://github.com/bendourthe/Nexus-AI/commit/2ab9c3f850da31dadbf283772a7c415e839014bc))
+* **v2.13:** reopen Image Studio edits after restart ([5ac6773](https://github.com/bendourthe/Nexus-AI/commit/5ac67738b48f0b08d8686c6bcaba0a0083eb8515))
+
+
+
 # [2.11.0](https://github.com/bendourthe/Nexus-AI/compare/v2.10.0...v2.11.0) (2026-10-06)
 
 
