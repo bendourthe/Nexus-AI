@@ -2,7 +2,7 @@
 
 **Project**: Nexus
 **Status**: in-progress
-**Last updated**: 2026-10-10
+**Last updated**: 2026-10-15
 
 The [existing carry-forward register](../../../v2/v2.12/known-gaps.md) remains the source for older open items. This canonical ledger records new phase dispositions without duplicating those items.
 
@@ -13,7 +13,7 @@ The [existing carry-forward register](../../../v2/v2.12/known-gaps.md) remains t
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 1 | 1 |
+| Deferred (DF) | 1 | 2 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 3 | 1 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -68,3 +68,4 @@ The [existing carry-forward register](../../../v2/v2.12/known-gaps.md) remains t
 |---|---|---|
 | WN-v211-5 | Native calls recorded as legacy user envelopes | Resolved in v2.12.0 Phase 3 for native Ollama calls. Both models completed three real reads with native assistant calls and tool-role results; persistence/resume keeps its legacy format intentionally. [History](development/history/2026-10-09_outline-promotion-readiness-phase-3.md), [evidence](development/evidence/phase-3-native-history.json). OpenAI-compatible native history remains DF-v212-4. |
 | DF-v211-4 | Missing desktop outline Settings controls | Resolved in Phase 5 with experimental, off-by-default switches, saved-preference preservation under environment overrides, and observed keyboard/toggle/reload behavior. [History](development/history/2026-10-09_outline-promotion-readiness-phase-5.md), [evidence](development/evidence/phase-5-settings/browser.json). Answer-quality promotion remains separate. |
+| DF-v211-5 | `AGENTS.md` names moved paths | Resolved 2026-10-15 outside the plan. The Module Authorship Contract and Tool Catalogue sections of [AGENTS.md](../../../../AGENTS.md) now name `modules/coding/llm/`, `modules/coding/llm/types.ts`, `modules/coding/config/settings.ts`, and `modules/coding/chat/PromptBuilder.ts`, matching the `configs/dependency-cruiser.cjs` Ollama-boundary rule. The remaining `src/` paths in those sections were checked and still exist. |
