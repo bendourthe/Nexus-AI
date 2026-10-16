@@ -122,7 +122,7 @@ Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans t
 
 ### What's new in v2.12.0
 
-This release carries the v2.12 and v2.13 plans.
+This release carries the v2.12 and v2.13 plans. Its installers and VSIX packages ship as **v2.12.1**: the `v2.12.0` tag exists but its release build failed before publishing (WN-5).
 
 - **Durable Image Studio edits** - Edits to a generated image are saved as a versioned recipe with undo and redo, survive a restart, and never change the original bytes. Generated images are now kept under `~/.nexus/generations/images/` so their turns can be reopened. Preview and export render through one pixel path.
 - **Approved agent edits** - `nexus image-edit` and `/nexus/image-edit/*` let an agent describe, apply, render and export edits to one image only after you approve its request in the Ask inbox. The grant is bound to that agent's caller id, run and image, and lasts one hour. Exports go only to `~/.nexus/generations/exports`.

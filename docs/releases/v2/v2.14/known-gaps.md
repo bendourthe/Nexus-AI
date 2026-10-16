@@ -3,7 +3,7 @@
 **Project**: Nexus
 **Status**: in-progress
 **Last updated**: 2026-10-16
-**Open items**: 8
+**Open items**: 10
 
 ## v2.14.0
 
@@ -14,7 +14,7 @@
 | Not implemented (NI) | 0 | 0 |
 | Deferred (DF) | 4 | 0 |
 | Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 3 | 0 |
+| Warnings (WN) | 5 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 1 | 0 |
 
@@ -89,6 +89,20 @@
 
 - **Migrated from**: v2.13.0#WN-2 on 2026-10-16 (reason: user-deferred)
 - **Migration evidence**: left open by v2.13.0, the last plan of v2.13
+
+#### WN-4 - Seven pre-existing high-severity CodeQL alerts reached main with v2.12.0
+
+- **Source phase**: v2.13 release (PR #102, 2026-10-16).
+- **Plan reference**: v2.13 T031 and `/update release`; not introduced by v2.13.
+- **Reason**: comparing `develop` with `main` (last released at v2.11.0), CodeQL reported 23 new alerts, 7 high: `js/insecure-temporary-file` and `js/file-system-race` at `tests/smoke/document-outline-smoke.test.ts` lines 162, 324 and 325 (v2.11 Phase 5 and v2.12 work), and `js/incomplete-multi-character-sanitization` at `scripts/handbook-renderer.mjs:7` (v2.12 Phase 7). CodeQL is not a required check on `main`. Exposure is low: the smoke test is opt-in and local and writes with exclusive create, and the regex only builds heading slugs from the repository's own Markdown. The PR threads were answered and resolved; the alerts stay open.
+- **Suggested next step**: write the smoke test's report and results under a private `mkdtemp` directory, replace the tag-stripping regex with a loop until no change (or strip with the Markdown parser), then dismiss or close the alerts.
+
+#### WN-5 - The v2.12.0 tag has no GitHub Release or installers
+
+- **Source phase**: v2.13 release (2026-10-16).
+- **Plan reference**: v2.13 run blocker 1 (approval NLY2GTF2).
+- **Reason**: tag `v2.12.0` (`7bbf224f`) was pushed, but `release.yml` failed in "Verify release source" because its depth-1 checkout lacked the embedding-eval baseline commit `90b95f24`. Tag and dispatched runs use `release.yml` as of the tagged commit, so that tag cannot build. The owner chose to fix `release.yml` and ship v2.12.1 rather than move a pushed tag. The v2.13 completion checker's `release.github` predicate is bound to v2.12.0 and stays unmet.
+- **Suggested next step**: none required beyond v2.12.1; optionally publish a notes-only v2.12.0 Release that points to v2.12.1.
 
 #### QG-1 - Two tests time out under full-suite load at vitest's 5 s default
 
