@@ -70,6 +70,13 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: "npm"
       - run: npm ci --prefer-offline --no-audit
+      # v2.13.0: the embedding evaluation rebuilds frozen source bytes from the
+      # contract's pinned baseline commit, which the depth-1 checkout lacks.
+      # Fetch only that commit rather than the whole history.
+      - name: Fetch pinned embedding-eval baseline commit
+        run: |
+          baseline="$(node -p "require('./docs/releases/v2/v2.13/development/embedding-eval-contract.json').baselineHead")"
+          git fetch --no-tags --depth=1 origin "$baseline"
       # v2.0.0 Phase 2: browser_* tests use InMemoryBrowser HTML fixtures.
       # CI does not install Playwright or download Chromium. Live Chromium is
       # opt-in locally via NEXUS_BROWSER_PLAYWRIGHT=1.
