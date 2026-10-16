@@ -87,5 +87,5 @@ describe("nexus CLI output contract", () => {
     if ((result.status ?? 1) !== 0) {
       expect(stderr.length > 0 || stdout.length > 0).toBe(true);
     }
-  });
+  }, 65000); // Enclose the CLI's existing 60000 ms child-process deadline.
 });

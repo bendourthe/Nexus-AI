@@ -21,7 +21,7 @@ import {
   createDiffusionRuntime,
   MediaRuntimeService,
 } from "./diffusion/runtimeFactory.js";
-import { createHandlerContext, dispatch } from "./handlers.js";
+import { createHandlerContext, dispatch, imageEditOps, imageRenderBridge } from "./handlers.js";
 import {
   beginStudioRuntimeShutdown,
   closeStudioRuntime,
@@ -30,6 +30,7 @@ import {
 import { resolveStudioDbPath } from "../../../core/generations/paths.js";
 import { createServingRuntime } from "./serving/servingRuntime.js";
 import { createJsonCliRoute } from "./controlSurface/jsonCliRoutes.js";
+import { generatedImagesRoot } from "./studio/generatedImages.js";
 import { captureNexusWindow } from "./controlSurface/windowCaptureClient.js";
 import { createAuditRuntime } from "./audit/runtime.js";
 import { InProcessTelemetryBus } from "../../../core/telemetry/TelemetryBus.js";
@@ -159,6 +160,7 @@ const studio = createStudioRuntime({
   telemetry,
 });
 ctx.studio = studio;
+ctx.generatedImagesRoot = generatedImagesRoot();
 ctx.audit = createAuditRuntime({ credentials: ctx.credentials, telemetry }).log;
 let rpcReader: ReturnType<typeof createInterface> | null = null;
 let acceptingRequests = true;
@@ -171,6 +173,7 @@ serving.gateway.surface.mount(
     listModels: async () =>
       SIDECAR_MODELS.map((m) => ({ id: m.id, displayName: m.displayName })),
     captureWindow: (request) => captureNexusWindow(request),
+    imageEdit: () => imageEditOps(ctx),
   }),
 );
 
@@ -258,6 +261,7 @@ function shutdown(): Promise<void> {
     reader?.removeAllListeners("close");
     reader?.close();
     scheduler.stop();
+    imageRenderBridge.close();
     beginStudioRuntimeShutdown(studio);
     await ctx.videoEnhancement?.stopActive();
     await ctx.videoEnhancement?.cleanupMedia();

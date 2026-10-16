@@ -1,0 +1,44 @@
+{
+  "snapshot": {
+    "entry_sha256": "33026a994ea0440a5e8d9bdd66e85bc502975ab9caeacefa4742c0e3eba71027",
+    "inputs": {
+      "docs/handbooks/markdown/generation-recovery.md": "085dad5722b163522d97b16b939365fbb48e6ddf9bd3aff2ad568c7913953b73",
+      "scripts/generate-handbooks.mjs": "bf3b6a548a94c68c462d861dae9e4e469195d9408a36b12d155d7a6c9b64ed14",
+      "scripts/handbook-renderer.mjs": "05ba5507ff47b3bc62647ef32377c5ba301bea63af0375ace316205e89d132fa",
+      "docs/handbooks/_sources/storyboards.json": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013",
+      "docs/handbooks/_sources/handbook.css": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf",
+      "docs/handbooks/_sources/handbook-clones.js": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b",
+      "docs/handbooks/_sources/dual-view.css": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
+      "docs/handbooks/_sources/dual-view-runtime.js": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
+      "desktop/public/nexus-mark.png": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05",
+      "package.json": "312845e4f8f3adf0253cfd132c3dcadd1a2e83f1fee683aa2932508d135bf20a",
+      "package-lock.json": "e53dbb01de470dfc74eb799833060dd516c6dd8b1fb894f48991bbbb692b7ce6",
+      "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py": "f79a0bdba3b09b5600f877ff6bd78381fa528b838be09fc32099d1f4f922c661",
+      "scripts/installer/build/smoke-installed-media.ps1": "46fa1f928121d9ffb28a8df3dd90ecde3bbd51d24d92beccb3b764732168f341",
+      "desktop/sidecar/src/diffusion/runtimeFactory.ts": "de804bcdd5ebef82b3cab1f17ca6e566b6e0f8eb6de6d47db2fb6633e6880373",
+      "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py": "8318eebaa71cefae7ce00943f8a6e3cd45c3ef3b4363722a9fc46a43a8a4b8d8",
+      "desktop/src/modules/image/ImageStudioPage.tsx": "a4eca1345edaf1fc2535c5fb3811146403756aedb1cdfdf6b3edb576bd180ec0",
+      "desktop/src/modules/video/VideoLabPage.tsx": "7f9d15dee314faa6e49549063dd378bc8a680bdf5657e44754289e76796bde97"
+    },
+    "output_sha256": "f12b89df38e96518389186caf202e6fc5ab992a3ab1a2aed5ee099ebfd155e23"
+  },
+  "checks": {
+    "content": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.13/development/evidence/handbooks/content-review.md",
+      "evidence_sha256": "6b5294437ecb4975e08ffb4c03619072040d82b5813f9512bbf4254801def574"
+    },
+    "build": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.13/development/evidence/handbooks/build-log.txt",
+      "evidence_sha256": "a850f0e164ca5ca7a802b4583065624c55570e92be625c15bd94c6e1a82870ae"
+    },
+    "rendered": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.13/development/evidence/handbooks/render-observations.json",
+      "evidence_sha256": "3bc7890afb4a1049625b2c7f31bcc588971986be97720dde177d6793c2731a7a",
+      "browser": "Microsoft Edge 155 headless (Chromium, the WebView2 engine)",
+      "output_sha256": "f12b89df38e96518389186caf202e6fc5ab992a3ab1a2aed5ee099ebfd155e23"
+    }
+  }
+}

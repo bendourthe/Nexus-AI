@@ -499,6 +499,34 @@
       "feature": "f016"
     },
     {
+      "command": "studio.image.edit.close",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.image.edit.commit",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.image.edit.open",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.image.edit.revision",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.image.media",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.image.render.claim",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.image.render.complete",
+      "feature": "f003"
+    },
+    {
       "command": "studio.session.appendTurn",
       "feature": "f003"
     },

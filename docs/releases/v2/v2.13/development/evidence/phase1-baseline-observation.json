@@ -1,0 +1,160 @@
+{
+  "observedAt": "2026-10-14T14:36:38.065Z",
+  "model": "embeddinggemma:300m",
+  "digest": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+  "artifactBytes": 621875917,
+  "runtime": {
+    "version": "0.32.15"
+  },
+  "dimensionality": 768,
+  "norms": [
+    1.0000002102057197,
+    1.0000002102057197,
+    1.0000002102057197,
+    1.0000002102057197,
+    1.0000002102057197
+  ],
+  "embeddingMilliseconds": [
+    46824.800599999995,
+    140.79000000000087,
+    156.94169999999576,
+    108.880799999999,
+    170.950499999999
+  ],
+  "residencySamples": [
+    {
+      "models": []
+    },
+    {
+      "models": [
+        {
+          "name": "embeddinggemma:300m",
+          "model": "embeddinggemma:300m",
+          "size": 681417113,
+          "digest": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "gemma3",
+            "families": [
+              "gemma3"
+            ],
+            "parameter_size": "307.58M",
+            "quantization_level": "BF16"
+          },
+          "expires_at": "2026-10-14T07:41:23.8521017-07:00",
+          "size_vram": 681417113,
+          "context_length": 2048
+        }
+      ]
+    },
+    {
+      "models": [
+        {
+          "name": "embeddinggemma:300m",
+          "model": "embeddinggemma:300m",
+          "size": 681417113,
+          "digest": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "gemma3",
+            "families": [
+              "gemma3"
+            ],
+            "parameter_size": "307.58M",
+            "quantization_level": "BF16"
+          },
+          "expires_at": "2026-10-14T07:41:24.0284217-07:00",
+          "size_vram": 681417113,
+          "context_length": 2048
+        }
+      ]
+    },
+    {
+      "models": [
+        {
+          "name": "embeddinggemma:300m",
+          "model": "embeddinggemma:300m",
+          "size": 681417113,
+          "digest": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "gemma3",
+            "families": [
+              "gemma3"
+            ],
+            "parameter_size": "307.58M",
+            "quantization_level": "BF16"
+          },
+          "expires_at": "2026-10-14T07:41:24.1933187-07:00",
+          "size_vram": 681417113,
+          "context_length": 2048
+        }
+      ]
+    },
+    {
+      "models": [
+        {
+          "name": "embeddinggemma:300m",
+          "model": "embeddinggemma:300m",
+          "size": 681417113,
+          "digest": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "gemma3",
+            "families": [
+              "gemma3"
+            ],
+            "parameter_size": "307.58M",
+            "quantization_level": "BF16"
+          },
+          "expires_at": "2026-10-14T07:41:24.3040529-07:00",
+          "size_vram": 681417113,
+          "context_length": 2048
+        }
+      ]
+    },
+    {
+      "models": [
+        {
+          "name": "embeddinggemma:300m",
+          "model": "embeddinggemma:300m",
+          "size": 681417113,
+          "digest": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "gemma3",
+            "families": [
+              "gemma3"
+            ],
+            "parameter_size": "307.58M",
+            "quantization_level": "BF16"
+          },
+          "expires_at": "2026-10-14T07:41:24.4775245-07:00",
+          "size_vram": 681417113,
+          "context_length": 2048
+        }
+      ]
+    }
+  ],
+  "retrieval": {
+    "milliseconds": 2501.631499999996,
+    "results": [
+      {
+        "content": "The image viewer adjusts brightness, contrast, saturation and sharpness before exporting a new PNG.",
+        "score": 0.04098360655737705,
+        "reason": [
+          "Linear-scan rank #1 (cosine 0.54)",
+          "FTS5 rank #1",
+          "Updated just now"
+        ]
+      }
+    ]
+  },
+  "disposableRoot": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v213-baseline-tCsi7K",
+  "scope": "Real Ollama adapter and MemorySubsystem/MemoryStore; VS Code host API stubbed by the existing test setup; five diagnostic embeddings, not the full Phase 2 quality/resource/offline gate."
+}

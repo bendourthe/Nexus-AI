@@ -1,0 +1,1188 @@
+{
+  "schemaVersion": 1,
+  "scope": "Frozen repository excerpt corpus, not product-wide question answering",
+  "chunks": [
+    {
+      "id": "chunk-001",
+      "title": "src/storage/MemorySubsystem.ts :: function buildSubsystem",
+      "kind": "code",
+      "source": "src/storage/MemorySubsystem.ts",
+      "sourceSha256": "30badfd31bb1cfae0ba52d0c6f8a19d8e64b7148f6e093843612a8a58f09f244",
+      "sourceStartLine": 119,
+      "excerptSha256": "866cc7e898faf35cd94ce9c26f4a387ccc71cc6167fd27c58564f6f1a8297231",
+      "text": "  unifiedRetriever: null,\n  sharedDb: null,\n};\n\nfunction buildSubsystem(options: MemorySubsystemOptions): Built {\n  let sharedDb: Database.Database | null = null;\n  try {\n    const embedder = options.embeddingModel\n      ? new EmbeddingClient(options.llmClient, options.embeddingModel)\n      : null;\n\n    // Single connection shared across MemoryStore, EpisodicMemory, and\n    // GraphMemory. All three classes accept an already-open Database and\n    // do NOT close it on their own .close() methods.\n    sharedDb = new Database(options.dbPath);\n    secureDbPermissions(options.dbPath);\n    sharedDb.pragma(\"journal_mode = WAL\");\n\n    const memoryStore = new MemoryStore(sharedDb, embedder, options.hnsw ? {\n      hnswIndexPath: options.hnsw.indexPath,\n      hnswThreshold: options.hnsw.threshold,\n    } : undefined);\n    const workingMemory = createWorkingMemory();\n    const episodicMemory = new EpisodicMemory(sharedDb, embedder);\n    const graphMemory = new GraphMemory(sharedDb);\n\n    const graphQueryEngine = new GraphQueryEngine(graphMemory, embedder);\n    memoryStore.setGraphEngine(graphQueryEngine);\n\n    const entityExtractor = new EntityExtractor();\n\n    const corroborationThreshold = Math.max(\n      1,\n      Math.floor(options.corroborationThreshold ?? 2),\n    );\n    const memoryConsolidator = new MemoryConsolidator(\n      memoryStore,\n      episodicMemory,\n      graphMemory,\n      entityExtractor,\n      { policy: \"pattern_recurring\", minRecurrences: 2, requireVerification: false },\n      corroborationThreshold,\n    );\n\n    // Phase 5: wire the shared embedder into the persistent tool-output\n    // cache (if provided) so embed-after-store fires for cached reads.\n    if (options.toolOutputCache && embedder) {\n      options.toolOutputCache.setEmbedder(embedder);\n    }\n\n    const unifiedRetriever = new UnifiedMemoryRetriever(\n      workingMemory,\n      episodicMemory,\n      memoryStore,\n      graphQueryEngine,\n      options.toolOutputCache ?? null,\n      embedder,\n      corroborationThreshold,\n    );\n\n    return {\n      memoryStore,\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-002",
+      "title": "src/storage/EmbeddingClient.ts :: async embedWithProvenance",
+      "kind": "code",
+      "source": "src/storage/EmbeddingClient.ts",
+      "sourceSha256": "1ff3529109876553b71036f06f06e790533d5d566b70f0a5090623348bbcabde",
+      "sourceStartLine": 79,
+      "excerptSha256": "1e8ef417e17412a73c8e7bf8e2ae729fce7931f567c77fd6383f223cc5768fc9",
+      "text": "   * embedder is offline or errors, falls back to the deterministic 128-D\n   * heuristic embedder and returns provenance `'heuristic'`. Returns null\n   * only for empty input.\n   */\n  async embedWithProvenance(text: string): Promise<ProvenancedEmbedding | null> {\n    if (!text) return null;\n    const primary = await this.embed(text);\n    if (primary) {\n      return { embedding: primary, provenance: \"ollama\" };\n    }\n    return {\n      embedding: this._heuristic.embed(text),\n      provenance: \"heuristic\",\n    };\n  }\n\n  /** Direct heuristic embedding without trying the primary embedder first. */\n  embedHeuristic(text: string): number[] {\n    return this._heuristic.embed(text);\n  }\n\n  /**\n   * Batch embed multiple texts. Returns an array parallel to the input;\n   * null entries indicate individual failures.\n   */\n  async embedBatch(texts: string[]): Promise<Array<number[] | null>> {\n    if (texts.length === 0) return [];\n    if (this._client.embedBatch) {\n      const results = await this._client.embedBatch(texts, this._model);\n      // If the entire batch is unavailable, cache the verdict.\n      if (results.every((r) => !r.available)) {\n        this._available = false;\n      }\n      return results.map((r) => r.embedding);\n    }\n    if (!this._client.embed) {\n      return texts.map(() => null);\n    }\n    // Polyfill: serial calls when the provider does not implement batch.\n    const out: Array<number[] | null> = [];\n    for (const text of texts) {\n      out.push(await this.embed(text));\n    }\n    return out;\n  }\n}\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-003",
+      "title": "src/storage/MemoryStore.ts :: async searchSemantic",
+      "kind": "code",
+      "source": "src/storage/MemoryStore.ts",
+      "sourceSha256": "98ba1ee281b205fbb707bc8b1a4185c984114f8188b034a63e81ce231a19a83f",
+      "sourceStartLine": 378,
+      "excerptSha256": "1055065408717f6c7a87d74918d55b9b82730ff83afd3d638a223bd586f04365",
+      "text": "  // Semantic search (cosine similarity)\n  // ---------------------------------------------------------------------------\n\n  /** Search memories using embedding cosine similarity. Returns empty if embedder unavailable. */\n  async searchSemantic(query: string, limit = 10): Promise<MemorySearchResult[]> {\n    if (!this._embedder) return [];\n\n    const queryVec = await this._embedder.embed(query);\n    if (!queryVec) return [];\n    const queryVec32 = Float32Array.from(queryVec);\n\n    // v0.7.0 Phase 7: HNSW path -- when entry count crosses the configured\n    // threshold AND hnswlib-node is loadable, use the persistent ANN index\n    // instead of the FTS5-pre-filtered linear scan. Falls back automatically\n    // when the index returns empty or HNSW yields fewer than `limit` results.\n    const hnswResults = this._searchHnsw(queryVec32, limit);\n    if (hnswResults && hnswResults.length > 0) {\n      return this._finalizeSemanticResults(hnswResults);\n    }\n\n    // Pre-filter candidates via FTS5 so we don't scan the full embeddings table.\n    // If the query has no FTS tokens (e.g., pure symbols) or the FTS query fails,\n    // fall back to a bounded scan of the most recently accessed rows.\n    const rows = this._getSemanticCandidates(query);\n    if (rows.length === 0) return [];\n\n    const scored = rows\n      .map((r) => ({\n        row: r,\n        similarity: this._cosineSimilarity32(queryVec32, this._getCachedEmbedding(r)),\n      }))\n      .sort((a, b) => b.similarity - a.similarity)\n      .slice(0, limit);\n\n    return this._finalizeSemanticResults(\n      scored.map((s) => ({ row: s.row, similarity: s.similarity })),\n    );\n  }\n\n  /**\n   * Mark the rows in `scored` as accessed and project them into the public\n   * MemorySearchResult shape. Shared by both the HNSW and linear-scan paths.\n   */\n  private _finalizeSemanticResults(\n    scored: Array<{ row: MemoryRow; similarity: number }>,\n  ): MemorySearchResult[] {\n    if (scored.length === 0) return [];\n\n    const now = Date.now();\n    const update = this._db.prepare(\n      \"UPDATE memories SET accessed_at = ?, access_count = access_count + 1 WHERE id = ?\",\n    );\n    const updateMany = this._db.transaction((ids: string[]) => {\n      for (const id of ids) update.run(now, id);\n    });\n    updateMany(scored.map((s) => s.row.id));\n\n    return scored.map((s) => ({\n      entry: this._rowToEntry(s.row),\n      score: Math.max(0, s.similarity),\n      matchSource: \"semantic\" as const,\n    }));\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-004",
+      "title": "src/storage/MemoryStore.ts :: private _getSemanticCandidates",
+      "kind": "code",
+      "source": "src/storage/MemoryStore.ts",
+      "sourceSha256": "98ba1ee281b205fbb707bc8b1a4185c984114f8188b034a63e81ce231a19a83f",
+      "sourceStartLine": 1022,
+      "excerptSha256": "740e6b7df3453062e2662c2f1209ade0392591e02262f25ac41630b350c7214f",
+      "text": "   * Return the candidate pool for semantic scoring: FTS5-matched rows first,\n   * fallback to the most-recently-accessed rows if the query has no tokens.\n   * Capped at SEMANTIC_CANDIDATE_LIMIT rows so cosine scoring is O(N).\n   */\n  private _getSemanticCandidates(query: string): MemoryRow[] {\n    const sanitized = sanitizeFtsQuery(query);\n    if (sanitized) {\n      try {\n        const rows = this._db\n          .prepare(\n            `SELECT m.*\n             FROM memories_fts fts\n             JOIN memories m ON m.rowid = fts.rowid\n             WHERE memories_fts MATCH ? AND m.embedding IS NOT NULL\n             ORDER BY fts.rank\n             LIMIT ?`,\n          )\n          .all(sanitized, SEMANTIC_CANDIDATE_LIMIT) as MemoryRow[];\n        if (rows.length > 0) return rows;\n      } catch {\n        // Fall through to the recency-based fallback.\n      }\n    }\n    return this._db\n      .prepare(\n        `SELECT * FROM memories\n         WHERE embedding IS NOT NULL\n         ORDER BY accessed_at DESC\n         LIMIT ?`,\n      )\n      .all(SEMANTIC_CANDIDATE_LIMIT) as MemoryRow[];\n  }\n\n  private _cosineSimilarity32(a: Float32Array, b: Float32Array): number {\n    return cosineSimilarity(a, b);\n  }\n\n  // ---------------------------------------------------------------------------\n  // v0.7.0 Phase 7 -- HNSW vector index helpers\n  // ---------------------------------------------------------------------------\n\n  /**\n   * Return true when the HNSW path should be considered: the entry count has\n   * crossed the configured threshold AND a `hnswIndexPath` was supplied. The\n   * native binary load is attempted lazily inside `_ensureHnswIndex`.\n   */\n  private _shouldUseHnsw(): boolean {\n    const opts = this._hnswOptions;\n    if (!opts.hnswIndexPath) return false;\n    const threshold = opts.hnswThreshold ?? 1000;\n    if (this._cachedCount === null) {\n      this._cachedCount = this.count();\n    }\n    return this._cachedCount >= threshold;\n  }\n\n  /**\n   * Lazily build / load the HNSW index on first access. Returns null when the\n   * native dependency cannot be loaded -- callers fall back to linear scan.\n   */\n  private _ensureHnswIndex(): MemoryHnswIndex | null {\n    if (this._hnswIndex) return this._hnswIndex;\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-005",
+      "title": "src/storage/MemoryStore.ts :: async searchHybrid",
+      "kind": "code",
+      "source": "src/storage/MemoryStore.ts",
+      "sourceSha256": "98ba1ee281b205fbb707bc8b1a4185c984114f8188b034a63e81ce231a19a83f",
+      "sourceStartLine": 454,
+      "excerptSha256": "ea30f29738ddaf82a1a71ced9a94ff7d1ce96765a3885d8ee2c61c7078ae19f2",
+      "text": "   * Falls through to an empty list cleanly when neither sub-ranker returns\n   * anything. The function never throws -- internal errors degrade to\n   * partial results.\n   */\n  async searchHybrid(\n    query: string,\n    limit = 10,\n    method: FusionMethod = \"rrf\",\n  ): Promise<MemorySearchResult[]> {\n    if (!query) return [];\n    const keywordResults = this.searchKeyword(query, Math.max(limit, 20));\n    let semanticResults: MemorySearchResult[] = [];\n    try {\n      semanticResults = await this.searchSemantic(query, Math.max(limit, 20));\n    } catch (err) {\n      getLogger().debug(\n        \"[MemoryStore] searchHybrid semantic step failed:\",\n        formatForLog(err),\n      );\n    }\n\n    if (keywordResults.length === 0 && semanticResults.length === 0) return [];\n\n    const vectorCandidates: VectorCandidate[] = semanticResults.map((r) => ({\n      entry: r.entry,\n      similarity: r.score,\n      source: \"linear-scan\",\n    }));\n    const lexicalCandidates: LexicalCandidate[] = keywordResults.map((r) => ({\n      entry: r.entry,\n      score: r.score,\n    }));\n\n    const ranker = new HybridRanker({ method, limit });\n    const ranked = ranker.rank(vectorCandidates, lexicalCandidates);\n    return ranked.map((r) => ({\n      entry: r.entry,\n      score: r.score,\n      matchSource: \"hybrid\" as const,\n      reason: r.reason,\n    }));\n  }\n\n  // ---------------------------------------------------------------------------\n  // Unified retrieval\n  // ---------------------------------------------------------------------------\n\n  /**\n   * v0.9.0 Phase 2.2 (from v0.8.0 known-gaps 10.O.M) -- formatted hybrid\n   * retrieval surface.\n   *\n   * Wraps `searchHybrid` so callers (UnifiedMemoryRetriever, PromptBuilder\n   * via UnifiedMemoryRetriever.retrieve) get a budget-packed memory-context\n   * string. Per-result `reason` arrays from the ranker pass through into\n   * the rendered output so the operator can audit why each entry was\n   * surfaced.\n   */\n  async retrieveHybrid(\n    query: string,\n    tokenBudget: number,\n    method: FusionMethod = \"rrf\",\n  ): Promise<string> {\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-006",
+      "title": "src/storage/MemoryStore.ts :: async retrieveHybrid",
+      "kind": "code",
+      "source": "src/storage/MemoryStore.ts",
+      "sourceSha256": "98ba1ee281b205fbb707bc8b1a4185c984114f8188b034a63e81ce231a19a83f",
+      "sourceStartLine": 507,
+      "excerptSha256": "4e71933d4a948d339c6493bccdc4a2ec88fe0018db4489efcd3ae6f0c5a7fb98",
+      "text": "   * string. Per-result `reason` arrays from the ranker pass through into\n   * the rendered output so the operator can audit why each entry was\n   * surfaced.\n   */\n  async retrieveHybrid(\n    query: string,\n    tokenBudget: number,\n    method: FusionMethod = \"rrf\",\n  ): Promise<string> {\n    if (!query) return \"\";\n    const results = await this.searchHybrid(query, 20, method);\n    if (results.length === 0 && !this._graphEngine) return \"\";\n\n    const header = \"## Recalled Memories\\n\\n\";\n    let usedTokens = header.length / CHARS_PER_TOKEN;\n    const lines: string[] = [];\n    for (const r of results) {\n      const date = new Date(r.entry.createdAt).toLocaleDateString();\n      const reasonTail =\n        r.reason && r.reason.length > 0 ? ` [${r.reason.join(\"; \")}]` : \"\";\n      const line = `- [${r.entry.type}] ${r.entry.content} (from ${date})${reasonTail}`;\n      const lineTokens = line.length / CHARS_PER_TOKEN;\n      if (usedTokens + lineTokens > tokenBudget) break;\n      lines.push(line);\n      usedTokens += lineTokens;\n    }\n    let out = lines.length > 0 ? header + lines.join(\"\\n\") : \"\";\n    if (this._graphEngine) {\n      const graphBudget = Math.floor(tokenBudget * 0.25);\n      const graphResult = this._graphEngine.queryContextFor(query, 10);\n      const graphContext = this._graphEngine.formatAsContext(graphResult, graphBudget);\n      if (graphContext) out = out ? `${out}\\n\\n${graphContext}` : graphContext;\n    }\n    return out;\n  }\n\n  /**\n   * Retrieve memories relevant to a query, packed within a token budget.\n   * Returns a formatted string ready for injection into PromptContext.memoryContext.\n   *\n   * `corroborationThreshold` tiers results into facts (count >= threshold)\n   * and candidates (count < threshold). Fact-tier rows are preferred; the\n   * candidate tier is only consulted when no fact-tier match is selected.\n   * Default is 1, which preserves legacy behavior (every row is a fact).\n   */\n  async retrieve(\n    query: string,\n    tokenBudget: number,\n    corroborationThreshold = 1,\n  ): Promise<string> {\n    if (!query) return \"\";\n\n    const keywordResults = this.searchKeyword(query, 20);\n    const semanticResults = await this.searchSemantic(query, 20);\n\n    if (keywordResults.length === 0 && semanticResults.length === 0 && !this._graphEngine) {\n      return \"\";\n    }\n\n    // Merge keyword + semantic into a single array, tracking seen ids via an\n    // index map so we can blend scores for entries that matched both paths.\n    // Avoids the previous Map<id, result> + `[...values()]` spread\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-007",
+      "title": "src/storage/EpisodicMemory.ts :: async record(",
+      "kind": "code",
+      "source": "src/storage/EpisodicMemory.ts",
+      "sourceSha256": "0f70018af5ffae517e8e7fe033188a6f0555140b0d55b209b0f13ac6aca670c7",
+      "sourceStartLine": 100,
+      "excerptSha256": "f404a4160d2ceff947ad2bb0487193c2be137bfdb59bc6889c309389b6527de4",
+      "text": "    }\n  }\n\n  /** Record a new episodic event. Computes embedding if embedder is available. */\n  async record(\n    event: Omit<EpisodicEntry, \"id\">,\n  ): Promise<EpisodicEntry> {\n    const id = randomUUID();\n\n    let embeddingBuf: Buffer | null = null;\n    if (this._embedder) {\n      const textForEmbedding = `${event.action} ${event.context} ${event.outcome ?? \"\"}`.trim();\n      const vec = await this._embedder.embed(textForEmbedding);\n      if (vec) {\n        embeddingBuf = serializeEmbedding(vec);\n      }\n    }\n\n    this._db\n      .prepare(\n        `INSERT INTO episodic_events\n         (id, session_id, action, context, outcome, timestamp, source, source_session_id, source_message_id, confidence, tags, embedding)\n         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,\n      )\n      .run(\n        id,\n        event.sessionId,\n        event.action,\n        event.context,\n        event.outcome ?? null,\n        event.timestamp,\n        event.provenance.source,\n        event.provenance.sourceSessionId ?? null,\n        event.provenance.sourceMessageId ?? null,\n        event.provenance.confidence,\n        JSON.stringify(event.tags),\n        embeddingBuf,\n      );\n\n    return { id, ...event };\n  }\n\n  /** Keyword search using FTS5 BM25 ranking. */\n  searchKeyword(query: string, limit = 10): EpisodicEntry[] {\n    const sanitized = sanitizeFtsQuery(query);\n    if (!sanitized) return [];\n\n    try {\n      const rows = this._db\n        .prepare(\n          `SELECT e.*\n           FROM episodic_fts fts\n           JOIN episodic_events e ON e.rowid = fts.rowid\n           WHERE episodic_fts MATCH ?\n           ORDER BY fts.rank\n           LIMIT ?`,\n        )\n        .all(sanitized, limit) as EpisodicRow[];\n\n      return rows.map((r) => this._rowToEntry(r));\n    } catch {\n      return [];\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-008",
+      "title": "src/storage/EpisodicMemory.ts :: async searchSemantic",
+      "kind": "code",
+      "source": "src/storage/EpisodicMemory.ts",
+      "sourceSha256": "0f70018af5ffae517e8e7fe033188a6f0555140b0d55b209b0f13ac6aca670c7",
+      "sourceStartLine": 162,
+      "excerptSha256": "c8cda85a7542e7b53f4d04666201846608bfc022fcf50ff733a49739db36b88b",
+      "text": "    }\n  }\n\n  /** Semantic search using embedding cosine similarity. */\n  async searchSemantic(query: string, limit = 10): Promise<EpisodicEntry[]> {\n    if (!this._embedder) return [];\n\n    const queryVec = await this._embedder.embed(query);\n    if (!queryVec) return [];\n\n    const rows = this._db\n      .prepare(\"SELECT * FROM episodic_events WHERE embedding IS NOT NULL\")\n      .all() as EpisodicRow[];\n\n    if (rows.length === 0) return [];\n\n    const scored = rows\n      .map((r) => ({\n        row: r,\n        similarity: cosineSimilarity(queryVec, deserializeEmbedding(r.embedding!)),\n      }))\n      .sort((a, b) => b.similarity - a.similarity)\n      .slice(0, limit);\n\n    return scored.map((s) => this._rowToEntry(s.row));\n  }\n\n  /**\n   * Retrieve episodic events relevant to a query, formatted as a string\n   * packed within the token budget.\n   */\n  async retrieve(query: string, tokenBudget: number): Promise<string> {\n    if (!query) return \"\";\n\n    const keywordResults = this.searchKeyword(query, 20);\n    const semanticResults = await this.searchSemantic(query, 20);\n\n    // Merge and deduplicate.\n    const seen = new Set<string>();\n    const merged: EpisodicEntry[] = [];\n    for (const entry of [...keywordResults, ...semanticResults]) {\n      if (!seen.has(entry.id)) {\n        seen.add(entry.id);\n        merged.push(entry);\n      }\n    }\n\n    if (merged.length === 0) return \"\";\n\n    const header = \"## Past Experiences\\n\\n\";\n    let usedTokens = header.length / CHARS_PER_TOKEN;\n    const lines: string[] = [];\n\n    for (const entry of merged) {\n      const outcomeStr = entry.outcome ? ` -> ${entry.outcome}` : \"\";\n      const line = `- [${entry.action}] ${entry.context}${outcomeStr} (confidence: ${entry.provenance.confidence.toFixed(1)})`;\n      const lineTokens = line.length / CHARS_PER_TOKEN;\n      if (usedTokens + lineTokens > tokenBudget) break;\n      lines.push(line);\n      usedTokens += lineTokens;\n    }\n\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-009",
+      "title": "src/storage/GraphQueryEngine.ts :: queryByEntity(",
+      "kind": "code",
+      "source": "src/storage/GraphQueryEngine.ts",
+      "sourceSha256": "20c30374859af61b62853babcc2b388a87c8676d3dc047ec42f8af6ee425b927",
+      "sourceStartLine": 47,
+      "excerptSha256": "79e3943f4404cdf74cb9fdeea293c60f0afa09e8d7a3ad74bd1a4b01fa32738c",
+      "text": "  /**\n   * Query by a specific entity name, traversing up to `depth` hops.\n   * Results are sorted by weight * recency_factor.\n   */\n  queryByEntity(\n    entityName: string,\n    depth: number,\n    limit: number,\n  ): GraphQueryResult {\n    const entity = this._graphMemory.getEntity(entityName);\n    if (!entity) return { entities: [], relations: [], totalWeight: 0 };\n\n    const relatedEntities = this._graphMemory.findRelatedEntities(entityName, depth);\n    const allEntities = [entity, ...relatedEntities];\n\n    // Collect all relations between discovered entities.\n    const entityIds = new Set(allEntities.map((e) => e.id));\n    const relations: GraphRelation[] = [];\n    const seenRelations = new Set<string>();\n\n    for (const e of allEntities) {\n      const rels = this._graphMemory.getEntityRelations(e.id, \"both\");\n      for (const rel of rels) {\n        if (\n          !seenRelations.has(rel.id) &&\n          entityIds.has(rel.sourceId) &&\n          entityIds.has(rel.targetId)\n        ) {\n          seenRelations.add(rel.id);\n          relations.push(rel);\n        }\n      }\n    }\n\n    // Score and sort by weight * recency.\n    const now = Date.now();\n    const scored = allEntities\n      .map((e) => ({\n        entity: e,\n        score: e.mentionCount * this._recencyFactor(e.lastSeenAt, now),\n      }))\n      .sort((a, b) => b.score - a.score)\n      .slice(0, limit);\n\n    const totalWeight = relations.reduce((sum, r) => sum + r.weight, 0);\n\n    return {\n      entities: scored.map((s) => s.entity),\n      relations,\n      totalWeight,\n    };\n  }\n\n  /** All relations of a given type, sorted by weight descending. */\n  queryByRelationType(\n    relationType: RelationType,\n    limit: number,\n  ): GraphQueryResult {\n    // Since GraphMemory doesn't have a direct \"all relations by type\" method,\n    // we search for entities and collect their relations.\n    const allEntities = this._graphMemory.searchEntities(\"\", undefined, 200);\n    const relations: GraphRelation[] = [];\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-010",
+      "title": "core/generations/StudioSessionStore.ts :: deleteSession(id: string)",
+      "kind": "code",
+      "source": "core/generations/StudioSessionStore.ts",
+      "sourceSha256": "0f911199290a0506fba1579a21d704fef97294b97b01cce01517943adad0461e",
+      "sourceStartLine": 408,
+      "excerptSha256": "c2a8152b83e4c3b943a30e03b6b844a653838c8a873ac0e00238c1f5a3d92d82",
+      "text": "    if (!mapped) throw new Error(`session not found: ${id}`);\n    return mapped;\n  }\n\n  deleteSession(id: string): void {\n    this.db.prepare(`DELETE FROM studio_sessions WHERE id = ?`).run(id);\n  }\n\n  archiveSession(id: string, archivedAt = Date.now()): StudioSession {\n    const tx = this.db.transaction(() => {\n      const existing = this.getSessionRow(id);\n      if (!existing) throw new Error(`session not found: ${id}`);\n      if (existing.archived_at != null) {\n        const mapped = rowToSession(existing);\n        if (!mapped) throw new Error(`session not found: ${id}`);\n        return mapped;\n      }\n      this.db\n        .prepare(\n          `UPDATE studio_sessions\n              SET archived_folder_id = folder_id, folder_id = NULL, archived_at = ?, updated_at = ?\n            WHERE id = ?`,\n        )\n        .run(archivedAt, archivedAt, id);\n      const mapped = rowToSession({\n        ...existing,\n        folder_id: null,\n        archived_folder_id: existing.folder_id,\n        archived_at: archivedAt,\n        updated_at: archivedAt,\n      });\n      if (!mapped) throw new Error(`session not found: ${id}`);\n      return mapped;\n    });\n    return tx();\n  }\n\n  restoreSession(id: string): { session: StudioSession; parentFallback: boolean } {\n    const tx = this.db.transaction(() => {\n      const existing = this.getSessionRow(id);\n      if (!existing || existing.archived_at == null) throw new Error(`archived session not found: ${id}`);\n      const archivedFolderId = existing.archived_folder_id ?? existing.folder_id;\n      const parent = archivedFolderId === null ? null : this.getFolderRow(archivedFolderId);\n      const parentFallback = archivedFolderId !== null && parent === undefined;\n      const folderId = parentFallback ? null : archivedFolderId;\n      const now = Date.now();\n      this.db\n        .prepare(\n          `UPDATE studio_sessions\n              SET folder_id = ?, archived_folder_id = NULL, archived_at = NULL, updated_at = ?\n            WHERE id = ?`,\n        )\n        .run(folderId, now, id);\n      const mapped = rowToSession({\n        ...existing,\n        folder_id: folderId,\n        archived_folder_id: null,\n        archived_at: null,\n        updated_at: now,\n      });\n      if (!mapped) throw new Error(`session not found: ${id}`);\n      return { session: mapped, parentFallback };\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-011",
+      "title": "core/generations/StudioSessionStore.ts :: appendTurn(input:",
+      "kind": "code",
+      "source": "core/generations/StudioSessionStore.ts",
+      "sourceSha256": "0f911199290a0506fba1579a21d704fef97294b97b01cce01517943adad0461e",
+      "sourceStartLine": 488,
+      "excerptSha256": "3b6575cebf5b7b17335d00aad810eb49cd6f6132600481188d81a412275064df",
+      "text": "    const row = this.getSessionRow(id);\n    return row && row.archived_at == null ? rowToSession(row) : null;\n  }\n\n  appendTurn(input: AppendStudioTurnInput): StudioTurn {\n    const existing = this.getSessionRow(input.sessionId);\n    if (!existing) throw new Error(`session not found: ${input.sessionId}`);\n    const mediaRef = assertPathRef(input.mediaRef);\n    const now = input.createdAt ?? Date.now();\n    const id = input.id ?? randomUUID();\n    const extraJson = turnUsageExtraJson(input);\n    const tx = this.db.transaction(() => {\n      this.db\n        .prepare(\n          `INSERT INTO studio_turns\n             (id, session_id, role, content, media_ref, extra_json, created_at)\n           VALUES (?, ?, ?, ?, ?, ?, ?)`,\n        )\n        .run(id, input.sessionId, input.role, input.content, mediaRef, extraJson, now);\n      if (input.role === \"assistant\" && mediaRef) {\n        this.db\n          .prepare(\n            `UPDATE studio_sessions\n               SET turn_count = turn_count + 1, last_output_ref = ?, updated_at = ?\n             WHERE id = ?`,\n          )\n          .run(mediaRef, now, input.sessionId);\n      } else {\n        this.db\n          .prepare(\n            `UPDATE studio_sessions\n               SET turn_count = turn_count + 1, updated_at = ?\n             WHERE id = ?`,\n          )\n          .run(now, input.sessionId);\n      }\n    });\n    tx();\n    return {\n      id,\n      sessionId: input.sessionId,\n      role: input.role,\n      content: input.content,\n      mediaRef,\n      createdAt: now,\n      inputTokens: input.inputTokens,\n      reasoningTokens: input.reasoningTokens,\n      reasoningText: input.reasoningText\n        ? redactSecrets(input.reasoningText).slice(0, 65_536)\n        : input.reasoningText,\n      outputTokens: input.outputTokens,\n      tokensEstimated: input.tokensEstimated,\n      requestUsage: input.requestUsage,\n      messageUsage: input.messageUsage,\n      visualUnits: input.visualUnits,\n    };\n  }\n\n  listTurns(sessionId: string, limit = 500): readonly StudioTurn[] {\n    const rows = this.db\n      .prepare(\n        `SELECT * FROM studio_turns WHERE session_id = ?\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-012",
+      "title": "desktop/src/shared/studio/ImageViewer.tsx :: export function adjustmentFilter",
+      "kind": "code",
+      "source": "desktop/src/shared/studio/ImageViewer.tsx",
+      "sourceSha256": "26670f508fceb0e486a8cd34643231a0f203717eddf3fbff260898a9479b767c",
+      "sourceStartLine": 80,
+      "excerptSha256": "7239a1293d7bc6761d9b9cc7d61d28b39c6e35a7b8a652da50d5b90f08427665",
+      "text": " * the real convolution, double-counting sharpness in the saved file. Sharpness\n * is now absent here and handled once, by `sharpenPixels`, on both paths --\n * see `renderAdjusted`, which the preview and the export share.\n */\nexport function adjustmentFilter(a: ImageAdjustments): string {\n  return [\n    `brightness(${a.brightness}%)`,\n    `contrast(${a.contrast}%)`,\n    `saturate(${a.saturation}%)`,\n  ].join(\" \");\n}\n\n/**\n * Paint `image` onto `ctx` with adjustments applied, sharpening last.\n *\n * ONE function for the live preview and the exported file, which is the whole\n * point: the operator sees what they save. Order matters (filter, then\n * convolve), so sharing the code is the only way to keep the two identical.\n */\nexport function renderAdjusted(\n  ctx: CanvasRenderingContext2D,\n  image: CanvasImageSource,\n  width: number,\n  height: number,\n  adjustments: ImageAdjustments,\n): void {\n  ctx.clearRect(0, 0, width, height);\n  ctx.filter = adjustmentFilter(adjustments);\n  ctx.drawImage(image, 0, 0, width, height);\n  ctx.filter = \"none\";\n  if (adjustments.sharpness <= 0) return;\n  try {\n    const raw = ctx.getImageData(0, 0, width, height);\n    raw.data.set(sharpenPixels(raw.data, width, height, adjustments.sharpness));\n    ctx.putImageData(raw, 0, 0);\n  } catch {\n    // A tainted canvas cannot be read back. The un-sharpened result is still\n    // correct in every other respect, and the export path behaves the same.\n  }\n}\n\nexport function adjustmentsAreNeutral(a: ImageAdjustments): boolean {\n  return (\n    a.brightness === NEUTRAL_ADJUSTMENTS.brightness &&\n    a.contrast === NEUTRAL_ADJUSTMENTS.contrast &&\n    a.saturation === NEUTRAL_ADJUSTMENTS.saturation &&\n    a.sharpness === NEUTRAL_ADJUSTMENTS.sharpness\n  );\n}\n\n/**\n * A 3x3 unsharp-mask convolution, strength 0-100.\n *\n * Deliberately takes and returns a raw pixel buffer rather than an `ImageData`:\n * that keeps the kernel testable without a DOM (jsdom has no `ImageData`) and\n * keeps the canvas plumbing at the one call site that owns it. Edge pixels are\n * copied through rather than clamped-sampled -- a one-pixel border is invisible\n * at any real image size and the loop stays readable.\n */\nexport function sharpenPixels(\n  src: Uint8ClampedArray,\n  width: number,\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-013",
+      "title": "desktop/src/shared/studio/ImageViewer.tsx :: export function renderAdjusted",
+      "kind": "code",
+      "source": "desktop/src/shared/studio/ImageViewer.tsx",
+      "sourceSha256": "26670f508fceb0e486a8cd34643231a0f203717eddf3fbff260898a9479b767c",
+      "sourceStartLine": 95,
+      "excerptSha256": "fc4cf5306533486d9a649d9977af5582d8906ff2b89fce265e2dde0deaed1d76",
+      "text": " * ONE function for the live preview and the exported file, which is the whole\n * point: the operator sees what they save. Order matters (filter, then\n * convolve), so sharing the code is the only way to keep the two identical.\n */\nexport function renderAdjusted(\n  ctx: CanvasRenderingContext2D,\n  image: CanvasImageSource,\n  width: number,\n  height: number,\n  adjustments: ImageAdjustments,\n): void {\n  ctx.clearRect(0, 0, width, height);\n  ctx.filter = adjustmentFilter(adjustments);\n  ctx.drawImage(image, 0, 0, width, height);\n  ctx.filter = \"none\";\n  if (adjustments.sharpness <= 0) return;\n  try {\n    const raw = ctx.getImageData(0, 0, width, height);\n    raw.data.set(sharpenPixels(raw.data, width, height, adjustments.sharpness));\n    ctx.putImageData(raw, 0, 0);\n  } catch {\n    // A tainted canvas cannot be read back. The un-sharpened result is still\n    // correct in every other respect, and the export path behaves the same.\n  }\n}\n\nexport function adjustmentsAreNeutral(a: ImageAdjustments): boolean {\n  return (\n    a.brightness === NEUTRAL_ADJUSTMENTS.brightness &&\n    a.contrast === NEUTRAL_ADJUSTMENTS.contrast &&\n    a.saturation === NEUTRAL_ADJUSTMENTS.saturation &&\n    a.sharpness === NEUTRAL_ADJUSTMENTS.sharpness\n  );\n}\n\n/**\n * A 3x3 unsharp-mask convolution, strength 0-100.\n *\n * Deliberately takes and returns a raw pixel buffer rather than an `ImageData`:\n * that keeps the kernel testable without a DOM (jsdom has no `ImageData`) and\n * keeps the canvas plumbing at the one call site that owns it. Edge pixels are\n * copied through rather than clamped-sampled -- a one-pixel border is invisible\n * at any real image size and the loop stays readable.\n */\nexport function sharpenPixels(\n  src: Uint8ClampedArray,\n  width: number,\n  height: number,\n  strength: number,\n): Uint8ClampedArray {\n  if (strength <= 0) return src;\n  const amount = Math.min(1, strength / 100);\n  const out = new Uint8ClampedArray(src);\n  const center = 1 + 4 * amount;\n  const side = -amount;\n  for (let y = 1; y < height - 1; y += 1) {\n    for (let x = 1; x < width - 1; x += 1) {\n      const i = (y * width + x) * 4;\n      for (let c = 0; c < 3; c += 1) {\n        const value =\n          src[i + c]! * center +\n          src[i - 4 + c]! * side +\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-014",
+      "title": "desktop/src/shared/studio/ImageViewer.tsx :: export function sharpenPixels",
+      "kind": "code",
+      "source": "desktop/src/shared/studio/ImageViewer.tsx",
+      "sourceSha256": "26670f508fceb0e486a8cd34643231a0f203717eddf3fbff260898a9479b767c",
+      "sourceStartLine": 135,
+      "excerptSha256": "2b3da0b938cbf2e07b37bbe02f1dbf19d61c0800ce3070a11286f3dc26544f86",
+      "text": " * keeps the canvas plumbing at the one call site that owns it. Edge pixels are\n * copied through rather than clamped-sampled -- a one-pixel border is invisible\n * at any real image size and the loop stays readable.\n */\nexport function sharpenPixels(\n  src: Uint8ClampedArray,\n  width: number,\n  height: number,\n  strength: number,\n): Uint8ClampedArray {\n  if (strength <= 0) return src;\n  const amount = Math.min(1, strength / 100);\n  const out = new Uint8ClampedArray(src);\n  const center = 1 + 4 * amount;\n  const side = -amount;\n  for (let y = 1; y < height - 1; y += 1) {\n    for (let x = 1; x < width - 1; x += 1) {\n      const i = (y * width + x) * 4;\n      for (let c = 0; c < 3; c += 1) {\n        const value =\n          src[i + c]! * center +\n          src[i - 4 + c]! * side +\n          src[i + 4 + c]! * side +\n          src[i - width * 4 + c]! * side +\n          src[i + width * 4 + c]! * side;\n        out[i + c] = value;\n      }\n    }\n  }\n  return out;\n}\n\nexport interface ImageViewerProps {\n  readonly src: string;\n  readonly alt?: string;\n  /** Base name for a saved file, without extension. */\n  readonly downloadName?: string;\n  readonly onClose: () => void;\n  /**\n   * v2.4.9: accepted and IGNORED. The studios pass their Copy-workflow / seed\n   * / layers row here; the operator reported none of those buttons did\n   * anything, so the viewer no longer renders them. Kept on the interface so\n   * the call sites stay valid and the intent is explicit rather than a silent\n   * prop drop.\n   */\n  readonly extra?: React.ReactNode;\n  readonly testId?: string;\n}\n\ntype Tool = \"none\" | \"brush\" | \"text\";\n\nexport function ImageViewer({\n  src,\n  alt,\n  downloadName = \"nexus-image\",\n  onClose,\n  testId = \"image-viewer\",\n}: ImageViewerProps): JSX.Element {\n  const [adjustments, setAdjustments] = useState<ImageAdjustments>({ ...NEUTRAL_ADJUSTMENTS });\n  const [tool, setTool] = useState<Tool>(\"none\");\n  const [color, setColor] = useState(\"#ff3b30\");\n  const [brushSize, setBrushSize] = useState(8);\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-015",
+      "title": "core/chat/attachments.ts :: export function validateImageBytes",
+      "kind": "code",
+      "source": "core/chat/attachments.ts",
+      "sourceSha256": "eb3d83505dd48c371e0b6a71001523eccacbcf0f3fd393f4300824a3e7b56058",
+      "sourceStartLine": 25,
+      "excerptSha256": "76cc339617d8b244c5b8ee6cb21d9063d280c6721869d713f303f08550d9f147",
+      "text": "  if (m.startsWith(\"audio/\")) return \"audio\";\n  return \"document\";\n}\n\nexport function validateImageBytes(bytes: Uint8Array, declaredMime?: string): AttachmentVerdict {\n  if (bytes.length < 8) {\n    return { kind: \"rejected\", reason: \"Attachment is empty or truncated.\" };\n  }\n  const matched = IMAGE_MAGIC.find((entry) =>\n    entry.bytes.every((b, i) => bytes[i] === b),\n  );\n  if (!matched) {\n    return { kind: \"rejected\", reason: \"Unsupported or malformed image. Use PNG, JPEG, WebP, or GIF.\" };\n  }\n  if (declaredMime && declaredMime.startsWith(\"image/\") && declaredMime !== \"image/*\") {\n    const declared = declaredMime.toLowerCase();\n    if (declared !== matched.mime && !(declared === \"image/jpg\" && matched.mime === \"image/jpeg\")) {\n      return { kind: \"rejected\", reason: `Declared type ${declaredMime} does not match the file bytes.` };\n    }\n  }\n  return { kind: \"image\" };\n}\n\nexport function pngPixelCount(bytes: Uint8Array): number | null {\n  if (bytes.length < 24) return null;\n  const png = IMAGE_MAGIC[0];\n  if (!png || !png.bytes.every((b, i) => bytes[i] === b)) return null;\n  const width = readU32(bytes, 16);\n  const height = readU32(bytes, 20);\n  if (!Number.isFinite(width) || !Number.isFinite(height) || width < 1 || height < 1) return null;\n  return width * height;\n}\n\nfunction readU32(bytes: Uint8Array, offset: number): number {\n  return (\n    ((bytes[offset] ?? 0) << 24) |\n    ((bytes[offset + 1] ?? 0) << 16) |\n    ((bytes[offset + 2] ?? 0) << 8) |\n    (bytes[offset + 3] ?? 0)\n  ) >>> 0;\n}\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-016",
+      "title": "core/chat/attachments.ts :: export function pngPixelCount",
+      "kind": "code",
+      "source": "core/chat/attachments.ts",
+      "sourceSha256": "eb3d83505dd48c371e0b6a71001523eccacbcf0f3fd393f4300824a3e7b56058",
+      "sourceStartLine": 44,
+      "excerptSha256": "9081ccc2a41482b898db0b89bf6eedff9c5d5e67c864f34317872baec470f367",
+      "text": "  }\n  return { kind: \"image\" };\n}\n\nexport function pngPixelCount(bytes: Uint8Array): number | null {\n  if (bytes.length < 24) return null;\n  const png = IMAGE_MAGIC[0];\n  if (!png || !png.bytes.every((b, i) => bytes[i] === b)) return null;\n  const width = readU32(bytes, 16);\n  const height = readU32(bytes, 20);\n  if (!Number.isFinite(width) || !Number.isFinite(height) || width < 1 || height < 1) return null;\n  return width * height;\n}\n\nfunction readU32(bytes: Uint8Array, offset: number): number {\n  return (\n    ((bytes[offset] ?? 0) << 24) |\n    ((bytes[offset + 1] ?? 0) << 16) |\n    ((bytes[offset + 2] ?? 0) << 8) |\n    (bytes[offset + 3] ?? 0)\n  ) >>> 0;\n}\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-017",
+      "title": "desktop/sidecar/src/studio/sessionRuntime.ts :: export function studioSessionRuntime",
+      "kind": "code",
+      "source": "desktop/sidecar/src/studio/sessionRuntime.ts",
+      "sourceSha256": "b9eec6cd88235d6f86f40ad81c059d91a4ae1de0a184cc2122a89c0a2b87a92f",
+      "sourceStartLine": 41,
+      "excerptSha256": "7895f38585561d811be285b6e61af818bfd20816afc97bb1c80c4a57e375c028",
+      "text": "\nlet runtime: StudioSessionRuntime | null = null;\nlet failure: StudioSessionStorageUnavailableError | null = null;\n\nexport function studioSessionRuntime(\n  dbPath = resolveStudioSessionsDbPath(),\n): StudioSessionRuntime {\n  if (failure) throw failure;\n  if (runtime) return runtime;\n  try {\n    if (dbPath !== \":memory:\") {\n      mkdirSync(path.dirname(dbPath), { recursive: true });\n    }\n    runtime = { store: new StudioSessionStore(dbPath), dbPath };\n    return runtime;\n  } catch (err) {\n    const cause = err instanceof Error ? err.message : String(err);\n    failure = new StudioSessionStorageUnavailableError(dbPath, cause);\n    throw failure;\n  }\n}\n\nexport function resetStudioSessionRuntime(): void {\n  try {\n    runtime?.store.close();\n  } catch {\n    /* best-effort */\n  }\n  runtime = null;\n  failure = null;\n}\n\nexport interface StudioSessionOps {\n  tree(input: { pillar: StudioPillar }): { tree: StudioTreeNode };\n  createFolder(input: CreateStudioFolderInput): StudioFolder;\n  renameFolder(input: { id: string; name: string }): StudioFolder;\n  moveFolder(input: { id: string; parentId: string | null }): StudioFolder;\n  deleteFolder(input: { id: string }): { ok: true };\n  createSession(input: CreateStudioSessionInput): StudioSession;\n  renameSession(input: { id: string; title: string }): StudioSession;\n  moveSession(input: { id: string; folderId: string | null }): StudioSession;\n  deleteSession(input: { id: string }): { ok: true };\n  archiveSession(input: { id: string }): StudioSession;\n  restoreSession(input: { id: string }): { session: StudioSession; parentFallback: boolean };\n  listArchived(input: { pillar?: StudioPillar }): { sessions: ReturnType<StudioSessionStore[\"listArchivedSessions\"]> };\n  appendTurn(input: AppendStudioTurnInput): StudioTurn;\n  listTurns(input: { sessionId: string; limit?: number }): { turns: readonly StudioTurn[] };\n}\n\nexport function createStudioSessionOps(\n  sessionRuntime: StudioSessionRuntime = studioSessionRuntime(),\n): StudioSessionOps {\n  const { store } = sessionRuntime;\n  return {\n    tree: (input) => ({ tree: store.listTree(input.pillar) }),\n    createFolder: (input) => store.createFolder(input),\n    renameFolder: (input) => store.renameFolder(input.id, input.name),\n    moveFolder: (input) => store.moveFolder(input.id, input.parentId),\n    deleteFolder: (input) => {\n      store.deleteFolder(input.id);\n      return { ok: true };\n    },\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-018",
+      "title": "desktop/sidecar/src/chat/memoryRuntime.ts :: new EpisodicMemory(dbPath, null)",
+      "kind": "code",
+      "source": "desktop/sidecar/src/chat/memoryRuntime.ts",
+      "sourceSha256": "62b18813420a1763fa7cd9cce3ac78982896af18fce76c483e824eedddf15873",
+      "sourceStartLine": 42,
+      "excerptSha256": "00822daf90db05e3aa0504e7799b8c6a7dd4355f9b3580c113b1d5d3ab98c607",
+      "text": "  private readonly store: EpisodicMemory;\n\n  constructor(dbPath = resolveChatMemoryDbPath()) {\n    mkdirSync(path.dirname(dbPath), { recursive: true });\n    this.store = new EpisodicMemory(dbPath, null);\n  }\n\n  async record(input: ChatMemoryRecordInput): Promise<{ ok: true }> {\n    const timestamp = Date.now();\n    const scopeId = input.scopeId ?? null;\n    await this.store.record({\n      sessionId: scopeId ?? \"chat-global\",\n      action: input.source ?? \"chat-turn\",\n      context: redactSecrets(input.content),\n      outcome: null,\n      timestamp,\n      provenance: {\n        source: \"user_stated\",\n        sourceSessionId: scopeId,\n        sourceMessageId: input.id,\n        timestamp,\n        confidence: 1,\n      },\n      tags: [\"chat\"],\n    });\n    return { ok: true };\n  }\n\n  async search(input: ChatMemorySearchInput): Promise<{ hits: readonly ChatMemoryHit[] }> {\n    const limit = Math.min(Math.max(1, input.limit ?? 5), 20);\n    const scopeId = input.scopeId ?? null;\n    const candidates = this.store.searchKeyword(redactSecrets(input.query), limit * 4);\n    const rows = candidates\n      .filter(\n        (entry) =>\n          input.scopeId === undefined || entry.provenance.sourceSessionId === scopeId,\n      )\n      .slice(0, limit)\n      .map((entry): ChatMemoryHit => ({\n        id: entry.provenance.sourceMessageId ?? entry.id,\n        content: entry.context,\n        source: entry.action,\n        capturedAt: new Date(entry.timestamp).toISOString(),\n        scopeId: entry.provenance.sourceSessionId,\n      }));\n    return { hits: rows };\n  }\n\n  close(): void {\n    this.store.close();\n  }\n}\n\nexport function chatMemoryRuntime(): ChatMemoryRuntime {\n  runtime ??= new ChatMemoryRuntime();\n  return runtime;\n}\n\nexport function resetChatMemoryRuntime(): void {\n  runtime?.close();\n  runtime = null;\n}\n",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-019",
+      "title": "docs/reference/model-acceptance.md :: ### Taking a job",
+      "kind": "document",
+      "source": "docs/reference/model-acceptance.md",
+      "sourceSha256": "b1078cee57e33aae994854f0389abdf1646d586fbcf3aaa040b3a7e54cd69310",
+      "sourceStartLine": 109,
+      "excerptSha256": "448872a83235deb3452956cc6d139358dce36f9385da0b6be9f81d916e576c8f",
+      "text": "**OQ-6 -- A model can call tools correctly and still be unusable as an agent, and nothing in this map records that.** v2.4.10 added `minicpm5:2b` as an opt-in chat entry rather than the low-VRAM agentic default it was proposed as. The model emits well-formed tool calls in its documented nested-XML grammar, but `<function`, `</function>`, `<param`, and `</param>` are tokenizer special tokens (ids 18-21), and Ollama's detokenizer omits special tokens from the response string. All five parsers in `TOOL_FORMAT_NAMES` return zero calls on nine transcripts, and no parser can be written against delimiters that never arrive. The blocker is neither the model nor Nexus but the boundary between them, and this map has no column for \"the runtime eats the format\". The consequence is live: `lfm2.5:2.6b` keeps the cpu-tier dedicated agentic job, so low-VRAM users remain on the one catalog LLM whose licence caps free commercial use at USD 10M annual revenue. Evidence and the re-probe exit condition are in [`docs/archive/v2/v2.4/development/v2.4.10-model-evidence.md`](../archive/v2/v2.4/development/v2.4.10-model-evidence.md); tracked as DF-1.\n\n## The bar\n\n### Taking a job\n\nA proposal that targets an occupied job must name the job, name the holder, and bring **measured numbers from this project's own hardware** on the axes that job is judged by. Vendor-reported figures and leaderboard positions do not count; the catalog already records `vendorReported` and `toolCallingBenchmark` separately for exactly this reason.\n\nWhat has to be measured depends on the job:\n\n- **A chat or agentic default**: peak resident memory against the tier's VRAM budget, tokens per second on a representative prompt, and for an agentic job a local transcript proving it actually calls tools in the format the binding claims. `toolCallingVerified: true` without a `toolCallingBenchmark` is a validation failure, not a claim.\n- **A coding-specialist fallback**: the above, plus why it beats the Gemma variant that already covers chat and agentic with one download. Displacing a one-download-covers-two-jobs holder costs the user a second download, and the numbers have to be worth that.\n- **An embedder**: dimension, passage window, and an explicit statement about the index. Switching the app-wide memory embedder forces a reindex of every existing user's on-disk memory, which is a migration, not a swap.\n- **An image or video default**: VRAM floor, wall-clock for one generation at the tier's target resolution, and output the reviewer can look at.\n- **A runtime**: the dependency delta, the platforms it was built on, and what breaks on the platforms it was not.\n\nA proposal that cannot produce the numbers is not rejected on principle. It is an opt-in entry until someone measures it.\n\n### Claiming an uncovered job\n\nA proposal claiming a job nobody holds has a lighter evidentiary load and a heavier one on definition. Say what the job is in the vocabulary of the map above -- a hardware tier, a section, a modality, a resolution step, a license posture -- and say why no current holder covers it. \"No current entry does X\" is checkable; a reviewer can look. If the job turns out to be a relabelling of an occupied one, the proposal is a take, and the numbers are back.\n\nAn uncovered job that is real but that nobody has hardware to test lands as an opt-in entry, gated below the VRAM floor via `hideBelowVramGB` or the `utility` and `opt-in` tags, exactly as `inkling-small` and `longcat-video-avatar-1.5` are today.\n\n### What both routes require\n\n- A license posture that clears the section below.\n- A `source` block with a pinned `revision` and a real `sha256`, or a documented reason the protocol verifies digests on its own. Ollama-sourced entries delegate digest verification to `ollama pull` and carry no `sha256`; Hugging Face entries do not get that exemption.\n- Card copy that argues from license, size, context window, and architecture. Vendor benchmark numbers and suite names do not belong in card copy.\n- A statement of which of the three runtimes, if any, has to change.\n\n## License posture\n\nThe",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    },
+    {
+      "id": "chunk-020",
+      "title": "docs/reference/model-acceptance.md :: ## License posture",
+      "kind": "document",
+      "source": "docs/reference/model-acceptance.md",
+      "sourceSha256": "b1078cee57e33aae994854f0389abdf1646d586fbcf3aaa040b3a7e54cd69310",
+      "sourceStartLine": 136,
+      "excerptSha256": "601e87940f118ea6f7d194b7e4f61cdf766d9ff362df221e8c086ef140f1cd60",
+      "text": "- A `source` block with a pinned `revision` and a real `sha256`, or a documented reason the protocol verifies digests on its own. Ollama-sourced entries delegate digest verification to `ollama pull` and carry no `sha256`; Hugging Face entries do not get that exemption.\n- Card copy that argues from license, size, context window, and architecture. Vendor benchmark numbers and suite names do not belong in card copy.\n- A statement of which of the three runtimes, if any, has to change.\n\n## License posture\n\nThe project has already made license-driven catalog decisions, so this section describes a revealed policy rather than a new one. The clearest worked example is [`v2.4.10-adoption-minicpm5-mistral-models.md`](../archive/v2/v2.4/plans/v2.4.10-adoption-minicpm5-mistral-models.md), whose whole argument is that routing every CPU-only and sub-4 GB user to a revenue-capped license is a harm worth a release to fix, because those users have the least hardware freedom to pick something else.\n\n**For a pre-ticked default**, the acceptable postures are:\n\n- **Permissive** (Apache-2.0, MIT, BSD): accepted without further argument. This is the default expectation for any new default holder.\n- **Custom but unrestricted in use** (the Gemma Terms of Use, as shipped on the primary chat default across four tiers): accepted, with the license named in the entry and, per OQ-5, a `licenseNote` stating what the terms actually require.\n- **Use-restricted** (the RAIL family, redeployment restrictions): accepted only with a `licenseNote` that states the restriction in plain language, because the user inherits it without having chosen the model.\n- **Commercially capped** (a revenue ceiling on free use, as in the LFM Open License v1.0): **not acceptable for a pre-ticked default when an alternative fits the same tier.** Where no alternative fits, it ships with a `licenseNote` and an open commitment to replace it; that commitment is what v2.4.10 is discharging. A proposal must not create a new instance of this.\n\n**For an opt-in entry**, any license is acceptable provided it is named accurately in `license`, linked in `licenseUrl`, and any use restriction is stated in `licenseNote`. The user is choosing it deliberately, so disclosure carries the weight that exclusion carries for defaults.\n\n**Neither route accepts** a license that forbids redistribution of the weights the installer downloads, a license whose terms cannot be read from a stable URL, or an entry whose license field says \"Apache-2.0\" when the model card says otherwise. The last one is the failure mode worth naming: the label is what the invariant test checks, so a wrong label defeats the check rather than tripping it.\n\n## Breadth is not the goal\n\nEvery entry above is a maintenance commitment on three platforms. When a proposal cannot take a job and cannot name an uncovered one, the correct outcome is to decline it, and declining is not a judgement about the model. `Ministral 3 14B` was cut from v2.4.10 on exactly these grounds: its only argument was license cleanliness against terms the catalog already ships as a default without incident, and it would have cost an 8.24 GB download, a catalog entry, an invariant, and four assertions to deliver an untagged row.\n\nThe same test applies in the other direction. An entry that no longer holds its job, because something took it or because the job stopped existing, is a removal candidate. The map is the record of which entries still have a reason.\n\nDeclined proposals and the conditions that would reopen them are listed in [declined-models.md](declined-models.md).\n\n## Qwen3.8 family\n\n\"3.8\" is a release line, not a parameter count. That mislabel has been observed twice. Evidence for one row never transfers to another.\n\n| Name | Parameters | Architecture | llama.cpp architecture id | Approximate smallest artifact | Status |\n|---|---|---|---|---|---|\n| `Qwen/Qwen3.8-Flash-Next` | 125B total, 6B activated per token, plus 51B n-gram embeddings and 4B MTP parameters (surfaces may report 176B to 180B) | MoE | `qwen4exp` (v2.4.0 comparison HF API inventory, 2026-",
+      "labelRationale": "The labelled excerpt contains the named operation or policy; neighboring operations serve as corpus distractors."
+    }
+  ],
+  "queries": [
+    {
+      "id": "answer-01-1",
+      "group": "chunk-001",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which factory wires durable, episodic, graph and working memory together?",
+      "relevant": [
+        "chunk-001"
+      ]
+    },
+    {
+      "id": "answer-01-2",
+      "group": "chunk-001",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where are memory layers given one shared SQLite connection?",
+      "relevant": [
+        "chunk-001"
+      ]
+    },
+    {
+      "id": "answer-01-3",
+      "group": "chunk-001",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which composition function connects the tool output cache to the common embedder?",
+      "relevant": [
+        "chunk-001"
+      ]
+    },
+    {
+      "id": "hard-01",
+      "group": "chunk-001",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Locate memory composition rather than the factory for named image sessions.",
+      "relevant": [
+        "chunk-001"
+      ]
+    },
+    {
+      "id": "answer-02-1",
+      "group": "chunk-002",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How can retrieval report whether its vector came from Ollama or deterministic fallback?",
+      "relevant": [
+        "chunk-002"
+      ]
+    },
+    {
+      "id": "answer-02-2",
+      "group": "chunk-002",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which embedding method returns a heuristic vector when the local model is unavailable?",
+      "relevant": [
+        "chunk-002"
+      ]
+    },
+    {
+      "id": "answer-02-3",
+      "group": "chunk-002",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where is the embedding provenance set for primary and fallback results?",
+      "relevant": [
+        "chunk-002"
+      ]
+    },
+    {
+      "id": "hard-02",
+      "group": "chunk-002",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Find fallback vector provenance rather than the function that validates image byte signatures.",
+      "relevant": [
+        "chunk-002"
+      ]
+    },
+    {
+      "id": "answer-03-1",
+      "group": "chunk-003",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How are memories ranked by cosine similarity with lexical candidate filtering?",
+      "relevant": [
+        "chunk-003"
+      ]
+    },
+    {
+      "id": "answer-03-2",
+      "group": "chunk-003",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where does semantic memory search first try its persistent approximate index?",
+      "relevant": [
+        "chunk-003"
+      ]
+    },
+    {
+      "id": "answer-03-3",
+      "group": "chunk-003",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which retrieval method computes a query vector then records access to similar memories?",
+      "relevant": [
+        "chunk-003"
+      ]
+    },
+    {
+      "id": "hard-03",
+      "group": "chunk-003",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Find cosine memory search rather than hybrid reciprocal rank fusion.",
+      "relevant": [
+        "chunk-003"
+      ]
+    },
+    {
+      "id": "answer-04-1",
+      "group": "chunk-004",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How does the bounded candidate scan behave when an FTS query has no matches?",
+      "relevant": [
+        "chunk-004"
+      ]
+    },
+    {
+      "id": "answer-04-2",
+      "group": "chunk-004",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where are semantic candidates limited and ordered by last access as a fallback?",
+      "relevant": [
+        "chunk-004"
+      ]
+    },
+    {
+      "id": "answer-04-3",
+      "group": "chunk-004",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which function joins full text search rows to only memories that have vectors?",
+      "relevant": [
+        "chunk-004"
+      ]
+    },
+    {
+      "id": "hard-04",
+      "group": "chunk-004",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Locate lexical prefilter fallback rather than the function that computes cosine scores.",
+      "relevant": [
+        "chunk-004"
+      ]
+    },
+    {
+      "id": "answer-05-1",
+      "group": "chunk-005",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where are keyword and semantic memory rankings fused with reciprocal rank fusion?",
+      "relevant": [
+        "chunk-005"
+      ]
+    },
+    {
+      "id": "answer-05-2",
+      "group": "chunk-005",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How does memory retrieval continue when its semantic step throws?",
+      "relevant": [
+        "chunk-005"
+      ]
+    },
+    {
+      "id": "answer-05-3",
+      "group": "chunk-005",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which memory search returns hybrid results with provenance reasons?",
+      "relevant": [
+        "chunk-005"
+      ]
+    },
+    {
+      "id": "hard-05",
+      "group": "chunk-005",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Locate reciprocal rank fusion rather than the pure vector cosine search.",
+      "relevant": [
+        "chunk-005"
+      ]
+    },
+    {
+      "id": "answer-06-1",
+      "group": "chunk-006",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which method packs ranked memories into a bounded context string?",
+      "relevant": [
+        "chunk-006"
+      ]
+    },
+    {
+      "id": "answer-06-2",
+      "group": "chunk-006",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How are hybrid retrieval reasons included in formatted recalled memory?",
+      "relevant": [
+        "chunk-006"
+      ]
+    },
+    {
+      "id": "answer-06-3",
+      "group": "chunk-006",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where is the token budget applied while producing memory context?",
+      "relevant": [
+        "chunk-006"
+      ]
+    },
+    {
+      "id": "hard-06",
+      "group": "chunk-006",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Find formatted recalled memory packing rather than session image export.",
+      "relevant": [
+        "chunk-006"
+      ]
+    },
+    {
+      "id": "answer-07-1",
+      "group": "chunk-007",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How is an episodic event embedded before storing it?",
+      "relevant": [
+        "chunk-007"
+      ]
+    },
+    {
+      "id": "answer-07-2",
+      "group": "chunk-007",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where does an event keep its importance and session with an optional vector?",
+      "relevant": [
+        "chunk-007"
+      ]
+    },
+    {
+      "id": "answer-07-3",
+      "group": "chunk-007",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which episodic write path uses the shared embedder?",
+      "relevant": [
+        "chunk-007"
+      ]
+    },
+    {
+      "id": "hard-07",
+      "group": "chunk-007",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Find episodic event recording rather than durable memory rank fusion.",
+      "relevant": [
+        "chunk-007"
+      ]
+    },
+    {
+      "id": "answer-08-1",
+      "group": "chunk-008",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How does episodic recall rank events by semantic similarity?",
+      "relevant": [
+        "chunk-008"
+      ]
+    },
+    {
+      "id": "answer-08-2",
+      "group": "chunk-008",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which event search returns empty when no embedder is present?",
+      "relevant": [
+        "chunk-008"
+      ]
+    },
+    {
+      "id": "answer-08-3",
+      "group": "chunk-008",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where does an episodic query get embedded before scoring stored events?",
+      "relevant": [
+        "chunk-008"
+      ]
+    },
+    {
+      "id": "hard-08",
+      "group": "chunk-008",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Locate semantic episode search rather than recording a new event.",
+      "relevant": [
+        "chunk-008"
+      ]
+    },
+    {
+      "id": "answer-09-1",
+      "group": "chunk-009",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How does graph recall traverse relations from a named entity?",
+      "relevant": [
+        "chunk-009"
+      ]
+    },
+    {
+      "id": "answer-09-2",
+      "group": "chunk-009",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where are graph entities scored by mention count and recency?",
+      "relevant": [
+        "chunk-009"
+      ]
+    },
+    {
+      "id": "answer-09-3",
+      "group": "chunk-009",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which graph query deduplicates relations across discovered entities?",
+      "relevant": [
+        "chunk-009"
+      ]
+    },
+    {
+      "id": "hard-09",
+      "group": "chunk-009",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Locate graph entity traversal rather than a query that embeds text for cosine scoring.",
+      "relevant": [
+        "chunk-009"
+      ]
+    },
+    {
+      "id": "answer-10-1",
+      "group": "chunk-010",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How is a named studio session deleted in a transaction?",
+      "relevant": [
+        "chunk-010"
+      ]
+    },
+    {
+      "id": "answer-10-2",
+      "group": "chunk-010",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which store operation removes turns along with their studio session?",
+      "relevant": [
+        "chunk-010"
+      ]
+    },
+    {
+      "id": "answer-10-3",
+      "group": "chunk-010",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where does deleting a studio session update related persistent records?",
+      "relevant": [
+        "chunk-010"
+      ]
+    },
+    {
+      "id": "hard-10",
+      "group": "chunk-010",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Find studio session deletion rather than adding another image turn.",
+      "relevant": [
+        "chunk-010"
+      ]
+    },
+    {
+      "id": "answer-11-1",
+      "group": "chunk-011",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How is a turn appended to a persisted image or video session?",
+      "relevant": [
+        "chunk-011"
+      ]
+    },
+    {
+      "id": "answer-11-2",
+      "group": "chunk-011",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where does the studio store update a session after saving a turn?",
+      "relevant": [
+        "chunk-011"
+      ]
+    },
+    {
+      "id": "answer-11-3",
+      "group": "chunk-011",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which transaction records a turn media reference without a giant image blob?",
+      "relevant": [
+        "chunk-011"
+      ]
+    },
+    {
+      "id": "hard-11",
+      "group": "chunk-011",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Find persisted turn insertion rather than deleting a session.",
+      "relevant": [
+        "chunk-011"
+      ]
+    },
+    {
+      "id": "answer-12-1",
+      "group": "chunk-012",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How are brightness, contrast and saturation represented as CSS filters?",
+      "relevant": [
+        "chunk-012"
+      ]
+    },
+    {
+      "id": "answer-12-2",
+      "group": "chunk-012",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where is sharpness intentionally excluded from the CSS adjustment string?",
+      "relevant": [
+        "chunk-012"
+      ]
+    },
+    {
+      "id": "answer-12-3",
+      "group": "chunk-012",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which helper builds the three exact CSS image adjustments?",
+      "relevant": [
+        "chunk-012"
+      ]
+    },
+    {
+      "id": "hard-12",
+      "group": "chunk-012",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Find CSS adjustment assembly rather than the unsharp convolution implementation.",
+      "relevant": [
+        "chunk-012"
+      ]
+    },
+    {
+      "id": "answer-13-1",
+      "group": "chunk-013",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which drawing function is shared by live image preview and export?",
+      "relevant": [
+        "chunk-013"
+      ]
+    },
+    {
+      "id": "answer-13-2",
+      "group": "chunk-013",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where is sharpening applied after drawing the filtered image?",
+      "relevant": [
+        "chunk-013"
+      ]
+    },
+    {
+      "id": "answer-13-3",
+      "group": "chunk-013",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How does the viewer clear a canvas and apply image adjustments once?",
+      "relevant": [
+        "chunk-013"
+      ]
+    },
+    {
+      "id": "hard-13",
+      "group": "chunk-013",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Find adjusted canvas composition rather than generating only a CSS filter string.",
+      "relevant": [
+        "chunk-013"
+      ]
+    },
+    {
+      "id": "answer-14-1",
+      "group": "chunk-014",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How does the image editor perform a three by three unsharp mask?",
+      "relevant": [
+        "chunk-014"
+      ]
+    },
+    {
+      "id": "answer-14-2",
+      "group": "chunk-014",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where are edge pixels preserved when sharpening an image?",
+      "relevant": [
+        "chunk-014"
+      ]
+    },
+    {
+      "id": "answer-14-3",
+      "group": "chunk-014",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which image operation uses center and neighboring pixel weights?",
+      "relevant": [
+        "chunk-014"
+      ]
+    },
+    {
+      "id": "hard-14",
+      "group": "chunk-014",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Locate the actual sharpness convolution rather than a contrast filter.",
+      "relevant": [
+        "chunk-014"
+      ]
+    },
+    {
+      "id": "answer-15-1",
+      "group": "chunk-015",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How are unsupported image signatures rejected before model input?",
+      "relevant": [
+        "chunk-015"
+      ]
+    },
+    {
+      "id": "answer-15-2",
+      "group": "chunk-015",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where is a declared image type checked against its actual bytes?",
+      "relevant": [
+        "chunk-015"
+      ]
+    },
+    {
+      "id": "answer-15-3",
+      "group": "chunk-015",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which boundary reports an empty or truncated image attachment?",
+      "relevant": [
+        "chunk-015"
+      ]
+    },
+    {
+      "id": "hard-15",
+      "group": "chunk-015",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Find byte signature validation rather than counting PNG pixels.",
+      "relevant": [
+        "chunk-015"
+      ]
+    },
+    {
+      "id": "answer-16-1",
+      "group": "chunk-016",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How are PNG dimensions read from the header to count pixels?",
+      "relevant": [
+        "chunk-016"
+      ]
+    },
+    {
+      "id": "answer-16-2",
+      "group": "chunk-016",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which image helper returns null for a missing or invalid dimension header?",
+      "relevant": [
+        "chunk-016"
+      ]
+    },
+    {
+      "id": "answer-16-3",
+      "group": "chunk-016",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where is pixel area computed from unsigned width and height values?",
+      "relevant": [
+        "chunk-016"
+      ]
+    },
+    {
+      "id": "hard-16",
+      "group": "chunk-016",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Locate dimension parsing rather than general attachment MIME validation.",
+      "relevant": [
+        "chunk-016"
+      ]
+    },
+    {
+      "id": "answer-17-1",
+      "group": "chunk-017",
+      "kind": "code",
+      "category": "answerable",
+      "text": "How does the sidecar lazily open the named studio session database?",
+      "relevant": [
+        "chunk-017"
+      ]
+    },
+    {
+      "id": "answer-17-2",
+      "group": "chunk-017",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where is a failed studio store open preserved as a typed unavailable error?",
+      "relevant": [
+        "chunk-017"
+      ]
+    },
+    {
+      "id": "answer-17-3",
+      "group": "chunk-017",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which runtime reuses its existing studio database connection?",
+      "relevant": [
+        "chunk-017"
+      ]
+    },
+    {
+      "id": "hard-17",
+      "group": "chunk-017",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Find named studio runtime construction rather than the shared memory subsystem.",
+      "relevant": [
+        "chunk-017"
+      ]
+    },
+    {
+      "id": "answer-18-1",
+      "group": "chunk-018",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where does desktop chat deliberately use episodic storage without an embedder?",
+      "relevant": [
+        "chunk-018"
+      ]
+    },
+    {
+      "id": "answer-18-2",
+      "group": "chunk-018",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Which desktop memory runtime opens lexical-only episodic storage?",
+      "relevant": [
+        "chunk-018"
+      ]
+    },
+    {
+      "id": "answer-18-3",
+      "group": "chunk-018",
+      "kind": "code",
+      "category": "answerable",
+      "text": "Where is a null embedding provider passed into desktop event memory?",
+      "relevant": [
+        "chunk-018"
+      ]
+    },
+    {
+      "id": "hard-18",
+      "group": "chunk-018",
+      "kind": "code",
+      "category": "hard-negative",
+      "text": "Locate desktop lexical event memory rather than the extension shared semantic stack.",
+      "relevant": [
+        "chunk-018"
+      ]
+    },
+    {
+      "id": "answer-19-1",
+      "group": "chunk-019",
+      "kind": "document",
+      "category": "answerable",
+      "text": "What local evidence is needed to replace an occupied model job?",
+      "relevant": [
+        "chunk-019"
+      ]
+    },
+    {
+      "id": "answer-19-2",
+      "group": "chunk-019",
+      "kind": "document",
+      "category": "answerable",
+      "text": "Why does changing the app memory embedder require an index migration?",
+      "relevant": [
+        "chunk-019"
+      ]
+    },
+    {
+      "id": "answer-19-3",
+      "group": "chunk-019",
+      "kind": "document",
+      "category": "answerable",
+      "text": "What measurements must a proposed default model bring from project hardware?",
+      "relevant": [
+        "chunk-019"
+      ]
+    },
+    {
+      "id": "hard-19",
+      "group": "chunk-019",
+      "kind": "document",
+      "category": "hard-negative",
+      "text": "Find job takeover evidence requirements rather than the license disclosure policy.",
+      "relevant": [
+        "chunk-019"
+      ]
+    },
+    {
+      "id": "answer-20-1",
+      "group": "chunk-020",
+      "kind": "document",
+      "category": "answerable",
+      "text": "Which licenses can be used for preselected model defaults?",
+      "relevant": [
+        "chunk-020"
+      ]
+    },
+    {
+      "id": "answer-20-2",
+      "group": "chunk-020",
+      "kind": "document",
+      "category": "answerable",
+      "text": "When does an optional model need a plain language restriction note?",
+      "relevant": [
+        "chunk-020"
+      ]
+    },
+    {
+      "id": "answer-20-3",
+      "group": "chunk-020",
+      "kind": "document",
+      "category": "answerable",
+      "text": "Why is a commercially capped license unsuitable when a fitting alternative exists?",
+      "relevant": [
+        "chunk-020"
+      ]
+    },
+    {
+      "id": "hard-20",
+      "group": "chunk-020",
+      "kind": "document",
+      "category": "hard-negative",
+      "text": "Find distribution and restriction policy rather than retrieval benchmark requirements.",
+      "relevant": [
+        "chunk-020"
+      ]
+    },
+    {
+      "id": "none-01",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "What is the configured Amazon managed PostgreSQL connection string?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-02",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "Which Kubernetes Helm chart deploys this app into a production cloud cluster?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-03",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "What remote Redis password is used for our shared image editor state?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-04",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "Where is the licensed Adobe Photoshop PSD layer importer implemented?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-05",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "Which XMP sidecar fields synchronize Lightroom RAW color adjustments?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-06",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "How does the vector editor convert Illustrator artboards into SVG layers?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-07",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "Which Premiere codec setting renders a multi-track video timeline?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-08",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "What subscription invoice is sent for every remote embedding API call?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-09",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "Which cloud object bucket stores all original generated photos?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-10",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "What is the enterprise SAML tenant domain for this studio?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-11",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "Which model weights implement simultaneous offline French translation?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-12",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "Where is the remote mobile push notification private signing key?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-13",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "What is the payroll tax calculation for a contractor in Germany?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-14",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "How does the repository book hotel rooms for conference attendees?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-15",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "What mechanical torque should an electric vehicle axle bolt use?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-16",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "Where is the production weather forecasting model calibration?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-17",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "How is a signed Ethereum transaction submitted by the image editor?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-18",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "Which remote image scraping service runs automatically at startup?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-19",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "What is the exact patient dosage for the prescription database?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    },
+    {
+      "id": "none-20",
+      "category": "unanswerable",
+      "kind": "document",
+      "text": "Which 3D printer extrusion temperature is stored in this corpus?",
+      "relevant": [],
+      "labelRationale": "No answer is present in this frozen excerpt corpus; not a claim of absence across all product code."
+    }
+  ]
+}

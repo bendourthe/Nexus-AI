@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="source-sha256" content="67784041db9968f69a8ad2fe9007631cb3ecfc279b419b403e9527b9c3d44998"><title>Nexus Architecture Atlas</title><style>/* Namespaced mechanics; project authors retain composition and brand tokens. */
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="source-sha256" content="80eff4033c1def65945fa9c43220d6f6c65f461ff78de53afced5ae2f9d8e642"><title>Nexus Architecture Atlas</title><style>/* Namespaced mechanics; project authors retain composition and brand tokens. */
 [data-dv-deck][hidden], [data-dv-slide][hidden] { display: none !important; }
 [data-dv-open], [data-dv-chapter] { display: none; }
 [data-dv-ready] [data-dv-open], [data-dv-ready] [data-dv-chapter] { display: inline-flex; }
@@ -115,6 +115,12 @@ ol,ul{padding-left:1.4em}li{margin-bottom:.45em}li p{margin-block:.3em}
 <td><code>desktop/sidecar/src/diffusion/dispatcher.ts</code> and Python pipelines</td>
 <td>Shared diffusion readiness API</td>
 <td>PNG validator and retained artifact</td>
+</tr>
+<tr>
+<td>Edit a saved image, by hand or by an approved agent</td>
+<td><code>desktop/sidecar/src/studio/imageEditRuntime.ts</code> and the Image Studio viewer</td>
+<td>One recipe store with revisions, Ask-inbox grants per image, one pixel path for preview and export</td>
+<td>Restart, conflict and grant tests plus a WebView pixel check</td>
 </tr>
 <tr>
 <td>Generate a video</td>

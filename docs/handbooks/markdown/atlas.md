@@ -6,6 +6,7 @@ This walkthrough maps Nexus's durable user flows to their owning components.
 |---|---|---|---|
 | Install or repair media | `scripts/installer/` | Owner-aware lease and atomic runtime state | Installer tests plus packaged operator run |
 | Generate an image | `desktop/sidecar/src/diffusion/dispatcher.ts` and Python pipelines | Shared diffusion readiness API | PNG validator and retained artifact |
+| Edit a saved image, by hand or by an approved agent | `desktop/sidecar/src/studio/imageEditRuntime.ts` and the Image Studio viewer | One recipe store with revisions, Ask-inbox grants per image, one pixel path for preview and export | Restart, conflict and grant tests plus a WebView pixel check |
 | Generate a video | `desktop/sidecar/src/diffusion/videoDispatcher.ts` and Python pipelines | Shared diffusion readiness API | Video probe and retained artifact |
 | Browse and install models | `core/registry/` and Settings | Shared availability/recommendation tuple | Cross-language rank fixture |
 | Read chat usage | `core/chat/` and shared chat UI | Role-local token provenance | Protocol, hydration, and UI tests |

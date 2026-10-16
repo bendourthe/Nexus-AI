@@ -13,6 +13,30 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-16] v2.13.0 Phase 7 - Final gate
+
+The final gate rebuilt all six handbooks with the review receipts their manifest names, rechecked the v2.12 CI comparison (only pinned action bumps changed), and ran a Tier 3 deep pass: the real sidecar, control surface, CLI and Ask inbox end to end (24/24) plus an independent adversarial review. Its fixes landed here: request floods are capped and folded, the Ask inbox now serializes its writes (a race that predated this plan), renders are limited and fully validated as PNGs, exports have collision-free idempotent names and refuse hard links, and errors no longer leak internals. Tests no longer write into the real `~/.nexus`. Both full suites pass (root 6277 tests, desktop 2328). A Video2X test that hung intermittently now fails fast instead; its cause and the other open gaps moved to `docs/releases/v2/v2.14/known-gaps.md`. Evidence: [last-phase evidence](releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md).
+
+---
+
+## [2026-10-15] v2.13.0 Phase 6 - Authorized edit commands
+
+Agents can now edit a persisted Image Studio image with `nexus image-edit` (routes `/nexus/image-edit/*`). Access is per image and starts as an Ask inbox request; only a human approval issues a one-hour grant bound to the agent's caller id, run id and the image, and the app token alone never reaches an image. `apply` is idempotent by key; the viewer and agents share one mutation path. Previews and exports are rendered by the running Nexus window through a polled request bridge, using pixel code now shared with the viewer (`imageEditRenderer.ts`); in headless Edge the viewer's export and the bridge's render were identical. Exports go only to `~/.nexus/generations/exports`, never overwrite, and refuse linked folders or a recipe or source that changed mid-render. Decision record: `docs/releases/v2/v2.13/development/image-command-contract.md`.
+
+---
+
+## [2026-10-15] v2.13.0 Phase 5 - Viewer reopen and export
+
+Generated Image Studio images are now saved once, content-addressed, under `~/.nexus/generations/images/`, so their turns can be reopened; the plan had assumed this already happened. The viewer edits a saved image durably through five new sidecar methods with process-bound grants: each finished gesture is committed against the last acknowledged revision, "Edits saved" appears only after acknowledgement, failures roll back with Retry and Reload, and close waits for pending saves. Chat attachments still edit in memory. In headless Edge (the WebView2 engine) preview and export pixels matched exactly with all four adjustments and both mark kinds. Open: saved images outlive their session (DF-3) and the installed window flow is not automated (WN-1). Evidence: `docs/releases/v2/v2.13/development/v2.13.0-phase5-evidence.md`.
+
+---
+
+## [2026-10-15] v2.13.0 Phase 4 - Durable image recipe and history
+
+Image Studio edits now have a versioned recipe (four adjustments, stroke and text marks, reset, undo, redo) stored per persisted image turn in `sessions.db` through a scoped transaction on the existing `StudioSessionStore` connection, with revision compare-and-swap, cascade deletion and a source hash re-checked on every access. A two-process smoke reopened the database and matched recipe, history and cursor with the original PNG unchanged. Support tier: candidate until Phases 5-6 wire the viewer and commands. The embedding evaluator now reads changed corpus files from its pinned baseline so Phase 2 stays reproducible. Evidence: `docs/releases/v2/v2.13/development/v2.13.0-phase4-evidence.md`.
+
+---
+
 ## [2026-10-09] v2.12.0 Phase 6 - Completed evaluation
 
 Both scored runs completed within the approved ceiling, with exact coverage (expanded 152/152, anchor 96/96) and zero restarts. The unchanged preregistered rule yields futility: arm C cross-section scores are Qwen 0/20 and Gemma 4/20. Both arm A user-outcome targets were missed. The flag stays experimental and off; recommend removal or narrowing at the v2.13 review with no repeats. Post-run reporting corrections retain future returned errors and qualify uncached OCR timing. Fresh checks: 36 fixture/question tests, scoped strict TypeScript and lint, and the actual harness's controlled-adapter reporting exercise passed. Historical diagnostic limits remain WN-v212-5. [Results](v2/v2.12/development/outline-eval.md), [history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [metadata](releases/v2/v2.12/development/evidence/phase-6-evaluation.json). One local results commit; no remote CI. Phase 7 remains open.
