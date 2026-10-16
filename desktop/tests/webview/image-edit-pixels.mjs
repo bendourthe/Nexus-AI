@@ -98,8 +98,11 @@ try {
   const pending = new Map();
   socket.onmessage = (event) => {
     const message = JSON.parse(String(event.data));
-    pending.get(message.id)?.(message);
+    if (!Number.isSafeInteger(message.id)) return;
+    const settle = pending.get(message.id);
+    if (typeof settle !== "function") return;
     pending.delete(message.id);
+    settle(message);
   };
   const evaluate = (expression) => new Promise((resolve) => {
     id += 1;
