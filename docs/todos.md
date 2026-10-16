@@ -195,7 +195,7 @@ Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 des
 | Tasks done (v0.3.0) | 55 / 55 | 55 / 55 | 0 |
 | Tasks done (v0.4.0) | 16 (P1) + 17 (P2) + 21 (P3) + 21 (P4) + 22 (P5) | ~135 / ~135 | in-progress |
 | Sources compared (Craft editors + EmbeddingGemma 2, 2026-10-07) | 2 / 2 | 2 / 2 | 0 |
-| v2.13 adoption plan implementation tasks (Phase 7 local, 2026-10-16; T008-T010 deferred under DF-2) | 27 / 28 | 28 | 1 |
+| v2.13 adoption plan implementation tasks (merged in PR #101, 2026-10-16; T008-T010 deferred under DF-2) | 28 / 28 | 28 | 0 |
 
 ---
 
@@ -705,7 +705,7 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 
 ## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)
 
-**Progress**: 27/28 tasks complete (T008-T010 moved to DF-2); only T031 publication and integration remains. Model admission is HOLD; image work is complete locally.
+**Progress**: 28/28 tasks complete (T008-T010 moved to DF-2); merged into `develop` through PR #101 and released as v2.12.0. Model admission is HOLD.
 
 - [x] Freeze the post-v2.12 baseline, 100-query evaluation contract and image ownership/limits; fast/platform and real disposable Ollama/SQLite probe pass ([Phase 1 evidence](releases/v2/v2.13/development/v2.13.0-phase1-evidence.md)).
 - [x] Build and verify the isolated evaluator and explicit retain/HOLD report: Ollama 0.32.15 rejects the candidate with HTTP 412; no quality score, default change or user-index mutation is claimed ([Phase 2 evidence](releases/v2/v2.13/development/v2.13.0-phase2-evidence.md)).
