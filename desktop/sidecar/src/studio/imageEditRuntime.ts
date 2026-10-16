@@ -257,33 +257,25 @@ export function createImageEditOps(
     };
     if (!inRoot()) throw new ImageEditError("EXPORT_UNSAFE", "The exports folder was moved or replaced.");
     const target = path.join(root, name);
+    // Open the name exactly once and decide everything through that handle, so
+    // no check by path can be swapped before the read or write. A non-empty
+    // file is never written: the same edit exported again returns it, anything
+    // else under that name is left alone.
     let fd: number;
     try {
-      fd = openSync(target, "wx");
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code === "EEXIST") {
-        // The same edit exported again: return the file already there. Anything
-        // else under that name is left alone.
-        // Judge the existing file only through one handle (no link following
-        // where the OS supports it), so nothing checked by path can be swapped
-        // before the read; its bytes must equal this export's digest.
-        let same = false;
-        let existing: number | undefined;
-        try {
-          existing = openSync(target, fsConstants.O_RDONLY | (fsConstants.O_NOFOLLOW ?? 0));
-          same = fstatSync(existing).isFile() && inRoot()
-            && sha256(readFileSync(existing)) === digest;
-        } catch {
-          same = false;
-        } finally {
-          if (existing !== undefined) closeSync(existing);
-        }
-        if (same) return target;
-        throw new ImageEditError("EXPORT_EXISTS", "An export with this name already exists; it was not overwritten.");
-      }
+      fd = openSync(target, fsConstants.O_RDWR | fsConstants.O_CREAT | (fsConstants.O_NOFOLLOW ?? 0), 0o644);
+    } catch {
       throw new ImageEditError("STORAGE_UNAVAILABLE", "The export could not be created.");
     }
     try {
+      const existing = fstatSync(fd);
+      if (!existing.isFile()) {
+        throw new ImageEditError("EXPORT_EXISTS", "An export with this name already exists; it was not overwritten.");
+      }
+      if (existing.size > 0) {
+        if (inRoot() && sha256(readFileSync(fd)) === digest) return target;
+        throw new ImageEditError("EXPORT_EXISTS", "An export with this name already exists; it was not overwritten.");
+      }
       let offset = 0;
       while (offset < bytes.length) offset += writeSync(fd, bytes, offset, bytes.length - offset);
       fsyncSync(fd);
