@@ -120,6 +120,17 @@ Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" c
 
 Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.11 live under `docs/archive/v2/`. v2.12 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.12/known-gaps.md](docs/v2/v2.12/known-gaps.md).
 
+### What's new in v2.12.0
+
+This release carries the v2.12 and v2.13 plans.
+
+- **Durable Image Studio edits** - Edits to a generated image are saved as a versioned recipe with undo and redo, survive a restart, and never change the original bytes. Generated images are now kept under `~/.nexus/generations/images/` so their turns can be reopened. Preview and export render through one pixel path.
+- **Approved agent edits** - `nexus image-edit` and `/nexus/image-edit/*` let an agent describe, apply, render and export edits to one image only after you approve its request in the Ask inbox. The grant is bound to that agent's caller id, run and image, and lasts one hour. Exports go only to `~/.nexus/generations/exports`.
+- **Outline and tool-history groundwork (experimental)** - Document output is budgeted from the current prompt usage, native tool calls keep their history, both agent loops compact tool results, and the desktop has outline Settings. The outline smoke evaluation was futile, so the outline tools stay experimental pending an owner decision (DF-v211-2).
+- **EmbeddingGemma 2 is not admitted** - A bounded local evaluator exists, but Ollama 0.32.15 rejects the candidate, so the current embedder is retained (DF-1, DF-2). Kolibri-1 is declined and recorded in the declined-models index.
+
+Plans: [v2.13.0](docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md), [v2.12 gaps](docs/v2/v2.12/known-gaps.md). Open items: [v2.14 carried gaps](docs/releases/v2/v2.14/known-gaps.md).
+
 ### What's new in v2.10.0
 
 Hosted Jev, Laya 0.3.20, and the Kev family (0.8B, 4B, 9B, and 27B) are not admitted. The record is one known-gap row, DF-v210-1. None of them is a catalog id, a runtime, an API client, or a download. The Nimble refusal stays in the v2.8.0 plan.
