@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "baselineHead": "90b95f2439959ddfa4c902d287a6d673df785dd9",
+  "fixtures": {
+    "held-out.json": "1ec05ab57196377cde9252f2a431c3aaa37360c5e10d7934fda8506664e22c02",
+    "tuning.json": "a34087c74412f644d716003c109939fd51834d7b3b166210ab9386c398f4918a"
+  },
+  "counts": {
+    "chunks": 20,
+    "answerable": 60,
+    "hardNegative": 20,
+    "unanswerable": 20
+  },
+  "chunkRecipe": {
+    "source": "tracked production files and living policy",
+    "selection": "first literal anchor, four lines before and at most 58 after, then 4096-character ceiling",
+    "maxChars": 4096,
+    "labels": "Three separate natural-language questions and one contrastive hard-negative per source group",
+    "bootstrapCaveat": "Answer queries share source groups; report source-group resampling sensitivity as well as the required paired query bootstrap."
+  }
+}

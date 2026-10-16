@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "release": "2.13.0",
+  "baselineHead": "90b95f2439959ddfa4c902d287a6d673df785dd9",
+  "fixtureManifest": "tests/fixtures/embedding-eval/manifest.json",
+  "fixtureManifestSha256": "09bd598eaae038e3c2b4f94dd54fd4c7fd7a7499d5377947a1df3de55227ba13",
+  "baseline": {
+    "model": "embeddinggemma:300m",
+    "digest": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+    "dimension": 768,
+    "contextTokens": 2048,
+    "queryPrefix": "",
+    "documentPrefix": "",
+    "normalization": "Finite nonzero vectors and current MemoryStore cosine; no truncation."
+  },
+  "candidate": {
+    "model": "embeddinggemma-2:270m",
+    "digest": null,
+    "dimension": 768,
+    "contextTokens": 8192,
+    "queryPrefixes": {
+      "code": "task: code retrieval | query: ",
+      "document": "task: search result | query: "
+    },
+    "documentFormat": "title: {title} | text: {text}",
+    "normalization": "Native 768 dimensions, finite nonzero vectors, cosine; no padding or dimension truncation.",
+    "digestDisposition": "Resolve after explicit provisioning and pin before scoring; missing identity yields HOLD."
+  },
+  "retrieval": {
+    "composition": "src/storage/MemorySubsystem.ts",
+    "consumer": "src/storage/MemoryStore.ts#searchHybrid",
+    "method": "rrf",
+    "limit": 5,
+    "clockEpochMs": 1791936000000,
+    "primaryHnswThreshold": 1000,
+    "supplementalHnswThreshold": 1,
+    "rejection": {
+      "rule": "Accept returned top-five hybrid rows only when their maximum cosine with the actual query vector meets the threshold.",
+      "cosineThreshold": 0.65,
+      "tunedOnHeldOut": false
+    },
+    "rowCountsAndTextHashesMustMatch": true,
+    "disableHeuristicFallback": true,
+    "storageRoot": "Unique disposable root per model/run; never production memory.db or cache."
+  },
+  "measurement": {
+    "warmRepetitions": 30,
+    "coldLoads": 5,
+    "bootstrapSamples": 10000,
+    "bootstrapSeed": 21320261014,
+    "sourceGroupSensitivity": true,
+    "maxRunMinutes": 45,
+    "perRequestTimeoutMs": 60000,
+    "maxProvisionBytes": 536870912,
+    "p95Method": "nearest-rank",
+    "lease": "Exclusive run lease; overlapping runs refuse.",
+    "offlineEvidence": "Process-level blocked non-loopback ordinary inference, separate from provisioning downloads."
+  },
+  "gate": {
+    "minimumRecallAt5GainPercentagePoints": 5,
+    "paired95LowerBoundMustExceed": 0,
+    "maximumP95LatencyRatio": 1.2,
+    "noAnswerAcceptedCountMustNotIncrease": true,
+    "invalidOrMixedVectorsAllowed": 0,
+    "hardNegatives": "report separately",
+    "requiredTiers": [
+      "cpu",
+      "8",
+      "12",
+      "16",
+      "24"
+    ],
+    "unmeasuredTierDisposition": "HOLD; retain default and withhold catalog/index changes",
+    "termsDisposition": "HOLD pending pinned checkpoint distribution terms and prohibited-use-policy discrepancy",
+    "contextDisposition": "8K model-card supported budget; 256K listing does not permit taking the 32K Qwen job"
+  },
+  "resourceCeilings": {
+    "referenceHost": {
+      "gpu": "NVIDIA GeForce RTX 3080 Ti Laptop GPU",
+      "gpuBytes": 17179869184,
+      "ramBytes": 34014523392,
+      "logicalProcessors": 20
+    },
+    "embeddingGpuBytes": 1073741824,
+    "embeddingGpuSource": "catalog.json embeddinggemma vramGB=1",
+    "evaluationProcessRamBytes": 8589934592,
+    "evaluationRamSource": "Engineering evaluation bound equal to the most restrictive existing DEFAULT_MEMORY_BUDGETS.maxCacheRamGB, not a new embedding product policy.",
+    "coexistenceReserveBytes": 2147483648,
+    "coexistenceSource": "Conservative reference-host workingMemReserveGB=2 from diffusion-high policy.",
+    "observedBaselineResidentBytes": 681417113,
+    "observedBaselineVramBytes": 681417113,
+    "processRamPeakDisposition": "Not proven by five diagnostic calls; instrument or HOLD in Phase2."
+  },
+  "imageRecipe": {
+    "schemaVersion": 1,
+    "identity": [
+      "studioSessionId",
+      "studioTurnId",
+      "sourceSha256"
+    ],
+    "maxSerializedBytes": 8388608,
+    "maxCommands": 1000,
+    "maxStrokePoints": 100000,
+    "maxTextCharacters": 4096,
+    "maxWidth": 2048,
+    "maxHeight": 2048,
+    "maxPixels": 4194304,
+    "sourceCeilingSource": "Current generated-media dimension cap; restored-image decode is currently unbounded and Phase5 must enforce this engineering contract.",
+    "adjustmentRanges": {
+      "brightness": [
+        20,
+        200
+      ],
+      "contrast": [
+        20,
+        200
+      ],
+      "saturation": [
+        0,
+        200
+      ],
+      "sharpness": [
+        0,
+        100
+      ]
+    },
+    "history": "Full retained history/cursor; typed limit refusal, never prune; branch redo only after committed new edit.",
+    "authorization": "Explicit owned-image grant bound to authenticated caller, coding session/run, image ids and source hash. Shared token and workspace-root union are insufficient.",
+    "grantIssuer": "Human UI image selection/confirmation through existing action-tier/permission owners.",
+    "revocation": [
+      "run termination",
+      "studio session deletion",
+      "source hash mismatch"
+    ],
+    "deletion": "Transactional recipe cascade in sessions.db with session/turn owner; preserve other images and original-media ownership.",
+    "persistence": "Existing StudioSessionStore connection/lifecycle; no second SQLite connection."
+  },
+  "sources": {
+    "modelCard": "https://ai.google.dev/gemma/docs/embeddinggemma/model_card_2",
+    "guide": "https://developers.googleblog.com/en/embeddinggemma-2-the-developer-guide/",
+    "checkpoint": "https://huggingface.co/google/embeddinggemma-2",
+    "ollama": "https://ollama.com/library/embeddinggemma-2:270m"
+  }
+}

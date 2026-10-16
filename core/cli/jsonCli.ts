@@ -108,6 +108,20 @@ export const SESSION_NEW_SCHEMA = { required: ["modelId"] as const };
 export const SESSION_SEND_SCHEMA = { required: ["sessionId", "text"] as const };
 export const GENERATE_QUEUE_SCHEMA = { required: ["pillar", "jobType", "parameters"] as const };
 
+/**
+ * v2.13.0 Phase 6: `nexus image-edit <subcommand> --json '{...}'`. Access needs a
+ * human approval in the Nexus Ask inbox before any other subcommand works.
+ */
+const IMAGE_EDIT_GRANT = ["callerId", "runId", "grantId"] as const;
+export const IMAGE_EDIT_SCHEMAS: Readonly<Record<string, { path: string; required: readonly string[] }>> = {
+  access: { path: "access", required: ["callerId", "runId", "sessionId", "turnId"] },
+  status: { path: "access/status", required: ["requestId", "callerId", "runId"] },
+  describe: { path: "describe", required: IMAGE_EDIT_GRANT },
+  apply: { path: "apply", required: [...IMAGE_EDIT_GRANT, "action", "expectedRevision", "idempotencyKey"] },
+  render: { path: "render", required: [...IMAGE_EDIT_GRANT, "mode", "expectedRevision"] },
+  release: { path: "release", required: IMAGE_EDIT_GRANT },
+};
+
 export function requireFields(value: Record<string, unknown>, required: readonly string[]): string | null {
   const missing = required.filter((k) => value[k] === undefined || value[k] === null || value[k] === "");
   return missing.length > 0 ? `missing fields: ${missing.join(", ")}` : null;
@@ -171,6 +185,17 @@ export async function dispatchJsonCli(input: JsonCliDispatchInput): Promise<Json
     }
     const lines = typeof raw === "string" ? raw : "100";
     return jsonCliRequest(client, "GET", `${JSON_CLI_PREFIX}/logs?lines=${encodeURIComponent(lines)}`);
+  }
+  if (command === "image-edit") {
+    const schema = subcommand ? IMAGE_EDIT_SCHEMAS[subcommand] : undefined;
+    if (!schema) {
+      return errorBody("usage", `image-edit subcommands: ${Object.keys(IMAGE_EDIT_SCHEMAS).join(", ")}`);
+    }
+    const parsed = parseJsonInput(rawJson);
+    if (!parsed.ok) return errorBody("schema", parsed.error);
+    const missing = requireFields(parsed.value, schema.required);
+    if (missing) return errorBody("schema", missing);
+    return jsonCliRequest(client, "POST", `${JSON_CLI_PREFIX}/image-edit/${schema.path}`, parsed.value);
   }
   if (command === "media" && subcommand === "inspect") {
     const mediaPath = typeof flags.path === "string" ? flags.path : "";

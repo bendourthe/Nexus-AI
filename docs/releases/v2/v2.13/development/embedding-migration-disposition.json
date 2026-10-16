@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "release": "2.13.0",
+  "observedAt": "2026-10-14T16:38:22.220959+00:00",
+  "decision": "HOLD",
+  "recommendation": "RETAIN",
+  "authority": "Approved plan Phase 3.1 requires HOLD/skip on missing evidence; no new default admission is authorized.",
+  "phase2Commit": "2d0006cee6235b72082fdeab2c9f6c64bfddbb10",
+  "evidence": "embedding-eval-results.json",
+  "condition": "RUNTIME_TOO_OLD and unmeasured admission gates",
+  "completedTasks": [
+    "T007",
+    "T011"
+  ],
+  "conditionallySkippedTasks": [
+    "T008",
+    "T009",
+    "T010"
+  ],
+  "skipIsNotImplementation": true,
+  "unchangedProduction": [
+    {
+      "path": "src/storage/EmbeddingClient.ts",
+      "normalizedSha256": "04140d23dee24ca9e7ad22573102cfb458e00f343e71f82cdd8210b75975d985",
+      "matchesMergedDevelop": true
+    },
+    {
+      "path": "src/storage/MemorySubsystem.ts",
+      "normalizedSha256": "9b4c4281fab9a8a156765686909c1bb397e7350cb25e3197c01efbc291cf3231",
+      "matchesMergedDevelop": true
+    },
+    {
+      "path": "src/storage/MemoryStore.ts",
+      "normalizedSha256": "c8543f54ecbdeb56ba95ab0adc1a68c2848d9d26a8a112e3cef68750ad4c3240",
+      "matchesMergedDevelop": true
+    },
+    {
+      "path": "src/storage/EpisodicMemory.ts",
+      "normalizedSha256": "f1e62d8d8bc3af8b3bb582ba95cf16cdf9c6ecc57b872a2e90f80334669553d7",
+      "matchesMergedDevelop": true
+    },
+    {
+      "path": "src/storage/ToolOutputCache.ts",
+      "normalizedSha256": "f3332dd12a4c07a3a327e180a7959089310a81ea310d92fdfddab21be116841c",
+      "matchesMergedDevelop": true
+    },
+    {
+      "path": "src/storage/MemoryHnswIndex.ts",
+      "normalizedSha256": "e1583096f4a9cc88a6ba0791059e7c4bc0523be1b3df296c3681baa9516ca137",
+      "matchesMergedDevelop": true
+    },
+    {
+      "path": "modules/coding/config/settings.ts",
+      "normalizedSha256": "d067e5b9a5ed7feb3a602060df83f19f99b293c2a4ff04eb283da3c66435d101",
+      "matchesMergedDevelop": true
+    },
+    {
+      "path": "core/registry/catalog.json",
+      "normalizedSha256": "e72e83c05fe2b26ffdac76876fa106bd7cf7e4fa52bbd7f9a1659eda9bfc279b",
+      "matchesMergedDevelop": true
+    },
+    {
+      "path": "core/registry/recommended.json",
+      "normalizedSha256": "16b484fc60fcca094f6d38f870fb4449f6d3622b63d053c8b4c7ae771c5e2d11",
+      "matchesMergedDevelop": true
+    },
+    {
+      "path": "docs/reference/model-acceptance.md",
+      "normalizedSha256": "63781f34e45a0fdd41ed837c5ebe04ecd8e56323316e883a3c52c0856217801d",
+      "matchesMergedDevelop": true
+    }
+  ]
+}

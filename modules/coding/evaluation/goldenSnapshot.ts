@@ -117,7 +117,7 @@ export function materializeGoldenSnapshot(
  * so the commit works in CI without global git config.
  */
 function initGitBaseline(dir: string, git: GitRunner): boolean {
-  if (git(["init", "-q"], dir) === null) return false;
+  if (git(["init", "-q", "--template="], dir) === null) return false;
   // Identity is best-effort; failures here do not abort the baseline.
   git(["config", "user.email", "golden-tasks@nexus.local"], dir);
   git(["config", "user.name", "Golden Tasks"], dir);

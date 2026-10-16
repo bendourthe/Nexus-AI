@@ -66,6 +66,12 @@ import {
   type ChatMessage,
 } from "../../shared/chat";
 import { isUsableImageBase64 } from "../../shared/studio/usablePayload";
+import {
+  createDurableImageEdit,
+  loadStudioImage,
+  type DurableImageEdit,
+  type StudioTurnRef,
+} from "../../shared/studio/imageEditClient";
 import { QuickModelSwitcher } from "../../shared/models/QuickModelSwitcher";
 import { StudioInlineControl } from "../../shared/studio/StudioSettings";
 import {
@@ -229,7 +235,24 @@ export interface ImageStudioPageProps {
   readonly openLocalSplat?: OpenLocalSplat;
   /** Host facts for splat generate. Absent means the generator is unavailable. */
   readonly splatHost?: SplatHostProbe;
+  /**
+   * v2.13.0: saved images and their durable edits. Production uses the sidecar
+   * whenever the IPC explorer is live; with an injected or in-memory explorer it
+   * is off unless a test passes one, and hydrated paths render as before.
+   */
+  readonly studioImages?: StudioImageAccess;
 }
+
+/** v2.13.0: how the page reads a persisted image and edits it durably. */
+export interface StudioImageAccess {
+  load(turn: StudioTurnRef): Promise<string>;
+  edit(turn: StudioTurnRef): DurableImageEdit;
+}
+
+const IPC_STUDIO_IMAGES: StudioImageAccess = {
+  load: loadStudioImage,
+  edit: createDurableImageEdit,
+};
 
 let messageSeq = 0;
 function nextId(prefix: string): string {
@@ -280,6 +303,7 @@ export function ImageStudioPage({
   mediaRuntimeClient: mediaRuntimeOverride,
   openLocalSplat,
   splatHost,
+  studioImages: studioImagesOverride,
 }: ImageStudioPageProps = {}): JSX.Element {
   const [client] = useState<DiffusionClient>(
     () => clientOverride ?? createIpcDiffusionClient(),
@@ -327,6 +351,27 @@ export function ImageStudioPage({
       return new InMemoryStudioExplorerClient("image");
     return createIpcStudioExplorerClient("image");
   }, [explorerClientOverride, backendDown]);
+  const studioImages = useMemo<StudioImageAccess | undefined>(() => {
+    if (studioImagesOverride) return studioImagesOverride;
+    if (explorerClientOverride || backendDown || !tauriAvailable()) return undefined;
+    return IPC_STUDIO_IMAGES;
+  }, [studioImagesOverride, explorerClientOverride, backendDown]);
+  // One editor per turn, so a re-render never reopens (and re-grants) it.
+  const durableEdits = useRef(new Map<string, DurableImageEdit>());
+  const durableImageEdit = useCallback(
+    (message: ChatMessage): DurableImageEdit | undefined => {
+      const turn = message.studioTurn;
+      if (!studioImages || !turn || !message.media?.src.startsWith("data:")) return undefined;
+      const key = `${turn.sessionId}/${turn.turnId}`;
+      let edit = durableEdits.current.get(key);
+      if (!edit) {
+        edit = studioImages.edit(turn);
+        durableEdits.current.set(key, edit);
+      }
+      return edit;
+    },
+    [studioImages],
+  );
   const [selectedModelId, setSelectedModelId] = useState<string>(
     FALLBACK_MODEL.id,
   );
@@ -536,6 +581,8 @@ export function ImageStudioPage({
       role: "user" | "assistant";
       content: string;
       mediaRef?: string | null;
+      /** v2.13.0: the live bubble that shows this turn's saved image. */
+      messageId?: string;
     }): void => {
       if (backendDown) return;
       // A completion for a job started in another session persists there.
@@ -551,14 +598,22 @@ export function ImageStudioPage({
             ...studioPersistUsage(input),
           }),
         ).then(
-          () => setHistoryEpoch((n) => n + 1),
+          (turn) => {
+            setHistoryEpoch((n) => n + 1);
+            // Only an acknowledged turn with a saved image becomes durable.
+            if (input.messageId && turn && turn.mediaRef) {
+              patchMessage(input.messageId, {
+                studioTurn: { sessionId: turn.sessionId, turnId: turn.id },
+              });
+            }
+          },
           () => undefined,
         );
       } catch {
         // Do not claim saved.
       }
     },
-    [backendDown, studioClient],
+    [backendDown, patchMessage, studioClient],
   );
 
   const handleStopGeneration = useCallback((): void => {
@@ -636,7 +691,25 @@ export function ImageStudioPage({
         lastPngB64Ref.current = lastRef?.toLowerCase().startsWith("data:")
           ? lastRef
           : null;
-        const rows = studioTurnsToChatMessages(turns, { outputExists });
+        const mapped = studioTurnsToChatMessages(turns, { outputExists });
+        // v2.13.0: the webview cannot draw a raw disk path, and a failed draw
+        // wipes the bubble. A saved image waits for its bytes from the sidecar
+        // and keeps its path only if that read fails.
+        const awaiting: { id: string; turn: StudioTurnRef; path: string }[] = [];
+        const rows = studioImages
+          ? mapped.map((row) => {
+              if (!row.studioTurn || !row.media || row.media.src.startsWith("data:")) return row;
+              awaiting.push({ id: row.id, turn: row.studioTurn, path: row.media.src });
+              const { media: _pending, ...rest } = row;
+              return rest;
+            })
+          : mapped;
+        for (const item of awaiting) {
+          void studioImages?.load(item.turn).then(
+            (src) => patchMessage(item.id, { media: { kind: "image", src } }),
+            () => patchMessage(item.id, { media: { kind: "image", src: item.path } }),
+          );
+        }
         // v2.4.8 follow-up: a job still running for this session keeps its
         // pending bubble when the session is re-opened.
         const pendingTurn = pendingTurnRef.current;
@@ -675,7 +748,7 @@ export function ImageStudioPage({
         );
       });
     },
-    [studioClient, outputExists, setActiveSession],
+    [studioClient, outputExists, setActiveSession, studioImages, patchMessage],
   );
 
   const startFreshStudioSession = useCallback(async (): Promise<void> => {
@@ -787,7 +860,7 @@ export function ImageStudioPage({
           const pathRef = event.outputPath?.trim() ?? "";
           if (isUsablePathRef(pathRef)) {
             lastOutputRef.current = pathRef;
-            persistTurn({ role: "assistant", content: "", mediaRef: pathRef });
+            persistTurn({ role: "assistant", content: "", mediaRef: pathRef, messageId });
           } else {
             lastOutputRef.current = `data:image/png;base64,${png}`;
             persistTurn({ role: "assistant", content: "" });
@@ -1593,6 +1666,7 @@ export function ImageStudioPage({
               messages={shownMessages}
               enableTools={false}
               onMediaError={handleMediaError}
+              durableImageEdit={durableImageEdit}
               renderMetaActions={(m, api) =>
                 m.role === "assistant" && m.media ? (
                   /*
