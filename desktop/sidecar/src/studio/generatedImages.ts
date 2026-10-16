@@ -9,9 +9,10 @@ import { createHash, randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, renameSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
 
+import { PNG_SIGNATURE } from "../../../../core/image/ImageEditRecipe.js";
 import { nexusHome } from "../../../../core/storage/paths.js";
 
-const PNG_MAGIC = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+const PNG_MAGIC = Buffer.from(PNG_SIGNATURE);
 
 export function generatedImagesRoot(home: string = nexusHome()): string {
   return path.join(home, "generations", "images");

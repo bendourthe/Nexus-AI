@@ -30,6 +30,7 @@ import {
 import { resolveStudioDbPath } from "../../../core/generations/paths.js";
 import { createServingRuntime } from "./serving/servingRuntime.js";
 import { createJsonCliRoute } from "./controlSurface/jsonCliRoutes.js";
+import { generatedImagesRoot } from "./studio/generatedImages.js";
 import { captureNexusWindow } from "./controlSurface/windowCaptureClient.js";
 import { createAuditRuntime } from "./audit/runtime.js";
 import { InProcessTelemetryBus } from "../../../core/telemetry/TelemetryBus.js";
@@ -159,6 +160,7 @@ const studio = createStudioRuntime({
   telemetry,
 });
 ctx.studio = studio;
+ctx.generatedImagesRoot = generatedImagesRoot();
 ctx.audit = createAuditRuntime({ credentials: ctx.credentials, telemetry }).log;
 let rpcReader: ReturnType<typeof createInterface> | null = null;
 let acceptingRequests = true;

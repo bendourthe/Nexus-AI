@@ -12,7 +12,7 @@
  */
 
 import { createHash, randomUUID } from "node:crypto";
-import { closeSync, fsyncSync, lstatSync, mkdirSync, openSync, realpathSync, unlinkSync, writeSync } from "node:fs";
+import { closeSync, fsyncSync, lstatSync, mkdirSync, openSync, readFileSync, realpathSync, unlinkSync, writeSync } from "node:fs";
 import * as path from "node:path";
 
 import { ImageEditRecipeStore, type ImageEditAccess } from "../../../../core/generations/ImageEditRecipeStore.js";
@@ -20,6 +20,7 @@ import {
   deriveImageEditState,
   ImageEditError,
   imageEditCapabilities,
+  parseImageEditAction,
   type ImageEditIdentity,
   type ImageEditRecipe,
 } from "../../../../core/image/ImageEditRecipe.js";
@@ -125,8 +126,15 @@ export interface ImageEditOpsOptions {
 /** `CODE: message`, so callers can tell a conflict from a missing image. */
 export function imageEditFailure(error: unknown): Error {
   if (error instanceof ImageEditError) return new Error(`${error.code}: ${error.message}`);
-  return error instanceof Error ? error : new Error(String(error));
+  // Never pass a raw system error (paths, errno text) to a caller.
+  return new Error("STORAGE_UNAVAILABLE: Image edits are temporarily unavailable. Retry or reload.");
 }
+
+/** Pending agent requests at once, in total and per caller (flood and approval-fatigue bound). */
+export const MAX_PENDING_REQUESTS = 16;
+export const MAX_PENDING_REQUESTS_PER_CALLER = 4;
+/** Decided requests kept for `status`, oldest dropped first. */
+export const MAX_DECIDED_REQUESTS = 64;
 
 /** Key-sorted JSON, so the same command always hashes the same. */
 function canonical(value: unknown): string {
@@ -163,7 +171,13 @@ export function createImageEditOps(
   const grants = new Map<string, Grant>();
   const agentGrants = new Map<string, AgentGrant>();
   const requests = new Map<string, AccessRequest>();
-  const replay = new Map<string, { hash: string; result: AgentImageState }>();
+  // One replay cache per grant, so another caller cannot evict this grant's entries.
+  const replay = new Map<string, Map<string, { hash: string; result: AgentImageState }>>();
+  const rendering = new Set<string>();
+  const dropGrant = (grantId: string): void => {
+    agentGrants.delete(grantId);
+    replay.delete(grantId);
+  };
 
   const sameImage = (a: ImageEditIdentity, b: ImageEditIdentity): boolean =>
     a.studioSessionId === b.studioSessionId && a.studioTurnId === b.studioTurnId && a.sourceSha256 === b.sourceSha256;
@@ -191,7 +205,7 @@ export function createImageEditOps(
       throw new ImageEditError("FORBIDDEN", "This caller and run have no grant for the selected image.");
     }
     if (grant.expiresAt <= now()) {
-      agentGrants.delete(access.grantId);
+      dropGrant(access.grantId);
       throw new ImageEditError("FORBIDDEN", "The image grant expired. Request access again.");
     }
     return grant;
@@ -232,7 +246,7 @@ export function createImageEditOps(
     exportsRoot = realpathSync(exportsDir);
     return exportsRoot;
   };
-  const writeExport = (bytes: Buffer, name: string): string => {
+  const writeExport = (bytes: Buffer, name: string, digest: string): string => {
     const root = canonicalExportsRoot();
     const inRoot = (): boolean => {
       try {
@@ -248,6 +262,16 @@ export function createImageEditOps(
       fd = openSync(target, "wx");
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === "EEXIST") {
+        // The same edit exported again: return the file already there. Anything
+        // else under that name is left alone.
+        let same = false;
+        try {
+          same = !lstatSync(target).isSymbolicLink() && realpathSync(target) === target
+            && sha256(readFileSync(target)) === digest;
+        } catch {
+          same = false;
+        }
+        if (same) return target;
         throw new ImageEditError("EXPORT_EXISTS", "An export with this name already exists; it was not overwritten.");
       }
       throw new ImageEditError("STORAGE_UNAVAILABLE", "The export could not be created.");
@@ -320,7 +344,7 @@ export function createImageEditOps(
     },
     revokeSession: (sessionId) => {
       for (const [id, grant] of grants) if (grant.identity.studioSessionId === sessionId) grants.delete(id);
-      for (const [id, grant] of agentGrants) if (grant.identity.studioSessionId === sessionId) agentGrants.delete(id);
+      for (const [id, grant] of agentGrants) if (grant.identity.studioSessionId === sessionId) dropGrant(id);
       for (const request of requests.values()) {
         if (request.identity.studioSessionId === sessionId && request.state !== "denied") {
           request.state = "denied";
@@ -337,14 +361,30 @@ export function createImageEditOps(
         throw new ImageEditError("APPROVAL_UNAVAILABLE", "No Ask inbox is available to approve image access.");
       }
       const { identity } = recipes.describe(input.sessionId, input.turnId);
+      // A repeated request for the same image, caller and run is the same ask.
+      const pending = [...requests.entries()].filter(([, r]) => r.state === "pending");
+      const existing = pending.find(([, r]) => r.callerId === callerId && r.runId === agentRun && sameImage(r.identity, identity));
+      if (existing) return { requestId: existing[0], state: "pending" as const };
+      if (pending.length >= MAX_PENDING_REQUESTS
+        || pending.filter(([, r]) => r.callerId === callerId).length >= MAX_PENDING_REQUESTS_PER_CALLER) {
+        throw new ImageEditError("APPROVAL_UNAVAILABLE", "Too many image access requests are waiting for approval. Retry later.");
+      }
+      const decided = [...requests.entries()].filter(([, r]) => r.state !== "pending");
+      for (const [id] of decided.slice(0, Math.max(0, decided.length - MAX_DECIDED_REQUESTS + 1))) requests.delete(id);
       const requestId = randomUUID();
       const request: AccessRequest = { callerId, runId: agentRun, identity, state: "pending" };
       requests.set(requestId, request);
+      // Caller and run ids are whatever the requester sent; the request code lets
+      // the user match this ask to the agent that is actually waiting for it.
+      const code = requestId.slice(0, 8);
       void opts.askInbox.parkAndWait({
         toolName: "image_edit_access",
-        summary: `Allow ${callerId} (run ${agentRun}) to edit an Image Studio image`,
-        detail: `Session ${identity.studioSessionId}, turn ${identity.studioTurnId}, source sha256 ${identity.sourceSha256}. `
-          + "The agent may change adjustments and marks, undo and redo, and export a copy for one hour. The original image is never changed.",
+        summary: `Allow "${callerId}" (run ${agentRun}) to edit an Image Studio image. Request code ${code}`,
+        detail: `Request code ${code}: approve only if the agent you are running shows this code. `
+          + "The caller and run names are reported by the requester and are not verified. "
+          + `Session ${identity.studioSessionId}, turn ${identity.studioTurnId}, source sha256 ${identity.sourceSha256}. `
+          + "For one hour the agent may change adjustments and marks, undo and redo (including undoing your own edits, "
+          + "which a new edit then replaces), and export a copy. The original image is never changed.",
         args: { sessionId: identity.studioSessionId, turnId: identity.studioTurnId, callerId, runId: agentRun },
         runMode: "headless",
         runId: agentRun,
@@ -385,29 +425,42 @@ export function createImageEditOps(
         ? input.idempotencyKey
         : null;
       if (!key) throw new ImageEditError("INVALID_RECIPE", "idempotencyKey must be 1-128 letters, digits, '.', '_', ':' or '-'.");
-      const cacheKey = [access.callerId, access.grantId, grant.identity.studioSessionId,
-        grant.identity.studioTurnId, input.expectedRevision, key].join("\n");
-      const hash = sha256(canonical(input.action));
-      const seen = replay.get(cacheKey);
+      // Validate before hashing: an invalid or deeply nested action never reaches canonical().
+      const action = parseImageEditAction(input.action);
+      const cacheKey = `${input.expectedRevision}\n${key}`;
+      const hash = sha256(canonical(action));
+      let cache = replay.get(access.grantId);
+      if (!cache) {
+        cache = new Map();
+        replay.set(access.grantId, cache);
+      }
+      const seen = cache.get(cacheKey);
       if (seen) {
         if (seen.hash !== hash) {
           throw new ImageEditError("IDEMPOTENCY_CONFLICT", "This idempotency key was already used for a different command.");
         }
         return seen.result;
       }
-      const recipe = recipes.commit(grant.identity, access, input.action, input.expectedRevision);
+      const recipe = recipes.commit(grant.identity, access, action, input.expectedRevision);
       const result = stateOf(grant, recipe);
-      replay.set(cacheKey, { hash, result });
-      while (replay.size > REPLAY_CACHE_LIMIT) replay.delete(replay.keys().next().value!);
+      cache.set(cacheKey, { hash, result });
+      while (cache.size > REPLAY_CACHE_LIMIT) cache.delete(cache.keys().next().value!);
       return result;
     }),
     render: async (access, input) => {
+      let claimed = false;
       try {
         const grant = agentGranted(access);
         if (!opts.renderBridge) throw new ImageEditError("RENDERER_UNAVAILABLE", "No desktop renderer is attached.");
         if (input.mode !== "preview" && input.mode !== "export") {
           throw new ImageEditError("INVALID_RECIPE", "mode must be preview or export.");
         }
+        // One render at a time per grant; each pending render holds a source copy.
+        if (rendering.has(access.grantId)) {
+          throw new ImageEditError("RENDERER_UNAVAILABLE", "A render for this grant is still running. Wait for it to finish.");
+        }
+        rendering.add(access.grantId);
+        claimed = true;
         // Pin the recipe revision and an immutable, hashed source snapshot.
         const recipe = recipes.load(grant.identity, access);
         if (recipe.revision !== input.expectedRevision) {
@@ -434,16 +487,19 @@ export function createImageEditOps(
           || recipes.readSource(grant.identity, access).sha256 !== source.sha256) {
           throw new ImageEditError("REVISION_CONFLICT", "The image changed during the export; nothing was written.");
         }
-        const name = `${grant.identity.studioTurnId.replace(/[^A-Za-z0-9_-]/g, "_")}-r${recipe.revision}-${digest.slice(0, 12)}.png`;
-        const written = writeExport(png, name);
+        // Session and turn are hashed into the name, so distinct images never collide.
+        const owner = sha256(`${grant.identity.studioSessionId}\n${grant.identity.studioTurnId}`).slice(0, 16);
+        const written = writeExport(png, `${owner}-r${recipe.revision}-${digest.slice(0, 12)}.png`, digest);
         return { revision: recipe.revision, sha256: digest, bytes: png.length, path: written };
       } catch (error) {
         throw imageEditFailure(error);
+      } finally {
+        if (claimed) rendering.delete(access.grantId);
       }
     },
     release: (access) => {
       const grant = agentGrants.get(access?.grantId);
-      if (grant && grant.callerId === access.callerId && grant.runId === access.runId) agentGrants.delete(access.grantId);
+      if (grant && grant.callerId === access.callerId && grant.runId === access.runId) dropGrant(access.grantId);
       return { ok: true };
     },
   };

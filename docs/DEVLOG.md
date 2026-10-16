@@ -13,6 +13,12 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-16] v2.13.0 Phase 7 - Final gate
+
+The final gate rebuilt all six handbooks with the review receipts their manifest names, rechecked the v2.12 CI comparison (only pinned action bumps changed), and ran a Tier 3 deep pass: the real sidecar, control surface, CLI and Ask inbox end to end (24/24) plus an independent adversarial review. Its fixes landed here: request floods are capped and folded, the Ask inbox now serializes its writes (a race that predated this plan), renders are limited and fully validated as PNGs, exports have collision-free idempotent names and refuse hard links, and errors no longer leak internals. Tests no longer write into the real `~/.nexus`. Both full suites pass (root 6277 tests, desktop 2328). A Video2X test that hung intermittently now fails fast instead; its cause and the other open gaps moved to `docs/releases/v2/v2.14/known-gaps.md`. Evidence: [last-phase evidence](releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md).
+
+---
+
 ## [2026-10-15] v2.13.0 Phase 6 - Authorized edit commands
 
 Agents can now edit a persisted Image Studio image with `nexus image-edit` (routes `/nexus/image-edit/*`). Access is per image and starts as an Ask inbox request; only a human approval issues a one-hour grant bound to the agent's caller id, run id and the image, and the app token alone never reaches an image. `apply` is idempotent by key; the viewer and agents share one mutation path. Previews and exports are rendered by the running Nexus window through a polled request bridge, using pixel code now shared with the viewer (`imageEditRenderer.ts`); in headless Edge the viewer's export and the bridge's render were identical. Exports go only to `~/.nexus/generations/exports`, never overwrite, and refuse linked folders or a recipe or source that changed mid-render. Decision record: `docs/releases/v2/v2.13/development/image-command-contract.md`.

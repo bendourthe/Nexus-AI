@@ -9,15 +9,43 @@
  */
 
 import { randomUUID } from "node:crypto";
+import { crc32 } from "node:zlib";
 
-import { ImageEditError } from "../../../../core/image/ImageEditRecipe.js";
+import { ImageEditError, PNG_SIGNATURE } from "../../../../core/image/ImageEditRecipe.js";
 import type { EditMark, ImageAdjustments } from "../../../../core/image/ImageEditRecipe.js";
 
-const PNG_MAGIC = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+const PNG_MAGIC = Buffer.from(PNG_SIGNATURE);
 
 /** Encoded output ceiling: 16-bit RGBA at the 2048 x 2048 recipe limit, plus headroom. */
 export const MAX_RENDER_OUTPUT_BYTES = 2048 * 2048 * 8 + 1024 * 1024;
 export const RENDER_DEADLINE_MS = 8000;
+/** Each pending render holds a source copy; bound them so callers cannot pile up memory. */
+export const MAX_PENDING_RENDERS = 8;
+
+/**
+ * True for a well-formed PNG of exactly `width` x `height`: every chunk's length
+ * and CRC check out, IHDR comes first, IEND comes last, and nothing follows it.
+ */
+export function isWellFormedPng(png: Buffer, width: number, height: number): boolean {
+  if (png.length < 8 + 25 + 12 || !png.subarray(0, 8).equals(PNG_MAGIC)) return false;
+  let offset = 8;
+  let first = true;
+  while (offset + 12 <= png.length) {
+    const length = png.readUInt32BE(offset);
+    const end = offset + 12 + length;
+    if (length > png.length || end > png.length) return false;
+    const type = png.subarray(offset + 4, offset + 8).toString("latin1");
+    if (crc32(png.subarray(offset + 4, offset + 8 + length)) !== png.readUInt32BE(offset + 8 + length)) return false;
+    if (first) {
+      if (type !== "IHDR" || length !== 13) return false;
+      if (png.readUInt32BE(offset + 8) !== width || png.readUInt32BE(offset + 12) !== height) return false;
+      first = false;
+    }
+    offset = end;
+    if (type === "IEND") return length === 0 && offset === png.length;
+  }
+  return false;
+}
 
 export interface RenderInput {
   readonly revision: number;
@@ -59,6 +87,9 @@ export class ImageRenderBridge {
     if (this.closed) {
       return Promise.reject(new ImageEditError("RENDERER_UNAVAILABLE", "The desktop renderer is shutting down."));
     }
+    if (this.pending.size >= MAX_PENDING_RENDERS) {
+      return Promise.reject(new ImageEditError("RENDERER_UNAVAILABLE", "The renderer is busy. Retry in a few seconds."));
+    }
     const requestId = randomUUID();
     return new Promise<Buffer>((resolve, reject) => {
       const timer = setTimeout(() => {
@@ -95,11 +126,8 @@ export class ImageRenderBridge {
       return { accepted: true };
     }
     const png = typeof response.png === "string" ? Buffer.from(response.png, "base64") : Buffer.alloc(0);
-    const valid = png.length >= 33 && png.length <= MAX_RENDER_OUTPUT_BYTES
-      && png.subarray(0, 8).equals(PNG_MAGIC)
-      && png.subarray(12, 16).toString("ascii") === "IHDR"
-      && png.readUInt32BE(16) === entry.request.width
-      && png.readUInt32BE(20) === entry.request.height;
+    const valid = png.length <= MAX_RENDER_OUTPUT_BYTES
+      && isWellFormedPng(png, entry.request.width, entry.request.height);
     if (!valid) {
       entry.reject(new ImageEditError("RENDER_FAILED", "The renderer returned an invalid image."));
       return { accepted: false };

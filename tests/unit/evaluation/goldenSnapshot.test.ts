@@ -78,7 +78,9 @@ describe("materializeGoldenSnapshot", () => {
     }
   });
 
-  it("does not copy or execute a personal Git template in a disposable snapshot", () => {
+  // Runs real `git init` and a commit (about 2.6 s alone on Windows, measured
+  // 2026-10-15), which exceeded the 5 s default under the full suite's workers.
+  it("does not copy or execute a personal Git template in a disposable snapshot", { timeout: 30_000 }, () => {
     const template = path.join(baseDir, "personal-template");
     fs.mkdirSync(path.join(template, "hooks"), { recursive: true });
     fs.writeFileSync(path.join(template, "template-marker"), "personal");

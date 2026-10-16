@@ -4,7 +4,7 @@ import { isAbsolute, relative } from "node:path";
 import { StudioSessionStore } from "./StudioSessionStore.js";
 import type { StudioTurn } from "./StudioSessionStore.types.js";
 import {
-  createImageEditRecipe, IMAGE_EDIT_LIMITS, ImageEditError, parseImageEditRecipe, reduceImageEditRecipe,
+  createImageEditRecipe, IMAGE_EDIT_LIMITS, ImageEditError, parseImageEditRecipe, PNG_SIGNATURE, reduceImageEditRecipe,
   type ImageEditIdentity, type ImageEditRecipe,
 } from "../image/ImageEditRecipe.js";
 
@@ -24,7 +24,7 @@ export interface ImageEditSourceSnapshot {
 
 // Bounds encoded input while allowing 16-bit RGBA at the decoded pixel ceiling.
 export const MAX_IMAGE_EDIT_SOURCE_BYTES = IMAGE_EDIT_LIMITS.pixels * 8 + 1024 * 1024;
-const PNG_MAGIC = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+const PNG_MAGIC = Buffer.from(PNG_SIGNATURE);
 
 export class ImageEditRecipeStore {
   private readonly mediaRoot: string;
@@ -143,6 +143,8 @@ export class ImageEditRecipeStore {
       descriptor = openSync(canonical, "r");
       const before = fstatSync(descriptor);
       if (!before.isFile() || before.size > MAX_IMAGE_EDIT_SOURCE_BYTES) throw new ImageEditError("LIMIT_EXCEEDED", "Encoded image exceeds the source safety limit.");
+      // A hard link inside the owned root can name a file kept elsewhere.
+      if (before.nlink > 1) throw new ImageEditError("FORBIDDEN", "Image source is linked from outside owned generation storage.");
       const bytes = Buffer.allocUnsafe(before.size);
       let offset = 0;
       while (offset < bytes.length) {

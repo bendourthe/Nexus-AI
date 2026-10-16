@@ -1,0 +1,32 @@
+PASS visual-defect detector: 0 finding(s), 0 allowlisted
+{
+  "allowlist": null,
+  "file": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-worktrees\\v2.13-craft-retrieval\\docs\\handbooks\\html\\generation-recovery.html",
+  "findings": [],
+  "font_floor_px": 12.0,
+  "fragment": null,
+  "gate_findings": 0,
+  "minimum_text_box_px": {
+    "height": 12.0,
+    "width": 16.0
+  },
+  "page_pass": true,
+  "status": "pass",
+  "suppressed_findings": 0,
+  "theme": null,
+  "tolerance_px": 1.0,
+  "viewports": [
+    {
+      "height": 900,
+      "width": 390
+    },
+    {
+      "height": 900,
+      "width": 900
+    },
+    {
+      "height": 900,
+      "width": 1440
+    }
+  ]
+}
