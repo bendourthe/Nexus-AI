@@ -13,13 +13,15 @@ const mockClientStatus = vi.fn((): "disconnected" | "connecting" | "connected" |
 const mockClientError = vi.fn(() => undefined);
 
 vi.mock("../../../modules/coding/mcp/McpClient.js", () => ({
-  McpClient: vi.fn().mockImplementation(() => ({
-    connect: mockConnect,
-    disconnect: mockDisconnect,
-    get tools() { return mockClientTools(); },
-    get status() { return mockClientStatus(); },
-    get error() { return mockClientError(); },
-  })),
+  McpClient: vi.fn().mockImplementation(function () {
+    return {
+      connect: mockConnect,
+      disconnect: mockDisconnect,
+      get tools() { return mockClientTools(); },
+      get status() { return mockClientStatus(); },
+      get error() { return mockClientError(); },
+    };
+  }),
 }));
 
 // Mock fs to control config loading.

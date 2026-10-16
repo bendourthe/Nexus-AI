@@ -1,0 +1,1869 @@
+{
+  "scope": "Current v2.12 diff versus origin/develop plus Phase 7 untracked owned artifacts and six maintained handbook outputs",
+  "integration_base": "092ce3c2f386db020d18eab6d69c0655657b2456",
+  "candidate_entry_head": "30a2e47bddc1280badb91aaeaa78c3bcb9447baf",
+  "dispositions": [
+    {
+      "path": "core/documents/documentOutlineEnabled.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "bc3b9d73190cd999b36a480099fd6ecc09f039d45389845a78ca2830d6ff6f8e",
+      "destination": "unchanged"
+    },
+    {
+      "path": "desktop/sidecar/src/coding/headlessAgentRunner.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "f5d82a53247be4dc56a267bc28cab670ba8e6f5bebc5dfa95ec57568a3e99127",
+      "destination": "unchanged"
+    },
+    {
+      "path": "desktop/sidecar/src/handlers.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "48818089138535b7e3af656c42618e62e9a506d60dc0241456e001939aaefc92",
+      "destination": "unchanged"
+    },
+    {
+      "path": "desktop/sidecar/src/protocol.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "da13867dfe190699f75fa22c9153140fc89fda55a6ba3dea0820548841d8c9bc",
+      "destination": "unchanged"
+    },
+    {
+      "path": "desktop/src/pages/settings/SecuritySettings.css",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "0e8f752c532b985bf1b0ca3edc6ec91c0203fb0bfbdb1631896ae33e9fe7d908",
+      "destination": "unchanged"
+    },
+    {
+      "path": "desktop/src/pages/settings/SecuritySettings.tsx",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "44ddb2db12a5d960a2efa4cce3d0aa82ed2890e5f455962203589a4fc86908bf",
+      "destination": "unchanged"
+    },
+    {
+      "path": "desktop/tests/SecuritySettings.test.tsx",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "de5170e722a7fb42fe4482381c656fa044ab181859752d35539cc1325ea964c4",
+      "destination": "unchanged"
+    },
+    {
+      "path": "desktop/tests/a11y-config.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "97bd82f0255e05619ec47e317863315d94751c3443832ceeee5ce71be5876189",
+      "destination": "unchanged"
+    },
+    {
+      "path": "desktop/tests/document-outline-settings.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "ae19b3f8791b4ab00aeb9a4d4e44d699eba42a5eaa312b11a350505e92725a61",
+      "destination": "unchanged"
+    },
+    {
+      "path": "desktop/tests/headless-agent-runner.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "263583580539434ff0e81b454aaf022a622ee6d27dcafb09ff055f4d8f00aaa5",
+      "destination": "unchanged"
+    },
+    {
+      "path": "docs/DEVLOG.md",
+      "disposition": "Cat 3",
+      "lifespan": "living",
+      "sha256": "b8d3f1879ba917799c5406ed1f2162937f459c27d0a3c288eb5ae3479e2557aa",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/DEVLOG.md",
+        "size": 1549068,
+        "mtime": "2026-10-09T23:02:27.669507+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "ba252ff5360a",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".md",
+        "line_count": 12212,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 13
+    },
+    {
+      "path": "docs/archive/v2/v2.11/development/v2.11.0-last-phase-evidence.md",
+      "disposition": "Cat 3",
+      "lifespan": "living",
+      "sha256": "7376ca39d84e7f2bb411bb974851cd02d70f718c6363ad217e3c711296a4ef57",
+      "destination": "unchanged"
+    },
+    {
+      "path": "docs/archive/v2/v2.11/plans/v2.11.0-adoption-pageindex-airi-clm.md",
+      "disposition": "Cat 3",
+      "lifespan": "living",
+      "sha256": "a860a930757552bccf661fbf5ec21dfd9ee23a7f5691e360013e07dad916b5a6",
+      "destination": "unchanged"
+    },
+    {
+      "path": "docs/handbooks/_sources/dual-view-runtime.js",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/_sources/dual-view-runtime.js",
+        "size": 12496,
+        "mtime": "2026-10-09T23:40:44.976072+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "a1f3476c13ed",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".js",
+        "line_count": 278,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/_sources/dual-view.css",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/_sources/dual-view.css",
+        "size": 4003,
+        "mtime": "2026-10-04T12:58:30+00:00",
+        "mtime_age_days": 5,
+        "sha256_prefix": "e60e94cd26d4",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".css",
+        "line_count": 60,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/_sources/handbook-clones.js",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/_sources/handbook-clones.js",
+        "size": 1361,
+        "mtime": "2026-10-09T23:29:01.365639+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "b39bb2be3fb5",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".js",
+        "line_count": 25,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/_sources/handbook.css",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "6e9c40cb7b8723dcdadbdd292587203455cc0a7751247584aa434a19d05de852",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/_sources/handbook.css",
+        "size": 3425,
+        "mtime": "2026-10-09T23:33:26.713192+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "6e9c40cb7b87",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".css",
+        "line_count": 32,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/_sources/storyboards.json",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/_sources/storyboards.json",
+        "size": 3435,
+        "mtime": "2026-10-09T23:27:54.811043+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "99d659ed4717",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".json",
+        "line_count": 18,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/handbooks.json",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "c4dc8411ceb9558fefe48067eba12ff55b222d185d6e38cc7909342afb433035",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/handbooks.json",
+        "size": 15040,
+        "mtime": "2026-10-10T00:01:31.802248+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "c4dc8411ceb9",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".json",
+        "line_count": 60,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 12
+    },
+    {
+      "path": "docs/handbooks/html/atlas.html",
+      "disposition": "Cat 3",
+      "lifespan": "generated",
+      "sha256": "d8ac4d849fedb081d3c52c62c2932f3bef91ee219214d5eeffe79027a461bddb",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/html/atlas.html",
+        "size": 2899,
+        "mtime": "2026-10-09T07:18:58.882202+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "d8ac4d849fed",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".html",
+        "line_count": 69,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/html/generation-recovery.html",
+      "disposition": "Cat 3",
+      "lifespan": "generated",
+      "sha256": "0b6a1e2c736c390f41409c97fa1a0ba6b8adfe4c527a53b353f0f4eaaaf4ee27",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/html/generation-recovery.html",
+        "size": 2842,
+        "mtime": "2026-10-09T07:18:58.883201+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "0b6a1e2c736c",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".html",
+        "line_count": 32,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/html/technical/document-outline.html",
+      "disposition": "Cat 3",
+      "lifespan": "generated",
+      "sha256": "9d0491664eb3f91cea705019515fa71bfbc70967a31610ef1c29608626edf486",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/html/technical/document-outline.html",
+        "size": 7797,
+        "mtime": "2026-10-09T07:18:58.884202+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "9d0491664eb3",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".html",
+        "line_count": 72,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/html/technical/installer-runtime.html",
+      "disposition": "Cat 3",
+      "lifespan": "generated",
+      "sha256": "bd8f6dcc495c0e060279659705c4ddfedfa98e9cb8e38da23f80d279a3badc62",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/html/technical/installer-runtime.html",
+        "size": 1708,
+        "mtime": "2026-10-09T07:18:58.885201+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "bd8f6dcc495c",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".html",
+        "line_count": 16,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/html/technical/media-runtime.html",
+      "disposition": "Cat 3",
+      "lifespan": "generated",
+      "sha256": "b5700ed427d43f1a802fc29db683125ff017a9a6d3d5d2cfbd21d9b185fb6789",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/html/technical/media-runtime.html",
+        "size": 1551,
+        "mtime": "2026-10-09T07:18:58.886706+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "b5700ed427d4",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".html",
+        "line_count": 16,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/html/technical/transcript-and-workspaces.html",
+      "disposition": "Cat 3",
+      "lifespan": "generated",
+      "sha256": "f715fccb8d42ddf2e8d2542a5c63c2eb34896448b097c923b981cb5e32f3113d",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/html/technical/transcript-and-workspaces.html",
+        "size": 1680,
+        "mtime": "2026-10-09T07:18:58.887718+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "f715fccb8d42",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".html",
+        "line_count": 16,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/markdown/atlas.md",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "0bfbbc537989d03b4a6d509c6861411214a79136da0054a59a5294358c039463",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/markdown/atlas.md",
+        "size": 1901,
+        "mtime": "2026-10-09T23:59:57.152702+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "0bfbbc537989",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".md",
+        "line_count": 22,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/markdown/generation-recovery.md",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "0913329cd30ffd855e11b7e8929810e1ff35d8d4927c32aa438538faa414f12a",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/markdown/generation-recovery.md",
+        "size": 2195,
+        "mtime": "2026-10-09T23:59:57.153702+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "0913329cd30f",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".md",
+        "line_count": 25,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/technical/document-outline.md",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "c79662602d8c603b69af0a200043d32e4fdceafb9669eeae22ec3166ef4e99ad",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/technical/document-outline.md",
+        "size": 10943,
+        "mtime": "2026-10-09T23:59:57.154702+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "c79662602d8c",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".md",
+        "line_count": 80,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 3
+    },
+    {
+      "path": "docs/handbooks/technical/installer-runtime.md",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "52ff450cb2c511e7948b581e589c71c925d386b63817f608926d74e2883874bf",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/technical/installer-runtime.md",
+        "size": 1073,
+        "mtime": "2026-10-09T23:52:00.779596+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "52ff450cb2c5",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".md",
+        "line_count": 7,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/technical/media-runtime.md",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "b1a45f7108eeca2efdaf471ff16643ff791120e6bdb39d0fdcd3f481087be4ed",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/technical/media-runtime.md",
+        "size": 1007,
+        "mtime": "2026-10-09T23:52:00.099942+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "b1a45f7108ee",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".md",
+        "line_count": 7,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/handbooks/technical/transcript-and-workspaces.md",
+      "disposition": "Cat 3",
+      "lifespan": "living or retained generator input",
+      "sha256": "5616821449709c170afbdede4f8398a53294e7cd0176435a57e2f26776f28c2a",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/handbooks/technical/transcript-and-workspaces.md",
+        "size": 990,
+        "mtime": "2026-10-09T23:52:01.780417+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "561682144970",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".md",
+        "line_count": 7,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/reference/declined-models.md",
+      "disposition": "Cat 3",
+      "lifespan": "living",
+      "sha256": "4efef301335364d505062a787bd6dae6b6ff89224dddd0d53d61fd412ac6ac1c",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/reference/declined-models.md",
+        "size": 2019,
+        "mtime": "2026-10-09T07:18:58.917391+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "4efef3013353",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".md",
+        "line_count": 16,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 2
+    },
+    {
+      "path": "docs/reference/model-acceptance.md",
+      "disposition": "Cat 3",
+      "lifespan": "living",
+      "sha256": "b1078cee57e33aae994854f0389abdf1646d586fbcf3aaa040b3a7e54cd69310",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/reference/model-acceptance.md",
+        "size": 20763,
+        "mtime": "2026-10-09T07:18:58.923397+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "b1078cee57e3",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".md",
+        "line_count": 198,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 12
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-3-native-history.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "8cc123b76461db50524a49e372209b84586a1a736322248925015b171de1bde1",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-3-native-history.json",
+        "size": 13092,
+        "mtime": "2026-10-09T11:20:08.735657+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "8cc123b76461",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 365,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-4-compaction.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "99762060ea94ffc512c9b8f1558b1ff2ee2e4d2c9d7711846f8488eb0e725fc3",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-4-compaction.json",
+        "size": 63905,
+        "mtime": "2026-10-09T12:43:17.921663+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "99762060ea94",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 1771,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 5
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-5-settings/browser.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "c38409026ebcc5733a9e677bcf573095f07b717a382126d0b0e1c59c1ca385aa",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-5-settings/browser.json",
+        "size": 2941,
+        "mtime": "2026-10-09T13:04:11.232888+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "c38409026ebc",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 138,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 5
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-5-settings/settings-320.png",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "9b9f9bcfdc52d21af5f2b6f8f782eeb6912ec62f52cd7b302ae9a0e3f2edce0c",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-5-settings/settings-320.png",
+        "size": 76808,
+        "mtime": "2026-10-09T13:04:12.416706+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "9b9f9bcfdc52",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".png",
+        "line_count": null,
+        "is_binary": true
+      },
+      "outside_docs_supported_ref_count": 3
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-5-settings/settings-rendered.html",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "c45e0cc222555e3448e4e7391a66db2254589f4b4b31cbee306f5bceac8545db",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-5-settings/settings-rendered.html",
+        "size": 42877,
+        "mtime": "2026-10-09T13:04:12.996094+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "c45e0cc22255",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".html",
+        "line_count": 2176,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 4
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-5-settings/visual-allowlist.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "40ce51f860b1eec64833633ab870af90eebc30fde2d29c9c16d02da50f783162",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-5-settings/visual-allowlist.json",
+        "size": 885,
+        "mtime": "2026-10-09T11:58:43.713650+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "40ce51f860b1",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 7,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 3
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-5-settings/visual-report.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "538153806b2a99eb49baa452f7e25ee8480b05420b62f4ebd39fcc01f9718b4e",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-5-settings/visual-report.json",
+        "size": 524,
+        "mtime": "2026-10-09T13:04:11.849045+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "538153806b2a",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 31,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 4
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-6-evaluation.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "4cc60fb1822047bef391507917ce3aaae2bf49e184e086f9b58efc62a6d529ab",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-6-evaluation.json",
+        "size": 21169,
+        "mtime": "2026-10-09T23:01:23.971784+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "4cc60fb18220",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 574,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-build-provenance.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "7de0d9ed07037691a3c370f2410fc07211d33afe67ac41786d947852a61d8212",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-build-provenance.json",
+        "size": 207494,
+        "mtime": "2026-10-10T00:16:38.775276+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "7de0d9ed0703",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 1786,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-ci-inputs.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "d12a2d20295b3ce12d0b190f17ca0dd15d368767aee1544646d27d6da8d47d1e",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-ci-inputs.json",
+        "size": 152998,
+        "mtime": "2026-10-10T00:14:12.126792+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "d12a2d20295b",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 4072,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-cli-help.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "5302958a14dc1aca7aaaf3f64e38446f647dded4f7590dfcfc1ef5b1955e6543",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-cli-help.json",
+        "size": 458,
+        "mtime": "2026-10-10T00:16:40.209140+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "5302958a14dc",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 11,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-cli-help.txt",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "c9052327ccd2e9532dcf4200eecae951f96f4d0b23907c99e4c141344d04c6ed",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-cli-help.txt",
+        "size": 2437,
+        "mtime": "2026-10-10T00:16:39.844857+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "c9052327ccd2",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".txt",
+        "line_count": 43,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/brand-contrast-observations.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "84eb6b84a6b4458f02c9c270304e9736a4dbcf6c8e64586381709abd8c2c6414",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/brand-contrast-observations.json",
+        "size": 70189,
+        "mtime": "2026-10-10T00:07:18.234796+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "84eb6b84a6b4",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 3594,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/contact-desktop.png",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "b495e07cd270a9cd8300d66bb13e973dc1dc767a0b2fa7e33d948f64497e70ae",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/contact-desktop.png",
+        "size": 769168,
+        "mtime": "2026-10-10T00:07:19.255050+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "b495e07cd270",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".png",
+        "line_count": null,
+        "is_binary": true
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/contact-phone.png",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "60b918772221bef306ceccd959db8f46dd9bccfc7e4292f8112094aff760ef61",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/contact-phone.png",
+        "size": 1153862,
+        "mtime": "2026-10-10T00:07:19.622654+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "8281a4977080",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".png",
+        "line_count": null,
+        "is_binary": true
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/contact-reading.png",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "2f5890cdfdd310b6f0a82bd4d785243e18ddccafd4a9318dc3aa9a4b37f941c3",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/contact-reading.png",
+        "size": 737894,
+        "mtime": "2026-10-10T00:07:19.959900+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "2f5890cdfdd3",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".png",
+        "line_count": null,
+        "is_binary": true
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/final-candidate-manifest.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "e09c35d86463304bbfcaa833b4718a3d950e180db9c23b4a890e56ceecfbbd6a",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/final-candidate-manifest.json",
+        "size": 91838,
+        "mtime": "2026-10-10T00:07:18.569740+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "e09c35d86463",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 1732,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/final-visual-original-review.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "4a93a922dfa642e60a25183d6508a49788467c5793917d85ec116f1d1814f40f",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/final-visual-original-review.json",
+        "size": 3215,
+        "mtime": "2026-10-10T00:07:18.909226+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "4a93a922dfa6",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 85,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/portability-observations.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "7339a68c61622618454ff67836181c39e2069335f782330a0613edb804a027ba",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/portability-observations.json",
+        "size": 1506,
+        "mtime": "2026-10-10T00:07:20.300263+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "7339a68c6162",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 44,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/render-observations.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "ee3003f71bbf0ec5250659c01ab2d1a643e11631c5766e2dd6ce6f2c31deb4b4",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/render-observations.json",
+        "size": 101692,
+        "mtime": "2026-10-10T00:07:17.603249+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "ee3003f71bbf",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 4350,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/source-build-geometry.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "2bf413efd170084c02e1b750b7334b10f17adb35a8002d28fde30d963961063e",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/source-build-geometry.json",
+        "size": 6034,
+        "mtime": "2026-10-10T00:07:17.922738+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "2bf413efd170",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 174,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/source-review.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "79b7da97f32ffd95feb40dee9401d4d8ca33ff7819a84a24a801462cee465517",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-handbooks/source-review.json",
+        "size": 16006,
+        "mtime": "2026-10-10T00:07:20.648672+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "79b7da97f32f",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 205,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/evidence/phase-7-local-validation.json",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "839cf5532140e438a49f443550f9f0f2566114dd5d34a258942c2fd89ebce0db",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/evidence/phase-7-local-validation.json",
+        "size": 3395,
+        "mtime": "2026-10-10T00:16:42.181871+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "839cf5532140",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".json",
+        "line_count": 103,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "290af8abcf62bf0427f5ae8c13fff96b781eeab5d8e4ad36a9d1c2880e2b2ba0",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md",
+        "size": 10052,
+        "mtime": "2026-10-09T10:13:12.066736+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "290af8abcf62",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".md",
+        "line_count": 66,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 3
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "f1301a9cc3ed4628cb4e09cb6307d1c41bb3259bf886e533ed4ba8ab87d2a461",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md",
+        "size": 6781,
+        "mtime": "2026-10-09T11:20:08.736658+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "f1301a9cc3ed",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".md",
+        "line_count": 41,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "59f91016219af4348028dc0cbf137dfd1dbbb5e4ad788559540c8054995df158",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md",
+        "size": 7364,
+        "mtime": "2026-10-09T12:43:13.615377+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "59f91016219a",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".md",
+        "line_count": 46,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 5
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "1973f2066816c8db779bf88c272b23c24749bb2f9a88f322edf957ed6bba6afa",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md",
+        "size": 6408,
+        "mtime": "2026-10-09T13:04:13.564008+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "1973f2066816",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".md",
+        "line_count": 39,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 8
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "d3e7223ee986673a3fa74079e5be7532713732b638c9ba4e0eed306de9443e3c",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md",
+        "size": 10690,
+        "mtime": "2026-10-09T23:11:28.835080+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "d3e7223ee986",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".md",
+        "line_count": 61,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 6
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-7.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "61598b252e414bc04c30503388197b9d47304a427f612837eece60c26d966683",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-7.md",
+        "size": 6903,
+        "mtime": "2026-10-10T00:03:29.008813+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "61598b252e41",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".md",
+        "line_count": 41,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/phase-7-ci-comparison.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "ed4e7f5ebe0e32369bbb81de487a7d35e314b64c6a488a82d9c13c4bbffaffd8",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/phase-7-ci-comparison.md",
+        "size": 6746,
+        "mtime": "2026-10-10T00:16:41.192613+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "ed4e7f5ebe0e",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".md",
+        "line_count": 41,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "d45f70f7761ccefdac6c7a91a16fb827915680d540cd0ca33f0d76dff394030c",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md",
+        "size": 9988,
+        "mtime": "2026-10-10T00:03:29.007813+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "d45f70f7761c",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "releases",
+        "extension": ".md",
+        "line_count": 49,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/releases/v2/v2.12/docs-cleanup-report.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "f8d02ae761c4d7ae4d4bbecb0dc9550678d5ded829b30cd6b509c56a2eef2a77",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/docs-cleanup-report.md",
+        "size": 7451,
+        "mtime": "2026-10-09T23:11:41.339650+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "f8d02ae761c4",
+        "version_dir": "v2.12",
+        "topic_dir": null,
+        "layout": "releases",
+        "extension": ".md",
+        "line_count": 86,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 2
+    },
+    {
+      "path": "docs/releases/v2/v2.12/known-gaps.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "690f0712aef9920740b466f4e3d69f7f615cb3e3f2f54a1996abd8e71c6dd0a6",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/releases/v2/v2.12/known-gaps.md",
+        "size": 7700,
+        "mtime": "2026-10-10T00:16:43.189582+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "690f0712aef9",
+        "version_dir": "v2.12",
+        "topic_dir": null,
+        "layout": "releases",
+        "extension": ".md",
+        "line_count": 70,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 5
+    },
+    {
+      "path": "docs/runbooks/ci-lifecycle.md",
+      "disposition": "Cat 3",
+      "lifespan": "living",
+      "sha256": "908db58424902cc77b23bbe3c16fa221f0899914c8da1986b2a9d309faf87c1a",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/runbooks/ci-lifecycle.md",
+        "size": 2671,
+        "mtime": "2026-10-10T00:14:12.457158+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "908db5842490",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".md",
+        "line_count": 28,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/todos.md",
+      "disposition": "Cat 3",
+      "lifespan": "living",
+      "sha256": "05e2de22c30842c335b449ba4f06d4d63c44ee42680e912c8523f1755a17adf3",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/todos.md",
+        "size": 181472,
+        "mtime": "2026-10-10T00:03:29.010838+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "05e2de22c308",
+        "version_dir": null,
+        "topic_dir": null,
+        "layout": null,
+        "extension": ".md",
+        "line_count": 701,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 33
+    },
+    {
+      "path": "docs/v2/v2.12/comparisons/v2.12.0-comparison-kolibri-1.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "02e97859b4aa0e7e48097002bd746e62351c407dc3fe9dc5f77bcab40d3aa104",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/v2/v2.12/comparisons/v2.12.0-comparison-kolibri-1.md",
+        "size": 11708,
+        "mtime": "2026-10-09T07:18:58.929842+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "02e97859b4aa",
+        "version_dir": "v2.12",
+        "topic_dir": "comparisons",
+        "layout": "v-bucket",
+        "extension": ".md",
+        "line_count": 113,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 2
+    },
+    {
+      "path": "docs/v2/v2.12/development/history/2026-10-08_v2.12.0-outline-promotion-readiness-phase-1.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "ceb9d0f3f613d58007616e8b587892502a842a958a4c72eb79f685f2a476787e",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/v2/v2.12/development/history/2026-10-08_v2.12.0-outline-promotion-readiness-phase-1.md",
+        "size": 5372,
+        "mtime": "2026-10-09T07:18:58.931842+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "ceb9d0f3f613",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "v-bucket",
+        "extension": ".md",
+        "line_count": 83,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 1
+    },
+    {
+      "path": "docs/v2/v2.12/development/outline-eval.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "1f9be104def3251d0d21c228ea492d76eae8e0db38088c319caff6dbc84b8b45",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/v2/v2.12/development/outline-eval.md",
+        "size": 11964,
+        "mtime": "2026-10-09T22:56:54.392784+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "1f9be104def3",
+        "version_dir": "v2.12",
+        "topic_dir": "development",
+        "layout": "v-bucket",
+        "extension": ".md",
+        "line_count": 88,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 14
+    },
+    {
+      "path": "docs/v2/v2.12/known-gaps.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "186f108054e9ddd35bdc32aee69dc58a3dc52e2ea71d69ee929f798100481652",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/v2/v2.12/known-gaps.md",
+        "size": 13748,
+        "mtime": "2026-10-09T23:00:16.388449+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "186f108054e9",
+        "version_dir": "v2.12",
+        "topic_dir": null,
+        "layout": "v-bucket",
+        "extension": ".md",
+        "line_count": 52,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 8
+    },
+    {
+      "path": "docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "f312376e173458e3610c8653f40f2074052700e9fc72b7c9603007f004bc5439",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md",
+        "size": 21677,
+        "mtime": "2026-10-09T07:18:58.933841+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "f312376e1734",
+        "version_dir": "v2.12",
+        "topic_dir": "plans",
+        "layout": "v-bucket",
+        "extension": ".md",
+        "line_count": 184,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 4
+    },
+    {
+      "path": "docs/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md",
+      "disposition": "Cat 4",
+      "lifespan": "frozen-at-release-close",
+      "sha256": "7d0c2fc3bcd8480781cced28d2a7b9764496bf119dbbf6b1458320e0b782b131",
+      "destination": "unchanged",
+      "owner_inventory": {
+        "path": "docs/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md",
+        "size": 70318,
+        "mtime": "2026-10-09T23:05:23.298043+00:00",
+        "mtime_age_days": 0,
+        "sha256_prefix": "7d0c2fc3bcd8",
+        "version_dir": "v2.12",
+        "topic_dir": "plans",
+        "layout": "v-bucket",
+        "extension": ".md",
+        "line_count": 661,
+        "is_binary": false
+      },
+      "outside_docs_supported_ref_count": 15
+    },
+    {
+      "path": "modules/coding/chat/CompactionStrategy.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "e9027ab58f57033b788728babacc73fbac9e0832d38b299c86c9c2e89aea5bfa",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/chat/ContextCompactor.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "8becf69958187f3125c37504b30476f6f4de8d7cf9d60df5a42b229a34e4fae8",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/chat/ConversationManager.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "0397bfc6723cb1a9b7d8927e6a4249d710ce13557094f5bf8d5dcd368b8b9ccb",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/chat/RegenerateFromSource.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "7bc9a545624c9464edcae49eeddd4bd251f1aef1f0138b501ef86545dc646773",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/chat/llmMessages.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "9da023b37a7414ad82b76679ea73f77cc030137826e3d4895238bfb898531f1c",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/chat/types.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "c78886c6463efe743bd195aa10eed64aea99ede8d0aa3487484bc4d7ac22a1f3",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/commands/compactCommand.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "b6eff4f2a256ec2c186e09374b6ac847c89416b45be9a078f961a72e14fbffbf",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/documents/DocumentOutlineTools.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "4b00a5ee007ebbbcf32a16e74af612ef76df8e20e8f17ef6fdf6dd2d10869424",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/llm/LmStudioClient.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "59a349593a78b3ce3a34cddc423b157172dfaa9ab35e082daf5f18d72da3449a",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/llm/OllamaClient.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "25c5a530c34331d2bbb903a2fdf58fa876946ba39f7514c1693f27eb1a61ed72",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/llm/headlessOllamaClient.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "c865895515a0bc9612b69e6a2700871890a161567daab53d6aaca2087de37f89",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/llm/headlessOpenAiClient.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "826e66c48ddc6f43e2862295cd826ca4d938c1a94e8279ea89adf52b375de7d7",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/llm/ollamaMemory.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "441126f6594c75e4b905d14d3c7a2a34ddafa666c915a92bc751a83fb9f5e729",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/llm/toolHistory.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "bb73df6714fb698e5329a22781a43d539965b4d035acd8a12d3983fae41a6c8b",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/llm/types.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "cea401cefbeefb2b806dfddb5364abc1145813025fce72338c97bf349d968235",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/runtime/HeadlessAgentSession.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "66766a3558ea576824c7e0f10f26671555a26c001980d9b31553766360cb146f",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/runtime/elideToolResults.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "dadec96f3d5a482f236d7b02fc5ab626ba54b66a63f3a19bbfe3993bee1d653d",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/runtime/headlessTools.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "9b8e142c36abe6b7d8a0cfede935e81182f87e8053fd478ff28954af34f0578d",
+      "destination": "unchanged"
+    },
+    {
+      "path": "modules/coding/runtime/outputBudget.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "0b660cdb17cbf8c8ba23a3c36cada9437de581e73d8ec1b18f9a2638ab3d8abb",
+      "destination": "unchanged"
+    },
+    {
+      "path": "scripts/build-outline-smoke-questions.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "51fed7d38a9c8eff30f8cf6a342fe119c994d79b97e27b48dc378741b8b27b40",
+      "destination": "unchanged"
+    },
+    {
+      "path": "scripts/generate-handbooks.mjs",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "f28c8d1ee031a30601286f28bd32b286a25ded0042946ec335eb832b18fdb1ef",
+      "destination": "unchanged"
+    },
+    {
+      "path": "scripts/generate-outline-fixtures.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "627b6f936c14ba02b91775d3ede2fdfb1706ad6efa1d5274a0d7933ce2820eda",
+      "destination": "unchanged"
+    },
+    {
+      "path": "scripts/handbook-renderer.mjs",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "9aede8fcca5d76178d0cf91df781740295aa08d7293e2d37fbc667a324d6db7d",
+      "destination": "unchanged"
+    },
+    {
+      "path": "src/panels/ChatPanelBootstrap.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "055fa491cfc34a27c77a5bc6730fade82bd8d1c50cad2d0111a76512e77fdc90",
+      "destination": "unchanged"
+    },
+    {
+      "path": "src/storage/ChatHistoryStore.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "3269516e648a670fd2e6afc8bf7e4480ae9004747f1a42ffd24776b63b5c9ec9",
+      "destination": "unchanged"
+    },
+    {
+      "path": "src/tools/AgentLoop.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "5ca4f55ba2912887c616eb06e01670590ed3e2b1999d2d702b5c3b16fe1a457c",
+      "destination": "unchanged"
+    },
+    {
+      "path": "src/tools/handlers/compress.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "222bf13a0075e9386a8bb9486fbe9292d9d89c394fa74e9358b7294b1b480c5c",
+      "destination": "unchanged"
+    },
+    {
+      "path": "src/tools/handlers/documentOutline.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "18e764bd3ae0b0c960d7691d50ab62f85565ff6e0f6fce915c64163fb8af6791",
+      "destination": "unchanged"
+    },
+    {
+      "path": "src/tools/handlers/parseDocument.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "051de22eeb5b7cb0e8788184c5cda23a7b882c6d19daa165b93e3f3bbdaf35c3",
+      "destination": "unchanged"
+    },
+    {
+      "path": "src/tools/parseDocumentWiring.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "d66c8e6bf0a6c20a2b1313b834889773ca37ceefc0f1e3fb95b3b6260d911a05",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/helpers/factories.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "c0831fa6e21d2c061f5478f46ec380182f44610d0c718336ee3ed790a89e1e30",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/integration/agents/worktree-read-rooting.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "ac570fe9b9d3053a7703fbf243b53d312ee31fe58fe3e96d705e32913050b4fa",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/integration/codegraph/benchmark.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "8cdd547faa2ef6f9bddd03128553f2109abd9db26d993d23337563d810966a37",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/integration/coding-pillar/command-compressor-benchmark.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "09fbb7da73ee01908229ee221368988a3e9c78c82f76e62139165c61820ae916",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/integration/coding-pillar/document-budget-loops.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "b58391268d5ee95fae4cf31667f35845e3172bff34423e4cbbf4a67ba8fc122f",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/integration/coding-pillar/phase-7-token-usage.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "f60fc5709181ffdd95949f1735f05e3c09ee2c02bd3edb11a0853c4065460ce4",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/integration/guardrails/v1.19.1-hardening.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "d528cab941174b931911c2108132ced9c0764f318143ad0094f5d6b7ed61df4c",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/integration/memory-tier/phase-7-storage-size-extended.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "57ef12457c10e8fab33588fa495cb15fe4f5e825c158d2f85cdf1b20204abc3a",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/integration/security/inbound-classifier-routing.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "ca6c222c792073788261a13914b3d48470cad1022474a4c29fdcc630e22539fc",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/smoke/document-outline-smoke.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "450cc2bbedb3c9fbf25a0f70a2c10c20aaed0c6db6fc4d83f0919670f0a2edb8",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/smoke/outline-smoke-parser.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "5173c389982b04aaaec86097292340093234e0651e0ec4e0336f2c01d6c206d6",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/chat/CompactionStrategy.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "71b303667c2683f80179a20b5b6412b55558e7fc38d73f41218cf54ab24ca340",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/chat/ContextCompactor.preCompact.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "00e2b2f8adc849ef93adfb4370769921915e86246d6e7afbe493e7ed06fe6f76",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/chat/ContextCompactor.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "fa820f4d8ca581d9786787d232a1dc98211021e5454721f6687d0cf2b197f4b0",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/chat/toolResultOwnership.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "1c53d782253477369cd2e8a8a8f3e4c11bb4f90db7fe78dbe084d9508250da00",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/docs/v2.12.0-kolibri-exclusion.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "c7c5115a33dcc1f653059734dc570b6ff24b128bf309af23075bf156d2abf7d8",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/llm/LmStudioClient.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "6f66664781ee418a024f0877c8fdbe156170eeca94e6a7c4d87061743fa3da50",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/llm/headlessOpenAiClient.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "c859c49cd5cc78949fbac0ca1dd73a45b6b5c3af9670bd7f0bec1d83b04f95e1",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/llm/loadedContextProbeBoundary.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "904a04c351e12eff0af553e8fa07f89c4cbffb5325254f6e90e81d87f28bbc73",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/llm/openAiTerminalWait.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "2520eeb1a666453dc5180858582a26cfc578857f511227acfba3a0b7bf5724e3",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/llm/toolHistory.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "bd90b4983a75dd0c7ff2ae5a7ff083070d08d44e8701ee3e0af1dfa6a70bc6ea",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/modules/coding/documents/DocumentOutlineTools.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "30f1279780221a83c60cd58ef1d5525264526d0047c6be435ae13a756b1dd792",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/modules/coding/llm/nativeToolCalls.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "016890fdbf023e9444c909e7d6c7bc00c3d9eb0fb2ff2b861f5f0fa44a27d6d7",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/runtime/HeadlessAgentSession.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "3750a7057326e96939cfda01f794fdc6e4c3b588bebc00c8df4e5bfebd025c11",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/runtime/elideToolResults.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "b40ae06d5ee5555ccb2f8471d408826c11c9aaac860686821736c99f8d87e3c6",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/runtime/headlessCompaction.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "8a52b3215e98aab3b45428c24284e982e64b76ba95762480ae67e11560ac4d40",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/runtime/outputBudget.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "bcb3f8a08debeedafceccd7ec14be9660fde051dcc7815a4eb36a6524bd795b2",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/scripts/measure-document-outline.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "0a942fb3115a4c2c824f27baea75337e209143d91dbd8eff356958b194200b11",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/scripts/outline-smoke.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "192f2dbbd0ea478c45c8680b3ec2bf229f4105dd8e7052bb9b073c175bb36716",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/tools/AgentLoop.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "b2ca2d9f19b2d238fc5d31eaa38217074685c83414cb1d4fe40947457eff9a01",
+      "destination": "unchanged"
+    },
+    {
+      "path": "tests/unit/tools/handlers/parseDocument.budget.test.ts",
+      "disposition": "Stay",
+      "lifespan": "current source/test/tooling owner",
+      "sha256": "3c4053e9696fe2c576359ee032098e54ed56e248befd93041ce73ab806c53eb2",
+      "destination": "unchanged"
+    }
+  ],
+  "counts": {
+    "Stay": 71,
+    "Cat 3": 25,
+    "Cat 4": 39
+  },
+  "moves": [],
+  "archives": [],
+  "deletions": [],
+  "excluded": [
+    "protected queued v2.13 plan",
+    "historical benchmark result files, including protected pre-existing edit",
+    "other worktrees and main-checkout concurrent edits",
+    "historical archived documentation outside plan-touched scope"
+  ],
+  "living_refresh_queue": [
+    "docs/handbooks/html/atlas.html",
+    "docs/handbooks/html/generation-recovery.html",
+    "docs/handbooks/html/technical/installer-runtime.html",
+    "docs/handbooks/html/technical/media-runtime.html",
+    "docs/handbooks/html/technical/transcript-and-workspaces.html",
+    "docs/handbooks/html/technical/document-outline.html"
+  ],
+  "owner_commands": {
+    "inventory_exit": 0,
+    "refgraph_exit": 0,
+    "docs_layout_exit": 0,
+    "architecture_exit": 0,
+    "architecture_errors": 0,
+    "architecture_warnings": 18
+  },
+  "links": {
+    "before": ".nexus-hub/phase6-links-after-20261009T2310.jsonl",
+    "after": ".nexus-hub/phase7-links-after-20261010T002201Z.jsonl",
+    "receipt": ".nexus-hub/phase7-links-diff-20261010T002203Z.json",
+    "totals": {
+      "after": 3770,
+      "before": 3770,
+      "fixed": 0,
+      "newly_broken": 0,
+      "unchanged": 3770
+    }
+  },
+  "limitations": [
+    "Scan does not certify the entire historical repository",
+    "Outside-docs refgraph covers only supported source formats; zero hits do not prove an orphan",
+    "Original handbook outputs remain stale and guarded; final candidates have separate source/render proof",
+    "No source orphan, duplicate or structural-depth warning authorizes removal",
+    "This new scan report and its JSON are self-classified active and not part of the earlier inventory"
+  ]
+}

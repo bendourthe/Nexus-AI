@@ -26,9 +26,12 @@ export function toLlmMessages(
   allowImages: boolean,
 ): LLMMessage[] {
   return history.map((m) => {
-    if (allowImages && m.images && m.images.length > 0) {
-      return { role: m.role, content: m.content, images: m.images };
-    }
-    return { role: m.role, content: m.content };
+    return {
+      role: m.role,
+      content: m.content,
+      ...(m.tool_calls ? { tool_calls: m.tool_calls } : {}),
+      ...(m.role === "tool" ? { tool_name: m.tool_name, tool_call_id: m.tool_call_id } : {}),
+      ...(allowImages && m.images?.length ? { images: m.images } : {}),
+    };
   });
 }

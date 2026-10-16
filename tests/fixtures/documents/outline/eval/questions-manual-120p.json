@@ -1,0 +1,230 @@
+[
+  {
+    "id": "q01",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"5.4 Installation Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q02",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"6 Scheduling\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q03",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"6.1 Backup and Restore Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q04",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"6.2 Calibration Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q05",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"6.3 Glossary Terms Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q06",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"6.4 Configuration Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q07",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"7 Monitoring\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q08",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"7.1 Performance Tuning Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q09",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"7.2 Reporting Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q10",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"7.3 Introduction Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q11",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"7.4 Network Settings Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q12",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"8 Troubleshooting\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q13",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"8.1 Maintenance Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q14",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"8.2 Appendix Notes Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q15",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"8.3 Installation Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q16",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"8.4 Storage Layout Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q17",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"9 Security Model\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q18",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"9.1 Calibration Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q19",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"9.2 Glossary Terms Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q20",
+    "file": "manual-120p.pdf",
+    "category": "cross-section",
+    "question": "In manual-120p.pdf, find the section that comes immediately after section \"9.3 Configuration Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q21",
+    "file": "manual-120p.pdf",
+    "category": "table",
+    "question": "In manual-120p.pdf, section \"10.1 Reporting Details\" contains a port table. Which port is listed?"
+  },
+  {
+    "id": "q22",
+    "file": "manual-120p.pdf",
+    "category": "table",
+    "question": "In manual-120p.pdf, section \"10.2 Introduction Details\" contains a port table. Which port is listed?"
+  },
+  {
+    "id": "q23",
+    "file": "manual-120p.pdf",
+    "category": "table",
+    "question": "In manual-120p.pdf, section \"10.3 Network Settings Details\" contains a port table. Which port is listed?"
+  },
+  {
+    "id": "q24",
+    "file": "manual-120p.pdf",
+    "category": "table",
+    "question": "In manual-120p.pdf, section \"10.4 Monitoring Details\" contains a port table. Which port is listed?"
+  },
+  {
+    "id": "q25",
+    "file": "manual-120p.pdf",
+    "category": "table",
+    "question": "In manual-120p.pdf, section \"11.1 Appendix Notes Details\" contains a port table. Which port is listed?"
+  },
+  {
+    "id": "q26",
+    "file": "manual-120p.pdf",
+    "category": "table",
+    "question": "In manual-120p.pdf, section \"11.2 Installation Details\" contains a port table. Which port is listed?"
+  },
+  {
+    "id": "q27",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"10 Backup and Restore\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q28",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"11 Performance Tuning\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q29",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"11.3 Storage Layout Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q30",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"11.4 Troubleshooting Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q31",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"12 Maintenance\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q32",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"12.1 Glossary Terms Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q33",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"12.2 Configuration Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q34",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"12.3 Scheduling Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q35",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"12.4 Security Model Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q36",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"1 Introduction\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q37",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"1.1 Storage Layout Details\". Quote the first few words of its body text exactly as the document shows them."
+  },
+  {
+    "id": "q38",
+    "file": "manual-120p.pdf",
+    "category": "factual",
+    "question": "In manual-120p.pdf, find section \"1.2 Troubleshooting Details\". Quote the first few words of its body text exactly as the document shows them."
+  }
+]

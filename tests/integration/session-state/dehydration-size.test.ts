@@ -7,31 +7,27 @@
  * turns carry large captured fields (a build log, a unified diff, a stack
  * trace) and measures the persisted JSON size before (fully inline) vs after
  * (dehydrated to the content-addressed artifact store). The delta is written
- * to a results fixture so the cycle docs can cite a real artifact, and the
+ * to a per-run report, and the
  * dehydrated form is asserted to be materially smaller.
  *
  * Deterministic: the corpus is generated from fixed seeds (no Math.random), so
  * a re-run produces the same numbers.
  *
- * Results are written to:
- *   tests/fixtures/session-dehydration/2026-06-15/results.json
+ * Reports use a temporary directory by default. Set NEXUS_BENCH_RESULTS_DIR to retain uniquely named reports for cycle documentation without changing historical fixtures.
  */
 
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 import { promises as fs } from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import { ArtifactStore } from "../../../core/memory/ArtifactStore.js";
 import { dehydrateMessages } from "../../../core/memory/sessionArtifacts.js";
 
-const RESULTS_DIR = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "fixtures",
-  "session-dehydration",
-  "2026-06-15",
-);
+const retainedResultsDir = process.env["NEXUS_BENCH_RESULTS_DIR"] || undefined;
+const RESULTS_DIR = retainedResultsDir ?? await fs.mkdtemp(path.join(os.tmpdir(), "nexus-dehydration-results-"));
+afterAll(async () => {
+  if (!retainedResultsDir) await fs.rm(RESULTS_DIR, { recursive: true, force: true });
+});
 
 /** A representative oversized turn-content corpus (deterministic). */
 function buildMessages(): string[] {
@@ -76,7 +72,7 @@ describe("Phase 3 session-state dehydration size benchmark", () => {
 
       await fs.mkdir(RESULTS_DIR, { recursive: true });
       const summary = {
-        runAt: "2026-06-15",
+        runAt: new Date().toISOString(),
         turns: messages.length,
         fieldsDehydrated: markerCount,
         thresholdBytes: 20 * 1024,
@@ -87,9 +83,9 @@ describe("Phase 3 session-state dehydration size benchmark", () => {
         stabilityGate: { sizeRatioMax: 0.5 },
       };
       await fs.writeFile(
-        path.join(RESULTS_DIR, "results.json"),
+        path.join(RESULTS_DIR, `session-dehydration-${Date.now()}-${process.pid}.json`),
         JSON.stringify(summary, null, 2),
-        "utf-8",
+        { encoding: "utf-8", flag: "wx" },
       );
 
       // Three of the four turns exceed the 20KB threshold and dehydrate.

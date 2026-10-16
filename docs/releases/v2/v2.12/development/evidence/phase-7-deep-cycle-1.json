@@ -1,0 +1,41 @@
+{
+  "created_at": "2026-10-10T00:52:05.394365+00:00",
+  "fix_rerun_cycles_used": 1,
+  "fix_rerun_cycles_max": 3,
+  "initial_finding_record": "../phase-7-deep-initial-findings.md",
+  "selected": [
+    "Shared presentation h1 and Exit accessible name",
+    "Section-range PDF consumer probe",
+    "Await settled fullscreen focus in accessibility probe"
+  ],
+  "status": "selected local corrections verified; overall NO-GO holds remain",
+  "owners": [
+    "accessibility-engineering",
+    "functional-verification"
+  ],
+  "finished_at": "2026-10-10T00:58:06.226094+00:00",
+  "results": {
+    "pdf_headings": 92,
+    "pdf_tables": 48,
+    "pdf_hashes_unchanged": true,
+    "candidate_pages": 6,
+    "slide_states": 200,
+    "viewports": 8,
+    "contrast_brand_checks": 248,
+    "extra_accessibility_findings": 0
+  },
+  "changes": [
+    "renderer active slide title h2 to h1",
+    "explicit narrow-screen Exit control aria-label",
+    "matching h1/h2 slide typography selectors",
+    "PDF consumer full-section coverage and unique exact row checks",
+    "accessibility probe awaits fullscreen/focus settlement and records footer spacing exception"
+  ],
+  "remaining": [
+    "Original root context fixture and complete root coverage",
+    "Original HTML replacement and actual-output receipts",
+    "CI migration decisions",
+    "Publication binding, integration and exact installed candidate",
+    "M5 real use and broader goal"
+  ]
+}

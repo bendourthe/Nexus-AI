@@ -1,0 +1,24 @@
+{
+  "status": "pass",
+  "source": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-final-c5673074\\atlas.html",
+  "source_sha256": "44c3b02a306592ca783fcbf35f88d4c98ccbca01e6f0d957b1bf4732211a25fb",
+  "checks": [
+    "clipped-text",
+    "label-overlap",
+    "label-on-trace",
+    "legend-colour-collision",
+    "oversized-type",
+    "stroke-drift",
+    "legend-entry-not-drawn",
+    "tick-outside-range",
+    "viewbox-dead-space",
+    "callout-stripe-default",
+    "uniform-card-grid"
+  ],
+  "findings": [],
+  "errors": [],
+  "verification_scope": "rendered figure geometry in screen space",
+  "browser": "Chromium 153.0.8010.12",
+  "svg_count": 5
+}
+

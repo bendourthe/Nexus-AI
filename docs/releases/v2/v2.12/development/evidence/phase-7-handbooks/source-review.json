@@ -1,0 +1,205 @@
+{
+  "scope": "Independent source-only factual review of six final Markdown handbooks",
+  "status": "pass",
+  "candidate_entry_head": "30a2e47bddc1280badb91aaeaa78c3bcb9447baf",
+  "integration_base": "092ce3c2f386db020d18eab6d69c0655657b2456",
+  "hash_methods": {
+    "manifest_and_reviewed_markdown": "raw-bytes",
+    "code_inputs_and_fallback_checker": "text-normalized-LF; binary raw-bytes"
+  },
+  "tree_state": "uncommitted integration and Phase 7 changes",
+  "recorded_at": "2026-10-10T00:07:20.621674+00:00",
+  "support_tiers": {
+    "mechanisms": "internal-compatible",
+    "exact_packaged_qualification": "candidate"
+  },
+  "limitations": [
+    "This is no final integrated Goal certification",
+    "No installed candidate, GPU, installation binding, M5 or publication observation is claimed",
+    "Generated browser proof is separate from semantic source review"
+  ],
+  "corrected_finding": {
+    "path": "docs/releases/v2/v2.12/known-gaps.md",
+    "owner_reference": "desktop/sidecar/src/acp/AcpAgent.ts",
+    "exists": true
+  },
+  "documents": [
+    {
+      "id": "atlas",
+      "markdown": {
+        "path": "docs/handbooks/markdown/atlas.md",
+        "sha256": "0bfbbc537989d03b4a6d509c6861411214a79136da0054a59a5294358c039463"
+      },
+      "claims_reviewed": [
+        "Diffusion dispatchers own image/video synthesis; catalog reachability and payload preparation are packaging prerequisites",
+        "Shared readiness/conditional repair, selected-layout checks, artifact finalization, model ranking, transcript and workspace owners match source"
+      ],
+      "code_inputs": {
+        "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py": "8318eebaa71cefae7ce00943f8a6e3cd45c3ef3b4363722a9fc46a43a8a4b8d8",
+        "desktop/sidecar/src/diffusion/runtimeFactory.ts": "de804bcdd5ebef82b3cab1f17ca6e566b6e0f8eb6de6d47db2fb6633e6880373",
+        "desktop/src/modules/coding/CodingPage.tsx": "5b1418eab5df76c310165cfb8e7835f7be040840abf20ea145da5c2d2eb25f72",
+        "desktop/sidecar/src/diffusion/resultGuard.ts": "3e792fc65a090b9644689cad5f24f7829335665d3815110da1685716effd780c",
+        "desktop/src/shared/studio/usablePayload.ts": "8ce0edc62cac7ae15b5815cf6fb132326776738d65d5a5584ab7ee83846b7f73",
+        "desktop/src/shared/studio/mediaRuntimeClient.ts": "e75accd75149ae25a793f8e573731e0487c9cd53028e57a1021558821f69a7f3",
+        "scripts/installer/build/smoke-installed-media.ps1": "46fa1f928121d9ffb28a8df3dd90ecde3bbd51d24d92beccb3b764732168f341",
+        "runtimes/diffusion/pipelines/base.py": "2c00525a6da852c0aa97bf539d7b09e183b3e53af059bf8f9a7d9af32f7decc4",
+        "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py": "f79a0bdba3b09b5600f877ff6bd78381fa528b838be09fc32099d1f4f922c661",
+        "scripts/installer/build/check-hf-catalog.py": "7f56ea7c14bdfd72e3ec93e8393dcaa67f1c97b62d57a81b61fbc4a555be4034",
+        "desktop/src/shared/models/catalogTabs.ts": "616becbc31e1dd6ad6e67f758a1399e0187188a7f3d267a71bd32c1b4a5ec42c",
+        "scripts/installer/src/nexus_installer/catalog_tab_sort.py": "52e9e51918a11e8b481a050e7463f95566fc39111547f9ae99cfdd709f79a620",
+        "desktop/src/shared/models/selectionPolicy.ts": "fcd3d3662b79cbe231736b5f903ec43588f9c948e7786af34c6b3308ee2e9b3b",
+        "core/chat/tokenUsage.ts": "501b2f411f37d1300a3cbdbef5f93c787125f688c3fd282bda7cefefb37cd645",
+        "desktop/src/shared/chat/transcriptChrome.ts": "00c5ef429245477b9a2adad6c7a58fe6d0bcd376e8b2594a48e434d967ccdb91",
+        "modules/coding/runtime/headlessTools.ts": "faf1ed8eaef8fdaccd0f188f61c10a6660da74157da6e0767c7a3f2b0a033835",
+        "runtimes/diffusion/pipelines/real_execute.py": "f9b94af7d0d3e2750ecccedf3d328fdfb32e0452c6003d81dcef77f7aad035f2",
+        "scripts/installer/src/nexus_installer/engine/desktop_payload.py": "f64dbfb69ded6733b6022cdef57a49c7506fdf53fae927879a746e516c7a7c6d",
+        "scripts/installer/src/nexus_installer/engine/desktop_provisioner.py": "daa83ced4e4ac42a791392871d04b5f019dedb4e8b8319a570cbae06394aa838",
+        "core/registry/NexusModelRegistry.ts": "aa217dc13ff58fba512b4c0eac99076942a720e0cdafcd2ad88a48bfd70aebc8",
+        "desktop/src/pages/settings/ModelsSettings.tsx": "a973e761ab76f58551cc782d66863561cd541260fbda195182370abeeb730673",
+        "desktop/sidecar/src/diffusion/dispatcher.ts": "4fb2b71bd0797d6f08d4f4a676ec51dac9b5346552a63c2bd8ae8dcf0cc4e121",
+        "desktop/sidecar/src/diffusion/videoDispatcher.ts": "17e9b83cfc9b35183b4c36093b270b044779e490a3fc311a031c4ae37f9884ea",
+        "desktop/src/pages/settings/ArchivedChatsSettings.tsx": "81b90aee42292d9ddfa7d03814cbc9134a9d6c5ec08a91d61ed8a48c45be4910",
+        "desktop/sidecar/src/main.ts": "6aea3137116b4a10c426af7710768a42ce1a16b466f4007880a6aa1596c7ac3d"
+      },
+      "generated_output_sha256": "f2ec6ce5894a9444a82e41d8623eee0f71037e020fa7f934aa439d43b8c918ed",
+      "content_review_status": "pass-source-only"
+    },
+    {
+      "id": "generation-recovery",
+      "markdown": {
+        "path": "docs/handbooks/markdown/generation-recovery.md",
+        "sha256": "0913329cd30ffd855e11b7e8929810e1ff35d8d4927c32aa438538faa414f12a"
+      },
+      "claims_reviewed": [
+        "Installer rerun preserves live or uncertain leases and selected unavailable capability fails qualification",
+        "Repair requires components; decoded artifacts and exact installer-to-payload binding need separate retained evidence"
+      ],
+      "code_inputs": {
+        "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py": "f79a0bdba3b09b5600f877ff6bd78381fa528b838be09fc32099d1f4f922c661",
+        "scripts/installer/build/smoke-installed-media.ps1": "46fa1f928121d9ffb28a8df3dd90ecde3bbd51d24d92beccb3b764732168f341",
+        "desktop/sidecar/src/diffusion/runtimeFactory.ts": "de804bcdd5ebef82b3cab1f17ca6e566b6e0f8eb6de6d47db2fb6633e6880373",
+        "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py": "8318eebaa71cefae7ce00943f8a6e3cd45c3ef3b4363722a9fc46a43a8a4b8d8",
+        "desktop/src/modules/image/ImageStudioPage.tsx": "5cc6829af592705685b3c05ec46cde23226381e0cc17e7d0764a50f434adc30b",
+        "desktop/src/modules/video/VideoLabPage.tsx": "7f9d15dee314faa6e49549063dd378bc8a680bdf5657e44754289e76796bde97"
+      },
+      "generated_output_sha256": "01ed6563b56a61c7a944699479e64caa3d76d3eca7ba2f4288652726b2d1fc53",
+      "content_review_status": "pass-source-only"
+    },
+    {
+      "id": "installer-runtime",
+      "markdown": {
+        "path": "docs/handbooks/technical/installer-runtime.md",
+        "sha256": "52ff450cb2c511e7948b581e589c71c925d386b63817f608926d74e2883874bf"
+      },
+      "claims_reviewed": [
+        "Installer lease and atomic snapshots have separate ownership from desktop repair attempt transitions",
+        "Explicit gated controls remain; catalog reachability is a separate packaging qualification check"
+      ],
+      "code_inputs": {
+        "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py": "f79a0bdba3b09b5600f877ff6bd78381fa528b838be09fc32099d1f4f922c661",
+        "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py": "8318eebaa71cefae7ce00943f8a6e3cd45c3ef3b4363722a9fc46a43a8a4b8d8",
+        "scripts/installer/src/nexus_installer/engine/hf_auth.py": "122dd264ed629aeedf1c95e09d4dd24dc5123a4b695e40d3e84423410feae52a",
+        "scripts/installer/src/nexus_installer/engine/gated_auth.py": "d8170932ed3f741876d63090ff85e208d184352223f19fa1d5b24f6ec9f45deb",
+        "runtimes/diffusion/repair.py": "52e702a84bbdf4cd7953b5315f9fdd2e5f29767ae3f2e1d265d39c646a736569",
+        "scripts/installer/src/nexus_installer/widgets/gated_auth_dialog.py": "4dcba881048c1f75f3dd6ce86eee60aa1a53071b9ebe3d4063752901d9bc3e49",
+        "scripts/installer/build/check-hf-catalog.py": "7f56ea7c14bdfd72e3ec93e8393dcaa67f1c97b62d57a81b61fbc4a555be4034"
+      },
+      "generated_output_sha256": "80de14895073a6939070692167111170a1c8b51e97fda464c2b493a147c33dbb",
+      "content_review_status": "pass-source-only"
+    },
+    {
+      "id": "media-runtime",
+      "markdown": {
+        "path": "docs/handbooks/technical/media-runtime.md",
+        "sha256": "b1a45f7108eeca2efdaf471ff16643ff791120e6bdb39d0fdcd3f481087be4ed"
+      },
+      "claims_reviewed": [
+        "One shared readiness service checks interpreter, recorded smoke and selected model layout",
+        "PNG production and MP4 finalization are narrower than packaged decoding; unavailable repair components require installer rerun"
+      ],
+      "code_inputs": {
+        "desktop/sidecar/src/diffusion/runtimeFactory.ts": "de804bcdd5ebef82b3cab1f17ca6e566b6e0f8eb6de6d47db2fb6633e6880373",
+        "runtimes/diffusion/pipelines/real_execute.py": "f9b94af7d0d3e2750ecccedf3d328fdfb32e0452c6003d81dcef77f7aad035f2",
+        "runtimes/diffusion/pipelines/video_base.py": "4a15660bdfe275fb02bd819a9e5b5abf24b62309e97b00773bb6fbfe66c93279",
+        "desktop/sidecar/src/diffusion/resultGuard.ts": "3e792fc65a090b9644689cad5f24f7829335665d3815110da1685716effd780c",
+        "desktop/src/shared/studio/usablePayload.ts": "8ce0edc62cac7ae15b5815cf6fb132326776738d65d5a5584ab7ee83846b7f73",
+        "desktop/src/shared/studio/mediaRuntimeClient.ts": "e75accd75149ae25a793f8e573731e0487c9cd53028e57a1021558821f69a7f3",
+        "scripts/installer/build/smoke-installed-media.ps1": "46fa1f928121d9ffb28a8df3dd90ecde3bbd51d24d92beccb3b764732168f341",
+        "runtimes/diffusion/pipelines/base.py": "2c00525a6da852c0aa97bf539d7b09e183b3e53af059bf8f9a7d9af32f7decc4",
+        "desktop/sidecar/src/main.ts": "6aea3137116b4a10c426af7710768a42ce1a16b466f4007880a6aa1596c7ac3d",
+        "desktop/src/modules/image/ImageStudioPage.tsx": "5cc6829af592705685b3c05ec46cde23226381e0cc17e7d0764a50f434adc30b",
+        "desktop/src/modules/video/VideoLabPage.tsx": "7f9d15dee314faa6e49549063dd378bc8a680bdf5657e44754289e76796bde97"
+      },
+      "generated_output_sha256": "b1819a1f6a5c6065f8698ed34efe7c82ea93ea07d6a8baf3ce4ca54037f7096c",
+      "content_review_status": "pass-source-only"
+    },
+    {
+      "id": "transcript-and-workspaces",
+      "markdown": {
+        "path": "docs/handbooks/technical/transcript-and-workspaces.md",
+        "sha256": "5616821449709c170afbdede4f8398a53294e7cd0176435a57e2f26776f28c2a"
+      },
+      "claims_reviewed": [
+        "Token usage is role-local; only empty pending responses omit bubbles; reasoning is collapsed and ordinary messages have no click preview",
+        "Recommendation snapshot and workspace union/realpath denial owners match source"
+      ],
+      "code_inputs": {
+        "core/chat/tokenUsage.ts": "501b2f411f37d1300a3cbdbef5f93c787125f688c3fd282bda7cefefb37cd645",
+        "desktop/src/shared/chat/MessageBubble.tsx": "7a1c13b35ebd8c4d405bf101c39357042b9270799f67dc436fe51d6232b76929",
+        "desktop/src/shared/chat/transcriptChrome.ts": "00c5ef429245477b9a2adad6c7a58fe6d0bcd376e8b2594a48e434d967ccdb91",
+        "desktop/src/shared/chat/ReasoningDisclosure.tsx": "58c7762acb37519fc3111d57e3552b13d102d91b14ff9c8000d107d0f7d8c168",
+        "desktop/src/modules/coding/CodingPage.tsx": "5b1418eab5df76c310165cfb8e7835f7be040840abf20ea145da5c2d2eb25f72",
+        "desktop/src/modules/coding/WorkspaceSelector.tsx": "863ea2c89561962d43113d4e862a9e3957b089213d0cd2ff42a894345339942d",
+        "modules/coding/runtime/headlessTools.ts": "faf1ed8eaef8fdaccd0f188f61c10a6660da74157da6e0767c7a3f2b0a033835",
+        "desktop/src/shared/chat/MessageList.tsx": "fbec30f5c39661d5b868895cbdc7cf6593208cb27647977d0ec8cf84b8097ecd",
+        "desktop/src/shared/models/selectionPolicy.ts": "fcd3d3662b79cbe231736b5f903ec43588f9c948e7786af34c6b3308ee2e9b3b"
+      },
+      "generated_output_sha256": "6583e28f9cec75c12e9fb0d43e995f4ee9551a74e559c32bfb68e4766d7f1ec1",
+      "content_review_status": "pass-source-only"
+    },
+    {
+      "id": "document-outline",
+      "markdown": {
+        "path": "docs/handbooks/technical/document-outline.md",
+        "sha256": "c79662602d8c603b69af0a200043d32e4fdceafb9669eeae22ec3166ef4e99ad"
+      },
+      "claims_reviewed": [
+        "Tree modes, caps and context budgets match owner logic; shared compaction protects loop-owned task/system/latest/native metadata",
+        "Native Ollama live history differs from legacy compatible clients and persistence/resume; Settings honor environment precedence",
+        "Screening, confirm tiers and loopback summaries match source; summary cache is uncapped and lazy text expiry is not erasure",
+        "Tool-instance/workspace authorization and counters can span desktop/ACP sessions",
+        "Expanded cross-section 0/20 and 4/20 produce futility; separate anchor missing counts 13 and 15 miss targets four and eight"
+      ],
+      "code_inputs": {
+        "modules/coding/documents/DocumentOutlineTools.ts": "8f8b56e854d33275878447b3bec7a3fa3f781771df974beefacc83e1298dfb93",
+        "modules/coding/runtime/outputBudget.ts": "0b660cdb17cbf8c8ba23a3c36cada9437de581e73d8ec1b18f9a2638ab3d8abb",
+        "modules/coding/runtime/HeadlessAgentSession.ts": "75121457ecd1fce63898c599f1b10d8c4d963945715ad5869934634961937092",
+        "modules/coding/llm/toolHistory.ts": "2802d6f767cf752ead32e36404ab4f39677ea78e7858460350db285afb308479",
+        "src/tools/AgentLoop.ts": "424265bab84d8832f56a290060ae8824ee733649390c7ea64d75b34199ad65b6",
+        "core/documents/OutlineCache.ts": "3303bbb3dccc62c2225f8145edb96bb28121e9e09398ea8f450055b9d385559c",
+        "core/documents/OutlineSession.ts": "049159fc92b1c0e66db006c85cef512eed87aa80f01677d26dc6ac92f4a9be0c",
+        "core/documents/OutlineSummaries.ts": "31050be06f1254983939e15c61cf11bdd2d9b91f07c162eb367666ecb0451d68",
+        "core/storage/OutlineFileStore.ts": "0b78bf3df84fb1441c589e90c3566943de83fae43b57c9f506fdea2b8476a59e",
+        "modules/coding/documents/OutlineSummaryProvider.ts": "5c8acdca416c66fb723ad12acecf27f0c6b13178b3f385603daa5046701642c0",
+        "modules/coding/guardrails/permissionTierMap.ts": "2aa33907c26a774011ed35f7aaae6fdaa047f43a2c66c6e8fdcc01e06af6c2b9",
+        "modules/coding/chat/ConversationManager.ts": "5c8556dab85878f97c0c8a18b28e60f821bc457b896faffe62c2e5ad31612d35",
+        "modules/coding/chat/CompactionStrategy.ts": "d1187108bcc9863002a0317a0361afeff69e18c185f943bd13f1ed4ca9c40448",
+        "desktop/src/pages/settings/SecuritySettings.tsx": "a591033685a87a41f7089978a3d563366db60d9dc3477d0ea7ad04e4013f6580",
+        "core/documents/documentOutlineEnabled.ts": "762494f7ad55518ab9b5a75d33bb83b559b3c54a6adc4d1930d8103a4d4461d2",
+        "modules/coding/runtime/headlessTools.ts": "faf1ed8eaef8fdaccd0f188f61c10a6660da74157da6e0767c7a3f2b0a033835",
+        "core/documents/DocumentOutline.ts": "46385160445f20bc1211905fa7d69a253aad7a2bdd21eacc761441b71e7a4107",
+        "modules/coding/documents/createDocumentOutlineTools.ts": "bd7a34d0174177deb6ca7c8e4c19682d316f97fe1025606f310f519d3222e5c4",
+        "src/tools/handlers/parseDocument.ts": "f764950384b585b305ee5fe94e3b9c78cda2139cac63c51863d0e701f01d9b9c",
+        "modules/coding/llm/OllamaClient.ts": "1ea7c5b8c861a897aacb792fb4861cf9687ebda8e2e158d698baf58631e77213",
+        "modules/coding/llm/LmStudioClient.ts": "8c18e2087fcc3044461098ac838f543db68100253d6825dee22e6fed65838e7e",
+        "modules/coding/llm/headlessOllamaClient.ts": "680fec95c79bce33a975f3052514e5198ee1bccd91cd5cea7943aaf7302fc207",
+        "modules/coding/llm/headlessOpenAiClient.ts": "0f44f0907c0dfc4cbeb428faf225d897b87fbbc6c17275b349b2a82655e13565",
+        "desktop/sidecar/src/coding/headlessAgentRunner.ts": "afeaf67640d81fa23705639c8ffe4063b1af4b3cb8a566324d5d6cc26f6c0b41",
+        "desktop/sidecar/src/acp/AcpAgent.ts": "bdbd96bc69222433ae9dd069dc92d283e766a6e3ed97332c271d9f5920d9d81e",
+        "desktop/sidecar/src/handlers.ts": "a75c625bb81638fa0ea94b8b3d76ea899b685e901c8df8efa87dfee04732baa3"
+      },
+      "generated_output_sha256": "703352e9277c6ff95bb2ef5f71074c48b1ccc4eff502b59413807d46bffa322f",
+      "content_review_status": "pass-source-only"
+    }
+  ]
+}

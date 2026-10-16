@@ -1,0 +1,1441 @@
+{
+  "scope": "PDF parser consumer of committed generated manual bytes, without OCR/inference/rescoring or visual-layout certification",
+  "created_at": "2026-10-10T00:39:00.862732+00:00",
+  "consumer": "pypdf PdfReader and page.extract_text",
+  "results": [
+    {
+      "file": "tests/fixtures/documents/outline/docs/manual-60p.pdf",
+      "sha256": "3d0bd4d6bc776e9e960855c48041a655a48db5817805d7307593defeab928908",
+      "unchanged": true,
+      "expected_pages": 65,
+      "observed_pages": 65,
+      "heading_count": 32,
+      "table_count": 0,
+      "checks": [
+        {
+          "title": "1 Introduction",
+          "startPage": 2,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "1.1 Storage Layout Details",
+          "startPage": 2,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "1.2 Troubleshooting Details",
+          "startPage": 4,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "1.3 Performance Tuning Details",
+          "startPage": 6,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "2 Installation",
+          "startPage": 10,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "2.1 Scheduling Details",
+          "startPage": 10,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "2.2 Security Model Details",
+          "startPage": 12,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "2.3 Maintenance Details",
+          "startPage": 15,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "3 Configuration",
+          "startPage": 18,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "3.1 Monitoring Details",
+          "startPage": 18,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "3.2 Backup and Restore Details",
+          "startPage": 20,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "3.3 Calibration Details",
+          "startPage": 22,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "4 Network Settings",
+          "startPage": 26,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "4.1 Troubleshooting Details",
+          "startPage": 26,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "4.2 Performance Tuning Details",
+          "startPage": 28,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "4.3 Reporting Details",
+          "startPage": 30,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "5 Storage Layout",
+          "startPage": 34,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "5.1 Security Model Details",
+          "startPage": 34,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "5.2 Maintenance Details",
+          "startPage": 36,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "5.3 Appendix Notes Details",
+          "startPage": 39,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "6 Scheduling",
+          "startPage": 42,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "6.1 Backup and Restore Details",
+          "startPage": 42,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "6.2 Calibration Details",
+          "startPage": 44,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "6.3 Glossary Terms Details",
+          "startPage": 47,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "7 Monitoring",
+          "startPage": 50,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "7.1 Performance Tuning Details",
+          "startPage": 50,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "7.2 Reporting Details",
+          "startPage": 52,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "7.3 Introduction Details",
+          "startPage": 55,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "8 Troubleshooting",
+          "startPage": 58,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "8.1 Maintenance Details",
+          "startPage": 58,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "8.2 Appendix Notes Details",
+          "startPage": 60,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "8.3 Installation Details",
+          "startPage": 63,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        }
+      ],
+      "mismatches": []
+    },
+    {
+      "file": "tests/fixtures/documents/outline/docs/manual-120p.pdf",
+      "sha256": "bd10ab42cc14866cfebf7cc33a6aef7edea08252320cb9703b4aa18e1472f640",
+      "unchanged": true,
+      "expected_pages": 123,
+      "observed_pages": 123,
+      "heading_count": 60,
+      "table_count": 48,
+      "checks": [
+        {
+          "title": "1 Introduction",
+          "startPage": 3,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "1.1 Storage Layout Details",
+          "startPage": 3,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "1.2 Troubleshooting Details",
+          "startPage": 5,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "1.3 Performance Tuning Details",
+          "startPage": 8,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "1.4 Reporting Details",
+          "startPage": 10,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "2 Installation",
+          "startPage": 13,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "2.1 Scheduling Details",
+          "startPage": 13,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "2.2 Security Model Details",
+          "startPage": 15,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "2.3 Maintenance Details",
+          "startPage": 17,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "2.4 Appendix Notes Details",
+          "startPage": 20,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "3 Configuration",
+          "startPage": 23,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "3.1 Monitoring Details",
+          "startPage": 23,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "3.2 Backup and Restore Details",
+          "startPage": 25,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "3.3 Calibration Details",
+          "startPage": 27,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "3.4 Glossary Terms Details",
+          "startPage": 30,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "4 Network Settings",
+          "startPage": 33,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "4.1 Troubleshooting Details",
+          "startPage": 33,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "4.2 Performance Tuning Details",
+          "startPage": 35,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "4.3 Reporting Details",
+          "startPage": 37,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "4.4 Introduction Details",
+          "startPage": 40,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "5 Storage Layout",
+          "startPage": 43,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "5.1 Security Model Details",
+          "startPage": 43,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "5.2 Maintenance Details",
+          "startPage": 45,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "5.3 Appendix Notes Details",
+          "startPage": 47,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "5.4 Installation Details",
+          "startPage": 50,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "6 Scheduling",
+          "startPage": 53,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "6.1 Backup and Restore Details",
+          "startPage": 53,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "6.2 Calibration Details",
+          "startPage": 55,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "6.3 Glossary Terms Details",
+          "startPage": 57,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "6.4 Configuration Details",
+          "startPage": 60,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "7 Monitoring",
+          "startPage": 63,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "7.1 Performance Tuning Details",
+          "startPage": 63,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "7.2 Reporting Details",
+          "startPage": 65,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "7.3 Introduction Details",
+          "startPage": 67,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "7.4 Network Settings Details",
+          "startPage": 70,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "8 Troubleshooting",
+          "startPage": 73,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "8.1 Maintenance Details",
+          "startPage": 73,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "8.2 Appendix Notes Details",
+          "startPage": 75,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "8.3 Installation Details",
+          "startPage": 77,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "8.4 Storage Layout Details",
+          "startPage": 80,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "9 Security Model",
+          "startPage": 83,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "9.1 Calibration Details",
+          "startPage": 83,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "9.2 Glossary Terms Details",
+          "startPage": 85,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "9.3 Configuration Details",
+          "startPage": 87,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "9.4 Scheduling Details",
+          "startPage": 90,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "10 Backup and Restore",
+          "startPage": 93,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "10.1 Reporting Details",
+          "startPage": 93,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "10.2 Introduction Details",
+          "startPage": 95,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "10.3 Network Settings Details",
+          "startPage": 97,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "10.4 Monitoring Details",
+          "startPage": 100,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "11 Performance Tuning",
+          "startPage": 103,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "11.1 Appendix Notes Details",
+          "startPage": 103,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "11.2 Installation Details",
+          "startPage": 105,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "11.3 Storage Layout Details",
+          "startPage": 107,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "11.4 Troubleshooting Details",
+          "startPage": 110,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "12 Maintenance",
+          "startPage": 113,
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "12.1 Glossary Terms Details",
+          "startPage": 113,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "12.2 Configuration Details",
+          "startPage": 115,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "12.3 Scheduling Details",
+          "startPage": 118,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "12.4 Security Model Details",
+          "startPage": 120,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        }
+      ],
+      "mismatches": [
+        {
+          "title": "1.1 Storage Layout Details",
+          "startPage": 3,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "1.2 Troubleshooting Details",
+          "startPage": 5,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "1.3 Performance Tuning Details",
+          "startPage": 8,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "1.4 Reporting Details",
+          "startPage": 10,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "2.1 Scheduling Details",
+          "startPage": 13,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "2.2 Security Model Details",
+          "startPage": 15,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "2.3 Maintenance Details",
+          "startPage": 17,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "2.4 Appendix Notes Details",
+          "startPage": 20,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "3.1 Monitoring Details",
+          "startPage": 23,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "3.2 Backup and Restore Details",
+          "startPage": 25,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "3.3 Calibration Details",
+          "startPage": 27,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "3.4 Glossary Terms Details",
+          "startPage": 30,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "4.1 Troubleshooting Details",
+          "startPage": 33,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "4.2 Performance Tuning Details",
+          "startPage": 35,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "4.3 Reporting Details",
+          "startPage": 37,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "4.4 Introduction Details",
+          "startPage": 40,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "5.1 Security Model Details",
+          "startPage": 43,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "5.2 Maintenance Details",
+          "startPage": 45,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "5.3 Appendix Notes Details",
+          "startPage": 47,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "5.4 Installation Details",
+          "startPage": 50,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "6.1 Backup and Restore Details",
+          "startPage": 53,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "6.2 Calibration Details",
+          "startPage": 55,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "6.3 Glossary Terms Details",
+          "startPage": 57,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "6.4 Configuration Details",
+          "startPage": 60,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "7.1 Performance Tuning Details",
+          "startPage": 63,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "7.2 Reporting Details",
+          "startPage": 65,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "7.3 Introduction Details",
+          "startPage": 67,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "7.4 Network Settings Details",
+          "startPage": 70,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "8.1 Maintenance Details",
+          "startPage": 73,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "8.2 Appendix Notes Details",
+          "startPage": 75,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "8.3 Installation Details",
+          "startPage": 77,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "8.4 Storage Layout Details",
+          "startPage": 80,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "9.1 Calibration Details",
+          "startPage": 83,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "9.2 Glossary Terms Details",
+          "startPage": 85,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "9.3 Configuration Details",
+          "startPage": 87,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "9.4 Scheduling Details",
+          "startPage": 90,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "10.1 Reporting Details",
+          "startPage": 93,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "10.2 Introduction Details",
+          "startPage": 95,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "10.3 Network Settings Details",
+          "startPage": 97,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "10.4 Monitoring Details",
+          "startPage": 100,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "11.1 Appendix Notes Details",
+          "startPage": 103,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "11.2 Installation Details",
+          "startPage": 105,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "11.3 Storage Layout Details",
+          "startPage": 107,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "11.4 Troubleshooting Details",
+          "startPage": 110,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "12.1 Glossary Terms Details",
+          "startPage": 113,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "12.2 Configuration Details",
+          "startPage": 115,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "12.3 Scheduling Details",
+          "startPage": 118,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        },
+        {
+          "title": "12.4 Security Model Details",
+          "startPage": 120,
+          "checks": {
+            "title": true,
+            "opening": true,
+            "port": false,
+            "protocol": false,
+            "default": false
+          }
+        }
+      ]
+    }
+  ],
+  "comparison": "mismatch"
+}

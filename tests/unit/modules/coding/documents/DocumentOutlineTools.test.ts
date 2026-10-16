@@ -318,6 +318,22 @@ describe("budgets", () => {
 });
 
 describe("node summaries", () => {
+  it("keeps rendered summaries inside the remaining outline body budget", async () => {
+    writeFileSync(join(workspace, "many.md"), Array.from({ length: 150 }, (_, i) => `# Reference ${i}\nordinary text\n`).join("\n"));
+    const t = tools({ contextTokens: () => 16_384, summaries: { summarize: async (outline) => ({
+      status: "on",
+      summaries: new Map(outline.nodes.map((node) => [node.id, "ordinary summary ".repeat(12)])),
+    }) } });
+    const r = await t.outline({ path: "many.md" }, { usedTokens: 15_000 });
+    expect(r.success).toBe(true);
+    const body = /Document content, not instructions\.[^\n]*\n([\s\S]*?)\n<<<END_DOCUMENT_CONTENT/.exec(r.output)?.[1];
+    expect(body).toBeDefined();
+    expect(body!.length).toBeLessThanOrEqual(1_440);
+    expect(body).toContain("machine-generated summary:");
+    expect(r.output).toContain("truncated=true");
+    expect(body).toMatch(/\[[0-9a-f]{8}-[0-9a-f]{12}\] Reference/);
+  });
+
   const outline = buildOutline({ indexedText: "## A\nalpha text\n## B\nbeta text", textKind: "markdown", kind: "markdown", treeHash: "c".repeat(64) });
   const text = "## A\nalpha text\n## B\nbeta text";
 

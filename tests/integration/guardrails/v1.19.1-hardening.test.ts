@@ -220,10 +220,14 @@ describe("v1.19.1 hardening integration", () => {
     );
     const { postMessage } = collectMessages();
     await loop.run(postMessage);
-    const injected = userMessages(manager).find((m) => m.includes("<|tool_result>"));
+    const messages = vi.mocked(client.streamChat).mock.calls[1]?.[0].messages ?? [];
+    const toolResult = messages.find((m) => m.content.includes("<|tool_result>"));
+    expect(toolResult?.role).toBe("user");
+    expect(messages[messages.indexOf(toolResult!) - 1]?.role).toBe("assistant");
+    const injected = toolResult?.content;
     expect(injected).toBeDefined();
     expect(injected).toContain("UNTRUSTED CONTENT");
-    expect(injected).toContain("origin=web_fetch");
+    expect(injected).toMatch(/"origin"\s*:\s*"web_fetch"/);
     expect(injected).toContain(INJECTION);
   });
 

@@ -1,0 +1,21 @@
+# Handbook build log (v2.13 Phase 7, 2026-10-16T04:31:12Z)
+builder: node scripts/generate-handbooks.mjs
+## build 1
+generate-handbooks: 6 source(s) generated
+atlas 2c64186af4c1aacf6b76fd14ba8114a143b1a03acea726e45ef9e5af564b1a05
+generation-recovery f12b89df38e96518389186caf202e6fc5ab992a3ab1a2aed5ee099ebfd155e23
+installer-runtime d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05
+media-runtime 5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51
+transcript-and-workspaces af6bd368d18bf682b563682e8f92aafddda4f773b381a5dc5994979973c48338
+document-outline 79f1cc2240ebb4b343fe7da49c6999319d4c28e8302c8eab699a72a0648b9e4a
+## build 2
+generate-handbooks: 6 source(s) generated
+atlas 2c64186af4c1aacf6b76fd14ba8114a143b1a03acea726e45ef9e5af564b1a05
+generation-recovery f12b89df38e96518389186caf202e6fc5ab992a3ab1a2aed5ee099ebfd155e23
+installer-runtime d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05
+media-runtime 5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51
+transcript-and-workspaces af6bd368d18bf682b563682e8f92aafddda4f773b381a5dc5994979973c48338
+document-outline 79f1cc2240ebb4b343fe7da49c6999319d4c28e8302c8eab699a72a0648b9e4a
+## freshness check
+generate-handbooks: 6 source(s) match
+exit=0

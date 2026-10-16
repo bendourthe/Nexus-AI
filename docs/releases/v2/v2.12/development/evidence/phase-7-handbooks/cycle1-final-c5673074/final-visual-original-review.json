@@ -1,0 +1,85 @@
+{
+  "official_original_diffs": [
+    {
+      "file": "docs/handbooks/html/atlas.html",
+      "baseline": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbook-originals-noesebhs\\docs\\handbooks\\html\\atlas.html",
+      "exit": 0,
+      "stdout": "\n",
+      "stderr": "",
+      "identical_bytes": false,
+      "identical_normalized_text": true,
+      "checkout_crlf": 69,
+      "blob_crlf": 0
+    },
+    {
+      "file": "docs/handbooks/html/generation-recovery.html",
+      "baseline": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbook-originals-noesebhs\\docs\\handbooks\\html\\generation-recovery.html",
+      "exit": 0,
+      "stdout": "\n",
+      "stderr": "",
+      "identical_bytes": false,
+      "identical_normalized_text": true,
+      "checkout_crlf": 32,
+      "blob_crlf": 0
+    },
+    {
+      "file": "docs/handbooks/html/technical/installer-runtime.html",
+      "baseline": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbook-originals-noesebhs\\docs\\handbooks\\html\\technical\\installer-runtime.html",
+      "exit": 0,
+      "stdout": "\n",
+      "stderr": "",
+      "identical_bytes": false,
+      "identical_normalized_text": true,
+      "checkout_crlf": 16,
+      "blob_crlf": 0
+    },
+    {
+      "file": "docs/handbooks/html/technical/media-runtime.html",
+      "baseline": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbook-originals-noesebhs\\docs\\handbooks\\html\\technical\\media-runtime.html",
+      "exit": 0,
+      "stdout": "\n",
+      "stderr": "",
+      "identical_bytes": false,
+      "identical_normalized_text": true,
+      "checkout_crlf": 16,
+      "blob_crlf": 0
+    },
+    {
+      "file": "docs/handbooks/html/technical/transcript-and-workspaces.html",
+      "baseline": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbook-originals-noesebhs\\docs\\handbooks\\html\\technical\\transcript-and-workspaces.html",
+      "exit": 0,
+      "stdout": "\n",
+      "stderr": "",
+      "identical_bytes": false,
+      "identical_normalized_text": true,
+      "checkout_crlf": 16,
+      "blob_crlf": 0
+    },
+    {
+      "file": "docs/handbooks/html/technical/document-outline.html",
+      "baseline": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbook-originals-noesebhs\\docs\\handbooks\\html\\technical\\document-outline.html",
+      "exit": 0,
+      "stdout": "\n",
+      "stderr": "",
+      "identical_bytes": false,
+      "identical_normalized_text": true,
+      "checkout_crlf": 72,
+      "blob_crlf": 0
+    }
+  ],
+  "visual_review": {
+    "reviewed": [
+      "contact-desktop.png",
+      "contact-phone.png",
+      "contact-reading.png"
+    ],
+    "observations": [
+      "Desktop slides fit the stage with readable source text and no clipping",
+      "Phone reading and slides retain a light palette and proportional brand mark",
+      "Tall compact slides allow native scrolling; all content bottoms were reached in browser proof",
+      "Reading sections retain source ordering, tables, lists and anchors"
+    ],
+    "defects": []
+  },
+  "support_limit": "Browser handbook observation only; no installed/GPU/M5 product observation"
+}

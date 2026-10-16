@@ -1,0 +1,278 @@
+{
+  "home": "throwaway temp dir",
+  "port": "32457",
+  "steps": [
+    {
+      "step": "control surface listens",
+      "expected": true,
+      "observed": true,
+      "pass": true
+    },
+    {
+      "step": "persisted image turn",
+      "expected": "turn with owned mediaRef",
+      "observed": {
+        "turnId": "56315833-9880-43fc-989d-edd863c72de6",
+        "mediaRef": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9.png"
+      },
+      "pass": true
+    },
+    {
+      "step": "viewer draws saved bytes (studio.image.media)",
+      "expected": "source bytes",
+      "observed": true,
+      "pass": true
+    },
+    {
+      "step": "viewer commit through IPC",
+      "expected": "revision 1",
+      "observed": 1,
+      "pass": true
+    },
+    {
+      "step": "nexus image-edit access (CLI, real HTTP)",
+      "expected": "pending request",
+      "observed": {
+        "requestId": "fb2f7b7e-be53-4c6c-a459-b31430c6d8af",
+        "state": "pending"
+      },
+      "pass": true
+    },
+    {
+      "step": "no grant before human approval",
+      "expected": "pending, no grantId",
+      "observed": {
+        "state": "pending"
+      },
+      "pass": true
+    },
+    {
+      "step": "request parked in the Ask inbox",
+      "expected": "image_edit_access ask",
+      "observed": {
+        "toolName": "image_edit_access",
+        "summary": "Allow \"deep-pass-agent\" (run run-1) to edit an Image Studio image. Request code fb2f7b7e"
+      },
+      "pass": true
+    },
+    {
+      "step": "human approves in the Ask inbox",
+      "expected": "approved",
+      "observed": {
+        "ok": true,
+        "reason": "Replayed at tier DANGEROUS.",
+        "replay": {
+          "allowed": true,
+          "reason": "Replayed at tier DANGEROUS.",
+          "currentTier": 2,
+          "floorClamped": false
+        },
+        "executed": false
+      },
+      "pass": true
+    },
+    {
+      "step": "grant issued after approval",
+      "expected": "approved with grantId",
+      "observed": {
+        "state": "approved",
+        "hasGrant": true
+      },
+      "pass": true
+    },
+    {
+      "step": "describe sees the viewer's edit (shared state)",
+      "expected": "revision 1, 1 mark",
+      "observed": {
+        "revision": 1,
+        "marks": 1
+      },
+      "pass": true
+    },
+    {
+      "step": "apply then identical replay",
+      "expected": "same result, revision 2 once",
+      "observed": {
+        "a": 2,
+        "b": 2
+      },
+      "pass": true
+    },
+    {
+      "step": "key reuse with another payload",
+      "expected": "IDEMPOTENCY_CONFLICT, exit 1",
+      "observed": {
+        "code": 1,
+        "body": {
+          "error": {
+            "code": "sidecar",
+            "message": "This idempotency key was already used for a different command.",
+            "status": 409,
+            "body": {
+              "error": {
+                "code": "IDEMPOTENCY_CONFLICT",
+                "message": "This idempotency key was already used for a different command."
+              }
+            }
+          }
+        }
+      },
+      "pass": true
+    },
+    {
+      "step": "another caller with this grant",
+      "expected": "FORBIDDEN 403",
+      "observed": {
+        "error": {
+          "code": "FORBIDDEN",
+          "message": "This caller and run have no grant for the selected image.",
+          "status": 403
+        }
+      },
+      "pass": true
+    },
+    {
+      "step": "wrong app token",
+      "expected": "HTTP 401 before any image-edit route",
+      "observed": "{\"error\":{\"code\":\"invalid_api_key\",\"message\":\"Invalid or missing API key.\",\"status\":401}}",
+      "pass": true
+    },
+    {
+      "step": "viewer sees the agent's edit (revision poll)",
+      "expected": "revision 2",
+      "observed": {
+        "revision": 2
+      },
+      "pass": true
+    },
+    {
+      "step": "render with no renderer attached",
+      "expected": "RENDERER_UNAVAILABLE within 8 s",
+      "observed": {
+        "error": {
+          "code": "sidecar",
+          "message": "No running Nexus window rendered the image in time. Open Nexus and retry.",
+          "status": 503,
+          "body": {
+            "error": {
+              "code": "RENDERER_UNAVAILABLE",
+              "message": "No running Nexus window rendered the image in time. Open Nexus and retry."
+            }
+          }
+        }
+      },
+      "pass": true
+    },
+    {
+      "step": "preview through the render bridge",
+      "expected": "PNG bytes, nothing written",
+      "observed": {
+        "revision": 2,
+        "bytes": 68,
+        "hasPng": true
+      },
+      "pass": true
+    },
+    {
+      "step": "export writes one file under the owned exports root",
+      "expected": "one PNG",
+      "observed": {
+        "path": ".nexus\\generations\\exports\\7bce23eae92a1fe0-r2-7ac2abfce2be.png",
+        "files": [
+          "7bce23eae92a1fe0-r2-7ac2abfce2be.png"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "step": "second export of the same revision is idempotent",
+      "expected": "same path, still one file",
+      "observed": {
+        "same": true,
+        "files": 1
+      },
+      "pass": true
+    },
+    {
+      "step": "renderer received the pinned source and recipe for each render",
+      "expected": "3 requests, source sha, revision 2",
+      "observed": [
+        {
+          "sourceSha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9",
+          "revision": 2,
+          "adjustments": {
+            "brightness": 150,
+            "contrast": 100,
+            "saturation": 100,
+            "sharpness": 20
+          },
+          "marks": 1
+        },
+        {
+          "sourceSha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9",
+          "revision": 2,
+          "adjustments": {
+            "brightness": 150,
+            "contrast": 100,
+            "saturation": 100,
+            "sharpness": 20
+          },
+          "marks": 1
+        },
+        {
+          "sourceSha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9",
+          "revision": 2,
+          "adjustments": {
+            "brightness": 150,
+            "contrast": 100,
+            "saturation": 100,
+            "sharpness": 20
+          },
+          "marks": 1
+        }
+      ],
+      "pass": true
+    },
+    {
+      "step": "release ends the grant",
+      "expected": "FORBIDDEN after release",
+      "observed": {
+        "released": {
+          "ok": true
+        },
+        "after": {
+          "error": {
+            "code": "FORBIDDEN",
+            "message": "This caller and run have no grant for the selected image.",
+            "status": 403
+          }
+        }
+      },
+      "pass": true
+    },
+    {
+      "step": "original image unchanged",
+      "expected": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9",
+      "observed": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9",
+      "pass": true
+    },
+    {
+      "step": "real sidecar restart keeps viewer and agent edits",
+      "expected": "revision 2, 2 commands, cursor 2",
+      "observed": {
+        "revision": 2,
+        "commands": 2,
+        "cursor": 2
+      },
+      "pass": true
+    },
+    {
+      "step": "pre-restart viewer grant is gone",
+      "expected": "FORBIDDEN",
+      "observed": "FORBIDDEN: This image editor session has ended. Reopen the image.",
+      "pass": true
+    }
+  ],
+  "passed": 24,
+  "failed": 0
+}

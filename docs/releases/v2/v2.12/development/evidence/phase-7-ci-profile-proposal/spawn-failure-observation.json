@@ -1,0 +1,16 @@
+{
+  "exit": 1,
+  "stdout": "spawnSync pwsh ENOENT\n{\"profile\":\"platform\",\"status\":\"FAIL\"}\n",
+  "stderr": "",
+  "summary": {
+    "profile": "platform",
+    "status": "FAIL",
+    "groups": [
+      {
+        "name": "pwsh -NoProfile -File scripts/init.ps1",
+        "status": "FAIL",
+        "durationMs": 1
+      }
+    ]
+  }
+}

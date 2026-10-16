@@ -1,0 +1,71 @@
+{
+  "created_at": "2026-10-10T01:16:05.941520+00:00",
+  "scope": "Temporary-copy proposal only; original CI profile/workflows and repository settings were not changed",
+  "source_before_sha256": "ffc42fe445c26fc7ee83bf5a6ce7779939337a91a939c735a1d6ea768f36fd7e",
+  "candidate_profile_sha256": "07f218aed5ec635d92621e9b9a57b5dacdf4cb88da75966202bfa8531dd828a9",
+  "patch_application_check": {
+    "command": "git apply --cached --check -",
+    "exit": 0,
+    "against": "Temporary repository index containing captured original source"
+  },
+  "tests": {
+    "passed": 16,
+    "failed": 0,
+    "test_files": 2,
+    "cli_cases": 13,
+    "cli_observations": 26
+  },
+  "real_fast": {
+    "exit": 0,
+    "groups": [
+      {
+        "name": "npm run lint",
+        "status": "PASS",
+        "durationMs": 7650
+      },
+      {
+        "name": "node bin/nexus-check.mjs --baseline configs/nexus-check-baseline.json",
+        "status": "PASS",
+        "durationMs": 2167
+      },
+      {
+        "name": "node scripts/check-command-parity.mjs",
+        "status": "PASS",
+        "durationMs": 118
+      },
+      {
+        "name": "node scripts/check-release-assets.mjs",
+        "status": "PASS",
+        "durationMs": 56
+      },
+      {
+        "name": "node scripts/check-docs-layout.mjs",
+        "status": "PASS",
+        "durationMs": 55
+      }
+    ]
+  },
+  "launch_failure_diagnostic": "Actual platform process failed with ENOENT and emitted FAIL summary; PATH removed only for this temporary-copy probe",
+  "retained_sha256": {
+    "ci-profile-correctness.patch": "308e00adc36fcaaaa01c2b3163a723e80ccfde760252d437f8b010d2d0cee6aa",
+    "ci-profile.proposed.mjs": "07f218aed5ec635d92621e9b9a57b5dacdf4cb88da75966202bfa8531dd828a9",
+    "ci-profile-report.test.ts": "4d00d0e69fe3f8b00dc6d4826b81dca8d6665c3c39f36a7bb3254533f7f0c4ec",
+    "report-regressions.json": "6288453ad9232545b5f22652bdbb5eb4f8c6d88e3a617034557089a9859a46fd",
+    "profile-tests.json": "3812d089cd0f5009011e8a72e5816c6bb9f7b459d0b3db4e3a7a0199deb4a2d1",
+    "real-fast-observation.json": "67545fe613b40158ac4243ad054345fe99b862310580283855763363d4b6af12",
+    "real-fast.log": "540d1cc12f2658cd71f95743fe7535e8d7f5e47fa0e6d408027e2fb74b8a6d73",
+    "spawn-failure-observation.json": "d26dd84d5a08819dfdfc7202fafd4c856ab8b122df68d1956e2b36cd525b8b96"
+  },
+  "original_guard": "No baseline; official diff against captured exact original reported unchanged; no accept was run",
+  "approval_scope": [
+    "Apply the six targeted CI profile corrections in scripts/ci-profile.mjs",
+    "Add tests/unit/scripts/ci-profile-report.test.ts"
+  ],
+  "excluded_scope": [
+    "Workflow migration",
+    "Permissions/secrets/repository settings",
+    "Full/platform/release contract completion",
+    "Push/merge/publication",
+    "Other pending guarded files"
+  ]
+}

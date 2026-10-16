@@ -1,0 +1,44 @@
+{
+  "roots": [
+    "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-hb-lf-0P3Gl0",
+    "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-hb-crlf-vegSFM"
+  ],
+  "files": [
+    {
+      "source": "docs\\handbooks\\markdown\\atlas.md",
+      "lfEqualsCRLF": true,
+      "matchesCandidate": true,
+      "sha256": "4a883ff236e19ddd3e4554eda05e23ee656cf0439e2a6ee6dd7617c15f8dc64f"
+    },
+    {
+      "source": "docs\\handbooks\\markdown\\generation-recovery.md",
+      "lfEqualsCRLF": true,
+      "matchesCandidate": true,
+      "sha256": "9079ed887afcbad696de293d7034c07bda31b50710cd382cb24289e75277effd"
+    },
+    {
+      "source": "docs\\handbooks\\technical\\document-outline.md",
+      "lfEqualsCRLF": true,
+      "matchesCandidate": true,
+      "sha256": "30144df7f6ec15f0e840cef2baa933bdfb982f9a083ac41f49cb322caff4dbc4"
+    },
+    {
+      "source": "docs\\handbooks\\technical\\installer-runtime.md",
+      "lfEqualsCRLF": true,
+      "matchesCandidate": true,
+      "sha256": "a26fccc3767d17d52df85a7bdcd8abcf94923acdec9fca365c8600fb34246095"
+    },
+    {
+      "source": "docs\\handbooks\\technical\\media-runtime.md",
+      "lfEqualsCRLF": true,
+      "matchesCandidate": true,
+      "sha256": "4132579251c14fe32e03e3a4fccbfe55a5ebea386d145b00e840e76a7d210ae2"
+    },
+    {
+      "source": "docs\\handbooks\\technical\\transcript-and-workspaces.md",
+      "lfEqualsCRLF": true,
+      "matchesCandidate": true,
+      "sha256": "70636b4ce97485a3b5eb8f7cccb96ae4f848981285ce65bd1a69937148b1771e"
+    }
+  ]
+}

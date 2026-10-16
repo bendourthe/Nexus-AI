@@ -86,7 +86,7 @@ const ALLOWLIST = new Set([
   // (GHSA-hp3w-g68c-fv3c, DoS via unbounded precision specifiers; 1.1.3 is
   // the latest), and roarr/global-agent fixes are semver-major under a
   // pinned parent. Nothing at runtime loads them. Tracked as QG-v211-2 in
-  // docs/v2/v2.11/known-gaps.md.
+  // docs/v2/v2.12/known-gaps.md.
   "global-agent",
   "roarr",
   "sprintf-js",

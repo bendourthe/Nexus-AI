@@ -1,0 +1,34 @@
+{
+  "created_at": "2026-10-10T01:32:49.065744+00:00",
+  "status": "PREPARED_CANDIDATE_PASS_APPLICATION_AND_INTEGRATION_PENDING",
+  "head": "30a2e47bddc1280badb91aaeaa78c3bcb9447baf",
+  "merge_head": "092ce3c2f386db020d18eab6d69c0655657b2456",
+  "prior_manifest_sha256": "b67710b7e6d62eed816580b1ed473095c56dd4cd6e6bdd6ed7bb2ab845fb968f",
+  "prior_pins_checked": 198,
+  "intentional_changes_since_prior_manifest": [
+    {
+      "path": "docs/todos.md",
+      "before": "35b0010c2393b7330912e04dab08acf282416b991acca88c201cb70ab752c853",
+      "after": "c1bc747cd0cee0c26c451ac785069ebb6aa8ce3a9d2f1e9fdf3a6ff8c0699aa8"
+    }
+  ],
+  "unexpected_prior_content_changes": [],
+  "new_record_sha256": {
+    "docs/releases/v2/v2.12/development/evidence/phase-7-root-prepared-candidate/retention.json": "101540dc5254c2d4a035715a3585f7a4b1cc0e48cb2a6bac9fb8a7a6b621155e",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-root-candidate-inputs.json": "6242a44b5eae301295d3ec8f287114bcd42cabf33cf742e0fe41f8f1311613fc",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-action-update-proposal/verification.json": "cd910d7ee70ae1e2cc288b44037ceb366f17bfd6e37774132d21462b112b446b",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-action-vendor-contracts.json": "835578a817a9edc267dafbbc0e24bfe243aee2154e63c2b941845b749c063b53",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-remaining-pr-source-comparison.json": "92a341f0ef1d3a8a92f10727258b4de14d85ac02ae626d676c3a59f048313f5f",
+    "docs/releases/v2/v2.12/development/evidence/phase-7-ci-action-guard-review.json": "32bd6f32efc91357a972d054ead5c9bd613ad0dd12e740c364653e5d6f1d2121",
+    "docs/releases/v2/v2.12/development/phase-7-root-prepared-candidate.md": "a46ac6b5d1081ee98240c78234806d3a88b9be951c4119d48c16718712126c78",
+    "docs/releases/v2/v2.12/development/phase-7-ci-action-update-proposal.md": "46f83613659bbaf1a40bbde00925a15ffb96eb00456b767bf9e38d9246cf025d",
+    "docs/todos.md": "c1bc747cd0cee0c26c451ac785069ebb6aa8ce3a9d2f1e9fdf3a6ff8c0699aa8"
+  },
+  "retained_root_proof_bindings_checked": 32,
+  "workflow_sources_unchanged": true,
+  "no_new_guard_accepts": true,
+  "progress_classification": "Progress: full prepared candidate suite and coverage now proven; pending SARIF pin availability diagnosed and exact action patches prepared",
+  "approvals": "No actual user answer received for guarded budget/HTML/handoff, CI profile, cache or new SARIF repair",
+  "no_remote_mutation": true,
+  "whole_goal": "Incomplete; no original-tree full gate, integrated CI, installed release, publication or cleanup claim"
+}

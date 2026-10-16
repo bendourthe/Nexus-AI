@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-14T16:20:59.401Z",
+  "contractSha256": "059e58aac528d2df1c6b5ee5e54e3f23e83fc685ad6ceea7da8e76a9c1e37177",
+  "fixtureManifestSha256": "09bd598eaae038e3c2b4f94dd54fd4c7fd7a7499d5377947a1df3de55227ba13",
+  "recommendation": "RETAIN",
+  "disposition": "HOLD",
+  "gates": {
+    "quality": "HOLD",
+    "latency": "HOLD",
+    "rejection": "HOLD",
+    "vectors": "HOLD",
+    "resources": "HOLD",
+    "tiers": "HOLD",
+    "coexistence": "HOLD",
+    "offline": "HOLD",
+    "terms": "HOLD",
+    "context": "HOLD"
+  },
+  "limitations": [
+    "Required cpu/8/12/24 tiers unmeasured.",
+    "Pinned distribution terms/PUP discrepancy unresolved.",
+    "OS-level non-loopback containment and packaged consumer observation not proven.",
+    "Whole-runtime peak RAM and coding coexistence not proven."
+  ],
+  "runtime": {
+    "version": "0.32.15"
+  },
+  "provision": {
+    "digest": "9e1df58d197e80e5a6c12110efb67b38ba6c8e23790a5044e1cafe6bea34b8f4",
+    "manifestBytes": 105626,
+    "artifactBytes": 378346995,
+    "pulledName": "embeddinggemma-2:270m",
+    "completed": false
+  },
+  "error": {
+    "code": "RUNTIME_TOO_OLD",
+    "message": "pull model manifest: 412: \nThe model you are attempting to pull requires a newer version of Ollama.\n\nPlease download the latest version at:\n\n\thttps://ollama.com/download\n"
+  },
+  "cleanup": []
+}

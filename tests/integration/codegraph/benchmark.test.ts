@@ -24,14 +24,14 @@
  *
  * The simulation is deterministic; both paths are exercised against the
  * fixture using the real handlers + store wiring, and the resulting tool
- * counts are written to `tests/fixtures/codegraph-benchmark-results/`
- * alongside the raw transcripts.
+ * counts and transcripts use temporary output by default. Set
+ * NEXUS_BENCH_RESULTS_DIR to retain a uniquely named run.
  */
 
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as os from "node:os";
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 import { buildToolRegistry } from "../../../src/tools/ToolRegistryBuilder.js";
 import { ConfirmationGate } from "../../../src/tools/ConfirmationGate.js";
 import type { ToolHandler } from "../../../src/tools/types.js";
@@ -46,14 +46,12 @@ const FIXTURE_REPO = path.resolve(
   "fixtures",
   "codegraph-benchmark-repo",
 );
-const RESULTS_DIR = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "fixtures",
-  "codegraph-benchmark-results",
-  "2026-05-26",
-);
+const retainedResults = process.env["NEXUS_BENCH_RESULTS_DIR"];
+if (retainedResults) fs.mkdirSync(retainedResults, { recursive: true });
+const RESULTS_DIR = fs.mkdtempSync(path.join(retainedResults ?? os.tmpdir(), "codegraph-results-"));
+afterAll(() => {
+  if (!retainedResults) fs.rmSync(RESULTS_DIR, { recursive: true, force: true, maxRetries: 3, retryDelay: 50 });
+});
 
 interface TranscriptEntry {
   readonly step: number;

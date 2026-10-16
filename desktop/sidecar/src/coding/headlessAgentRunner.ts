@@ -29,6 +29,7 @@ import { createHookBus, type HookBus } from "../../../../core/lifecycle/HookBus.
 import type { CodingSessionEventT } from "../protocol.js";
 import type { SidecarModelEntry } from "./models.js";
 import { runEnrichedHeadlessSession } from "./headlessRunEnrichment.js";
+import { formatForUser } from "../../../../modules/coding/utils/errors.js";
 import { isAbsolute } from "node:path";
 import type { WorkspaceScope } from "../../../../core/project/WorkspaceScope.js";
 
@@ -101,7 +102,7 @@ export function createHeadlessAgentRunner(
       outlineLlm: { client: llm, model: () => currentModel, endpoint: resolveHeadlessOllamaUrl() },
       outlineContextTokens: () => loadedContext(currentModel),
     });
-  const session = new HeadlessAgentSession(llm, tools);
+  const session = new HeadlessAgentSession(llm, tools, undefined, { contextTokens: loadedContext });
   const hookBus = options.hookBus ?? createHookBus();
 
   return async (input) => {
@@ -154,9 +155,13 @@ export function createHeadlessAgentRunner(
               break;
             case "done":
               break;
+            case "compaction":
+              options.log?.(`Compacted ${event.elided} old tool result(s), saving ${event.charactersSaved} characters.`);
+              break;
           }
         },
       });
+      if (result.finishReason === "error" && result.error) events.push({ kind: "token", text: formatForUser(result.error) });
       events.push({ kind: "done", finishReason: result.finishReason });
     } catch (error) {
       events.push({

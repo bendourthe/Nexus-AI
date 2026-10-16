@@ -1,5 +1,5 @@
 /**
- * v2.11.0 Phase 5.1 (T018) -- build the 24-question smoke set and its keys.
+ * Build the preserved 24-question anchor or the 38-question expanded smoke set.
  *
  * Questions are derived deterministically from the fixtures' expected files,
  * not from the outline builder's output, so the set cannot be tuned to the
@@ -11,6 +11,8 @@
  * after the one named), 4 table. At least 8 answers lie past page 50 of the
  * 65-page manual, beyond parse_document's 50-page cap.
  *
+ * Expanded: 12 factual, 20 cross-section, 6 table questions with distinct targets.
+ * Select with NEXUS_OUTLINE_MANUAL=manual-120p.pdf; the anchor is the default.
  * Run: npx vite-node scripts/build-outline-smoke-questions.ts
  */
 
@@ -23,6 +25,15 @@ import type { ExpectedFile, ExpectedHeading } from "./generate-outline-fixtures.
 import type { MatchMode } from "./outline-smoke-scoring.js";
 
 export type QuestionCategory = "factual" | "cross-section" | "table";
+export type SmokeArm = "A" | "B" | "C" | "D";
+
+export function selectSmokeArms(raw?: string): SmokeArm[] {
+  const selected = (raw ?? "A,B,C,D").split(",").map(arm => arm.trim());
+  if (selected.some(arm => !["A", "B", "C", "D"].includes(arm)) || new Set(selected).size !== selected.length) {
+    throw new Error("smoke arms must be distinct values from A,B,C,D");
+  }
+  return selected as SmokeArm[];
+}
 
 export interface SmokeQuestion {
   readonly id: string;
@@ -54,8 +65,9 @@ function load(root: string, file: string): ExpectedFile {
   return JSON.parse(readFileSync(join(root, "expected", `${file}.json`), "utf8")) as ExpectedFile;
 }
 
-export function buildQuestionSet(fixtureRoot: string): { questions: SmokeQuestion[]; keys: SmokeKey[] } {
-  const manual = load(fixtureRoot, "manual-60p.pdf");
+export function buildQuestionSet(fixtureRoot: string, manualFile = "manual-60p.pdf"): { questions: SmokeQuestion[]; keys: SmokeKey[] } {
+  if (!/^[a-z0-9-]+\.pdf$/.test(manualFile)) throw new Error("invalid manual file name");
+  const manual = load(fixtureRoot, manualFile);
   const questions: SmokeQuestion[] = [];
   const keys: SmokeKey[] = [];
   const push = (file: string, category: QuestionCategory, question: string, target: ExpectedHeading, answer: string, distractor: string): void => {
@@ -66,7 +78,7 @@ export function buildQuestionSet(fixtureRoot: string): { questions: SmokeQuestio
       answer,
       section: target.title,
       startPage: target.startPage,
-      pastPage50: file === "manual-60p.pdf" && target.startPage > PARSE_DOCUMENT_CAP,
+      pastPage50: file === manualFile && target.startPage > PARSE_DOCUMENT_CAP,
       distractors: [distractor],
       match: category === "table" ? "exact" : "prefix",
     });
@@ -74,6 +86,31 @@ export function buildQuestionSet(fixtureRoot: string): { questions: SmokeQuestio
   const withBody = manual.headings.filter((h) => h.firstWords.length > 0);
   const late = withBody.filter((h) => h.startPage > PARSE_DOCUMENT_CAP);
   const early = withBody.filter((h) => h.startPage <= PARSE_DOCUMENT_CAP);
+
+  if (manualFile !== "manual-60p.pdf") {
+    const used = new Set<string>();
+    for (const [i, target] of withBody.entries()) {
+      const preceding = withBody[i - 1];
+      if (!preceding || target.startPage <= PARSE_DOCUMENT_CAP) continue;
+      push(manualFile, "cross-section", `In ${manualFile}, find the section that comes immediately after section "${preceding.title}". ${OPENING}`, target, firstThree(target), firstThree(preceding));
+      used.add(target.title);
+      if (used.size === 20) break;
+    }
+    const tablePicks = [...late, ...early].filter(h => h.table && !used.has(h.title)).slice(0, 6);
+    for (const target of tablePicks) {
+      if (!target.table) continue;
+      const other = withBody.find(h => h.table && h.title !== target.title);
+      push(manualFile, "table", `In ${manualFile}, section "${target.title}" contains a port table. Which port is listed?`, target, String(target.table.port), String(other?.table?.port ?? "none"));
+      used.add(target.title);
+    }
+    for (const target of [...late, ...early].filter(h => !used.has(h.title)).slice(0, 12)) {
+      const other = withBody.find(h => h.title !== target.title);
+      push(manualFile, "factual", `In ${manualFile}, find section "${target.title}". ${OPENING}`, target, firstThree(target), firstThree(other ?? target));
+      used.add(target.title);
+    }
+    validate(questions, keys, manual);
+    return { questions, keys };
+  }
 
   // Factual: 8 manual sections (late ones first; the manual has fewer than 8
   // past page 50, so early ones fill the rest), then 4 from the other formats.
@@ -115,15 +152,29 @@ export function buildQuestionSet(fixtureRoot: string): { questions: SmokeQuestio
   return { questions, keys };
 }
 
-export function validate(questions: readonly SmokeQuestion[], keys: readonly SmokeKey[]): void {
+export function validate(questions: readonly SmokeQuestion[], keys: readonly SmokeKey[], expandedManual?: ExpectedFile): void {
   const count = (c: QuestionCategory): number => questions.filter((q) => q.category === c).length;
-  if (count("factual") !== 12 || count("cross-section") !== 8 || count("table") !== 4) {
+  if (count("factual") !== 12 || count("cross-section") !== (expandedManual ? 20 : 8) || count("table") !== (expandedManual ? 6 : 4)) {
     throw new Error(`category counts wrong: ${count("factual")}/${count("cross-section")}/${count("table")}`);
   }
   if (new Set(questions.map((q) => q.id)).size !== questions.length) throw new Error("duplicate question id");
   if (keys.some((k) => k.answer.trim().length === 0)) throw new Error("empty answer");
-  if (keys.filter((k) => k.pastPage50).length < 8) throw new Error("fewer than 8 answers past page 50");
+  const minimumLate = expandedManual ? 16 : 8;
+  if (keys.filter((k) => k.pastPage50).length < minimumLate) throw new Error(`fewer than ${minimumLate} answers past page 50`);
   if (!keys.some((k) => k.pastPage50)) throw new Error("every answer fits inside parse_document's cap");
+  if (expandedManual) {
+    if (new Set(keys.map(k => k.section)).size !== keys.length) throw new Error("expanded categories reuse a target section");
+    const normalized = (text: string): string => text.toLowerCase().replace(/\s+/g, "");
+    for (const key of keys) {
+      for (const heading of expandedManual.headings) {
+        if (heading.title === key.section) continue;
+        const values = [heading.firstWords, ...(heading.table ? Object.values(heading.table).map(String) : [])];
+        if (values.some(value => normalized(value).includes(normalized(key.answer)))) {
+          throw new Error(`ambiguous answer ${key.id} also appears in ${heading.title}`);
+        }
+      }
+    }
+  }
 }
 
 export function hashOf(value: unknown): string {
@@ -132,9 +183,11 @@ export function hashOf(value: unknown): string {
 
 if (!process.env["VITEST"]) {
   const root = resolve(dirname(fileURLToPath(import.meta.url)), "../tests/fixtures/documents/outline");
-  const { questions, keys } = buildQuestionSet(root);
+  const manualFile = process.env["NEXUS_OUTLINE_MANUAL"] ?? "manual-60p.pdf";
+  const { questions, keys } = buildQuestionSet(root, manualFile);
+  const suffix = manualFile === "manual-60p.pdf" ? "" : `-${manualFile.replace(/\.pdf$/, "")}`;
   mkdirSync(join(root, "eval"), { recursive: true });
-  writeFileSync(join(root, "eval", "questions.json"), `${JSON.stringify(questions, null, 2)}\n`);
-  writeFileSync(join(root, "eval", "keys.json"), `${JSON.stringify(keys, null, 2)}\n`);
+  writeFileSync(join(root, "eval", `questions${suffix}.json`), `${JSON.stringify(questions, null, 2)}\n`);
+  writeFileSync(join(root, "eval", `keys${suffix}.json`), `${JSON.stringify(keys, null, 2)}\n`);
   process.stdout.write(`wrote ${questions.length} questions; ${keys.filter((k) => k.pastPage50).length} past page 50\n`);
 }

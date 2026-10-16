@@ -1,0 +1,7 @@
+{
+  "allow": [
+    {"rule":"fixed-text-max-width","selector":"[data-testid='settings-security'] > p","reason":"Existing Security posture paragraph uses the established 640px text measure. It is outside the outline-controls delta; actual 320, 768 and 1200px measurements show no horizontal overflow."},
+    {"rule":"fixed-text-max-width","selector":"[data-testid='parse-document-settings'] > p","reason":"Existing parsing paragraph uses the established 640px text measure. The observed unbreakable settings key was fixed separately; the preserved paragraph cap causes no overflow at 320, 768 or 1200px."},
+    {"rule":"fixed-text-max-width","selector":"[data-testid='audit-log-viewer'] > p","reason":"Existing audit paragraph uses the established 640px text measure. It is outside the outline-controls delta; actual 320, 768 and 1200px measurements show no horizontal overflow."}
+  ]
+}

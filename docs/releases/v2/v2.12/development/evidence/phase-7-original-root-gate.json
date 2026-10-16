@@ -1,0 +1,32 @@
+{
+  "scope": "Fresh actual-source root gate after applying approved Next steps 1-3 in the continuation worktree; workflow pins not yet applied",
+  "head": "30a2e47bddc1280badb91aaeaa78c3bcb9447baf",
+  "merge_head": "092ce3c2f386db020d18eab6d69c0655657b2456",
+  "command": "node node_modules/vitest/vitest.mjs run --config configs/vitest.config.ts --coverage --maxWorkers=4 --reporter=json --reporter=dot",
+  "exit": 0,
+  "files": 579,
+  "tests_total": 6227,
+  "passed": 6215,
+  "failed": 0,
+  "skipped": 12,
+  "coverage_pct": {
+    "statements": 85.09,
+    "branches": 76.43,
+    "functions": 87.22,
+    "lines": 87.26
+  },
+  "thresholds_unchanged": "80/75/80",
+  "results_json_sha256": "1bfddeed226fed3064aa03bb33a386334adaa7eb448ae84407f34b43faf6d070",
+  "applied_file_sha256": {
+    "tests/integration/coding-pillar/document-budget-loops.test.ts": "3a2646a6202f8c12bffc80fef69b68e45ca4c62bc0555baf0a792c326f6e0b4e",
+    "scripts/ci-profile.mjs": "f32d51f208cc2dd131e993119202a4061402c4b54244b0077cdfd5c3cc674cee",
+    "tests/unit/scripts/ci-profile-report.test.ts": "4d00d0e69fe3f8b00dc6d4826b81dca8d6665c3c39f36a7bb3254533f7f0c4ec",
+    "docs/handbooks/html/atlas.html": "44c3b02a306592ca783fcbf35f88d4c98ccbca01e6f0d957b1bf4732211a25fb",
+    "docs/handbooks/html/generation-recovery.html": "f12b89df38e96518389186caf202e6fc5ab992a3ab1a2aed5ee099ebfd155e23",
+    "docs/handbooks/html/technical/installer-runtime.html": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05",
+    "docs/handbooks/html/technical/media-runtime.html": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51",
+    "docs/handbooks/html/technical/transcript-and-workspaces.html": "af6bd368d18bf682b563682e8f92aafddda4f773b381a5dc5994979973c48338",
+    "docs/handbooks/html/technical/document-outline.html": "79f1cc2240ebb4b343fe7da49c6999319d4c28e8302c8eab699a72a0648b9e4a"
+  },
+  "line_ending_note": "budget test and ci-profile.mjs are CRLF; LF-normalized content equals the approved proposed SHAs"
+}

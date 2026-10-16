@@ -5,9 +5,9 @@
  * `CommandCompressor` twice -- once with the default registry active and
  * once with an empty registry (forcing passthrough) -- and asserts that
  * the compressed total stays at most 50% of the raw total. The two
- * resulting transcripts are persisted under
- * `tests/fixtures/coding-pillar-benchmark-results/2026-05-26/` so the
- * Phase 7 stabilization report can cite a stable baseline.
+ * resulting transcripts use temporary output by default. Set
+ * NEXUS_BENCH_RESULTS_DIR to retain a uniquely named run without
+ * overwriting the historical Phase 7 baseline.
  *
  * The transcript shape mimics a representative Coding-pillar session for
  * the prompt "Run the full test suite, then summarize failures":
@@ -25,11 +25,18 @@
  * is applied to both runs.
  */
 
-import { describe, it, expect } from "vitest";
+import { afterAll, describe, it, expect } from "vitest";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import { CommandCompressor } from "../../../core/observability/CommandCompressor.js";
+
+const retainedResults = process.env["NEXUS_BENCH_RESULTS_DIR"];
+if (retainedResults) fs.mkdirSync(retainedResults, { recursive: true });
+const RESULTS_DIR = fs.mkdtempSync(path.join(retainedResults ?? os.tmpdir(), "compressor-results-"));
+afterAll(() => {
+  if (!retainedResults) fs.rmSync(RESULTS_DIR, { recursive: true, force: true, maxRetries: 3, retryDelay: 50 });
+});
 
 interface TranscriptStep {
   readonly command: string;
@@ -161,18 +168,9 @@ describe("CommandCompressor benchmark (Phase 2 sub-task 2.5)", () => {
     // Baseline: raw bytes the model would receive without any compressor.
     const withoutCompressor = runTranscriptRaw(transcript);
 
-    // Persist both transcripts under the Phase 2 benchmark results dir.
-    const resultsDir = path.resolve(
-      __dirname,
-      "..",
-      "..",
-      "fixtures",
-      "coding-pillar-benchmark-results",
-      "2026-05-26",
-    );
-    fs.mkdirSync(resultsDir, { recursive: true });
-    const withPath = path.join(resultsDir, "with-compressor.json");
-    const withoutPath = path.join(resultsDir, "without-compressor.json");
+    // Write run-owned reports; retain only when an output directory is explicit.
+    const withPath = path.join(RESULTS_DIR, "with-compressor.json");
+    const withoutPath = path.join(RESULTS_DIR, "without-compressor.json");
     fs.writeFileSync(
       withPath,
       JSON.stringify(

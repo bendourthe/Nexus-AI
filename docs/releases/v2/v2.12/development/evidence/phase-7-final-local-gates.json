@@ -1,0 +1,38 @@
+{
+  "scope": "Final local gates on the continuation worktree with all approved Phase 7 changes applied (uncommitted; merge uncommitted). Run 2026-10-10.",
+  "desktop_full_suite": {
+    "run1": {
+      "exit": 1,
+      "files": "248 passed / 1 failed",
+      "tests": "2,286 passed / 1 failed / 1 skipped",
+      "failure": "desktop/tests/a11y-config.test.ts: ESLint child killed at its 30 s cap (spawnSync error)",
+      "diagnosis": "same command standalone 2.5 s x2 and test alone passes; concurrent Codex processes on host, CPU 33% while idle; attributed to host contention, not proven for every cause; test not modified"
+    },
+    "run2": {
+      "exit": 0,
+      "files": 249,
+      "passed": 2287,
+      "failed": 0,
+      "skipped": 1,
+      "coverage_pct": {
+        "statements": 80.17,
+        "branches": 72.88,
+        "functions": 80.31,
+        "lines": 82.83
+      },
+      "thresholds": "unchanged",
+      "results_json_sha256": "41c6006aafc1bf05016aac596b5402df2427238911fb7932e22cdb0378f33777"
+    }
+  },
+  "root_full_suite": "see phase-7-original-root-gate.json (6,215 passed, 0 failed, 12 skipped)",
+  "root_lint": "eslint src modules exit 0",
+  "desktop_lint": "eslint src sidecar/src tests --max-warnings=0 exit 0",
+  "root_typecheck_and_build": "tsc -b exit 0 (outputs to ignored out/)",
+  "desktop_typecheck": "tsc --noEmit exit 0",
+  "architecture": "depcruise: 0 errors, 18 warnings, 504 modules",
+  "sidecar_build": "node sidecar/esbuild.config.mjs exit 0 (ignored desktop/sidecar/dist)",
+  "fast_ci_profile": "PASS x5 after action pins",
+  "workflow_tests": "70 passed",
+  "handbooks": "generate-handbooks --check 6 match; 4/4 relative links resolve; headless Edge renders at 1280 px and a true 390 px iframe viewport viewed",
+  "tree_effect": "git status line count unchanged by builds (117)"
+}

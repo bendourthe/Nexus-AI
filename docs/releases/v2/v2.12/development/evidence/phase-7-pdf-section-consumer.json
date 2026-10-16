@@ -1,0 +1,1331 @@
+{
+  "created_at": "2026-10-10T00:52:39.516700+00:00",
+  "fix_rerun_cycles_used": 1,
+  "scope": "Corrected full-section parser exercise; no OCR, inference, fixture edits, rescoring or visual PDF-layout certification",
+  "initial_receipt": "phase-7-pdf-consumer.json",
+  "initial_finding": "Two-page opening sampling missed section-end tables; initial receipt retained.",
+  "consumer": "pypdf.PdfReader page.extract_text",
+  "range_policy": "Heading start page through next heading start page inclusive; last through final page. Inclusion accommodates a table followed by the next heading on one page. Unique full-row match required.",
+  "results": [
+    {
+      "file": "tests/fixtures/documents/outline/docs/manual-60p.pdf",
+      "sha256": "3d0bd4d6bc776e9e960855c48041a655a48db5817805d7307593defeab928908",
+      "unchanged": true,
+      "expected_pages": 65,
+      "observed_pages": 65,
+      "headings": 32,
+      "tables": 0,
+      "sections": [
+        {
+          "title": "1 Introduction",
+          "section_page_range_inclusive": [
+            2,
+            2
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "1.1 Storage Layout Details",
+          "section_page_range_inclusive": [
+            2,
+            4
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "1.2 Troubleshooting Details",
+          "section_page_range_inclusive": [
+            4,
+            6
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "1.3 Performance Tuning Details",
+          "section_page_range_inclusive": [
+            6,
+            10
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "2 Installation",
+          "section_page_range_inclusive": [
+            10,
+            10
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "2.1 Scheduling Details",
+          "section_page_range_inclusive": [
+            10,
+            12
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "2.2 Security Model Details",
+          "section_page_range_inclusive": [
+            12,
+            15
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "2.3 Maintenance Details",
+          "section_page_range_inclusive": [
+            15,
+            18
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "3 Configuration",
+          "section_page_range_inclusive": [
+            18,
+            18
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "3.1 Monitoring Details",
+          "section_page_range_inclusive": [
+            18,
+            20
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "3.2 Backup and Restore Details",
+          "section_page_range_inclusive": [
+            20,
+            22
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "3.3 Calibration Details",
+          "section_page_range_inclusive": [
+            22,
+            26
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "4 Network Settings",
+          "section_page_range_inclusive": [
+            26,
+            26
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "4.1 Troubleshooting Details",
+          "section_page_range_inclusive": [
+            26,
+            28
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "4.2 Performance Tuning Details",
+          "section_page_range_inclusive": [
+            28,
+            30
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "4.3 Reporting Details",
+          "section_page_range_inclusive": [
+            30,
+            34
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "5 Storage Layout",
+          "section_page_range_inclusive": [
+            34,
+            34
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "5.1 Security Model Details",
+          "section_page_range_inclusive": [
+            34,
+            36
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "5.2 Maintenance Details",
+          "section_page_range_inclusive": [
+            36,
+            39
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "5.3 Appendix Notes Details",
+          "section_page_range_inclusive": [
+            39,
+            42
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "6 Scheduling",
+          "section_page_range_inclusive": [
+            42,
+            42
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "6.1 Backup and Restore Details",
+          "section_page_range_inclusive": [
+            42,
+            44
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "6.2 Calibration Details",
+          "section_page_range_inclusive": [
+            44,
+            47
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "6.3 Glossary Terms Details",
+          "section_page_range_inclusive": [
+            47,
+            50
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "7 Monitoring",
+          "section_page_range_inclusive": [
+            50,
+            50
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "7.1 Performance Tuning Details",
+          "section_page_range_inclusive": [
+            50,
+            52
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "7.2 Reporting Details",
+          "section_page_range_inclusive": [
+            52,
+            55
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "7.3 Introduction Details",
+          "section_page_range_inclusive": [
+            55,
+            58
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "8 Troubleshooting",
+          "section_page_range_inclusive": [
+            58,
+            58
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "8.1 Maintenance Details",
+          "section_page_range_inclusive": [
+            58,
+            60
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "8.2 Appendix Notes Details",
+          "section_page_range_inclusive": [
+            60,
+            63
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "8.3 Installation Details",
+          "section_page_range_inclusive": [
+            63,
+            65
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        }
+      ]
+    },
+    {
+      "file": "tests/fixtures/documents/outline/docs/manual-120p.pdf",
+      "sha256": "bd10ab42cc14866cfebf7cc33a6aef7edea08252320cb9703b4aa18e1472f640",
+      "unchanged": true,
+      "expected_pages": 123,
+      "observed_pages": 123,
+      "headings": 60,
+      "tables": 48,
+      "sections": [
+        {
+          "title": "1 Introduction",
+          "section_page_range_inclusive": [
+            3,
+            3
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "1.1 Storage Layout Details",
+          "section_page_range_inclusive": [
+            3,
+            5
+          ],
+          "table_pages": [
+            5
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "1.2 Troubleshooting Details",
+          "section_page_range_inclusive": [
+            5,
+            8
+          ],
+          "table_pages": [
+            7
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "1.3 Performance Tuning Details",
+          "section_page_range_inclusive": [
+            8,
+            10
+          ],
+          "table_pages": [
+            10
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "1.4 Reporting Details",
+          "section_page_range_inclusive": [
+            10,
+            13
+          ],
+          "table_pages": [
+            12
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "2 Installation",
+          "section_page_range_inclusive": [
+            13,
+            13
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "2.1 Scheduling Details",
+          "section_page_range_inclusive": [
+            13,
+            15
+          ],
+          "table_pages": [
+            15
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "2.2 Security Model Details",
+          "section_page_range_inclusive": [
+            15,
+            17
+          ],
+          "table_pages": [
+            17
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "2.3 Maintenance Details",
+          "section_page_range_inclusive": [
+            17,
+            20
+          ],
+          "table_pages": [
+            20
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "2.4 Appendix Notes Details",
+          "section_page_range_inclusive": [
+            20,
+            23
+          ],
+          "table_pages": [
+            22
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "3 Configuration",
+          "section_page_range_inclusive": [
+            23,
+            23
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "3.1 Monitoring Details",
+          "section_page_range_inclusive": [
+            23,
+            25
+          ],
+          "table_pages": [
+            25
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "3.2 Backup and Restore Details",
+          "section_page_range_inclusive": [
+            25,
+            27
+          ],
+          "table_pages": [
+            27
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "3.3 Calibration Details",
+          "section_page_range_inclusive": [
+            27,
+            30
+          ],
+          "table_pages": [
+            30
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "3.4 Glossary Terms Details",
+          "section_page_range_inclusive": [
+            30,
+            33
+          ],
+          "table_pages": [
+            32
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "4 Network Settings",
+          "section_page_range_inclusive": [
+            33,
+            33
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "4.1 Troubleshooting Details",
+          "section_page_range_inclusive": [
+            33,
+            35
+          ],
+          "table_pages": [
+            35
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "4.2 Performance Tuning Details",
+          "section_page_range_inclusive": [
+            35,
+            37
+          ],
+          "table_pages": [
+            37
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "4.3 Reporting Details",
+          "section_page_range_inclusive": [
+            37,
+            40
+          ],
+          "table_pages": [
+            40
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "4.4 Introduction Details",
+          "section_page_range_inclusive": [
+            40,
+            43
+          ],
+          "table_pages": [
+            42
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "5 Storage Layout",
+          "section_page_range_inclusive": [
+            43,
+            43
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "5.1 Security Model Details",
+          "section_page_range_inclusive": [
+            43,
+            45
+          ],
+          "table_pages": [
+            45
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "5.2 Maintenance Details",
+          "section_page_range_inclusive": [
+            45,
+            47
+          ],
+          "table_pages": [
+            47
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "5.3 Appendix Notes Details",
+          "section_page_range_inclusive": [
+            47,
+            50
+          ],
+          "table_pages": [
+            50
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "5.4 Installation Details",
+          "section_page_range_inclusive": [
+            50,
+            53
+          ],
+          "table_pages": [
+            52
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "6 Scheduling",
+          "section_page_range_inclusive": [
+            53,
+            53
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "6.1 Backup and Restore Details",
+          "section_page_range_inclusive": [
+            53,
+            55
+          ],
+          "table_pages": [
+            55
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "6.2 Calibration Details",
+          "section_page_range_inclusive": [
+            55,
+            57
+          ],
+          "table_pages": [
+            57
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "6.3 Glossary Terms Details",
+          "section_page_range_inclusive": [
+            57,
+            60
+          ],
+          "table_pages": [
+            60
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "6.4 Configuration Details",
+          "section_page_range_inclusive": [
+            60,
+            63
+          ],
+          "table_pages": [
+            62
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "7 Monitoring",
+          "section_page_range_inclusive": [
+            63,
+            63
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "7.1 Performance Tuning Details",
+          "section_page_range_inclusive": [
+            63,
+            65
+          ],
+          "table_pages": [
+            65
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "7.2 Reporting Details",
+          "section_page_range_inclusive": [
+            65,
+            67
+          ],
+          "table_pages": [
+            67
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "7.3 Introduction Details",
+          "section_page_range_inclusive": [
+            67,
+            70
+          ],
+          "table_pages": [
+            70
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "7.4 Network Settings Details",
+          "section_page_range_inclusive": [
+            70,
+            73
+          ],
+          "table_pages": [
+            72
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "8 Troubleshooting",
+          "section_page_range_inclusive": [
+            73,
+            73
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "8.1 Maintenance Details",
+          "section_page_range_inclusive": [
+            73,
+            75
+          ],
+          "table_pages": [
+            75
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "8.2 Appendix Notes Details",
+          "section_page_range_inclusive": [
+            75,
+            77
+          ],
+          "table_pages": [
+            77
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "8.3 Installation Details",
+          "section_page_range_inclusive": [
+            77,
+            80
+          ],
+          "table_pages": [
+            80
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "8.4 Storage Layout Details",
+          "section_page_range_inclusive": [
+            80,
+            83
+          ],
+          "table_pages": [
+            82
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "9 Security Model",
+          "section_page_range_inclusive": [
+            83,
+            83
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "9.1 Calibration Details",
+          "section_page_range_inclusive": [
+            83,
+            85
+          ],
+          "table_pages": [
+            85
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "9.2 Glossary Terms Details",
+          "section_page_range_inclusive": [
+            85,
+            87
+          ],
+          "table_pages": [
+            87
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "9.3 Configuration Details",
+          "section_page_range_inclusive": [
+            87,
+            90
+          ],
+          "table_pages": [
+            90
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "9.4 Scheduling Details",
+          "section_page_range_inclusive": [
+            90,
+            93
+          ],
+          "table_pages": [
+            92
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "10 Backup and Restore",
+          "section_page_range_inclusive": [
+            93,
+            93
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "10.1 Reporting Details",
+          "section_page_range_inclusive": [
+            93,
+            95
+          ],
+          "table_pages": [
+            95
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "10.2 Introduction Details",
+          "section_page_range_inclusive": [
+            95,
+            97
+          ],
+          "table_pages": [
+            97
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "10.3 Network Settings Details",
+          "section_page_range_inclusive": [
+            97,
+            100
+          ],
+          "table_pages": [
+            100
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "10.4 Monitoring Details",
+          "section_page_range_inclusive": [
+            100,
+            103
+          ],
+          "table_pages": [
+            102
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "11 Performance Tuning",
+          "section_page_range_inclusive": [
+            103,
+            103
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "11.1 Appendix Notes Details",
+          "section_page_range_inclusive": [
+            103,
+            105
+          ],
+          "table_pages": [
+            105
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "11.2 Installation Details",
+          "section_page_range_inclusive": [
+            105,
+            107
+          ],
+          "table_pages": [
+            107
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "11.3 Storage Layout Details",
+          "section_page_range_inclusive": [
+            107,
+            110
+          ],
+          "table_pages": [
+            110
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "11.4 Troubleshooting Details",
+          "section_page_range_inclusive": [
+            110,
+            113
+          ],
+          "table_pages": [
+            112
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "12 Maintenance",
+          "section_page_range_inclusive": [
+            113,
+            113
+          ],
+          "table_pages": [],
+          "checks": {
+            "title": true,
+            "opening": true
+          }
+        },
+        {
+          "title": "12.1 Glossary Terms Details",
+          "section_page_range_inclusive": [
+            113,
+            115
+          ],
+          "table_pages": [
+            115
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "12.2 Configuration Details",
+          "section_page_range_inclusive": [
+            115,
+            118
+          ],
+          "table_pages": [
+            118
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "12.3 Scheduling Details",
+          "section_page_range_inclusive": [
+            118,
+            120
+          ],
+          "table_pages": [
+            120
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        },
+        {
+          "title": "12.4 Security Model Details",
+          "section_page_range_inclusive": [
+            120,
+            123
+          ],
+          "table_pages": [
+            122
+          ],
+          "checks": {
+            "title": true,
+            "opening": true,
+            "exact_table_row_unique": true,
+            "exact_table_row_in_section": true
+          }
+        }
+      ]
+    }
+  ],
+  "findings": [],
+  "status": "pass"
+}

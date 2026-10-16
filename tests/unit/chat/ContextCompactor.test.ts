@@ -24,6 +24,7 @@ function makeManager(messages: Array<{ role: string; content: string }>): Conver
     getHistory: () => history,
     // v0.9.0 Phase 2.1: ContextCompactor feeds the pipeline a replay view.
     replayForCompaction: () => history,
+    toolResultIndicesFor: () => [],
     replaceWithSummary: vi.fn(),
     replaceMessages: vi.fn(),
     addAssistantMessage: vi.fn(),
@@ -335,6 +336,7 @@ describe("ContextCompactor", () => {
       return mockOf<ConversationManager>({
         getHistory: () => history,
         replayForCompaction: () => history,
+        toolResultIndicesFor: () => [],
         replaceWithSummary: vi.fn(),
         replaceMessages: vi.fn(),
         addAssistantMessage: vi.fn(),

@@ -15,10 +15,14 @@ describe("jsx-a11y flat config", () => {
         cwd: desktopRoot,
         encoding: "utf8",
         env: { ...process.env, ESLINT_USE_FLAT_CONFIG: "true" },
+        timeout: 30_000,
       },
     );
+    expect(result.error).toBeUndefined();
+    expect(result.status, result.stderr).toBe(0);
     const parsed = JSON.parse(result.stdout || "[]") as { messages: { ruleId: string | null }[] }[];
     const ruleIds = (parsed[0]?.messages ?? []).map((message) => message.ruleId);
     expect(ruleIds, result.stderr).toContain("jsx-a11y/click-events-have-key-events");
-  });
+    // A cold ESLint child can exceed the default 5s during Windows coverage runs.
+  }, 45_000);
 });

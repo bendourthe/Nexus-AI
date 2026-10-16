@@ -1,0 +1,574 @@
+{
+  "schemaVersion": 1,
+  "evaluatedCommit": "e8ee872d6081ee3f2851a83d47ff96f27a91f540",
+  "validation": {
+    "status": "complete",
+    "preregistrationCommit": "e8ee872d6081ee3f2851a83d47ff96f27a91f540",
+    "startedAt": "2026-10-09T13:48:32.665867+00:00",
+    "deadlineMs": 1791604052665,
+    "restartCount": 0,
+    "error": null,
+    "runs": [
+      {
+        "name": "dry-expanded",
+        "status": "complete",
+        "coverageValidated": true,
+        "completed": 8,
+        "expected": 8,
+        "rows": [
+          {
+            "model": "qwen3.5:9b",
+            "arm": "A",
+            "completed": 2,
+            "expected": 2,
+            "correct": 0,
+            "crossCorrect": 0,
+            "crossObserved": 2,
+            "lateCorrect": 0,
+            "lateObserved": 2,
+            "statuses": {
+              "timeout": 1,
+              "error": 1
+            },
+            "errorOrNoAnswerIncludingTimeout": 2,
+            "nativeToolResultRequests": 17,
+            "compactions": 6
+          },
+          {
+            "model": "qwen3.5:9b",
+            "arm": "C",
+            "completed": 2,
+            "expected": 2,
+            "correct": 0,
+            "crossCorrect": 0,
+            "crossObserved": 2,
+            "lateCorrect": 0,
+            "lateObserved": 2,
+            "statuses": {
+              "no-answer": 1,
+              "timeout": 1
+            },
+            "errorOrNoAnswerIncludingTimeout": 2,
+            "nativeToolResultRequests": 11,
+            "compactions": 3
+          },
+          {
+            "model": "gemma4:12b",
+            "arm": "A",
+            "completed": 2,
+            "expected": 2,
+            "correct": 0,
+            "crossCorrect": 0,
+            "crossObserved": 2,
+            "lateCorrect": 0,
+            "lateObserved": 2,
+            "statuses": {
+              "timeout": 2
+            },
+            "errorOrNoAnswerIncludingTimeout": 2,
+            "nativeToolResultRequests": 7,
+            "compactions": 2
+          },
+          {
+            "model": "gemma4:12b",
+            "arm": "C",
+            "completed": 2,
+            "expected": 2,
+            "correct": 0,
+            "crossCorrect": 0,
+            "crossObserved": 2,
+            "lateCorrect": 0,
+            "lateObserved": 2,
+            "statuses": {
+              "timeout": 2
+            },
+            "errorOrNoAnswerIncludingTimeout": 2,
+            "nativeToolResultRequests": 4,
+            "compactions": 0
+          }
+        ]
+      },
+      {
+        "name": "dry-anchor",
+        "status": "complete",
+        "coverageValidated": true,
+        "completed": 8,
+        "expected": 8,
+        "rows": [
+          {
+            "model": "qwen3.5:9b",
+            "arm": "A",
+            "completed": 2,
+            "expected": 2,
+            "correct": 0,
+            "crossCorrect": 0,
+            "crossObserved": 0,
+            "lateCorrect": 0,
+            "lateObserved": 2,
+            "statuses": {
+              "error": 2
+            },
+            "errorOrNoAnswerIncludingTimeout": 2,
+            "nativeToolResultRequests": 18,
+            "compactions": 5
+          },
+          {
+            "model": "qwen3.5:9b",
+            "arm": "C",
+            "completed": 2,
+            "expected": 2,
+            "correct": 0,
+            "crossCorrect": 0,
+            "crossObserved": 0,
+            "lateCorrect": 0,
+            "lateObserved": 2,
+            "statuses": {
+              "no-answer": 2
+            },
+            "errorOrNoAnswerIncludingTimeout": 2,
+            "nativeToolResultRequests": 4,
+            "compactions": 0
+          },
+          {
+            "model": "gemma4:12b",
+            "arm": "A",
+            "completed": 2,
+            "expected": 2,
+            "correct": 0,
+            "crossCorrect": 0,
+            "crossObserved": 0,
+            "lateCorrect": 0,
+            "lateObserved": 2,
+            "statuses": {
+              "timeout": 2
+            },
+            "errorOrNoAnswerIncludingTimeout": 2,
+            "nativeToolResultRequests": 7,
+            "compactions": 2
+          },
+          {
+            "model": "gemma4:12b",
+            "arm": "C",
+            "completed": 2,
+            "expected": 2,
+            "correct": 1,
+            "crossCorrect": 0,
+            "crossObserved": 0,
+            "lateCorrect": 1,
+            "lateObserved": 2,
+            "statuses": {
+              "timeout": 1,
+              "answered": 1
+            },
+            "errorOrNoAnswerIncludingTimeout": 1,
+            "nativeToolResultRequests": 4,
+            "compactions": 0
+          }
+        ]
+      },
+      {
+        "name": "full-expanded",
+        "status": "complete",
+        "coverageValidated": true,
+        "completed": 152,
+        "expected": 152,
+        "rows": [
+          {
+            "model": "qwen3.5:9b",
+            "arm": "A",
+            "completed": 38,
+            "expected": 38,
+            "correct": 1,
+            "crossCorrect": 0,
+            "crossObserved": 20,
+            "lateCorrect": 0,
+            "lateObserved": 35,
+            "statuses": {
+              "timeout": 6,
+              "error": 25,
+              "no-answer": 4,
+              "answered": 3
+            },
+            "errorOrNoAnswerIncludingTimeout": 35,
+            "nativeToolResultRequests": 284,
+            "compactions": 80
+          },
+          {
+            "model": "qwen3.5:9b",
+            "arm": "C",
+            "completed": 38,
+            "expected": 38,
+            "correct": 0,
+            "crossCorrect": 0,
+            "crossObserved": 20,
+            "lateCorrect": 0,
+            "lateObserved": 35,
+            "statuses": {
+              "error": 33,
+              "answered": 2,
+              "no-answer": 3
+            },
+            "errorOrNoAnswerIncludingTimeout": 36,
+            "nativeToolResultRequests": 161,
+            "compactions": 32
+          },
+          {
+            "model": "gemma4:12b",
+            "arm": "A",
+            "completed": 38,
+            "expected": 38,
+            "correct": 1,
+            "crossCorrect": 0,
+            "crossObserved": 20,
+            "lateCorrect": 0,
+            "lateObserved": 35,
+            "statuses": {
+              "timeout": 30,
+              "error": 6,
+              "answered": 2
+            },
+            "errorOrNoAnswerIncludingTimeout": 36,
+            "nativeToolResultRequests": 126,
+            "compactions": 48
+          },
+          {
+            "model": "gemma4:12b",
+            "arm": "C",
+            "completed": 38,
+            "expected": 38,
+            "correct": 4,
+            "crossCorrect": 4,
+            "crossObserved": 20,
+            "lateCorrect": 4,
+            "lateObserved": 35,
+            "statuses": {
+              "timeout": 16,
+              "answered": 6,
+              "error": 16
+            },
+            "errorOrNoAnswerIncludingTimeout": 32,
+            "nativeToolResultRequests": 120,
+            "compactions": 14
+          }
+        ]
+      },
+      {
+        "name": "full-anchor",
+        "status": "complete",
+        "coverageValidated": true,
+        "completed": 96,
+        "expected": 96,
+        "rows": [
+          {
+            "model": "qwen3.5:9b",
+            "arm": "A",
+            "completed": 24,
+            "expected": 24,
+            "correct": 7,
+            "crossCorrect": 1,
+            "crossObserved": 8,
+            "lateCorrect": 2,
+            "lateObserved": 12,
+            "statuses": {
+              "error": 7,
+              "timeout": 2,
+              "answered": 11,
+              "no-answer": 4
+            },
+            "errorOrNoAnswerIncludingTimeout": 13,
+            "nativeToolResultRequests": 94,
+            "compactions": 25
+          },
+          {
+            "model": "qwen3.5:9b",
+            "arm": "C",
+            "completed": 24,
+            "expected": 24,
+            "correct": 4,
+            "crossCorrect": 1,
+            "crossObserved": 8,
+            "lateCorrect": 1,
+            "lateObserved": 12,
+            "statuses": {
+              "answered": 6,
+              "no-answer": 13,
+              "error": 5
+            },
+            "errorOrNoAnswerIncludingTimeout": 18,
+            "nativeToolResultRequests": 63,
+            "compactions": 4
+          },
+          {
+            "model": "gemma4:12b",
+            "arm": "A",
+            "completed": 24,
+            "expected": 24,
+            "correct": 8,
+            "crossCorrect": 0,
+            "crossObserved": 8,
+            "lateCorrect": 2,
+            "lateObserved": 12,
+            "statuses": {
+              "timeout": 15,
+              "answered": 9
+            },
+            "errorOrNoAnswerIncludingTimeout": 15,
+            "nativeToolResultRequests": 43,
+            "compactions": 3
+          },
+          {
+            "model": "gemma4:12b",
+            "arm": "C",
+            "completed": 24,
+            "expected": 24,
+            "correct": 13,
+            "crossCorrect": 2,
+            "crossObserved": 8,
+            "lateCorrect": 7,
+            "lateObserved": 12,
+            "statuses": {
+              "answered": 19,
+              "timeout": 5
+            },
+            "errorOrNoAnswerIncludingTimeout": 5,
+            "nativeToolResultRequests": 55,
+            "compactions": 0
+          }
+        ]
+      }
+    ]
+  },
+  "runner": {
+    "status": "complete",
+    "preregistrationCommit": "e8ee872d6081ee3f2851a83d47ff96f27a91f540",
+    "startedAt": "2026-10-09T13:48:32.665867+00:00",
+    "deadlineMs": 1791604052665,
+    "restartCount": 0,
+    "outputDirectory": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3",
+    "runs": [
+      {
+        "name": "dry-expanded",
+        "set": "manual-120p",
+        "limit": 2,
+        "arms": [
+          "A",
+          "C"
+        ],
+        "status": "complete",
+        "startedAt": "2026-10-09T13:48:33.334939+00:00",
+        "report": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-expanded.md",
+        "console": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-expanded.console.log",
+        "details": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-expanded.details.jsonl",
+        "pid": 44100,
+        "exitCode": 0,
+        "finishedAt": "2026-10-09T14:38:20.678973+00:00",
+        "outcomes": 8,
+        "resultSha256": "21fe876102ff9a01ed8f34e957f73b404e03cd6cd846309d183852b3370c331e",
+        "minutes": 49.74755
+      },
+      {
+        "name": "dry-anchor",
+        "set": "v2.11",
+        "limit": 2,
+        "arms": [
+          "A",
+          "C"
+        ],
+        "status": "complete",
+        "startedAt": "2026-10-09T14:38:22.134395+00:00",
+        "report": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-anchor.md",
+        "console": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-anchor.console.log",
+        "details": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-anchor.details.jsonl",
+        "pid": 47068,
+        "exitCode": 0,
+        "finishedAt": "2026-10-09T15:10:16.372424+00:00",
+        "outcomes": 8,
+        "resultSha256": "2cffb798cdf50123f5154137d87e3728ac6b4f35628520a70788a96fae3b556c",
+        "minutes": 31.833916666666667
+      },
+      {
+        "name": "full-expanded",
+        "set": "manual-120p",
+        "limit": 0,
+        "arms": [
+          "A",
+          "C"
+        ],
+        "status": "complete",
+        "startedAt": "2026-10-09T15:10:16.966538+00:00",
+        "report": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-expanded.md",
+        "console": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-expanded.console.log",
+        "details": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-expanded.details.jsonl",
+        "pid": 8,
+        "exitCode": 0,
+        "finishedAt": "2026-10-09T20:31:15.350645+00:00",
+        "outcomes": 152,
+        "resultSha256": "87b0f5647032b35e7801623778e8db60fcf8928247bf75d8a8c9feeab6ed42d5",
+        "minutes": 320.93236666666667
+      },
+      {
+        "name": "full-anchor",
+        "set": "v2.11",
+        "limit": 0,
+        "arms": [
+          "A",
+          "C"
+        ],
+        "status": "complete",
+        "startedAt": "2026-10-09T20:31:15.938767+00:00",
+        "report": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-anchor.md",
+        "console": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-anchor.console.log",
+        "details": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-anchor.details.jsonl",
+        "pid": 2288,
+        "exitCode": 0,
+        "finishedAt": "2026-10-09T22:50:33.433763+00:00",
+        "outcomes": 96,
+        "resultSha256": "896bf9c8d5d5c561cd113991dc681077b9baf67b586bd6fef610452cbafe9bd1",
+        "minutes": 139.21263333333334
+      }
+    ],
+    "finishedAt": "2026-10-09T22:50:34.836530+00:00"
+  },
+  "reportingCorrection": {
+    "commands": ["$env:NEXUS_OUTLINE_SMOKE='1'; $env:NEXUS_OUTLINE_SMOKE_LIMIT='2'; $env:NEXUS_OUTLINE_SMOKE_ARMS='A,C'; $env:NEXUS_OUTLINE_SMOKE_SET=''; $env:NEXUS_OUTLINE_SMOKE_DEADLINE_MS='0'; $env:NEXUS_REPORTING_CANDIDATE=''; $env:NEXUS_OUTLINE_SMOKE_REPORT='C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-reporting-boundary-l7yhisb0/corrected/actual-20261009T2252.md'; $env:NEXUS_OUTLINE_SMOKE_LOG='C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-reporting-boundary-l7yhisb0/corrected/actual-20261009T2252.jsonl'; node node_modules/vitest/vitest.mjs run --config .nexus-hub/reporting-boundary.config.ts --reporter=dot *> 'C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-reporting-boundary-l7yhisb0/corrected/actual-20261009T2252.log'; $exerciseExit = $LASTEXITCODE; [pscustomobject]@{exercise='actual-20261009T2252';exitCode=$exerciseExit;log='C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-reporting-boundary-l7yhisb0/corrected/actual-20261009T2252.log'} | ConvertTo-Json -Compress; exit $exerciseExit","$env:NEXUS_OUTLINE_SMOKE='1'; $env:NEXUS_OUTLINE_SMOKE_LIMIT='-1'; $env:NEXUS_OUTLINE_SMOKE_ARMS='A,C'; $env:NEXUS_OUTLINE_SMOKE_SET=''; $env:NEXUS_OUTLINE_SMOKE_DEADLINE_MS='0'; $env:NEXUS_REPORTING_CANDIDATE=''; $env:NEXUS_OUTLINE_SMOKE_REPORT='C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-reporting-boundary-l7yhisb0/corrected/actual-malformed-20261009T2252.md'; $env:NEXUS_OUTLINE_SMOKE_LOG='C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-reporting-boundary-l7yhisb0/corrected/actual-malformed-20261009T2252.jsonl'; node node_modules/vitest/vitest.mjs run --config .nexus-hub/reporting-boundary.config.ts --reporter=dot *> 'C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-reporting-boundary-l7yhisb0/corrected/actual-malformed-20261009T2252.log'; $exerciseExit = $LASTEXITCODE; [pscustomobject]@{exercise='actual-malformed-20261009T2252';exitCode=$exerciseExit;log='C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-reporting-boundary-l7yhisb0/corrected/actual-malformed-20261009T2252.log'} | ConvertTo-Json -Compress; exit $exerciseExit"],
+    "scope": "Actual patched harness CLI with controlled adapters; no GPU or real OCR",
+    "entryPoint": "node node_modules/vitest/vitest.mjs run --config .nexus-hub/reporting-boundary.config.ts --reporter=dot",
+    "sourceSha256": "450cc2bbedb3c9fbf25a0f70a2c10c20aaed0c6db6fc4d83f0919670f0a2edb8",
+    "validExitCode": 0,
+    "invalidExitCode": 1,
+    "rows": 8,
+    "returnedErrorsRetained": 4,
+    "normalRowsExplicitNull": 4,
+    "selectedScoringFieldsUnchanged": true,
+    "resultsAgreeWithJsonl": true,
+    "timingProseQualified": true,
+    "invalidRejectedBeforeOutput": true,
+    "outputPrefix": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-reporting-boundary-l7yhisb0\\corrected\\actual-20261009T2252",
+    "notCovered": [
+      "real OCR or model inference",
+      "integrated final revision"
+    ]
+  },
+  "decision": "futility",
+  "flagDefault": "off",
+  "userOutcome": {
+    "qwen": {
+      "baselineErrorOrNoAnswer": 9,
+      "targetMaximum": 4,
+      "observedIncludingTimeout": 13,
+      "met": false
+    },
+    "gemma": {
+      "baselineErrorOrNoAnswer": 16,
+      "targetMaximum": 8,
+      "observedIncludingTimeout": 15,
+      "met": false
+    }
+  },
+  "coldOcrSeconds": {
+    "expanded": 1258.046,
+    "anchor": 499.511
+  },
+  "limits": [
+    "One run per set; no repeatability estimate",
+    "Headless channel only; extension requires its separate tests and real-use entry",
+    "Only page caps 50 and 200 prewarmed; other uncached caps can consume timed question budget",
+    "Evaluated harness omitted returned error strings; exact causes of error finish reasons cannot be reconstructed",
+    "Reporting correction applied after inference; no rescoring or inference restart"
+  ],
+  "artifacts": [
+    {
+      "run": "dry-expanded",
+      "kind": "report",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-expanded.md",
+      "sha256": "4ed51eb1557694816790d8416493387277eb272d00bcf3a32714d26f1b63e349"
+    },
+    {
+      "run": "dry-expanded",
+      "kind": "details",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-expanded.details.jsonl",
+      "sha256": "204fd094053a83d9e1e5d2435cc1983dc41b1a4e662c079fe649819e3a754f15"
+    },
+    {
+      "run": "dry-expanded",
+      "kind": "result",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-expanded.md.json",
+      "sha256": "21fe876102ff9a01ed8f34e957f73b404e03cd6cd846309d183852b3370c331e"
+    },
+    {
+      "run": "dry-anchor",
+      "kind": "report",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-anchor.md",
+      "sha256": "39c1b9fee4f5775c40598826d0720f4da5cd385d3d57391fbb0e6392c262e7e9"
+    },
+    {
+      "run": "dry-anchor",
+      "kind": "details",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-anchor.details.jsonl",
+      "sha256": "d95afd9ae5394b8e4da421aa71d543b39d91c7938ec9befdf61ae8858162e75f"
+    },
+    {
+      "run": "dry-anchor",
+      "kind": "result",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\dry-anchor.md.json",
+      "sha256": "2cffb798cdf50123f5154137d87e3728ac6b4f35628520a70788a96fae3b556c"
+    },
+    {
+      "run": "full-expanded",
+      "kind": "report",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-expanded.md",
+      "sha256": "8faeb771eb391e8d23e087939efec303989e05cc2163ff104dbca851a4a8b992"
+    },
+    {
+      "run": "full-expanded",
+      "kind": "details",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-expanded.details.jsonl",
+      "sha256": "9831ea2d08fc128ac62879bbfdd1a18d36095b21b9f4cb145e6ec05fad7e7170"
+    },
+    {
+      "run": "full-expanded",
+      "kind": "result",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-expanded.md.json",
+      "sha256": "87b0f5647032b35e7801623778e8db60fcf8928247bf75d8a8c9feeab6ed42d5"
+    },
+    {
+      "run": "full-anchor",
+      "kind": "report",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-anchor.md",
+      "sha256": "792ddffae5dbda9eb1afe95413e9c0bce5b3959b478e2a4c8813a25f7fd58fb3"
+    },
+    {
+      "run": "full-anchor",
+      "kind": "details",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-anchor.details.jsonl",
+      "sha256": "8bf5f9cf8ede3cf4f08d2e95969fa1b66300b71b00f546973ee4d8eb42cb4442"
+    },
+    {
+      "run": "full-anchor",
+      "kind": "result",
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-outline-eval-nuaqmnj3\\full-anchor.md.json",
+      "sha256": "896bf9c8d5d5c561cd113991dc681077b9baf67b586bd6fef610452cbafe9bd1"
+    }
+  ],
+  "diagnostics": {
+    "full-expanded": {
+      "errorRows": 80,
+      "finishReasons": {
+        "max-iterations": 34,
+        "error": 46
+      },
+      "emptyReplyTails": 80,
+      "returnedErrorFieldAbsent": 80
+    },
+    "full-anchor": {
+      "errorRows": 12,
+      "finishReasons": {
+        "max-iterations": 7,
+        "error": 5
+      },
+      "emptyReplyTails": 12,
+      "returnedErrorFieldAbsent": 12
+    }
+  },
+  "elapsedSeconds": 32522.170663
+}

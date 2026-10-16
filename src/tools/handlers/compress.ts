@@ -3,6 +3,16 @@ import type { ToolHandler, ToolResult } from "../types.js";
 import type { Message } from "../../../modules/coding/chat/types.js";
 import type { ConversationManager } from "../../../modules/coding/chat/ConversationManager.js";
 import type { CompressionState, BlockSummary } from "../../../modules/coding/chat/state/CompressionState.js";
+import { expandToolPairIndices, toRequestMessages } from "../../../modules/coding/llm/toolHistory.js";
+
+function nativeSelectionError(messages: readonly Message[]): string | undefined {
+  try {
+    toRequestMessages(messages.filter((m) => m.role === "tool" || m.tool_calls?.length), "ollama");
+    return undefined;
+  } catch {
+    return "native tool calls and their results must be compressed as a complete batch";
+  }
+}
 
 /**
  * v0.7.0 Phase 3 sub-tasks 3.4 + 3.5 -- Model-callable compress tool (C12).
@@ -210,17 +220,12 @@ function buildBlockReplacement(
   const slice = view.slice(resolved.startView, resolved.endView + 1).map((v) => v.message);
   const nestedBlockIds = findNestedBlockIds(slice);
 
-  const tail: Message[] = [];
-  if (deps.protectUserMessages) {
-    for (const m of slice) {
-      if (m.role === "user") tail.push(m);
-    }
-  }
-  for (const m of slice) {
-    if (tooLooksLikeProtectedToolResult(m.content, deps.protectedTools)) {
-      tail.push(m);
-    }
-  }
+  const protectedIndices = new Set(slice.flatMap((m, index) =>
+    (deps.protectUserMessages && m.role === "user") ||
+    (m.role === "tool" && deps.protectedTools.includes(m.tool_name ?? "")) ||
+    tooLooksLikeProtectedToolResult(m.content, deps.protectedTools) ? [index] : []));
+  const keep = expandToolPairIndices(slice, protectedIndices);
+  const tail = slice.filter((_, index) => keep.has(index));
 
   const nestedFooter = nestedBlockIds.length > 0
     ? `\n\nNested blocks embedded: ${nestedBlockIds.join(", ")}`
@@ -278,6 +283,11 @@ export class CompressRangeTool implements ToolHandler {
         return fail(id, `compress_range: ${res.error}.`);
       }
       resolved.push(res.resolved);
+    }
+
+    for (const range of resolved) {
+      const error = nativeSelectionError(view.slice(range.startView, range.endView + 1).map((v) => v.message));
+      if (error) return fail(id, `compress_range: ${error}.`);
     }
 
     // Reject overlapping ranges in the SAME call.
@@ -408,6 +418,12 @@ export class CompressMessageTool implements ToolHandler {
     const orphanCheck = rejectsOrphanedToolPair(targets, view);
     if (!orphanCheck.ok) {
       return fail(id, `compress_message: ${orphanCheck.error}.`);
+    }
+
+    const nativeError = nativeSelectionError(targets.slice().sort((a, b) => a.index - b.index).map((t) => t.message));
+    if (nativeError) return fail(id, `compress_message: ${nativeError}.`);
+    if (targets.some((t) => t.message.role === "tool" || t.message.tool_calls?.length)) {
+      return fail(id, "compress_message: use compress_range for native tool batches so decompression restores the whole batch.");
     }
 
     const newMessages: Message[] = [...messages];

@@ -1,0 +1,174 @@
+{
+  "sourceFidelity": [
+    {
+      "file": "atlas.html",
+      "readingSourceEqual": true,
+      "sourceTextSha256": "8a9206bbb58234618eb348e8b1f90f9a3395475b4478f95bbe87ba5050cef492",
+      "readingTextSha256": "8a9206bbb58234618eb348e8b1f90f9a3395475b4478f95bbe87ba5050cef492",
+      "links": [],
+      "marks": [
+        {
+          "decoded": true,
+          "aspect": 1
+        },
+        {
+          "decoded": true,
+          "aspect": 1
+        }
+      ]
+    },
+    {
+      "file": "generation-recovery.html",
+      "readingSourceEqual": true,
+      "sourceTextSha256": "f76885ce0e9f3b4109066e9a6f62c8801832c6a4b17cd8d42815021ba4de1793",
+      "readingTextSha256": "f76885ce0e9f3b4109066e9a6f62c8801832c6a4b17cd8d42815021ba4de1793",
+      "links": [
+        {
+          "href": "technical/installer-runtime.html",
+          "exists": true
+        },
+        {
+          "href": "technical/media-runtime.html",
+          "exists": true
+        }
+      ],
+      "marks": [
+        {
+          "decoded": true,
+          "aspect": 1
+        },
+        {
+          "decoded": true,
+          "aspect": 1
+        }
+      ]
+    },
+    {
+      "file": "technical/document-outline.html",
+      "readingSourceEqual": true,
+      "sourceTextSha256": "25e18d0be9155fa8a32219a1c13eacc62a921ba04eeaebbe26a48cc91f8d6ef0",
+      "readingTextSha256": "25e18d0be9155fa8a32219a1c13eacc62a921ba04eeaebbe26a48cc91f8d6ef0",
+      "links": [
+        {
+          "href": "../../../v2/v2.12/development/outline-eval.md",
+          "exists": true
+        },
+        {
+          "href": "../../../DEVLOG.md",
+          "exists": true
+        }
+      ],
+      "marks": [
+        {
+          "decoded": true,
+          "aspect": 1
+        },
+        {
+          "decoded": true,
+          "aspect": 1
+        }
+      ]
+    },
+    {
+      "file": "technical/installer-runtime.html",
+      "readingSourceEqual": true,
+      "sourceTextSha256": "10c58c39a3d1dc40f289f329b7007741eb0c2232f80c89f2630c3421842337b3",
+      "readingTextSha256": "10c58c39a3d1dc40f289f329b7007741eb0c2232f80c89f2630c3421842337b3",
+      "links": [],
+      "marks": [
+        {
+          "decoded": true,
+          "aspect": 1
+        },
+        {
+          "decoded": true,
+          "aspect": 1
+        }
+      ]
+    },
+    {
+      "file": "technical/media-runtime.html",
+      "readingSourceEqual": true,
+      "sourceTextSha256": "32a848f4869d0f75259e2bd2bfa29344e67b523298f33a11dbc6e5b464c490a7",
+      "readingTextSha256": "32a848f4869d0f75259e2bd2bfa29344e67b523298f33a11dbc6e5b464c490a7",
+      "links": [],
+      "marks": [
+        {
+          "decoded": true,
+          "aspect": 1
+        },
+        {
+          "decoded": true,
+          "aspect": 1
+        }
+      ]
+    },
+    {
+      "file": "technical/transcript-and-workspaces.html",
+      "readingSourceEqual": true,
+      "sourceTextSha256": "8a9f523a77aeaff363b33293ca78d46e8b68b022050af227b5a7ea0515ad9d6a",
+      "readingTextSha256": "8a9f523a77aeaff363b33293ca78d46e8b68b022050af227b5a7ea0515ad9d6a",
+      "links": [],
+      "marks": [
+        {
+          "decoded": true,
+          "aspect": 1
+        },
+        {
+          "decoded": true,
+          "aspect": 1
+        }
+      ]
+    }
+  ],
+  "buildExit": 0,
+  "freshnessExit": 0,
+  "reproducible": true,
+  "outputHashes": {
+    "atlas.html": "f2ec6ce5894a9444a82e41d8623eee0f71037e020fa7f934aa439d43b8c918ed",
+    "generation-recovery.html": "01ed6563b56a61c7a944699479e64caa3d76d3eca7ba2f4288652726b2d1fc53",
+    "technical\\document-outline.html": "703352e9277c6ff95bb2ef5f71074c48b1ccc4eff502b59413807d46bffa322f",
+    "technical\\installer-runtime.html": "80de14895073a6939070692167111170a1c8b51e97fda464c2b493a147c33dbb",
+    "technical\\media-runtime.html": "b1819a1f6a5c6065f8698ed34efe7c82ea93ea07d6a8baf3ce4ca54037f7096c",
+    "technical\\transcript-and-workspaces.html": "6583e28f9cec75c12e9fb0d43e995f4ee9551a74e559c32bfb68e4766d7f1ec1"
+  },
+  "secondRoot": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-rebuild-tpa3t604",
+  "geometric": [
+    {
+      "file": "atlas.html",
+      "exit": 0,
+      "log": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-final-b0b5b537\\proof-mk_y3kjv\\atlas-geometric.txt",
+      "logSha256": "26c491c5246c858e8fd9698b1d8eeb784226d547529479595c1668821002bb7d"
+    },
+    {
+      "file": "generation-recovery.html",
+      "exit": 0,
+      "log": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-final-b0b5b537\\proof-mk_y3kjv\\generation-recovery-geometric.txt",
+      "logSha256": "94a6292be79fbac9658e016d020a4e8f1e1fa77c41b2aefb0f3b2d2297c951e5"
+    },
+    {
+      "file": "technical/document-outline.html",
+      "exit": 0,
+      "log": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-final-b0b5b537\\proof-mk_y3kjv\\document-outline-geometric.txt",
+      "logSha256": "3a611e2c860e827ad33f88ade3217b9efafb1b4a9bdd63c52e0f55cb34586355"
+    },
+    {
+      "file": "technical/installer-runtime.html",
+      "exit": 0,
+      "log": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-final-b0b5b537\\proof-mk_y3kjv\\installer-runtime-geometric.txt",
+      "logSha256": "82d381337e4bea9aaebf2acdf21c177c8ef1945ac85b38eb8b6450cf62c33cdb"
+    },
+    {
+      "file": "technical/media-runtime.html",
+      "exit": 0,
+      "log": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-final-b0b5b537\\proof-mk_y3kjv\\media-runtime-geometric.txt",
+      "logSha256": "1f02b237a2eb99ee62e4420d83507537ea1a9a083f0226d557414325ff7043d2"
+    },
+    {
+      "file": "technical/transcript-and-workspaces.html",
+      "exit": 0,
+      "log": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-final-b0b5b537\\proof-mk_y3kjv\\transcript-and-workspaces-geometric.txt",
+      "logSha256": "7fc25700e82c79d3c9e2e40b1aadeda3d0ce48f8294c7506762e6b5e7530364c"
+    }
+  ]
+}

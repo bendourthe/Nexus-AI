@@ -9,11 +9,13 @@ const mockServerConnect = vi.fn();
 const mockServerClose = vi.fn();
 
 vi.mock("@modelcontextprotocol/sdk/server/mcp.js", () => ({
-  McpServer: vi.fn().mockImplementation(() => ({
-    tool: mockServerTool,
-    connect: mockServerConnect,
-    close: mockServerClose,
-  })),
+  McpServer: vi.fn().mockImplementation(function () {
+    return {
+      tool: mockServerTool,
+      connect: mockServerConnect,
+      close: mockServerClose,
+    };
+  }),
 }));
 
 vi.mock("@modelcontextprotocol/sdk/server/stdio.js", () => ({

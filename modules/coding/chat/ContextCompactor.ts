@@ -233,7 +233,7 @@ export class ContextCompactor {
     const pipeline = new CompactionPipeline([
       new DeduplicationStrategy({ protectedTools, protectedFilePatterns }),
       new PurgeErrorsStrategy({ protectedTools, errorPurgeTurns }),
-      new ToolResultClearing(settings.compactionToolResultsKeep),
+      new ToolResultClearing(settings.compactionToolResultsKeep, (messages) => this._manager.toolResultIndicesFor(messages)),
       new SlidingWindow(settings.compactionKeepRecent),
       new CodeBlockTruncation(),
       ...(this._workspacePath
@@ -356,7 +356,7 @@ export class ContextCompactor {
     if (!this.shouldCompact()) return;
     const settings = this._settingsProvider();
     const pipeline = new CompactionPipeline([
-      new ToolResultClearing(settings.compactionToolResultsKeep),
+      new ToolResultClearing(settings.compactionToolResultsKeep, (messages) => this._manager.toolResultIndicesFor(messages)),
     ]);
     const budget = calculateBudget(this._maxTokens);
     const compacted = await pipeline.run(

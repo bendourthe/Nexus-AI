@@ -1,0 +1,24 @@
+{
+  "status": "pass",
+  "source": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v212-handbooks-cycle1-c4ef3396\\technical\\installer-runtime.html",
+  "source_sha256": "a26fccc3767d17d52df85a7bdcd8abcf94923acdec9fca365c8600fb34246095",
+  "checks": [
+    "clipped-text",
+    "label-overlap",
+    "label-on-trace",
+    "legend-colour-collision",
+    "oversized-type",
+    "stroke-drift",
+    "legend-entry-not-drawn",
+    "tick-outside-range",
+    "viewbox-dead-space",
+    "callout-stripe-default",
+    "uniform-card-grid"
+  ],
+  "findings": [],
+  "errors": [],
+  "verification_scope": "rendered figure geometry in screen space",
+  "browser": "Chromium 153.0.8010.12",
+  "svg_count": 5
+}
+

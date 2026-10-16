@@ -1,14 +1,18 @@
 #!/usr/bin/env node
 
-import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { dirname, join, relative } from "node:path";
-import { marked } from "marked";
+import { dirname, join, relative, resolve } from "node:path";
+import { renderHandbook } from "./handbook-renderer.mjs";
 
 const root = process.cwd();
 const handbookRoot = join(root, "docs", "handbooks");
 const sources = [join(handbookRoot, "markdown"), join(handbookRoot, "technical")];
-const outputRoot = join(handbookRoot, "html");
+const outputOption = process.argv.indexOf("--output-root");
+if (outputOption >= 0 && (!process.argv[outputOption + 1] || process.argv[outputOption + 1].startsWith("--"))) {
+  console.error("generate-handbooks: --output-root requires a directory");
+  process.exit(1);
+}
+const outputRoot = outputOption >= 0 ? resolve(process.argv[outputOption + 1]) : join(handbookRoot, "html");
 const checkOnly = process.argv.includes("--check");
 
 function markdownFiles(directory) {
@@ -25,23 +29,7 @@ function outputPath(source) {
 }
 
 function render(source) {
-  const markdown = readFileSync(source, "utf8");
-  const digest = createHash("sha256").update(markdown).digest("hex");
-  const title = markdown.match(/^#\s+(.+)$/m)?.[1] ?? "Nexus handbook";
-  const body = marked.parse(markdown, { gfm: true });
-  return `<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="source-sha256" content="${digest}">
-  <title>${title}</title>
-  <style>body{font:16px/1.6 system-ui,sans-serif;max-width:72rem;margin:auto;padding:2rem;color:#172033;background:#f7f9fc}a{color:#075eb8}code,pre{font-family:ui-monospace,monospace}:not(pre)>code{overflow-wrap:anywhere}pre{overflow:auto;padding:1rem;background:#e9eef6;border-radius:.5rem}table{border-collapse:collapse;width:100%}th,td{border:1px solid #bac5d6;padding:.5rem;text-align:left}</style>
-</head>
-<body>
-${body}</body>
-</html>
-`;
+  return renderHandbook(source, root);
 }
 
 const files = sources.flatMap(markdownFiles).sort();

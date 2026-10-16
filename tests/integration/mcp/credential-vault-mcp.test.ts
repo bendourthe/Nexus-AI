@@ -6,7 +6,7 @@
  * not part of the credential-resolution path.
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import * as fs from "fs";
 import * as os from "os";
 import { ToolRegistry } from "../../../src/tools/ToolRegistry.js";
@@ -18,19 +18,21 @@ import { InMemoryKeychainBackend } from "../../../core/security/KeychainBackend.
 const mockConnect = vi.fn();
 const mockDisconnect = vi.fn();
 vi.mock("../../../modules/coding/mcp/McpClient.js", () => ({
-  McpClient: vi.fn().mockImplementation(() => ({
-    connect: mockConnect,
-    disconnect: mockDisconnect,
-    get tools() {
-      return [];
-    },
-    get status() {
-      return "connected";
-    },
-    get error() {
-      return undefined;
-    },
-  })),
+  McpClient: vi.fn().mockImplementation(function () {
+    return {
+      connect: mockConnect,
+      disconnect: mockDisconnect,
+      get tools() {
+        return [];
+      },
+      get status() {
+        return "connected";
+      },
+      get error() {
+        return undefined;
+      },
+    };
+  }),
 }));
 
 vi.mock("fs", async () => {
@@ -49,6 +51,10 @@ function mockGlobalConfig(configJson: string): void {
 }
 
 describe("MCP credential-vault integration", () => {
+  afterEach(() => {
+    expect(mockConnect).toHaveBeenCalledOnce();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     mockConnect.mockResolvedValue(undefined);

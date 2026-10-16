@@ -1,0 +1,123 @@
+{
+  "started_at": "2026-10-10T01:21:23.577871+00:00",
+  "finished_at": "2026-10-10T01:22:45.432050+00:00",
+  "exit": 1,
+  "command": [
+    "node",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "configs/vitest.config.ts",
+    "--coverage",
+    "--reporter=json",
+    "--outputFile=after/root-tests.json"
+  ],
+  "log_sha256": "1a3727a93f5f98a33060571b8f276c25243ddae90ef9bf2ec6adfa0f4f9f7ec7",
+  "input_manifest_sha256": "6242a44b5eae301295d3ec8f287114bcd42cabf33cf742e0fe41f8f1311613fc",
+  "scope": "Complete root-suite candidate with pending repairs created only in new owned temporary files; original source not changed",
+  "tests": {
+    "success": false,
+    "numTotalTests": 6227,
+    "numPassedTests": 6206,
+    "numFailedTests": 9,
+    "numPendingTests": 12,
+    "numTotalTestSuites": 1977,
+    "numPassedTestSuites": 1965,
+    "numFailedTestSuites": 12,
+    "numPendingTestSuites": 0
+  },
+  "failed_files": [
+    {
+      "name": "C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/integration/agents/swarm-orchestration.test.ts",
+      "status": "failed",
+      "failed_cases": [
+        {
+          "title": "integration: swarm orchestration dispatches write-capable nodes in worktrees (T010) dispatches a write-capable node into an isolated worktree, leaving the shared workspace untouched",
+          "messages": [
+            "Error: STACK_TRACE_ERROR\n    at task (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1784:27)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1817:16)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1563:28)\n    at chain (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:599:14)\n    at C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/integration/agents/swarm-orchestration.test.ts:70:3\n    at file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:40\n    at runWithSuite (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:2258:8)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:10)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1893:54)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/integration/agents/worktree-isolation.test.ts",
+      "status": "failed",
+      "failed_cases": [
+        {
+          "title": "integration: worktree-isolated parallel sub-agent execution (A10) creates a detached worktree from HEAD and removes it when left unchanged",
+          "messages": [
+            "Error: STACK_TRACE_ERROR\n    at task (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1784:27)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1817:16)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1563:28)\n    at chain (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:599:14)\n    at C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/integration/agents/worktree-isolation.test.ts:61:3\n    at file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:40\n    at runWithSuite (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:2258:8)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:10)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1893:54)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/integration/agents/worktree-read-rooting.test.ts",
+      "status": "failed",
+      "failed_cases": [
+        {
+          "title": "integration: write-then-read parity inside an isolated worktree (T012) a worktree-isolated sub-agent reads back its own run_terminal write",
+          "messages": [
+            "Error: STACK_TRACE_ERROR\n    at task (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1784:27)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1817:16)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1563:28)\n    at chain (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:599:14)\n    at C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/integration/agents/worktree-read-rooting.test.ts:125:3\n    at file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:40\n    at runWithSuite (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:2258:8)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:10)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1893:54)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/integration/golden/golden-runner-end-to-end.test.ts",
+      "status": "failed",
+      "failed_cases": [
+        {
+          "title": "golden runner end-to-end (dry path) materializes a real snapshot and reports failure for the untouched tree",
+          "messages": [
+            "Error: STACK_TRACE_ERROR\n    at task (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1784:27)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1817:16)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1563:28)\n    at chain (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:599:14)\n    at C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/integration/golden/golden-runner-end-to-end.test.ts:30:3\n    at file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:40\n    at runWithSuite (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:2258:8)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:10)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1893:54)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/unit/hooks/check-git-control-plane.test.ts",
+      "status": "failed",
+      "failed_cases": [
+        {
+          "title": "check-git-control-plane hook blocks when on main branch",
+          "messages": [
+            "Error: STACK_TRACE_ERROR\n    at task (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1784:27)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1817:16)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1563:28)\n    at chain (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:599:14)\n    at C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/unit/hooks/check-git-control-plane.test.ts:73:3\n    at file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:40\n    at runWithSuite (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:2258:8)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:10)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1893:54)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)"
+          ]
+        },
+        {
+          "title": "check-git-control-plane hook blocks when on master branch",
+          "messages": [
+            "Error: STACK_TRACE_ERROR\n    at task (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1784:27)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1817:16)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1563:28)\n    at chain (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:599:14)\n    at C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/unit/hooks/check-git-control-plane.test.ts:85:3\n    at file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:40\n    at runWithSuite (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:2258:8)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:10)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1893:54)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)"
+          ]
+        },
+        {
+          "title": "check-git-control-plane hook allows on a feature branch with a clean working tree",
+          "messages": [
+            "Error: STACK_TRACE_ERROR\n    at task (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1784:27)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1817:16)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1563:28)\n    at chain (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:599:14)\n    at C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/unit/hooks/check-git-control-plane.test.ts:97:3\n    at file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:40\n    at runWithSuite (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:2258:8)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:10)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1893:54)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)"
+          ]
+        },
+        {
+          "title": "check-git-control-plane hook blocks when too many files are dirty",
+          "messages": [
+            "Error: STACK_TRACE_ERROR\n    at task (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1784:27)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1817:16)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1563:28)\n    at chain (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:599:14)\n    at C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/unit/hooks/check-git-control-plane.test.ts:108:3\n    at file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:40\n    at runWithSuite (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:2258:8)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:10)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1893:54)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/unit/tools/handlers/dry_run.adversarial.test.ts",
+      "status": "failed",
+      "failed_cases": [
+        {
+          "title": "dry_run adversarial sweep spawn is NEVER called across 200 fuzzed run_terminal(dry_run=true) inputs",
+          "messages": [
+            "Error: STACK_TRACE_ERROR\n    at task (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1784:27)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1817:16)\n    at Object.<anonymous> (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1563:28)\n    at chain (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:599:14)\n    at C:/Users/bdour/AppData/Local/Temp/nexus-v212-full-root-candidate-2z1cnl33/tests/unit/tools/handlers/dry_run.adversarial.test.ts:92:3\n    at file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:40\n    at runWithSuite (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:2258:8)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:10)\n    at Object.collect (file:///C:/Users/bdour/Documents/Projects/Development/Nexus-AI-worktrees/v2.12-outline-continuation/node_modules/@vitest/runner/dist/chunk-artifact.js:1893:54)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)"
+          ]
+        }
+      ]
+    }
+  ],
+  "changed_candidate_source": [],
+  "changed_original_source": []
+}

@@ -127,15 +127,16 @@ function aggregate(dir) {
   if (!existsSync(dir)) {
     return { status: "PARTIAL", groups };
   }
-  for (const name of readdirSync(dir).filter((file) => file.endsWith(".json") && file !== "summary.json").sort()) {
+  for (const name of readdirSync(dir).filter((file) => file.endsWith(".json") && file !== "summary.json" && file !== "report.json").sort()) {
     try {
       const parsed = JSON.parse(readFileSync(join(dir, name), "utf8"));
-      groups.push({ name: parsed.profile ?? name, status: parsed.status ?? "PARTIAL", durationMs: 0 });
+      const status = parsed.status ?? "PARTIAL";
+      groups.push({ name: parsed.profile ?? name, status: ["PASS", "FAIL", "PARTIAL"].includes(status) ? status : "FAIL", durationMs: 0 });
     } catch {
       groups.push({ name, status: "FAIL", durationMs: 0 });
     }
   }
-  const status = groups.some((group) => group.status === "FAIL") ? "FAIL" : groups.length === 0 ? "PARTIAL" : "PASS";
+  const status = groups.some((group) => group.status === "FAIL") ? "FAIL" : groups.length === 0 || groups.some((group) => group.status === "PARTIAL") ? "PARTIAL" : "PASS";
   return { status, groups };
 }
 
@@ -153,13 +154,16 @@ export function runProfile(options) {
       ? aggregated.groups
       : [{ name: "report", status: "PARTIAL", durationMs: 0, startedAt: new Date().toISOString() }];
     writeReports(options.reportsDir, "report", groups, aggregated.status);
-    return { exitCode: aggregated.status === "FAIL" ? 1 : 0, payload: { profile: "report", status: aggregated.status } };
+    return { exitCode: aggregated.status === "PASS" ? 0 : 1, payload: { profile: "report", status: aggregated.status } };
   }
   const groups = [];
   let failed = false;
   for (const [cmd, args] of commands) {
     const started = Date.now();
-    const child = spawnSync(cmd, args, {
+    const [executable, commandArgs] = cmd === "npm" && platform() === "win32"
+      ? [process.execPath, [join(dirname(process.execPath), "node_modules", "npm", "bin", "npm-cli.js"), ...args]]
+      : [cmd, args];
+    const child = spawnSync(executable, commandArgs, {
       cwd: ROOT,
       encoding: "utf8",
       shell: false,
@@ -174,7 +178,7 @@ export function runProfile(options) {
       durationMs,
       startedAt: new Date(started).toISOString(),
     });
-    const output = redact(`${child.stdout ?? ""}${child.stderr ?? ""}`);
+    const output = redact(`${child.stdout ?? ""}${child.stderr ?? ""}${child.error ? `${child.error.message}\n` : ""}`);
     if (output.trim()) process.stdout.write(output.endsWith("\n") ? output : `${output}\n`);
     if (status === "FAIL") {
       failed = true;

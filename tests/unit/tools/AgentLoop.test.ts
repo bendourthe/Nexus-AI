@@ -1,7 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AgentLoop } from "../../../src/tools/AgentLoop.js";
+import { formatToolResult } from "../../../src/tools/ToolCallParser.js";
+import type { InboundClassifier } from "../../../modules/coding/security/InboundClassifier.js";
+import type { LLMChatRequest } from "../../../modules/coding/llm/types.js";
 import { BudgetMiddleware } from "../../../src/tools/BudgetMiddleware.js";
-import type { ConversationManager } from "../../../modules/coding/chat/ConversationManager.js";
+import { LoopGuards } from "../../../modules/coding/guardrails/LoopGuards.js";
+import { toRequestMessages } from "../../../modules/coding/llm/toolHistory.js";
+import { toLlmMessages } from "../../../modules/coding/chat/llmMessages.js";
+import { ParseDocumentTool } from "../../../src/tools/handlers/parseDocument.js";
+import { mockFs } from "../../setup.js";
+import { ConversationManager } from "../../../modules/coding/chat/ConversationManager.js";
 import type { ToolRegistry } from "../../../src/tools/ToolRegistry.js";
 import type { OllamaClient } from "../../../modules/coding/llm/types.js";
 import type { ToolCall, ToolResult } from "../../../src/tools/types.js";
@@ -28,6 +36,175 @@ describe("AgentLoop", () => {
   beforeEach(() => {
     manager = makeManager();
     registry = makeRegistry();
+  });
+
+  it("sends exact screened native results and budgets argument bytes without completion counts", async () => {
+    const conversation = new ConversationManager("System instructions");
+    conversation.addUserMessage("Read the documents.");
+    const requests: LLMChatRequest[] = [];
+    const results: ToolResult[] = [];
+    mockFs.readFile.mockResolvedValue(new TextEncoder().encode("%PDF-1.7 fixture"));
+    const tool = new ParseDocumentTool({ contextTokens: () => 16_384, resolveParser: () => ({ parse: async () => ({ engine: "rapidocr", text: "word ".repeat(16_000), markdown: null, pageCount: 1 }) }) });
+    vi.mocked(registry.execute).mockImplementation(async (call) => {
+      const result = await tool.execute(call.parameters);
+      results.push(result);
+      return result;
+    });
+    const classifier = mockOf<InboundClassifier>({ screen: vi.fn(async (text: string) => ({ flagged: true, findings: [], annotated: `[screened]\n${text}` })) });
+    const client = mockOf<OllamaClient>({ streamChat: vi.fn(async function* (request: LLMChatRequest) {
+      requests.push(structuredClone(request));
+      yield { message: { role: "assistant", content: requests.length === 1 ? "" : "Done.", ...(requests.length === 1 ? { tool_calls: [{ function: { name: "parse_document", arguments: { path: "a.pdf", padding: "x".repeat(12_000) } } }, { function: { name: "parse_document", arguments: { path: "b.pdf" } } }] } : {}) }, done: true, prompt_eval_count: 9_000 };
+    }) });
+    await new AgentLoop(client, conversation, registry, "gemma4:12b", undefined, undefined, undefined, undefined, { passStateGating: false, inboundClassifier: classifier }).run(collectMessages().postMessage);
+    expect(results).toHaveLength(2);
+    const executed = vi.mocked(registry.execute).mock.calls.map(([call]) => call);
+    expect(executed[0]?.parameters._usedTokens).toBeGreaterThan(12_000);
+    expect(executed[1]?.parameters._usedTokens).toBeGreaterThan(executed[0]!.parameters._usedTokens as number);
+    const sent = requests[1]!.messages;
+    expect(sent.find((m) => m.tool_calls?.length)?.tool_calls?.map((c) => c.id)).toEqual(executed.map((c) => c.id));
+    expect(sent.filter((m) => m.role === "tool")).toEqual(results.map((result, index) => ({ role: "tool", tool_name: "parse_document", tool_call_id: executed[index]!.id, content: formatToolResult("parse_document", { ...result, output: `[screened]\n${result.output}` }) })));
+    conversation.dispose();
+  });
+
+  it.each(["clear", "replace"])("stops a native batch when the conversation is changed during a tool: %s", async (boundary) => {
+    const conversation = new ConversationManager("System.");
+    conversation.addUserMessage("Read two files.");
+    const client = mockOf<OllamaClient>({ streamChat: vi.fn(async function* () {
+      yield { message: { role: "assistant", content: "", tool_calls: ["a", "b"].map((path) => ({ function: { name: "read_file", arguments: { path } } })) }, done: true };
+    }) });
+    vi.mocked(registry.execute).mockImplementation(async (call) => {
+      if (boundary === "clear") conversation.clearHistory();
+      else conversation.replaceMessages([makeMessage("new-system", "system", "Loaded another session.")]);
+      return { id: call.id, success: true, output: "Old session result." };
+    });
+    await expect(new AgentLoop(client, conversation, registry, "gemma4:12b", undefined, undefined, undefined, undefined, { passStateGating: false }).run(collectMessages().postMessage)).resolves.toBeUndefined();
+    expect(registry.execute).toHaveBeenCalledTimes(1);
+    expect(client.streamChat).toHaveBeenCalledTimes(1);
+    expect(conversation.getHistory()).toHaveLength(1);
+    expect(conversation.getHistory()[0]?.content).not.toContain("Old session result.");
+    conversation.dispose();
+  });
+
+  it.each(["limit", "error-stop"])("repairs every unexecuted native call after a %s", async (stop) => {
+    const conversation = new ConversationManager("System.");
+    conversation.addUserMessage("Read three files.");
+    let turn = 0;
+    const client = mockOf<OllamaClient>({ streamChat: vi.fn(async function* () {
+      turn += 1;
+      yield { message: { role: "assistant", content: turn === 1 ? "" : "Done.", ...(turn === 1 ? { tool_calls: ["a", "b", "c"].map((path) => ({ function: { name: "read_file", arguments: { path } } })) } : {}) }, done: true };
+    }) });
+    vi.mocked(registry.execute).mockImplementation(async (call) => ({ id: call.id, success: stop === "limit", output: "", ...(stop === "error-stop" ? { error: "Read failed." } : {}) }));
+    const guards = new LoopGuards(stop === "limit" ? { maxExecuting: 1, maxPending: 0 } : { errorBurst: 1 });
+    await new AgentLoop(client, conversation, registry, "gemma4:12b", undefined, undefined, undefined, undefined, { passStateGating: false, loopGuards: guards }).run(collectMessages().postMessage);
+    expect(registry.execute).toHaveBeenCalledTimes(1);
+    const messages = toLlmMessages(conversation.getHistory(), false);
+    expect(() => toRequestMessages(messages, "ollama")).not.toThrow();
+    const recorded = messages.find((m) => m.tool_calls?.length)!.tool_calls!;
+    const results = messages.filter((m) => m.role === "tool");
+    expect(results.map((m) => m.tool_call_id)).toEqual(recorded.map((call) => call.id));
+    for (const call of recorded.slice(1)) {
+      expect(results.find((m) => m.tool_call_id === call.id)?.content).toBe(formatToolResult("read_file", { id: call.id!, success: false, output: "", error: "Tool call was not executed because the batch stopped or exceeded the call limit." }));
+    }
+    conversation.dispose();
+  });
+
+  it.each(["clear", "replace", "compact", "summary", "trim", "model"])("forgets old reported usage after a %s boundary", async (boundary) => {
+    const conversation = new ConversationManager("System instructions");
+    conversation.addUserMessage("Old context ".repeat(1_000));
+    mockFs.readFile.mockResolvedValue(new TextEncoder().encode("%PDF-1.7 fixture"));
+    const tool = new ParseDocumentTool({
+      contextTokens: () => 16_384,
+      resolveParser: () => ({ parse: async () => ({ engine: "rapidocr", text: "word ".repeat(16_000), markdown: null, pageCount: 1 }) }),
+    });
+    const outputs: ToolResult[] = [];
+    vi.mocked(registry.execute).mockImplementation(async (call) => {
+      const result = await tool.execute(call.parameters);
+      outputs.push(result);
+      return result;
+    });
+    let turn = 0;
+    const client = mockOf<OllamaClient>({ streamChat: vi.fn(async function* () {
+      turn += 1;
+      yield {
+        message: { role: "assistant", content: turn === 2 ? "" : "Done.", ...(turn === 2 ? { tool_calls: [{ function: { name: "parse_document", arguments: { path: "scan.pdf" } } }] } : {}) },
+        done: true,
+        ...(turn === 1 ? { prompt_eval_count: 16_320 } : {}),
+      };
+    }) });
+    const loop = new AgentLoop(client, conversation, registry, "gemma4:12b", undefined, undefined, undefined, undefined, { passStateGating: false });
+    await loop.run(collectMessages().postMessage);
+    expect(turn).toBe(1);
+    expect(outputs).toHaveLength(0);
+    if (boundary === "clear") conversation.clearHistory();
+    else if (boundary === "replace") conversation.replaceMessages([makeMessage("loaded-system", "system", "Loaded instructions")]);
+    else if (boundary === "compact") conversation.replaceMessages([conversation.getHistory()[0]!]);
+    else if (boundary === "summary") conversation.replaceWithSummary("Earlier work completed.", 1);
+    else if (boundary === "trim") conversation.trimToContextLimit(10);
+    else loop.setModelName("qwen3.5:9b");
+    conversation.addUserMessage("Read scan.pdf");
+    await loop.run(collectMessages().postMessage);
+    expect(outputs).toHaveLength(1);
+    expect(outputs[0]?.success).toBe(true);
+    expect(outputs[0]!.output.length).toBeGreaterThan(16_384);
+    expect(outputs[0]!.output.length).toBeLessThan(17_000);
+    expect(outputs[0]?.output).not.toContain("context window is nearly full");
+    expect(vi.mocked(registry.execute).mock.calls[0]?.[0].parameters._usedTokens).toBeUndefined();
+    conversation.dispose();
+  });
+
+  it("forwards per-call usage to the real document handler across turns and within a turn", async () => {
+    mockFs.readFile.mockResolvedValue(new TextEncoder().encode("%PDF-1.7 fixture"));
+    const tool = new ParseDocumentTool({
+      contextTokens: () => 16_384,
+      resolveParser: () => ({ parse: async () => ({ engine: "rapidocr", text: "word ".repeat(16_000), markdown: null, pageCount: 1 }) }),
+    });
+    const outputs: ToolResult[] = [];
+    vi.mocked(registry.execute).mockImplementation(async (call) => {
+      const result = await tool.execute(call.parameters);
+      outputs.push(result);
+      return result;
+    });
+    let turn = 0;
+    const client = mockOf<OllamaClient>({ streamChat: vi.fn(async function* () {
+      turn += 1;
+      const names = turn === 1 ? ["a.pdf"] : turn === 2 ? ["b.pdf", "c.pdf"] : [];
+      yield {
+        message: { role: "assistant", content: names.length ? "" : "Done.", tool_calls: names.map((path) => ({ function: { name: "parse_document", arguments: { path } } })) },
+        done: true,
+        prompt_eval_count: turn === 1 ? 0 : turn === 2 ? 13_000 : 15_000,
+      };
+    }) });
+    await new AgentLoop(client, manager, registry, "gemma4:12b").run(collectMessages().postMessage);
+    expect(outputs).toHaveLength(3);
+    expect(outputs.every((result) => result.success)).toBe(true);
+    expect(outputs[0]?.output.length).toBeGreaterThan(outputs[1]?.output.length ?? Number.POSITIVE_INFINITY);
+    expect(outputs[1]?.output.length).toBeGreaterThan(outputs[2]?.output.length ?? Number.POSITIVE_INFINITY);
+    expect(outputs[2]?.output).toContain("context window is nearly full");
+    const calls = vi.mocked(registry.execute).mock.calls.map(([call]) => call.parameters._usedTokens);
+    expect(calls[1]).toBeGreaterThan(calls[0] as number);
+    expect(calls[2]).toBeGreaterThan(calls[1] as number);
+  });
+
+  it("keeps the document handler on its fixed share when no backend count is known", async () => {
+    mockFs.readFile.mockResolvedValue(new TextEncoder().encode("%PDF-1.7 fixture"));
+    manager.addUserMessage("Context ".repeat(4_000));
+    const tool = new ParseDocumentTool({
+      contextTokens: () => 4_096,
+      resolveParser: () => ({ parse: async () => ({ engine: "rapidocr", text: "word ".repeat(8_000), markdown: null, pageCount: 1 }) }),
+    });
+    const outputs: ToolResult[] = [];
+    vi.mocked(registry.execute).mockImplementation(async (call) => {
+      const result = await tool.execute(call.parameters);
+      outputs.push(result);
+      return result;
+    });
+    const client = makeMultiClient(['<|tool_call>call:parse_document{path:<|"|>scan.pdf<|"|>}<tool_call|>', "Done."]);
+    await new AgentLoop(client, manager, registry, "gemma4:12b").run(collectMessages().postMessage);
+    expect(outputs).toHaveLength(1);
+    expect(outputs[0]?.success).toBe(true);
+    expect(outputs[0]?.output.length).toBeGreaterThan(4_096);
+    expect(outputs[0]?.output.length).toBeLessThan(5_000);
+    expect(vi.mocked(registry.execute).mock.calls[0]?.[0].parameters._usedTokens).toBeUndefined();
   });
 
   it("single turn with no tool call: posts tokens and messageComplete", async () => {
@@ -57,7 +234,7 @@ describe("AgentLoop", () => {
     expect(posted.some((m) => m.type === "toolResult")).toBe(true);
     expect(posted.some((m) => m.type === "messageComplete")).toBe(true);
     // Tool result is injected as user message in Gemma 4 format
-    expect(manager.addUserMessage).toHaveBeenCalledWith(expect.stringContaining("<|tool_result>"));
+    expect(manager.addToolResultMessage).toHaveBeenCalledWith("read_file", expect.stringContaining("<|tool_result>"));
   });
 
   it("executes a call the backend returns in message.tool_calls with no text call", async () => {

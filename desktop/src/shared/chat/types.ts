@@ -38,6 +38,11 @@ export interface ChatMessage {
   attachments?: readonly string[];
   /** A generated output rendered inline in the bubble. */
   media?: ChatMedia;
+  /**
+   * v2.13.0: the persisted Image Studio turn behind `media`, when it has a saved
+   * image. Its edits are durable; a message without it edits in memory only.
+   */
+  studioTurn?: { readonly sessionId: string; readonly turnId: string };
   /** True while an assistant message's generation is still in flight. */
   pending?: boolean;
   /** Optional step/total progress for a pending generation. */

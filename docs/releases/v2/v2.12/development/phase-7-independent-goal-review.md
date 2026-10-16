@@ -1,0 +1,7 @@
+# Independent refreshed Goal review
+
+Reviewer: /root/phase7_goal_review. Status: REQUEST_CHANGES, incomplete. Read-only review against HEAD 30a2e47bddc1280badb91aaeaa78c3bcb9447baf and incoming 092ce3c2f386db020d18eab6d69c0655657b2456. Initial manifest SHA-256 b196519cfb5bda95d09495eb840ac1d6d714c65a31842e43161ef9b89b80e46e; all 139 working-content hashes matched. Main plan hash 7d0c2fc3bcd8480781cced28d2a7b9764496bf119dbbf6b1458320e0b782b131; seed f312376e173458e3610c8653f40f2074052700e9fc72b7c9603007f004bc5439.
+
+The reviewer confirmed scoped main DoD mechanism/evaluation evidence, seed exclusion and nine index links, 40 catalog and 43 recommended nonempty IDs, and all 12 retained evaluation artifacts. Controlled real headless HTTP receipts prove internal-compatible protocol behavior, not actual inference, quality, extension host, installed app or M5 qualification. The temporary six-test budget patch is a proposal; original root certification remains incomplete.
+
+P2 findings: initial PDF table probe uses insufficient coverage, independently confirmed by the first table on page 5; terminal inventory predates new boundary receipts. Both belong to existing T026. User-outcome target failed (13/15 misses against <=4/<=8). Original HTML, CI, M5, root validation, final integration and exact installer remain pending under existing tasks. No new tasks or plan changes are recommended. Refresh this review after material candidate changes. No publication or installed/GPU qualification is authorized by this assessment.

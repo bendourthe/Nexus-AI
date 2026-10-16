@@ -16,8 +16,11 @@ import { z } from "zod";
  */
 
 export interface LLMMessage {
-  role: "system" | "user" | "assistant";
+  role: "system" | "user" | "assistant" | "tool";
   content: string;
+  tool_calls?: readonly LLMToolCall[];
+  tool_name?: string;
+  tool_call_id?: string;
   /**
    * v1.5.0 Phase 5 (item 33) -- base64-encoded image data forwarded to a
    * vision-capable model. Maps directly to Ollama's `/api/chat` per-message
@@ -100,6 +103,7 @@ export interface LLMUsageCounters {
  * returns them here, never in `content`.
  */
 export interface LLMToolCall {
+  id?: string;
   function: {
     name: string;
     arguments: Record<string, unknown>;
@@ -203,6 +207,7 @@ export const LLMStreamChunkSchema = z.object({
     tool_calls: z
       .array(
         z.object({
+          id: z.string().optional(),
           function: z.object({
             name: z.string(),
             arguments: z.record(z.unknown()),

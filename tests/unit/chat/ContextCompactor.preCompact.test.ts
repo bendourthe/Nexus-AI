@@ -18,6 +18,7 @@ function makeManager(): ConversationManager {
   return mockOf<ConversationManager>({
     getHistory: () => history,
     replayForCompaction: () => history,
+    toolResultIndicesFor: () => [],
     replaceMessages: vi.fn(),
     dispose: vi.fn(),
     sessionId: "sess-1",

@@ -8,7 +8,6 @@ import { describe, it, expect, vi } from "vitest";
 import { AgentLoop } from "../../../src/tools/AgentLoop.js";
 import { InboundClassifier } from "../../../modules/coding/security/InboundClassifier.js";
 import type { InboundScreenResult } from "../../../modules/coding/security/InboundClassifier.js";
-import type { ConversationManager } from "../../../modules/coding/chat/ConversationManager.js";
 import type { ToolRegistry } from "../../../src/tools/ToolRegistry.js";
 import type { ToolCall, ToolResult } from "../../../src/tools/types.js";
 import {
@@ -39,15 +38,19 @@ function registryReturning(output: string): ToolRegistry {
   });
 }
 
-/** Collect the strings passed to manager.addUserMessage during the run. */
-function userMessages(manager: ConversationManager): string[] {
-  return (manager.addUserMessage as ReturnType<typeof vi.fn>).mock.calls.map(
-    (c) => c[0] as string,
-  );
-}
-
-function toolResultMessage(manager: ConversationManager): string | undefined {
-  return userMessages(manager).find((m) => m.includes("<|tool_result>"));
+/** Inspect the screened result consumed by the next model request. */
+function toolResultMessage(client: ReturnType<typeof makeMultiResponseOllamaClient>, native = false): string | undefined {
+  const messages = vi.mocked(client.streamChat).mock.calls[1]?.[0].messages ?? [];
+  const result = messages.find((message) => message.content.includes("<|tool_result>"));
+  expect(result?.role).toBe(native ? "tool" : "user");
+  if (native) {
+    expect(result?.tool_name).toBe("fetch_page");
+    expect(result?.tool_call_id).toBeTruthy();
+    expect(messages.some((message) => message.role === "assistant" && message.tool_calls?.some((call) => call.id === result?.tool_call_id && call.function.name === result?.tool_name))).toBe(true);
+  } else {
+    expect(messages[messages.indexOf(result!) - 1]?.role).toBe("assistant");
+  }
+  return result?.content;
 }
 
 describe("inbound classifier routing through AgentLoop", () => {
@@ -65,7 +68,7 @@ describe("inbound classifier routing through AgentLoop", () => {
     await loop.run(postMessage);
 
     expect(registry.execute).toHaveBeenCalledOnce();
-    const injected = toolResultMessage(manager);
+    const injected = toolResultMessage(client);
     expect(injected).toBeDefined();
     // The agent sees the untrusted-content banner...
     expect(injected).toContain("UNTRUSTED CONTENT");
@@ -90,7 +93,7 @@ describe("inbound classifier routing through AgentLoop", () => {
 
     await loop.run(postMessage);
 
-    const injected = toolResultMessage(manager);
+    const injected = toolResultMessage(client);
     expect(injected).toBeDefined();
     expect(injected).not.toContain("UNTRUSTED CONTENT");
     expect(injected).toContain(benign);
@@ -109,10 +112,10 @@ describe("inbound classifier routing through AgentLoop", () => {
 
     await loop.run(postMessage);
 
-    const injected = toolResultMessage(manager);
+    const injected = toolResultMessage(client);
     expect(injected).toBeDefined();
     expect(injected).toContain("UNTRUSTED CONTENT");
-    expect(injected).toContain("origin=web_fetch");
+    expect(injected).toMatch(/"origin"\s*:\s*"web_fetch"/);
     expect(injected).toContain(INJECTION);
   });
 
@@ -129,7 +132,7 @@ describe("inbound classifier routing through AgentLoop", () => {
 
     await loop.run(postMessage);
 
-    const injected = toolResultMessage(manager);
+    const injected = toolResultMessage(client);
     expect(injected).toBeDefined();
     expect(injected).not.toContain("UNTRUSTED CONTENT");
   });
@@ -154,7 +157,7 @@ describe("inbound classifier routing through AgentLoop", () => {
 
     await loop.run(postMessage);
 
-    const injected = toolResultMessage(manager);
+    const injected = toolResultMessage(client);
     expect(injected).toBeDefined();
     expect(injected).not.toContain("UNTRUSTED CONTENT");
     expect(injected).toContain(INJECTION); // content never dropped
@@ -173,9 +176,28 @@ describe("inbound classifier routing through AgentLoop", () => {
 
     await loop.run(postMessage);
 
-    const injected = toolResultMessage(manager);
+    const injected = toolResultMessage(client);
     expect(injected).toBeDefined();
     expect(injected).toContain("UNTRUSTED CONTENT");
-    expect(injected).toContain("origin=web_fetch");
+    expect(injected).toMatch(/"origin"\s*:\s*"web_fetch"/);
+  });
+
+  it("preserves screening and matched identifiers in native tool history", async () => {
+    const registry = registryReturning(INJECTION);
+    const client = makeMultiResponseOllamaClient(["Done."]);
+    vi.mocked(client.streamChat).mockImplementationOnce(async function* () {
+      yield { message: { role: "assistant", content: "", tool_calls: [{ id: "native-fetch", function: { name: "fetch_page", arguments: { url: "https://evil.test/article" } } }] }, done: true };
+    });
+    const loop = new AgentLoop(client, makeConversationManager(), registry, "gemma4:e4b", 5, undefined, undefined, undefined, {
+      inboundClassifier: new InboundClassifier(),
+      inboundClassifierEnabled: true,
+      passStateGating: false,
+    });
+    await loop.run(collectMessages().postMessage);
+    expect(registry.execute).toHaveBeenCalledOnce();
+    const injected = toolResultMessage(client, true);
+    expect(injected).toContain("UNTRUSTED CONTENT");
+    expect(injected).toMatch(/"origin"\s*:\s*"web_fetch"/);
+    expect(injected).toContain(INJECTION);
   });
 });

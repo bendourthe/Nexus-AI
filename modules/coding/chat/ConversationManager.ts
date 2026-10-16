@@ -3,6 +3,8 @@ import { randomUUID } from "crypto";
 import type { Message, Role } from "./types.js";
 import type { ChatHistoryStore } from "../../../src/storage/ChatHistoryStore.js";
 import { stripLeadingThinkBlocks } from "../llm/Gemma4Parser.js";
+import type { LLMToolCall } from "../llm/types.js";
+import { expandToolPairIndices, toolPairGroups } from "../llm/toolHistory.js";
 
 /** Maximum characters used as the session title (truncated first user message). */
 const SESSION_TITLE_MAX_CHARS = 60;
@@ -42,6 +44,7 @@ export class ConversationManager {
   // Maintained by every mutation path so estimators can read it in O(1)
   // without iterating the array. Divide by ~4 for a rough token estimate.
   private _totalChars = 0;
+  private _historyRevision = 0;
 
   constructor(
     systemPrompt: string,
@@ -71,6 +74,7 @@ export class ConversationManager {
    * reconfiguration (e.g. plan mode toggle, skill activation).
    */
   rebuildSystemPrompt(newPrompt: string): void {
+    this._historyRevision += 1;
     this._systemPrompt = newPrompt;
     const systemMsg = this._messages[0];
     if (systemMsg && systemMsg.role === "system") {
@@ -86,12 +90,13 @@ export class ConversationManager {
     this._onDidChange.fire(this.getHistory());
   }
 
-  private _append(role: Role, content: string, images?: readonly string[]): Message {
+  private _append(role: Role, content: string, images?: readonly string[], tool?: Pick<Message, "tool_calls" | "tool_name" | "tool_call_id">): Message {
     const message: Message = {
-      id: randomUUID(),
+      id: role === "tool" || tool?.tool_name ? `tool-result:${randomUUID()}` : randomUUID(),
       role,
       content,
       timestamp: Date.now(),
+      ...tool,
       // v1.5.0 Phase 5 (item 33): carry image attachments on the user turn so
       // the prompt-assembly path can forward them to a vision-capable model.
       ...(images && images.length > 0 ? { images } : {}),
@@ -101,7 +106,7 @@ export class ConversationManager {
 
     // Persist non-system messages to the history store.
     if (this._store && this._sessionId && role !== "system") {
-      this._store.saveMessage(this._sessionId, message);
+      this._store.saveMessage(this._sessionId, role === "tool" ? { ...message, role: "user" } : message);
 
       // Set session title from the first user message.
       if (role === "user" && !this._titleSet) {
@@ -122,8 +127,29 @@ export class ConversationManager {
     return this._append("user", content, images);
   }
 
-  addAssistantMessage(content: string): Message {
-    return this._append("assistant", content);
+  addToolResultMessage(tool_name: string, content: string): Message {
+    return this._append("user", content, undefined, { tool_name });
+  }
+
+  addAssistantMessage(content: string, tool_calls?: readonly LLMToolCall[]): Message {
+    return this._append("assistant", content, undefined, tool_calls?.length ? { tool_calls } : undefined);
+  }
+
+  addToolMessage(tool_name: string, tool_call_id: string, content: string): Message {
+    const matching = this._messages.some((message) => message.role === "assistant" && message.tool_calls?.some((call) => call.id === tool_call_id && call.function.name === tool_name));
+    if (!matching || this._messages.some((message) => message.role === "tool" && message.tool_call_id === tool_call_id)) {
+      throw new Error("Orphan or duplicate native tool result.");
+    }
+    return this._append("tool", content, undefined, { tool_name, tool_call_id });
+  }
+
+  get toolResultIndices(): readonly number[] {
+    return this.toolResultIndicesFor(this._messages);
+  }
+
+  toolResultIndicesFor(messages: readonly Message[]): readonly number[] {
+    const ownedIds = new Set(this._messages.filter((message) => message.id.startsWith("tool-result:")).map((message) => message.id));
+    return messages.flatMap((message, index) => ownedIds.has(message.id) ? [index] : []);
   }
 
   addSystemMessage(content: string): Message {
@@ -156,7 +182,13 @@ export class ConversationManager {
     return this._totalChars;
   }
 
+  /** Changes when existing prompt history is rewritten, rather than appended. */
+  get historyRevision(): number {
+    return this._historyRevision;
+  }
+
   clearHistory(): void {
+    this._historyRevision += 1;
     this._messages.length = 0;
     this._totalChars = 0;
     this._append("system", this._systemPrompt);
@@ -178,6 +210,7 @@ export class ConversationManager {
     const session = this._store.getSession(sessionId);
     if (!session) return false;
 
+    this._historyRevision += 1;
     this._messages.length = 0;
     this._totalChars = 0;
     // Always keep the system prompt as the first message.
@@ -210,6 +243,7 @@ export class ConversationManager {
    * The caller is responsible for preserving system messages.
    */
   replaceMessages(messages: readonly Message[]): void {
+    this._historyRevision += 1;
     this._messages.length = 0;
     this._totalChars = 0;
     for (const m of messages) {
@@ -226,11 +260,14 @@ export class ConversationManager {
    * Called by ContextCompactor after receiving a summary from the model.
    */
   replaceWithSummary(summary: string, keepMessages: number): void {
+    this._historyRevision += 1;
     const systemMessages = this._messages.filter((m) => m.role === "system");
     const nonSystem = this._messages.filter((m) => m.role !== "system");
 
     // Take the tail of non-system messages to preserve immediate context.
-    const kept = nonSystem.slice(-keepMessages);
+    const tail = new Set(nonSystem.map((_, index) => index).slice(-keepMessages));
+    const keep = expandToolPairIndices(nonSystem, tail);
+    const kept = nonSystem.filter((_, index) => keep.has(index));
 
     const summaryMessage: Message = {
       id: randomUUID(),
@@ -270,16 +307,22 @@ export class ConversationManager {
     // deletion until the remaining total fits, then rebuild the array once.
     let remaining = this._totalChars;
     const drop = new Set<number>();
+    const groups = toolPairGroups(this._messages);
     for (let i = 0; i < this._messages.length && remaining / 4 > maxTokens; i++) {
       const msg = this._messages[i];
-      if (msg !== undefined && msg.role !== "system") {
-        remaining -= msg.content.length;
-        drop.add(i);
+      if (msg !== undefined && msg.role !== "system" && !drop.has(i)) {
+        for (const index of groups.get(i) ?? [i]) {
+          if (!drop.has(index)) {
+            remaining -= this._messages[index]?.content.length ?? 0;
+            drop.add(index);
+          }
+        }
       }
     }
 
     if (drop.size === 0) return;
 
+    this._historyRevision += 1;
     const kept: Message[] = [];
     for (let i = 0; i < this._messages.length; i++) {
       if (!drop.has(i)) {
