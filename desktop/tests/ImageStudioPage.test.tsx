@@ -1037,6 +1037,66 @@ describe("ImageStudioPage (chat)", () => {
     expect(screen.queryByRole("img")).toBeNull();
   });
 
+  it("v2.13.0: draws a saved image from its bytes and opens it for durable edits", async () => {
+    const explorer = new InMemoryStudioExplorerClient("image");
+    const session = explorer.createSession({ folderId: null, title: "Fox", modelId: "sana-1.6b-1024" });
+    explorer.appendTurn({ sessionId: session.id, role: "user", content: "a fox" });
+    const turn = explorer.appendTurn({
+      sessionId: session.id,
+      role: "assistant",
+      content: "",
+      mediaRef: "C:/nexus/generations/images/fox.png",
+    }) as { id: string };
+    const bytes = "data:image/png;base64,iVBORw0KGgo=";
+    const opened: string[] = [];
+    const studioImages = {
+      load: vi.fn(async () => bytes),
+      edit: vi.fn((ref: { sessionId: string; turnId: string }) => ({
+        open: async () => {
+          opened.push(ref.turnId);
+          throw new Error("UNSUPPORTED_SOURCE: fixture");
+        },
+        commit: vi.fn(),
+        revision: vi.fn(),
+        close: vi.fn(async () => undefined),
+      })),
+    };
+    render(
+      <ImageStudioPage
+        client={new InMemoryDiffusionClient()}
+        modelsClient={imageModels()}
+        explorerClient={explorer}
+        initialSessionId={session.id}
+        studioImages={studioImages}
+      />,
+    );
+    await waitFor(() => expect(screen.getByRole("img")).toHaveAttribute("src", bytes));
+    expect(studioImages.load).toHaveBeenCalledWith({ sessionId: session.id, turnId: turn.id });
+    fireEvent.click(screen.getByTestId(`message-media-${turn.id}`));
+    await waitFor(() => expect(opened).toEqual([turn.id]));
+    expect(studioImages.edit).toHaveBeenCalledTimes(1);
+  });
+
+  it("v2.13.0: keeps the stored path when the saved image cannot be read", async () => {
+    const explorer = new InMemoryStudioExplorerClient("image");
+    const session = explorer.createSession({ folderId: null, title: "Fox", modelId: "sana-1.6b-1024" });
+    explorer.appendTurn({ sessionId: session.id, role: "user", content: "a fox" });
+    explorer.appendTurn({ sessionId: session.id, role: "assistant", content: "", mediaRef: "/tmp/fox.png" });
+    render(
+      <ImageStudioPage
+        client={new InMemoryDiffusionClient()}
+        modelsClient={imageModels()}
+        explorerClient={explorer}
+        initialSessionId={session.id}
+        studioImages={{
+          load: async () => { throw new Error("IMAGE_NOT_FOUND: gone"); },
+          edit: vi.fn(),
+        }}
+      />,
+    );
+    await waitFor(() => expect(screen.getByRole("img")).toHaveAttribute("src", "/tmp/fox.png"));
+  });
+
   it("titles a pre-created untitled session on the first prompt", async () => {
     const explorer = new InMemoryStudioExplorerClient("image");
     const session = explorer.createSession({

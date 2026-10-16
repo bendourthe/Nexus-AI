@@ -98,6 +98,9 @@ export function studioTurnsToChatMessages(
       requestUsage: turn.requestUsage,
       messageUsage: turn.messageUsage,
       ...(ref ? { media: { kind: mediaKind, src: ref } } : {}),
+      ...(ref && mediaKind === "image"
+        ? { studioTurn: { sessionId: turn.sessionId, turnId: turn.id } }
+        : {}),
     };
   });
 }

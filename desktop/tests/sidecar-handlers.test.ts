@@ -196,6 +196,12 @@ describe("sidecar handlers", () => {
           "studio.session.deleteSession",
           "studio.session.appendTurn",
           "studio.session.listTurns",
+          // v2.13.0 Phase 5 wired durable Image Studio edits.
+          "studio.image.media",
+          "studio.image.edit.open",
+          "studio.image.edit.commit",
+          "studio.image.edit.revision",
+          "studio.image.edit.close",
           // v2.2.0 Phase 8 (DF-16) wired local data export / import.
           "data.categories",
           "data.export",

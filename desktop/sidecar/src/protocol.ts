@@ -142,6 +142,12 @@ export const IPC_METHODS = [
   "studio.session.deleteSession",
   "studio.session.appendTurn",
   "studio.session.listTurns",
+  // v2.13.0 Phase 5 -- durable edits for persisted Image Studio images.
+  "studio.image.media",
+  "studio.image.edit.open",
+  "studio.image.edit.commit",
+  "studio.image.edit.revision",
+  "studio.image.edit.close",
   "data.categories",
   "data.export",
   "data.import",
@@ -1104,6 +1110,43 @@ export const StudioSessionListTurnsRequest = z
 export const StudioSessionListTurnsResponse = z.object({
   turns: z.array(StudioSessionTurnResponse),
 });
+
+// v2.13.0 Phase 5 -- the recipe itself is validated by the shared reducer in
+// core/image/ImageEditRecipe.ts; the envelope only bounds identifiers.
+const StudioImageTurnRequest = z
+  .object({ sessionId: z.string().min(1).max(256), turnId: z.string().min(1).max(256) })
+  .strict();
+const StudioImageGrantRequest = z.object({ grantId: z.string().uuid() }).strict();
+const StudioImageEditIdentity = z
+  .object({
+    studioSessionId: z.string(),
+    studioTurnId: z.string(),
+    sourceSha256: z.string().regex(/^[a-f0-9]{64}$/),
+  })
+  .strict();
+const StudioImageEditState = z.object({
+  recipe: z.record(z.string(), z.unknown()),
+  capabilities: z.record(z.string(), z.unknown()),
+});
+export const StudioImageMediaRequest = StudioImageTurnRequest;
+export const StudioImageMediaResponse = z.object({ png: z.string().min(1) }).strict();
+export const StudioImageEditOpenRequest = StudioImageTurnRequest;
+export const StudioImageEditOpenResponse = StudioImageEditState.extend({
+  grantId: z.string().uuid(),
+  identity: StudioImageEditIdentity,
+  png: z.string().min(1),
+}).strict();
+export const StudioImageEditCommitRequest = StudioImageGrantRequest.extend({
+  action: z.unknown(),
+  expectedRevision: z.number().int().nonnegative(),
+}).strict();
+export const StudioImageEditCommitResponse = StudioImageEditState.strict();
+export const StudioImageEditRevisionRequest = StudioImageGrantRequest;
+export const StudioImageEditRevisionResponse = z
+  .object({ revision: z.number().int().nonnegative() })
+  .strict();
+export const StudioImageEditCloseRequest = StudioImageGrantRequest;
+export const StudioImageEditCloseResponse = z.object({ ok: z.literal(true) }).strict();
 
 // v2.2.0 Phase 5 (5.3) -- auto-title a chat from its first message.
 export const ChatGenerateTitleRequest = z
@@ -3441,6 +3484,31 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
   "studio.session.listTurns": {
     request: StudioSessionListTurnsRequest,
     response: StudioSessionListTurnsResponse,
+    implemented: true,
+  },
+  "studio.image.media": {
+    request: StudioImageMediaRequest,
+    response: StudioImageMediaResponse,
+    implemented: true,
+  },
+  "studio.image.edit.open": {
+    request: StudioImageEditOpenRequest,
+    response: StudioImageEditOpenResponse,
+    implemented: true,
+  },
+  "studio.image.edit.commit": {
+    request: StudioImageEditCommitRequest,
+    response: StudioImageEditCommitResponse,
+    implemented: true,
+  },
+  "studio.image.edit.revision": {
+    request: StudioImageEditRevisionRequest,
+    response: StudioImageEditRevisionResponse,
+    implemented: true,
+  },
+  "studio.image.edit.close": {
+    request: StudioImageEditCloseRequest,
+    response: StudioImageEditCloseResponse,
     implemented: true,
   },
   "data.categories": {

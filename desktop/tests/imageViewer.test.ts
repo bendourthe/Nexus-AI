@@ -11,8 +11,33 @@ import {
   adjustmentFilter,
   adjustmentsAreNeutral,
   NEUTRAL_ADJUSTMENTS,
+  renderAdjusted,
   sharpenPixels,
 } from "../src/shared/studio/ImageViewer";
+
+describe("renderAdjusted", () => {
+  // Only the calls renderAdjusted makes; jsdom has no 2D context of its own.
+  const context = (readable: boolean) => ({
+    filter: "none",
+    clearRect: () => undefined,
+    drawImage: () => undefined,
+    getImageData: () => {
+      if (!readable) throw new DOMException("tainted", "SecurityError");
+      return { data: new Uint8ClampedArray(16) };
+    },
+    putImageData: () => undefined,
+  }) as unknown as CanvasRenderingContext2D;
+  const image = {} as CanvasImageSource;
+
+  it("reports success when no read-back is needed or the read-back works", () => {
+    expect(renderAdjusted(context(false), image, 2, 2, NEUTRAL_ADJUSTMENTS)).toBe(true);
+    expect(renderAdjusted(context(true), image, 2, 2, { ...NEUTRAL_ADJUSTMENTS, sharpness: 50 })).toBe(true);
+  });
+
+  it("reports failure when a tainted canvas blocks sharpening, so export can refuse", () => {
+    expect(renderAdjusted(context(false), image, 2, 2, { ...NEUTRAL_ADJUSTMENTS, sharpness: 50 })).toBe(false);
+  });
+});
 
 describe("adjustmentFilter", () => {
   it("is an identity filter at neutral", () => {

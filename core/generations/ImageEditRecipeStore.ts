@@ -65,6 +65,30 @@ export class ImageEditRecipeStore {
     }));
   }
 
+  /**
+   * The identity and verified bytes of a persisted image turn, for display and for
+   * issuing a grant. Reveals nothing the turn's owner does not already list.
+   */
+  describe(sessionId: string, turnId: string): { identity: ImageEditIdentity; source: ImageEditSourceSnapshot } {
+    return this.storage(() => this.sessions.withImageRecipe(sessionId, turnId, (scope) => {
+      const source = this.ownedPng(scope.turn);
+      const identity = this.identity({ studioSessionId: sessionId, studioTurnId: turnId, sourceSha256: source.sha256 });
+      return { identity, source };
+    }));
+  }
+
+  /** The stored revision only, so an open viewer can poll for outside changes cheaply. */
+  revision(identityInput: ImageEditIdentity, access: ImageEditAccess): number {
+    const identity = this.identity(identityInput);
+    this.checkAccess(access, identity);
+    return this.storage(() => this.sessions.withImageRecipe(identity.studioSessionId, identity.studioTurnId, (scope) => {
+      if (scope.storedSourceSha256 !== null && scope.storedSourceSha256 !== identity.sourceSha256) {
+        throw new ImageEditError("SOURCE_CHANGED", "The recipe no longer matches its original image.");
+      }
+      return scope.storedRevision;
+    }));
+  }
+
   readSource(identityInput: ImageEditIdentity, access: ImageEditAccess): ImageEditSourceSnapshot {
     const identity = this.identity(identityInput);
     this.checkAccess(access, identity);
@@ -104,6 +128,12 @@ export class ImageEditRecipeStore {
   }
 
   private source(turn: StudioTurn, identity: ImageEditIdentity): ImageEditSourceSnapshot {
+    const source = this.ownedPng(turn);
+    if (source.sha256 !== identity.sourceSha256) throw new ImageEditError("SOURCE_CHANGED", "The original image hash changed.");
+    return source;
+  }
+
+  private ownedPng(turn: StudioTurn): ImageEditSourceSnapshot {
     let descriptor: number | undefined;
     try {
       if (!turn.mediaRef || turn.mediaRef.startsWith("data:")) throw new ImageEditError("UNSUPPORTED_SOURCE", "A persisted local PNG is required.");
@@ -138,7 +168,6 @@ export class ImageEditRecipeStore {
         throw new ImageEditError("LIMIT_EXCEEDED", "Source image exceeds the decoded size limit.");
       }
       const sha256 = createHash("sha256").update(bytes).digest("hex");
-      if (sha256 !== identity.sourceSha256) throw new ImageEditError("SOURCE_CHANGED", "The original image hash changed.");
       return { bytes, sha256, width, height };
     } catch (error) {
       if (error instanceof ImageEditError) throw error;
