@@ -519,6 +519,14 @@
       "feature": "f003"
     },
     {
+      "command": "studio.image.render.claim",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.image.render.complete",
+      "feature": "f003"
+    },
+    {
       "command": "studio.session.appendTurn",
       "feature": "f003"
     },

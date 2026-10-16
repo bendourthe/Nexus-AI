@@ -21,7 +21,7 @@ import {
   createDiffusionRuntime,
   MediaRuntimeService,
 } from "./diffusion/runtimeFactory.js";
-import { createHandlerContext, dispatch } from "./handlers.js";
+import { createHandlerContext, dispatch, imageEditOps, imageRenderBridge } from "./handlers.js";
 import {
   beginStudioRuntimeShutdown,
   closeStudioRuntime,
@@ -171,6 +171,7 @@ serving.gateway.surface.mount(
     listModels: async () =>
       SIDECAR_MODELS.map((m) => ({ id: m.id, displayName: m.displayName })),
     captureWindow: (request) => captureNexusWindow(request),
+    imageEdit: () => imageEditOps(ctx),
   }),
 );
 
@@ -258,6 +259,7 @@ function shutdown(): Promise<void> {
     reader?.removeAllListeners("close");
     reader?.close();
     scheduler.stop();
+    imageRenderBridge.close();
     beginStudioRuntimeShutdown(studio);
     await ctx.videoEnhancement?.stopActive();
     await ctx.videoEnhancement?.cleanupMedia();

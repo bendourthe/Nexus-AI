@@ -202,6 +202,9 @@ describe("sidecar handlers", () => {
           "studio.image.edit.commit",
           "studio.image.edit.revision",
           "studio.image.edit.close",
+          // v2.13.0 Phase 6 wired the renderer side of the render bridge.
+          "studio.image.render.claim",
+          "studio.image.render.complete",
           // v2.2.0 Phase 8 (DF-16) wired local data export / import.
           "data.categories",
           "data.export",

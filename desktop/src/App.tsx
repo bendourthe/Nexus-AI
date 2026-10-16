@@ -32,6 +32,8 @@ import { createMockTelemetryStream } from "./lib/telemetryMock";
 import { createLiveTelemetryStream } from "./lib/liveTelemetry";
 import type { TelemetryStream } from "./components/LocalModelStatus.types";
 import { ipcCall } from "./lib/ipc";
+import { tauriAvailable } from "./modules/chat/ipcChatExplorerClient";
+import { useImageRenderBridge } from "./shared/studio/useImageRenderBridge";
 import { MotionActivityProvider, useMotionActivity } from "./motion";
 import {
   fetchSchedulerSnapshot,
@@ -98,6 +100,8 @@ function AppLayout({ telemetryStream }: AppProps): JSX.Element {
   const location = useLocation();
   const { isAmbientReceded } = useMotionActivity();
   const ready = useReadyGate();
+  // v2.13.0: answer agent image renders with the viewer's own pixel path.
+  useImageRenderBridge(tauriAvailable());
 
   useEffect(() => {
     if (telemetryStream !== undefined) {
