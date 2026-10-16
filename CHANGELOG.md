@@ -1,3 +1,12 @@
+## [2.12.1](https://github.com/bendourthe/Nexus-AI/compare/v2.12.0...v2.12.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **ci:** fetch the pinned embedding-eval baseline in the release verify job ([a4ba82b](https://github.com/bendourthe/Nexus-AI/commit/a4ba82bd4ba3458667cda4fc2c48f0e43a0c8fd7))
+
+
+
 # [2.12.0](https://github.com/bendourthe/Nexus-AI/compare/v2.11.0...v2.12.0) (2026-10-16)
 
 
