@@ -79,6 +79,13 @@ jobs:
       - name: Install workspace dependencies
         run: npm ci --prefer-offline --no-audit
 
+      # The embedding evaluation tests rebuild frozen source bytes from the
+      # contract's pinned baseline commit, which the depth-1 checkout lacks.
+      - name: Fetch pinned embedding-eval baseline commit
+        run: |
+          baseline="$(node -p "require('./docs/releases/v2/v2.13/development/embedding-eval-contract.json').baselineHead")"
+          git fetch --no-tags --depth=1 origin "$baseline"
+
       - name: Lint extension source
         run: npm run lint --silent
 
