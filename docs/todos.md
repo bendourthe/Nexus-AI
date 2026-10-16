@@ -195,7 +195,7 @@ Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 des
 | Tasks done (v0.3.0) | 55 / 55 | 55 / 55 | 0 |
 | Tasks done (v0.4.0) | 16 (P1) + 17 (P2) + 21 (P3) + 21 (P4) + 22 (P5) | ~135 / ~135 | in-progress |
 | Sources compared (Craft editors + EmbeddingGemma 2, 2026-10-07) | 2 / 2 | 2 / 2 | 0 |
-| v2.13 adoption plan implementation tasks (Phase 6 local, 2026-10-15; T008-T010 deferred under DF-2) | 18 / 28 | 28 | 10 |
+| v2.13 adoption plan implementation tasks (Phase 7 local, 2026-10-16; T008-T010 deferred under DF-2) | 27 / 28 | 28 | 1 |
 
 ---
 
@@ -705,14 +705,15 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 
 ## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)
 
-**Progress**: 8/31 task checkboxes complete; Phases 1-2 verified locally, Phase 3 has an explicit retain/HOLD disposition with three skipped unchecked tasks; 20 applicable tasks remain. Model admission is HOLD; image work remains independently authorized.
+**Progress**: 27/28 tasks complete (T008-T010 moved to DF-2); only T031 publication and integration remains. Model admission is HOLD; image work is complete locally.
 
 - [x] Freeze the post-v2.12 baseline, 100-query evaluation contract and image ownership/limits; fast/platform and real disposable Ollama/SQLite probe pass ([Phase 1 evidence](releases/v2/v2.13/development/v2.13.0-phase1-evidence.md)).
 - [x] Build and verify the isolated evaluator and explicit retain/HOLD report: Ollama 0.32.15 rejects the candidate with HTTP 412; no quality score, default change or user-index mutation is claimed ([Phase 2 evidence](releases/v2/v2.13/development/v2.13.0-phase2-evidence.md)).
 - [x] Persist versioned Image Studio edit recipes with undo/redo history in `sessions.db`, unchanged source bytes, and a two-process reopen smoke ([Phase 4 evidence](releases/v2/v2.13/development/v2.13.0-phase4-evidence.md), 2026-10-15).
 - [x] Save generated Image Studio PNGs and connect the viewer to durable edits: acknowledged saves, retry/reload, restart reopen, and preview/export pixel equality in the WebView engine ([Phase 5 evidence](releases/v2/v2.13/development/v2.13.0-phase5-evidence.md), 2026-10-15).
 - [x] Expose Image Studio edits to agents through `nexus image-edit` and `/nexus/image-edit/*`: Ask-inbox-approved per-image grants, idempotent apply, render through the running window, safe owned exports ([Phase 6 evidence](releases/v2/v2.13/development/v2.13.0-phase6-evidence.md), 2026-10-15).
-- [ ] Decide whether saved Image Studio PNGs are removed with their session (DF-3) and drive the packaged desktop restart and agent render flows by hand (WN-1).
+- [x] Run the final gate: handbooks rebuilt with receipts, CI comparison rechecked, Tier 3 deep pass with real-sidecar driver 24/24 and an adversarial review whose fixes landed, both full suites green; open gaps carried to v2.14 ([last-phase evidence](releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md), 2026-10-16).
+- [ ] Decide whether saved Image Studio PNGs are removed with their session (DF-3), whether agents may replace redo history (DF-4) and the residual image-access items (WN-3), and drive the packaged desktop restart and agent render flows by hand (WN-1); all now in `docs/releases/v2/v2.14/known-gaps.md`.
 - [x] Record Phase 3 conditional retain/HOLD, verify ten unchanged production paths, and explicitly skip T008-T010 without claiming migration ([disposition](releases/v2/v2.13/development/embedding-migration-disposition.json)).
 
 

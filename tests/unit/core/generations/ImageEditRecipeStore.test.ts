@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { createHash } from "node:crypto";
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { linkSync, mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import Database from "better-sqlite3";
@@ -204,6 +204,14 @@ describe("owned image recipe persistence", () => {
     try { expect(() => f.recipes.commit(f.identity, actor, { kind: "reset" }, saved.revision)).toThrow("could not be stored"); }
     finally { injector.exec("DROP TRIGGER reject_recipe_update"); injector.close(); }
     expect(f.recipes.load(f.identity, actor)).toEqual(saved);
+  });
+});
+
+describe("hard-linked sources", () => {
+  it("refuses a source with more than one link, which can name a file kept elsewhere", () => {
+    const f = fixture();
+    linkSync(f.source, join(f.root, "outside-copy.png"));
+    expect(() => f.recipes.describe(f.session.id, f.turn.id)).toThrow(expect.objectContaining({ code: "FORBIDDEN" }));
   });
 });
 

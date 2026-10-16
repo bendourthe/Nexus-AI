@@ -370,6 +370,12 @@ export interface HandlerContext {
   scheduler?: AgentRunScheduler;
   /** v2.1.0 Phase 3 -- generation index + persistent queue. */
   studio?: StudioRuntime;
+  /**
+   * v2.13.0 -- where finished Image Studio PNGs are saved so their turns can be
+   * reopened. Production sets `~/.nexus/generations/images`; absent (tests),
+   * images stay display-only and nothing is written.
+   */
+  generatedImagesRoot?: string;
   /** v2.3.0 Phase 3 -- optional local post-generation video enhancement. */
   videoEnhancement?: VideoEnhancementRuntimeBundle;
   /** v2.1.0 Phase 5 -- Unsloth Core fine-tuning. */
@@ -873,7 +879,9 @@ async function pumpStudio(ctx: HandlerContext): Promise<void> {
             } else if (result.pngBase64) {
               // v2.13.0 Phase 5: keep the image so its studio turn can name it
               // and reopen it for durable edits; a failed write stays display-only.
-              const saved = persistGeneratedPng(result.pngBase64);
+              const saved = ctx.generatedImagesRoot
+                ? persistGeneratedPng(result.pngBase64, ctx.generatedImagesRoot)
+                : null;
               recordCompletion(studio, {
                 kind: "complete",
                 jobId: job.id,

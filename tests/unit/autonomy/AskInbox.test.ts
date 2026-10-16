@@ -119,4 +119,24 @@ describe("AskInbox", () => {
       await rm(dir, { recursive: true, force: true });
     }
   });
+
+  it("v2.13.0: keeps every ask when many are parked at once on a fresh file store", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "nexus-ask-inbox-concurrent-"));
+    try {
+      const filePath = join(dir, "asks.json");
+      let n = 0;
+      const inbox = new AskInbox({ store: new JsonFileAskInboxStore(filePath), idFactory: () => `ask-${(n += 1)}` });
+      for (let i = 0; i < 12; i += 1) {
+        void inbox.parkAndWait({ toolName: "image_edit_access", summary: `request ${i}`, runMode: "headless", runId: `run-${i}` });
+      }
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      expect(await inbox.list("pending")).toHaveLength(12);
+      const reloaded = new AskInbox({ store: new JsonFileAskInboxStore(filePath) });
+      expect(await reloaded.list("pending")).toHaveLength(12);
+      const saved = JSON.parse(await readFile(filePath, "utf8")) as { items: unknown[] };
+      expect(saved.items).toHaveLength(12);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
 });

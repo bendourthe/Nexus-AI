@@ -17,8 +17,8 @@ import { CodingSessionManager } from "../../sidecar/src/coding/sessionManager";
 import { createJsonCliRoute } from "../../sidecar/src/controlSurface/jsonCliRoutes";
 import { LoopbackHttpServer } from "../../sidecar/src/controlSurface/loopbackServer";
 import { persistGeneratedPng } from "../../sidecar/src/studio/generatedImages.js";
-import { AGENT_GRANT_TTL_MS, createImageEditOps, type AgentAccess } from "../../sidecar/src/studio/imageEditRuntime.js";
-import { ImageRenderBridge } from "../../sidecar/src/studio/imageRenderBridge.js";
+import { AGENT_GRANT_TTL_MS, createImageEditOps, imageEditFailure, type AgentAccess } from "../../sidecar/src/studio/imageEditRuntime.js";
+import { ImageRenderBridge, isWellFormedPng } from "../../sidecar/src/studio/imageRenderBridge.js";
 
 const PNG_B64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVR4nGP4DwQACfsD/fteaysAAAAASUVORK5CYII=";
 const ADJUST = { kind: "adjustments", values: { brightness: 140, contrast: 100, saturation: 100, sharpness: 0 } };
@@ -138,6 +138,54 @@ describe("agent access", () => {
   });
 });
 
+describe("agent access hardening (Phase 7 adversarial pass)", () => {
+  it("shows an unverified-name warning and a request code, and folds repeats into one ask", () => {
+    const f = fixture();
+    const first = f.ops.requestAccess({ callerId: "nexus-coding-agent", runId: "run-1", sessionId: f.session.id, turnId: f.turn.id });
+    const again = f.ops.requestAccess({ callerId: "nexus-coding-agent", runId: "run-1", sessionId: f.session.id, turnId: f.turn.id });
+    expect(again.requestId).toBe(first.requestId);
+    expect(f.askInbox.asks).toHaveLength(1);
+    const ask = f.askInbox.asks[0]!.input as { summary: string; detail?: string };
+    expect(ask.summary).toContain(first.requestId.slice(0, 8));
+    expect(ask.detail).toContain("not verified");
+    expect(ask.detail).toContain("undoing your own edits");
+  });
+
+  it("caps pending requests per caller", () => {
+    const f = fixture();
+    for (let run = 1; run <= 4; run += 1) {
+      f.ops.requestAccess({ callerId: "flooder", runId: `run-${run}`, sessionId: f.session.id, turnId: f.turn.id });
+    }
+    expect(() => f.ops.requestAccess({ callerId: "flooder", runId: "run-5", sessionId: f.session.id, turnId: f.turn.id }))
+      .toThrow(/^APPROVAL_UNAVAILABLE: /);
+    expect(f.ops.requestAccess({ callerId: "someone-else", runId: "run-1", sessionId: f.session.id, turnId: f.turn.id }).state)
+      .toBe("pending");
+  });
+
+  it("allows one render in flight per grant", async () => {
+    const f = fixture();
+    const a = await grantFor(f);
+    const first = f.ops.render(a, { mode: "preview", expectedRevision: 0 });
+    await expect(f.ops.render(a, { mode: "preview", expectedRevision: 0 })).rejects.toThrow(/^RENDERER_UNAVAILABLE: A render for this grant/);
+    const request = f.bridge.claim()!;
+    f.bridge.complete({ requestId: request.requestId, ok: true, png: PNG_B64 });
+    await expect(first).resolves.toMatchObject({ revision: 0 });
+  });
+
+  it("rejects a deeply nested action as invalid instead of overflowing the stack", async () => {
+    const f = fixture();
+    const a = await grantFor(f);
+    let nested: unknown = {};
+    for (let i = 0; i < 20000; i += 1) nested = { kind: "mark", mark: nested };
+    expect(() => f.ops.apply(a, { action: nested, expectedRevision: 0, idempotencyKey: "deep" })).toThrow(/^INVALID_RECIPE: /);
+  });
+
+  it("never passes a raw system error to the caller", () => {
+    const error = imageEditFailure(new Error("EACCES: permission denied, open 'C:\\Users\\someone\\.nexus\\x'"));
+    expect(error.message).toBe("STORAGE_UNAVAILABLE: Image edits are temporarily unavailable. Retry or reload.");
+  });
+});
+
 describe("agent mutations", () => {
   it("replays an identical request, refuses key reuse for another payload, and shares state with the viewer", async () => {
     const f = fixture();
@@ -176,8 +224,12 @@ describe("agent render and export", () => {
       const exported = await f.ops.render(a, { mode: "export", expectedRevision: 1 });
       expect(readFileSync(exported.path!)).toEqual(Buffer.from(PNG_B64, "base64"));
       expect(exported.path!.startsWith(f.exportsRoot.replace(/\\/g, "/")) || exported.path!.startsWith(f.exportsRoot)).toBe(true);
+      // The same edit exported again returns the file already there.
+      expect((await f.ops.render(a, { mode: "export", expectedRevision: 1 })).path).toBe(exported.path);
+      // A different file under that name is never overwritten.
+      writeFileSync(exported.path!, Buffer.from("someone else's file"));
       await expect(f.ops.render(a, { mode: "export", expectedRevision: 1 })).rejects.toThrow(/^EXPORT_EXISTS: /);
-      expect(readFileSync(exported.path!)).toEqual(Buffer.from(PNG_B64, "base64"));
+      expect(readFileSync(exported.path!).toString()).toBe("someone else's file");
       await expect(f.ops.render(a, { mode: "preview", expectedRevision: 0 })).rejects.toThrow(/^REVISION_CONFLICT: /);
       expect(sha(readFileSync(f.saved.outputPath))).toBe(f.saved.outputHash);
     } finally {
@@ -250,6 +302,20 @@ describe("agent render and export", () => {
     const closing = f.ops.render(a, { mode: "preview", expectedRevision: 0 });
     f.bridge.close();
     await expect(closing).rejects.toThrow(/^RENDERER_UNAVAILABLE: /);
+  });
+});
+
+describe("render response validation", () => {
+  it("accepts only a complete, CRC-correct PNG of the requested size", () => {
+    const png = Buffer.from(PNG_B64, "base64");
+    expect(isWellFormedPng(png, 1, 1)).toBe(true);
+    expect(isWellFormedPng(png, 2, 1)).toBe(false);
+    expect(isWellFormedPng(Buffer.concat([png, Buffer.from("trailing")]), 1, 1)).toBe(false);
+    const corrupt = Buffer.from(png);
+    const at = corrupt.length - 20;
+    corrupt.writeUInt8(corrupt.readUInt8(at) ^ 1, at);
+    expect(isWellFormedPng(corrupt, 1, 1)).toBe(false);
+    expect(isWellFormedPng(png.subarray(0, png.length - 12), 1, 1)).toBe(false);
   });
 });
 

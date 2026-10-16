@@ -10,6 +10,9 @@ export const IMAGE_EDIT_LIMITS = Object.freeze({
   pixels: 4194304,
 });
 
+/** The eight-byte PNG signature every durable source and render must start with. */
+export const PNG_SIGNATURE: readonly number[] = Object.freeze([137, 80, 78, 71, 13, 10, 26, 10]);
+
 export const IMAGE_ADJUSTMENT_RANGES = Object.freeze({
   brightness: [20, 200] as const,
   contrast: [20, 200] as const,
@@ -136,6 +139,13 @@ export function parseImageEditRecipe(input: unknown): ImageEditRecipe {
     throw new ImageEditError("LIMIT_EXCEEDED", "Retained history exceeds 100000 stroke points.");
   }
   return recipe;
+}
+
+/** Validate one action on its own, before it is hashed or replayed. */
+export function parseImageEditAction(input: unknown): ImageEditAction {
+  const parsed = actionSchema.safeParse(input);
+  if (!parsed.success) invalid(parsed.error.issues);
+  return parsed.data;
 }
 
 export function createImageEditRecipe(identity: ImageEditIdentity, width: number, height: number): ImageEditRecipe {

@@ -60,7 +60,10 @@ function makeRepo(initialBranch: string): string {
   return dir;
 }
 
-describe("check-git-control-plane hook", () => {
+// Each case builds a real repository and runs the hook as a child process
+// (about 2.6 s alone on Windows, measured 2026-10-15); under the full suite's
+// workers four cases exceeded the 5 s default.
+describe("check-git-control-plane hook", { timeout: 30_000 }, () => {
   let gitAvailable = true;
   beforeAll(() => {
     try {

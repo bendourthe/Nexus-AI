@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -308,6 +308,34 @@ describe("generation queue IPC", () => {
           j.enhancement === null,
       ),
     ).toBe(true);
+  });
+
+  it("v2.13.0: saves a finished image under the configured root and names it in the completion", async () => {
+    const png = createUsablePng();
+    const submit = async (generatedImagesRoot: string | undefined, seed: number) => {
+      const runtime = new InMemoryDiffusionRuntime();
+      runtime.setResponse("sana.txt2img", { pngBase64: png.toString("base64") });
+      const ctx = createHandlerContext({ pid: seed, platform: process.platform }, new CodingSessionManager(), runtime);
+      ctx.studio = createStudioRuntime({ dbPath: ":memory:" });
+      if (generatedImagesRoot) ctx.generatedImagesRoot = generatedImagesRoot;
+      const reply = (await dispatch("diffusion.txt2img", {
+        modelId: "sana-1.6b-1024", prompt: "fox", width: 512, height: 512, steps: 4, cfgScale: 1.5, sampler: "euler_a", seed,
+      }, ctx)) as { jobId: string };
+      return drainTerminalEvent(ctx, reply.jobId);
+    };
+    const root = mkdtempSync(join(tmpdir(), "nexus-generated-images-"));
+    try {
+      const saved = await submit(root, 21);
+      const hash = contentHash(png);
+      expect(saved).toMatchObject({ kind: "complete", png: png.toString("base64"), outputPath: join(root, `${hash}.png`), outputHash: hash });
+      expect(readFileSync(join(root, `${hash}.png`))).toEqual(png);
+      // Without a configured root (tests, headless helpers) nothing is written.
+      const unsaved = await submit(undefined, 22);
+      expect(unsaved).toMatchObject({ kind: "complete", png: png.toString("base64") });
+      expect(unsaved).not.toHaveProperty("outputPath");
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 
   it("emits an error event when txt2img completes without image bytes", async () => {
