@@ -90,12 +90,16 @@
 - **Migrated from**: v2.13.0#WN-2 on 2026-10-16 (reason: user-deferred)
 - **Migration evidence**: left open by v2.13.0, the last plan of v2.13
 
-#### QG-1 - A Video2X deadline test hangs intermittently in the full desktop suite
+#### QG-1 - Two tests time out under full-suite load at vitest's 5 s default
 
-- **Source phase**: v2.13 Phase 4 (root suite, 2026-10-14) and Phase 5 (desktop suite, 2026-10-15).
-- **Plan reference**: v2.13 Phase 7 T030; `desktop/tests/video2x-adapter.test.ts` "bounds a hanging source hash with the run-local deadline".
-- **Reason**: the root half is resolved: the golden-runner dry path and four other git- and process-heavy root tests run about 2.5 s alone and now carry measured 30 s timeouts; the root suite passed (579 files, 6277 tests). The Video2X test is not slow: it runs in 31 ms alone and passed in eight concurrent copies of its file, yet in one full desktop run it still timed out at 30 s, so it hangs rather than runs long. Fake timers freeze `performance.now`, which rules out the adapter's clock. In v2.13 the test was changed to race the source-hash start against the run result, so a run that settles early now fails at once with its result instead of hanging; the next full desktop run passed (254 files, 2328 tests). The underlying cause is not proven here.
-- **Suggested next step**: when the test fails again, read the run result its new assertion prints; if it never recurs across several full desktop runs, close this gap with those runs as evidence.
+- **Source phase**: Phase 4 (root suite, 2026-10-14) and Phase 5 (desktop suite, 2026-10-15).
+- **Plan reference**: Phase 7 T030.
+- **Reason**: `tests/integration/golden/golden-runner-end-to-end.test.ts` (dry path) and `desktop/tests/video2x-adapter.test.ts` ("bounds a hanging source hash with the run-local deadline") pass alone (about 2.5 s and 3 of 3 runs) and time out only beside parallel workers. The golden file's own comment gives this cause for its sibling block, which already has a 30 s timeout. Neither test was changed by this plan.
+- **Suggested next step**: In Phase 7, give each the same explicit timeout its sibling uses, with the measured duration as the reason, then re-run both full suites.
+
+Prior v2.12 and older registers remain authoritative. These new items resolve none of them.
+
+- **Update (2026-10-16)**: the root half is resolved: the golden-runner dry path and four other git- and process-heavy root tests run about 2.5 s alone and now carry measured 30 s timeouts; the root suite passed (579 files, 6277 tests). The Video2X test is not slow: it runs in 31 ms alone and passed in eight concurrent copies of its file, yet in one full desktop run it still timed out at 30 s, so it hangs rather than runs long. Fake timers freeze `performance.now`, which rules out the adapter's clock. In v2.13 the test was changed to race the source-hash start against the run result, so a run that settles early now fails at once with its result instead of hanging; the next full desktop run passed (254 files, 2328 tests). The underlying cause is not proven here. Next: when the test fails again, read the run result its new assertion prints; if it never recurs across several full desktop runs, close this gap with those runs as evidence.
 
 - **Migrated from**: v2.13.0#QG-1 on 2026-10-16 (reason: user-deferred)
 - **Migration evidence**: left open by v2.13.0, the last plan of v2.13
