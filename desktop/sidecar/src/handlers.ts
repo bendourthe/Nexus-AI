@@ -109,6 +109,11 @@ import {
   StudioSessionCreateSessionRequest,
   StudioSessionIdRequest,
   StudioSessionListTurnsRequest,
+  StudioImageMediaRequest,
+  StudioImageEditOpenRequest,
+  StudioImageEditCommitRequest,
+  StudioImageEditRevisionRequest,
+  StudioImageEditCloseRequest,
   StudioSessionMoveFolderRequest,
   StudioSessionMoveSessionRequest,
   StudioSessionRenameFolderRequest,
@@ -243,6 +248,7 @@ import { pumpOnce } from "../../../core/generations/queuePump.js";
 import { SPLAT_GENERATE_JOB_TYPE, prepareSplatGenerate } from "../../../core/image/SplatGenerate.js";
 import { probeSplatHost, promotePreparedSplat, splatJobPaths } from "./image/GaussianSplatRuntime.js";
 import { runTripoSplatAdapter } from "./image/TripoSplatAdapter.js";
+import { persistGeneratedPng } from "./studio/generatedImages.js";
 import {
   createStudioRuntime,
   recordCompletion,
@@ -625,6 +631,21 @@ async function studioSessionOps(): Promise<StudioSessionOps> {
 /** Test seam: drop the memoized studio-session ops. */
 export function resetStudioSessionOps(): void {
   _studioSessionOps = null;
+  _imageEditOps = null;
+}
+
+let _imageEditOps: import("./studio/imageEditRuntime.js").ImageEditOps | null = null;
+
+/** v2.13.0 Phase 5: shares the studio session store's connection and lifecycle. */
+async function imageEditOps(): Promise<import("./studio/imageEditRuntime.js").ImageEditOps> {
+  if (!_imageEditOps) {
+    const [{ studioSessionRuntime }, { createImageEditOps }] = await Promise.all([
+      import("./studio/sessionRuntime.js"),
+      import("./studio/imageEditRuntime.js"),
+    ]);
+    _imageEditOps = createImageEditOps(studioSessionRuntime().store);
+  }
+  return _imageEditOps;
 }
 
 async function memoryOps(ctx: HandlerContext): Promise<ChatMemoryOps> {
@@ -836,10 +857,14 @@ async function pumpStudio(ctx: HandlerContext): Promise<void> {
                 outputHash: result.outputHash,
               });
             } else if (result.pngBase64) {
+              // v2.13.0 Phase 5: keep the image so its studio turn can name it
+              // and reopen it for durable edits; a failed write stays display-only.
+              const saved = persistGeneratedPng(result.pngBase64);
               recordCompletion(studio, {
                 kind: "complete",
                 jobId: job.id,
                 png: result.pngBase64,
+                ...(saved ? { outputPath: saved.outputPath, outputHash: saved.outputHash } : {}),
               });
             }
           },
@@ -1767,10 +1792,12 @@ export const handlers: Record<Method, HandlerFn> = {
     (await studioSessionOps()).moveSession(
       StudioSessionMoveSessionRequest.parse(params ?? {}),
     ),
-  "studio.session.deleteSession": async (params) =>
-    (await studioSessionOps()).deleteSession(
-      StudioSessionIdRequest.parse(params ?? {}),
-    ),
+  "studio.session.deleteSession": async (params) => {
+    const input = StudioSessionIdRequest.parse(params ?? {});
+    const result = (await studioSessionOps()).deleteSession(input);
+    _imageEditOps?.revokeSession(input.id);
+    return result;
+  },
   "studio.session.appendTurn": async (params) =>
     (await studioSessionOps()).appendTurn(
       StudioSessionAppendTurnRequest.parse(params ?? {}),
@@ -1779,6 +1806,22 @@ export const handlers: Record<Method, HandlerFn> = {
     (await studioSessionOps()).listTurns(
       StudioSessionListTurnsRequest.parse(params ?? {}),
     ),
+  "studio.image.media": async (params) =>
+    (await imageEditOps()).media(StudioImageMediaRequest.parse(params ?? {})),
+  "studio.image.edit.open": async (params) =>
+    (await imageEditOps()).open(StudioImageEditOpenRequest.parse(params ?? {})),
+  "studio.image.edit.commit": async (params) => {
+    const input = StudioImageEditCommitRequest.parse(params ?? {});
+    return (await imageEditOps()).commit({
+      grantId: input.grantId,
+      action: input.action,
+      expectedRevision: input.expectedRevision,
+    });
+  },
+  "studio.image.edit.revision": async (params) =>
+    (await imageEditOps()).revision(StudioImageEditRevisionRequest.parse(params ?? {})),
+  "studio.image.edit.close": async (params) =>
+    (await imageEditOps()).close(StudioImageEditCloseRequest.parse(params ?? {})),
   // v2.2.0 Phase 8 (DF-16): local data export / import.
   //
   // These load the runtime lazily. transferRuntime reaches into the storage

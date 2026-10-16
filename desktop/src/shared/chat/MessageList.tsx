@@ -10,6 +10,7 @@ import type { ReactNode } from "react";
 import { MessageBubble, type MessageBubbleActionApi } from "./MessageBubble";
 import type { BranchControlProps } from "./BranchControl";
 import type { ChatMessage } from "./types";
+import type { DurableImageEdit } from "../studio/imageEditClient";
 import {
   calendarDayKey,
   formatDateHeading,
@@ -27,6 +28,8 @@ export interface MessageListProps {
   renderAfter?: (message: ChatMessage) => ReactNode;
   /** v2.2.4 Phase 4 -- extra studio actions inside the media lightbox. */
   renderPreviewExtra?: (message: ChatMessage) => ReactNode;
+  /** v2.13.0 -- durable edits for persisted Image Studio images (Image Studio only). */
+  durableImageEdit?: (message: ChatMessage) => DurableImageEdit | undefined;
   /** v2.4.9 -- per-message actions rendered on the bubble's timestamp row. */
   /**
    * Per-message actions on the timestamp row. `api` carries the bubble's own
@@ -73,6 +76,7 @@ export function MessageList({
   onMediaError,
   renderAfter,
   renderPreviewExtra,
+  durableImageEdit,
   renderMetaActions,
   locale,
   onRepairMediaRuntime,
@@ -138,6 +142,7 @@ export function MessageList({
           locale={locale}
           {...(onMediaError ? { onMediaError } : {})}
           {...(renderPreviewExtra ? { renderPreviewExtra } : {})}
+          {...(durableImageEdit ? { durableImageEdit } : {})}
           {...(renderMetaActions
             ? {
                 metaActions: (api: MessageBubbleActionApi) =>

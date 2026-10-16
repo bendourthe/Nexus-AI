@@ -207,6 +207,29 @@ describe("owned image recipe persistence", () => {
   });
 });
 
+describe("recipe store describe and revision", () => {
+  it("describes a turn by its verified source hash and tracks the stored revision", () => {
+    const f = fixture();
+    const described = f.recipes.describe(f.session.id, f.turn.id);
+    expect(described.identity).toEqual(f.identity);
+    expect(described.source.bytes).toEqual(png);
+    expect(f.recipes.revision(f.identity, actor)).toBe(0);
+    const saved = f.recipes.commit(f.identity, actor, adjustment, 0);
+    expect(f.recipes.revision(f.identity, actor)).toBe(saved.revision);
+    expect(() => f.recipes.revision({ ...f.identity, sourceSha256: "b".repeat(64) }, actor)).toThrow();
+    f.revoke();
+    expect(() => f.recipes.revision(f.identity, actor)).toThrow("no grant");
+  });
+
+  it("reports a changed source on revision without reading the image", () => {
+    const f = fixture();
+    f.recipes.commit(f.identity, actor, adjustment, 0);
+    const other = { ...f.identity, sourceSha256: "c".repeat(64) };
+    const recipes = new ImageEditRecipeStore(f.owner, f.media, () => true);
+    expect(() => recipes.revision(other, actor)).toThrow(expect.objectContaining({ code: "SOURCE_CHANGED" }));
+  });
+});
+
 describe("StudioSessionStore recipe scope guards", () => {
   const next = (identity: ImageEditIdentity) => reduceImageEditRecipe(createImageEditRecipe(identity, 1, 1), adjustment, 0);
 

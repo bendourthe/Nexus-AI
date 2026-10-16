@@ -195,7 +195,7 @@ Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 des
 | Tasks done (v0.3.0) | 55 / 55 | 55 / 55 | 0 |
 | Tasks done (v0.4.0) | 16 (P1) + 17 (P2) + 21 (P3) + 21 (P4) + 22 (P5) | ~135 / ~135 | in-progress |
 | Sources compared (Craft editors + EmbeddingGemma 2, 2026-10-07) | 2 / 2 | 2 / 2 | 0 |
-| v2.13 adoption plan implementation tasks (Phase 4 local, 2026-10-15; T008-T010 deferred under DF-2) | 11 / 28 | 28 | 17 |
+| v2.13 adoption plan implementation tasks (Phase 5 local, 2026-10-15; T008-T010 deferred under DF-2) | 14 / 28 | 28 | 14 |
 
 ---
 
@@ -710,6 +710,8 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Freeze the post-v2.12 baseline, 100-query evaluation contract and image ownership/limits; fast/platform and real disposable Ollama/SQLite probe pass ([Phase 1 evidence](releases/v2/v2.13/development/v2.13.0-phase1-evidence.md)).
 - [x] Build and verify the isolated evaluator and explicit retain/HOLD report: Ollama 0.32.15 rejects the candidate with HTTP 412; no quality score, default change or user-index mutation is claimed ([Phase 2 evidence](releases/v2/v2.13/development/v2.13.0-phase2-evidence.md)).
 - [x] Persist versioned Image Studio edit recipes with undo/redo history in `sessions.db`, unchanged source bytes, and a two-process reopen smoke ([Phase 4 evidence](releases/v2/v2.13/development/v2.13.0-phase4-evidence.md), 2026-10-15).
+- [x] Save generated Image Studio PNGs and connect the viewer to durable edits: acknowledged saves, retry/reload, restart reopen, and preview/export pixel equality in the WebView engine ([Phase 5 evidence](releases/v2/v2.13/development/v2.13.0-phase5-evidence.md), 2026-10-15).
+- [ ] Decide whether saved Image Studio PNGs are removed with their session (DF-3) and drive the packaged desktop restart flow by hand (WN-1).
 - [x] Record Phase 3 conditional retain/HOLD, verify ten unchanged production paths, and explicitly skip T008-T010 without claiming migration ([disposition](releases/v2/v2.13/development/embedding-migration-disposition.json)).
 
 

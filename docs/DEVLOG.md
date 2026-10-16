@@ -13,6 +13,12 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-15] v2.13.0 Phase 5 - Viewer reopen and export
+
+Generated Image Studio images are now saved once, content-addressed, under `~/.nexus/generations/images/`, so their turns can be reopened; the plan had assumed this already happened. The viewer edits a saved image durably through five new sidecar methods with process-bound grants: each finished gesture is committed against the last acknowledged revision, "Edits saved" appears only after acknowledgement, failures roll back with Retry and Reload, and close waits for pending saves. Chat attachments still edit in memory. In headless Edge (the WebView2 engine) preview and export pixels matched exactly with all four adjustments and both mark kinds. Open: saved images outlive their session (DF-3) and the installed window flow is not automated (WN-1). Evidence: `docs/releases/v2/v2.13/development/v2.13.0-phase5-evidence.md`.
+
+---
+
 ## [2026-10-15] v2.13.0 Phase 4 - Durable image recipe and history
 
 Image Studio edits now have a versioned recipe (four adjustments, stroke and text marks, reset, undo, redo) stored per persisted image turn in `sessions.db` through a scoped transaction on the existing `StudioSessionStore` connection, with revision compare-and-swap, cascade deletion and a source hash re-checked on every access. A two-process smoke reopened the database and matched recipe, history and cursor with the original PNG unchanged. Support tier: candidate until Phases 5-6 wire the viewer and commands. The embedding evaluator now reads changed corpus files from its pinned baseline so Phase 2 stays reproducible. Evidence: `docs/releases/v2/v2.13/development/v2.13.0-phase4-evidence.md`.
