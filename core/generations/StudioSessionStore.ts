@@ -14,6 +14,7 @@ import BetterSqlite from "better-sqlite3";
 import type Database from "better-sqlite3";
 import { redactSecrets } from "../observability/redactSecrets.js";
 import { isStudioPillar, type StudioPillar } from "./StudioSessionStore.types.js";
+import { ImageEditError, parseImageEditRecipe, type ImageEditRecipe } from "../image/ImageEditRecipe.js";
 import type {
   AppendStudioTurnInput,
   CreateStudioFolderInput,
@@ -25,6 +26,14 @@ import type {
 } from "./StudioSessionStore.types.js";
 
 const MAX_PATH_REF = 4096;
+
+export interface StudioImageRecipeScope {
+  readonly turn: StudioTurn;
+  readonly recipeJson: string | null;
+  readonly storedRevision: number;
+  readonly storedSourceSha256: string | null;
+  commit(recipe: ImageEditRecipe, expectedRevision: number): void;
+}
 
 interface FolderRow {
   id: string;
@@ -260,6 +269,16 @@ export class StudioSessionStore {
       );
       CREATE INDEX IF NOT EXISTS idx_studio_turns_session
         ON studio_turns(session_id, created_at);
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_studio_turns_identity
+        ON studio_turns(id, session_id);
+      CREATE TABLE IF NOT EXISTS studio_image_edit_recipes (
+        turn_id TEXT PRIMARY KEY,
+        session_id TEXT NOT NULL,
+        source_sha256 TEXT NOT NULL,
+        revision INTEGER NOT NULL CHECK (revision > 0),
+        recipe_json TEXT NOT NULL,
+        FOREIGN KEY (turn_id, session_id) REFERENCES studio_turns(id, session_id) ON DELETE CASCADE
+      );
     `);
     const columns = this.db.prepare(`PRAGMA table_info(studio_sessions)`).all() as Array<{ name: string }>;
     if (!columns.some((column) => column.name === "archived_at")) {
@@ -487,6 +506,53 @@ export class StudioSessionStore {
   getSession(id: string): StudioSession | null {
     const row = this.getSessionRow(id);
     return row && row.archived_at == null ? rowToSession(row) : null;
+  }
+
+  /** Scoped recipe work shares this owner's connection, transaction and deletion. */
+  withImageRecipe<T>(sessionId: string, turnId: string, operation: (scope: StudioImageRecipeScope) => T): T {
+    return this.db.transaction(() => {
+      const session = this.getSession(sessionId);
+      const row = this.db.prepare(
+        "SELECT * FROM studio_turns WHERE id = ? AND session_id = ?",
+      ).get(turnId, sessionId) as TurnRow | undefined;
+      const turn = row ? rowToTurn(row) : null;
+      if (!session || session.pillar !== "image" || !turn?.mediaRef) {
+        throw new ImageEditError("IMAGE_NOT_FOUND", "The persisted Image Studio image is unavailable.");
+      }
+      const stored = this.db.prepare(
+        "SELECT revision, source_sha256, recipe_json FROM studio_image_edit_recipes WHERE turn_id = ? AND session_id = ?",
+      ).get(turnId, sessionId) as { revision: number; source_sha256: string; recipe_json: string } | undefined;
+      let committed = false;
+      const result = operation({
+        turn,
+        recipeJson: stored?.recipe_json ?? null,
+        storedRevision: stored?.revision ?? 0,
+        storedSourceSha256: stored?.source_sha256 ?? null,
+        commit: (input, expectedRevision) => {
+          const recipe = parseImageEditRecipe(input);
+          if (committed || !Number.isSafeInteger(expectedRevision)
+            || expectedRevision !== (stored?.revision ?? 0) || recipe.revision !== expectedRevision + 1) {
+            throw new ImageEditError("REVISION_CONFLICT", "The image recipe revision is stale.");
+          }
+          if (recipe.identity.studioSessionId !== sessionId || recipe.identity.studioTurnId !== turnId) {
+            throw new ImageEditError("FORBIDDEN", "The recipe belongs to another image.");
+          }
+          if (stored) {
+            const changed = this.db.prepare(
+              "UPDATE studio_image_edit_recipes SET source_sha256 = ?, revision = ?, recipe_json = ? WHERE turn_id = ? AND session_id = ? AND revision = ?",
+            ).run(recipe.identity.sourceSha256, recipe.revision, JSON.stringify(recipe), turnId, sessionId, expectedRevision);
+            if (changed.changes !== 1) throw new ImageEditError("REVISION_CONFLICT", "The image recipe revision is stale.");
+          } else {
+            this.db.prepare(
+              "INSERT INTO studio_image_edit_recipes (turn_id, session_id, source_sha256, revision, recipe_json) VALUES (?, ?, ?, ?, ?)",
+            ).run(turnId, sessionId, recipe.identity.sourceSha256, recipe.revision, JSON.stringify(recipe));
+          }
+          committed = true;
+        },
+      });
+      if (result instanceof Promise) throw new ImageEditError("STORAGE_UNAVAILABLE", "Recipe transactions must be synchronous.");
+      return result;
+    })();
   }
 
   appendTurn(input: AppendStudioTurnInput): StudioTurn {

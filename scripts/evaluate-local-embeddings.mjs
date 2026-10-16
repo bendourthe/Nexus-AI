@@ -88,7 +88,7 @@ export async function run(args) {
   const aliases = { baseline: "nexus-eval-" + id + "-baseline:latest", candidate: "nexus-eval-" + id + "-candidate:latest" };
   const created = [];
   const report = { schemaVersion: 1, observedAt: new Date().toISOString(), contractSha256: loaded.contractSha256,
-    fixtureManifestSha256: loaded.manifestSha256, recommendation: "RETAIN", disposition: "HOLD",
+    fixtureManifestSha256: loaded.manifestSha256, sourceSnapshots: loaded.sourceSnapshots, recommendation: "RETAIN", disposition: "HOLD",
     gates: { quality: "HOLD", latency: "HOLD", rejection: "HOLD", vectors: "HOLD", resources: "HOLD",
       tiers: "HOLD", coexistence: "HOLD", offline: "HOLD", terms: "HOLD", context: "HOLD" },
     limitations: ["Required cpu/8/12/24 tiers unmeasured.", "Pinned distribution terms/PUP discrepancy unresolved.",

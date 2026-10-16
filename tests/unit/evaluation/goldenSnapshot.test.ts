@@ -70,11 +70,33 @@ describe("materializeGoldenSnapshot", () => {
     const ws = materializeGoldenSnapshot(sourceDir, "task-02", { baseDir, gitRunner: runner });
     try {
       expect(ws.gitInitialized).toBe(true);
-      expect(calls[0]).toEqual(["init", "-q"]);
+      expect(calls[0]).toEqual(["init", "-q", "--template="]);
       expect(calls.some((c) => c[0] === "add")).toBe(true);
       expect(calls.some((c) => c[0] === "commit")).toBe(true);
     } finally {
       cleanupGoldenSnapshot(ws);
+    }
+  });
+
+  it("does not copy or execute a personal Git template in a disposable snapshot", () => {
+    const template = path.join(baseDir, "personal-template");
+    fs.mkdirSync(path.join(template, "hooks"), { recursive: true });
+    fs.writeFileSync(path.join(template, "template-marker"), "personal");
+    fs.writeFileSync(path.join(template, "hooks", "commit-msg"), "#!/bin/sh\nexit 93\n", { mode: 0o755 });
+    const previous = process.env.GIT_TEMPLATE_DIR;
+    process.env.GIT_TEMPLATE_DIR = template;
+    try {
+      const ws = materializeGoldenSnapshot(sourceDir, "template-isolation", { baseDir });
+      try {
+        expect(ws.gitInitialized).toBe(true);
+        expect(fs.existsSync(path.join(ws.path, ".git", "template-marker"))).toBe(false);
+        expect(fs.existsSync(path.join(ws.path, ".git", "hooks", "commit-msg"))).toBe(false);
+      } finally {
+        cleanupGoldenSnapshot(ws);
+      }
+    } finally {
+      if (previous === undefined) delete process.env.GIT_TEMPLATE_DIR;
+      else process.env.GIT_TEMPLATE_DIR = previous;
     }
   });
 

@@ -1,0 +1,31 @@
+{
+  "observedAt": "2026-10-14",
+  "observations": [
+    {
+      "mode": "create",
+      "pid": 56308,
+      "revision": 6,
+      "cursor": 2,
+      "commands": 3,
+      "marks": 1,
+      "originalSha256": "d126d616641d42ac8b0a07ec302c9fa1ec049f86200931a0a60c8f3080284b77",
+      "sameSource": true,
+      "scope": "Built store facade in separate processes; fixture-owned grant, no UI or human issuer claim."
+    },
+    {
+      "mode": "reopen",
+      "pid": 30244,
+      "revision": 7,
+      "cursor": 3,
+      "commands": 3,
+      "marks": 2,
+      "originalSha256": "d126d616641d42ac8b0a07ec302c9fa1ec049f86200931a0a60c8f3080284b77",
+      "sameSource": true,
+      "scope": "Built store facade in separate processes; fixture-owned grant, no UI or human issuer claim."
+    }
+  ],
+  "independentProcesses": true,
+  "sameCommittedHistory": true,
+  "unchangedSource": true,
+  "tier": "internal-compatible; real core facade, fixture grant; renderer/IPC/human issuer not observed"
+}
