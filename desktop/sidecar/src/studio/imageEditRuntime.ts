@@ -12,7 +12,7 @@
  */
 
 import { createHash, randomUUID } from "node:crypto";
-import { closeSync, fstatSync, fsyncSync, lstatSync, mkdirSync, openSync, readFileSync, realpathSync, unlinkSync, writeSync } from "node:fs";
+import { closeSync, constants as fsConstants, fstatSync, fsyncSync, lstatSync, mkdirSync, openSync, readFileSync, realpathSync, unlinkSync, writeSync } from "node:fs";
 import * as path from "node:path";
 
 import { ImageEditRecipeStore, type ImageEditAccess } from "../../../../core/generations/ImageEditRecipeStore.js";
@@ -264,17 +264,14 @@ export function createImageEditOps(
       if ((error as NodeJS.ErrnoException).code === "EEXIST") {
         // The same edit exported again: return the file already there. Anything
         // else under that name is left alone.
-        // Read through one handle, then confirm that handle is the plain file at
-        // this path, so a swap between the checks and the read is detected.
+        // Judge the existing file only through one handle (no link following
+        // where the OS supports it), so nothing checked by path can be swapped
+        // before the read; its bytes must equal this export's digest.
         let same = false;
         let existing: number | undefined;
         try {
-          existing = openSync(target, "r");
-          const opened = fstatSync(existing);
-          const named = lstatSync(target);
-          same = opened.isFile() && !named.isSymbolicLink()
-            && opened.dev === named.dev && opened.ino === named.ino
-            && realpathSync(target) === target
+          existing = openSync(target, fsConstants.O_RDONLY | (fsConstants.O_NOFOLLOW ?? 0));
+          same = fstatSync(existing).isFile() && inRoot()
             && sha256(readFileSync(existing)) === digest;
         } catch {
           same = false;
