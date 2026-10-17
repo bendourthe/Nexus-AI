@@ -3,7 +3,7 @@
 **Project**: Nexus
 **Status**: in-progress
 **Last updated**: 2026-10-17
-**Open items**: 10
+**Open items**: 9
 
 ## v2.15.0
 
@@ -15,7 +15,7 @@
 | Deferred (DF) | 3 | 0 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 5 | 0 |
-| Missing tests / coverage gaps (MT) | 1 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 1 |
 | Quality-gate gaps (QG) | 1 | 0 |
 
 ### Open Items
@@ -47,13 +47,6 @@
 - **Plan reference**: v2.14.0 T019 known-gaps reconciliation.
 - **Reason**: `rapidocr-onnxruntime` appears only in the legacy `REQUIRED_WHEEL_PREFIXES` list; no verified provisioner installs it, so OCR works only where it was installed by hand. Installing it today pulls `opencv-python` 5.0.0.93, which requires `numpy>=2`, against the lock's `numpy==1.26.4`. The OCR runtime's interpreter likely defaults to a bare `python`, the same pattern as the voice bug fixed in v2.14.0 Phase 1. On the v2.14 reference host, where `rapidocr-onnxruntime` was installed by hand into the system Python, `tests/python/ocr/test_parse.py::TestEngineSelection::test_defaults_to_the_portable_engine` fails with `execution-failed` instead of `engine-unavailable` (also in the untouched main checkout, so not a v2.14 regression; CI has no RapidOCR and passes). Not proven here: which OCR features fail on a clean install.
 - **Suggested next step**: provision OCR through the verified path with pinned `rapidocr-onnxruntime` and `opencv-python` versions compatible with the lock (or move the lock to numpy 2 after a media regression run), and point the OCR runtime at the provisioned interpreter.
-
-#### MT-1 - The Windows stdin regression test never runs in CI
-
-- **Source phase**: v2.14.0 Phase 5 (2026-10-17), terminal CI/CD reconciliation.
-- **Plan reference**: v2.14.0 T022; `tests/python/audio/test_audio_stdin_windows.py`.
-- **Reason**: the test proves the audio runtime's threaded stdin reader does not deadlock on Windows pipes (the v2.14.0 Phase 2 fix). It is marked to skip off Windows, and the only CI job that runs `tests/python` uses `ubuntu-latest`; the one Windows job (`init.ps1 (Windows)`) runs only the bootstrap. It passes locally on Windows (1 passed). Adding a Windows step is a CI workflow change, which the v2.14 run may not make without its own approval.
-- **Suggested next step**: add `python -m pytest tests/python/audio -q` to a Windows job (for example after `init.ps1` in `init-check-windows`, which already runs only off pull requests), with owner approval for the workflow change.
 
 #### WN-3 - The pinned-digest check cannot read a remote or containerized Ollama
 
@@ -94,3 +87,4 @@
 
 | ID | Title | Resolved in | Notes |
 |---|---|---|---|
+| MT-1 | The Windows stdin regression test never runs in CI | v2.14.0 Phase 5 (owner-approved workflow change, 2026-10-17) | `ci.yml` `init-check-windows` now runs `python -m pytest tests/python/audio -q` on Windows after `init.ps1` (off pull requests, like the job). Locally: 38 passed; workflow tests 51 passed; `nexus-check` unchanged at its baseline |
