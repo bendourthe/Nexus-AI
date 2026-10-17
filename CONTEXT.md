@@ -17,3 +17,20 @@ Ubiquitous language only. Architecture lives in `AGENTS.md` and `ARCHITECTURE.md
 **Avoid**: chunk, passage, snippet
 
 **Relationships**: A leaf or branch of a document outline. Not the same as a memory chunk, which has no stored position in the source document.
+
+
+## Rewrite adaptation
+
+**Definition**: An explicitly frozen text-only instruction set derived from installed editing guidance for one local model request.
+
+**Avoid**: full skill execution, model fine-tune
+
+**Relationships**: Uses editing guidance and produces a candidate rewrite; narrower than the complete installed skill workflow.
+
+## Literal obligation
+
+**Definition**: A fixture-declared exact text and occurrence requirement checked against the decoded rewrite.
+
+**Avoid**: fact guarantee, semantic proof
+
+**Relationships**: A deterministic preservation check, separate from semantic and readability review.

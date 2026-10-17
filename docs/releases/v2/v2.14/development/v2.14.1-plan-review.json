@@ -1,0 +1,348 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "plan": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+  "reviewedDraftSha256": "fec5f778e1e933c8978feeb5c081f8d53504b659997e03f817ee9eb54294b90f",
+  "selectedLenses": [
+    "coherence",
+    "feasibility",
+    "product",
+    "design",
+    "scope-guardian",
+    "security",
+    "adversarial"
+  ],
+  "skippedLenses": [],
+  "normalization": "File + section bucket + recorded canonical-issue alias; original titles preserved. Dedup, one-step independent cross-lens promotion, then late 75 confidence gate; P0 >=50 exception. No interactive demotion.",
+  "rawFindings": [
+    {
+      "persona": "coherence",
+      "title": "Pilot HOLD has no path to the final HOLD decision",
+      "severity": "P2",
+      "line": 167,
+      "confidence": 100,
+      "key": "pilot-hold-continuation",
+      "fix": "Allow missing-ID/HOLD continuation to feasibility and final reporting without a live-quality pass.",
+      "file": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+      "requires_verification": false,
+      "pre_existing": false,
+      "autofix_class": "manual",
+      "suggested_fix": "Allow missing-ID/HOLD continuation to feasibility and final reporting without a live-quality pass.",
+      "section_bucket": "phase-2-prerequisites"
+    },
+    {
+      "persona": "coherence",
+      "title": "Reviewer qualification and readability acceptance remain undefined",
+      "severity": "P2",
+      "line": 28,
+      "confidence": 75,
+      "key": "reviewer-rubric-definition",
+      "fix": "Owner must define qualification, readable output anchors and the per-language HOLD rule before freezing.",
+      "file": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+      "requires_verification": true,
+      "pre_existing": false,
+      "autofix_class": "manual",
+      "suggested_fix": "Owner must define qualification, readable output anchors and the per-language HOLD rule before freezing.",
+      "section_bucket": "definition-of-done"
+    },
+    {
+      "persona": "feasibility",
+      "title": "The proposed endpoint validator cannot load in plain Node",
+      "severity": "P1",
+      "line": 146,
+      "confidence": 100,
+      "key": "headless-validator-import",
+      "fix": "Use vscode-free loopback.ts, evaluation-local contract validation and a plain-Node import smoke.",
+      "file": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+      "requires_verification": false,
+      "pre_existing": false,
+      "autofix_class": "manual",
+      "suggested_fix": "Use vscode-free loopback.ts, evaluation-local contract validation and a plain-Node import smoke.",
+      "section_bucket": "phase-1.3"
+    },
+    {
+      "persona": "feasibility",
+      "title": "A body-only request cannot execute the installed skill's required workflow",
+      "severity": "P2",
+      "line": 146,
+      "confidence": 100,
+      "key": "body-only-workflow",
+      "fix": "Explicitly label a bounded one-shot adaptation or separately authorize the complete reference/detector workflow.",
+      "file": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+      "requires_verification": false,
+      "pre_existing": false,
+      "autofix_class": "manual",
+      "suggested_fix": "Explicitly label a bounded one-shot adaptation or separately authorize the complete reference/detector workflow.",
+      "section_bucket": "phase-1.3"
+    },
+    {
+      "persona": "product",
+      "title": "An unchanged draft can pass without fulfilling the editing task",
+      "severity": "P2",
+      "line": 28,
+      "confidence": 75,
+      "key": "unchanged-draft-usefulness",
+      "fix": "Freeze source-specific editing goals, anchored scores and appropriate unchanged-control handling.",
+      "file": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+      "requires_verification": true,
+      "pre_existing": false,
+      "autofix_class": "manual",
+      "suggested_fix": "Freeze source-specific editing goals, anchored scores and appropriate unchanged-control handling.",
+      "section_bucket": "definition-of-done"
+    },
+    {
+      "persona": "design",
+      "title": "Loading only SKILL.md cannot exercise the installed editing workflow",
+      "severity": "P2",
+      "line": 146,
+      "confidence": 100,
+      "key": "body-only-workflow",
+      "fix": "Choose complete bounded workflow or label body-only evidence and hold full-workflow claims.",
+      "file": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+      "requires_verification": false,
+      "pre_existing": false,
+      "autofix_class": "manual",
+      "suggested_fix": "Choose complete bounded workflow or label body-only evidence and hold full-workflow claims.",
+      "section_bucket": "phase-1.3"
+    },
+    {
+      "persona": "design",
+      "title": "The scored draft has no boundary separating it from required change notes",
+      "severity": "P2",
+      "line": 146,
+      "confidence": 75,
+      "key": "rewrite-commentary-boundary",
+      "fix": "Freeze the rewrite/commentary boundary; hash raw output, decoded draft and review; hold malformed separation.",
+      "file": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+      "requires_verification": true,
+      "pre_existing": false,
+      "autofix_class": "manual",
+      "suggested_fix": "Freeze the rewrite/commentary boundary; hash raw output, decoded draft and review; hold malformed separation.",
+      "section_bucket": "phase-1.3"
+    },
+    {
+      "persona": "security",
+      "title": "Loopback validation does not prevent redirected inference requests from leaving the host",
+      "severity": "P1",
+      "line": 146,
+      "confidence": 100,
+      "key": "redirect-rejection",
+      "fix": "Reject redirects before every request/probe in a process-local restricted fetch wrapper; prove no redirected body delivery or hold live calls.",
+      "file": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+      "requires_verification": false,
+      "pre_existing": false,
+      "autofix_class": "manual",
+      "suggested_fix": "Reject redirects before every request/probe in a process-local restricted fetch wrapper; prove no redirected body delivery or hold live calls.",
+      "section_bucket": "phase-1.3"
+    },
+    {
+      "persona": "adversarial",
+      "title": "Freeze the scored rewrite boundary so commentary cannot satisfy missing draft obligations",
+      "severity": "P2",
+      "line": 146,
+      "confidence": 75,
+      "key": "rewrite-commentary-boundary",
+      "fix": "Use the same preregistered draft text for every check/review and test commentary holding omitted literals.",
+      "file": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+      "requires_verification": true,
+      "pre_existing": false,
+      "autofix_class": "manual",
+      "suggested_fix": "Use the same preregistered draft text for every check/review and test commentary holding omitted literals.",
+      "section_bucket": "phase-1.3"
+    },
+    {
+      "persona": "adversarial",
+      "title": "Preflight identity checks do not bind every response to the frozen model digest",
+      "severity": "P2",
+      "line": 183,
+      "confidence": 50,
+      "key": "per-response-model-binding",
+      "fix": "Verify any available identity around requests, hold detected drift and qualify unobservable tag mutation rather than assert cryptographic binding.",
+      "file": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+      "requires_verification": true,
+      "pre_existing": false,
+      "autofix_class": "manual",
+      "suggested_fix": "Verify any available identity around requests, hold detected drift and qualify unobservable tag mutation rather than assert cryptographic binding.",
+      "section_bucket": "phase-2.1"
+    },
+    {
+      "persona": "coherence-followup",
+      "title": "Baseline task still requires the full skill despite adaptation scope",
+      "severity": "P2",
+      "line": 202,
+      "confidence": 100,
+      "key": "adaptation-wording-consistency",
+      "fix": "Align remaining full-skill-fit/baseline instructions with Q1's proposed adaptation.",
+      "file": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md",
+      "requires_verification": false,
+      "pre_existing": false,
+      "autofix_class": "manual",
+      "suggested_fix": "Align remaining full-skill-fit/baseline instructions with Q1's proposed adaptation.",
+      "section_bucket": "phase-2.2"
+    }
+  ],
+  "merged": [
+    {
+      "fingerprint": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md|phase-2-prerequisites|pilot-hold-continuation",
+      "canonical_issue": "pilot-hold-continuation",
+      "severity": "P2",
+      "confidence": 100,
+      "personas": [
+        "coherence"
+      ],
+      "original_titles": [
+        "Pilot HOLD has no path to the final HOLD decision"
+      ],
+      "suppressed": false
+    },
+    {
+      "fingerprint": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md|definition-of-done|reviewer-rubric-definition",
+      "canonical_issue": "reviewer-rubric-definition",
+      "severity": "P2",
+      "confidence": 75,
+      "personas": [
+        "coherence"
+      ],
+      "original_titles": [
+        "Reviewer qualification and readability acceptance remain undefined"
+      ],
+      "suppressed": false
+    },
+    {
+      "fingerprint": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md|phase-1.3|headless-validator-import",
+      "canonical_issue": "headless-validator-import",
+      "severity": "P1",
+      "confidence": 100,
+      "personas": [
+        "feasibility"
+      ],
+      "original_titles": [
+        "The proposed endpoint validator cannot load in plain Node"
+      ],
+      "suppressed": false
+    },
+    {
+      "fingerprint": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md|phase-1.3|body-only-workflow",
+      "canonical_issue": "body-only-workflow",
+      "severity": "P2",
+      "confidence": 100,
+      "personas": [
+        "feasibility",
+        "design"
+      ],
+      "original_titles": [
+        "A body-only request cannot execute the installed skill's required workflow",
+        "Loading only SKILL.md cannot exercise the installed editing workflow"
+      ],
+      "suppressed": false
+    },
+    {
+      "fingerprint": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md|definition-of-done|unchanged-draft-usefulness",
+      "canonical_issue": "unchanged-draft-usefulness",
+      "severity": "P2",
+      "confidence": 75,
+      "personas": [
+        "product"
+      ],
+      "original_titles": [
+        "An unchanged draft can pass without fulfilling the editing task"
+      ],
+      "suppressed": false
+    },
+    {
+      "fingerprint": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md|phase-1.3|rewrite-commentary-boundary",
+      "canonical_issue": "rewrite-commentary-boundary",
+      "severity": "P2",
+      "confidence": 100,
+      "personas": [
+        "design",
+        "adversarial"
+      ],
+      "original_titles": [
+        "The scored draft has no boundary separating it from required change notes",
+        "Freeze the scored rewrite boundary so commentary cannot satisfy missing draft obligations"
+      ],
+      "suppressed": false
+    },
+    {
+      "fingerprint": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md|phase-1.3|redirect-rejection",
+      "canonical_issue": "redirect-rejection",
+      "severity": "P1",
+      "confidence": 100,
+      "personas": [
+        "security"
+      ],
+      "original_titles": [
+        "Loopback validation does not prevent redirected inference requests from leaving the host"
+      ],
+      "suppressed": false
+    },
+    {
+      "fingerprint": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md|phase-2.1|per-response-model-binding",
+      "canonical_issue": "per-response-model-binding",
+      "severity": "P2",
+      "confidence": 50,
+      "personas": [
+        "adversarial"
+      ],
+      "original_titles": [
+        "Preflight identity checks do not bind every response to the frozen model digest"
+      ],
+      "suppressed": true
+    },
+    {
+      "fingerprint": "docs/releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md|phase-2.2|adaptation-wording-consistency",
+      "canonical_issue": "adaptation-wording-consistency",
+      "severity": "P2",
+      "confidence": 100,
+      "personas": [
+        "coherence-followup"
+      ],
+      "original_titles": [
+        "Baseline task still requires the full skill despite adaptation scope"
+      ],
+      "suppressed": false
+    }
+  ],
+  "ownerDecisions": {
+    "date": "2026-10-16",
+    "Q1": {
+      "status": "approved",
+      "decision": "Three phases, 18 tasks; bounded text-only adaptation on installed gemma4:12b. A blocked runtime may yield HOLD without a quality verdict. No Humanizer installation, adapter/catalog changes or Handwired implementation."
+    },
+    "Q2": {
+      "status": "approved",
+      "decision": "Eight outputs per language: four edit-needed and four clean controls; zero factual changes, exact/structure obligations, edit-needed readability at least 4 with at least one-point improvement and declared goal met, clean controls preserve voice without regression."
+    },
+    "Q3": {
+      "status": "approved",
+      "decision": "Locally record self-attested proficiency in professional writing and checking meaning per reviewed language; qualify only completed reviews and hold unavailable languages. No hosted judge or guessed approval."
+    },
+    "Q4": {
+      "status": "approved",
+      "decision": "Add the v2.14.1 tracker section and 0/18 metric plus Rewrite adaptation and Literal obligation terms, preserving every existing entry."
+    }
+  },
+  "finalDisposition": {
+    "status": "READY",
+    "technicalFindingsCorrected": [
+      "R1",
+      "R2",
+      "R3",
+      "R5",
+      "R8"
+    ],
+    "ownerResolvedFindings": [
+      "R4",
+      "R6",
+      "R7"
+    ],
+    "openP0P1": 0,
+    "openOwnerDecisions": 0,
+    "implementationTasksComplete": 0,
+    "implementationTasksTotal": 18,
+    "implementationAuthorized": false,
+    "runtimeQualityVerified": false,
+    "note": "Initial raw findings and confidence values are retained; final dispositions reflect the approved decisions, not runtime verification."
+  }
+}
