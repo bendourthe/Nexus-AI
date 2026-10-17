@@ -90,6 +90,7 @@ import { foldModelId } from "../../../../core/registry/modelAliases";
 import { DEFAULT_MODEL_ID, FRONTEND_MODELS } from "../coding/models";
 import { createIpcDocumentClient, type DocumentClient } from "./documentClient";
 import { createIpcAudioClient, type AudioClient } from "./audioClient";
+import { useSpokenReply } from "./useSpokenReply";
 import {
   createBrowserMicRecorder,
   type MicRecorder,
@@ -599,47 +600,14 @@ export function ChatPage({
     [],
   );
 
-  const playReply = useCallback(
-    async (text: string) => {
-      if (!voiceEnabled || !text.trim()) return;
-      dispatchVoice({ type: "tts-started" });
-      const abort = new AbortController();
-      ttsAbortRef.current = abort;
-      try {
-        const spoken = await audioClient.speak(text);
-        if (abort.signal.aborted) return;
-        const dataUrl = `data:${spoken.mimeType};base64,${spoken.audioBase64}`;
-        const play =
-          playAudioOverride ??
-          (async (url: string, signal: AbortSignal) => {
-            const audio = new Audio(url);
-            await new Promise<void>((resolve, reject) => {
-              const stop = () => {
-                audio.pause();
-                resolve();
-              };
-              signal.addEventListener("abort", stop, { once: true });
-              audio.onended = () => resolve();
-              audio.onerror = () => reject(new Error("tts playback failed"));
-              void audio.play();
-            });
-          });
-        // v2.14.0 T001: time-to-first-audio anchor for the packaged-app check.
-        // Carries no text or audio; read via performance.getEntriesByName.
-        performance.mark("nexus:voice:first-playback");
-        await play(dataUrl, abort.signal);
-        if (!abort.signal.aborted) dispatchVoice({ type: "tts-ended" });
-      } catch (err) {
-        if (!abort.signal.aborted) {
-          dispatchVoice({
-            type: "error",
-            message: err instanceof Error ? err.message : String(err),
-          });
-        }
-      }
-    },
-    [audioClient, dispatchVoice, playAudioOverride, voiceEnabled],
-  );
+  // v2.14.0 T009: the sidecar speaks the reply while it streams; this plays
+  // its segments in order and cancels synthesis on barge-in or a new turn.
+  const spokenReply = useSpokenReply({
+    audioClient,
+    dispatchVoice,
+    abortRef: ttsAbortRef,
+    ...(playAudioOverride ? { play: playAudioOverride } : {}),
+  });
 
   const handleSelect = useCallback((node: SelectedNode) => {
     setSelected(node);
@@ -916,6 +884,7 @@ export function ChatPage({
           reply = await chatSession.sendMessage({
             sessionId,
             message: outbound,
+            ...(voiceEnabled ? { voice: { jobId: spokenReply.begin(sessionId) } } : {}),
             ...(images.length > 0
               ? { images: images.map(stripDataUrlPrefix) }
               : {}),
@@ -937,6 +906,7 @@ export function ChatPage({
           reply = await chatSession.sendMessage({
             sessionId: restarted.sessionId,
             message: outbound,
+            ...(voiceEnabled ? { voice: { jobId: spokenReply.begin(restarted.sessionId) } } : {}),
             ...(images.length > 0
               ? { images: images.map(stripDataUrlPrefix) }
               : {}),
@@ -1002,6 +972,8 @@ export function ChatPage({
       patchMessage,
       persistMessage,
       personaByChat,
+      spokenReply,
+      voiceEnabled,
     ],
   );
 
@@ -1361,7 +1333,7 @@ export function ChatPage({
           })
           .catch(() => undefined);
       }
-      if (voiceEnabled) void playReply(reply);
+      if (voiceEnabled) spokenReply.replyFinished();
     },
     [
       activeChat,
@@ -1375,7 +1347,7 @@ export function ChatPage({
       listedModels,
       memoryHub,
       modelId,
-      playReply,
+      spokenReply,
       residency,
       sampleVideoFrames,
       selectedListedModel,
@@ -1421,8 +1393,8 @@ export function ChatPage({
       return;
     }
     dispatchVoice({ type: "transcript-ready" });
+    // v2.14.0 T009: speaking is driven by the reply's segments as they arrive.
     await handleSubmit("", [url]);
-    dispatchVoice({ type: "reply-ready" });
   }, [dispatchVoice, handleSubmit]);
 
   const onPttDown = useCallback(() => {

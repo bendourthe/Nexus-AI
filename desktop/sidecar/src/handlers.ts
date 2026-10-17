@@ -86,6 +86,11 @@ import {
   AudioEmptyRequest,
   AudioTranscribeRequest,
   AudioSpeakRequest,
+  IpcMethodError,
+  AudioSpeakDrainRequest,
+  type AudioSpeakDrainResponseT,
+  AudioSpeakCancelRequest,
+  type AudioSpeakCancelResponseT,
   type AudioHealthResponseT,
   type AudioTranscribeResponseT,
   type AudioSpeakResponseT,
@@ -297,6 +302,7 @@ import type { OcrRuntime } from "../../../core/documents/ocrRuntimeFactory.js";
 import { getSharedOcrRuntime } from "./ocr/sharedRuntime.js";
 import type { AudioRuntime } from "../../../core/audio/audioRuntimeFactory.js";
 import { getSharedAudioRuntime } from "./audio/sharedRuntime.js";
+import { VoiceJobError, VoiceJobRegistry } from "./chat/voiceJobs.js";
 import {
   listMcpRegistrySettings,
   setMcpRegistryToolDenied,
@@ -357,6 +363,8 @@ export interface HandlerContext {
    * in-memory client; production lazily builds on first `audio.*` call.
    */
   audio?: AudioRuntime;
+  /** v2.14.0 T008 -- spoken-reply jobs; built lazily on the first voice turn. */
+  voiceJobs?: VoiceJobRegistry;
   /**
    * v1.18.0 Phase 3 (OW-A5) -- project root for per-project MCP tool deny.
    * Production uses `NEXUS_WORKSPACE` or `process.cwd()`; tests inject a temp dir.
@@ -437,6 +445,11 @@ function resolveOcrRuntime(ctx: HandlerContext): OcrRuntime {
 
 function resolveAudioRuntime(ctx: HandlerContext): AudioRuntime {
   return getSharedAudioRuntime(ctx.audio);
+}
+
+function resolveVoiceJobs(ctx: HandlerContext): VoiceJobRegistry {
+  if (!ctx.voiceJobs) ctx.voiceJobs = new VoiceJobRegistry(() => resolveAudioRuntime(ctx));
+  return ctx.voiceJobs;
 }
 
 export type HandlerFn = (
@@ -1304,6 +1317,17 @@ export const handlers: Record<Method, HandlerFn> = {
     const client = resolveAudioRuntime(ctx);
     return client.speak({ text: req.text });
   },
+  "audio.speakDrain": async (params, ctx): Promise<AudioSpeakDrainResponseT> => {
+    const req = AudioSpeakDrainRequest.parse(params ?? {});
+    const drained = resolveVoiceJobs(ctx).drain(req.sessionId, req.jobId, req.afterSeq);
+    return { ...drained, segments: [...drained.segments] };
+  },
+  "audio.speakCancel": async (params, ctx): Promise<AudioSpeakCancelResponseT> => {
+    const req = AudioSpeakCancelRequest.parse(params ?? {});
+    // The same answer for unknown, finished and foreign ids.
+    resolveVoiceJobs(ctx).cancel(req.sessionId, req.jobId);
+    return { ok: true as const };
+  },
   "coding.startTask": async () => {
     throw new NotImplementedError("coding.startTask");
   },
@@ -1503,6 +1527,18 @@ export const handlers: Record<Method, HandlerFn> = {
   },
   "chat.session.sendMessage": async (params, ctx) => {
     const req = ChatSessionSendMessageRequest.parse(params ?? {});
+    let voice: ReturnType<VoiceJobRegistry["open"]> | undefined;
+    if (req.voice) {
+      if (ctx.chat.peekModelId(req.sessionId) === undefined) {
+        throw new IpcMethodError("chat.session.sendMessage", `unknown sessionId: ${req.sessionId}`);
+      }
+      try {
+        voice = resolveVoiceJobs(ctx).open(req.sessionId, req.voice.jobId);
+      } catch (err) {
+        if (err instanceof VoiceJobError) throw new IpcMethodError("chat.session.sendMessage", err.message);
+        throw err;
+      }
+    }
     ctx.telemetry?.publish({
       kind: "chat.turn",
       source: "chat",
@@ -1512,7 +1548,7 @@ export const handlers: Record<Method, HandlerFn> = {
       ctx,
       "chat",
       ctx.chat.peekModelId(req.sessionId),
-      () => ctx.chat.sendMessage(req.sessionId, req.message, req.images),
+      () => ctx.chat.sendMessage(req.sessionId, req.message, req.images, voice),
     )) as Awaited<ReturnType<typeof ctx.chat.sendMessage>>;
     return { sessionId: req.sessionId, events };
   },

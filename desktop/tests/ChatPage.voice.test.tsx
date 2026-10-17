@@ -39,15 +39,19 @@ describe("ChatPage voice loop", () => {
       transcript: "[origin:stt_transcript]\nhello voice",
     });
     const played: string[] = [];
+    const voiceJobs: string[] = [];
     const chatSession: ChatSessionClient = {
       start: async () => ({ sessionId: "s1", modelId: "gemma4:e4b", createdAt: "t" }),
-      sendMessage: async () => ({
+      sendMessage: async (input) => {
+        if (input.voice) voiceJobs.push(input.voice.jobId);
+        return {
         sessionId: "s1",
         events: [
           { kind: "token", text: "spoken reply" },
           { kind: "done", finishReason: "stop" },
         ],
-      }),
+        };
+      },
     };
     const user = userEvent.setup();
     render(
@@ -90,10 +94,47 @@ describe("ChatPage voice loop", () => {
     fireEvent.click(screen.getByTestId("media-composer-voice-ptt"));
     expect(await screen.findByText("spoken reply")).toBeInTheDocument();
     await waitFor(() => expect(played.length).toBeGreaterThan(0));
-    expect(audio.speakCalls.some((t) => t.includes("spoken reply"))).toBe(true);
+    // v2.14.0 T009: the sidecar speaks the reply from the stream; the page
+    // sends a voice job id with the turn and plays the drained segments.
+    expect(voiceJobs).toHaveLength(1);
+    expect(audio.drainCalls.some((c) => c.jobId === voiceJobs[0])).toBe(true);
+    expect(audio.speakCalls).toEqual([]);
   },
   15_000,
 );
+
+  it("with voice off, a typed turn sends no voice job and drains nothing", async () => {
+    const client = new InMemoryChatExplorerClient();
+    const folder = client.createFolder({ parentId: null, name: "Work" });
+    const chat = client.createChat({ folderId: folder.id, title: "draft", modelId: "gemma4:e4b" });
+    const audio = createInMemoryAudioClient();
+    const sent: Array<{ voice?: { jobId: string } }> = [];
+    const user = userEvent.setup();
+    render(
+      <ChatPage
+        client={client}
+        chatSession={{
+          start: async () => ({ sessionId: "s1", modelId: "gemma4:e4b", createdAt: "t" }),
+          sendMessage: async (input) => {
+            sent.push(input);
+            return { sessionId: "s1", events: [{ kind: "token", text: "typed reply" }, { kind: "done", finishReason: "stop" }] };
+          },
+        }}
+        audioClient={audio}
+        playAudio={async () => undefined}
+        modelsClient={INSTALLED_CHAT_MODELS}
+      />,
+    );
+    await user.click(screen.getByTestId(`tree-row-folder-${folder.id}`));
+    await user.click(screen.getByTestId(`tree-row-chat-${chat.id}`));
+    await waitForInstalledChatModel();
+    await user.type(screen.getByTestId("media-composer-textarea"), "hello{Enter}");
+    expect(await screen.findByText("typed reply")).toBeInTheDocument();
+    expect(sent).toHaveLength(1);
+    expect(sent[0]!.voice).toBeUndefined();
+    expect(audio.drainCalls).toEqual([]);
+    expect(audio.speakCalls).toEqual([]);
+  });
 
   it("VAD start shows the capture indicator until stop", async () => {
     const client = new InMemoryChatExplorerClient();

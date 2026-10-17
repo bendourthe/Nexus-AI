@@ -68,3 +68,38 @@ def test_torch_dll_helper_is_a_no_op_off_windows_or_without_torch(monkeypatch):
     monkeypatch.setattr("importlib.util.find_spec", lambda name: None)
     engines._expose_torch_cuda_dlls()
     assert os.environ["PATH"] == "C:/other"
+
+
+def test_whisper_model_is_built_once_and_reused(tmp_path, monkeypatch):
+    import sys
+    import types
+
+    monkeypatch.delenv("NEXUS_AUDIO_STUB", raising=False)
+    monkeypatch.setenv("NEXUS_MODELS_ROOT", str(tmp_path))
+    (tmp_path / "weights" / "faster-whisper-large-v3").mkdir(parents=True)
+    built: list[str] = []
+
+    class Segment:
+        text = " hello "
+
+    class WhisperModel:
+        def __init__(self, path, local_files_only):
+            assert local_files_only is True
+            built.append(path)
+
+        def transcribe(self, _path):
+            return [Segment()], None
+
+    monkeypatch.setitem(sys.modules, "faster_whisper", types.SimpleNamespace(WhisperModel=WhisperModel))
+    monkeypatch.setattr(engines, "_WHISPER", None)
+    for _ in range(3):
+        assert engines.transcribe({"audioBase64": "AAAA"}) == {"transcript": "hello"}
+    assert len(built) == 1
+
+
+def test_transcribe_fails_closed_without_whisper_weights(tmp_path, monkeypatch):
+    monkeypatch.delenv("NEXUS_AUDIO_STUB", raising=False)
+    monkeypatch.setenv("NEXUS_MODELS_ROOT", str(tmp_path))
+    monkeypatch.setattr(engines, "_WHISPER", None)
+    with pytest.raises(RuntimeError, match="STT weights are not installed"):
+        engines.transcribe({"audioBase64": "AAAA"})
