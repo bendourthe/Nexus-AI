@@ -12,6 +12,7 @@ import {
 } from "../../../modules/coding/orchestration/FusionAgent.js";
 import type { OllamaClient } from "../../../modules/coding/llm/types.js";
 import { makeOllamaClient } from "../../helpers/factories.js";
+import { NO_USER_SKILLS_DIR } from "../../helpers/noUserSkills.js";
 
 // v1.6.0 adoption-openrouter-fusion Phase 2 (OF004 acceptance). End-to-end
 // integration of the local panel-fusion path: PanelExecutor fans one prompt
@@ -61,7 +62,7 @@ describe("PanelExecutor + FusionAgent end-to-end (OF004)", () => {
     const judgeClient = makeOllamaClient(JUDGE_OUTPUT);
     const fusePrompt = loadFusePrompt(
       REAL_CATALOG_DIR,
-      path.join(REAL_CATALOG_DIR, "__none__"),
+      NO_USER_SKILLS_DIR,
     );
     const judge = new FusionAgent(judgeClient, "gemma4:e4b", { num_ctx: 131072 }, fusePrompt);
 

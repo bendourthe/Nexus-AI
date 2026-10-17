@@ -407,6 +407,7 @@ export async function runStreamedTurn(sidecar, opts, fixture, { bargeIn = false,
     const arrivals = [];
     let afterSeq = -1;
     let state = "unknown";
+    let jobError;
     let cancelSentAt = null;
     let cancelMs = null;
     const deadline = performance.now() + timeout;
@@ -420,6 +421,7 @@ export async function runStreamedTurn(sidecar, opts, fixture, { bargeIn = false,
         arrivals.push({ atMs: now - marks.transcribeStart, durationMs });
       }
       state = drained.state;
+      jobError = drained.error;
       if (bargeIn && cancelSentAt === null && arrivals.length > 0) {
         cancelSentAt = performance.now();
         await rpc("audio.speakCancel", { sessionId: session.sessionId, jobId }, timeout, "cancel");
@@ -437,7 +439,9 @@ export async function runStreamedTurn(sidecar, opts, fixture, { bargeIn = false,
     if (chatError) throw chatError;
     const events = turn?.events ?? [];
     const done = events.find((e) => e.kind === "done");
-    if (state === "error") return { status: "error", stage: "synthesis", reason: "voice-job-error" };
+    if (state === "error") {
+      return { status: "error", stage: "synthesis", reason: "voice-job-error", ...(jobError ? { error: jobError } : {}) };
+    }
     if (done?.finishReason?.startsWith("error")) return { status: "error", stage: "modelComplete", reason: "model-error" };
     if (arrivals.length === 0) return { status: "error", stage: "synthesis", reason: "no-segments" };
     const metrics = await rpc("metrics.inference", {}, timeout, "metrics");

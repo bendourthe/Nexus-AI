@@ -59,15 +59,26 @@ def manifest_path(model_tag: str, models_dir: Path) -> Path:
     return models_dir.joinpath("manifests", *name.split("/"), tag)
 
 
+def manifest_candidates(model_tag: str, models_dir: Path) -> list[Path]:
+    """As written, then with the repository path lowercased (some Ollama
+    versions store ``hf.co`` names that way on case-sensitive filesystems)."""
+    name, sep, tag = model_tag.rpartition(":")
+    lowered = f"{name.lower()}:{tag}" if sep else model_tag.lower()
+    paths = [manifest_path(model_tag, models_dir), manifest_path(lowered, models_dir)]
+    # Keyed by text: Windows paths compare case-insensitively.
+    return list({str(path): path for path in paths}.values())
+
+
 def read_model_digest(model_tag: str, models_dir: Path | None = None) -> str | None:
     """The model layer's sha256 from a pulled tag's manifest, or None."""
-    try:
-        manifest = json.loads(
-            manifest_path(model_tag, models_dir or ollama_models_dir()).read_text(
-                encoding="utf-8"
-            )
-        )
-    except (OSError, ValueError):
+    manifest = None
+    for path in manifest_candidates(model_tag, models_dir or ollama_models_dir()):
+        try:
+            manifest = json.loads(path.read_text(encoding="utf-8"))
+            break
+        except (OSError, ValueError):
+            continue
+    if not isinstance(manifest, dict):
         return None
     for layer in manifest.get("layers") or []:
         if layer.get("mediaType") == MODEL_LAYER:
@@ -78,7 +89,7 @@ def read_model_digest(model_tag: str, models_dir: Path | None = None) -> str | N
 
 def remove_model(model_tag: str) -> None:
     subprocess.run(
-        ["ollama", "rm", model_tag], capture_output=True, timeout=120, check=False
+        ["ollama", "rm", model_tag], capture_output=True, timeout=120, check=True
     )
 
 
@@ -95,14 +106,21 @@ def verify_pull(
     actual = read_digest(model_tag)
     if actual == expected:
         return None
+    removed = False
     with contextlib.suppress(OSError, subprocess.SubprocessError):
         remove(model_tag)
+        removed = True
+    outcome = (
+        "the model was removed"
+        if removed
+        else "removing it failed, so remove it before use"
+    )
     if actual is None:
         return (
             f"pulled {model_tag} has no readable GGUF digest in Ollama's manifest; "
-            "the model was removed"
+            f"{outcome}"
         )
     return (
         f"pulled {model_tag} has GGUF digest {actual}, but the catalog pins "
-        f"{expected}; the model was removed"
+        f"{expected}; {outcome}"
     )

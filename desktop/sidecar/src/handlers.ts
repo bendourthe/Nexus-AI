@@ -1544,12 +1544,20 @@ export const handlers: Record<Method, HandlerFn> = {
       source: "chat",
       payload: { role: "app", sessionId: req.sessionId },
     });
-    const events = (await enqueueInference(
-      ctx,
-      "chat",
-      ctx.chat.peekModelId(req.sessionId),
-      () => ctx.chat.sendMessage(req.sessionId, req.message, req.images, voice),
-    )) as Awaited<ReturnType<typeof ctx.chat.sendMessage>>;
+    let events: Awaited<ReturnType<typeof ctx.chat.sendMessage>>;
+    try {
+      events = (await enqueueInference(
+        ctx,
+        "chat",
+        ctx.chat.peekModelId(req.sessionId),
+        () => ctx.chat.sendMessage(req.sessionId, req.message, req.images, voice),
+      )) as Awaited<ReturnType<typeof ctx.chat.sendMessage>>;
+    } catch (err) {
+      // A turn rejected or cancelled before it ran must not leave its voice
+      // job running for the webview to poll forever (no-op once finished).
+      voice?.fail(err instanceof Error ? err.message : String(err));
+      throw err;
+    }
     return { sessionId: req.sessionId, events };
   },
   "memory.episodic.record": async (params, ctx) =>

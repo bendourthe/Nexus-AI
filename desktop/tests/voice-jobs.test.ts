@@ -237,6 +237,28 @@ describe("VoiceJobRegistry", () => {
     expect(registry.drain("s1", job.id, -1).state).toBe("cancelled");
   });
 
+  // v2.14.0 Phase 5 deep pass (adversarial finding 4).
+  it("bounds undrained segments, not the total of a long reply", async () => {
+    const audio = new ScriptedAudio();
+    const registry = new VoiceJobRegistry(() => audio);
+    const job = registry.open("s1", randomUUID());
+    let acked = -1;
+    for (let i = 0; i < 250; i++) {
+      job.pushSentence(`Sentence ${i}.`);
+      await vi.waitFor(() => expect(audio.spoken).toHaveLength(i + 1));
+      acked = registry.drain("s1", job.id, acked).segments.at(-1)?.seq ?? acked;
+    }
+    job.endReply();
+    await vi.waitFor(() => expect(registry.drain("s1", job.id, acked).state).toBe("completed"));
+
+    const stalled = new VoiceJobRegistry(() => new ScriptedAudio());
+    const undrained = stalled.open("s1", randomUUID());
+    for (let i = 0; i < 201; i++) undrained.pushSentence(`Sentence ${i}.`);
+    undrained.endReply();
+    await vi.waitFor(() => expect(stalled.drain("s1", undrained.id, -1).state).not.toBe("running"));
+    expect(stalled.drain("s1", undrained.id, -1)).toMatchObject({ state: "error", error: expect.stringMatching(/segment bound/) });
+  });
+
   it("evicts finished jobs after their drain window", () => {
     let now = 0;
     const registry = new VoiceJobRegistry(() => new ScriptedAudio(), () => now);
@@ -275,6 +297,28 @@ describe("voice IPC validation", () => {
       dispatch("chat.session.sendMessage", { sessionId, message: "Again.", voice: { jobId } }, ctx),
     ).rejects.toThrow(/already used/);
     await expect(dispatch("audio.speakDrain", { sessionId, jobId: "bad", afterSeq: -1 }, ctx)).rejects.toThrow();
+  });
+
+  // v2.14.0 Phase 5 deep pass (adversarial finding 5).
+  it("ends the voice job when the turn is rejected before it runs", async () => {
+    const ctx = createHandlerContext({ pid: 1, platform: process.platform });
+    ctx.audio = new ScriptedAudio();
+    const { sessionId } = (await dispatch("chat.session.start", { modelId: "gemma4:e4b" }, ctx)) as { sessionId: string };
+    ctx.studio = {
+      scheduler: {
+        enqueue: async () => {
+          throw new Error("scheduler stopped");
+        },
+      },
+    } as unknown as NonNullable<typeof ctx.studio>;
+    const jobId = randomUUID();
+    await expect(
+      dispatch("chat.session.sendMessage", { sessionId, message: "Hello there.", voice: { jobId } }, ctx),
+    ).rejects.toThrow(/scheduler stopped/);
+    expect(await dispatch("audio.speakDrain", { sessionId, jobId, afterSeq: -1 }, ctx)).toMatchObject({
+      state: "error",
+      error: "scheduler stopped",
+    });
   });
 
   it("caps one-shot synthesis text at 8,000 characters", async () => {

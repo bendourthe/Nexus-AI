@@ -30,6 +30,11 @@ export const LINK_WORD = "link";
 const THINK_OPEN = "<think>";
 const THINK_CLOSE = "</think>";
 
+/** Case-insensitive index of an ASCII tag (models emit `<Think>` too). */
+function findTag(text: string, tag: string): number {
+  return text.toLowerCase().indexOf(tag);
+}
+
 export interface ReasoningDelta {
   readonly visible: string;
   readonly reasoning: string;
@@ -45,7 +50,7 @@ export interface ReasoningSplitter {
 function partialTagSuffix(text: string, tag: string): number {
   const max = Math.min(text.length, tag.length - 1);
   for (let n = max; n > 0; n--) {
-    if (tag.startsWith(text.slice(text.length - n))) return n;
+    if (tag.startsWith(text.slice(text.length - n).toLowerCase())) return n;
   }
   return 0;
 }
@@ -64,7 +69,7 @@ export function createReasoningSplitter(options: {
     let reasoning = "";
     while (buf.length > 0) {
       const tag = inReasoning ? THINK_CLOSE : THINK_OPEN;
-      const at = buf.indexOf(tag);
+      const at = findTag(buf, tag);
       if (at >= 0) {
         if (inReasoning) reasoning += buf.slice(0, at);
         else visible += buf.slice(0, at);
@@ -118,8 +123,12 @@ function stripSpans(text: string, open: string, close: string): { text: string; 
     if (start < 0) return { text: out + rest, unclosedAt: -1 };
     const end = rest.indexOf(close, start + open.length);
     if (end < 0) return { text: out + rest.slice(0, start), unclosedAt: out.length + start };
-    out += rest.slice(0, start) + " ";
-    rest = rest.slice(end + close.length);
+    // A span glued between two non-space characters is joined without a
+    // space, so a secret split by a tool call stays one run for redaction.
+    const after = rest.slice(end + close.length);
+    const glued = /\S$/.test(out + rest.slice(0, start)) && /^\S/.test(after);
+    out += rest.slice(0, start) + (glued ? "" : " ");
+    rest = after;
   }
 }
 
@@ -186,6 +195,18 @@ function projectInline(text: string): string {
   );
 }
 
+/**
+ * Underscore runs that open or close a word become spaces before redaction:
+ * as emphasis (`_KEY_`, `__ghp_...__`) they sit against the secret, where the
+ * redaction patterns' word boundary cannot match. Underscores inside a word
+ * (`ghp_`, `snake_case`) are kept.
+ */
+function unwrapUnderscores(text: string): string {
+  return text
+    .replace(/(^|[^A-Za-z0-9_])_+(?=[A-Za-z0-9])/g, "$1 ")
+    .replace(/([A-Za-z0-9])_+(?=$|[^A-Za-z0-9_])/g, "$1 ");
+}
+
 /** Split speech into sentences; the last element may be incomplete. */
 export function splitSentences(text: string): string[] {
   const sentences: string[] = [];
@@ -207,6 +228,26 @@ export function splitSentences(text: string): string[] {
   }
   sentences.push(text.slice(start).replace(/\s+/g, " ").trim());
   return sentences;
+}
+
+/**
+ * Longest sentence handed to synthesis. The runtime refuses more than 8,000
+ * characters per request, and a shorter piece starts speaking sooner.
+ */
+export const MAX_SPOKEN_SENTENCE_CHARS = 1000;
+
+/** Split an over-long sentence at whitespace, greedily from its start. */
+function capSentence(sentence: string): string[] {
+  const pieces: string[] = [];
+  let rest = sentence;
+  while (rest.length > MAX_SPOKEN_SENTENCE_CHARS) {
+    const cut = rest.lastIndexOf(" ", MAX_SPOKEN_SENTENCE_CHARS);
+    const at = cut > 0 ? cut : MAX_SPOKEN_SENTENCE_CHARS;
+    pieces.push(rest.slice(0, at).trim());
+    rest = rest.slice(at).trim();
+  }
+  pieces.push(rest);
+  return pieces;
 }
 
 /** The safe prefix of the accumulated visible text, in raw coordinates. */
@@ -235,11 +276,17 @@ export function speakableSentences(raw: string, final: boolean): string[] {
     const pem = unclosedPem(text);
     if (pem >= 0) text = text.slice(0, pem);
   }
-  const redacted = redactSecrets(text);
-  const spoken = projectInline(projectBlocks(redacted, final));
+  const redacted = redactSecrets(unwrapUnderscores(text));
+  // Redact again after projection: stripping emphasis such as `_KEY_` can
+  // expose a secret the first pass could not match at a word boundary.
+  const spoken = redactSecrets(projectInline(projectBlocks(redacted, final)));
   const sentences = splitSentences(spoken);
-  // In streaming mode the last element is still open, so it is never spoken yet.
-  return final ? sentences.filter((s) => s.length > 0) : sentences.slice(0, -1).filter((s) => s.length > 0);
+  // In streaming mode the last element is still open: only the complete
+  // pieces of an over-long open sentence are spoken yet.
+  const done = final ? sentences : sentences.slice(0, -1);
+  const pieces = done.flatMap(capSentence);
+  if (!final) pieces.push(...capSentence(sentences[sentences.length - 1] ?? "").slice(0, -1));
+  return pieces.filter((s) => s.length > 0);
 }
 
 export interface SpeakableProjector {

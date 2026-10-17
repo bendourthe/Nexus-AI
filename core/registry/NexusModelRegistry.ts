@@ -24,6 +24,8 @@
 
 import { verifyOllamaPull } from "./ollamaDigest.js";
 import * as path from "node:path";
+import * as fs from "node:fs/promises";
+import { createReadStream } from "node:fs";
 import { createHash } from "node:crypto";
 
 import {
@@ -332,6 +334,62 @@ export class NexusModelRegistry {
     throw new Error(`NexusModelRegistry: unsupported protocol ${spec.source.protocol}`);
   }
 
+  /**
+   * v2.14.0 (DF-5) -- install every file a Hugging Face entry lists in
+   * `weights.files` into `<root>/weights/<id>/`, each verified against its own
+   * pinned sha256 at the entry's pinned revision, exactly where the installer
+   * puts them and the runtimes read them. A file already present with the
+   * pinned digest is kept. A placeholder digest fails closed.
+   */
+  private async _installWeightsFiles(spec: ModelSpec, opts: InstallOptions): Promise<InstallResult> {
+    const weights = spec.weights!;
+    if (weights.layoutVersion !== 1) {
+      throw new Error(`NexusModelRegistry: ${spec.id} uses weight variants; install it with the Nexus installer`);
+    }
+    const repo = spec.source.repo;
+    if (!repo) throw new Error(`NexusModelRegistry: ${spec.id} missing source.repo`);
+    const revision = spec.source.revision ?? "main";
+    const files = weights.files ?? [];
+    const unverifiable = files.filter((f) => !/^[a-f0-9]{64}$/.test(f.sha256) || /^0{64}$/.test(f.sha256));
+    if (unverifiable.length > 0) {
+      throw new Error(
+        `NexusModelRegistry: ${spec.id} has no verifiable digest for ${unverifiable.map((f) => f.path).join(", ")}; ` +
+          "install it with the Nexus installer",
+      );
+    }
+    // A fresh install is staged in a dot-prefixed folder and renamed into
+    // place only when every file verified: the weights probes treat any
+    // folder under weights/ as installed, and no catalog id starts with a dot.
+    // A failed attempt's verified files are kept there for the retry.
+    const dir = weightsDirFor(this._storage.root, spec.id);
+    const existed = await fs.stat(dir).then(() => true, () => false);
+    const workDir = existed ? dir : path.join(path.dirname(dir), `.${path.basename(dir)}.partial`);
+    let bytesDownloaded = 0;
+    for (const file of files) {
+      const dest = path.join(workDir, ...file.path.split("/"));
+      if (await fileHasDigest(dest, file.sha256)) continue;
+      await fs.mkdir(path.dirname(dest), { recursive: true });
+      const url = `https://huggingface.co/${repo}/resolve/${revision}/${file.path}`;
+      const result = await this._downloader.download(url, file.sha256, {
+        signal: opts.signal,
+        onProgress: opts.onProgress,
+        fetch: opts.fetch,
+        destPath: dest,
+      });
+      bytesDownloaded += result.bytes;
+    }
+    await fs.writeFile(path.join(workDir, MODEL_ID_MARKER), `${spec.id}\n`, "utf8");
+    if (!existed) await fs.rename(workDir, dir);
+    const manifest = makeWeightsManifest(spec, this._now());
+    await this._storage.linkManifest(spec.family, spec.name, spec.tag, manifest);
+    return {
+      id: spec.id,
+      status: "installed",
+      bytesDownloaded,
+      manifestPath: this._storage.manifestPath(spec.family, spec.name, spec.tag),
+    };
+  }
+
   async remove(id: string): Promise<void> {
     if (this._external) {
       const ext = await this._external.list();
@@ -344,6 +402,12 @@ export class NexusModelRegistry {
     if (!target) {
       throw new Error(`NexusModelRegistry: not installed: ${id}`);
     }
+    // v2.14.0 (DF-5): a weights-tree install also owns its weights folder,
+    // removed only when its marker names this model, and before the manifest,
+    // so a failed delete (a runtime holding a file open) can be retried.
+    const dir = weightsDirFor(this._storage.root, id);
+    const marker = await fs.readFile(path.join(dir, MODEL_ID_MARKER), "utf8").catch(() => null);
+    if (marker?.trim() === id) await fs.rm(dir, { recursive: true, force: true });
     await this._storage.unlinkManifest(target.family, target.name, target.tag);
     await this._storage.gcUnreferencedBlobs();
   }
@@ -369,7 +433,8 @@ export class NexusModelRegistry {
     await this._ollama.pull(tag, { signal: opts.signal, onProgress: opts.onProgress });
     const ollama = this._ollama;
     await verifyOllamaPull(spec, tag, async (t) => {
-      await ollama.remove?.(t);
+      if (!ollama.remove) throw new Error("this Ollama client cannot remove models");
+      await ollama.remove(t);
     }, this._readOllamaDigest);
     const manifest = makeOllamaManifest(spec, this._now());
     await this._storage.linkManifest(spec.family, spec.name, spec.tag, manifest);
@@ -377,6 +442,9 @@ export class NexusModelRegistry {
   }
 
   private async _installHttp(spec: ModelSpec, opts: InstallOptions): Promise<InstallResult> {
+    if (spec.source.protocol === "huggingface" && (spec.weights?.files?.length ?? 0) > 0) {
+      return this._installWeightsFiles(spec, opts);
+    }
     const url = spec.source.url;
     const sha = spec.source.sha256;
     if (!url) throw new Error(`NexusModelRegistry: ${spec.id} missing source.url`);
@@ -439,6 +507,34 @@ function ollamaTagFromSpec(spec: ModelSpec): string {
   return spec.id;
 }
 
+/** Marker naming the catalog id inside a weights folder (installer: MODEL_ID_MARKER). */
+const MODEL_ID_MARKER = ".nexus-model-id";
+
+/** `<root>/weights/<safe id>`, the installer's `safe_dir_name` rule. */
+function weightsDirFor(root: string, id: string): string {
+  return path.join(root, "weights", id.replace(/[^A-Za-z0-9._-]/g, "-"));
+}
+
+async function fileHasDigest(file: string, sha256: string): Promise<boolean> {
+  try {
+    const hash = createHash("sha256");
+    for await (const chunk of createReadStream(file)) hash.update(chunk as Buffer);
+    return hash.digest("hex") === sha256;
+  } catch {
+    return false;
+  }
+}
+
+function makeWeightsManifest(spec: ModelSpec, now: Date): ModelManifest {
+  // The files live in the weights tree, not the blob store, so the manifest
+  // carries an opaque handle (as for Ollama) and GC never visits them.
+  return {
+    ...makeOllamaManifest(spec, now),
+    runtime: runtimeForSpec(spec),
+    source: { protocol: "huggingface", url: spec.source.url ?? `https://huggingface.co/${spec.source.repo ?? ""}` },
+  };
+}
+
 function makeOllamaManifest(spec: ModelSpec, now: Date): ModelManifest {
   // Ollama owns the blob; we record an opaque sha derived from the spec id so
   // listManifests has a stable handle. Storage GC will never visit these
@@ -463,6 +559,25 @@ function makeOllamaManifest(spec: ModelSpec, now: Date): ModelManifest {
   };
 }
 
+/** Runtime that serves a downloaded (non-Ollama) entry. */
+function runtimeForSpec(spec: ModelSpec): ModelManifest["runtime"] {
+  return spec.type === "llm"
+    ? "lmstudio"
+    : spec.type === "embed"
+      ? "embed"
+      : spec.type === "image"
+        ? "diffusion"
+        : spec.type === "controlnet"
+          ? "controlnet"
+          : spec.type === "vae"
+            ? "vae"
+            : spec.type === "audio"
+              ? "audio"
+              : spec.type === "document"
+                ? "ocr"
+                : "video";
+}
+
 function makeHttpManifest(spec: ModelSpec, result: DownloadResult, now: Date): ModelManifest {
   return {
     schemaVersion: 1,
@@ -471,22 +586,7 @@ function makeHttpManifest(spec: ModelSpec, result: DownloadResult, now: Date): M
     name: spec.name,
     tag: spec.tag,
     type: spec.type,
-    runtime:
-      spec.type === "llm"
-        ? "lmstudio"
-        : spec.type === "embed"
-          ? "embed"
-          : spec.type === "image"
-            ? "diffusion"
-            : spec.type === "controlnet"
-              ? "controlnet"
-              : spec.type === "vae"
-                ? "vae"
-                : spec.type === "audio"
-                  ? "audio"
-                  : spec.type === "document"
-                    ? "ocr"
-                    : "video",
+    runtime: runtimeForSpec(spec),
     displayName: spec.displayName,
     license: spec.license,
     vramGb: spec.vramGB,

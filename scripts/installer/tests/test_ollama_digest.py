@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 
 from nexus_installer.engine import ollama_digest as od
@@ -63,3 +64,24 @@ def test_unreadable_digest_fails_closed() -> None:
     reason = od.verify_pull(entry(), TAG, lambda _t: None, removed.append)
     assert reason is not None and "no readable GGUF digest" in reason
     assert removed == [TAG]
+
+
+def test_manifest_falls_back_to_a_lowercased_repository_path(tmp_path: Path) -> None:
+    lowered = "hf.co/liquidai/lfm2.5-24b-a2b-gguf:QAD-Q4_0"
+    assert [str(p) for p in od.manifest_candidates(TAG, tmp_path)] == [
+        str(od.manifest_path(TAG, tmp_path)),
+        str(od.manifest_path(lowered, tmp_path)),
+    ]
+    path = od.manifest_path(lowered, tmp_path)
+    path.parent.mkdir(parents=True)
+    layer = {"mediaType": od.MODEL_LAYER, "digest": f"sha256:{PINNED}"}
+    path.write_text(json.dumps({"layers": [layer]}), encoding="utf-8")
+    assert od.read_model_digest(TAG, tmp_path) == PINNED
+
+
+def test_failed_removal_is_reported() -> None:
+    def remove(tag: str) -> None:
+        raise subprocess.CalledProcessError(1, ["ollama", "rm", tag])
+
+    reason = od.verify_pull(entry(), TAG, lambda _t: "f" * 64, remove)
+    assert reason is not None and "removing it failed" in reason

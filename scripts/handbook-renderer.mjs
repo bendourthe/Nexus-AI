@@ -4,7 +4,17 @@ import { basename, dirname, join, relative, resolve } from "node:path";
 import { marked } from "marked";
 
 const escape = (text) => String(text).replace(/[&<>"']/g, (character) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[character]);
-const slug = (text) => text.toLowerCase().replace(/<[^>]*>/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+// v2.14.0 (inherited gap WN-4): strip tags until nothing changes, so a nested
+// fragment such as `<sc<x>ript>` cannot survive a single pass.
+const stripTags = (text) => {
+  let previous;
+  do {
+    previous = text;
+    text = text.replace(/<[^>]*>/g, "");
+  } while (text !== previous);
+  return text;
+};
+const slug = (text) => stripTags(text.toLowerCase()).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const readText = (path) => readFileSync(path, "utf8").replace(/\r\n/g, "\n");
 
 export function renderHandbook(source, root) {

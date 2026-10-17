@@ -18,6 +18,7 @@ import { NexusModelRegistry } from "../../../../core/registry/NexusModelRegistry
 import { lookupAlias, toSidecarRuntime } from "../../../../core/registry/modelAliases.js";
 import {
   OllamaDigestMismatchError,
+  ollamaManifestCandidates,
   ollamaManifestPath,
   pinnedGgufDigest,
   readOllamaModelDigest,
@@ -85,6 +86,19 @@ describe("pinned GGUF digest", () => {
     expect(await readOllamaModelDigest(TAG, root)).toBe(PINNED);
     expect(await readOllamaModelDigest("hf.co/none/x:Q4", root)).toBeNull();
   });
+  // v2.14.0 Phase 5 deep pass: a case-sensitive store may hold the
+  // repository path lowercased; the exact path is still tried first.
+  it("falls back to a lowercased repository path for the manifest", async () => {
+    const lowered = "hf.co/liquidai/lfm2.5-24b-a2b-gguf:QAD-Q4_0";
+    expect(ollamaManifestCandidates(TAG, root)).toEqual([ollamaManifestPath(TAG, root), ollamaManifestPath(lowered, root)]);
+    const file = ollamaManifestPath(lowered, root);
+    await fs.mkdir(path.dirname(file), { recursive: true });
+    await fs.writeFile(
+      file,
+      JSON.stringify({ layers: [{ mediaType: "application/vnd.ollama.image.model", digest: `sha256:${PINNED}` }] }),
+    );
+    expect(await readOllamaModelDigest(TAG, root)).toBe(PINNED);
+  });
 });
 
 describe("install verification", () => {
@@ -122,6 +136,27 @@ describe("install verification", () => {
     const { registry, remove } = await registryWith(null);
     await expect(registry.installById(ID)).rejects.toThrow(/no readable GGUF digest/);
     expect(remove).toHaveBeenCalledWith(TAG);
+  });
+
+  // v2.14.0 Phase 5 deep pass (adversarial finding 8).
+  it("says so when the mismatched model could not be removed", async () => {
+    const failing = await (async () => {
+      const catalog = await loadCatalog();
+      return new NexusModelRegistry({
+        storage: new ModelStorage(root),
+        catalog,
+        ollama: { pull: vi.fn(async () => undefined), remove: vi.fn(async () => Promise.reject(new Error("busy"))) },
+        readOllamaDigest: async () => "f".repeat(64),
+      });
+    })();
+    await expect(failing.installById(ID)).rejects.toThrow(/removing it failed/);
+    const noRemove = new NexusModelRegistry({
+      storage: new ModelStorage(root),
+      catalog: await loadCatalog(),
+      ollama: { pull: vi.fn(async () => undefined) },
+      readOllamaDigest: async () => "f".repeat(64),
+    });
+    await expect(noRemove.installById(ID)).rejects.toThrow(/removing it failed/);
   });
 
   it("leaves unpinned Ollama entries unchecked", async () => {
