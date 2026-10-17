@@ -229,6 +229,8 @@ export interface SidecarRuntimeModel {
   readonly promptFormat: PromptFormatName;
   readonly toolFormat: ToolFormatName;
   readonly codingAvailable: boolean;
+  /** v2.14.0 T012 -- see LlmCatalogEntry.reasoningOpensInPrompt. */
+  readonly reasoningOpensInPrompt?: boolean;
 }
 
 export function toSidecarRuntime(record: ModelAliasRecord): SidecarRuntimeModel | undefined {
@@ -241,6 +243,7 @@ export function toSidecarRuntime(record: ModelAliasRecord): SidecarRuntimeModel 
       promptFormat: record.coding.promptFormat,
       toolFormat: record.coding.toolFormat,
       codingAvailable: true,
+      ...(record.coding.reasoningOpensInPrompt ? { reasoningOpensInPrompt: true } : {}),
     };
   }
   const formats = familyFormats(record.family);

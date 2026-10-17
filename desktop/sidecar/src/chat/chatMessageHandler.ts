@@ -33,13 +33,6 @@ export interface ChatRunnerInput {
   readonly voice?: VoiceJob;
 }
 
-/**
- * Whether the model's chat template opens reasoning inside the prompt. Read
- * from the catalog entry when it declares it (v2.14.0 T012); default false.
- */
-function reasoningOpensInPrompt(model: SidecarModelEntry): boolean {
-  return (model as { reasoningOpensInPrompt?: unknown }).reasoningOpensInPrompt === true;
-}
 
 /** Runs one chat turn and returns the mapped IPC event stream. */
 export type ChatRunner = (input: ChatRunnerInput) => Promise<readonly ChatSessionEventT[]>;
@@ -69,11 +62,30 @@ export function createChatMessageHandler(
     let reply = "";
     let reasoningCaptured = 0;
     const voice = input.voice;
-    const splitter = voice
-      ? createReasoningSplitter({ reasoningOpensInPrompt: reasoningOpensInPrompt(input.model) })
+    // v2.14.0 T012: a model whose template opens reasoning in the prompt has
+    // its content split into visible text and reasoning before display. Every
+    // other model's token stream is passed through exactly as before.
+    const display = input.model.reasoningOpensInPrompt
+      ? createReasoningSplitter({ reasoningOpensInPrompt: true })
       : null;
+    // Speech also drops well-formed think blocks from unflagged models.
+    const speechSplitter = voice && !display ? createReasoningSplitter({ reasoningOpensInPrompt: false }) : null;
     const projector = voice ? createSpeakableProjector() : null;
-    const speak = (sentences: readonly string[]) => {
+    const addReasoning = (text: string): void => {
+      thinking += text;
+      const safeDelta = redactSecrets(text).slice(0, Math.max(MAX_REASONING_TEXT_CHARS - reasoningCaptured, 0));
+      if (safeDelta) {
+        events.push({ kind: "reasoning_delta", text: safeDelta });
+        reasoningCaptured += safeDelta.length;
+      }
+    };
+    const addVisible = (text: string): void => {
+      if (!text) return;
+      reply += text;
+      events.push({ kind: "token", text });
+      if (projector) speak(projector.push(speechSplitter ? speechSplitter.push(text).visible : text));
+    };
+    const speak = (sentences: readonly string[]): void => {
       for (const sentence of sentences) voice?.pushSentence(sentence);
     };
     try {
@@ -91,27 +103,26 @@ export function createChatMessageHandler(
       )) {
         collectUsage(chunk, usage);
         const thinkDelta = chunk.message?.thinking ?? "";
-        if (thinkDelta) {
-          thinking += thinkDelta;
-          const safeDelta = redactSecrets(thinkDelta).slice(
-            0,
-            Math.max(MAX_REASONING_TEXT_CHARS - reasoningCaptured, 0),
-          );
-          if (safeDelta) {
-            events.push({ kind: "reasoning_delta", text: safeDelta });
-            reasoningCaptured += safeDelta.length;
-          }
-        }
+        if (thinkDelta) addReasoning(thinkDelta);
         const delta = chunk.message?.content ?? "";
         if (delta) {
-          reply += delta;
-          events.push({ kind: "token", text: delta });
-          if (splitter && projector) speak(projector.push(splitter.push(delta).visible));
+          if (display) {
+            const split = display.push(delta);
+            if (split.reasoning) addReasoning(split.reasoning);
+            addVisible(split.visible);
+          } else {
+            addVisible(delta);
+          }
         }
         if (chunk.done) break;
       }
-      if (splitter && projector) {
-        speak(projector.push(splitter.end().visible));
+      if (display) {
+        const rest = display.end();
+        if (rest.reasoning) addReasoning(rest.reasoning);
+        addVisible(rest.visible);
+      }
+      if (projector) {
+        if (speechSplitter) speak(projector.push(speechSplitter.end().visible));
         speak(projector.end());
         voice?.endReply();
       }

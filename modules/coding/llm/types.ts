@@ -36,6 +36,10 @@ export interface LLMOptions {
   top_p?: number;
   top_k?: number;
   num_ctx?: number;
+  /** v2.14.0 T013 -- Ollama's spelling of the repetition penalty. */
+  repeat_penalty?: number;
+  /** v2.14.0 T013 -- Ollama min-p sampling. */
+  min_p?: number;
 }
 
 export interface LLMToolFunction {

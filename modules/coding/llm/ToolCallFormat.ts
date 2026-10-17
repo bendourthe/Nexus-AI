@@ -391,6 +391,28 @@ function parseLfmJsonArray(body: string, raw: string): ParsedToolCall[] | null {
   }
 }
 
+/**
+ * v2.14.0 T013 -- tool-call spans the codec could not turn into a call. The
+ * LFM codec drops a malformed span silently, so a run would otherwise never
+ * see its parse failures. Other formats report 0 here (Gemma 4 reports its
+ * failures as `ok: false` results instead).
+ */
+export function countUnparsedToolSpans(text: string, format: ToolFormatName): number {
+  if (format !== "lfm-pythonic") return 0;
+  let failures = 0;
+  LFM_SPAN_RE.lastIndex = 0;
+  for (;;) {
+    const m = LFM_SPAN_RE.exec(text);
+    if (!m) break;
+    const body = (m[1] ?? "").trim();
+    if (body.length === 0 || body === "[]") continue;
+    const parsed = parseLfmJsonArray(body, m[0]) ?? parsePythonicCallList(body, m[0]);
+    if (parsed.length === 0) failures += 1;
+  }
+  LFM_SPAN_RE.lastIndex = 0;
+  return failures;
+}
+
 const LfmPythonic: ToolCallFormat = {
   name: "lfm-pythonic",
   parse(text) {

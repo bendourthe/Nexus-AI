@@ -72,6 +72,15 @@ export interface LlmCatalogEntry {
   readonly sampling: SamplingDefaults;
   readonly promptFormat: PromptFormatName;
   readonly toolFormat: ToolFormatName;
+  /**
+   * v2.14.0 T012 -- the chat template opens `<think>` inside the prompt, so the
+   * model's output is reasoning until the first `</think>`. Per entry, never
+   * per family (`lfm2.5:2.6b` does not set it). Authoritative here and in its
+   * `models.json` twin (checked by the parity test); `catalog.json` carries it
+   * only for an entry admitted with it. Omitted means false: output is
+   * handled exactly as before.
+   */
+  readonly reasoningOpensInPrompt?: boolean;
 }
 
 const ENTRIES: readonly LlmCatalogEntry[] = Object.freeze([
