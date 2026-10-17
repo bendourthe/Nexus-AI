@@ -74,14 +74,14 @@ That distinction carries most of the weight in this document. The bar for taking
 | linear-attention 1024px SDXL-class entry | `sana-1.6b-1024` |
 | segmentation utility weights, hidden from the picker | `sam2:hiera-tiny` |
 | audio2video avatar entry, diffusion-pro gated | `longcat-video-avatar-1.5` |
-
-**v2.14.0 job move.** `lfm2.5:24b-a2b` took the 16 GB MoE worker job from `nemotron-lightning:30b-a3b-offload` on a local paired A/B over the 28 golden tasks (completion 19/19/21 vs 22/20/20, overlapping, counted as equal by owner decision; p95 turn time 10.3 s vs 18.8 s; no RAM spill vs about 12 GB spilled): [lfm-ab-results.json](../releases/v2/v2.14/development/lfm-ab-results.json). The Nemotron sibling keeps a distinct job, the 1M-token context window on 16 GB, which the LFM entry (131K) does not offer.
 | 720p efficiency video entry | `sana-video-2b-720p` |
 | SANA auto-loaded VAE | `dc-ae-f32c32-sana-1.1` |
 | SANA canny conditioning | `sana-controlnet-canny` |
 | SANA depth conditioning | `sana-controlnet-depth` |
 | SANA pose conditioning | `sana-controlnet-pose` |
 | optional NVIDIA CUDA single-image splat generate | `triposplat` |
+
+**v2.14.0 job move.** `lfm2.5:24b-a2b` took the 16 GB MoE worker job from `nemotron-lightning:30b-a3b-offload` on a local paired A/B over the 28 golden tasks (completion 19/19/21 vs 22/20/20, overlapping, counted as equal by owner decision; p95 turn time 10.3 s vs 18.8 s; no RAM spill vs about 12 GB spilled): [lfm-ab-results.json](../releases/v2/v2.14/development/lfm-ab-results.json). The Nemotron sibling keeps a distinct job, the 1M-token context window on 16 GB, which the LFM entry (131K) does not offer.
 
 ### Runtime jobs
 

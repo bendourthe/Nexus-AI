@@ -729,7 +729,7 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Phase 2: speak from the first sentence through the sidecar, with barge-in cancelling synthesis. Time to first audio 3.99 s p50 (medium, warm) against a 38.6 s baseline; V-1 (2.0 s) missed and recorded in v2.15 DF-1 by owner decision, every other voice gate passes ([Phase 2 evidence](releases/v2/v2.14/development/v2.14.0-phase2-evidence.md), [results](releases/v2/v2.14/development/voice-latency-results.md), 2026-10-16).
 - [x] Phase 3: prompt-opened reasoning in every path, golden-runner options and metrics (and a working live runner outside VS Code), paired A/B: LFM2.5-24B 19.7 vs 20.7 of 28 tasks with 46% better p95 turn time and no RAM spill; ADMIT under the owner's M-3 reading ([Phase 3 evidence](releases/v2/v2.14/development/v2.14.0-phase3-evidence.md), 2026-10-17).
 - [x] Phase 4: `lfm2.5:24b-a2b` admitted opt-in with a coding-catalog twin, commit and GGUF pin, and post-pull digest verification in both install paths; 16 GB MoE worker job moved; stale `lfm2.5:2.6b` pin corrected ([Phase 4 evidence](releases/v2/v2.14/development/v2.14.0-phase4-evidence.md), 2026-10-17).
-- [ ] Phase 5: architecture, known gaps (including DF-5, WN-6, WN-7 from Phase 1, which cannot migrate), CI/CD, deep pass, publication.
+- [ ] Phase 5: local duties done 2026-10-17 (T018-T026): DF-5, WN-3, WN-4, WN-5, WN-7 and QG-1 resolved; 8 deep-pass defects fixed; full local gate and installer rebuild ([last-phase evidence](releases/v2/v2.14/development/v2.14.0-last-phase-evidence.md)). Open: T027 publication and integration, waiting on the v2.14.1 decision.
 
 ## Recurring Obligations
 

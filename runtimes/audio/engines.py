@@ -227,6 +227,9 @@ def iter_speak_segments(
         segments: Iterator[bytes] = iter([b""])
         stub = True
     else:
+        # Build (or reuse) the cached pipeline before the per-segment clock
+        # starts, so a cold first load is not counted as synthesis time.
+        _kokoro_pipeline()
         segments = _pcm_segments(text)
         stub = False
     total = 0

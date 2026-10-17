@@ -111,7 +111,9 @@ class VoiceJob {
 
   private onSegment(segment: AudioSpeakSegment): void {
     if (this.state !== "running") return;
-    if (this.nextSeq >= VOICE_JOB_MAX_SEGMENTS) {
+    // The bound is on undrained segments: a long reply the webview keeps
+    // draining may produce more than this many in total.
+    if (this.buffer.length >= VOICE_JOB_MAX_SEGMENTS) {
       this.fail("voice job exceeded its segment bound");
       return;
     }

@@ -2,8 +2,8 @@
 
 **Project**: Nexus
 **Status**: in-progress
-**Last updated**: 2026-10-16
-**Open items**: 13
+**Last updated**: 2026-10-17
+**Open items**: 6
 
 ## v2.14.0
 
@@ -12,11 +12,11 @@
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 5 | 0 |
+| Deferred (DF) | 4 | 1 |
 | Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 7 | 0 |
+| Warnings (WN) | 2 | 5 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
-| Quality-gate gaps (QG) | 1 | 0 |
+| Quality-gate gaps (QG) | 0 | 1 |
 
 ### Open Items
 
@@ -80,66 +80,16 @@
 - **Migrated from**: v2.13.0#WN-1 on 2026-10-16 (reason: user-deferred)
 - **Migration evidence**: left open by v2.13.0, the last plan of v2.13
 
-#### WN-3 - Skill tests leave empty folders in the source catalog
-
-- **Source phase**: Phase 7 architecture refactor scan.
-- **Plan reference**: T022.
-- **Reason**: `modules/coding/skills/catalog/__none__` and `__nonexistent_user__` are created inside the source tree by `tests/unit/skills/SkillLoader.test.ts`, `tests/unit/skills/fuse.test.ts`, `tests/unit/orchestration/FusionAgent.test.ts`, `tests/integration/commands/skill-execution.test.ts` and `tests/integration/orchestration/PanelFusion.test.ts`. They are empty and untracked, and also exist in the main checkout, so they predate this plan.
-- **Suggested next step**: point those tests at a temporary catalog root and remove the two folders.
-
-- **Migrated from**: v2.13.0#WN-2 on 2026-10-16 (reason: user-deferred)
-- **Migration evidence**: left open by v2.13.0, the last plan of v2.13
-
-#### WN-4 - Seven pre-existing high-severity CodeQL alerts reached main with v2.12.0
-
-- **Source phase**: v2.13 release (PR #102, 2026-10-16).
-- **Plan reference**: v2.13 T031 and `/update release`; not introduced by v2.13.
-- **Reason**: comparing `develop` with `main` (last released at v2.11.0), CodeQL reported 23 new alerts, 7 high: `js/insecure-temporary-file` and `js/file-system-race` at `tests/smoke/document-outline-smoke.test.ts` lines 162, 324 and 325 (v2.11 Phase 5 and v2.12 work), and `js/incomplete-multi-character-sanitization` at `scripts/handbook-renderer.mjs:7` (v2.12 Phase 7). CodeQL is not a required check on `main`. Exposure is low: the smoke test is opt-in and local and writes with exclusive create, and the regex only builds heading slugs from the repository's own Markdown. The PR threads were answered and resolved; the alerts stay open.
-- **Suggested next step**: write the smoke test's report and results under a private `mkdtemp` directory, replace the tag-stripping regex with a loop until no change (or strip with the Markdown parser), then dismiss or close the alerts.
-
-#### WN-5 - The v2.12.0 tag has no GitHub Release or installers
-
-- **Source phase**: v2.13 release (2026-10-16).
-- **Plan reference**: v2.13 run blocker 1 (approval NLY2GTF2).
-- **Reason**: tag `v2.12.0` (`7bbf224f`) was pushed, but `release.yml` failed in "Verify release source" because its depth-1 checkout lacked the embedding-eval baseline commit `90b95f24`. Tag and dispatched runs use `release.yml` as of the tagged commit, so that tag cannot build. The owner chose to fix `release.yml` and ship v2.12.1 rather than move a pushed tag. The v2.13 completion checker's `release.github` predicate is bound to v2.12.0 and stays unmet.
-- **Suggested next step**: none required beyond v2.12.1; optionally publish a notes-only v2.12.0 Release that points to v2.12.1.
-
-#### QG-1 - Two tests time out under full-suite load at vitest's 5 s default
-
-- **Source phase**: Phase 4 (root suite, 2026-10-14) and Phase 5 (desktop suite, 2026-10-15).
-- **Plan reference**: Phase 7 T030.
-- **Reason**: `tests/integration/golden/golden-runner-end-to-end.test.ts` (dry path) and `desktop/tests/video2x-adapter.test.ts` ("bounds a hanging source hash with the run-local deadline") pass alone (about 2.5 s and 3 of 3 runs) and time out only beside parallel workers. The golden file's own comment gives this cause for its sibling block, which already has a 30 s timeout. Neither test was changed by this plan.
-- **Suggested next step**: In Phase 7, give each the same explicit timeout its sibling uses, with the measured duration as the reason, then re-run both full suites.
-
 Prior v2.12 and older registers remain authoritative. These new items resolve none of them.
-
-- **Update (2026-10-16)**: the root half is resolved: the golden-runner dry path and four other git- and process-heavy root tests run about 2.5 s alone and now carry measured 30 s timeouts; the root suite passed (579 files, 6277 tests). The Video2X test is not slow: it runs in 31 ms alone and passed in eight concurrent copies of its file, yet in one full desktop run it still timed out at 30 s, so it hangs rather than runs long. Fake timers freeze `performance.now`, which rules out the adapter's clock. In v2.13 the test was changed to race the source-hash start against the run result, so a run that settles early now fails at once with its result instead of hanging; the next full desktop run passed (254 files, 2328 tests). The underlying cause is not proven here. Next: when the test fails again, read the run result its new assertion prints; if it never recurs across several full desktop runs, close this gap with those runs as evidence.
-
-- **Migrated from**: v2.13.0#QG-1 on 2026-10-16 (reason: user-deferred)
-- **Migration evidence**: left open by v2.13.0, the last plan of v2.13
-
-#### DF-5 - In-app model install cannot fetch multi-file Hugging Face models
-
-- **Source phase**: Phase 1 (2026-10-16).
-- **Plan reference**: T001 provisioning delta (session history `v2.14.0-phase1.md`, Plan delta).
-- **Reason**: `models.install` in the sidecar goes through `NexusModelRegistry._installHttp` (`core/registry/NexusModelRegistry.ts:364-385`), which downloads only `source.url`, verifies it against `source.sha256` (all zeros for the voice models, so `Downloader.ts:169-173` throws `DigestMismatch`), writes to `blobs/<sha>` rather than `weights/<id>`, and ignores `weights.files`. Phase 1 fixed the installer path (`HFWeightsPuller`, which honors `weights.files` and per-file sha256), but the runtime's own error text still tells users to "Install ... from Settings > Models", which cannot succeed for `kokoro-82m` or `faster-whisper-large-v3`.
-- **Suggested next step**: Route Hugging Face `weights.files` entries in `NexusModelRegistry` through the same per-file pinned download the installer uses, writing to `~/.nexus/models/weights/<id>/`, or point the runtime error text at the installer until that lands.
-
-#### WN-6 - Hosts without an NVIDIA or Apple GPU still get no voice runtime
-
-- **Source phase**: Phase 1 (2026-10-16).
-- **Plan reference**: T001 provisioning delta.
-- **Reason**: voice now shares the provisioned media venv, and a voice-only selection now requests it, but `scripts/installer/build/versions.lock.json` has only `win-x64-nvidia`, `linux-x64-nvidia` and `mac-arm64-apple` targets. A CPU-only host fails provisioning as before, so the audio runtime falls back to a bare `python` without the voice packages. This is unchanged from before Phase 1, not a regression.
-- **Suggested next step**: Add a CPU target (CPU torch wheels plus the same runtime requirements) so the CPU-capable Whisper and Kokoro models provision on every tier the recommended defaults claim.
-
-#### WN-7 - The provisioned venv's numpy differs from its lock
-
-- **Source phase**: Phase 1 (2026-10-16).
-- **Plan reference**: T001 provisioning delta.
-- **Reason**: the lock pins `numpy==1.26.4`, but the provisioned venv on the reference host reports numpy 2.5.3, so some later install upgraded it outside the provisioner. Phase 1's voice packages did not change it (pip dry-run and before/after import check). Image, video and voice all import correctly with 2.5.3 here, so the effect is drift, not a failure.
-- **Suggested next step**: Find which component upgrades numpy (a later runtime extra or a repair path) and either pin it through the provisioner or move the lock to the version actually in use.
 
 ### Resolved
 
 | ID | Title | Resolved in | Notes |
 |---|---|---|---|
+| DF-5 | In-app model install cannot fetch multi-file Hugging Face models | v2.14.0 Phase 5 | `NexusModelRegistry` now installs every `weights.files` entry into `weights/<id>/` at the pinned revision, each file checked against its own sha256, writes the `.nexus-model-id` marker, refuses placeholder digests, and removes the folder with the model. `tests/unit/core/registry/weightsFilesInstall.test.ts` (6 tests), including the real Kokoro entry's pinned URL |
+| WN-3 | Skill tests leave empty folders in the source catalog | v2.14.0 Phase 5 | The five tests use `tests/helpers/noUserSkills.ts` (a path under the OS temp folder); both folders removed. A re-run of the five files left `modules/coding/skills/catalog/` without them |
+| WN-4 | Seven pre-existing high-severity CodeQL alerts | v2.14.0 Phase 5 (code) | The smoke test writes its default report and results into a private `mkdtemp` folder; `scripts/handbook-renderer.mjs` strips tags until the text stops changing. Rendered handbooks are byte-identical apart from line endings. The alerts themselves close when CodeQL re-scans the merged tree |
+| WN-5 | The v2.12.0 tag has no GitHub Release or installers | Superseded by v2.12.1 | `gh release view v2.12.1`: published 2026-10-16 with 5 assets. No notes-only v2.12.0 Release was made |
+| WN-6 | Hosts without an NVIDIA or Apple GPU get no voice runtime | Moved to v2.15 (WN-1) | Still open: a CPU target cannot be verified on this GPU host, and a gap opened in this run cannot migrate at the minor close |
+| WN-7 | The provisioned venv's numpy differs from its lock | v2.14.0 Phase 5 (cause found) | No Nexus provisioner changes numpy. On 2026-10-01 a `rapidocr-onnxruntime` install, which no provisioner performs, pulled `opencv-python` 5.0.0.93 (needs `numpy>=2`), upgrading numpy to 2.5.3. The lock stays correct for what Nexus installs; the OCR provisioning gap and its numpy conflict are v2.15 WN-2 |
+| QG-1 | Two tests time out under full-suite load | v2.14.0 | Root half fixed in v2.13 with measured timeouts. The Video2X test passed in three full desktop runs in this cycle, meeting the gap's own closing rule |

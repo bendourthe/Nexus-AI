@@ -2,6 +2,7 @@ import * as path from "path";
 import * as url from "url";
 import { describe, it, expect } from "vitest";
 import { SkillLoader } from "../../../modules/coding/skills/SkillLoader.js";
+import { NO_USER_SKILLS_DIR } from "../../helpers/noUserSkills.js";
 
 // ---------------------------------------------------------------------------
 // v1.6.0 adoption-openrouter-fusion Phase 1 (OF003) -- schema-conformance
@@ -122,7 +123,7 @@ No grounded answer is possible from the supplied candidates.
 const BROKEN_OUTPUT = "Sure, here is my take: just validate the input and move on. Looks fine to me.";
 
 describe("fuse skill (OF001) loads and declares the fusion schema", () => {
-  const loader = new SkillLoader(REAL_CATALOG_DIR, path.join(REAL_CATALOG_DIR, "__nonexistent_user__"));
+  const loader = new SkillLoader(REAL_CATALOG_DIR, NO_USER_SKILLS_DIR);
   loader.load();
   const skill = loader.getSkill("fuse");
 

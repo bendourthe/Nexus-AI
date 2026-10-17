@@ -24,11 +24,13 @@ export class OllamaDigestMismatchError extends Error {
     readonly modelTag: string,
     readonly expected: string,
     readonly actual: string | null,
+    readonly removed: boolean = true,
   ) {
+    const outcome = removed ? "the model was removed" : "removing it failed, so remove it before use";
     super(
       actual
-        ? `pulled ${modelTag} has GGUF digest ${actual}, but the catalog pins ${expected}; the model was removed`
-        : `pulled ${modelTag} has no readable GGUF digest in Ollama's manifest; the model was removed`,
+        ? `pulled ${modelTag} has GGUF digest ${actual}, but the catalog pins ${expected}; ${outcome}`
+        : `pulled ${modelTag} has no readable GGUF digest in Ollama's manifest; ${outcome}`,
     );
     this.name = "OllamaDigestMismatchError";
   }
@@ -58,10 +60,33 @@ export function ollamaManifestPath(modelTag: string, modelsDir: string): string 
   return join(modelsDir, "manifests", ...name.split("/"), tag);
 }
 
+/**
+ * Manifest paths to try: as written, then with the repository path lowercased
+ * (some Ollama versions store `hf.co` names that way), so a case-sensitive
+ * filesystem does not read a real pull as unreadable.
+ */
+export function ollamaManifestCandidates(modelTag: string, modelsDir: string): string[] {
+  const colon = modelTag.lastIndexOf(":");
+  const lowered = colon > 0 ? modelTag.slice(0, colon).toLowerCase() + modelTag.slice(colon) : modelTag.toLowerCase();
+  return [...new Set([ollamaManifestPath(modelTag, modelsDir), ollamaManifestPath(lowered, modelsDir)])];
+}
+
+async function readFirst(paths: readonly string[]): Promise<string> {
+  let lastError: unknown;
+  for (const p of paths) {
+    try {
+      return await readFile(p, "utf8");
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  throw lastError;
+}
+
 /** The model layer's sha256 from a pulled tag's manifest, or null if unreadable. */
 export async function readOllamaModelDigest(modelTag: string, modelsDir: string = ollamaModelsDir()): Promise<string | null> {
   try {
-    const manifest = JSON.parse(await readFile(ollamaManifestPath(modelTag, modelsDir), "utf8")) as {
+    const manifest = JSON.parse(await readFirst(ollamaManifestCandidates(modelTag, modelsDir))) as {
       layers?: Array<{ mediaType?: string; digest?: string }>;
     };
     const layer = (manifest.layers ?? []).find((l) => l.mediaType === MODEL_LAYER);
@@ -86,6 +111,9 @@ export async function verifyOllamaPull(
   if (!expected) return;
   const actual = await readDigest(modelTag);
   if (actual === expected) return;
-  await remove(modelTag).catch(() => undefined);
-  throw new OllamaDigestMismatchError(modelTag, expected, actual);
+  const removed = await remove(modelTag).then(
+    () => true,
+    () => false,
+  );
+  throw new OllamaDigestMismatchError(modelTag, expected, actual, removed);
 }

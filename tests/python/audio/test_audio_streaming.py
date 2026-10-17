@@ -95,6 +95,7 @@ def fake_segments(
 
     monkeypatch.delenv("NEXUS_AUDIO_STUB", raising=False)
     monkeypatch.setattr(engines, "_pcm_segments", segments)
+    monkeypatch.setattr(engines, "_kokoro_pipeline", lambda: None)
 
 
 class TestConversion:
@@ -299,3 +300,26 @@ class TestBounds:
         ticks = iter([0.0, engines.SEGMENT_TIMEOUT_S + 1])
         with pytest.raises(engines.SpeakLimitError, match="exceeded"):
             list(engines.iter_speak_segments({"text": "x"}, clock=lambda: next(ticks)))
+
+
+class TestColdPipeline:
+    """v2.14.0 Phase 5 deep pass: a cold Kokoro load is not synthesis time."""
+
+    def test_first_pipeline_build_is_outside_the_segment_clock(self, monkeypatch):
+        now = [0.0]
+        built: list[bool] = []
+
+        def pipeline():
+            if not built:
+                now[0] += engines.SEGMENT_TIMEOUT_S + 10  # cold load
+                built.append(True)
+
+        def segments(_text):
+            engines._kokoro_pipeline()  # the real generator builds lazily too
+            yield b"\x01\x00" * 4
+
+        monkeypatch.delenv("NEXUS_AUDIO_STUB", raising=False)
+        monkeypatch.setattr(engines, "_kokoro_pipeline", pipeline)
+        monkeypatch.setattr(engines, "_pcm_segments", segments)
+        out = list(engines.iter_speak_segments({"text": "Hi."}, clock=lambda: now[0]))
+        assert len(out) == 1

@@ -9,6 +9,7 @@ import * as path from "path";
 import * as url from "url";
 import { describe, it, expect } from "vitest";
 import { SkillLoader } from "../../../modules/coding/skills/SkillLoader.js";
+import { NO_USER_SKILLS_DIR } from "../../helpers/noUserSkills.js";
 
 // Resolve the catalog directory relative to this test file.
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
@@ -16,7 +17,7 @@ const CATALOG_DIR = path.resolve(__dirname, "../../../modules/coding/skills/cata
 
 describe("Built-in skill catalog integration", () => {
   it("loads the commit skill correctly", () => {
-    const loader = new SkillLoader(CATALOG_DIR, path.join(CATALOG_DIR, "__nonexistent_user__"));
+    const loader = new SkillLoader(CATALOG_DIR, NO_USER_SKILLS_DIR);
     loader.load();
 
     const skill = loader.getSkill("commit");
@@ -27,7 +28,7 @@ describe("Built-in skill catalog integration", () => {
   });
 
   it("$ARGUMENTS substitution replaces the placeholder with the provided argument string", () => {
-    const loader = new SkillLoader(CATALOG_DIR, path.join(CATALOG_DIR, "__nonexistent_user__"));
+    const loader = new SkillLoader(CATALOG_DIR, NO_USER_SKILLS_DIR);
     loader.load();
 
     const skill = loader.getSkill("commit");
@@ -40,7 +41,7 @@ describe("Built-in skill catalog integration", () => {
   });
 
   it("lists all eighteen built-in skills", () => {
-    const loader = new SkillLoader(CATALOG_DIR, path.join(CATALOG_DIR, "__nonexistent_user__"));
+    const loader = new SkillLoader(CATALOG_DIR, NO_USER_SKILLS_DIR);
     loader.load();
 
     const names = loader.listSkills().map((s) => s.name);
@@ -77,7 +78,7 @@ describe("Built-in skill catalog integration", () => {
   });
 
   it("every built-in skill has a non-empty prompt body", () => {
-    const loader = new SkillLoader(CATALOG_DIR, path.join(CATALOG_DIR, "__nonexistent_user__"));
+    const loader = new SkillLoader(CATALOG_DIR, NO_USER_SKILLS_DIR);
     loader.load();
 
     for (const skill of loader.listSkills()) {

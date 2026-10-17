@@ -4,8 +4,10 @@ import {
   CODE_CUE,
   TABLE_CUE,
   createReasoningSplitter,
+  MAX_SPOKEN_SENTENCE_CHARS,
   createSpeakableProjector,
   speakableProjection,
+  speakableSentences,
   splitSentences,
 } from "../../../../core/chat/speakable.js";
 
@@ -123,6 +125,33 @@ describe("speakable projection", () => {
     expect(spoken.join(" ")).not.toContain("AKIA");
     expect(spoken.join(" ")).toContain("<redacted>");
   });
+  // v2.14.0 Phase 5 deep pass: adversarial findings 1 to 3.
+  it("never speaks a secret wrapped in underscore emphasis", () => {
+    for (const reply of [`Key _${AWS}_ here. Done.`, `Token __${GITHUB}__ now. Done.`]) {
+      const spoken = speakableProjection(reply);
+      expect(spoken).not.toContain(AWS);
+      expect(spoken).not.toContain(GITHUB);
+      expect(spoken).toContain("<redacted>");
+    }
+  });
+
+  it("never speaks a secret split by a tool-call span glued inside it", () => {
+    const reply = `Here ${GITHUB.slice(0, 20)}<|tool_call>x<tool_call|>${GITHUB.slice(20)} it is. Done.`;
+    for (const seed of [1, 2, 3]) {
+      const spoken = streamSentences(reply, randomChunks(reply, seed)).join(" ");
+      expect(spoken).not.toContain(GITHUB.slice(4, 20));
+      expect(spoken).toContain("<redacted>");
+    }
+  });
+
+  it("splits a sentence too long for one synthesis request at whitespace, identically when streamed", () => {
+    const list = Array.from({ length: 400 }, (_, i) => `- item number ${i}`).join(String.fromCharCode(10));
+    const whole = speakableSentences(list, true);
+    expect(whole.length).toBeGreaterThan(5);
+    expect(Math.max(...whole.map((s) => s.length))).toBeLessThanOrEqual(MAX_SPOKEN_SENTENCE_CHARS);
+    expect(whole.join(" ")).toBe(speakableProjection(list));
+    for (const seed of [4, 5]) expect(streamSentences(list, randomChunks(list, seed))).toEqual(whole);
+  });
 });
 
 describe("reasoning splitter", () => {
@@ -159,6 +188,14 @@ describe("reasoning splitter", () => {
     const text = "<|tool_call>call:read_file{path:<|\"|>a.ts<|\"|>}<tool_call|> The answer is 4.";
     const visible = randomChunks(text, 7).map((c) => split.push(c).visible).join("") + split.end().visible;
     expect(visible).toBe(text);
+  });
+
+  it("recognizes think tags in any letter case", () => {
+    const split = createReasoningSplitter({ reasoningOpensInPrompt: false });
+    const a = split.push("<Think>plan</THINK>Hi");
+    const e = split.end();
+    expect(a.visible + e.visible).toBe("Hi");
+    expect(a.reasoning + e.reasoning).toBe("plan");
   });
 
   it("splits identically for any chunking", () => {
