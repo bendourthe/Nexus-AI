@@ -219,6 +219,24 @@ const ENTRIES: readonly LlmCatalogEntry[] = Object.freeze([
     toolFormat: "lfm-pythonic",
   },
   {
+    // v2.14.0 T016 -- opt-in 16 GB MoE worker admitted on the local A/B
+    // (lfm-ab-results.json). Card sampler; topP is Ollama's default because the
+    // card sets none; contextLength is the 32K the 16 GB fit was verified at.
+    // Reasoning arrives in Ollama's `thinking` field, so reasoningOpensInPrompt
+    // stays unset (T002).
+    id: "lfm2.5:24b-a2b",
+    displayName: "LFM2.5 24B-A2B",
+    family: "lfm2.5",
+    runtime: "ollama",
+    vramGb: 15,
+    activeParams: 2,
+    totalParams: 24,
+    tags: Object.freeze(["coding", "tool-use", "worker-candidate"]),
+    sampling: { temperature: 0.1, topP: 0.9, topK: 50, contextLength: 32768 },
+    promptFormat: "lfm",
+    toolFormat: "lfm-pythonic",
+  },
+  {
     id: "minicpm5:2b",
     displayName: "MiniCPM5 2B",
     family: "minicpm5",
