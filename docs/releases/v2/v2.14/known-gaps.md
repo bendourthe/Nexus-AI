@@ -3,7 +3,7 @@
 **Project**: Nexus
 **Status**: in-progress
 **Last updated**: 2026-10-16
-**Open items**: 10
+**Open items**: 13
 
 ## v2.14.0
 
@@ -12,9 +12,9 @@
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 4 | 0 |
+| Deferred (DF) | 5 | 0 |
 | Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 5 | 0 |
+| Warnings (WN) | 7 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 1 | 0 |
 
@@ -117,6 +117,27 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 
 - **Migrated from**: v2.13.0#QG-1 on 2026-10-16 (reason: user-deferred)
 - **Migration evidence**: left open by v2.13.0, the last plan of v2.13
+
+#### DF-5 - In-app model install cannot fetch multi-file Hugging Face models
+
+- **Source phase**: Phase 1 (2026-10-16).
+- **Plan reference**: T001 provisioning delta (session history `v2.14.0-phase1.md`, Plan delta).
+- **Reason**: `models.install` in the sidecar goes through `NexusModelRegistry._installHttp` (`core/registry/NexusModelRegistry.ts:364-385`), which downloads only `source.url`, verifies it against `source.sha256` (all zeros for the voice models, so `Downloader.ts:169-173` throws `DigestMismatch`), writes to `blobs/<sha>` rather than `weights/<id>`, and ignores `weights.files`. Phase 1 fixed the installer path (`HFWeightsPuller`, which honors `weights.files` and per-file sha256), but the runtime's own error text still tells users to "Install ... from Settings > Models", which cannot succeed for `kokoro-82m` or `faster-whisper-large-v3`.
+- **Suggested next step**: Route Hugging Face `weights.files` entries in `NexusModelRegistry` through the same per-file pinned download the installer uses, writing to `~/.nexus/models/weights/<id>/`, or point the runtime error text at the installer until that lands.
+
+#### WN-6 - Hosts without an NVIDIA or Apple GPU still get no voice runtime
+
+- **Source phase**: Phase 1 (2026-10-16).
+- **Plan reference**: T001 provisioning delta.
+- **Reason**: voice now shares the provisioned media venv, and a voice-only selection now requests it, but `scripts/installer/build/versions.lock.json` has only `win-x64-nvidia`, `linux-x64-nvidia` and `mac-arm64-apple` targets. A CPU-only host fails provisioning as before, so the audio runtime falls back to a bare `python` without the voice packages. This is unchanged from before Phase 1, not a regression.
+- **Suggested next step**: Add a CPU target (CPU torch wheels plus the same runtime requirements) so the CPU-capable Whisper and Kokoro models provision on every tier the recommended defaults claim.
+
+#### WN-7 - The provisioned venv's numpy differs from its lock
+
+- **Source phase**: Phase 1 (2026-10-16).
+- **Plan reference**: T001 provisioning delta.
+- **Reason**: the lock pins `numpy==1.26.4`, but the provisioned venv on the reference host reports numpy 2.5.3, so some later install upgraded it outside the provisioner. Phase 1's voice packages did not change it (pip dry-run and before/after import check). Image, video and voice all import correctly with 2.5.3 here, so the effect is drift, not a failure.
+- **Suggested next step**: Find which component upgrades numpy (a later runtime extra or a repair path) and either pin it through the provisioner or move the lock to the version actually in use.
 
 ### Resolved
 

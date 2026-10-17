@@ -1,6 +1,6 @@
 # Nexus - Progress Dashboard
 
-**Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.13-craft-retrieval`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
+**Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.14.0-adoption-voice-latency-lfm2.5-24b`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
 
 ## v2.12 Phase 7 gates (2026-10-09)
 
@@ -722,6 +722,14 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Select the v2.13.0 planning scope after v2.12 outline-readiness: accepted measured promotion gate, persisted Image Studio-only recipes and running-desktop-renderer export (owner: "all recommendations", 2026-10-08). Media search and video editing remain deferred.
 - [ ] Evaluate EmbeddingGemma 2 text/code retrieval through the existing local adapter, resolve its context/terms discrepancies and measure the comparison's proposed gate before changing the model job map or defaults (E1/E2).
 - [ ] Implement and verify the planned durable recipe and shared commands for existing ImageViewer edits, including restart/reopen and UI-versus-command export equivalence, before adding broader creative-editor features (C1/C2).
+
+## Voice latency and LFM2.5-24B trial (active v2.14.0)
+
+- [x] Phase 1: make desktop voice runnable on install (pinned Kokoro and Whisper files, voice packages in the media venv, sidecar audio interpreter, offline Kokoro, Windows CUDA DLL path), measure the baseline (medium warm time to first audio p50 38.6 s), probe LFM2.5-24B (GO on QAD-Q4_0) and freeze the gates ([Phase 1 evidence](releases/v2/v2.14/development/v2.14.0-phase1-evidence.md), 2026-10-16).
+- [ ] Phase 2: speak from the first sentence through the sidecar, with barge-in cancelling synthesis; judge the frozen voice gates.
+- [ ] Phase 3: prompt-opened reasoning in every path, golden-runner metrics and LFM codec, paired A/B.
+- [ ] Phase 4: admit LFM2.5-24B opt-in on a frozen win, or record the decline.
+- [ ] Phase 5: architecture, known gaps (including DF-5, WN-6, WN-7 from Phase 1, which cannot migrate), CI/CD, deep pass, publication.
 
 ## Recurring Obligations
 

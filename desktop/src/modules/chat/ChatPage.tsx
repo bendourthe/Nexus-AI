@@ -624,6 +624,9 @@ export function ChatPage({
               void audio.play();
             });
           });
+        // v2.14.0 T001: time-to-first-audio anchor for the packaged-app check.
+        // Carries no text or audio; read via performance.getEntriesByName.
+        performance.mark("nexus:voice:first-playback");
         await play(dataUrl, abort.signal);
         if (!abort.signal.aborted) dispatchVoice({ type: "tts-ended" });
       } catch (err) {

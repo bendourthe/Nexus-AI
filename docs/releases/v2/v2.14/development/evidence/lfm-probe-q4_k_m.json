@@ -1,0 +1,82 @@
+{
+  "model": "hf.co/LiquidAI/LFM2.5-24B-A2B-GGUF:Q4_K_M",
+  "extraOptions": {},
+  "at": "2026-10-17T00:19:25.963Z",
+  "loads": [
+    {
+      "numCtx": 8192,
+      "loaded": true,
+      "idleGpuMiB": 0,
+      "gpuUsedMiB": 14300,
+      "ollamaRamMiB": 178,
+      "ps": {
+        "size": 14775431986,
+        "size_vram": 14775431986,
+        "context_length": 8192
+      },
+      "loadMs": 42841,
+      "wallMs": 68649,
+      "evalCount": 256,
+      "decodeTokPerSec": 130.4,
+      "promptTokPerSec": 1.3
+    },
+    {
+      "numCtx": 32768,
+      "loaded": true,
+      "idleGpuMiB": 0,
+      "gpuUsedMiB": 14368,
+      "ollamaRamMiB": 178,
+      "ps": {
+        "size": 15658783864,
+        "size_vram": 14844480715,
+        "context_length": 32768
+      },
+      "loadMs": 13446,
+      "wallMs": 16166,
+      "evalCount": 256,
+      "decodeTokPerSec": 116.91,
+      "promptTokPerSec": 59.69
+    }
+  ],
+  "reasoning": [
+    {
+      "think": true,
+      "thinkingChars": 175,
+      "contentChars": 49,
+      "contentHasThinkOpen": false,
+      "contentHasThinkClose": false,
+      "contentHead": "\n\nNo, 391 is not prime because it equals 17 × 23."
+    },
+    {
+      "think": false,
+      "thinkingChars": 175,
+      "contentChars": 49,
+      "contentHasThinkOpen": false,
+      "contentHasThinkClose": false,
+      "contentHead": "\n\nNo, 391 is not prime because it equals 17 × 23."
+    }
+  ],
+  "tools": {
+    "native": {
+      "toolCalls": [
+        {
+          "name": "read_file",
+          "args": {
+            "path": "src/index.ts"
+          }
+        }
+      ],
+      "content": ""
+    },
+    "pythonic": {
+      "toolCalls": [],
+      "content": "<|tool_call_start|>[read_file(path='src/index.ts')]<|tool_call_end|>",
+      "parses": false
+    },
+    "gemma4": {
+      "toolCalls": [],
+      "content": "\n\n<|tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool_call>\n<tool",
+      "parses": false
+    }
+  }
+}
