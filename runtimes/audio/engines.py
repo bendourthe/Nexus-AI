@@ -20,6 +20,41 @@ STT_UNAVAILABLE = (
 )
 TTS_UNAVAILABLE = "TTS weights are not installed. Install kokoro-82m from Settings > Models."
 
+# v2.14.0: Kokoro and huggingface_hub must never reach the network. These are
+# read at import time, and the engine imports are lazy, so set them first.
+os.environ.setdefault("HF_HUB_OFFLINE", "1")
+os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+
+KOKORO_REPO_ID = "hexgrad/Kokoro-82M"
+KOKORO_VOICE = "af_heart"
+# Files the offline Kokoro construction opens (catalog `weights.files`).
+KOKORO_FILES = ("config.json", "kokoro-v1_0.pth", f"voices/{KOKORO_VOICE}.pt")
+
+
+def _expose_torch_cuda_dlls() -> None:
+    """Let CTranslate2 find the CUDA DLLs (cublas64_12, cudnn) that torch ships.
+
+    On Windows these live in `torch/lib`, which is not on the DLL search path
+    until torch itself is imported, so a transcription before any synthesis
+    failed with "cublas64_12.dll is not found". No-op elsewhere or without torch.
+    """
+    if os.name != "nt":
+        return
+    import importlib.util
+
+    spec = importlib.util.find_spec("torch")
+    if spec is None or not spec.origin:
+        return
+    lib = Path(spec.origin).parent / "lib"
+    if not lib.is_dir():
+        return
+    os.add_dll_directory(str(lib))
+    # CTranslate2 loads cuBLAS lazily with a plain LoadLibrary, which searches
+    # PATH and ignores add_dll_directory, so PATH needs the folder too.
+    entries = os.environ.get("PATH", "").split(os.pathsep)
+    if str(lib) not in entries:
+        os.environ["PATH"] = os.pathsep.join([str(lib), *entries])
+
 
 def models_root() -> Path:
     override = os.environ.get("NEXUS_MODELS_ROOT")
@@ -68,6 +103,7 @@ def transcribe(params: dict[str, Any] | None) -> dict[str, Any]:
     model_dir = weights_dir(version.STT_MODEL_ID)
     if not model_dir.is_dir():
         raise RuntimeError(STT_UNAVAILABLE)
+    _expose_torch_cuda_dlls()
     try:
         from faster_whisper import WhisperModel  # type: ignore[import-untyped]
     except ImportError as exc:
@@ -103,15 +139,23 @@ def speak(params: dict[str, Any] | None) -> dict[str, Any]:
         )
         return {"audioBase64": base64.b64encode(silence).decode("ascii"), "mimeType": "audio/wav"}
     model_dir = weights_dir(version.TTS_MODEL_ID)
-    if not model_dir.is_dir():
+    if not all((model_dir / name).is_file() for name in KOKORO_FILES):
         raise RuntimeError(TTS_UNAVAILABLE)
     try:
-        from kokoro import KPipeline  # type: ignore[import-untyped]
+        from kokoro import KModel, KPipeline  # type: ignore[import-untyped]
     except ImportError as exc:
         raise RuntimeError("kokoro is not installed in the audio runtime venv") from exc
-    pipeline = KPipeline(lang_code="a")
+    # Built from the local weights only. Still constructed per call; v2.14.0
+    # T005 caches it once the Phase 1 baseline has measured this cost.
+    model = KModel(
+        repo_id=KOKORO_REPO_ID,
+        config=str(model_dir / "config.json"),
+        model=str(model_dir / "kokoro-v1_0.pth"),
+    )
+    pipeline = KPipeline(lang_code="a", repo_id=KOKORO_REPO_ID, model=model)
+    voice = str(model_dir / "voices" / f"{KOKORO_VOICE}.pt")
     chunks: list[bytes] = []
-    for _gs, _ps, audio in pipeline(text, voice="af_heart"):
+    for _gs, _ps, audio in pipeline(text, voice=voice):
         # audio is a numpy array; encode lazily via wave in a temp file if needed.
         import numpy as np
 

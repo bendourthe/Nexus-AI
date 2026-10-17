@@ -471,9 +471,11 @@ class RuntimeProvisioner:
             return False
         for model_id in selected:
             entry = catalog.get(model_id) if isinstance(catalog, dict) else None
+            # v2.14.0: the audio runtime (Whisper STT, Kokoro TTS) shares this venv,
+            # so a voice-only selection must provision it too.
             if isinstance(entry, dict) and (
-                entry.get("task") in {"image", "video"}
-                or entry.get("type") in {"image", "video"}
+                entry.get("task") in {"image", "video", "audio"}
+                or entry.get("type") in {"image", "video", "audio"}
             ):
                 return True
         return False

@@ -1,0 +1,82 @@
+{
+  "model": "nemotron-3.5-lightning:30b",
+  "extraOptions": {},
+  "at": "2026-10-17T00:21:21.707Z",
+  "loads": [
+    {
+      "numCtx": 8192,
+      "loaded": true,
+      "idleGpuMiB": 0,
+      "gpuUsedMiB": 14152,
+      "ollamaRamMiB": 173,
+      "ps": {
+        "size": 25637179880,
+        "size_vram": 13382765771,
+        "context_length": 8192
+      },
+      "loadMs": 41130,
+      "wallMs": 70425,
+      "evalCount": 145,
+      "decodeTokPerSec": 18.87,
+      "promptTokPerSec": 1.85
+    },
+    {
+      "numCtx": 32768,
+      "loaded": true,
+      "idleGpuMiB": 13,
+      "gpuUsedMiB": 14372,
+      "ollamaRamMiB": 172,
+      "ps": {
+        "size": 25712677352,
+        "size_vram": 13433097419,
+        "context_length": 32768
+      },
+      "loadMs": 25586,
+      "wallMs": 29480,
+      "evalCount": 145,
+      "decodeTokPerSec": 49.51,
+      "promptTokPerSec": 42.02
+    }
+  ],
+  "reasoning": [
+    {
+      "think": true,
+      "thinkingChars": 1394,
+      "contentChars": 47,
+      "contentHasThinkOpen": false,
+      "contentHasThinkClose": false,
+      "contentHead": "No, 391 is not prime because it equals 17 × 23."
+    },
+    {
+      "think": false,
+      "thinkingChars": 0,
+      "contentChars": 58,
+      "contentHasThinkOpen": false,
+      "contentHasThinkClose": false,
+      "contentHead": "No, 391 is not prime because it is divisible by 17 and 23."
+    }
+  ],
+  "tools": {
+    "native": {
+      "toolCalls": [
+        {
+          "name": "read_file",
+          "args": {
+            "path": "src/index.ts"
+          }
+        }
+      ],
+      "content": ""
+    },
+    "pythonic": {
+      "toolCalls": [],
+      "content": "<|tool_call_start|>[read_file(path=\"src/index.ts\")]<|tool_call_end|>",
+      "parses": true
+    },
+    "gemma4": {
+      "toolCalls": [],
+      "content": "<|tool_call>call:read_file{path:\"src/index.ts\"}<tool_call|>",
+      "parses": false
+    }
+  }
+}
