@@ -3,6 +3,7 @@ import { randomUUID } from "crypto";
 import type { Message, Role } from "./types.js";
 import type { ChatHistoryStore } from "../../../src/storage/ChatHistoryStore.js";
 import { stripLeadingThinkBlocks } from "../llm/Gemma4Parser.js";
+import { createReasoningSplitter } from "../../../core/chat/speakable.js";
 import type { LLMToolCall } from "../llm/types.js";
 import { expandToolPairIndices, toolPairGroups } from "../llm/toolHistory.js";
 
@@ -167,11 +168,20 @@ export class ConversationManager {
    * Used by `ContextCompactor` (and any future replay surface) so the
    * compaction prompt does not re-feed `<think>` blocks back through the
    * model. User and system messages pass through unchanged.
+   *
+   * v2.14.0 T012 -- with `reasoningOpensInPrompt`, an assistant message is
+   * reasoning until its first `</think>`; a message that never closes it
+   * replays as empty. Without the option, behaviour is unchanged.
    */
-  replayForCompaction(): readonly Message[] {
+  replayForCompaction(options: { readonly reasoningOpensInPrompt?: boolean } = {}): readonly Message[] {
     return this._messages.map((m) => {
       if (m.role !== "assistant") return m;
-      const cleaned = stripLeadingThinkBlocks(m.content);
+      let content = m.content;
+      if (options.reasoningOpensInPrompt) {
+        const split = createReasoningSplitter({ reasoningOpensInPrompt: true });
+        content = split.push(content).visible + split.end().visible;
+      }
+      const cleaned = stripLeadingThinkBlocks(content);
       if (cleaned === m.content) return m;
       return { ...m, content: cleaned };
     });

@@ -1,0 +1,6 @@
+{
+  "temperature": 0.1,
+  "top_k": 50,
+  "repeat_penalty": 1.05,
+  "num_ctx": 32768
+}

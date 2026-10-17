@@ -1,0 +1,1665 @@
+{
+  "schemaVersion": 1,
+  "model": "nemotron-3.5-lightning:30b",
+  "mode": "live",
+  "options": {
+    "temperature": 0.5,
+    "top_p": 0.9,
+    "top_k": 20,
+    "num_ctx": 32768
+  },
+  "toolFormat": "qwen-json",
+  "passed": 22,
+  "total": 28,
+  "tasks": [
+    {
+      "id": "agent-friendly-dry-run-then-execute-03",
+      "firstToolCallMs": 33763,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 33737,
+          "firstChunkMs": 30741
+        },
+        {
+          "turnMs": 8477,
+          "firstChunkMs": 1134
+        },
+        {
+          "turnMs": 4587,
+          "firstChunkMs": 1008
+        },
+        {
+          "turnMs": 10085,
+          "firstChunkMs": 1002
+        },
+        {
+          "turnMs": 2173,
+          "firstChunkMs": 1140
+        },
+        {
+          "turnMs": 9095,
+          "firstChunkMs": 1036
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 68333,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 43
+      }
+    },
+    {
+      "id": "agent-friendly-truncation-recovery-grep-02",
+      "firstToolCallMs": 11766,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 11746,
+          "firstChunkMs": 1314
+        },
+        {
+          "turnMs": 14102,
+          "firstChunkMs": 11805
+        },
+        {
+          "turnMs": 16556,
+          "firstChunkMs": 1181
+        },
+        {
+          "turnMs": 3304,
+          "firstChunkMs": 1194
+        },
+        {
+          "turnMs": 134229,
+          "firstChunkMs": 6765
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "agent: task timed out after 180000ms"
+      ],
+      "taskMs": 180162,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 179
+      }
+    },
+    {
+      "id": "agent-friendly-truncation-recovery-read-01",
+      "firstToolCallMs": 4084,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 4075,
+          "firstChunkMs": 1640
+        },
+        {
+          "turnMs": 1483,
+          "firstChunkMs": 961
+        },
+        {
+          "turnMs": 2255,
+          "firstChunkMs": 1059
+        },
+        {
+          "turnMs": 59001,
+          "firstChunkMs": 51313
+        },
+        {
+          "turnMs": 54342,
+          "firstChunkMs": 52349
+        },
+        {
+          "turnMs": 4355,
+          "firstChunkMs": 2688
+        },
+        {
+          "turnMs": 53782,
+          "firstChunkMs": 51312
+        },
+        {
+          "turnMs": 769,
+          "firstChunkMs": null
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "agent: task timed out after 180000ms",
+        "large.ts contains the targeted function the agent must locate (output_contains node -e \"const fs=require('fs');const m=fs.readFileSync('large.ts','utf8').match(/featureFlag1300[\\s\\S]*?return [^;]+;/);process.stdout.write(m?m[0].slice(0,80):'no-match')\"): command exit=0"
+      ],
+      "taskMs": 180107,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 179
+      }
+    },
+    {
+      "id": "bugfix-async-await-03",
+      "firstToolCallMs": 3034,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 3027,
+          "firstChunkMs": 1859
+        },
+        {
+          "turnMs": 4539,
+          "firstChunkMs": 1113
+        },
+        {
+          "turnMs": 1987,
+          "firstChunkMs": 1164
+        },
+        {
+          "turnMs": 2897,
+          "firstChunkMs": 1122
+        },
+        {
+          "turnMs": 2003,
+          "firstChunkMs": 1159
+        },
+        {
+          "turnMs": 2756,
+          "firstChunkMs": 1160
+        },
+        {
+          "turnMs": 5067,
+          "firstChunkMs": 2345
+        },
+        {
+          "turnMs": 4346,
+          "firstChunkMs": 1176
+        },
+        {
+          "turnMs": 1781,
+          "firstChunkMs": 1218
+        },
+        {
+          "turnMs": 3334,
+          "firstChunkMs": 1135
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 32482,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 33
+      }
+    },
+    {
+      "id": "bugfix-import-path-04",
+      "firstToolCallMs": 2225,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2207,
+          "firstChunkMs": 1363
+        },
+        {
+          "turnMs": 4058,
+          "firstChunkMs": 1129
+        },
+        {
+          "turnMs": 2147,
+          "firstChunkMs": 1128
+        },
+        {
+          "turnMs": 4853,
+          "firstChunkMs": 1213
+        },
+        {
+          "turnMs": 3597,
+          "firstChunkMs": 1200
+        },
+        {
+          "turnMs": 2033,
+          "firstChunkMs": 1143
+        },
+        {
+          "turnMs": 2395,
+          "firstChunkMs": 1133
+        },
+        {
+          "turnMs": 2775,
+          "firstChunkMs": 1313
+        },
+        {
+          "turnMs": 3206,
+          "firstChunkMs": 2349
+        },
+        {
+          "turnMs": 1954,
+          "firstChunkMs": 1220
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "no stray parent-directory imports remain (output_contains grep -c \"../\" src/main.ts || true): command exit=0"
+      ],
+      "taskMs": 36661,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 37
+      }
+    },
+    {
+      "id": "bugfix-null-check-02",
+      "firstToolCallMs": 3106,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 3099,
+          "firstChunkMs": 1478
+        },
+        {
+          "turnMs": 4782,
+          "firstChunkMs": 1091
+        },
+        {
+          "turnMs": 1957,
+          "firstChunkMs": 1132
+        },
+        {
+          "turnMs": 2417,
+          "firstChunkMs": 1124
+        },
+        {
+          "turnMs": 1805,
+          "firstChunkMs": 1098
+        },
+        {
+          "turnMs": 4600,
+          "firstChunkMs": 1114
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 18693,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 19
+      }
+    },
+    {
+      "id": "bugfix-off-by-one-01",
+      "firstToolCallMs": 2093,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2080,
+          "firstChunkMs": 1247
+        },
+        {
+          "turnMs": 2966,
+          "firstChunkMs": 1127
+        },
+        {
+          "turnMs": 2146,
+          "firstChunkMs": 1102
+        },
+        {
+          "turnMs": 2976,
+          "firstChunkMs": 1115
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 11303,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 12
+      }
+    },
+    {
+      "id": "bugfix-race-condition-05",
+      "firstToolCallMs": 2149,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2136,
+          "firstChunkMs": 1276
+        },
+        {
+          "turnMs": 14979,
+          "firstChunkMs": 1195
+        },
+        {
+          "turnMs": 2735,
+          "firstChunkMs": 1895
+        },
+        {
+          "turnMs": 6945,
+          "firstChunkMs": 1218
+        },
+        {
+          "turnMs": 2583,
+          "firstChunkMs": 1258
+        },
+        {
+          "turnMs": 7967,
+          "firstChunkMs": 1259
+        },
+        {
+          "turnMs": 1908,
+          "firstChunkMs": 1257
+        },
+        {
+          "turnMs": 4084,
+          "firstChunkMs": 1283
+        },
+        {
+          "turnMs": 4101,
+          "firstChunkMs": 2203
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "agent: task timed out after 240000ms"
+      ],
+      "taskMs": 240016,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 239
+      }
+    },
+    {
+      "id": "memory-hygiene-missed-fact-01",
+      "firstToolCallMs": 4343,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 4336,
+          "firstChunkMs": 1618
+        },
+        {
+          "turnMs": 2484,
+          "firstChunkMs": 986
+        },
+        {
+          "turnMs": 11467,
+          "firstChunkMs": 1260
+        },
+        {
+          "turnMs": 9411,
+          "firstChunkMs": 1396
+        },
+        {
+          "turnMs": 5324,
+          "firstChunkMs": 1385
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 36805,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 37
+      }
+    },
+    {
+      "id": "multi-file-add-import-02",
+      "firstToolCallMs": 1974,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1959,
+          "firstChunkMs": 1270
+        },
+        {
+          "turnMs": 1652,
+          "firstChunkMs": 1005
+        },
+        {
+          "turnMs": 2555,
+          "firstChunkMs": 1030
+        },
+        {
+          "turnMs": 8890,
+          "firstChunkMs": 1213
+        },
+        {
+          "turnMs": 2049,
+          "firstChunkMs": 1214
+        },
+        {
+          "turnMs": 2979,
+          "firstChunkMs": 1057
+        },
+        {
+          "turnMs": 2800,
+          "firstChunkMs": 1140
+        },
+        {
+          "turnMs": 3052,
+          "firstChunkMs": 1103
+        },
+        {
+          "turnMs": 2229,
+          "firstChunkMs": 1135
+        },
+        {
+          "turnMs": 2072,
+          "firstChunkMs": 1072
+        },
+        {
+          "turnMs": 2198,
+          "firstChunkMs": 1230
+        },
+        {
+          "turnMs": 3737,
+          "firstChunkMs": 1154
+        },
+        {
+          "turnMs": 2233,
+          "firstChunkMs": 1125
+        },
+        {
+          "turnMs": 1845,
+          "firstChunkMs": 1040
+        },
+        {
+          "turnMs": 2625,
+          "firstChunkMs": 1115
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 45086,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 45
+      }
+    },
+    {
+      "id": "multi-file-api-endpoint-04",
+      "firstToolCallMs": 2068,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2052,
+          "firstChunkMs": 1342
+        },
+        {
+          "turnMs": 1645,
+          "firstChunkMs": 993
+        },
+        {
+          "turnMs": 1723,
+          "firstChunkMs": 997
+        },
+        {
+          "turnMs": 1941,
+          "firstChunkMs": 1189
+        },
+        {
+          "turnMs": 1689,
+          "firstChunkMs": 1008
+        },
+        {
+          "turnMs": 1749,
+          "firstChunkMs": 1103
+        },
+        {
+          "turnMs": 3344,
+          "firstChunkMs": 1110
+        },
+        {
+          "turnMs": 3292,
+          "firstChunkMs": 1108
+        },
+        {
+          "turnMs": 3136,
+          "firstChunkMs": 1114
+        },
+        {
+          "turnMs": 1986,
+          "firstChunkMs": 1130
+        },
+        {
+          "turnMs": 3108,
+          "firstChunkMs": 1185
+        },
+        {
+          "turnMs": 4558,
+          "firstChunkMs": 1131
+        },
+        {
+          "turnMs": 2189,
+          "firstChunkMs": 1165
+        },
+        {
+          "turnMs": 3374,
+          "firstChunkMs": 1111
+        },
+        {
+          "turnMs": 2168,
+          "firstChunkMs": 1171
+        },
+        {
+          "turnMs": 2396,
+          "firstChunkMs": 1250
+        },
+        {
+          "turnMs": 2143,
+          "firstChunkMs": 1159
+        },
+        {
+          "turnMs": 18394,
+          "firstChunkMs": 1137
+        },
+        {
+          "turnMs": 8138,
+          "firstChunkMs": 1211
+        },
+        {
+          "turnMs": 2597,
+          "firstChunkMs": 1251
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 87929,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 87
+      }
+    },
+    {
+      "id": "multi-file-config-update-03",
+      "firstToolCallMs": 2290,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2278,
+          "firstChunkMs": 1587
+        },
+        {
+          "turnMs": 1588,
+          "firstChunkMs": 991
+        },
+        {
+          "turnMs": 1675,
+          "firstChunkMs": 1034
+        },
+        {
+          "turnMs": 3177,
+          "firstChunkMs": 1121
+        },
+        {
+          "turnMs": 10507,
+          "firstChunkMs": 2865
+        },
+        {
+          "turnMs": 2053,
+          "firstChunkMs": 1164
+        },
+        {
+          "turnMs": 3008,
+          "firstChunkMs": 1122
+        },
+        {
+          "turnMs": 2472,
+          "firstChunkMs": 1133
+        },
+        {
+          "turnMs": 3611,
+          "firstChunkMs": 1174
+        },
+        {
+          "turnMs": 4296,
+          "firstChunkMs": 1143
+        },
+        {
+          "turnMs": 2401,
+          "firstChunkMs": 1110
+        },
+        {
+          "turnMs": 2448,
+          "firstChunkMs": 1106
+        },
+        {
+          "turnMs": 2651,
+          "firstChunkMs": 1105
+        },
+        {
+          "turnMs": 2564,
+          "firstChunkMs": 1134
+        },
+        {
+          "turnMs": 2530,
+          "firstChunkMs": 1091
+        },
+        {
+          "turnMs": 3462,
+          "firstChunkMs": 1132
+        },
+        {
+          "turnMs": 7680,
+          "firstChunkMs": 2292
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 59698,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 60
+      }
+    },
+    {
+      "id": "multi-file-rename-01",
+      "firstToolCallMs": 3462,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 3445,
+          "firstChunkMs": 1340
+        },
+        {
+          "turnMs": 3948,
+          "firstChunkMs": 1245
+        },
+        {
+          "turnMs": 2384,
+          "firstChunkMs": 1130
+        },
+        {
+          "turnMs": 2107,
+          "firstChunkMs": 1079
+        },
+        {
+          "turnMs": 2302,
+          "firstChunkMs": 1066
+        },
+        {
+          "turnMs": 2635,
+          "firstChunkMs": 1053
+        },
+        {
+          "turnMs": 1956,
+          "firstChunkMs": 1122
+        },
+        {
+          "turnMs": 3125,
+          "firstChunkMs": 1129
+        },
+        {
+          "turnMs": 2920,
+          "firstChunkMs": 1112
+        },
+        {
+          "turnMs": 2511,
+          "firstChunkMs": 1274
+        },
+        {
+          "turnMs": 3332,
+          "firstChunkMs": 1138
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 32022,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 32
+      }
+    },
+    {
+      "id": "multi-file-type-propagation-05",
+      "firstToolCallMs": 2100,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2084,
+          "firstChunkMs": 1266
+        },
+        {
+          "turnMs": 2859,
+          "firstChunkMs": 997
+        },
+        {
+          "turnMs": 21857,
+          "firstChunkMs": 1289
+        },
+        {
+          "turnMs": 2066,
+          "firstChunkMs": 1193
+        },
+        {
+          "turnMs": 2394,
+          "firstChunkMs": 1056
+        },
+        {
+          "turnMs": 3148,
+          "firstChunkMs": 1089
+        },
+        {
+          "turnMs": 2531,
+          "firstChunkMs": 1143
+        },
+        {
+          "turnMs": 2401,
+          "firstChunkMs": 1095
+        },
+        {
+          "turnMs": 2268,
+          "firstChunkMs": 1103
+        },
+        {
+          "turnMs": 2723,
+          "firstChunkMs": 1102
+        },
+        {
+          "turnMs": 3809,
+          "firstChunkMs": 1156
+        },
+        {
+          "turnMs": 7663,
+          "firstChunkMs": 1276
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 57010,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 57
+      }
+    },
+    {
+      "id": "refactor-callback-to-async-03",
+      "firstToolCallMs": 2224,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2211,
+          "firstChunkMs": 1325
+        },
+        {
+          "turnMs": 31175,
+          "firstChunkMs": 1257
+        },
+        {
+          "turnMs": 2266,
+          "firstChunkMs": 1274
+        },
+        {
+          "turnMs": 2105,
+          "firstChunkMs": 1124
+        },
+        {
+          "turnMs": 2725,
+          "firstChunkMs": 1278
+        },
+        {
+          "turnMs": 3833,
+          "firstChunkMs": 1131
+        },
+        {
+          "turnMs": 2988,
+          "firstChunkMs": 1192
+        },
+        {
+          "turnMs": 6053,
+          "firstChunkMs": 1179
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "most callback parameters removed (<=2 remaining) (output_contains grep -c \"callback\" src/reader.ts || true): command exit=0"
+      ],
+      "taskMs": 54960,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 55
+      }
+    },
+    {
+      "id": "refactor-class-to-module-02",
+      "firstToolCallMs": 2345,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2332,
+          "firstChunkMs": 1279
+        },
+        {
+          "turnMs": 5420,
+          "firstChunkMs": 1232
+        },
+        {
+          "turnMs": 2646,
+          "firstChunkMs": 1168
+        },
+        {
+          "turnMs": 2259,
+          "firstChunkMs": 1103
+        },
+        {
+          "turnMs": 5107,
+          "firstChunkMs": 1210
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 17888,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 18
+      }
+    },
+    {
+      "id": "refactor-deduplicate-04",
+      "firstToolCallMs": 2604,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2589,
+          "firstChunkMs": 1269
+        },
+        {
+          "turnMs": 1786,
+          "firstChunkMs": 1121
+        },
+        {
+          "turnMs": 1754,
+          "firstChunkMs": 1131
+        },
+        {
+          "turnMs": 12193,
+          "firstChunkMs": 1131
+        },
+        {
+          "turnMs": 3905,
+          "firstChunkMs": 1174
+        },
+        {
+          "turnMs": 2338,
+          "firstChunkMs": 1169
+        },
+        {
+          "turnMs": 4102,
+          "firstChunkMs": 1171
+        },
+        {
+          "turnMs": 3435,
+          "firstChunkMs": 1172
+        },
+        {
+          "turnMs": 3172,
+          "firstChunkMs": 1200
+        },
+        {
+          "turnMs": 2291,
+          "firstChunkMs": 1090
+        },
+        {
+          "turnMs": 2288,
+          "firstChunkMs": 1099
+        },
+        {
+          "turnMs": 3004,
+          "firstChunkMs": 1051
+        },
+        {
+          "turnMs": 6708,
+          "firstChunkMs": 3063
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 49730,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 50
+      }
+    },
+    {
+      "id": "refactor-extract-function-01",
+      "firstToolCallMs": 2106,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2092,
+          "firstChunkMs": 1346
+        },
+        {
+          "turnMs": 79674,
+          "firstChunkMs": 1244
+        },
+        {
+          "turnMs": 2163,
+          "firstChunkMs": 1331
+        },
+        {
+          "turnMs": 2655,
+          "firstChunkMs": 1122
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 87704,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 88
+      }
+    },
+    {
+      "id": "refactor-rename-pattern-05",
+      "firstToolCallMs": 3234,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 3218,
+          "firstChunkMs": 1279
+        },
+        {
+          "turnMs": 2881,
+          "firstChunkMs": 1018
+        },
+        {
+          "turnMs": 14158,
+          "firstChunkMs": 3210
+        },
+        {
+          "turnMs": 1867,
+          "firstChunkMs": 1160
+        },
+        {
+          "turnMs": 3136,
+          "firstChunkMs": 1070
+        },
+        {
+          "turnMs": 2475,
+          "firstChunkMs": 1123
+        },
+        {
+          "turnMs": 2215,
+          "firstChunkMs": 1097
+        },
+        {
+          "turnMs": 2176,
+          "firstChunkMs": 1099
+        },
+        {
+          "turnMs": 3244,
+          "firstChunkMs": 1097
+        },
+        {
+          "turnMs": 20832,
+          "firstChunkMs": 1123
+        },
+        {
+          "turnMs": 16487,
+          "firstChunkMs": 1184
+        },
+        {
+          "turnMs": 5618,
+          "firstChunkMs": 2801
+        },
+        {
+          "turnMs": 1826,
+          "firstChunkMs": 1182
+        },
+        {
+          "turnMs": 2120,
+          "firstChunkMs": 1147
+        },
+        {
+          "turnMs": 3594,
+          "firstChunkMs": 1136
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 87133,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 87
+      }
+    },
+    {
+      "id": "review-code-quality-04",
+      "firstToolCallMs": 2122,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2111,
+          "firstChunkMs": 1335
+        },
+        {
+          "turnMs": 18708,
+          "firstChunkMs": 1257
+        },
+        {
+          "turnMs": 2145,
+          "firstChunkMs": 1265
+        },
+        {
+          "turnMs": 10696,
+          "firstChunkMs": 1280
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 33758,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 34
+      }
+    },
+    {
+      "id": "review-error-handling-03",
+      "firstToolCallMs": 2113,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2105,
+          "firstChunkMs": 1273
+        },
+        {
+          "turnMs": 13152,
+          "firstChunkMs": 1203
+        },
+        {
+          "turnMs": 2127,
+          "firstChunkMs": 1226
+        },
+        {
+          "turnMs": 4650,
+          "firstChunkMs": 1197
+        },
+        {
+          "turnMs": 2299,
+          "firstChunkMs": 1203
+        },
+        {
+          "turnMs": 6165,
+          "firstChunkMs": 1238
+        },
+        {
+          "turnMs": 2033,
+          "firstChunkMs": 1229
+        },
+        {
+          "turnMs": 5448,
+          "firstChunkMs": 1250
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 38120,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 38
+      }
+    },
+    {
+      "id": "review-performance-02",
+      "firstToolCallMs": 2270,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2257,
+          "firstChunkMs": 1350
+        },
+        {
+          "turnMs": 13089,
+          "firstChunkMs": 1195
+        },
+        {
+          "turnMs": 2217,
+          "firstChunkMs": 1267
+        },
+        {
+          "turnMs": 3917,
+          "firstChunkMs": 1210
+        },
+        {
+          "turnMs": 1990,
+          "firstChunkMs": 1165
+        },
+        {
+          "turnMs": 5440,
+          "firstChunkMs": 1172
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 29008,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 29
+      }
+    },
+    {
+      "id": "review-security-vuln-01",
+      "firstToolCallMs": 2449,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2437,
+          "firstChunkMs": 1266
+        },
+        {
+          "turnMs": 5724,
+          "firstChunkMs": 1183
+        },
+        {
+          "turnMs": 2040,
+          "firstChunkMs": 1157
+        },
+        {
+          "turnMs": 3656,
+          "firstChunkMs": 1215
+        },
+        {
+          "turnMs": 2413,
+          "firstChunkMs": 1186
+        },
+        {
+          "turnMs": 4052,
+          "firstChunkMs": 1236
+        },
+        {
+          "turnMs": 2617,
+          "firstChunkMs": 1196
+        },
+        {
+          "turnMs": 3230,
+          "firstChunkMs": 1180
+        },
+        {
+          "turnMs": 2138,
+          "firstChunkMs": 1216
+        },
+        {
+          "turnMs": 3991,
+          "firstChunkMs": 1241
+        },
+        {
+          "turnMs": 1785,
+          "firstChunkMs": 1200
+        },
+        {
+          "turnMs": 4935,
+          "firstChunkMs": 1207
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "no raw string concatenation in queries (output_contains grep -c \"'\\\" + \" src/db.ts || true): command exit=2"
+      ],
+      "taskMs": 39892,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 40
+      }
+    },
+    {
+      "id": "testgen-edge-cases-02",
+      "firstToolCallMs": 2547,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2533,
+          "firstChunkMs": 1335
+        },
+        {
+          "turnMs": 8103,
+          "firstChunkMs": 1230
+        },
+        {
+          "turnMs": 2097,
+          "firstChunkMs": 1235
+        },
+        {
+          "turnMs": 5533,
+          "firstChunkMs": 1180
+        },
+        {
+          "turnMs": 6484,
+          "firstChunkMs": 1237
+        },
+        {
+          "turnMs": 2758,
+          "firstChunkMs": 1296
+        },
+        {
+          "turnMs": 1765,
+          "firstChunkMs": 1107
+        },
+        {
+          "turnMs": 2217,
+          "firstChunkMs": 1108
+        },
+        {
+          "turnMs": 2360,
+          "firstChunkMs": 1302
+        },
+        {
+          "turnMs": 2448,
+          "firstChunkMs": 1218
+        },
+        {
+          "turnMs": 2166,
+          "firstChunkMs": 1154
+        },
+        {
+          "turnMs": 2506,
+          "firstChunkMs": 1206
+        },
+        {
+          "turnMs": 2319,
+          "firstChunkMs": 1128
+        },
+        {
+          "turnMs": 2322,
+          "firstChunkMs": 1138
+        },
+        {
+          "turnMs": 2485,
+          "firstChunkMs": 1142
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 48760,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 49
+      }
+    },
+    {
+      "id": "testgen-error-handling-05",
+      "firstToolCallMs": 2223,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2212,
+          "firstChunkMs": 1320
+        },
+        {
+          "turnMs": 3744,
+          "firstChunkMs": 1254
+        },
+        {
+          "turnMs": 13814,
+          "firstChunkMs": 1010
+        },
+        {
+          "turnMs": 3668,
+          "firstChunkMs": 2286
+        },
+        {
+          "turnMs": 29292,
+          "firstChunkMs": 26950
+        },
+        {
+          "turnMs": 3524,
+          "firstChunkMs": 1219
+        },
+        {
+          "turnMs": 2515,
+          "firstChunkMs": 1299
+        },
+        {
+          "turnMs": 19871,
+          "firstChunkMs": 18326
+        },
+        {
+          "turnMs": 12743,
+          "firstChunkMs": 1203
+        },
+        {
+          "turnMs": 3295,
+          "firstChunkMs": 2399
+        },
+        {
+          "turnMs": 15629,
+          "firstChunkMs": 13279
+        },
+        {
+          "turnMs": 6543,
+          "firstChunkMs": 1363
+        },
+        {
+          "turnMs": 2703,
+          "firstChunkMs": 1201
+        },
+        {
+          "turnMs": 4307,
+          "firstChunkMs": 1374
+        },
+        {
+          "turnMs": 3032,
+          "firstChunkMs": 1274
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 141464,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 141
+      }
+    },
+    {
+      "id": "testgen-integration-api-04",
+      "firstToolCallMs": 2897,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2890,
+          "firstChunkMs": 1651
+        },
+        {
+          "turnMs": 3550,
+          "firstChunkMs": 1224
+        },
+        {
+          "turnMs": 1747,
+          "firstChunkMs": 1033
+        },
+        {
+          "turnMs": 4604,
+          "firstChunkMs": 996
+        },
+        {
+          "turnMs": 18842,
+          "firstChunkMs": 1155
+        },
+        {
+          "turnMs": 3431,
+          "firstChunkMs": 2421
+        },
+        {
+          "turnMs": 3538,
+          "firstChunkMs": 2464
+        },
+        {
+          "turnMs": 3820,
+          "firstChunkMs": 2099
+        },
+        {
+          "turnMs": 3680,
+          "firstChunkMs": 1205
+        },
+        {
+          "turnMs": 4653,
+          "firstChunkMs": 1248
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 52832,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 53
+      }
+    },
+    {
+      "id": "testgen-mock-dependency-03",
+      "firstToolCallMs": 2377,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2365,
+          "firstChunkMs": 1373
+        },
+        {
+          "turnMs": 12094,
+          "firstChunkMs": 1206
+        },
+        {
+          "turnMs": 2729,
+          "firstChunkMs": 1961
+        },
+        {
+          "turnMs": 3312,
+          "firstChunkMs": 2133
+        },
+        {
+          "turnMs": 2113,
+          "firstChunkMs": 1238
+        },
+        {
+          "turnMs": 1857,
+          "firstChunkMs": 1262
+        },
+        {
+          "turnMs": 2415,
+          "firstChunkMs": 1158
+        },
+        {
+          "turnMs": 2093,
+          "firstChunkMs": 1161
+        },
+        {
+          "turnMs": 2460,
+          "firstChunkMs": 1238
+        },
+        {
+          "turnMs": 2988,
+          "firstChunkMs": 1135
+        },
+        {
+          "turnMs": 3222,
+          "firstChunkMs": 1915
+        },
+        {
+          "turnMs": 3230,
+          "firstChunkMs": 1258
+        },
+        {
+          "turnMs": 2359,
+          "firstChunkMs": 1112
+        },
+        {
+          "turnMs": 1989,
+          "firstChunkMs": 1110
+        },
+        {
+          "turnMs": 1980,
+          "firstChunkMs": 1124
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 52751,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 53
+      }
+    },
+    {
+      "id": "testgen-unit-function-01",
+      "firstToolCallMs": 3077,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 3064,
+          "firstChunkMs": 1366
+        },
+        {
+          "turnMs": 7666,
+          "firstChunkMs": 1142
+        },
+        {
+          "turnMs": 2262,
+          "firstChunkMs": 1238
+        },
+        {
+          "turnMs": 2172,
+          "firstChunkMs": 1263
+        },
+        {
+          "turnMs": 3482,
+          "firstChunkMs": 2252
+        },
+        {
+          "turnMs": 2352,
+          "firstChunkMs": 1043
+        },
+        {
+          "turnMs": 5219,
+          "firstChunkMs": 1156
+        },
+        {
+          "turnMs": 2798,
+          "firstChunkMs": 1153
+        },
+        {
+          "turnMs": 16208,
+          "firstChunkMs": 993
+        },
+        {
+          "turnMs": 7173,
+          "firstChunkMs": 1238
+        },
+        {
+          "turnMs": 7467,
+          "firstChunkMs": 1142
+        },
+        {
+          "turnMs": 2604,
+          "firstChunkMs": 1210
+        },
+        {
+          "turnMs": 1870,
+          "firstChunkMs": 1133
+        },
+        {
+          "turnMs": 2007,
+          "firstChunkMs": 1186
+        },
+        {
+          "turnMs": 3976,
+          "firstChunkMs": 2261
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 76016,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 25712677352,
+        "peakVramBytes": 13433097419,
+        "peakRamBytes": 12279579933,
+        "offloaded": true,
+        "samples": 76
+      }
+    }
+  ]
+}

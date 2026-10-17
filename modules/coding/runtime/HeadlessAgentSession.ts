@@ -30,7 +30,9 @@ import {
   toolCallSyntax,
   toolFormatForModel,
 } from "../llm/parseAgentToolCalls.js";
-import type { ToolFormatName } from "../../../core/registry/ModelCatalog.js";
+import { ModelCatalog, type ToolFormatName } from "../../../core/registry/ModelCatalog.js";
+import { createReasoningSplitter } from "../../../core/chat/speakable.js";
+import { countUnparsedToolSpans } from "../llm/ToolCallFormat.js";
 import type { ToolMetadata } from "../../../src/tools/ToolCatalog.js";
 import type { ToolResult } from "../../../src/tools/types.js";
 import type { InboundClassifier } from "../security/InboundClassifier.js";
@@ -58,6 +60,8 @@ export const COMPACT_TO = 0.4;
 export type HeadlessAgentEvent =
   | { readonly kind: "token"; readonly text: string }
   | { readonly kind: "toolCall"; readonly name: string; readonly args: Record<string, unknown> }
+  /** v2.14.0 T013 -- tool-call text the codec could not parse in one turn. */
+  | { readonly kind: "toolParseFailure"; readonly count: number }
   | { readonly kind: "toolResult"; readonly name: string; readonly success: boolean; readonly output: string }
   | { readonly kind: "compaction"; readonly elided: number; readonly charactersSaved: number }
   | { readonly kind: "done"; readonly finishReason: HeadlessFinishReason };
@@ -87,6 +91,12 @@ export interface HeadlessRunOptions {
   readonly onEvent?: (event: HeadlessAgentEvent) => void;
   /** Override catalog toolFormat. */
   readonly toolFormat?: ToolFormatName;
+  /**
+   * v2.14.0 T012 -- override the catalog's `reasoningOpensInPrompt`. When true,
+   * each turn's output is reasoning until the first `</think>`, and only the
+   * visible text is shown, kept in history and parsed for tool calls.
+   */
+  readonly reasoningOpensInPrompt?: boolean;
 }
 
 export interface HeadlessAgentSessionOptions {
@@ -273,6 +283,8 @@ export class HeadlessAgentSession {
     );
     const toolsByName = new Map(this._tools.map((t) => [t.name, t]));
     const format = opts.toolFormat ?? toolFormatForModel(opts.model);
+    const opensInPrompt =
+      opts.reasoningOpensInPrompt ?? ModelCatalog.byId(opts.model)?.reasoningOpensInPrompt === true;
     const guards = this._options.loopGuards ?? new LoopGuards();
     guards.reset();
     // v2.12.0: how full the window is when each tool runs, so document tools
@@ -348,6 +360,13 @@ export class HeadlessAgentSession {
       let assistantText = "";
       const nativeCalls: LLMToolCall[] = [];
       let counters: TurnCounters | undefined;
+      // Unflagged models are passed through exactly as before.
+      const reasoning = opensInPrompt ? createReasoningSplitter({ reasoningOpensInPrompt: true }) : null;
+      const addVisible = (text: string): void => {
+        if (!text) return;
+        assistantText += text;
+        opts.onEvent?.({ kind: "token", text });
+      };
       try {
         llmCalls += 1;
         for await (const chunk of this._llm.streamChat(
@@ -361,10 +380,7 @@ export class HeadlessAgentSession {
           opts.signal,
         )) {
           const delta = chunk.message?.content ?? "";
-          if (delta) {
-            assistantText += delta;
-            opts.onEvent?.({ kind: "token", text: delta });
-          }
+          if (delta) addVisible(reasoning ? reasoning.push(delta).visible : delta);
           if (chunk.message?.tool_calls) nativeCalls.push(...chunk.message.tool_calls);
           if (chunk.done) {
             counters = chunk;
@@ -375,8 +391,13 @@ export class HeadlessAgentSession {
         if (opts.signal?.aborted) return finish("aborted");
         return finish("error", err instanceof Error ? err.message : String(err));
       }
+      if (reasoning) addVisible(reasoning.end().visible);
 
       const parsed = parseAgentToolCalls(assistantText, format, nativeCalls);
+      const parseFailures = nativeCalls.length
+        ? 0
+        : parsed.results.filter((r) => !r.ok).length + countUnparsedToolSpans(assistantText, format);
+      if (parseFailures > 0) opts.onEvent?.({ kind: "toolParseFailure", count: parseFailures });
       const recordedCalls = nativeCalls.length ? parsed.results.flatMap((result) => result.ok ? [{ id: result.call.id, function: { name: result.call.tool, arguments: result.call.parameters } }] : []) : undefined;
       messages.push({ role: "assistant", content: assistantText, ...(recordedCalls ? { tool_calls: recordedCalls } : {}) });
       ledger.turnCompleted(counters, assistantText.length + (recordedCalls ? JSON.stringify(recordedCalls).length : 0));

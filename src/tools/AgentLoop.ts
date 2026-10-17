@@ -21,7 +21,8 @@ import {
   stripAgentToolCalls,
   toolFormatForModel,
 } from "../../modules/coding/llm/parseAgentToolCalls.js";
-import type { ToolFormatName } from "../../core/registry/ModelCatalog.js";
+import { ModelCatalog, type ToolFormatName } from "../../core/registry/ModelCatalog.js";
+import { createReasoningSplitter } from "../../core/chat/speakable.js";
 import type { TelemetryBus } from "../../core/telemetry/TelemetryBus.js";
 import {
   hashToolCall,
@@ -1429,6 +1430,16 @@ export class AgentLoop {
     let accumulated = "";
     let counters: TurnCounters | undefined;
     this._lastNativeCalls = [];
+    // v2.14.0 T012: a model whose template opens reasoning in the prompt shows,
+    // keeps and parses only its visible text. Unflagged models are unchanged.
+    const reasoning = ModelCatalog.byId(this._modelName)?.reasoningOpensInPrompt
+      ? createReasoningSplitter({ reasoningOpensInPrompt: true })
+      : null;
+    const addVisible = (text: string): void => {
+      if (!text) return;
+      postMessage({ type: "token", value: text });
+      accumulated += text;
+    };
 
     try {
       const stream = this._client.streamChat(
@@ -1445,15 +1456,13 @@ export class AgentLoop {
       for await (const chunk of stream) {
         if (this._cancelled) break;
         const token = chunk.message.content;
-        if (token) {
-          postMessage({ type: "token", value: token });
-          accumulated += token;
-        }
+        if (token) addVisible(reasoning ? reasoning.push(token).visible : token);
         if (chunk.message.tool_calls) this._lastNativeCalls.push(...chunk.message.tool_calls);
         if (chunk.done) counters = chunk;
       }
 
       if (this._cancelled) return null;
+      if (reasoning) addVisible(reasoning.end().visible);
       this._ledger.turnCompleted(counters, accumulated.length + (this._lastNativeCalls.length ? JSON.stringify(this._lastNativeCalls).length : 0));
       return accumulated;
     } catch (err) {

@@ -1,3 +1,5 @@
+import { ModelCatalog } from "../../../core/registry/ModelCatalog.js";
+import { createReasoningSplitter } from "../../../core/chat/speakable.js";
 import type {
   OllamaClient,
   OllamaMessage,
@@ -118,6 +120,11 @@ export class StreamingPipeline {
       // toolCallComplete events to the webview so the progressive tool-call
       // card can render before the model finishes the call.
       const toolCallParser = new ToolCallStreamParser();
+      // v2.14.0 T012: a model whose template opens reasoning in the prompt has
+      // its reasoning removed before any other scrubber sees the text.
+      const reasoning = ModelCatalog.byId(this._modelName)?.reasoningOpensInPrompt
+        ? createReasoningSplitter({ reasoningOpensInPrompt: true })
+        : null;
 
       try {
         // v1.5.0 Phase 5 (item 33): forward image attachments only when the
@@ -145,7 +152,8 @@ export class StreamingPipeline {
         );
 
         for await (const chunk of stream) {
-          const token = chunk.message.content;
+          const raw = chunk.message.content;
+          const token = raw && reasoning ? reasoning.push(raw).visible : raw;
           if (token) {
             const memCleaned = scrubber.feed(token);
             if (memCleaned) {
@@ -161,7 +169,7 @@ export class StreamingPipeline {
           }
         }
 
-        const memTail = scrubber.flush();
+        const memTail = scrubber.feed(reasoning ? reasoning.end().visible : "") + scrubber.flush();
         const channelTail =
           channelScrubber.feed(memTail) + channelScrubber.flush();
         const tailEvents = [
