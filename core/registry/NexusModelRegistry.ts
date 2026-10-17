@@ -22,6 +22,7 @@
  * remains for tests + Phase 2.6 consumers that don't need disk semantics.
  */
 
+import { verifyOllamaPull } from "./ollamaDigest.js";
 import * as path from "node:path";
 import { createHash } from "node:crypto";
 
@@ -50,6 +51,11 @@ export interface OllamaPullClient {
    * progress; the registry consumes only the final outcome.
    */
   pull(modelTag: string, opts?: { signal?: AbortSignal; onProgress?: InstallProgress }): Promise<void>;
+  /**
+   * v2.14.0 T016 -- remove a pulled model. Used to fail closed when a pinned
+   * `hf.co` pull does not match its GGUF digest.
+   */
+  remove?(modelTag: string): Promise<void>;
 }
 
 export interface ExternalModelEntry {
@@ -156,6 +162,8 @@ export interface NexusModelRegistryOptions {
   readonly catalog: CatalogFile;
   readonly downloader?: Downloader;
   readonly ollama?: OllamaPullClient;
+  /** v2.14.0 T016 -- override how a pulled tag's GGUF digest is read (tests). */
+  readonly readOllamaDigest?: (tag: string) => Promise<string | null>;
   readonly external?: ExternalModelIndex;
   readonly now?: () => Date;
 }
@@ -178,6 +186,8 @@ export class NexusModelRegistry {
   private readonly _catalog: CatalogFile;
   private readonly _downloader: Downloader;
   private readonly _ollama: OllamaPullClient | null;
+  /** v2.14.0 T016 -- test seam for the pulled model's GGUF digest. */
+  private readonly _readOllamaDigest: ((tag: string) => Promise<string | null>) | undefined;
   private readonly _external: ExternalModelIndex | null;
   private readonly _now: () => Date;
 
@@ -186,6 +196,7 @@ export class NexusModelRegistry {
     this._catalog = opts.catalog;
     this._downloader = opts.downloader ?? new Downloader(opts.storage);
     this._ollama = opts.ollama ?? null;
+    this._readOllamaDigest = opts.readOllamaDigest;
     this._external = opts.external ?? null;
     this._now = opts.now ?? (() => new Date());
   }
@@ -356,6 +367,10 @@ export class NexusModelRegistry {
     }
     const tag = ollamaTagFromSpec(spec);
     await this._ollama.pull(tag, { signal: opts.signal, onProgress: opts.onProgress });
+    const ollama = this._ollama;
+    await verifyOllamaPull(spec, tag, async (t) => {
+      await ollama.remove?.(t);
+    }, this._readOllamaDigest);
     const manifest = makeOllamaManifest(spec, this._now());
     await this._storage.linkManifest(spec.family, spec.name, spec.tag, manifest);
     return { id: spec.id, status: "installed", bytesDownloaded: 0, manifestPath: this._storage.manifestPath(spec.family, spec.name, spec.tag) };
