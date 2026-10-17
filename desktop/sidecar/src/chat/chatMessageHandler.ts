@@ -11,6 +11,7 @@
 
 import { createHeadlessOllamaClient } from "../../../../modules/coding/llm/headlessOllamaClient.js";
 import { redactSecrets } from "../../../../core/observability/redactSecrets.js";
+import { createReasoningSplitter, createSpeakableProjector } from "../../../../core/chat/speakable.js";
 import type { LLMClient, LLMMessage } from "../../../../modules/coding/llm/types.js";
 import type { ChatSessionEventT } from "../protocol.js";
 import type { SidecarModelEntry } from "../coding/models.js";
@@ -20,6 +21,7 @@ import {
   newUsage,
   turnUsageFromCollected,
 } from "../serving/chatCore.js";
+import type { VoiceJob } from "./voiceJobs.js";
 
 export interface ChatRunnerInput {
   readonly sessionId: string;
@@ -27,6 +29,16 @@ export interface ChatRunnerInput {
   /** Full conversation so far (system + prior turns + the new user message). */
   readonly messages: readonly LLMMessage[];
   readonly signal?: AbortSignal;
+  /** v2.14.0 T008 -- speak the reply sentence by sentence while it streams. */
+  readonly voice?: VoiceJob;
+}
+
+/**
+ * Whether the model's chat template opens reasoning inside the prompt. Read
+ * from the catalog entry when it declares it (v2.14.0 T012); default false.
+ */
+function reasoningOpensInPrompt(model: SidecarModelEntry): boolean {
+  return (model as { reasoningOpensInPrompt?: unknown }).reasoningOpensInPrompt === true;
 }
 
 /** Runs one chat turn and returns the mapped IPC event stream. */
@@ -56,9 +68,25 @@ export function createChatMessageHandler(
     // total can be split between reasoning and output by text proportion.
     let reply = "";
     let reasoningCaptured = 0;
+    const voice = input.voice;
+    const splitter = voice
+      ? createReasoningSplitter({ reasoningOpensInPrompt: reasoningOpensInPrompt(input.model) })
+      : null;
+    const projector = voice ? createSpeakableProjector() : null;
+    const speak = (sentences: readonly string[]) => {
+      for (const sentence of sentences) voice?.pushSentence(sentence);
+    };
     try {
       for await (const chunk of llm.streamChat(
-        { model: input.model.id, messages: [...input.messages], stream: true },
+        {
+          model: input.model.id,
+          messages: [...input.messages],
+          stream: true,
+          // v2.14.0 (owner decision, Phase 2 rework): a spoken reply skips the
+          // model's hidden reasoning pass, which delayed the first visible
+          // token by 16-21 s on the 16 GB tier. Typed turns are unchanged.
+          ...(voice ? { think: false } : {}),
+        },
         input.signal,
       )) {
         collectUsage(chunk, usage);
@@ -78,8 +106,14 @@ export function createChatMessageHandler(
         if (delta) {
           reply += delta;
           events.push({ kind: "token", text: delta });
+          if (splitter && projector) speak(projector.push(splitter.push(delta).visible));
         }
         if (chunk.done) break;
+      }
+      if (splitter && projector) {
+        speak(projector.push(splitter.end().visible));
+        speak(projector.end());
+        voice?.endReply();
       }
       events.push({
         kind: "done",
@@ -87,6 +121,10 @@ export function createChatMessageHandler(
         ...doneUsageFields(turnUsageFromCollected(usage, thinking, reply)),
       });
     } catch (err) {
+      // A cancelled turn stops synthesis and further sentences; any other
+      // failure ends the voice job with a terminal error.
+      if (input.signal?.aborted) voice?.cancel();
+      else voice?.fail("the reply failed before it finished");
       events.push({
         kind: "done",
         finishReason: `error: ${err instanceof Error ? err.message : String(err)}`,

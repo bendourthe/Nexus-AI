@@ -18,13 +18,22 @@
  *     --fixtures tests/fixtures/voice/ \
  *     --output docs/releases/v2/v2.14/development/voice-latency-baseline.json
  *
- * Flags: --mode baseline|streamed (streamed lands in Phase 2), --warm N (20),
- * --cold N (5), --stage-timeout-ms N (180000), --fixture <id> (repeatable).
+ * Flags: --mode baseline|streamed, --warm N (20), --cold N (5),
+ * --barge-in N (0; streamed only), --stage-timeout-ms N (180000),
+ * --fixture <id> (repeatable).
+ *
+ * Streamed mode (v2.14.0 Phase 2) sends the turn with `voice: { jobId }` and
+ * polls `audio.speakDrain` every SPOKEN_REPLY_POLL_MS, as the webview does.
+ * First audio is the first segment received; segments are scheduled back to
+ * back as the webview plays them, which gives the silent gap before each
+ * segment and the time to last audio. Barge-in runs cancel after the first
+ * segment and time how long the sidecar takes to report the job cancelled.
  * Exit codes: 0 measured; 1 a run failed; 2 refused (lock held, bad args,
  * missing sidecar bundle).
  */
 
 import { spawn } from "node:child_process";
+import { randomUUID } from "node:crypto";
 import { closeSync, existsSync, openSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import path from "node:path";
@@ -34,6 +43,8 @@ import { pathToFileURL } from "node:url";
 export const STAGES = ["transcribe", "modelFirstToken", "modelComplete", "synthesis", "firstAudio"];
 export const MODES = ["baseline", "streamed"];
 const LOCK_NAME = "nexus-measure-voice-latency.lock";
+/** Mirrors desktop/src/modules/chat/useSpokenReply.ts SPOKEN_REPLY_POLL_MS. */
+export const SPOKEN_REPLY_POLL_MS = 100;
 
 // ---------------------------------------------------------------- pure helpers
 
@@ -109,6 +120,23 @@ export function ttftForTurn(recent, chatStartEpochMs) {
   return Number.isFinite(newest.ttftMs) ? newest.ttftMs : null;
 }
 
+/**
+ * Back-to-back playback of segments that arrive at `atMs` (relative to the
+ * turn start) and last `durationMs`. Returns when the first starts, the silent
+ * gap before each later segment, and when the last one ends.
+ */
+export function playbackSchedule(arrivals) {
+  if (arrivals.length === 0) return { firstStart: null, gaps: [], end: null };
+  let end = arrivals[0].atMs + arrivals[0].durationMs;
+  const gaps = [];
+  for (const segment of arrivals.slice(1)) {
+    const start = Math.max(segment.atMs, end);
+    gaps.push(start - end);
+    end = start + segment.durationMs;
+  }
+  return { firstStart: arrivals[0].atMs, gaps, end };
+}
+
 /** Reduce a list of turn records to per-fixture, per-temperature statistics. */
 export function aggregate(turns) {
   const groups = new Map();
@@ -125,7 +153,11 @@ export function aggregate(turns) {
       runs: group.length,
       ok: ok.length,
       failures: group.filter((t) => t.status !== "ok").map((t) => ({ status: t.status, stage: t.stage ?? null })),
-      stats: Object.fromEntries(metrics.map((m) => [m, summarize(ok.map((t) => t.spans?.[m]))])),
+      stats: {
+        ...Object.fromEntries(metrics.map((m) => [m, summarize(ok.map((t) => t.spans?.[m]))])),
+        interSegmentGap: summarize(ok.flatMap((t) => t.gapsMs ?? [])),
+        bargeInCancel: summarize(ok.map((t) => t.bargeIn?.cancelMs)),
+      },
     };
   }
   return out;
@@ -141,6 +173,8 @@ const TRACE_FIELDS = new Set([
   "reason",
   "spans",
   "counts",
+  "gapsMs",
+  "bargeIn",
 ]);
 export function sanitizeTurn(turn) {
   return Object.fromEntries(Object.entries(turn).filter(([k]) => TRACE_FIELDS.has(k)));
@@ -151,6 +185,7 @@ export function parseArgs(argv) {
     mode: "baseline",
     warm: 20,
     cold: 5,
+    bargeIn: 0,
     stageTimeoutMs: 180_000,
     fixtures: "tests/fixtures/voice/",
     output: null,
@@ -168,6 +203,7 @@ export function parseArgs(argv) {
     if (flag === "--mode") opts.mode = take();
     else if (flag === "--warm") opts.warm = Number(take());
     else if (flag === "--cold") opts.cold = Number(take());
+    else if (flag === "--barge-in") opts.bargeIn = Number(take());
     else if (flag === "--stage-timeout-ms") opts.stageTimeoutMs = Number(take());
     else if (flag === "--fixtures") opts.fixtures = take();
     else if (flag === "--output") opts.output = take();
@@ -176,11 +212,12 @@ export function parseArgs(argv) {
     else throw new Error(`unknown flag ${flag}`);
   }
   if (!MODES.includes(opts.mode)) throw new Error(`--mode must be one of ${MODES.join(", ")}`);
-  for (const k of ["warm", "cold", "stageTimeoutMs"]) {
+  for (const k of ["warm", "cold", "bargeIn", "stageTimeoutMs"]) {
     if (!Number.isInteger(opts[k]) || opts[k] < 0) throw new Error(`--${k} must be a non-negative integer`);
   }
   if (!opts.output) throw new Error("--output is required");
   if (!opts.model) throw new Error("--model is required");
+  if (opts.bargeIn > 0 && opts.mode !== "streamed") throw new Error("--barge-in needs --mode streamed");
   return opts;
 }
 
@@ -327,6 +364,116 @@ export async function runTurn(sidecar, opts, fixture) {
   }
 }
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * One streamed voice turn: the sidecar speaks the reply while it streams and
+ * this polls the job like the webview. With `bargeIn`, cancel after the first
+ * segment and time the sidecar's acknowledgement of the cancel.
+ */
+export async function runStreamedTurn(sidecar, opts, fixture, { bargeIn = false, poll = SPOKEN_REPLY_POLL_MS } = {}) {
+  const { rpc } = sidecar;
+  const timeout = opts.stageTimeoutMs;
+  const marks = {};
+  let stage = "transcribe";
+  try {
+    marks.transcribeStart = performance.now();
+    const heard = await rpc("audio.transcribe", { audioBase64: fixture.audioBase64, mimeType: "audio/wav" }, timeout, stage);
+    marks.transcribeEnd = performance.now();
+
+    stage = "modelComplete";
+    const session = await rpc("chat.session.start", { modelId: opts.model }, timeout, stage);
+    const jobId = randomUUID();
+    marks.chatStart = performance.now();
+    const chatStartEpoch = Date.now();
+    let chatError = null;
+    const chat = rpc(
+      "chat.session.sendMessage",
+      { sessionId: session.sessionId, message: heard.transcript, voice: { jobId } },
+      timeout,
+      stage,
+    ).then(
+      (turn) => {
+        marks.chatEnd = performance.now();
+        return turn;
+      },
+      (err) => {
+        chatError = err;
+        return null;
+      },
+    );
+
+    stage = "synthesis";
+    const arrivals = [];
+    let afterSeq = -1;
+    let state = "unknown";
+    let cancelSentAt = null;
+    let cancelMs = null;
+    const deadline = performance.now() + timeout;
+    for (;;) {
+      const drained = await rpc("audio.speakDrain", { sessionId: session.sessionId, jobId, afterSeq }, timeout, stage);
+      const now = performance.now();
+      for (const segment of drained.segments) {
+        if (segment.seq <= afterSeq) continue;
+        afterSeq = segment.seq;
+        const durationMs = wavDurationMs(Buffer.from(segment.audioBase64, "base64")) ?? 0;
+        arrivals.push({ atMs: now - marks.transcribeStart, durationMs });
+      }
+      state = drained.state;
+      if (bargeIn && cancelSentAt === null && arrivals.length > 0) {
+        cancelSentAt = performance.now();
+        await rpc("audio.speakCancel", { sessionId: session.sessionId, jobId }, timeout, "cancel");
+      }
+      if (cancelSentAt !== null && state === "cancelled") {
+        cancelMs = Math.round(performance.now() - cancelSentAt);
+        break;
+      }
+      if (state === "completed" || state === "cancelled" || state === "error") break;
+      if (state === "unknown" && marks.chatEnd !== undefined) break;
+      if (performance.now() > deadline) throw new StageTimeout(stage);
+      await sleep(cancelSentAt !== null ? 10 : poll);
+    }
+    const turn = await chat;
+    if (chatError) throw chatError;
+    const events = turn?.events ?? [];
+    const done = events.find((e) => e.kind === "done");
+    if (state === "error") return { status: "error", stage: "synthesis", reason: "voice-job-error" };
+    if (done?.finishReason?.startsWith("error")) return { status: "error", stage: "modelComplete", reason: "model-error" };
+    if (arrivals.length === 0) return { status: "error", stage: "synthesis", reason: "no-segments" };
+    const metrics = await rpc("metrics.inference", {}, timeout, "metrics");
+    const ttftMs = ttftForTurn(metrics.recent, chatStartEpoch);
+    const schedule = playbackSchedule(arrivals);
+    const firstAudio = Math.round(schedule.firstStart);
+    const rel = (t) => Math.round(t - marks.transcribeStart);
+    const tokens = events.filter((e) => e.kind === "token");
+    return {
+      status: "ok",
+      spans: {
+        transcribe: rel(marks.transcribeEnd),
+        modelFirstToken: Number.isFinite(ttftMs) ? Math.round(rel(marks.chatStart) + ttftMs) : null,
+        modelComplete: rel(marks.chatEnd),
+        // Streamed synthesis overlaps generation: first to last segment received.
+        synthesis: Math.round(arrivals[arrivals.length - 1].atMs - arrivals[0].atMs),
+        firstAudio,
+        timeToFirstAudio: firstAudio,
+        timeToLastAudio: bargeIn ? null : Math.round(schedule.end),
+      },
+      gapsMs: bargeIn ? [] : schedule.gaps.map((g) => Math.round(g)),
+      ...(bargeIn ? { bargeIn: { cancelMs, state } } : {}),
+      counts: {
+        transcriptChars: heard.transcript.length,
+        replyChars: tokens.map((e) => e.text).join("").length,
+        tokenEvents: tokens.length,
+        segments: arrivals.length,
+        audioDurationMs: arrivals.reduce((sum, a) => sum + a.durationMs, 0),
+      },
+    };
+  } catch (err) {
+    if (err instanceof StageTimeout) return { status: "timeout", stage: err.stage };
+    return { status: "error", stage, reason: err instanceof Error ? err.message.slice(0, 160) : "unknown" };
+  }
+}
+
 function loadFixtures(dir, only) {
   const manifest = JSON.parse(readFileSync(path.join(dir, "manifest.json"), "utf8"));
   return manifest.fixtures
@@ -335,10 +482,7 @@ function loadFixtures(dir, only) {
 }
 
 async function measure(opts, repoRoot) {
-  if (opts.mode === "streamed") {
-    // Phase 2 adds the streamed path; stage definitions stay identical.
-    throw new Error("--mode streamed is not available until v2.14.0 Phase 2");
-  }
+  const turnFn = opts.mode === "streamed" ? runStreamedTurn : runTurn;
   const fixtures = loadFixtures(path.resolve(repoRoot, opts.fixtures), opts.only);
   const turns = [];
   const record = (turn) => {
@@ -370,7 +514,7 @@ async function measure(opts, repoRoot) {
     for (let run = 1; run <= opts.cold; run++) {
       const sidecar = startSidecar(repoRoot);
       try {
-        record({ fixture: fixture.id, temperature: "cold", run, ...(await runTurn(sidecar, opts, fixture)) });
+        record({ fixture: fixture.id, temperature: "cold", run, ...(await turnFn(sidecar, opts, fixture)) });
       } finally {
         await sidecar.stop();
       }
@@ -378,9 +522,17 @@ async function measure(opts, repoRoot) {
     // Warm: one discarded warm-up turn, then the measured runs on one sidecar.
     const sidecar = startSidecar(repoRoot);
     try {
-      await runTurn(sidecar, opts, fixture);
+      await turnFn(sidecar, opts, fixture);
       for (let run = 1; run <= opts.warm; run++) {
-        record({ fixture: fixture.id, temperature: "warm", run, ...(await runTurn(sidecar, opts, fixture)) });
+        record({ fixture: fixture.id, temperature: "warm", run, ...(await turnFn(sidecar, opts, fixture)) });
+      }
+      for (let run = 1; run <= opts.bargeIn; run++) {
+        record({
+          fixture: fixture.id,
+          temperature: "barge-in",
+          run,
+          ...(await runStreamedTurn(sidecar, opts, fixture, { bargeIn: true })),
+        });
       }
     } finally {
       await sidecar.stop();
@@ -423,7 +575,8 @@ async function main() {
       startedAt: started,
       finishedAt: new Date().toISOString(),
       host: { platform: process.platform, runtimeConfig: existsSync(path.join(homedir(), ".nexus", "runtime.json")) },
-      runsPerFixture: { warm: opts.warm, cold: opts.cold },
+      runsPerFixture: { warm: opts.warm, cold: opts.cold, bargeIn: opts.bargeIn },
+      pollIntervalMs: opts.mode === "streamed" ? SPOKEN_REPLY_POLL_MS : null,
       ...result,
     };
     writeFileSync(path.resolve(repoRoot, opts.output), `${JSON.stringify(report, null, 2)}\n`);

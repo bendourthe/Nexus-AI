@@ -5,6 +5,13 @@
  * STT, and playback from these states. Capture indicator is visible whenever
  * the mic is open (PTT or VAD). Barge-in stops TTS when the user starts
  * speaking.
+ *
+ * v2.14.0 T009 -- a reply is spoken as its segments arrive. `segment-queued`
+ * starts speaking, also while the reply is still being awaited, so barge-in
+ * works as soon as speech starts. `queue-drained` and `reply-stream-ended`
+ * record the two halves of "done": the loop returns to idle only when the
+ * reply stream has ended AND the playback queue is empty, never in the gap
+ * between two sentences.
  */
 
 export type VoiceCaptureMode = "ptt" | "vad";
@@ -22,6 +29,10 @@ export interface VoiceLoopState {
   readonly mode: VoiceCaptureMode;
   readonly captureVisible: boolean;
   readonly lastError: string | null;
+  /** v2.14.0: no more segments will arrive for the current reply. */
+  readonly replyStreamEnded: boolean;
+  /** v2.14.0: every queued segment has finished playing. */
+  readonly queueDrained: boolean;
 }
 
 export type VoiceLoopEvent =
@@ -37,6 +48,9 @@ export type VoiceLoopEvent =
   | { readonly type: "tts-started" }
   | { readonly type: "tts-ended" }
   | { readonly type: "barge-in" }
+  | { readonly type: "segment-queued" }
+  | { readonly type: "queue-drained" }
+  | { readonly type: "reply-stream-ended" }
   | { readonly type: "error"; readonly message: string }
   | { readonly type: "reset" };
 
@@ -45,6 +59,8 @@ export const INITIAL_VOICE_LOOP: VoiceLoopState = {
   mode: "ptt",
   captureVisible: false,
   lastError: null,
+  replyStreamEnded: false,
+  queueDrained: true,
 };
 
 function withCapture(state: VoiceLoopState, phase: VoiceLoopPhase, visible: boolean): VoiceLoopState {
@@ -98,6 +114,26 @@ export function reduceVoiceLoop(state: VoiceLoopState, event: VoiceLoopEvent): V
     case "barge-in":
       if (state.phase !== "speaking") return state;
       return withCapture(state, "recording", true);
+    case "segment-queued":
+      // A typed turn can start speaking from idle; a voice turn from awaiting-reply.
+      if (state.phase !== "idle" && state.phase !== "awaiting-reply" && state.phase !== "speaking") return state;
+      return {
+        ...withCapture(state, "speaking", false),
+        queueDrained: false,
+        replyStreamEnded: state.phase === "speaking" ? state.replyStreamEnded : false,
+      };
+    case "queue-drained":
+      if (state.phase !== "speaking") return state;
+      if (state.replyStreamEnded) return { ...withCapture(state, "idle", false), queueDrained: true, replyStreamEnded: false };
+      return { ...state, queueDrained: true };
+    case "reply-stream-ended":
+      if (state.phase === "speaking" && state.queueDrained) {
+        return { ...withCapture(state, "idle", false), replyStreamEnded: false };
+      }
+      if (state.phase === "speaking") return { ...state, replyStreamEnded: true };
+      // Nothing was spoken (an empty or reasoning-only reply): stop waiting.
+      if (state.phase === "awaiting-reply") return withCapture(state, "idle", false);
+      return state;
     case "error":
       return { ...state, phase: "idle", captureVisible: false, lastError: event.message };
     case "reset":

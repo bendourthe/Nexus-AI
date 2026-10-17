@@ -1,0 +1,1 @@
+﻿samples=3002 watchedProcesses=58 (node.exe,ollama.exe,python.EXE) nonLoopback=0

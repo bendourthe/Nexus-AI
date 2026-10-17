@@ -84,6 +84,9 @@ describe("sidecar handlers", () => {
           "audio.health",
           "audio.transcribe",
           "audio.speak",
+          // v2.14.0 T008 wired spoken-reply drain and cancel.
+          "audio.speakDrain",
+          "audio.speakCancel",
           "coding.session.start",
           "coding.session.sendMessage",
           "coding.session.cancel",

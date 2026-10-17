@@ -62,6 +62,12 @@ export interface LLMChatRequest {
    * StreamingPipeline derives this from the active `ModelPinRegistry`.
    */
   keep_alive?: number | string;
+  /**
+   * v2.14.0 -- Ollama's `think` switch. `false` asks a reasoning model to
+   * answer directly; omitted keeps the model's default. Spoken Chat replies
+   * set it so speech starts without a hidden reasoning pass.
+   */
+  think?: boolean;
 }
 
 /**

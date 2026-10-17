@@ -726,7 +726,7 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 ## Voice latency and LFM2.5-24B trial (active v2.14.0)
 
 - [x] Phase 1: make desktop voice runnable on install (pinned Kokoro and Whisper files, voice packages in the media venv, sidecar audio interpreter, offline Kokoro, Windows CUDA DLL path), measure the baseline (medium warm time to first audio p50 38.6 s), probe LFM2.5-24B (GO on QAD-Q4_0) and freeze the gates ([Phase 1 evidence](releases/v2/v2.14/development/v2.14.0-phase1-evidence.md), 2026-10-16).
-- [ ] Phase 2: speak from the first sentence through the sidecar, with barge-in cancelling synthesis; judge the frozen voice gates.
+- [x] Phase 2: speak from the first sentence through the sidecar, with barge-in cancelling synthesis. Time to first audio 3.99 s p50 (medium, warm) against a 38.6 s baseline; V-1 (2.0 s) missed and recorded in v2.15 DF-1 by owner decision, every other voice gate passes ([Phase 2 evidence](releases/v2/v2.14/development/v2.14.0-phase2-evidence.md), [results](releases/v2/v2.14/development/voice-latency-results.md), 2026-10-16).
 - [ ] Phase 3: prompt-opened reasoning in every path, golden-runner metrics and LFM codec, paired A/B.
 - [ ] Phase 4: admit LFM2.5-24B opt-in on a frozen win, or record the decline.
 - [ ] Phase 5: architecture, known gaps (including DF-5, WN-6, WN-7 from Phase 1, which cannot migrate), CI/CD, deep pass, publication.
