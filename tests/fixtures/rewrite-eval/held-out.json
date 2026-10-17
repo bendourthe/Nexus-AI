@@ -1,0 +1,694 @@
+[
+  {
+    "id": "en-email-edit-1",
+    "language": "en",
+    "genre": "email",
+    "kind": "edit",
+    "draft": "Hi Lila,\nIn today's fast-paced world, it is important to note that Arin can deliver 12 kg on 2026-11-03, if the bridge reopens. Belen can deliver 18 kg. Arin cannot deliver 18 kg. Please keep the label \"Dry only\".\nThanks,\nTomas",
+    "editingGoal": "Remove the empty opener and wordy emphasis; keep the practical email voice.",
+    "literals": [
+      {
+        "text": "Lila",
+        "count": 1
+      },
+      {
+        "text": "Arin",
+        "count": 2
+      },
+      {
+        "text": "Belen",
+        "count": 1
+      },
+      {
+        "text": "12 kg",
+        "count": 1
+      },
+      {
+        "text": "18 kg",
+        "count": 2
+      },
+      {
+        "text": "2026-11-03",
+        "count": 1
+      },
+      {
+        "text": "\"Dry only\"",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "Arin can deliver 12 kg on 2026-11-03 only if the bridge reopens.",
+      "Belen can deliver 18 kg.",
+      "Arin cannot deliver 18 kg.",
+      "Tomas asks to retain the Dry only label."
+    ]
+  },
+  {
+    "id": "en-email-clean-2",
+    "language": "en",
+    "genre": "email",
+    "kind": "clean",
+    "draft": "Hello Ivo,\nPlease send 7 samples by 2026-11-06. Nera will test them at 18 C. We have not approved the shipment; approval depends on the moisture test.\nMika",
+    "editingGoal": "Preserve the direct, courteous voice.",
+    "literals": [
+      {
+        "text": "Ivo",
+        "count": 1
+      },
+      {
+        "text": "7 samples",
+        "count": 1
+      },
+      {
+        "text": "2026-11-06",
+        "count": 1
+      },
+      {
+        "text": "Nera",
+        "count": 1
+      },
+      {
+        "text": "18 C",
+        "count": 1
+      },
+      {
+        "text": "Mika",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "Ivo is asked for seven samples by 2026-11-06.",
+      "Nera tests the samples at 18 C.",
+      "Shipment is not approved; approval depends on the moisture test."
+    ]
+  },
+  {
+    "id": "en-essay-edit-3",
+    "language": "en",
+    "genre": "essay",
+    "kind": "edit",
+    "draft": "# A small garden\nIt is crucial to delve into the fact that Mira planted 6 trees in 2024. In 2025, only 4 survived, according to Mira's notes. This is not a revolution, it is a transformation. The notes do not establish why the other 2 died.",
+    "editingGoal": "Cut inflated verbs and the unsupported rhetorical contrast; retain the modest reflective tone.",
+    "literals": [
+      {
+        "text": "Mira",
+        "count": 2
+      },
+      {
+        "text": "6 trees",
+        "count": 1
+      },
+      {
+        "text": "2024",
+        "count": 1
+      },
+      {
+        "text": "2025",
+        "count": 1
+      },
+      {
+        "text": "4 survived",
+        "count": 1
+      },
+      {
+        "text": "2",
+        "count": 5
+      }
+    ],
+    "structures": [
+      {
+        "text": "# A small garden",
+        "count": 1
+      }
+    ],
+    "propositions": [
+      "Mira planted six trees in 2024.",
+      "Mira's notes say only four survived in 2025.",
+      "The notes do not establish why two trees died."
+    ]
+  },
+  {
+    "id": "en-essay-clean-4",
+    "language": "en",
+    "genre": "essay",
+    "kind": "clean",
+    "draft": "# A quiet experiment\nOren walked 3 km each morning for 9 days. He felt less rushed, but this diary cannot show that walking caused the change. He wrote, \"I had time to look\".",
+    "editingGoal": "Preserve the restrained first-hand observation and uncertainty.",
+    "literals": [
+      {
+        "text": "Oren",
+        "count": 1
+      },
+      {
+        "text": "3 km",
+        "count": 1
+      },
+      {
+        "text": "9 days",
+        "count": 1
+      },
+      {
+        "text": "\"I had time to look\"",
+        "count": 1
+      }
+    ],
+    "structures": [
+      {
+        "text": "# A quiet experiment",
+        "count": 1
+      }
+    ],
+    "propositions": [
+      "Oren walked 3 km each morning for nine days.",
+      "He felt less rushed.",
+      "The diary cannot establish causation.",
+      "He wrote the quoted sentence."
+    ]
+  },
+  {
+    "id": "en-report-edit-5",
+    "language": "en",
+    "genre": "report",
+    "kind": "edit",
+    "draft": "# Pump trial\nIt is important to note that Sela measured 24 L twice: 24 L at inlet A and 16 L at inlet B. The difference is 8 L, assuming the meter calibration holds.\n\n| Inlet | Volume |\n| --- | --- |\n| A | 24 L |\n| B | 16 L |\n\nThe trial did not test pressure.",
+    "editingGoal": "Remove filler and shorten the lead while preserving the table and calibration qualification.",
+    "literals": [
+      {
+        "text": "Sela",
+        "count": 1
+      },
+      {
+        "text": "24 L",
+        "count": 3
+      },
+      {
+        "text": "16 L",
+        "count": 2
+      },
+      {
+        "text": "8 L",
+        "count": 1
+      }
+    ],
+    "structures": [
+      {
+        "text": "| Inlet | Volume |",
+        "count": 1
+      },
+      {
+        "text": "| --- | --- |",
+        "count": 1
+      },
+      {
+        "text": "| A | 24 L |",
+        "count": 1
+      },
+      {
+        "text": "| B | 16 L |",
+        "count": 1
+      },
+      {
+        "text": "# Pump trial",
+        "count": 1
+      }
+    ],
+    "propositions": [
+      "Sela measured inlet A at 24 L and inlet B at 16 L.",
+      "The difference is 8 L if calibration holds.",
+      "The trial did not test pressure."
+    ]
+  },
+  {
+    "id": "en-report-clean-6",
+    "language": "en",
+    "genre": "report",
+    "kind": "clean",
+    "draft": "# Build check\nVera ran `nexus check --json` on revision c7d2a1. It returned 0 errors and 2 warnings. The [log](https://example.invalid/build/c7d2a1) covers only Linux; Windows was not tested.",
+    "editingGoal": "Keep the compact technical reporting voice.",
+    "literals": [
+      {
+        "text": "Vera",
+        "count": 1
+      },
+      {
+        "text": "`nexus check --json`",
+        "count": 1
+      },
+      {
+        "text": "c7d2a1",
+        "count": 2
+      },
+      {
+        "text": "0 errors",
+        "count": 1
+      },
+      {
+        "text": "2 warnings",
+        "count": 1
+      },
+      {
+        "text": "[log](https://example.invalid/build/c7d2a1)",
+        "count": 1
+      }
+    ],
+    "structures": [
+      {
+        "text": "# Build check",
+        "count": 1
+      }
+    ],
+    "propositions": [
+      "Vera ran the quoted command at revision c7d2a1.",
+      "The command returned zero errors and two warnings.",
+      "The log covers Linux only; Windows was not tested."
+    ]
+  },
+  {
+    "id": "en-post-edit-7",
+    "language": "en",
+    "genre": "post",
+    "kind": "edit",
+    "draft": "Here's the thing: Kemi's workshop opens at 09:30 on 2026-11-12. It's not just a class, it's a game-changing journey. There are 14 seats, and entry costs 5 EUR if booked before 2026-11-10. No tickets are sold at the door.",
+    "editingGoal": "Remove the faux-insight opener and promotional puffery; retain a friendly practical invitation.",
+    "literals": [
+      {
+        "text": "Kemi",
+        "count": 1
+      },
+      {
+        "text": "09:30",
+        "count": 1
+      },
+      {
+        "text": "2026-11-12",
+        "count": 1
+      },
+      {
+        "text": "14 seats",
+        "count": 1
+      },
+      {
+        "text": "5 EUR",
+        "count": 1
+      },
+      {
+        "text": "2026-11-10",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "Kemi's workshop starts at 09:30 on 2026-11-12.",
+      "Capacity is 14 seats.",
+      "Entry costs 5 EUR if booked before 2026-11-10.",
+      "Door tickets are unavailable."
+    ]
+  },
+  {
+    "id": "en-post-clean-8",
+    "language": "en",
+    "genre": "post",
+    "kind": "clean",
+    "draft": "The ferry to Luma leaves at 07:15 and returns at 17:40. Bring 2 liters of water. This route is open only when the harbor flag is green. I would skip it in a strong wind.",
+    "editingGoal": "Preserve the conversational advice and conditional access.",
+    "literals": [
+      {
+        "text": "Luma",
+        "count": 1
+      },
+      {
+        "text": "07:15",
+        "count": 1
+      },
+      {
+        "text": "17:40",
+        "count": 1
+      },
+      {
+        "text": "2 liters",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "The Luma ferry departs 07:15 and returns 17:40.",
+      "Readers should bring two liters of water.",
+      "The route opens only with a green harbor flag.",
+      "The writer recommends skipping strong winds."
+    ]
+  },
+  {
+    "id": "zh-email-edit-1",
+    "language": "zh",
+    "genre": "email",
+    "kind": "edit",
+    "draft": "林夏你好：\n在当今快节奏的世界里，值得强调的是，周宁可在2026年11月4日运送12箱，但前提是道路恢复通行。何青可运送18箱。周宁不能运送18箱。请保留标签“勿倒置”。\n谢谢，沈舟",
+    "editingGoal": "删除空泛开头和刻意强调，保留礼貌、直接的邮件语气。",
+    "literals": [
+      {
+        "text": "林夏",
+        "count": 1
+      },
+      {
+        "text": "周宁",
+        "count": 2
+      },
+      {
+        "text": "何青",
+        "count": 1
+      },
+      {
+        "text": "2026年11月4日",
+        "count": 1
+      },
+      {
+        "text": "12箱",
+        "count": 1
+      },
+      {
+        "text": "18箱",
+        "count": 2
+      },
+      {
+        "text": "“勿倒置”",
+        "count": 1
+      },
+      {
+        "text": "沈舟",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "周宁在道路恢复通行的前提下，可于2026年11月4日运送12箱。",
+      "何青可运送18箱。",
+      "周宁不能运送18箱。",
+      "沈舟要求保留勿倒置标签。"
+    ]
+  },
+  {
+    "id": "zh-email-clean-2",
+    "language": "zh",
+    "genre": "email",
+    "kind": "clean",
+    "draft": "罗文你好：\n请在2026年11月8日前寄来7份样品。许岚将在18摄氏度下测试。我们尚未批准发货，是否批准取决于含水率测试。\n安好，叶南",
+    "editingGoal": "保留简洁、客气的工作邮件语气。",
+    "literals": [
+      {
+        "text": "罗文",
+        "count": 1
+      },
+      {
+        "text": "2026年11月8日",
+        "count": 1
+      },
+      {
+        "text": "7份",
+        "count": 1
+      },
+      {
+        "text": "许岚",
+        "count": 1
+      },
+      {
+        "text": "18摄氏度",
+        "count": 1
+      },
+      {
+        "text": "叶南",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "罗文需在2026年11月8日前寄来7份样品。",
+      "许岚在18摄氏度下测试。",
+      "发货尚未获批，批准取决于含水率测试。"
+    ]
+  },
+  {
+    "id": "zh-essay-edit-3",
+    "language": "zh",
+    "genre": "essay",
+    "kind": "edit",
+    "draft": "# 院子里的树\n深入探讨这一至关重要的事实很有必要：温禾在2024年种下6棵树。根据她的记录，2025年只有4棵存活。这不仅是变化，更是一场革命。记录无法说明另外2棵死亡的原因。",
+    "editingGoal": "删除空泛强调与夸张对比，保留克制的观察口吻。",
+    "literals": [
+      {
+        "text": "温禾",
+        "count": 1
+      },
+      {
+        "text": "2024年",
+        "count": 1
+      },
+      {
+        "text": "6棵",
+        "count": 1
+      },
+      {
+        "text": "2025年",
+        "count": 1
+      },
+      {
+        "text": "4棵",
+        "count": 1
+      },
+      {
+        "text": "2棵",
+        "count": 1
+      }
+    ],
+    "structures": [
+      {
+        "text": "# 院子里的树",
+        "count": 1
+      }
+    ],
+    "propositions": [
+      "温禾在2024年种下6棵树。",
+      "她的记录显示2025年只有4棵存活。",
+      "记录无法解释另外2棵死亡的原因。"
+    ]
+  },
+  {
+    "id": "zh-essay-clean-4",
+    "language": "zh",
+    "genre": "essay",
+    "kind": "clean",
+    "draft": "# 慢走的九天\n孟溪连续9天每天早晨走3公里。他觉得自己没那么匆忙了，但这本日记不能证明变化由步行造成。他写道：“有空看看路边了”。",
+    "editingGoal": "保留平实叙述、原话和因果上的谨慎。",
+    "literals": [
+      {
+        "text": "孟溪",
+        "count": 1
+      },
+      {
+        "text": "9天",
+        "count": 1
+      },
+      {
+        "text": "3公里",
+        "count": 1
+      },
+      {
+        "text": "“有空看看路边了”",
+        "count": 1
+      }
+    ],
+    "structures": [
+      {
+        "text": "# 慢走的九天",
+        "count": 1
+      }
+    ],
+    "propositions": [
+      "孟溪连续9天，每天早晨走3公里。",
+      "他觉得不再那么匆忙。",
+      "日记不能证明步行导致了变化。",
+      "他写下了所引原话。"
+    ]
+  },
+  {
+    "id": "zh-report-edit-5",
+    "language": "zh",
+    "genre": "report",
+    "kind": "edit",
+    "draft": "# 水泵试验\n值得特别指出的是，苏澄两次记下24升：A入口为24升，B入口为16升。假定仪表校准有效，两者相差8升。\n\n| 入口 | 水量 |\n| --- | --- |\n| A | 24升 |\n| B | 16升 |\n\n本次试验没有测试压力。",
+    "editingGoal": "删去空泛强调，使开头直接，同时保留表格和校准条件。",
+    "literals": [
+      {
+        "text": "苏澄",
+        "count": 1
+      },
+      {
+        "text": "24升",
+        "count": 3
+      },
+      {
+        "text": "16升",
+        "count": 2
+      },
+      {
+        "text": "8升",
+        "count": 1
+      }
+    ],
+    "structures": [
+      {
+        "text": "| 入口 | 水量 |",
+        "count": 1
+      },
+      {
+        "text": "| --- | --- |",
+        "count": 1
+      },
+      {
+        "text": "| A | 24升 |",
+        "count": 1
+      },
+      {
+        "text": "| B | 16升 |",
+        "count": 1
+      },
+      {
+        "text": "# 水泵试验",
+        "count": 1
+      }
+    ],
+    "propositions": [
+      "苏澄记录A入口24升、B入口16升。",
+      "两者相差8升，但以仪表校准有效为前提。",
+      "本次试验未测试压力。"
+    ]
+  },
+  {
+    "id": "zh-report-clean-6",
+    "language": "zh",
+    "genre": "report",
+    "kind": "clean",
+    "draft": "# 构建检查\n陆乔在版本d8e3b2上运行`nexus check --json`，得到0个错误和2个警告。[日志](https://example.invalid/build/d8e3b2)仅覆盖Linux，尚未测试Windows。",
+    "editingGoal": "保留紧凑的技术报告语气。",
+    "literals": [
+      {
+        "text": "陆乔",
+        "count": 1
+      },
+      {
+        "text": "d8e3b2",
+        "count": 2
+      },
+      {
+        "text": "`nexus check --json`",
+        "count": 1
+      },
+      {
+        "text": "0个错误",
+        "count": 1
+      },
+      {
+        "text": "2个警告",
+        "count": 1
+      },
+      {
+        "text": "[日志](https://example.invalid/build/d8e3b2)",
+        "count": 1
+      },
+      {
+        "text": "Linux",
+        "count": 1
+      },
+      {
+        "text": "Windows",
+        "count": 1
+      }
+    ],
+    "structures": [
+      {
+        "text": "# 构建检查",
+        "count": 1
+      }
+    ],
+    "propositions": [
+      "陆乔在版本d8e3b2运行所列命令。",
+      "结果为0个错误、2个警告。",
+      "日志仅覆盖Linux，Windows未测试。"
+    ]
+  },
+  {
+    "id": "zh-post-edit-7",
+    "language": "zh",
+    "genre": "post",
+    "kind": "edit",
+    "draft": "说到底，顾遥的手作课将于2026年11月14日09:30开始。这不仅是一节课，更是一段颠覆性的旅程！共14个名额，2026年11月11日前预约的费用是5元。现场不售票。",
+    "editingGoal": "删除故作深刻的开头和夸张宣传，保留亲切、实用的邀请。",
+    "literals": [
+      {
+        "text": "顾遥",
+        "count": 1
+      },
+      {
+        "text": "2026年11月14日",
+        "count": 1
+      },
+      {
+        "text": "09:30",
+        "count": 1
+      },
+      {
+        "text": "14个",
+        "count": 1
+      },
+      {
+        "text": "2026年11月11日",
+        "count": 1
+      },
+      {
+        "text": "5元",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "顾遥的手作课于2026年11月14日09:30开始。",
+      "共14个名额。",
+      "2026年11月11日前预约费用为5元。",
+      "现场不售票。"
+    ]
+  },
+  {
+    "id": "zh-post-clean-8",
+    "language": "zh",
+    "genre": "post",
+    "kind": "clean",
+    "draft": "去青汀的渡船07:15出发，17:40返航。带上2升水。只有港口挂绿旗时才开放这条航线。要是风大，我会改天再去。",
+    "editingGoal": "保留随和的建议语气和开放条件。",
+    "literals": [
+      {
+        "text": "青汀",
+        "count": 1
+      },
+      {
+        "text": "07:15",
+        "count": 1
+      },
+      {
+        "text": "17:40",
+        "count": 1
+      },
+      {
+        "text": "2升",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "青汀渡船07:15出发、17:40返航。",
+      "建议带2升水。",
+      "航线只在港口挂绿旗时开放。",
+      "作者建议大风时改日出行。"
+    ]
+  }
+]
