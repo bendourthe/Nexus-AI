@@ -1,0 +1,39 @@
+{
+  "contractSha256": "b5c912f3124738b58292d8bb158376f41feb49b62fe4a32d5c80c8026d0ea169",
+  "denominator": 4,
+  "present": 4,
+  "missing": [],
+  "disposition": "HOLD",
+  "semantic": "unreviewed",
+  "readability": "unreviewed",
+  "rows": [
+    {
+      "id": "en-email-edit-0",
+      "language": "en",
+      "genre": "email",
+      "status": "HOLD",
+      "reason": "REQUEST_OR_FORMAT_FAILURE"
+    },
+    {
+      "id": "en-post-clean-0",
+      "language": "en",
+      "genre": "post",
+      "status": "HOLD",
+      "reason": "PILOT_HOLD_NOT_RUN"
+    },
+    {
+      "id": "zh-email-edit-0",
+      "language": "zh",
+      "genre": "email",
+      "status": "HOLD",
+      "reason": "PILOT_HOLD_NOT_RUN"
+    },
+    {
+      "id": "zh-post-clean-0",
+      "language": "zh",
+      "genre": "post",
+      "status": "HOLD",
+      "reason": "PILOT_HOLD_NOT_RUN"
+    }
+  ]
+}

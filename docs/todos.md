@@ -196,7 +196,7 @@ Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 des
 | Tasks done (v0.4.0) | 16 (P1) + 17 (P2) + 21 (P3) + 21 (P4) + 22 (P5) | ~135 / ~135 | in-progress |
 | Sources compared (Craft editors + EmbeddingGemma 2, 2026-10-07) | 2 / 2 | 2 / 2 | 0 |
 | v2.13 adoption plan implementation tasks (merged in PR #101, 2026-10-16; T008-T010 deferred under DF-2) | 28 / 28 | 28 | 0 |
-| v2.14.1 local rewrite evaluation implementation tasks (plan approved, 2026-10-16) | 0 / 18 | 18 | 18 |
+| v2.14.1 local rewrite evaluation implementation tasks (authorized, 2026-10-17) | 17 / 18 | 18 | 1 |
 
 ---
 
@@ -724,11 +724,13 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [ ] Evaluate EmbeddingGemma 2 text/code retrieval through the existing local adapter, resolve its context/terms discrepancies and measure the comparison's proposed gate before changing the model job map or defaults (E1/E2).
 - [ ] Implement and verify the planned durable recipe and shared commands for existing ImageViewer edits, including restart/reopen and UI-versus-command export equivalence, before adding broader creative-editor features (C1/C2).
 
-## Local rewrite evaluation (planned v2.14.1)
+## Local rewrite evaluation (active v2.14.1)
 
 - [x] Compare Humanizer and Handwired against Nexus and record the confirmed v2.14.1 adoption target after v2.14.0 ([comparison](releases/v2/v2.14/comparisons/v2.14.1-comparison-humanizer-handwired.md), 2026-10-16).
 - [x] Finalize the three-phase, 18-task text-only evaluation plan after seven-lens review and owner approval of Q1-Q4 ([plan](releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), [review](releases/v2/v2.14/development/v2.14.1-plan-review.md), 2026-10-16). Implementation is 0/18.
-- [ ] Implement the bounded evaluation only after separate authorization and v2.14.0 integration; keep Humanizer installation, adapter/catalog changes and Handwired implementation outside this plan.
+- [x] Freeze the evaluation and run its single pilot under the owner's 2026-10-17 authorization to run v2.14.1 before v2.14.0; [Phase 1 evidence](releases/v2/v2.14/development/v2.14.1-phase1-evidence.md) records format HOLD with no retry.
+- [x] Record all sixteen held-out IDs as not-run/HOLD, retain missing-output counts, and assess exact-runtime Humanizer feasibility ([Phase 2 evidence](releases/v2/v2.14/development/v2.14.1-phase2-evidence.md)). Quality remains unmeasured under DF-5.
+- [ ] Finish bounded HOLD continuation, Humanizer feasibility, final gates, approved integration and release; keep Humanizer installation, adapter/catalog changes and Handwired implementation outside this plan.
 
 ## Recurring Obligations
 
