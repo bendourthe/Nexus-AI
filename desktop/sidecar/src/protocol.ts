@@ -60,6 +60,9 @@ export const IPC_METHODS = [
   "audio.health",
   "audio.transcribe",
   "audio.speak",
+  // v2.14.0 T008 -- spoken replies streamed from the chat turn.
+  "audio.speakDrain",
+  "audio.speakCancel",
   "coding.startTask",
   "coding.session.start",
   "coding.session.sendMessage",
@@ -380,6 +383,12 @@ export const ChatSessionSendMessageRequest = z
     message: z.string(),
     /** v2.0.0 Phase 1 -- raw base64 images for a vision-capable local model. */
     images: z.array(z.string().min(1)).max(16).optional(),
+    /**
+     * v2.14.0 T008 -- speak the reply while it streams. `jobId` is a
+     * client-generated random UUID, bound to this session; a reused id is
+     * rejected. Segments are fetched with `audio.speakDrain`.
+     */
+    voice: z.object({ jobId: z.string().uuid() }).strict().optional(),
   })
   .strict()
   .refine(
@@ -2572,7 +2581,8 @@ export const AudioTranscribeResponse = z
   .strict();
 export type AudioTranscribeResponseT = z.infer<typeof AudioTranscribeResponse>;
 
-export const AudioSpeakRequest = z.object({ text: z.string().min(1) }).strict();
+// v2.14.0: the frozen 8,000-character synthesis cap (gates.md).
+export const AudioSpeakRequest = z.object({ text: z.string().min(1).max(8000) }).strict();
 export type AudioSpeakRequestT = z.infer<typeof AudioSpeakRequest>;
 
 export const AudioSpeakResponse = z
@@ -2582,6 +2592,42 @@ export const AudioSpeakResponse = z
   })
   .strict();
 export type AudioSpeakResponseT = z.infer<typeof AudioSpeakResponse>;
+
+// v2.14.0 T008 -- drain ready segments of a spoken reply, and cancel it.
+export const AudioSpeakDrainRequest = z
+  .object({
+    sessionId: z.string().min(1),
+    jobId: z.string().uuid(),
+    /** The highest seq already played; -1 for none. Acknowledged segments are released. */
+    afterSeq: z.number().int().min(-1),
+  })
+  .strict();
+export type AudioSpeakDrainRequestT = z.infer<typeof AudioSpeakDrainRequest>;
+
+export const AudioSpeakDrainResponse = z
+  .object({
+    state: z.enum(["unknown", "running", "completed", "cancelled", "error"]),
+    segments: z.array(
+      z
+        .object({
+          seq: z.number().int().min(0),
+          audioBase64: z.string().min(1),
+          mimeType: z.string().min(1),
+        })
+        .strict(),
+    ),
+    error: z.string().optional(),
+  })
+  .strict();
+export type AudioSpeakDrainResponseT = z.infer<typeof AudioSpeakDrainResponse>;
+
+export const AudioSpeakCancelRequest = z
+  .object({ sessionId: z.string().min(1), jobId: z.string().uuid() })
+  .strict();
+export type AudioSpeakCancelRequestT = z.infer<typeof AudioSpeakCancelRequest>;
+
+export const AudioSpeakCancelResponse = z.object({ ok: z.literal(true) }).strict();
+export type AudioSpeakCancelResponseT = z.infer<typeof AudioSpeakCancelResponse>;
 
 export const OcrParseDocumentRequest = z
   .object({
@@ -3123,6 +3169,16 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
   "audio.speak": {
     request: AudioSpeakRequest,
     response: AudioSpeakResponse,
+    implemented: true,
+  },
+  "audio.speakDrain": {
+    request: AudioSpeakDrainRequest,
+    response: AudioSpeakDrainResponse,
+    implemented: true,
+  },
+  "audio.speakCancel": {
+    request: AudioSpeakCancelRequest,
+    response: AudioSpeakCancelResponse,
     implemented: true,
   },
   "coding.startTask": {

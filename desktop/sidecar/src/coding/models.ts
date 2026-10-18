@@ -33,7 +33,7 @@ export type ToolFormatName = CoreToolFormatName;
 
 export type SidecarModelEntry = Pick<
   LlmCatalogEntry,
-  "id" | "displayName" | "family" | "promptFormat" | "toolFormat"
+  "id" | "displayName" | "family" | "promptFormat" | "toolFormat" | "reasoningOpensInPrompt"
 > & {
   readonly codingAvailable?: boolean;
 };
@@ -45,6 +45,7 @@ function project(entry: LlmCatalogEntry): SidecarModelEntry {
     family: entry.family,
     promptFormat: entry.promptFormat,
     toolFormat: entry.toolFormat,
+    ...(entry.reasoningOpensInPrompt ? { reasoningOpensInPrompt: true } : {}),
     codingAvailable: true,
   });
 }
@@ -64,6 +65,7 @@ export function lookupModel(id: string): SidecarModelEntry | undefined {
           family: runtime.family,
           promptFormat: runtime.promptFormat,
           toolFormat: runtime.toolFormat,
+          ...(runtime.reasoningOpensInPrompt ? { reasoningOpensInPrompt: true } : {}),
           codingAvailable: runtime.codingAvailable,
         })
       : undefined;

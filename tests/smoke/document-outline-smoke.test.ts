@@ -18,7 +18,6 @@
  */
 
 import { execFileSync } from "node:child_process";
-import { randomUUID } from "node:crypto";
 import { appendFileSync, copyFileSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -41,8 +40,15 @@ import { memoParser } from "./outline-smoke-parser.js";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, "../..");
 const FIXTURES = join(REPO, "tests/fixtures/documents/outline");
-const REPORT = process.env["NEXUS_OUTLINE_SMOKE_REPORT"] ?? join(tmpdir(), `outline-smoke-${randomUUID()}.md`);
-const RESULT_JSON = `${REPORT}.json`;
+// v2.14.0 (inherited gap WN-4): the default report lives in a private mkdtemp
+// directory, created on first use, not at a guessable path in the shared tmpdir.
+let privateReport: string | undefined;
+function reportPath(): string {
+  const override = process.env["NEXUS_OUTLINE_SMOKE_REPORT"];
+  if (override) return override;
+  privateReport ??= join(mkdtempSync(join(tmpdir(), "outline-smoke-")), "report.md");
+  return privateReport;
+}
 const SET = process.env["NEXUS_OUTLINE_SMOKE_SET"] ?? "";
 if (SET !== "" && SET !== "manual-120p") throw new Error("unknown outline smoke set");
 const SUFFIX = SET ? `-${SET}` : "";
@@ -144,7 +150,7 @@ describe.skipIf(!ENABLED)("document outline directional smoke", () => {
   it("records selected-arm counts on local models", async () => {
     const started = Date.now();
     boundedTime(QUESTION_TIMEOUT_MS);
-    if (existsSync(REPORT) || existsSync(RESULT_JSON)) throw new Error("refusing to overwrite a smoke report");
+    if (existsSync(reportPath()) || existsSync(`${reportPath()}.json`)) throw new Error("refusing to overwrite a smoke report");
     if (!Number.isInteger(LIMIT) || LIMIT < 0) throw new Error("smoke limit must be a nonnegative integer");
     const questionsAll = JSON.parse(readFileSync(join(FIXTURES, "eval", `questions${SUFFIX}.json`), "utf8")) as SmokeQuestion[];
     const keysAll = JSON.parse(readFileSync(join(FIXTURES, "eval", `keys${SUFFIX}.json`), "utf8")) as SmokeKey[];
@@ -159,7 +165,7 @@ describe.skipIf(!ENABLED)("document outline directional smoke", () => {
       reachable = false;
     }
     if (!reachable) {
-      writeFileSync(REPORT, "# Outline smoke test\n\nNot run: Ollama was not reachable on 127.0.0.1:11434.\n", { flag: "wx" });
+      writeFileSync(reportPath(), "# Outline smoke test\n\nNot run: Ollama was not reachable on 127.0.0.1:11434.\n", { flag: "wx" });
       throw new Error("Ollama preflight failed");
     }
     const models: string[] = [];
@@ -321,9 +327,9 @@ describe.skipIf(!ENABLED)("document outline directional smoke", () => {
       }
     }
     const results = { outcomes, models, skipped, coldSeconds, coldFile, gpuBefore, gpuAfterOcr, gpuDuringModel, questions, keysAll, minutes: (Date.now() - started) / 60000 };
-    writeFileSync(RESULT_JSON, JSON.stringify({ ...results, questions: undefined, keysAll: undefined, questionHash: hashOf(questions), fullQuestionHash: hashOf(questionsAll), keyHash: hashOf(keysAll), set: SET || "v2.11", arms: ARMS, contextTokens: CONTEXT_TOKENS, deadlineMs: DEADLINE_MS }, null, 2), { flag: "wx" });
-    writeFileSync(REPORT, render(results), { flag: "wx" });
-    process.stdout.write(`[smoke] report=${REPORT} results=${RESULT_JSON}\n`);
+    writeFileSync(`${reportPath()}.json`, JSON.stringify({ ...results, questions: undefined, keysAll: undefined, questionHash: hashOf(questions), fullQuestionHash: hashOf(questionsAll), keyHash: hashOf(keysAll), set: SET || "v2.11", arms: ARMS, contextTokens: CONTEXT_TOKENS, deadlineMs: DEADLINE_MS }, null, 2), { flag: "wx" });
+    writeFileSync(reportPath(), render(results), { flag: "wx" });
+    process.stdout.write(`[smoke] report=${reportPath()} results=${reportPath()}.json\n`);
     expect(outcomes.length).toBe(models.length * ARMS.length * questions.length);
     } finally {
       parsingSuspended = true;

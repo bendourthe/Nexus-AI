@@ -16,6 +16,7 @@ import {
   type ChatSessionStartResponseT,
 } from "../protocol.js";
 import type { ChatRunner } from "./chatMessageHandler.js";
+import type { VoiceJob } from "./voiceJobs.js";
 
 const CHAT_SYSTEM_PROMPT =
   "You are Nexus, a helpful, concise local AI assistant running fully on-device.";
@@ -75,6 +76,7 @@ export class ChatSessionManager {
     sessionId: string,
     message: string,
     images?: readonly string[],
+    voice?: VoiceJob,
   ): Promise<readonly ChatSessionEventT[]> {
     const rec = this._requireSession(sessionId);
     rec.history.push({
@@ -100,11 +102,18 @@ export class ChatSessionManager {
           // Memory availability must never make the active chat turn fail.
         }
       }
-      const events = await this._runner({
-        sessionId: rec.id,
-        model: rec.model,
-        messages: runnerMessages,
-      });
+      let events: readonly ChatSessionEventT[];
+      try {
+        events = await this._runner({
+          sessionId: rec.id,
+          model: rec.model,
+          messages: runnerMessages,
+          ...(voice ? { voice } : {}),
+        });
+      } catch (err) {
+        voice?.fail("the reply failed before it finished");
+        throw err;
+      }
       // Reconstruct the assistant turn from the streamed token events so the
       // next turn carries the full conversation.
       const reply = events
@@ -118,6 +127,7 @@ export class ChatSessionManager {
     // Fallback (tests / bare dev): a deterministic echo.
     const reply = `(local stub) ${message.slice(0, 80)}`;
     rec.history.push({ role: "assistant", content: reply });
+    voice?.endReply();
     return [
       { kind: "token", text: reply },
       { kind: "done", finishReason: "stop" },

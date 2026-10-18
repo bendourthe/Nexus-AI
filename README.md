@@ -120,6 +120,12 @@ Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" c
 
 Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.11 live under `docs/archive/v2/`. v2.12 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.12/known-gaps.md](docs/v2/v2.12/known-gaps.md).
 
+### v2.14.2
+
+Desktop Chat speaks a reply from its first sentence while the model is still writing: median time to first audio on the medium test fell from 38.6 s to about 3.9 s, speaking over a reply stops it, and code, links, secrets and hidden reasoning are never read aloud. Voice now runs on install. LFM2.5 24B-A2B joins the catalog as an opt-in 16 GB worker, with pulled weights checked against their pinned digest. Planned as v2.14.0 and released after v2.14.1. The 2.0 s target is not yet met (v2.15 DF-1).
+
+Evidence: [last-phase evidence](docs/releases/v2/v2.14/development/v2.14.2-last-phase-evidence.md), [voice latency results](docs/releases/v2/v2.14/development/voice-latency-results.md), [LFM A/B](docs/releases/v2/v2.14/development/lfm-ab-results.json), [open gaps](docs/releases/v2/v2.15/known-gaps.md).
+
 ### v2.14.1
 
 This release adds an internal-compatible development evaluator for a text-only editing adaptation on frozen synthetic English and Chinese drafts. The single pilot failed the response-format contract, so all sixteen held-out drafts remain not-run/HOLD. Factual preservation and readability improvement are unmeasured; Humanizer is not admitted or installed.

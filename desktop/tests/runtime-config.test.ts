@@ -69,11 +69,15 @@ describe("applyRuntimeConfigEnv", () => {
       modelsRoot: "/data/models",
     });
     expect(applied.sort()).toEqual([
+      "NEXUS_AUDIO_CWD",
+      "NEXUS_AUDIO_PYTHON",
       "NEXUS_DIFFUSION_CWD",
       "NEXUS_DIFFUSION_PYTHON",
       "NEXUS_MODELS_ROOT",
     ]);
     expect(env.NEXUS_DIFFUSION_PYTHON).toBe("/venv/bin/python");
+    expect(env.NEXUS_AUDIO_PYTHON).toBe("/venv/bin/python");
+    expect(env.NEXUS_AUDIO_CWD).toBe("/opt/runtimes");
     expect(env.NEXUS_MODELS_ROOT).toBe("/data/models");
   });
 
@@ -82,7 +86,8 @@ describe("applyRuntimeConfigEnv", () => {
     const applied = applyRuntimeConfigEnv(env, {
       diffusionPython: "/venv/bin/python",
     });
-    expect(applied).toEqual([]);
+    // Only the unset audio knob is filled; the explicit diffusion one is kept.
+    expect(applied).toEqual(["NEXUS_AUDIO_PYTHON"]);
     expect(env.NEXUS_DIFFUSION_PYTHON).toBe("explicit");
   });
 
@@ -116,6 +121,8 @@ describe("applyRuntimeConfigEnv", () => {
       },
     });
     expect(applied.sort()).toEqual([
+      "NEXUS_AUDIO_CWD",
+      "NEXUS_AUDIO_PYTHON",
       "NEXUS_DIFFUSION_CWD",
       "NEXUS_DIFFUSION_PYTHON",
     ]);
@@ -128,8 +135,27 @@ describe("applyRuntimeConfigEnv", () => {
       diffusionPython: "/venv/bin/python",
       diffusion: { status: "failed", failure_code: "CUDA_UNAVAILABLE" },
     });
-    expect(applied).toEqual(["NEXUS_DIFFUSION_NOT_READY"]);
+    expect(applied).toEqual(["NEXUS_DIFFUSION_NOT_READY", "NEXUS_AUDIO_PYTHON"]);
     expect(env.NEXUS_DIFFUSION_PYTHON).toBeUndefined();
     expect(env.NEXUS_DIFFUSION_NOT_READY).toBe("CUDA_UNAVAILABLE");
+  });
+
+  it("keeps the audio runtime on the provisioned venv when diffusion is not ready", () => {
+    const env: NodeJS.ProcessEnv = {};
+    applyRuntimeConfigEnv(env, {
+      schemaVersion: 2,
+      diffusionPython: "/venv/bin/python",
+      diffusionCwd: "/opt/runtimes",
+      diffusion: { status: "failed", failure_code: "CUDA_UNAVAILABLE" },
+    });
+    expect(env.NEXUS_AUDIO_PYTHON).toBe("/venv/bin/python");
+    expect(env.NEXUS_AUDIO_CWD).toBe("/opt/runtimes");
+    expect(env.NEXUS_DIFFUSION_CWD).toBeUndefined();
+  });
+
+  it("never overrides an explicit audio interpreter", () => {
+    const env: NodeJS.ProcessEnv = { NEXUS_AUDIO_PYTHON: "explicit" };
+    applyRuntimeConfigEnv(env, { diffusionPython: "/venv/bin/python" });
+    expect(env.NEXUS_AUDIO_PYTHON).toBe("explicit");
   });
 });

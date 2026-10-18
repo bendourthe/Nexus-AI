@@ -96,6 +96,11 @@ export function applyRuntimeConfigEnv(
   const mappings: Array<[key: string, value: string | null | undefined]> = [
     ["NEXUS_DIFFUSION_PYTHON", !installedContract || ready ? config.diffusionPython : null],
     ["NEXUS_DIFFUSION_CWD", !installedContract || ready ? config.diffusionCwd : null],
+    // v2.14.0: the audio runtime shares the provisioned venv and runtimes root.
+    // Voice runs on CPU, so it is not gated on the diffusion CUDA smoke; without
+    // these the audio factory fell back to a bare `python` with no voice deps.
+    ["NEXUS_AUDIO_PYTHON", config.diffusionPython],
+    ["NEXUS_AUDIO_CWD", config.diffusionCwd],
     ["NEXUS_MODELS_ROOT", config.modelsRoot],
   ];
   for (const [key, value] of mappings) {

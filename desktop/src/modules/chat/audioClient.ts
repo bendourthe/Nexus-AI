@@ -24,10 +24,29 @@ export interface AudioHealthResult {
   readonly ttsReason: string;
 }
 
+/** v2.14.0 T009 -- one ready segment of a reply spoken by the sidecar. */
+export interface SpokenSegment {
+  readonly seq: number;
+  readonly audioBase64: string;
+  readonly mimeType: string;
+}
+
+export type SpokenJobState = "unknown" | "running" | "completed" | "cancelled" | "error";
+
+export interface SpokenDrainResult {
+  readonly state: SpokenJobState;
+  readonly segments: readonly SpokenSegment[];
+  readonly error?: string;
+}
+
 export interface AudioClient {
   transcribe(audioBase64: string, mimeType?: string): Promise<AudioTranscribeResult>;
   speak(text: string): Promise<AudioSpeakResult>;
   health(): Promise<AudioHealthResult>;
+  /** Segments after `afterSeq` (-1 for all) and the job's state. */
+  speakDrain(sessionId: string, jobId: string, afterSeq: number): Promise<SpokenDrainResult>;
+  /** Stop the sidecar's synthesis for this job. */
+  speakCancel(sessionId: string, jobId: string): Promise<void>;
 }
 
 export function createIpcAudioClient(): AudioClient {
@@ -44,6 +63,14 @@ export function createIpcAudioClient(): AudioClient {
       const reply = await ipcCall<AudioSpeakResult>("audio.speak", { text });
       if (!reply.ok) throw new Error(reply.message);
       return reply.value;
+    },
+    async speakDrain(sessionId, jobId, afterSeq) {
+      const reply = await ipcCall<SpokenDrainResult>("audio.speakDrain", { sessionId, jobId, afterSeq });
+      if (!reply.ok) throw new Error(reply.message);
+      return reply.value;
+    },
+    async speakCancel(sessionId, jobId) {
+      await ipcCall<{ ok: true }>("audio.speakCancel", { sessionId, jobId });
     },
     async health() {
       const reply = await ipcCall<{
@@ -73,19 +100,39 @@ export interface InMemoryAudioClientOptions {
   readonly speakAudioBase64?: string;
   readonly sttInstalled?: boolean;
   readonly ttsInstalled?: boolean;
+  /** Segments every voice job yields (one drain), then the job completes. */
+  readonly spokenSegments?: readonly string[];
 }
 
 export function createInMemoryAudioClient(opts: InMemoryAudioClientOptions = {}): AudioClient & {
   readonly transcribeCalls: string[];
   readonly speakCalls: string[];
+  readonly drainCalls: Array<{ jobId: string; afterSeq: number }>;
+  readonly cancelCalls: string[];
 } {
   const transcribeCalls: string[] = [];
   const speakCalls: string[] = [];
+  const drainCalls: Array<{ jobId: string; afterSeq: number }> = [];
+  const cancelCalls: string[] = [];
+  const spoken = opts.spokenSegments ?? ["UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA="];
   const sttInstalled = opts.sttInstalled ?? true;
   const ttsInstalled = opts.ttsInstalled ?? true;
   return {
     transcribeCalls,
     speakCalls,
+    drainCalls,
+    cancelCalls,
+    async speakDrain(_sessionId, jobId, afterSeq) {
+      drainCalls.push({ jobId, afterSeq });
+      if (cancelCalls.includes(jobId)) return { state: "cancelled", segments: [] };
+      const segments = spoken
+        .map((audioBase64, seq) => ({ seq, audioBase64, mimeType: "audio/wav" }))
+        .filter((s) => s.seq > afterSeq);
+      return { state: "completed", segments };
+    },
+    async speakCancel(_sessionId, jobId) {
+      cancelCalls.push(jobId);
+    },
     async transcribe(audioBase64) {
       transcribeCalls.push(audioBase64);
       if (!sttInstalled) throw new Error("STT weights are not installed");

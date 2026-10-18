@@ -140,6 +140,19 @@
       "toolFormat": "lfm-pythonic"
     },
     {
+      "id": "lfm2.5:24b-a2b",
+      "displayName": "LFM2.5 24B-A2B",
+      "family": "lfm2.5",
+      "runtime": "ollama",
+      "vramGb": 15,
+      "activeParams": 2,
+      "totalParams": 24,
+      "tags": ["coding", "tool-use", "worker-candidate"],
+      "sampling": { "temperature": 0.1, "topP": 0.9, "topK": 50, "contextLength": 32768 },
+      "promptFormat": "lfm",
+      "toolFormat": "lfm-pythonic"
+    },
+    {
       "id": "minicpm5:2b",
       "displayName": "MiniCPM5 2B",
       "family": "minicpm5",
