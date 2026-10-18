@@ -3,12 +3,14 @@
  * parse-failure counting and codec selection for catalog-only entries.
  */
 
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, writeFileSync } from "node:fs";
 import * as fsp from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 
-import { describe, expect, it } from "vitest";
+import { buildSync } from "esbuild";
+
+import { beforeAll, describe, expect, it } from "vitest";
 
 import {
   ALLOWED_OPTIONS,
@@ -46,6 +48,17 @@ describe("--options", () => {
     [JSON.stringify({ temperature: "hot" }), /must be a number/],
   ])("rejects %s before any task runs", (body, error) => {
     expect(() => loadGoldenOptions(optionsFile(body))).toThrow(error);
+  });
+
+  // The CLI checks --tool-format against the compiled codec list. CI's test
+  // job does not build out/, so build that one module when it is missing
+  // (as evaluate-local-rewrites.test.ts does for its modules).
+  beforeAll(() => {
+    const root = resolve(__dirname, "../../..");
+    const entry = "modules/coding/llm/ToolCallFormat.ts";
+    if (!existsSync(join(root, "out", entry.replace(/\.ts$/, ".js")))) {
+      buildSync({ entryPoints: [join(root, entry)], outdir: join(root, "out"), outbase: root, bundle: true, platform: "node", format: "cjs", logLevel: "silent" });
+    }
   });
 
   it("is refused by the CLI with exit 2, as is a flag with no value", async () => {

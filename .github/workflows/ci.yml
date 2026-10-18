@@ -478,14 +478,15 @@ jobs:
         shell: pwsh
       # v2.14.0 (v2.15 MT-1): the audio runtime's Windows stdin regression
       # test skips on the Linux runtime job, so it runs here, where pipes
-      # behave like a user's machine. Stdlib plus pytest; no model weights.
+      # behave like a user's machine. pytest and numpy (the PCM helper); no
+      # model weights.
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: "3.12"
       - name: Audio runtime tests (Windows pipes)
         run: |
           python -m pip install --quiet --upgrade pip
-          python -m pip install --quiet pytest
+          python -m pip install --quiet pytest "numpy>=1.26.0"
           python -m pytest tests/python/audio -q
         env:
           NEXUS_AUDIO_STUB: "1"

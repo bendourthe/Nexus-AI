@@ -896,30 +896,9 @@ export async function runGoldenRun(flags, stdout = process.stdout, stderr = proc
   const tasksDir = resolvePath(__dirname, "..", "tests", "golden", "tasks");
   const snapshotRoot = resolvePath(__dirname, "..", "tests", "golden", "snapshots");
 
-  const [runnerMod, loaderMod] = await Promise.all([
-    loadCompiled(["modules", "coding", "evaluation", "GoldenTaskRunner.js"], "GoldenTaskRunner"),
-    loadCompiled(["modules", "coding", "evaluation", "goldenTaskLoader.js"], "goldenTaskLoader"),
-  ]);
-
-  let tasks;
-  try {
-    tasks = loaderMod.loadAllGoldenTasks(tasksDir);
-  } catch (err) {
-    stderr.write(
-      `nexus golden run: failed to load tasks from ${tasksDir}: ${err instanceof Error ? err.message : String(err)}\n`,
-    );
-    return 1;
-  }
-  if (typeof flags.task === "string") {
-    tasks = tasks.filter((t) => t.id === flags.task);
-    if (tasks.length === 0) {
-      stderr.write(`nexus golden run: no task with id "${flags.task}".\n`);
-      return 1;
-    }
-  }
-
   // v2.14.0 T013: optional sampler options, per-turn metrics and a codec
-  // override for trial models. Each is validated before any task runs.
+  // override for trial models. Each is validated before any task runs, and before the compiled
+  // runner loads, so a bad flag exits 2 even without a build.
   if (flags.metrics === true || flags.options === true || flags["tool-format"] === true) {
     stderr.write("nexus golden run: --options, --metrics and --tool-format need a value.\n");
     return 2;
@@ -942,6 +921,29 @@ export async function runGoldenRun(flags, stdout = process.stdout, stderr = proc
     }
   }
   const metricsPath = typeof flags.metrics === "string" ? flags.metrics : undefined;
+
+  const [runnerMod, loaderMod] = await Promise.all([
+    loadCompiled(["modules", "coding", "evaluation", "GoldenTaskRunner.js"], "GoldenTaskRunner"),
+    loadCompiled(["modules", "coding", "evaluation", "goldenTaskLoader.js"], "goldenTaskLoader"),
+  ]);
+
+  let tasks;
+  try {
+    tasks = loaderMod.loadAllGoldenTasks(tasksDir);
+  } catch (err) {
+    stderr.write(
+      `nexus golden run: failed to load tasks from ${tasksDir}: ${err instanceof Error ? err.message : String(err)}\n`,
+    );
+    return 1;
+  }
+  if (typeof flags.task === "string") {
+    tasks = tasks.filter((t) => t.id === flags.task);
+    if (tasks.length === 0) {
+      stderr.write(`nexus golden run: no task with id "${flags.task}".\n`);
+      return 1;
+    }
+  }
+
 
   const options = { mode, snapshotRoot, initGit: false };
   const model = typeof flags.model === "string" ? flags.model : "gemma4:e4b";
