@@ -1,6 +1,6 @@
 # LFM2.5-24B-A2B Probe (T002)
 
-**Plan**: [v2.14.0 voice latency and LFM2.5-24B trial](../plans/v2.14.0-adoption-voice-latency-lfm2.5-24b.md), task T002
+**Plan**: [v2.14.0 voice latency and LFM2.5-24B trial](../plans/v2.14.2-adoption-voice-latency-lfm2.5-24b.md), task T002
 **Date**: 2026-10-16
 **Host**: reference 16 GB tier, NVIDIA GeForce RTX 3080 Ti Laptop GPU (16384 MiB), Windows 11, Ollama 0.32.15
 **Verdict**: GO on `QAD-Q4_0` (Q4_K_M spills 0.81 GB at 32K; QAD-Q4_0 fits fully)
