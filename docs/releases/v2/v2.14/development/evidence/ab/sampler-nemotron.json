@@ -1,0 +1,6 @@
+{
+  "temperature": 0.5,
+  "top_p": 0.9,
+  "top_k": 20,
+  "num_ctx": 32768
+}

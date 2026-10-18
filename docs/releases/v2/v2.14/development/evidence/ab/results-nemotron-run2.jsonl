@@ -1,0 +1,28 @@
+{"id":"agent-friendly-dry-run-then-execute-03","passed":true,"failures":[]}
+{"id":"agent-friendly-truncation-recovery-grep-02","passed":false,"failures":["agent: task timed out after 180000ms"]}
+{"id":"agent-friendly-truncation-recovery-read-01","passed":false,"failures":["agent: task timed out after 180000ms","large.ts contains the targeted function the agent must locate (output_contains node -e \"const fs=require('fs');const m=fs.readFileSync('large.ts','utf8').match(/featureFlag1300[\\s\\S]*?return [^;]+;/);process.stdout.write(m?m[0].slice(0,80):'no-match')\"): command exit=0"]}
+{"id":"bugfix-async-await-03","passed":true,"failures":[]}
+{"id":"bugfix-import-path-04","passed":false,"failures":["no stray parent-directory imports remain (output_contains grep -c \"../\" src/main.ts || true): command exit=0"]}
+{"id":"bugfix-null-check-02","passed":true,"failures":[]}
+{"id":"bugfix-off-by-one-01","passed":true,"failures":[]}
+{"id":"bugfix-race-condition-05","passed":false,"failures":["agent: Error-burst guard: 4 consecutive tool errors. Terminating this turn. The session is still open."]}
+{"id":"memory-hygiene-missed-fact-01","passed":true,"failures":[]}
+{"id":"multi-file-add-import-02","passed":true,"failures":[]}
+{"id":"multi-file-api-endpoint-04","passed":true,"failures":[]}
+{"id":"multi-file-config-update-03","passed":false,"failures":["agent: Error-burst guard: 4 consecutive tool errors. Terminating this turn. The session is still open.","consumer a references timeout (file_contains src/a.ts): pattern \"timeout\" in a.ts","consumer d references timeout (file_contains src/d.ts): pattern \"timeout\" in d.ts"]}
+{"id":"multi-file-rename-01","passed":true,"failures":[]}
+{"id":"multi-file-type-propagation-05","passed":true,"failures":[]}
+{"id":"refactor-callback-to-async-03","passed":true,"failures":[]}
+{"id":"refactor-class-to-module-02","passed":true,"failures":[]}
+{"id":"refactor-deduplicate-04","passed":true,"failures":[]}
+{"id":"refactor-extract-function-01","passed":true,"failures":[]}
+{"id":"refactor-rename-pattern-05","passed":true,"failures":[]}
+{"id":"review-code-quality-04","passed":true,"failures":[]}
+{"id":"review-error-handling-03","passed":true,"failures":[]}
+{"id":"review-performance-02","passed":true,"failures":[]}
+{"id":"review-security-vuln-01","passed":false,"failures":["no raw string concatenation in queries (output_contains grep -c \"'\\\" + \" src/db.ts || true): command exit=2"]}
+{"id":"testgen-edge-cases-02","passed":false,"failures":["agent: Error-burst guard: 4 consecutive tool errors. Terminating this turn. The session is still open."]}
+{"id":"testgen-error-handling-05","passed":false,"failures":["agent: Error-burst guard: 4 consecutive tool errors. Terminating this turn. The session is still open."]}
+{"id":"testgen-integration-api-04","passed":true,"failures":[]}
+{"id":"testgen-mock-dependency-03","passed":true,"failures":[]}
+{"id":"testgen-unit-function-01","passed":true,"failures":[]}

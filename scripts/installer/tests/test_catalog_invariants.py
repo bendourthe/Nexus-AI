@@ -20,7 +20,10 @@ from nexus_installer.catalog_invariants import (
 )
 from nexus_installer.registry_paths import default_catalog_path
 
-_LFM_PIN = "79fdf00351b46cf26f020aead28d01889886be87c55fa0eb907e6f9b00bfee14"
+# v2.14.0: Liquid AI replaced LFM2.5-2.6B-Q4_K_M.gguf on 2026-08-19 (commit b8b9fd82),
+# a day after the original pin; this is the current Hugging Face LFS sha256,
+# which matches a fresh Ollama hf.co pull.
+_LFM_PIN = "02a8b7e17487d326e46d68ce0ba24211e1b80a14c4cd0597fa73c1cd697f52ed"
 _LFM_NOTE = "USD 10M cap. This is a use restriction, not a download gate."
 _LFM_URL = "ollama://hf.co/LiquidAI/LFM2.5-2.6B-GGUF:Q4_K_M"
 

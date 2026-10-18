@@ -48,6 +48,7 @@ import httpx
 from nexus_installer import registry_paths
 from nexus_installer.engine.hf_weights_puller import HFWeightsPuller
 from nexus_installer.engine.model_puller import ModelPuller, remedy_for_failure
+from nexus_installer.engine.ollama_digest import verify_pull
 from nexus_installer.engine.ollama_installer import ensure_ollama_supports
 from nexus_installer.engine.platform_utils import no_window_kwargs
 from nexus_installer.installer_state import InstallerState
@@ -382,7 +383,12 @@ class ModelStepRouter:
                             self._active.append(puller)
                         target = ollama_target_for(entry, model_id)
                         ok = puller.pull_model(target, mlog, mprogress)
-                        if not ok:
+                        # v2.14.0 T016: a pinned hf.co pull must match its GGUF digest.
+                        mismatch = verify_pull(entry, target) if ok else None
+                        if mismatch:
+                            ok = False
+                            reason = mismatch
+                        elif not ok:
                             reason = puller.last_error or "ollama pull failed"
                             if puller.last_failure_class:
                                 reason = (

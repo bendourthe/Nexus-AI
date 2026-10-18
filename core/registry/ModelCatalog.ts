@@ -72,6 +72,15 @@ export interface LlmCatalogEntry {
   readonly sampling: SamplingDefaults;
   readonly promptFormat: PromptFormatName;
   readonly toolFormat: ToolFormatName;
+  /**
+   * v2.14.0 T012 -- the chat template opens `<think>` inside the prompt, so the
+   * model's output is reasoning until the first `</think>`. Per entry, never
+   * per family (`lfm2.5:2.6b` does not set it). Authoritative here and in its
+   * `models.json` twin (checked by the parity test); `catalog.json` carries it
+   * only for an entry admitted with it. Omitted means false: output is
+   * handled exactly as before.
+   */
+  readonly reasoningOpensInPrompt?: boolean;
 }
 
 const ENTRIES: readonly LlmCatalogEntry[] = Object.freeze([
@@ -206,6 +215,24 @@ const ENTRIES: readonly LlmCatalogEntry[] = Object.freeze([
     vramGb: 3,
     tags: Object.freeze(["recommended", "coding", "tool-use", "lightweight"]),
     sampling: { temperature: 0.3, topP: 0.9, topK: 50, contextLength: 128000 },
+    promptFormat: "lfm",
+    toolFormat: "lfm-pythonic",
+  },
+  {
+    // v2.14.0 T016 -- opt-in 16 GB MoE worker admitted on the local A/B
+    // (lfm-ab-results.json). Card sampler; topP is Ollama's default because the
+    // card sets none; contextLength is the 32K the 16 GB fit was verified at.
+    // Reasoning arrives in Ollama's `thinking` field, so reasoningOpensInPrompt
+    // stays unset (T002).
+    id: "lfm2.5:24b-a2b",
+    displayName: "LFM2.5 24B-A2B",
+    family: "lfm2.5",
+    runtime: "ollama",
+    vramGb: 15,
+    activeParams: 2,
+    totalParams: 24,
+    tags: Object.freeze(["coding", "tool-use", "worker-candidate"]),
+    sampling: { temperature: 0.1, topP: 0.9, topK: 50, contextLength: 32768 },
     promptFormat: "lfm",
     toolFormat: "lfm-pythonic",
   },

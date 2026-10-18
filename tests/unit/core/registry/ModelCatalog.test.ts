@@ -102,6 +102,7 @@ describe("ModelCatalog", () => {
       expect(t?.family).toBe(j.family);
       expect(t?.promptFormat).toBe(j.promptFormat);
       expect(t?.toolFormat).toBe(j.toolFormat);
+      expect(t?.reasoningOpensInPrompt).toBe((j as { reasoningOpensInPrompt?: boolean }).reasoningOpensInPrompt);
     }
   });
 });

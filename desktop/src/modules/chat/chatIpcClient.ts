@@ -45,6 +45,8 @@ export interface ChatSessionClient {
     sessionId: string;
     message: string;
     images?: readonly string[];
+    /** v2.14.0 T009 -- have the sidecar speak this reply as it streams. */
+    voice?: { jobId: string };
   }): Promise<ChatSendResult>;
 }
 
@@ -105,6 +107,7 @@ export function createChatIpcClient(): ChatSessionClient {
         sessionId: input.sessionId,
         message: input.message,
         ...(input.images && input.images.length > 0 ? { images: input.images } : {}),
+        ...(input.voice ? { voice: input.voice } : {}),
       });
       if (!reply.ok) throw new Error(reply.message);
       return reply.value;
