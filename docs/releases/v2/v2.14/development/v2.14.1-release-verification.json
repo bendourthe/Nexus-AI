@@ -1,0 +1,70 @@
+{
+  "tag": "v2.14.1",
+  "commit": "965b0e4beb05f0ca904e02955422e9addb8994ee",
+  "assets": [
+    {
+      "name": "NexusSetup.exe",
+      "bytes": 310407499,
+      "sha256": "1cae489f01bd843cd33f837e55220af0bd184de65bba348558de7db5eaaa8dd2"
+    },
+    {
+      "name": "nexus-coding-2.14.1-darwin-arm64.vsix",
+      "bytes": 212096391,
+      "sha256": "5a886e44479cd3ae3dc65576c151c915a949bf09bb2bdf64ad615fc279b9176b"
+    },
+    {
+      "name": "nexus-coding-2.14.1-linux-x64.vsix",
+      "bytes": 443290694,
+      "sha256": "86a329e6674836e05eacc10fde6a1bf9977516ce8151a65180523233e95f49f3"
+    },
+    {
+      "name": "nexus-coding-2.14.1-win32-x64.vsix",
+      "bytes": 216227623,
+      "sha256": "b3ab24d8d806001e23a8e3982eb0cd221a498af8ea78821ebf16cc72a0cec38c"
+    }
+  ],
+  "vsixPackages": [
+    {
+      "target": "win32-x64",
+      "version": "2.14.1",
+      "manifest": "verified"
+    },
+    {
+      "target": "darwin-arm64",
+      "version": "2.14.1",
+      "manifest": "verified"
+    },
+    {
+      "target": "linux-x64",
+      "version": "2.14.1",
+      "manifest": "verified"
+    }
+  ],
+  "installerPE": true,
+  "sourceValidation": {
+    "disposition": "VALID",
+    "pilot": 4,
+    "heldOut": 16,
+    "contractSha256": "b5c912f3124738b58292d8bb158376f41feb49b62fe4a32d5c80c8026d0ea169",
+    "inference": false
+  },
+  "sourceScoring": {
+    "disposition": "HOLD",
+    "denominator": 16,
+    "present": 16,
+    "completedOutputs": 0,
+    "missing": 16
+  },
+  "inference": false,
+  "releaseUrl": "https://github.com/bendourthe/Nexus-AI/releases/tag/v2.14.1",
+  "publishedAt": "2026-10-18T03:44:47Z",
+  "workflowRun": 39093739290,
+  "workflowConclusion": "success",
+  "supportTier": "internal-compatible",
+  "quality": {
+    "English": "HOLD",
+    "Chinese": "HOLD",
+    "completedHeldOutOutputs": 0,
+    "denominator": 16
+  }
+}
