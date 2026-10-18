@@ -1,4 +1,15 @@
-## [2.12.1](https://github.com/bendourthe/Nexus-AI/compare/v2.12.0...v2.12.1) (2026-10-16)
+# [2.14.1](https://github.com/bendourthe/Nexus-AI/compare/v2.12.1...v2.14.1) (2026-10-17)
+
+## Development evaluation
+
+- Add a bounded local rewrite evaluator with frozen synthetic English/Chinese drafts, strict evidence scoring, durable attempt budgets, loopback-only transport and exclusive outputs.
+- Record the sole installed-model pilot as format HOLD and all sixteen held-out drafts as not-run. Factual preservation and readability improvement remain unmeasured under DF-5.
+- Record Humanizer exact-runtime feasibility as HOLD, with no model download, runtime upgrade, catalog admission or production-client change.
+- Verify 50 focused boundary regressions, the reproduced ledger race correction, independent review and current handbook receipts.
+
+The owner explicitly selected v2.14.1. The separately isolated v2.14.0 plan is not included.
+
+# [2.12.1](https://github.com/bendourthe/Nexus-AI/compare/v2.12.0...v2.12.1) (2026-10-16)
 
 
 ### Bug Fixes
