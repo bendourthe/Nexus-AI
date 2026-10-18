@@ -1,0 +1,66 @@
+{
+  "snapshot": {
+    "entry_sha256": "f8ae04a2591ad1e8c4452bcc14d0478574d9f8a2bb4e5e9a41c88229a615399e",
+    "inputs": {
+      "docs/handbooks/technical/document-outline.md": "6e9d8c9656bcdd9ec041aaa9e97abfdd025f984513d4234953d5977cbd3053c4",
+      "scripts/generate-handbooks.mjs": "bf3b6a548a94c68c462d861dae9e4e469195d9408a36b12d155d7a6c9b64ed14",
+      "scripts/handbook-renderer.mjs": "05ba5507ff47b3bc62647ef32377c5ba301bea63af0375ace316205e89d132fa",
+      "docs/handbooks/_sources/storyboards.json": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013",
+      "docs/handbooks/_sources/handbook.css": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf",
+      "docs/handbooks/_sources/handbook-clones.js": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b",
+      "docs/handbooks/_sources/dual-view.css": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
+      "docs/handbooks/_sources/dual-view-runtime.js": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
+      "desktop/public/nexus-mark.png": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05",
+      "package.json": "4cc033b1b60f5e23422a3cf0a66dc3dde02674ef81f49301d5b6c7e478433ab1",
+      "package-lock.json": "17cb86b3188d3efe34e81fed29cf03d4cab93166248713527231cb68e45c2cec",
+      "modules/coding/documents/DocumentOutlineTools.ts": "8f8b56e854d33275878447b3bec7a3fa3f781771df974beefacc83e1298dfb93",
+      "modules/coding/runtime/outputBudget.ts": "0b660cdb17cbf8c8ba23a3c36cada9437de581e73d8ec1b18f9a2638ab3d8abb",
+      "modules/coding/runtime/HeadlessAgentSession.ts": "75121457ecd1fce63898c599f1b10d8c4d963945715ad5869934634961937092",
+      "modules/coding/llm/toolHistory.ts": "2802d6f767cf752ead32e36404ab4f39677ea78e7858460350db285afb308479",
+      "src/tools/AgentLoop.ts": "424265bab84d8832f56a290060ae8824ee733649390c7ea64d75b34199ad65b6",
+      "core/documents/OutlineCache.ts": "3303bbb3dccc62c2225f8145edb96bb28121e9e09398ea8f450055b9d385559c",
+      "core/documents/OutlineSession.ts": "049159fc92b1c0e66db006c85cef512eed87aa80f01677d26dc6ac92f4a9be0c",
+      "core/documents/OutlineSummaries.ts": "31050be06f1254983939e15c61cf11bdd2d9b91f07c162eb367666ecb0451d68",
+      "core/storage/OutlineFileStore.ts": "0b78bf3df84fb1441c589e90c3566943de83fae43b57c9f506fdea2b8476a59e",
+      "modules/coding/documents/OutlineSummaryProvider.ts": "5c8acdca416c66fb723ad12acecf27f0c6b13178b3f385603daa5046701642c0",
+      "modules/coding/guardrails/permissionTierMap.ts": "2aa33907c26a774011ed35f7aaae6fdaa047f43a2c66c6e8fdcc01e06af6c2b9",
+      "modules/coding/chat/ConversationManager.ts": "5c8556dab85878f97c0c8a18b28e60f821bc457b896faffe62c2e5ad31612d35",
+      "modules/coding/chat/CompactionStrategy.ts": "d1187108bcc9863002a0317a0361afeff69e18c185f943bd13f1ed4ca9c40448",
+      "desktop/src/pages/settings/SecuritySettings.tsx": "a591033685a87a41f7089978a3d563366db60d9dc3477d0ea7ad04e4013f6580",
+      "core/documents/documentOutlineEnabled.ts": "762494f7ad55518ab9b5a75d33bb83b559b3c54a6adc4d1930d8103a4d4461d2",
+      "modules/coding/runtime/headlessTools.ts": "faf1ed8eaef8fdaccd0f188f61c10a6660da74157da6e0767c7a3f2b0a033835",
+      "core/documents/DocumentOutline.ts": "46385160445f20bc1211905fa7d69a253aad7a2bdd21eacc761441b71e7a4107",
+      "modules/coding/documents/createDocumentOutlineTools.ts": "bd7a34d0174177deb6ca7c8e4c19682d316f97fe1025606f310f519d3222e5c4",
+      "src/tools/handlers/parseDocument.ts": "f764950384b585b305ee5fe94e3b9c78cda2139cac63c51863d0e701f01d9b9c",
+      "docs/v2/v2.12/development/outline-eval.md": "1f9be104def3251d0d21c228ea492d76eae8e0db38088c319caff6dbc84b8b45",
+      "docs/archive/v2/v2.11/development/outline-feasibility.md": "0c6fb20d3dc58581eda16aae9a5b9e2e0d3abad88452c2469a6197ad96944c30",
+      "modules/coding/llm/OllamaClient.ts": "1ea7c5b8c861a897aacb792fb4861cf9687ebda8e2e158d698baf58631e77213",
+      "modules/coding/llm/LmStudioClient.ts": "8c18e2087fcc3044461098ac838f543db68100253d6825dee22e6fed65838e7e",
+      "modules/coding/llm/headlessOllamaClient.ts": "680fec95c79bce33a975f3052514e5198ee1bccd91cd5cea7943aaf7302fc207",
+      "modules/coding/llm/headlessOpenAiClient.ts": "0f44f0907c0dfc4cbeb428faf225d897b87fbbc6c17275b349b2a82655e13565",
+      "desktop/sidecar/src/coding/headlessAgentRunner.ts": "afeaf67640d81fa23705639c8ffe4063b1af4b3cb8a566324d5d6cc26f6c0b41",
+      "desktop/sidecar/src/acp/AcpAgent.ts": "bdbd96bc69222433ae9dd069dc92d283e766a6e3ed97332c271d9f5920d9d81e",
+      "desktop/sidecar/src/handlers.ts": "a1996231fc6b96e868a15c68aa65f3d1bc9a38c8c4c734871d54ab31d50662f0"
+    },
+    "output_sha256": "79f1cc2240ebb4b343fe7da49c6999319d4c28e8302c8eab699a72a0648b9e4a"
+  },
+  "checks": {
+    "content": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.14/development/v2.14.1-handbook-review.md",
+      "evidence_sha256": "d8b9e70eeb1019e0b95cdeac234388543c164c50d3b30e819a18056e03cf55f9"
+    },
+    "build": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.14/development/v2.14.1-handbook-review.md",
+      "evidence_sha256": "d8b9e70eeb1019e0b95cdeac234388543c164c50d3b30e819a18056e03cf55f9"
+    },
+    "rendered": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.13/development/evidence/handbooks/render-observations.json",
+      "evidence_sha256": "3bc7890afb4a1049625b2c7f31bcc588971986be97720dde177d6793c2731a7a",
+      "browser": "Microsoft Edge 155 headless (Chromium, the WebView2 engine)",
+      "output_sha256": "79f1cc2240ebb4b343fe7da49c6999319d4c28e8302c8eab699a72a0648b9e4a"
+    }
+  }
+}
