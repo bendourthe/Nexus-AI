@@ -15,3 +15,8 @@ tests/snapshots/specialists/*.json text eol=lf
 # PDFs carry cross-reference byte offsets and bom-crlf.md exists to test CRLF.
 # An autocrlf rewrite on a Windows checkout would corrupt both.
 tests/fixtures/documents/outline/docs/* -text
+
+# Frozen rewrite evaluation hashes require identical bytes on every host.
+tests/fixtures/rewrite-eval/*.json text eol=lf
+docs/releases/v2/v2.14/development/v2.14.1-rewrite-contract.json* text eol=lf
+docs/releases/v2/v2.14/development/rewrite-eval/*.json* text eol=lf
