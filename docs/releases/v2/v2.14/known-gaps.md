@@ -92,7 +92,7 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 | WN-5 | The v2.12.0 tag has no GitHub Release or installers | Superseded by v2.12.1 | `gh release view v2.12.1`: published 2026-10-16 with 5 assets. No notes-only v2.12.0 Release was made |
 | WN-6 | Hosts without an NVIDIA or Apple GPU get no voice runtime | Moved to v2.15 (WN-1) | Still open: a CPU target cannot be verified on this GPU host, and a gap opened in this run cannot migrate at the minor close |
 | WN-7 | The provisioned venv's numpy differs from its lock | v2.14.0 Phase 5 (cause found) | No Nexus provisioner changes numpy. On 2026-10-01 a `rapidocr-onnxruntime` install, which no provisioner performs, pulled `opencv-python` 5.0.0.93 (needs `numpy>=2`), upgrading numpy to 2.5.3. The lock stays correct for what Nexus installs; the OCR provisioning gap and its numpy conflict are v2.15 WN-2 |
-| QG-1 | Two tests time out under full-suite load | v2.14.0 | Root half fixed in v2.13 with measured timeouts. The Video2X test passed in three full desktop runs in this cycle, meeting the gap's own closing rule |
+| QG-1 | Two tests time out under full-suite load | v2.14.0 Phase 5 (cause found and fixed) | Root half fixed in v2.13. The Video2X test failed again in the merged-tree desktop run, and its v2.13 assertion printed the cause: the run ended with `process_timeout` before the source hash started. The adapter's deadline reads `performance.now()`, which the test's fake timers do not freeze, so under load the 100 ms deadline ran on the real clock during staging; the filesystem-deadline test had the same race. Both now drive the adapter's `monotonicNow` option from fake time. 10 of 10 concurrent runs beside a CPU-burning process pass |
 
 ## v2.14.1
 

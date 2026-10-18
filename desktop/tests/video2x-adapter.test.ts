@@ -1722,8 +1722,12 @@ describe("Video2X staged execution", () => {
         return await new Promise<string>(() => undefined);
       };
       const request = { ...(await requestFor()), timeoutMs: 100 };
+      // The adapter's deadline reads performance.now(), which fake timers do
+      // not freeze; under full-suite load 100 real ms could pass before the
+      // source hash started (v2.14 QG-1). Drive the clock from fake time.
       const runPromise = createAdapter(new FakeVideoProcess(), {
         hashFile,
+        monotonicNow: () => Date.now(),
       }).run(request, {
         childJobId: "hash-deadline",
         signal: new AbortController().signal,
@@ -1778,34 +1782,47 @@ describe("Video2X staged execution", () => {
   });
 
   it("bounds a hanging filesystem operation with the run-local deadline", async () => {
-    let notifySourceReadStarted: (() => void) | undefined;
-    const sourceReadStarted = new Promise<void>((resolve) => {
-      notifySourceReadStarted = resolve;
-    });
-    const baseFilesystem = realFilesystem();
-    const filesystem: Video2xFileSystem = {
-      ...baseFilesystem,
-      async lstat(target) {
-        if (target === sourcePath) {
-          notifySourceReadStarted?.();
-          return await new Promise<Video2xFileStat>(() => undefined);
-        }
-        return baseFilesystem.lstat(target);
-      },
-    };
-    const request = { ...(await requestFor()), timeoutMs: 100 };
-    const runPromise = createAdapter(new FakeVideoProcess(), {
-      filesystem,
-    }).run(request, {
-      childJobId: "filesystem-deadline",
-      signal: new AbortController().signal,
-    });
-    await sourceReadStarted;
-    const runResult = await runPromise;
-    expect(runResult).toMatchObject({
-      ok: false,
-      error: { code: "process_timeout" },
-    });
+    vi.useFakeTimers();
+    try {
+      let notifySourceReadStarted: (() => void) | undefined;
+      const sourceReadStarted = new Promise<void>((resolve) => {
+        notifySourceReadStarted = resolve;
+      });
+      const baseFilesystem = realFilesystem();
+      const filesystem: Video2xFileSystem = {
+        ...baseFilesystem,
+        async lstat(target) {
+          if (target === sourcePath) {
+            notifySourceReadStarted?.();
+            return await new Promise<Video2xFileStat>(() => undefined);
+          }
+          return baseFilesystem.lstat(target);
+        },
+      };
+      const request = { ...(await requestFor()), timeoutMs: 100 };
+      // Fake-time clock, as in the source-hash test (v2.14 QG-1): the real
+      // 100 ms could elapse under load before the source read starts.
+      const runPromise = createAdapter(new FakeVideoProcess(), {
+        filesystem,
+        monotonicNow: () => Date.now(),
+      }).run(request, {
+        childJobId: "filesystem-deadline",
+        signal: new AbortController().signal,
+      });
+      const settledEarly = await Promise.race([
+        sourceReadStarted.then(() => undefined),
+        runPromise,
+      ]);
+      expect(settledEarly).toBeUndefined();
+      await vi.advanceTimersByTimeAsync(100);
+      const runResult = await runPromise;
+      expect(runResult).toMatchObject({
+        ok: false,
+        error: { code: "process_timeout" },
+      });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("revalidates the final staged identity after terminal awaits", async () => {
