@@ -1,6 +1,6 @@
 # Frozen Voice and Model Gates (T003)
 
-**Plan**: [v2.14.0 voice latency and LFM2.5-24B trial](../plans/v2.14.0-adoption-voice-latency-lfm2.5-24b.md), task T003
+**Plan**: [v2.14.0 voice latency and LFM2.5-24B trial](../plans/v2.14.2-adoption-voice-latency-lfm2.5-24b.md), task T003
 **Frozen**: 2026-10-16, before any Phase 2 or Phase 3 result exists
 **Source of values**: the owner-accepted answers to the 2026-10-14 grill (Q4, Q6, Q7, Q8), recorded in the plan's "Planning review and owner decisions"
 

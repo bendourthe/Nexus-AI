@@ -1,6 +1,6 @@
 # Voice Latency Results and PersonaPlex Trigger (T010)
 
-**Plan**: [v2.14.0 voice latency and LFM2.5-24B trial](../plans/v2.14.0-adoption-voice-latency-lfm2.5-24b.md), task T010
+**Plan**: [v2.14.0 voice latency and LFM2.5-24B trial](../plans/v2.14.2-adoption-voice-latency-lfm2.5-24b.md), task T010
 **Gates**: [`gates.md`](gates.md), frozen before these results existed
 **Host**: RTX 3080 Ti Laptop GPU (16 GB), Windows 11, Ollama 0.32.15, Chat model `gemma-4-12b-it-gguf` (`gemma4:12b`)
 **Records**: [`voice-latency-baseline.json`](voice-latency-baseline.json), [`voice-latency-streamed-pass1.json`](voice-latency-streamed-pass1.json), [`voice-latency-streamed-pass2.json`](voice-latency-streamed-pass2.json)

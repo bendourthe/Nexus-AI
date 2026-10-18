@@ -1,6 +1,6 @@
 # Nexus - Progress Dashboard
 
-**Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.14.0-adoption-voice-latency-lfm2.5-24b`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
+**Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.14.2-adoption-voice-latency-lfm2.5-24b`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
 
 ## v2.12 Phase 7 gates (2026-10-09)
 
@@ -724,13 +724,13 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [ ] Evaluate EmbeddingGemma 2 text/code retrieval through the existing local adapter, resolve its context/terms discrepancies and measure the comparison's proposed gate before changing the model job map or defaults (E1/E2).
 - [ ] Implement and verify the planned durable recipe and shared commands for existing ImageViewer edits, including restart/reopen and UI-versus-command export equivalence, before adding broader creative-editor features (C1/C2).
 
-## Voice latency and LFM2.5-24B trial (active v2.14.0)
+## Voice latency and LFM2.5-24B trial (v2.14.2, planned as v2.14.0)
 
 - [x] Phase 1: make desktop voice runnable on install (pinned Kokoro and Whisper files, voice packages in the media venv, sidecar audio interpreter, offline Kokoro, Windows CUDA DLL path), measure the baseline (medium warm time to first audio p50 38.6 s), probe LFM2.5-24B (GO on QAD-Q4_0) and freeze the gates ([Phase 1 evidence](releases/v2/v2.14/development/v2.14.0-phase1-evidence.md), 2026-10-16).
 - [x] Phase 2: speak from the first sentence through the sidecar, with barge-in cancelling synthesis. Time to first audio 3.99 s p50 (medium, warm) against a 38.6 s baseline; V-1 (2.0 s) missed and recorded in v2.15 DF-1 by owner decision, every other voice gate passes ([Phase 2 evidence](releases/v2/v2.14/development/v2.14.0-phase2-evidence.md), [results](releases/v2/v2.14/development/voice-latency-results.md), 2026-10-16).
 - [x] Phase 3: prompt-opened reasoning in every path, golden-runner options and metrics (and a working live runner outside VS Code), paired A/B: LFM2.5-24B 19.7 vs 20.7 of 28 tasks with 46% better p95 turn time and no RAM spill; ADMIT under the owner's M-3 reading ([Phase 3 evidence](releases/v2/v2.14/development/v2.14.0-phase3-evidence.md), 2026-10-17).
 - [x] Phase 4: `lfm2.5:24b-a2b` admitted opt-in with a coding-catalog twin, commit and GGUF pin, and post-pull digest verification in both install paths; 16 GB MoE worker job moved; stale `lfm2.5:2.6b` pin corrected ([Phase 4 evidence](releases/v2/v2.14/development/v2.14.0-phase4-evidence.md), 2026-10-17).
-- [ ] Phase 5: local duties done 2026-10-17 (T018-T026): DF-5, WN-3, WN-4, WN-5, WN-7 and QG-1 resolved; 8 deep-pass defects fixed; full local gate and installer rebuild ([last-phase evidence](releases/v2/v2.14/development/v2.14.0-last-phase-evidence.md)). Open: T027 publication and integration, waiting on the v2.14.1 decision.
+- [x] Phase 5: known gaps, deep pass (8 fixes), full local gate, installer rebuild; published and merged as PR #112 (`cea4674a`, 2026-10-18) after v2.14.1; releasing as v2.14.2 ([last-phase evidence](releases/v2/v2.14/development/v2.14.2-last-phase-evidence.md)).
 
 ## Local rewrite evaluation (shipped v2.14.1)
 
