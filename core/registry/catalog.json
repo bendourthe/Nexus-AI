@@ -42,7 +42,7 @@
         "files": [
           {
             "path": "LFM2.5-2.6B-Q4_K_M.gguf",
-            "sha256": "79fdf00351b46cf26f020aead28d01889886be87c55fa0eb907e6f9b00bfee14"
+            "sha256": "02a8b7e17487d326e46d68ce0ba24211e1b80a14c4cd0597fa73c1cd697f52ed"
           }
         ]
       },
@@ -469,6 +469,79 @@
         "expert-offload",
         "coding"
       ]
+    },
+    {
+      "id": "lfm2.5:24b-a2b",
+      "family": "lfm2.5",
+      "name": "lfm2.5",
+      "tag": "24b-a2b",
+      "quant": "QAD-Q4_0",
+      "type": "llm",
+      "task": "agentic",
+      "displayName": "LFM2.5 24B-A2B",
+      "releaseDate": "2026-10-13",
+      "origin": "USA",
+      "agentic": true,
+      "codingEligible": true,
+      "diffusion": false,
+      "description": "Liquid AI's LFM2.5-24B-A2B is a 24B-parameter mixture-of-experts agentic model from the USA with about 2B parameters active per token. The QAD-Q4_0 GGUF (13.6 GB) stays fully on a 16 GB GPU at 32K context, with no expert offload, and decodes at about 160 tokens per second on the reference laptop GPU.",
+      "strengths": [
+        "Fits a 16 GB GPU at 32K context with no layers spilled to system RAM",
+        "About 2x faster model turns than the 16 GB Nemotron expert-offload build on the golden tasks",
+        "Native Pythonic tool calling (lfm-pythonic codec) with zero parse failures in the local A/B"
+      ],
+      "whyRecommended": "The opt-in 16 GB MoE worker: it matched the expert-offload Nemotron's golden-task completion within run-to-run spread while its p95 turn time was 46% better, without spilling to system RAM.",
+      "differentiators": "Takes the 16 GB MoE worker job from nemotron-lightning:30b-a3b-offload on a measured local A/B (docs/releases/v2/v2.14/development/lfm-ab-results.json). Pinned to a Hugging Face commit and GGUF digest, checked after every pull. Opt-in only; never a pre-ticked default.",
+      "sizeGB": 13.58,
+      "vramGB": 15,
+      "requiredVramGB": 16,
+      "hideBelowVramGB": 16,
+      "minOllamaVersion": "0.32.15",
+      "activeParams": 2,
+      "totalParams": 24,
+      "contextWindow": 131072,
+      "license": "LFM Open License v1.0",
+      "licenseUrl": "https://www.liquid.ai/lfm-license",
+      "licenseNote": "Apache-2.0-based, royalty-free. Fine-tunes may stay proprietary. Free commercial use is limited to entities under USD 10M annual revenue; a commercial license is required above that. Qualified non-profits are exempt. This is a use restriction, not a download gate.",
+      "requiresLicense": false,
+      "source": {
+        "protocol": "ollama",
+        "url": "ollama://hf.co/LiquidAI/LFM2.5-24B-A2B-GGUF:QAD-Q4_0",
+        "repo": "LiquidAI/LFM2.5-24B-A2B-GGUF",
+        "revision": "0912d33141f77e10705345a6732bfd83f0252fdc"
+      },
+      "weights": {
+        "layoutVersion": 1,
+        "files": [
+          {
+            "path": "LFM2.5-24B-A2B-QAD-Q4_0.gguf",
+            "sha256": "d1c03f73ecaf61017d70419eec9e5dc0b05d50ae26c23d522829b934fbabf8a5"
+          }
+        ]
+      },
+      "modalities": [
+        "text"
+      ],
+      "role": "worker-candidate",
+      "localEval": {
+        "suite": "nexus-golden-task",
+        "status": "pass",
+        "date": "2026-10-17",
+        "hardwareTier": "16GB",
+        "result": "3 runs x 28 tasks: completed 19/19/21 vs holder 22/20/20 (ranges overlap), p95 turn 10,250 ms vs 18,842 ms, 0 codec parse failures, no offload; gates M-1..M-3 PASS under the owner's reading of M-3. docs/releases/v2/v2.14/development/lfm-ab-results.json"
+      },
+      "tags": [
+        "agentic",
+        "worker-candidate",
+        "coding"
+      ],
+      "toolCallingVerified": true,
+      "toolCallingBenchmark": {
+        "suite": "nexus-golden-task",
+        "date": "2026-10-17",
+        "result": "pass: 84 golden-task runs through the headless loop with the lfm-pythonic codec, 0 codec parse failures (lfm-ab-results.json; local Ollama, not a hosted eval)"
+      },
+      "provenance": "Official Liquid AI GGUF, QAD-Q4_0, ungated Hugging Face repo LiquidAI/LFM2.5-24B-A2B-GGUF at commit 0912d33141f77e10705345a6732bfd83f0252fdc. Pulled at install time through Ollama's hf.co bridge and verified against the pinned GGUF sha256; Nexus does not redistribute weights."
     },
     {
       "id": "muse-glimmer:30b-dynamic",
@@ -2199,14 +2272,23 @@
         "protocol": "huggingface",
         "repo": "hexgrad/Kokoro-82M",
         "url": "https://huggingface.co/hexgrad/Kokoro-82M/resolve/main/kokoro-v1_0.pth",
-        "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987"
       },
       "weights": {
         "layoutVersion": 1,
         "files": [
           {
+            "path": "config.json",
+            "sha256": "5abb01e2403b072bf03d04fde160443e209d7a0dad49a423be15196b9b43c17f"
+          },
+          {
             "path": "kokoro-v1_0.pth",
             "sha256": "496dba118d1a58f5f3db2efc88dbdc216e0483fc89fe6e47ee1f2c53f18ad1e4"
+          },
+          {
+            "path": "voices/af_heart.pt",
+            "sha256": "0ab5709b8ffab19bfd849cd11d98f75b60af7733253ad0d67b12382a102cb4ff"
           }
         ]
       },
@@ -2249,14 +2331,31 @@
         "protocol": "huggingface",
         "repo": "Systran/faster-whisper-large-v3",
         "url": "https://huggingface.co/Systran/faster-whisper-large-v3/resolve/main/model.bin",
-        "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "revision": "edaa852ec7e145841d8ffdb056a99866b5f0a478"
       },
       "weights": {
         "layoutVersion": 1,
         "files": [
           {
+            "path": "config.json",
+            "sha256": "a9306624f5ec14270a014b647e5c316b6e03a662c369758d1b90697a7b0655b9"
+          },
+          {
             "path": "model.bin",
             "sha256": "69f74147e3334731bc3a76048724833325d2ec74642fb52620eda87352e3d4f1"
+          },
+          {
+            "path": "preprocessor_config.json",
+            "sha256": "7ccc62c6f2765af1f3b46c00c9b5894426835a05021c8b9c01eecb6dfb542711"
+          },
+          {
+            "path": "tokenizer.json",
+            "sha256": "6d8cbd7cd0d8d5815e478dac67b85a26bbe77c1f5e0c6d76d1ce2abc0e5f21ca"
+          },
+          {
+            "path": "vocabulary.json",
+            "sha256": "c69260f2ab26d659b7c398f9a2b2b48ed0df16c3b47d7326782fd9cba71690c1"
           }
         ]
       },

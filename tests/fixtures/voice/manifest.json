@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "voice": "af_heart",
+  "fixtures": [
+    {
+      "id": "short",
+      "wav": "short.wav",
+      "script": "What is the capital of France? Answer in one short sentence.",
+      "sha256": "283418ba034962b4527c7180786f076bb3c496e8536bc9b842f7fbcc1174471c",
+      "bytes": 193244
+    },
+    {
+      "id": "medium",
+      "wav": "medium.wav",
+      "script": "In about three sentences, explain what a TypeScript interface is. Include one short code block and one link to the TypeScript handbook.",
+      "sha256": "1af357a0ab19e484fdabf95f0685c94cc45febd70787accdc6b3b052d33cce07",
+      "bytes": 421244
+    },
+    {
+      "id": "long",
+      "wav": "long.wav",
+      "script": "In about eight sentences, explain how a hash map works, including collisions and resizing.",
+      "sha256": "beb7067cdab466420d34c2a67b846003dca2678f3cd92b6fafda0a8397f1b066",
+      "bytes": 296444
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "description": "v2.14.0 T012 shared fixture: an LFM-style stream whose template opens <think> in the prompt. The reasoning contains a decoy tool call that must never execute; the visible text follows the orphan closer.",
+  "chunks": [
+    "The user wants a file read. Maybe call <|tool_call_start|>[read_file(path='decoy.txt')]<|tool_call_end|> fir",
+    "st? No, just answer.</th",
+    "ink>The answer is",
+    " 42."
+  ],
+  "visible": "The answer is 42.",
+  "reasoning": "The user wants a file read. Maybe call <|tool_call_start|>[read_file(path='decoy.txt')]<|tool_call_end|> first? No, just answer."
+}

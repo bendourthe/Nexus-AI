@@ -76,6 +76,18 @@ export class HttpOllamaPullClient implements OllamaPullClient {
       }
     }
   }
+
+  /** v2.14.0 T016 -- Ollama `DELETE /api/delete`; a missing model is not an error. */
+  async remove(modelTag: string): Promise<void> {
+    const res = await this._fetch(`${this._baseUrl}/api/delete`, {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ model: modelTag }),
+    });
+    if (!res.ok && res.status !== 404) {
+      throw new Error(`Ollama delete failed (${res.status}) for ${modelTag}`);
+    }
+  }
 }
 
 export class InstallManager {

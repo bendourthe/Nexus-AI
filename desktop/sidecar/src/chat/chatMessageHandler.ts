@@ -11,6 +11,7 @@
 
 import { createHeadlessOllamaClient } from "../../../../modules/coding/llm/headlessOllamaClient.js";
 import { redactSecrets } from "../../../../core/observability/redactSecrets.js";
+import { createReasoningSplitter, createSpeakableProjector } from "../../../../core/chat/speakable.js";
 import type { LLMClient, LLMMessage } from "../../../../modules/coding/llm/types.js";
 import type { ChatSessionEventT } from "../protocol.js";
 import type { SidecarModelEntry } from "../coding/models.js";
@@ -20,6 +21,7 @@ import {
   newUsage,
   turnUsageFromCollected,
 } from "../serving/chatCore.js";
+import type { VoiceJob } from "./voiceJobs.js";
 
 export interface ChatRunnerInput {
   readonly sessionId: string;
@@ -27,7 +29,10 @@ export interface ChatRunnerInput {
   /** Full conversation so far (system + prior turns + the new user message). */
   readonly messages: readonly LLMMessage[];
   readonly signal?: AbortSignal;
+  /** v2.14.0 T008 -- speak the reply sentence by sentence while it streams. */
+  readonly voice?: VoiceJob;
 }
+
 
 /** Runs one chat turn and returns the mapped IPC event stream. */
 export type ChatRunner = (input: ChatRunnerInput) => Promise<readonly ChatSessionEventT[]>;
@@ -56,30 +61,70 @@ export function createChatMessageHandler(
     // total can be split between reasoning and output by text proportion.
     let reply = "";
     let reasoningCaptured = 0;
+    const voice = input.voice;
+    // v2.14.0 T012: a model whose template opens reasoning in the prompt has
+    // its content split into visible text and reasoning before display. Every
+    // other model's token stream is passed through exactly as before.
+    const display = input.model.reasoningOpensInPrompt
+      ? createReasoningSplitter({ reasoningOpensInPrompt: true })
+      : null;
+    // Speech also drops well-formed think blocks from unflagged models.
+    const speechSplitter = voice && !display ? createReasoningSplitter({ reasoningOpensInPrompt: false }) : null;
+    const projector = voice ? createSpeakableProjector() : null;
+    const addReasoning = (text: string): void => {
+      thinking += text;
+      const safeDelta = redactSecrets(text).slice(0, Math.max(MAX_REASONING_TEXT_CHARS - reasoningCaptured, 0));
+      if (safeDelta) {
+        events.push({ kind: "reasoning_delta", text: safeDelta });
+        reasoningCaptured += safeDelta.length;
+      }
+    };
+    const addVisible = (text: string): void => {
+      if (!text) return;
+      reply += text;
+      events.push({ kind: "token", text });
+      if (projector) speak(projector.push(speechSplitter ? speechSplitter.push(text).visible : text));
+    };
+    const speak = (sentences: readonly string[]): void => {
+      for (const sentence of sentences) voice?.pushSentence(sentence);
+    };
     try {
       for await (const chunk of llm.streamChat(
-        { model: input.model.id, messages: [...input.messages], stream: true },
+        {
+          model: input.model.id,
+          messages: [...input.messages],
+          stream: true,
+          // v2.14.0 (owner decision, Phase 2 rework): a spoken reply skips the
+          // model's hidden reasoning pass, which delayed the first visible
+          // token by 16-21 s on the 16 GB tier. Typed turns are unchanged.
+          ...(voice ? { think: false } : {}),
+        },
         input.signal,
       )) {
         collectUsage(chunk, usage);
         const thinkDelta = chunk.message?.thinking ?? "";
-        if (thinkDelta) {
-          thinking += thinkDelta;
-          const safeDelta = redactSecrets(thinkDelta).slice(
-            0,
-            Math.max(MAX_REASONING_TEXT_CHARS - reasoningCaptured, 0),
-          );
-          if (safeDelta) {
-            events.push({ kind: "reasoning_delta", text: safeDelta });
-            reasoningCaptured += safeDelta.length;
-          }
-        }
+        if (thinkDelta) addReasoning(thinkDelta);
         const delta = chunk.message?.content ?? "";
         if (delta) {
-          reply += delta;
-          events.push({ kind: "token", text: delta });
+          if (display) {
+            const split = display.push(delta);
+            if (split.reasoning) addReasoning(split.reasoning);
+            addVisible(split.visible);
+          } else {
+            addVisible(delta);
+          }
         }
         if (chunk.done) break;
+      }
+      if (display) {
+        const rest = display.end();
+        if (rest.reasoning) addReasoning(rest.reasoning);
+        addVisible(rest.visible);
+      }
+      if (projector) {
+        if (speechSplitter) speak(projector.push(speechSplitter.end().visible));
+        speak(projector.end());
+        voice?.endReply();
       }
       events.push({
         kind: "done",
@@ -87,6 +132,10 @@ export function createChatMessageHandler(
         ...doneUsageFields(turnUsageFromCollected(usage, thinking, reply)),
       });
     } catch (err) {
+      // A cancelled turn stops synthesis and further sentences; any other
+      // failure ends the voice job with a terminal error.
+      if (input.signal?.aborted) voice?.cancel();
+      else voice?.fail("the reply failed before it finished");
       events.push({
         kind: "done",
         finishReason: `error: ${err instanceof Error ? err.message : String(err)}`,

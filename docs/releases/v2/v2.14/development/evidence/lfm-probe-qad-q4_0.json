@@ -1,0 +1,82 @@
+{
+  "model": "hf.co/LiquidAI/LFM2.5-24B-A2B-GGUF:QAD-Q4_0",
+  "extraOptions": {},
+  "at": "2026-10-17T00:36:15.698Z",
+  "loads": [
+    {
+      "numCtx": 8192,
+      "loaded": true,
+      "idleGpuMiB": 13,
+      "gpuUsedMiB": 13410,
+      "ollamaRamMiB": 138,
+      "ps": {
+        "size": 13827361995,
+        "size_vram": 13827361995,
+        "context_length": 8192
+      },
+      "loadMs": 6668,
+      "wallMs": 12863,
+      "evalCount": 256,
+      "decodeTokPerSec": 155.97,
+      "promptTokPerSec": 6.83
+    },
+    {
+      "numCtx": 32768,
+      "loaded": true,
+      "idleGpuMiB": 13,
+      "gpuUsedMiB": 13914,
+      "ollamaRamMiB": 137,
+      "ps": {
+        "size": 14355844299,
+        "size_vram": 14355844299,
+        "context_length": 32768
+      },
+      "loadMs": 5150,
+      "wallMs": 6892,
+      "evalCount": 256,
+      "decodeTokPerSec": 162.12,
+      "promptTokPerSec": 197.4
+    }
+  ],
+  "reasoning": [
+    {
+      "think": true,
+      "thinkingChars": 186,
+      "contentChars": 42,
+      "contentHasThinkOpen": false,
+      "contentHasThinkClose": false,
+      "contentHead": "\n\nNo, 391 is not prime; it equals 17 × 23."
+    },
+    {
+      "think": false,
+      "thinkingChars": 186,
+      "contentChars": 42,
+      "contentHasThinkOpen": false,
+      "contentHasThinkClose": false,
+      "contentHead": "\n\nNo, 391 is not prime; it equals 17 × 23."
+    }
+  ],
+  "tools": {
+    "native": {
+      "toolCalls": [
+        {
+          "name": "read_file",
+          "args": {
+            "path": "src/index.ts"
+          }
+        }
+      ],
+      "content": ""
+    },
+    "pythonic": {
+      "toolCalls": [],
+      "content": "<|tool_call_start|>[read_file(path='src/index.ts')]<|tool_call_end|>",
+      "parses": false
+    },
+    "gemma4": {
+      "toolCalls": [],
+      "content": "<|tool_call_start|>[read_file(path='src/index.ts')]<|tool_call_end|>",
+      "parses": false
+    }
+  }
+}

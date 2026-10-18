@@ -60,7 +60,8 @@ That distinction carries most of the weight in this document. The bar for taking
 | long-context embed opt-in, 32K per passage | `qwen3-embedding:0.6b` |
 | index-continuity embedder, 8K, preserves an existing Nomic index | `nomic-embed-text` |
 | 24 GB MoE worker candidate, native build | `nemotron-lightning:30b-a3b` |
-| 16 GB MoE worker candidate, expert-offload sibling | `nemotron-lightning:30b-a3b-offload` |
+| 16 GB MoE worker candidate, fits fully on the GPU at 32K context | `lfm2.5:24b-a2b` |
+| 16 GB 1M-context MoE worker, expert-offload sibling | `nemotron-lightning:30b-a3b-offload` |
 | 32 GB Dynamic-quant strong candidate | `muse-glimmer:30b-dynamic` |
 | 17 GB K-quant strong candidate | `muse-glimmer:30b` |
 | patient-tier frontier MoE | `inkling-small` |
@@ -79,6 +80,8 @@ That distinction carries most of the weight in this document. The bar for taking
 | SANA depth conditioning | `sana-controlnet-depth` |
 | SANA pose conditioning | `sana-controlnet-pose` |
 | optional NVIDIA CUDA single-image splat generate | `triposplat` |
+
+**v2.14.0 job move.** `lfm2.5:24b-a2b` took the 16 GB MoE worker job from `nemotron-lightning:30b-a3b-offload` on a local paired A/B over the 28 golden tasks (completion 19/19/21 vs 22/20/20, overlapping, counted as equal by owner decision; p95 turn time 10.3 s vs 18.8 s; no RAM spill vs about 12 GB spilled): [lfm-ab-results.json](../releases/v2/v2.14/development/lfm-ab-results.json). The Nemotron sibling keeps a distinct job, the 1M-token context window on 16 GB, which the LFM entry (131K) does not offer.
 
 ### Runtime jobs
 

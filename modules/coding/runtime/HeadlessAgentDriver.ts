@@ -17,7 +17,8 @@ import type {
   AgentDriverContext,
   AgentRunOutcome,
 } from "../evaluation/GoldenTaskRunner.js";
-import type { LLMClient } from "../llm/types.js";
+import type { LLMClient, LLMOptions } from "../llm/types.js";
+import type { ToolFormatName } from "../../../core/registry/ModelCatalog.js";
 import { createHeadlessTools, type HeadlessTool } from "./headlessTools.js";
 import { HeadlessAgentSession, type HeadlessAgentEvent } from "./HeadlessAgentSession.js";
 
@@ -36,6 +37,10 @@ export interface HeadlessAgentDriverOptions {
   readonly now?: () => number;
   /** Optional per-run event sink (the desktop sidecar streams these). */
   readonly onEvent?: (event: HeadlessAgentEvent) => void;
+  /** v2.14.0 T013 -- sampler options sent with every model request. */
+  readonly llmOptions?: LLMOptions;
+  /** v2.14.0 T013 -- override the catalog's tool-call codec (trial models). */
+  readonly toolFormat?: ToolFormatName;
 }
 
 /**
@@ -64,6 +69,8 @@ export class HeadlessAgentDriver implements AgentDriver {
       maxIterations: ctx.task.maxIterations,
       signal: ctx.signal,
       onEvent: this._opts.onEvent,
+      ...(this._opts.llmOptions ? { llmOptions: this._opts.llmOptions } : {}),
+      ...(this._opts.toolFormat ? { toolFormat: this._opts.toolFormat } : {}),
     });
     const totalDurationMs = Math.max(0, this._now() - start);
     return {
