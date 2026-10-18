@@ -1,4 +1,4 @@
-import { readFileSync, existsSync, openSync, closeSync, writeSync, fsyncSync, unlinkSync, mkdirSync, lstatSync, statSync, fstatSync } from "node:fs";
+import { readFileSync, existsSync, openSync, closeSync, writeSync, fsyncSync, unlinkSync, mkdirSync, lstatSync, statSync, fstatSync, constants } from "node:fs";
 import { resolve, dirname, join, relative } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createRequire } from "node:module";
@@ -58,11 +58,17 @@ async function identity(contract, signal) {
 
 function ledger(loaded) {
   const file = safePath(loaded.root, loaded.contract.ledger, true);
-  const read = () => existsSync(file) ? readFileSync(safePath(loaded.root, file), "utf8").trim().split("\n").filter(Boolean).map(JSON.parse) : [];
-  const before = read();
-  demand(before.every((r) => r.contractSha256 === loaded.contractSha256), "LEDGER_MISMATCH");
-  const fd = openSync(file, existsSync(file) ? "a" : "wx", 0o600);
+  const fd = openSync(file, constants.O_CREAT | constants.O_APPEND | constants.O_RDWR | (constants.O_NOFOLLOW ?? 0), 0o600);
   const owner = fstatSync(fd);
+  let before;
+  try {
+    demand(owner.isFile() && owner.nlink === 1, "OWNERSHIP_CHANGED");
+    safePath(loaded.root, file);
+    const current = statSync(file);
+    demand(current.dev === owner.dev && current.ino === owner.ino && current.nlink === 1, "OWNERSHIP_CHANGED");
+    before = readFileSync(fd, "utf8").trim().split("\n").filter(Boolean).map(JSON.parse);
+    demand(before.every((r) => r.contractSha256 === loaded.contractSha256), "LEDGER_MISMATCH");
+  } catch (error) { closeSync(fd); throw error; }
   return {
     events: before,
     append(event) {

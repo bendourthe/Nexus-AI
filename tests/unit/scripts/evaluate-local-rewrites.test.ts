@@ -5,6 +5,8 @@ import { spawnSync, execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { createServer, type Server } from "node:http";
 import { buildSync } from "esbuild";
+import fs from "node:fs";
+import { syncBuiltinESMExports } from "node:module";
 // Development-only ESM helpers intentionally have no TypeScript production surface.
 // @ts-expect-error JavaScript evaluator module.
 import { load, hash, decode, literalScore, score, requestFor, safePath } from "../../../lib/rewrite-eval.mjs";
@@ -27,6 +29,7 @@ afterEach(async () => {
   for (const server of servers.splice(0)) { server.closeAllConnections(); await new Promise<void>((done) => server.close(() => done())); }
   for (const path of temporary.splice(0)) rmSync(path, { recursive: true, force: true });
   vi.restoreAllMocks();
+  syncBuiltinESMExports();
 });
 
 function sandbox() {
@@ -217,5 +220,21 @@ describe("local rewrite evaluation boundary", () => {
     expect(calls()).toBe(4);
     await expect(execute(process.execPath, ["--input-type=module", "-e", source.replace("pilot.jsonl", "replay.jsonl")], { cwd: root })).rejects.toThrow("MODE_ALREADY_ATTEMPTED");
     expect(calls()).toBe(4);
+  });
+  test("ledger replacement at open cannot hide spent mode history", async () => {
+    const s = sandbox(); const calls = await serverFor(s);
+    const loaded = load(root, s.file); const ledgerFile = join(root, s.contract.ledger);
+    writeFileSync(ledgerFile, "");
+    const original = fs.openSync; let inserted = false;
+    vi.spyOn(fs, "openSync").mockImplementation(((file, flags, mode) => {
+      if (file === ledgerFile && !inserted) {
+        inserted = true;
+        writeFileSync(ledgerFile, JSON.stringify({ type: "mode-start", group: "pilot", contractSha256: loaded.contractSha256 }) + "\n");
+      }
+      return original(file, flags, mode);
+    }) as typeof fs.openSync);
+    syncBuiltinESMExports();
+    await expect(collect(loaded, "pilot", join(s.dir, "pilot.jsonl"), s)).rejects.toThrow("MODE_ALREADY_ATTEMPTED");
+    expect(inserted).toBe(true); expect(calls()).toBe(0);
   });
 });

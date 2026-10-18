@@ -176,7 +176,7 @@
   "protectionStrict": false,
   "sourceHashes": {
     "lib/rewrite-eval.mjs": "29036b1af22431bd4438773b16095216367f23a6ba02eb933011cf895aff2197",
-    "scripts/evaluate-local-rewrites.mjs": "de4ffe0cd4d9f0a8804e2f8ce022e0ca0107c30a1e9eb6ddc868534a34c60a2c",
-    "tests/unit/scripts/evaluate-local-rewrites.test.ts": "e1dbe630674f5c3a91d9d2069f095365bd77b544b51d97397cf12a45c2eeea1f"
+    "scripts/evaluate-local-rewrites.mjs": "0c747a6c1792cdbd68ecc39674b4cf0d2986d64e9d26e373f34b81c212898c60",
+    "tests/unit/scripts/evaluate-local-rewrites.test.ts": "08221a9f0f6ba1956877cf4ce208c6e286417cb2ab2cc95b04f85ea3a1fa5cbb"
   }
 }
