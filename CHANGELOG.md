@@ -1,3 +1,51 @@
+# [2.14.2](https://github.com/bendourthe/Nexus-AI/compare/v2.14.1...v2.14.2) (2026-10-18)
+
+Planned and implemented as v2.14.0 ("Faster spoken replies and a measured LFM2.5-24B worker trial"); released as v2.14.2 because v2.14.1 shipped first and version numbers must keep increasing. This release includes everything in v2.14.1.
+
+## Voice
+
+- Desktop voice now runs on install: the installer provisions Kokoro and Whisper (pinned weight files) into the media runtime, and the sidecar starts the audio runtime with that interpreter.
+- Spoken replies start from the first complete sentence while the model is still writing, instead of after the whole reply is written and synthesized. Median time to first audio on the medium test fixture fell from 38.6 s to about 3.9 s. The 2.0 s target was missed and is recorded as v2.15 DF-1.
+- Speaking over a reply cancels synthesis (26 ms in the scripted run).
+- What is spoken: reasoning and tool-call text are removed, secrets are redacted (including inside underscore emphasis), code and tables become a short spoken cue, and links are spoken by label.
+- Voice turns ask the model to skip its hidden reasoning pass, so speech starts in seconds. Typed turns are unchanged.
+
+Voice loop (existing opt-in, behavior changed):
+- Activation: in desktop Chat, tick the "Voice loop" checkbox. It stays off by default.
+- Validation: ask a three-sentence question by voice; speech should start before the reply text finishes.
+- Rollback: untick "Voice loop". The voice models stay installed; remove them in Settings > Models if wanted.
+- Authority: turning it on does not send audio or text off this machine (0 non-loopback connections measured during voice turns), and does not change typed turns or the model used.
+- Docs: [voice latency results](docs/releases/v2/v2.14/development/voice-latency-results.md)
+
+## Models
+
+- LFM2.5 24B-A2B (`lfm2.5:24b-a2b`) joins the catalog as an opt-in 16 GB mixture-of-experts worker. It fits fully on a 16 GB GPU at 32K context and matched the Nemotron offload build's golden-task completion within run-to-run spread, with a 46% better p95 turn time. The admission rests on the owner's reading of that spread (v2.15 DF-3).
+- Pulls of commit-pinned `hf.co` models are checked against the pinned GGUF digest in both install paths; a mismatch removes the model and says so.
+- The in-app installer can now install multi-file Hugging Face models (such as the voice models), each file checked against its own pin.
+
+LFM2.5 24B-A2B (new opt-in model):
+- Activation: Settings > Models on a GPU with at least 16 GB, install "LFM2.5 24B-A2B". It is never pre-ticked.
+- Validation: the model shows as installed and can be selected for coding.
+- Rollback: remove it in Settings > Models; no default changes.
+- Authority: installing it does not make it a default for any tier, and its LFM Open License use restrictions still apply.
+- Docs: [model acceptance job map](docs/reference/model-acceptance.md)
+
+## Developer tooling
+
+- `nexus golden run` accepts `--options`, `--metrics` and `--tool-format`, and runs live outside VS Code.
+- Prompt-opened reasoning is handled in every path for catalog entries that declare it.
+- CI runs the audio runtime tests on the Windows init job.
+
+## Fixes
+
+- Secrets wrapped in underscore emphasis, or split by a tool call, are never spoken.
+- A long reply no longer ends speech early, and a cold first voice turn no longer fails on the model load time.
+- A rejected voice turn no longer leaves its voice job running; a half-finished weights install no longer looks installed.
+- Skill tests no longer write folders into the source tree; the outline smoke report uses a private temp folder; handbook slugs strip nested tags.
+- The Video2X deadline tests no longer race the real clock under load.
+
+Known gaps carried forward: [v2.15 known gaps](docs/releases/v2/v2.15/known-gaps.md).
+
 # [2.14.1](https://github.com/bendourthe/Nexus-AI/compare/v2.12.1...v2.14.1) (2026-10-17)
 
 ## Development evaluation
