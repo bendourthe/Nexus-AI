@@ -11,8 +11,8 @@
       "docs/handbooks/_sources/dual-view.css": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
       "docs/handbooks/_sources/dual-view-runtime.js": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
       "desktop/public/nexus-mark.png": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05",
-      "package.json": "43da6a0ce64f41d429247fb364259ddcf22f68154553af50a02992fa7ab38047",
-      "package-lock.json": "1c22c6fc2d987426d65f2d190aece9c92fcb3844ddf2f1eb35d23f7cbf4defb2",
+      "package.json": "4cc033b1b60f5e23422a3cf0a66dc3dde02674ef81f49301d5b6c7e478433ab1",
+      "package-lock.json": "17cb86b3188d3efe34e81fed29cf03d4cab93166248713527231cb68e45c2cec",
       "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py": "f79a0bdba3b09b5600f877ff6bd78381fa528b838be09fc32099d1f4f922c661",
       "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py": "8318eebaa71cefae7ce00943f8a6e3cd45c3ef3b4363722a9fc46a43a8a4b8d8",
       "scripts/installer/src/nexus_installer/engine/hf_auth.py": "122dd264ed629aeedf1c95e09d4dd24dc5123a4b695e40d3e84423410feae52a",
@@ -27,12 +27,12 @@
     "content": {
       "status": "pass",
       "evidence": "docs/releases/v2/v2.14/development/v2.14.1-handbook-review.md",
-      "evidence_sha256": "a0a1bf00aec9bc3bfdeea5da27056dd38531c5e9ed53ba038eb547793620eda5"
+      "evidence_sha256": "d8b9e70eeb1019e0b95cdeac234388543c164c50d3b30e819a18056e03cf55f9"
     },
     "build": {
       "status": "pass",
       "evidence": "docs/releases/v2/v2.14/development/v2.14.1-handbook-review.md",
-      "evidence_sha256": "a0a1bf00aec9bc3bfdeea5da27056dd38531c5e9ed53ba038eb547793620eda5"
+      "evidence_sha256": "d8b9e70eeb1019e0b95cdeac234388543c164c50d3b30e819a18056e03cf55f9"
     },
     "rendered": {
       "status": "pass",
