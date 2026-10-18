@@ -43,6 +43,9 @@ def test_torch_cuda_dlls_are_put_on_path_on_windows(tmp_path, monkeypatch):
         origin = str(torch_dir / "__init__.py")
 
     added: list[str] = []
+    # Faking os.name makes pathlib.Path build a WindowsPath, which a Linux
+    # runner cannot instantiate; keep the engine on the host's path class.
+    monkeypatch.setattr(engines, "Path", type(tmp_path))
     monkeypatch.setattr(engines.os, "name", "nt")
     monkeypatch.setattr(
         "importlib.util.find_spec", lambda name: Spec() if name == "torch" else None
