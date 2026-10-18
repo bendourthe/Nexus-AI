@@ -196,7 +196,7 @@ Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 des
 | Tasks done (v0.4.0) | 16 (P1) + 17 (P2) + 21 (P3) + 21 (P4) + 22 (P5) | ~135 / ~135 | in-progress |
 | Sources compared (Craft editors + EmbeddingGemma 2, 2026-10-07) | 2 / 2 | 2 / 2 | 0 |
 | v2.13 adoption plan implementation tasks (merged in PR #101, 2026-10-16; T008-T010 deferred under DF-2) | 28 / 28 | 28 | 0 |
-| v2.14.1 local rewrite evaluation implementation tasks (authorized, 2026-10-17) | 8 / 18 | 18 | 10 |
+| v2.14.1 local rewrite evaluation implementation tasks (authorized, 2026-10-17) | 17 / 18 | 18 | 1 |
 
 ---
 
