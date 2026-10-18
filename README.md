@@ -120,6 +120,12 @@ Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" c
 
 Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.11 live under `docs/archive/v2/`. v2.12 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.12/known-gaps.md](docs/v2/v2.12/known-gaps.md).
 
+### v2.14.1
+
+This release adds an internal-compatible development evaluator for a text-only editing adaptation on frozen synthetic English and Chinese drafts. The single pilot failed the response-format contract, so all sixteen held-out drafts remain not-run/HOLD. Factual preservation and readability improvement are unmeasured; Humanizer is not admitted or installed.
+
+Evidence: [baseline](docs/releases/v2/v2.14/development/v2.14.1-rewrite-baseline.md), [Humanizer feasibility](docs/releases/v2/v2.14/development/v2.14.1-humanizer-feasibility.md), [remaining quality goal DF-5](docs/releases/v2/v2.14/known-gaps.md). The separate v2.14.0 plan is not part of this release.
+
 ### What's new in v2.12.0
 
 This release carries the v2.12 and v2.13 plans. Its installers and VSIX packages ship as **v2.12.1**: the `v2.12.0` tag exists but its release build failed before publishing (WN-5).

@@ -1,0 +1,182 @@
+{
+  "recordedAt": "2026-10-18T00:12:19.413Z",
+  "base": "47336bdf",
+  "provider": "GitHub Actions",
+  "workflows": [
+    {
+      "path": ".github/workflows/branch-cleanup.yml",
+      "sha256": "d1e02f3a2ff8a2bfe2991bb2a716861d9fd002dee344acc44927e13bf749b64c",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "bc71daf408e6d68d2c6f8a0034087534bdfde48197f346d217e8301cde60efa0",
+      "unchanged": false
+    },
+    {
+      "path": ".github/workflows/codeql.yml",
+      "sha256": "51996c6753e136d500421af3a20f9c8ebad454a2931e25957b128d35cc295bf3",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/commitlint.yml",
+      "sha256": "12f8205d71e5c72dbc867c0938dbf8346607f2cbb5a8d87faa456efe292d9f28",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/coverage-diff.yml",
+      "sha256": "18eed1d8b199089d0c83b9d4aa9997e947332d358ca4d0d584340d9ebb742dd5",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/docs-drift.yml",
+      "sha256": "a90fd19bbf3483be74e2952a4bf25f23edba253b203bee675de49772769a919c",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/golden-tasks.yml",
+      "sha256": "581e8cf83b3acc8247395ec79bd85de3bedb57ba06b9dfe4c8d2808fdcc0a355",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/installer-build.yml",
+      "sha256": "58b2f2d1144d83a3effb7f875ecec7265294d7723898c2b9b4d265813bdcc962",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/installer-linux.yml",
+      "sha256": "3df8f92afc6c14ee7d8dd7bb9793a04120d23681bea97e1cea477636f651908c",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/installer-macos.yml",
+      "sha256": "76aa696248ce2600f99cb2418a9c19cb1d144511eeb428d01b0d7a778c3f72d5",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/installer-matrix.yml",
+      "sha256": "3c808b0ff34f40178ef4039ba7eb05c56212e07877a9014db59385605fa8066d",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/installer-smoke.yml",
+      "sha256": "d278b131488219f66df36dfe1cbce746259a797128d65b966b30c27bae09a805",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/installer-tests.yml",
+      "sha256": "b81b6655435d1abb2d01317bd551d984df12a38036664fb593b1349e10cdc5d6",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/nightly.yml",
+      "sha256": "8d87eb4e36720af482d070b1b771774c7d9b41d96c499f3700ff2f902d84e6da",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/packaged-window-smoke.yml",
+      "sha256": "5ce489f65dd32a010ce1cf79baffe2944e79025efe77d79d106356303462887c",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/pr-quality.yml",
+      "sha256": "77efa9fd8d189fe1f8d26e4d6916299f8a786122fccf7d9154b9bbe93562629e",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "c46672a63ae1882483965b348e1cfe6c5f3b26f914066cd324d030c92de2bebe",
+      "unchanged": false
+    },
+    {
+      "path": ".github/workflows/sandbox.yml",
+      "sha256": "a9e1a3d8346a7da542e5205c33cd7024f94974505e1e87e27029bf9bcf258c91",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/scorecard.yml",
+      "sha256": "05eabc2c7398cb0249f7a7bcf73e7342f491236b27140b07c13c21d1405b547f",
+      "unchanged": false
+    },
+    {
+      "path": ".github/workflows/secrets.yml",
+      "sha256": "32c399edbb08dd617f0ced9ae37a3b8f8cba57a2c251ee9d1378ba145f1ae833",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/semantic-release.yml",
+      "sha256": "9164629434e22c3cdf2622429abdf5e3686cdd905ca72c0979bed1c98376c1f9",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/shell-build.yml",
+      "sha256": "52f4d5fd97aa35afb0d69b7e67083a7080f8357fcaa01294ee7ff8140292f63d",
+      "unchanged": false
+    },
+    {
+      "path": ".github/workflows/tuning-live.yml",
+      "sha256": "966ab282ef345efce711a42568834003b505051f08ac9e49cf31cd064ab56d9e",
+      "unchanged": true
+    }
+  ],
+  "packageScripts": {
+    "generate:golden-tasks": "node scripts/generate-golden-tasks.mjs",
+    "prebuild": "npm run generate:golden-tasks",
+    "build": "tsc -b",
+    "dev:shell": "npm run dev:shell --workspace @nexus/desktop",
+    "build:shell": "npm run build:shell --workspace @nexus/desktop",
+    "build:sidecar": "npm run build:sidecar --workspace @nexus/desktop",
+    "lint:shell": "npm run lint --workspace @nexus/desktop",
+    "test:shell": "npm run test --workspace @nexus/desktop --",
+    "test:shell:coverage": "npm run test:coverage --workspace @nexus/desktop",
+    "watch": "tsc -b -w",
+    "dev": "tsc -b -w",
+    "pretest": "npm run generate:golden-tasks",
+    "test": "vitest run --config configs/vitest.config.ts",
+    "t": "node scripts/test.mjs",
+    "test:integration": "vitest run --config configs/vitest.config.ts --reporter=verbose tests/integration",
+    "test:vsix-runtime": "node scripts/verify-vsix-runtime.mjs",
+    "lint": "eslint src modules",
+    "fast": "npm run lint && npm run lint:shell && npm run build && npm run check-architecture",
+    "full": "npm run fast && npm test && npm run test:shell",
+    "platform": "npm run typecheck --workspace @nexus/desktop && npm run build:sidecar",
+    "package": "powershell -NonInteractive -ExecutionPolicy Bypass -File scripts/build-vsix.ps1",
+    "package:quick": "node scripts/warn-package-quick.mjs && vsce package",
+    "check": "node bin/nexus-check.mjs --baseline configs/nexus-check-baseline.json",
+    "check:raw": "node bin/nexus-check.mjs",
+    "check:prompts": "node bin/nexus-check.mjs --rule prompt-no-ascii-violation --rule prompt-oversized --rule prompt-trailing-whitespace --rule prompt-bom --rule skill-duplicate-name modules/coding/chat/prompts modules/coding/skills/catalog",
+    "check:tampering": "node bin/nexus-check.mjs --rule no-focused-tests --rule no-skipped-tests-without-reason --rule no-tautological-assertion --rule no-commented-out-assertion --rule no-disabled-ci-check tests .github/workflows",
+    "cleanup:scan": "node scripts/cleanup-scanner.mjs",
+    "cleanup:scan:json": "node scripts/cleanup-scanner.mjs --format=json",
+    "bench": "vitest bench --run --config configs/vitest.config.ts",
+    "deps:check": "depcruise --config configs/dependency-cruiser.cjs src core modules tests",
+    "check-architecture": "depcruise --config configs/dependency-cruiser.cjs src core modules",
+    "deps:graph": "depcruise --config configs/dependency-cruiser.cjs --output-type dot src | dot -Tsvg > docs/archive/v0/v0.5/dep-graph.svg",
+    "catalog": "node scripts/generate-catalog.mjs",
+    "catalog:check": "node scripts/generate-catalog.mjs && git diff --exit-code docs/index.md",
+    "perm-tier": "node scripts/generate-tool-permission-table.mjs",
+    "perm-tier:check": "node scripts/generate-tool-permission-table.mjs --check",
+    "security:gen": "node scripts/generate-tool-permission-table.mjs",
+    "security:check": "node scripts/generate-tool-permission-table.mjs --check",
+    "check:audit-prod": "node scripts/check-prod-audit.mjs",
+    "check:naming": "node scripts/check-no-devai-hub.mjs",
+    "check:docs-layout": "node scripts/check-docs-layout.mjs",
+    "check:plan-scope": "node scripts/check-plan-scope-guard.mjs",
+    "docs:handbooks": "node scripts/generate-handbooks.mjs",
+    "docs:handbooks:check": "node scripts/generate-handbooks.mjs --check",
+    "mutate": "stryker run configs/stryker.config.json",
+    "debug": "node scripts/debug/cli.mjs",
+    "work": "node scripts/work.mjs",
+    "deep-work": "node scripts/deep-work/cli.mjs",
+    "agent-batch": "node scripts/agent-batch/cli.mjs",
+    "review": "node scripts/review/cli.mjs",
+    "prepare": "husky"
+  },
+  "requiredContext": "ci-required",
+  "protectionStrict": false,
+  "sourceHashes": {
+    "lib/rewrite-eval.mjs": "29036b1af22431bd4438773b16095216367f23a6ba02eb933011cf895aff2197",
+    "scripts/evaluate-local-rewrites.mjs": "0c747a6c1792cdbd68ecc39674b4cf0d2986d64e9d26e373f34b81c212898c60",
+    "tests/unit/scripts/evaluate-local-rewrites.test.ts": "08221a9f0f6ba1956877cf4ce208c6e286417cb2ab2cc95b04f85ea3a1fa5cbb"
+  }
+}
