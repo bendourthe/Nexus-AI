@@ -40,8 +40,10 @@ function streamSentences(text: string, chunks: readonly string[]): string[] {
   return spoken;
 }
 
+// nexus-check-allow-next-line: no-secret-patterns -- fake fixture for redaction tests
 const AWS = "AKIAABCDEFGHIJKLMNOP";
 const GITHUB = `ghp_${"a1B2c3D4e5".repeat(4)}`;
+// nexus-check-allow-next-line: no-secret-patterns -- fake fixture for redaction tests
 const JWT = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dBjftJeZ4CVPmB92K27uhbUJU1p1r_wW1gFWFOEjXk";
 const SECRETS = [AWS, GITHUB, JWT];
 
@@ -52,6 +54,7 @@ const REPLIES = [
   "Compare them:\n| a | b |\n|---|---|\n| 1 | 2 |\n\nThe left column wins. Visit https://example.com/x?y=1 later.",
   "Use e.g. a map, i.e. a dictionary. It costs 3.5 ms on average. Dr. Smith agrees! Really? Yes.",
   "Calling a tool <|tool_call>call:read_file{path:<|\"|>a.ts<|\"|>}<tool_call|> now. Then <|tool_call_start|>[read_file(path='b')]<|tool_call_end|> again. Finished.",
+  // nexus-check-allow-next-line: no-secret-patterns -- fake fixture for redaction tests
   "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA\n-----END RSA PRIVATE KEY-----\nNever paste keys. Ok.",
 ];
 
