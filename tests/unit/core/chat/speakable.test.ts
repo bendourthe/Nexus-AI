@@ -67,7 +67,7 @@ describe("speakable projection", () => {
     const table = speakableProjection(REPLIES[3]!);
     expect(table).toContain(TABLE_CUE);
     expect(table).not.toMatch(/\|/);
-    expect(table).not.toMatch(/example\.com/);
+    expect(table).not.toContain("example.com");
   });
 
   it("redacts secrets, including across a sentence period", () => {
