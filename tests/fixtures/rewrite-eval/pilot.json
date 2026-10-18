@@ -1,0 +1,120 @@
+[
+  {
+    "id": "en-email-edit-0",
+    "language": "en",
+    "genre": "email",
+    "kind": "edit",
+    "draft": "Hello Teva,\nIt is important to note that 11 crates arrive on 2026-12-02, provided the ice clears. None can arrive earlier.\nRin",
+    "editingGoal": "Remove the empty emphasis; retain the arrival condition.",
+    "literals": [
+      {
+        "text": "Teva",
+        "count": 1
+      },
+      {
+        "text": "11 crates",
+        "count": 1
+      },
+      {
+        "text": "2026-12-02",
+        "count": 1
+      },
+      {
+        "text": "Rin",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "Eleven crates arrive on 2026-12-02 if ice clears.",
+      "None can arrive earlier."
+    ]
+  },
+  {
+    "id": "en-post-clean-0",
+    "language": "en",
+    "genre": "post",
+    "kind": "clean",
+    "draft": "Pavo opens at 08:20. Bring 3 tokens; cash is not accepted.",
+    "editingGoal": "Keep the direct voice.",
+    "literals": [
+      {
+        "text": "Pavo",
+        "count": 1
+      },
+      {
+        "text": "08:20",
+        "count": 1
+      },
+      {
+        "text": "3 tokens",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "Pavo opens at 08:20.",
+      "Bring three tokens.",
+      "Cash is not accepted."
+    ]
+  },
+  {
+    "id": "zh-email-edit-0",
+    "language": "zh",
+    "genre": "email",
+    "kind": "edit",
+    "draft": "方雨你好：\n值得特别强调的是，9箱物资将在2026年12月3日到达，前提是桥梁开放。无法提前到达。\n季川",
+    "editingGoal": "删去空泛强调，保留条件。",
+    "literals": [
+      {
+        "text": "方雨",
+        "count": 1
+      },
+      {
+        "text": "9箱",
+        "count": 1
+      },
+      {
+        "text": "2026年12月3日",
+        "count": 1
+      },
+      {
+        "text": "季川",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "9箱物资在桥梁开放的前提下于2026年12月3日到达。",
+      "无法提前到达。"
+    ]
+  },
+  {
+    "id": "zh-post-clean-0",
+    "language": "zh",
+    "genre": "post",
+    "kind": "clean",
+    "draft": "北岸小店08:40开门。请带4枚代币，店内不收现金。",
+    "editingGoal": "保留直接、自然的语气。",
+    "literals": [
+      {
+        "text": "北岸",
+        "count": 1
+      },
+      {
+        "text": "08:40",
+        "count": 1
+      },
+      {
+        "text": "4枚",
+        "count": 1
+      }
+    ],
+    "structures": [],
+    "propositions": [
+      "北岸小店08:40开门。",
+      "需带4枚代币。",
+      "店内不收现金。"
+    ]
+  }
+]

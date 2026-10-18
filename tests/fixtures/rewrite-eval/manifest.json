@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "files": {
+    "pilot": {
+      "path": "tests/fixtures/rewrite-eval/pilot.json",
+      "sha256": "c58704fffd4fafa4bd0b3b8cf228e17a5e9ba942613dac50ac1f22dce653ed6d"
+    },
+    "heldOut": {
+      "path": "tests/fixtures/rewrite-eval/held-out.json",
+      "sha256": "f26c0199dd8842a0e1d96c2e94f870b6805068d163d2f56877aa50901a25fd8c"
+    }
+  }
+}

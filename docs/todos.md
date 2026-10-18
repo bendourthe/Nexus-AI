@@ -196,6 +196,7 @@ Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 des
 | Tasks done (v0.4.0) | 16 (P1) + 17 (P2) + 21 (P3) + 21 (P4) + 22 (P5) | ~135 / ~135 | in-progress |
 | Sources compared (Craft editors + EmbeddingGemma 2, 2026-10-07) | 2 / 2 | 2 / 2 | 0 |
 | v2.13 adoption plan implementation tasks (merged in PR #101, 2026-10-16; T008-T010 deferred under DF-2) | 28 / 28 | 28 | 0 |
+| v2.14.1 local rewrite evaluation implementation tasks (authorized, 2026-10-17) | 18 / 18 | 18 | 0 |
 
 ---
 
@@ -730,6 +731,15 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Phase 3: prompt-opened reasoning in every path, golden-runner options and metrics (and a working live runner outside VS Code), paired A/B: LFM2.5-24B 19.7 vs 20.7 of 28 tasks with 46% better p95 turn time and no RAM spill; ADMIT under the owner's M-3 reading ([Phase 3 evidence](releases/v2/v2.14/development/v2.14.0-phase3-evidence.md), 2026-10-17).
 - [x] Phase 4: `lfm2.5:24b-a2b` admitted opt-in with a coding-catalog twin, commit and GGUF pin, and post-pull digest verification in both install paths; 16 GB MoE worker job moved; stale `lfm2.5:2.6b` pin corrected ([Phase 4 evidence](releases/v2/v2.14/development/v2.14.0-phase4-evidence.md), 2026-10-17).
 - [ ] Phase 5: local duties done 2026-10-17 (T018-T026): DF-5, WN-3, WN-4, WN-5, WN-7 and QG-1 resolved; 8 deep-pass defects fixed; full local gate and installer rebuild ([last-phase evidence](releases/v2/v2.14/development/v2.14.0-last-phase-evidence.md)). Open: T027 publication and integration, waiting on the v2.14.1 decision.
+
+## Local rewrite evaluation (shipped v2.14.1)
+
+- [x] Compare Humanizer and Handwired against Nexus and record the confirmed v2.14.1 adoption target after v2.14.0 ([comparison](releases/v2/v2.14/comparisons/v2.14.1-comparison-humanizer-handwired.md), 2026-10-16).
+- [x] Finalize the three-phase, 18-task text-only evaluation plan after seven-lens review and owner approval of Q1-Q4 ([plan](releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), [review](releases/v2/v2.14/development/v2.14.1-plan-review.md), 2026-10-16). Implementation was 0/18 at planning.
+- [x] Freeze the evaluation and run its single pilot under the owner's 2026-10-17 authorization to run v2.14.1 before v2.14.0; [Phase 1 evidence](releases/v2/v2.14/development/v2.14.1-phase1-evidence.md) records format HOLD with no retry.
+- [x] Record all sixteen held-out IDs as not-run/HOLD, retain missing-output counts, and assess exact-runtime Humanizer feasibility ([Phase 2 evidence](releases/v2/v2.14/development/v2.14.1-phase2-evidence.md)). Quality remains unmeasured under DF-5.
+- [x] Complete v2.14.1 implementation and merge PR #108 as 6673f0cf after required CI and CodeQL success; quality remains HOLD under DF-5. [Release assets and source CLI are verified](releases/v2/v2.14/development/v2.14.1-release-verification.json).
+- [x] Finish bounded HOLD continuation, Humanizer feasibility, final gates, approved integration and release; keep Humanizer installation, adapter/catalog changes and Handwired implementation outside this plan.
 
 ## Recurring Obligations
 

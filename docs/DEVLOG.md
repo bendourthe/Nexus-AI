@@ -2,6 +2,8 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
+- 2026-10-17 v2.14.1: bounded local rewrite evaluation ends in explicit HOLD, with Humanizer feasibility and unmeasured quality retained. [Plan](releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), [history](releases/v2/v2.14/development/history/), [known gaps](releases/v2/v2.14/known-gaps.md).
+
 - 2026-10-06 v2.11: the document-outline plan is archived at `docs/archive/v2/v2.11/`. v2.11.0 is published. Still-open items: `docs/v2/v2.12/known-gaps.md`.
 - 2026-09-28 v2.10: the System One plan is archived at `docs/archive/v2/v2.10/`. v2.10.0 is published. Still-open items: `docs/v2/v2.12/known-gaps.md`.
 - 2026-09-27 v2.9: the CrisperWhisper plan is archived at `docs/archive/v2/v2.9/`. v2.9.0 is published. Still-open items: `docs/v2/v2.12/known-gaps.md`.

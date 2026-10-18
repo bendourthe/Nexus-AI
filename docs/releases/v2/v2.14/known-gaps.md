@@ -3,7 +3,7 @@
 **Project**: Nexus
 **Status**: in-progress
 **Last updated**: 2026-10-17
-**Open items**: 6
+**Open items**: 7
 
 ## v2.14.0
 
@@ -93,3 +93,21 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 | WN-6 | Hosts without an NVIDIA or Apple GPU get no voice runtime | Moved to v2.15 (WN-1) | Still open: a CPU target cannot be verified on this GPU host, and a gap opened in this run cannot migrate at the minor close |
 | WN-7 | The provisioned venv's numpy differs from its lock | v2.14.0 Phase 5 (cause found) | No Nexus provisioner changes numpy. On 2026-10-01 a `rapidocr-onnxruntime` install, which no provisioner performs, pulled `opencv-python` 5.0.0.93 (needs `numpy>=2`), upgrading numpy to 2.5.3. The lock stays correct for what Nexus installs; the OCR provisioning gap and its numpy conflict are v2.15 WN-2 |
 | QG-1 | Two tests time out under full-suite load | v2.14.0 | Root half fixed in v2.13 with measured timeouts. The Video2X test passed in three full desktop runs in this cycle, meeting the gap's own closing rule |
+
+## v2.14.1
+
+### Summary
+
+| Category | Open | Resolved |
+|---|---|---|
+| Deferred (DF) | 1 | 0 |
+
+### Open Items
+
+##### DF-5 - Live rewrite quality remains unmeasured after pilot format HOLD
+
+- **Source phase**: v2.14.1 Phase 1, T002-T004.
+- **Plan reference**: [local rewrite evaluation](plans/v2.14.1-adoption-humanizer-handwired.md), blocked-run continuation.
+- **Reason**: The sole started pilot response completed but fenced its JSON. The frozen envelope rejects fences without repair or retry. Three pilot items and all sixteen held-out items are not run; no semantic, readability or language-quality verdict is available.
+- **Owner**: Maintainer.
+- **Suggested next step**: If another evaluation is wanted, separately preregister a revised experiment with retained ancestry and obtain qualified language review. Do not replay this experiment, infer a quality loss or admit Humanizer from this observation.
