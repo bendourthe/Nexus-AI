@@ -34,8 +34,8 @@
 
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { closeSync, existsSync, openSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { homedir, tmpdir } from "node:os";
+import { closeSync, existsSync, mkdirSync, openSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
 import path from "node:path";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
@@ -221,8 +221,12 @@ export function parseArgs(argv) {
   return opts;
 }
 
-/** Exclusive lock so two runs never share the audio runtime or the GPU. */
-export function acquireLock(dir = tmpdir()) {
+/**
+ * Exclusive lock so two runs never share the audio runtime or the GPU. The
+ * default lives in a per-user folder (owner-only), not the shared temp dir.
+ */
+export function acquireLock(dir = path.join(homedir(), ".nexus", "locks")) {
+  mkdirSync(dir, { recursive: true, mode: 0o700 });
   const lockPath = path.join(dir, LOCK_NAME);
   let fd;
   try {
@@ -406,7 +410,7 @@ export async function runStreamedTurn(sidecar, opts, fixture, { bargeIn = false,
     stage = "synthesis";
     const arrivals = [];
     let afterSeq = -1;
-    let state = "unknown";
+    let state;
     let jobError;
     let cancelSentAt = null;
     let cancelMs = null;
