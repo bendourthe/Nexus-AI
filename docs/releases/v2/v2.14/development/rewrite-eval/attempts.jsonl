@@ -1,3 +1,4 @@
 {"type":"mode-start","group":"pilot","contractSha256":"b5c912f3124738b58292d8bb158376f41feb49b62fe4a32d5c80c8026d0ea169"}
 {"type":"request-start","id":"en-email-edit-0","group":"pilot","contractSha256":"b5c912f3124738b58292d8bb158376f41feb49b62fe4a32d5c80c8026d0ea169"}
 {"type":"request-end","id":"en-email-edit-0","durationMs":47345,"contractSha256":"b5c912f3124738b58292d8bb158376f41feb49b62fe4a32d5c80c8026d0ea169"}
+{"type":"mode-start","group":"heldOut","contractSha256":"b5c912f3124738b58292d8bb158376f41feb49b62fe4a32d5c80c8026d0ea169"}
