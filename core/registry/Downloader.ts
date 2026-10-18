@@ -48,6 +48,11 @@ export interface DownloadOptions {
    * Injectable clock for tests. Defaults to `Date.now`.
    */
   now?: () => number;
+  /**
+   * v2.14.0 (DF-5) -- where the verified file is moved. Defaults to the
+   * content-addressed blob path; a weights-tree install names its own path.
+   */
+  destPath?: string;
 }
 
 export interface DownloadResult {
@@ -172,7 +177,7 @@ export class Downloader {
       throw new DigestMismatch(expectedSha256, actual);
     }
 
-    const finalPath = this._storage.blobPath(expectedSha256);
+    const finalPath = opts.destPath ?? this._storage.blobPath(expectedSha256);
     await fs.mkdir(path.dirname(finalPath), { recursive: true });
     await fs.rename(tmpPath, finalPath);
     return { path: finalPath, sha256: actual, bytes: downloaded };

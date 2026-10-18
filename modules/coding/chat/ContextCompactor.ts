@@ -19,6 +19,7 @@ import { calculateBudget } from "../config/PromptBudget.js";
 import { Tracer } from "../observability/Tracer.js";
 import { sharedCompactionLease } from "../../../core/chat/compactionLease.js";
 import type { HookBus } from "../../../core/lifecycle/HookBus.js";
+import { ModelCatalog } from "../../../core/registry/ModelCatalog.js";
 
 /**
  * The slice of `GemmaCodeSettings` the compactor reads on each invocation.
@@ -146,6 +147,11 @@ export class ContextCompactor {
     return this.estimateTokens() >= this._maxTokens * this._compactionThreshold;
   }
 
+  /** v2.14.0 T012 -- strip prompt-opened reasoning for models that declare it. */
+  private _replayOptions(): { reasoningOpensInPrompt: boolean } {
+    return { reasoningOpensInPrompt: ModelCatalog.byId(this._modelName)?.reasoningOpensInPrompt === true };
+  }
+
   /**
    * Runs the multi-strategy compaction pipeline. Strategies are applied in
    * cost order (cheapest first) until the conversation fits within the
@@ -154,6 +160,7 @@ export class ContextCompactor {
    * @param postMessage - webview message sender for status updates
    * @param force - if true, compact regardless of the token count
    */
+
   async compact(postMessage: PostMessageFn, force = false): Promise<CompactionResult> {
     const leaseId = `coding:${this._traceId}`;
     const acquired = sharedCompactionLease.tryAcquire(leaseId);
@@ -254,7 +261,7 @@ export class ContextCompactor {
       // strips Gemma 4 `<think>` blocks from assistant messages so the
       // compaction prompt is dominated by user-visible content.
       compacted = await pipeline.run(
-        this._manager.replayForCompaction(),
+        this._manager.replayForCompaction(this._replayOptions()),
         budget.conversationBudget,
       );
     } catch (err) {
@@ -360,7 +367,7 @@ export class ContextCompactor {
     ]);
     const budget = calculateBudget(this._maxTokens);
     const compacted = await pipeline.run(
-      this._manager.replayForCompaction(),
+      this._manager.replayForCompaction(this._replayOptions()),
       budget.conversationBudget,
     );
     this._manager.replaceMessages(compacted);

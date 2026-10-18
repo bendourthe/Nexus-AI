@@ -4,6 +4,7 @@ import * as os from "os";
 import * as url from "url";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { SkillLoader } from "../../../modules/coding/skills/SkillLoader.js";
+import { NO_USER_SKILLS_DIR } from "../../helpers/noUserSkills.js";
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const REAL_CATALOG_DIR = path.resolve(__dirname, "../../../modules/coding/skills/catalog");
@@ -204,7 +205,7 @@ describe("v0.7.0 skill expansion", () => {
     it(`loads "${name}" with non-empty description and prompt`, () => {
       const loader = new SkillLoader(
         REAL_CATALOG_DIR,
-        path.join(REAL_CATALOG_DIR, "__nonexistent_user__")
+        NO_USER_SKILLS_DIR
       );
       loader.load();
 
@@ -219,7 +220,7 @@ describe("v0.7.0 skill expansion", () => {
   it("every new skill has an argument-hint declared", () => {
     const loader = new SkillLoader(
       REAL_CATALOG_DIR,
-      path.join(REAL_CATALOG_DIR, "__nonexistent_user__")
+      NO_USER_SKILLS_DIR
     );
     loader.load();
 
@@ -368,7 +369,7 @@ describe("v0.8.0 SKILL.md schema extension", () => {
   it("real catalog skills load with extended fields", () => {
     const loader = new SkillLoader(
       REAL_CATALOG_DIR,
-      path.join(REAL_CATALOG_DIR, "__nonexistent_user__"),
+      NO_USER_SKILLS_DIR,
     );
     loader.load();
     const commit = loader.getSkill("commit");

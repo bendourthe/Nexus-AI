@@ -36,6 +36,10 @@ export interface LLMOptions {
   top_p?: number;
   top_k?: number;
   num_ctx?: number;
+  /** v2.14.0 T013 -- Ollama's spelling of the repetition penalty. */
+  repeat_penalty?: number;
+  /** v2.14.0 T013 -- Ollama min-p sampling. */
+  min_p?: number;
 }
 
 export interface LLMToolFunction {
@@ -62,6 +66,12 @@ export interface LLMChatRequest {
    * StreamingPipeline derives this from the active `ModelPinRegistry`.
    */
   keep_alive?: number | string;
+  /**
+   * v2.14.0 -- Ollama's `think` switch. `false` asks a reasoning model to
+   * answer directly; omitted keeps the model's default. Spoken Chat replies
+   * set it so speech starts without a hidden reasoning pass.
+   */
+  think?: boolean;
 }
 
 /**

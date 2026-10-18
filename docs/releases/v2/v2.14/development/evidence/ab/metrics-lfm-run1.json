@@ -1,0 +1,1884 @@
+{
+  "schemaVersion": 1,
+  "model": "hf.co/LiquidAI/LFM2.5-24B-A2B-GGUF:QAD-Q4_0",
+  "mode": "live",
+  "options": {
+    "temperature": 0.1,
+    "top_k": 50,
+    "repeat_penalty": 1.05,
+    "num_ctx": 32768
+  },
+  "toolFormat": "lfm-pythonic",
+  "passed": 19,
+  "total": 28,
+  "tasks": [
+    {
+      "id": "agent-friendly-dry-run-then-execute-03",
+      "firstToolCallMs": 1672,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1649,
+          "firstChunkMs": 730
+        },
+        {
+          "turnMs": 904,
+          "firstChunkMs": 147
+        },
+        {
+          "turnMs": 1241,
+          "firstChunkMs": 195
+        },
+        {
+          "turnMs": 1190,
+          "firstChunkMs": 159
+        },
+        {
+          "turnMs": 4576,
+          "firstChunkMs": 151
+        },
+        {
+          "turnMs": 2310,
+          "firstChunkMs": 180
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "target.txt is gone after the run (output_contains node -e \"const fs=require('fs');process.stdout.write(fs.existsSync('target.txt')?'still-here':'deleted')\"): command exit=0"
+      ],
+      "taskMs": 12276,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 13
+      }
+    },
+    {
+      "id": "agent-friendly-truncation-recovery-grep-02",
+      "firstToolCallMs": 1478,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1468,
+          "firstChunkMs": 321
+        },
+        {
+          "turnMs": 855,
+          "firstChunkMs": 141
+        },
+        {
+          "turnMs": 424,
+          "firstChunkMs": 182
+        },
+        {
+          "turnMs": 578,
+          "firstChunkMs": 150
+        },
+        {
+          "turnMs": 954,
+          "firstChunkMs": 388
+        },
+        {
+          "turnMs": 558,
+          "firstChunkMs": 366
+        },
+        {
+          "turnMs": 574,
+          "firstChunkMs": 384
+        },
+        {
+          "turnMs": 594,
+          "firstChunkMs": 391
+        },
+        {
+          "turnMs": 46923,
+          "firstChunkMs": 378
+        },
+        {
+          "turnMs": 4215,
+          "firstChunkMs": 2022
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 57258,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 58
+      }
+    },
+    {
+      "id": "agent-friendly-truncation-recovery-read-01",
+      "firstToolCallMs": 2086,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2080,
+          "firstChunkMs": 394
+        },
+        {
+          "turnMs": 500,
+          "firstChunkMs": 133
+        },
+        {
+          "turnMs": 34133,
+          "firstChunkMs": 8152
+        },
+        {
+          "turnMs": 7091,
+          "firstChunkMs": 576
+        },
+        {
+          "turnMs": 4798,
+          "firstChunkMs": 191
+        },
+        {
+          "turnMs": 1351,
+          "firstChunkMs": 197
+        },
+        {
+          "turnMs": 1952,
+          "firstChunkMs": 160
+        },
+        {
+          "turnMs": 14688,
+          "firstChunkMs": 8667
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "large.ts contains the targeted function the agent must locate (output_contains node -e \"const fs=require('fs');const m=fs.readFileSync('large.ts','utf8').match(/featureFlag1300[\\s\\S]*?return [^;]+;/);process.stdout.write(m?m[0].slice(0,80):'no-match')\"): command exit=0"
+      ],
+      "taskMs": 67082,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 67
+      }
+    },
+    {
+      "id": "bugfix-async-await-03",
+      "firstToolCallMs": 809,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 803,
+          "firstChunkMs": 431
+        },
+        {
+          "turnMs": 2694,
+          "firstChunkMs": 145
+        },
+        {
+          "turnMs": 1792,
+          "firstChunkMs": 139
+        },
+        {
+          "turnMs": 3370,
+          "firstChunkMs": 141
+        },
+        {
+          "turnMs": 1141,
+          "firstChunkMs": 157
+        },
+        {
+          "turnMs": 3022,
+          "firstChunkMs": 167
+        },
+        {
+          "turnMs": 1432,
+          "firstChunkMs": 182
+        },
+        {
+          "turnMs": 462,
+          "firstChunkMs": 177
+        },
+        {
+          "turnMs": 1533,
+          "firstChunkMs": 175
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 16275,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 17
+      }
+    },
+    {
+      "id": "bugfix-import-path-04",
+      "firstToolCallMs": 2647,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2639,
+          "firstChunkMs": 1906
+        },
+        {
+          "turnMs": 314,
+          "firstChunkMs": 134
+        },
+        {
+          "turnMs": 382,
+          "firstChunkMs": 127
+        },
+        {
+          "turnMs": 1494,
+          "firstChunkMs": 145
+        },
+        {
+          "turnMs": 2642,
+          "firstChunkMs": 163
+        },
+        {
+          "turnMs": 4010,
+          "firstChunkMs": 154
+        },
+        {
+          "turnMs": 441,
+          "firstChunkMs": 149
+        },
+        {
+          "turnMs": 826,
+          "firstChunkMs": 162
+        },
+        {
+          "turnMs": 448,
+          "firstChunkMs": 189
+        },
+        {
+          "turnMs": 458,
+          "firstChunkMs": 175
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "no stray parent-directory imports remain (output_contains grep -c \"../\" src/main.ts || true): command exit=0"
+      ],
+      "taskMs": 17629,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 18
+      }
+    },
+    {
+      "id": "bugfix-null-check-02",
+      "firstToolCallMs": 2691,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 2684,
+          "firstChunkMs": 2235
+        },
+        {
+          "turnMs": 2121,
+          "firstChunkMs": 136
+        },
+        {
+          "turnMs": 469,
+          "firstChunkMs": 132
+        },
+        {
+          "turnMs": 1244,
+          "firstChunkMs": 159
+        },
+        {
+          "turnMs": 455,
+          "firstChunkMs": 170
+        },
+        {
+          "turnMs": 1190,
+          "firstChunkMs": 161
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 8337,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 9
+      }
+    },
+    {
+      "id": "bugfix-off-by-one-01",
+      "firstToolCallMs": 493,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 486,
+          "firstChunkMs": 227
+        },
+        {
+          "turnMs": 776,
+          "firstChunkMs": 149
+        },
+        {
+          "turnMs": 624,
+          "firstChunkMs": 163
+        },
+        {
+          "turnMs": 492,
+          "firstChunkMs": 156
+        },
+        {
+          "turnMs": 776,
+          "firstChunkMs": 196
+        },
+        {
+          "turnMs": 1861,
+          "firstChunkMs": 149
+        },
+        {
+          "turnMs": 2780,
+          "firstChunkMs": 172
+        },
+        {
+          "turnMs": 2432,
+          "firstChunkMs": 197
+        },
+        {
+          "turnMs": 2321,
+          "firstChunkMs": 152
+        },
+        {
+          "turnMs": 1972,
+          "firstChunkMs": 155
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 14746,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 15
+      }
+    },
+    {
+      "id": "bugfix-race-condition-05",
+      "firstToolCallMs": 610,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 604,
+          "firstChunkMs": 230
+        },
+        {
+          "turnMs": 8481,
+          "firstChunkMs": 167
+        },
+        {
+          "turnMs": 3863,
+          "firstChunkMs": 174
+        },
+        {
+          "turnMs": 532,
+          "firstChunkMs": 173
+        },
+        {
+          "turnMs": 4519,
+          "firstChunkMs": 207
+        },
+        {
+          "turnMs": 799,
+          "firstChunkMs": 162
+        },
+        {
+          "turnMs": 1597,
+          "firstChunkMs": 209
+        },
+        {
+          "turnMs": 4708,
+          "firstChunkMs": 179
+        },
+        {
+          "turnMs": 7674,
+          "firstChunkMs": 170
+        },
+        {
+          "turnMs": 366,
+          "firstChunkMs": 203
+        },
+        {
+          "turnMs": 34563,
+          "firstChunkMs": 203
+        },
+        {
+          "turnMs": 413,
+          "firstChunkMs": 230
+        },
+        {
+          "turnMs": 3703,
+          "firstChunkMs": 227
+        },
+        {
+          "turnMs": 1441,
+          "firstChunkMs": 213
+        },
+        {
+          "turnMs": 2381,
+          "firstChunkMs": 223
+        },
+        {
+          "turnMs": 943,
+          "firstChunkMs": 244
+        },
+        {
+          "turnMs": 1211,
+          "firstChunkMs": 209
+        },
+        {
+          "turnMs": 9238,
+          "firstChunkMs": 218
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "agent: Error-burst guard: 4 consecutive tool errors. Terminating this turn. The session is still open."
+      ],
+      "taskMs": 87247,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 87
+      }
+    },
+    {
+      "id": "memory-hygiene-missed-fact-01",
+      "firstToolCallMs": 3630,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 3625,
+          "firstChunkMs": 353
+        },
+        {
+          "turnMs": 979,
+          "firstChunkMs": 129
+        },
+        {
+          "turnMs": 5666,
+          "firstChunkMs": 204
+        },
+        {
+          "turnMs": 1746,
+          "firstChunkMs": 374
+        },
+        {
+          "turnMs": 3035,
+          "firstChunkMs": 158
+        },
+        {
+          "turnMs": 2428,
+          "firstChunkMs": 186
+        },
+        {
+          "turnMs": 764,
+          "firstChunkMs": 525
+        },
+        {
+          "turnMs": 1655,
+          "firstChunkMs": 258
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 35935,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 36
+      }
+    },
+    {
+      "id": "multi-file-add-import-02",
+      "firstToolCallMs": 947,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 935,
+          "firstChunkMs": 311
+        },
+        {
+          "turnMs": 545,
+          "firstChunkMs": 139
+        },
+        {
+          "turnMs": 1805,
+          "firstChunkMs": 177
+        },
+        {
+          "turnMs": 1968,
+          "firstChunkMs": 148
+        },
+        {
+          "turnMs": 564,
+          "firstChunkMs": 146
+        },
+        {
+          "turnMs": 929,
+          "firstChunkMs": 156
+        },
+        {
+          "turnMs": 990,
+          "firstChunkMs": 179
+        },
+        {
+          "turnMs": 508,
+          "firstChunkMs": 170
+        },
+        {
+          "turnMs": 2631,
+          "firstChunkMs": 171
+        },
+        {
+          "turnMs": 1018,
+          "firstChunkMs": 173
+        },
+        {
+          "turnMs": 738,
+          "firstChunkMs": 183
+        },
+        {
+          "turnMs": 442,
+          "firstChunkMs": 176
+        },
+        {
+          "turnMs": 529,
+          "firstChunkMs": 211
+        },
+        {
+          "turnMs": 438,
+          "firstChunkMs": 211
+        },
+        {
+          "turnMs": 524,
+          "firstChunkMs": 187
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 18692,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 19
+      }
+    },
+    {
+      "id": "multi-file-api-endpoint-04",
+      "firstToolCallMs": 1078,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1070,
+          "firstChunkMs": 309
+        },
+        {
+          "turnMs": 319,
+          "firstChunkMs": 143
+        },
+        {
+          "turnMs": 350,
+          "firstChunkMs": 129
+        },
+        {
+          "turnMs": 380,
+          "firstChunkMs": 177
+        },
+        {
+          "turnMs": 353,
+          "firstChunkMs": 131
+        },
+        {
+          "turnMs": 1814,
+          "firstChunkMs": 175
+        },
+        {
+          "turnMs": 2392,
+          "firstChunkMs": 163
+        },
+        {
+          "turnMs": 494,
+          "firstChunkMs": 213
+        },
+        {
+          "turnMs": 4180,
+          "firstChunkMs": 180
+        },
+        {
+          "turnMs": 1908,
+          "firstChunkMs": 170
+        },
+        {
+          "turnMs": 432,
+          "firstChunkMs": 190
+        },
+        {
+          "turnMs": 1459,
+          "firstChunkMs": 173
+        },
+        {
+          "turnMs": 992,
+          "firstChunkMs": 195
+        },
+        {
+          "turnMs": 558,
+          "firstChunkMs": 234
+        },
+        {
+          "turnMs": 578,
+          "firstChunkMs": 299
+        },
+        {
+          "turnMs": 2561,
+          "firstChunkMs": 919
+        },
+        {
+          "turnMs": 839,
+          "firstChunkMs": 190
+        },
+        {
+          "turnMs": 2825,
+          "firstChunkMs": 181
+        },
+        {
+          "turnMs": 993,
+          "firstChunkMs": 238
+        },
+        {
+          "turnMs": 2432,
+          "firstChunkMs": 192
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 33666,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 34
+      }
+    },
+    {
+      "id": "multi-file-config-update-03",
+      "firstToolCallMs": 1142,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1133,
+          "firstChunkMs": 304
+        },
+        {
+          "turnMs": 756,
+          "firstChunkMs": 136
+        },
+        {
+          "turnMs": 6380,
+          "firstChunkMs": 289
+        },
+        {
+          "turnMs": 2317,
+          "firstChunkMs": 151
+        },
+        {
+          "turnMs": 2846,
+          "firstChunkMs": 156
+        },
+        {
+          "turnMs": 719,
+          "firstChunkMs": 236
+        },
+        {
+          "turnMs": 1629,
+          "firstChunkMs": 193
+        },
+        {
+          "turnMs": 927,
+          "firstChunkMs": 164
+        },
+        {
+          "turnMs": 971,
+          "firstChunkMs": 184
+        },
+        {
+          "turnMs": 460,
+          "firstChunkMs": 185
+        },
+        {
+          "turnMs": 538,
+          "firstChunkMs": 246
+        },
+        {
+          "turnMs": 452,
+          "firstChunkMs": 203
+        },
+        {
+          "turnMs": 2708,
+          "firstChunkMs": 250
+        },
+        {
+          "turnMs": 1041,
+          "firstChunkMs": 184
+        },
+        {
+          "turnMs": 2695,
+          "firstChunkMs": 218
+        },
+        {
+          "turnMs": 441,
+          "firstChunkMs": 177
+        },
+        {
+          "turnMs": 631,
+          "firstChunkMs": 210
+        },
+        {
+          "turnMs": 3006,
+          "firstChunkMs": 382
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 36173,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 36
+      }
+    },
+    {
+      "id": "multi-file-rename-01",
+      "firstToolCallMs": 7234,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 7227,
+          "firstChunkMs": 6616
+        },
+        {
+          "turnMs": 2386,
+          "firstChunkMs": 206
+        },
+        {
+          "turnMs": 1744,
+          "firstChunkMs": 155
+        },
+        {
+          "turnMs": 568,
+          "firstChunkMs": 150
+        },
+        {
+          "turnMs": 531,
+          "firstChunkMs": 145
+        },
+        {
+          "turnMs": 798,
+          "firstChunkMs": 159
+        },
+        {
+          "turnMs": 491,
+          "firstChunkMs": 172
+        },
+        {
+          "turnMs": 1171,
+          "firstChunkMs": 167
+        },
+        {
+          "turnMs": 783,
+          "firstChunkMs": 220
+        },
+        {
+          "turnMs": 3088,
+          "firstChunkMs": 192
+        },
+        {
+          "turnMs": 1360,
+          "firstChunkMs": 228
+        },
+        {
+          "turnMs": 9091,
+          "firstChunkMs": 191
+        },
+        {
+          "turnMs": 2585,
+          "firstChunkMs": 167
+        },
+        {
+          "turnMs": 569,
+          "firstChunkMs": 209
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "agent: Error-burst guard: 4 consecutive tool errors. Terminating this turn. The session is still open."
+      ],
+      "taskMs": 34081,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 34
+      }
+    },
+    {
+      "id": "multi-file-type-propagation-05",
+      "firstToolCallMs": 1083,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1075,
+          "firstChunkMs": 284
+        },
+        {
+          "turnMs": 700,
+          "firstChunkMs": 140
+        },
+        {
+          "turnMs": 7790,
+          "firstChunkMs": 209
+        },
+        {
+          "turnMs": 1742,
+          "firstChunkMs": 145
+        },
+        {
+          "turnMs": 593,
+          "firstChunkMs": 154
+        },
+        {
+          "turnMs": 1178,
+          "firstChunkMs": 154
+        },
+        {
+          "turnMs": 6035,
+          "firstChunkMs": 165
+        },
+        {
+          "turnMs": 685,
+          "firstChunkMs": 183
+        },
+        {
+          "turnMs": 596,
+          "firstChunkMs": 171
+        },
+        {
+          "turnMs": 450,
+          "firstChunkMs": 175
+        },
+        {
+          "turnMs": 522,
+          "firstChunkMs": 175
+        },
+        {
+          "turnMs": 495,
+          "firstChunkMs": 207
+        },
+        {
+          "turnMs": 411,
+          "firstChunkMs": 205
+        },
+        {
+          "turnMs": 1307,
+          "firstChunkMs": 181
+        },
+        {
+          "turnMs": 3439,
+          "firstChunkMs": 241
+        },
+        {
+          "turnMs": 2929,
+          "firstChunkMs": 179
+        },
+        {
+          "turnMs": 2254,
+          "firstChunkMs": 219
+        },
+        {
+          "turnMs": 899,
+          "firstChunkMs": 194
+        },
+        {
+          "turnMs": 1882,
+          "firstChunkMs": 210
+        },
+        {
+          "turnMs": 1033,
+          "firstChunkMs": 210
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 42623,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 43
+      }
+    },
+    {
+      "id": "refactor-callback-to-async-03",
+      "firstToolCallMs": 1336,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1330,
+          "firstChunkMs": 300
+        },
+        {
+          "turnMs": 386,
+          "firstChunkMs": 136
+        },
+        {
+          "turnMs": 3058,
+          "firstChunkMs": 204
+        },
+        {
+          "turnMs": 457,
+          "firstChunkMs": 188
+        },
+        {
+          "turnMs": 530,
+          "firstChunkMs": 192
+        },
+        {
+          "turnMs": 432,
+          "firstChunkMs": 179
+        },
+        {
+          "turnMs": 2226,
+          "firstChunkMs": 183
+        },
+        {
+          "turnMs": 1841,
+          "firstChunkMs": 190
+        },
+        {
+          "turnMs": 1206,
+          "firstChunkMs": 173
+        },
+        {
+          "turnMs": 2787,
+          "firstChunkMs": 157
+        },
+        {
+          "turnMs": 914,
+          "firstChunkMs": 392
+        },
+        {
+          "turnMs": 1173,
+          "firstChunkMs": 531
+        },
+        {
+          "turnMs": 1382,
+          "firstChunkMs": 163
+        },
+        {
+          "turnMs": 597,
+          "firstChunkMs": 238
+        },
+        {
+          "turnMs": 1565,
+          "firstChunkMs": 269
+        },
+        {
+          "turnMs": 1492,
+          "firstChunkMs": 179
+        },
+        {
+          "turnMs": 3207,
+          "firstChunkMs": 222
+        },
+        {
+          "turnMs": 529,
+          "firstChunkMs": 225
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 38918,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 39
+      }
+    },
+    {
+      "id": "refactor-class-to-module-02",
+      "firstToolCallMs": 525,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 518,
+          "firstChunkMs": 265
+        },
+        {
+          "turnMs": 300,
+          "firstChunkMs": 140
+        },
+        {
+          "turnMs": 294,
+          "firstChunkMs": 128
+        },
+        {
+          "turnMs": 324,
+          "firstChunkMs": 158
+        },
+        {
+          "turnMs": 2687,
+          "firstChunkMs": 181
+        },
+        {
+          "turnMs": 4796,
+          "firstChunkMs": 188
+        },
+        {
+          "turnMs": 1100,
+          "firstChunkMs": 146
+        },
+        {
+          "turnMs": 487,
+          "firstChunkMs": 166
+        },
+        {
+          "turnMs": 966,
+          "firstChunkMs": 181
+        },
+        {
+          "turnMs": 422,
+          "firstChunkMs": 202
+        },
+        {
+          "turnMs": 1363,
+          "firstChunkMs": 157
+        },
+        {
+          "turnMs": 927,
+          "firstChunkMs": 181
+        },
+        {
+          "turnMs": 506,
+          "firstChunkMs": 222
+        },
+        {
+          "turnMs": 591,
+          "firstChunkMs": 200
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 19338,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 20
+      }
+    },
+    {
+      "id": "refactor-deduplicate-04",
+      "firstToolCallMs": 667,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 660,
+          "firstChunkMs": 272
+        },
+        {
+          "turnMs": 2190,
+          "firstChunkMs": 216
+        },
+        {
+          "turnMs": 1848,
+          "firstChunkMs": 147
+        },
+        {
+          "turnMs": 788,
+          "firstChunkMs": 192
+        },
+        {
+          "turnMs": 3131,
+          "firstChunkMs": 197
+        },
+        {
+          "turnMs": 2834,
+          "firstChunkMs": 237
+        },
+        {
+          "turnMs": 742,
+          "firstChunkMs": 239
+        },
+        {
+          "turnMs": 1439,
+          "firstChunkMs": 230
+        },
+        {
+          "turnMs": 591,
+          "firstChunkMs": 276
+        },
+        {
+          "turnMs": 669,
+          "firstChunkMs": 215
+        },
+        {
+          "turnMs": 2306,
+          "firstChunkMs": 235
+        },
+        {
+          "turnMs": 875,
+          "firstChunkMs": 203
+        },
+        {
+          "turnMs": 650,
+          "firstChunkMs": 194
+        },
+        {
+          "turnMs": 1723,
+          "firstChunkMs": 240
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 21178,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 22
+      }
+    },
+    {
+      "id": "refactor-extract-function-01",
+      "firstToolCallMs": 1522,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1514,
+          "firstChunkMs": 324
+        },
+        {
+          "turnMs": 330,
+          "firstChunkMs": 138
+        },
+        {
+          "turnMs": 8607,
+          "firstChunkMs": 191
+        },
+        {
+          "turnMs": 454,
+          "firstChunkMs": 204
+        },
+        {
+          "turnMs": 521,
+          "firstChunkMs": 198
+        },
+        {
+          "turnMs": 446,
+          "firstChunkMs": 174
+        },
+        {
+          "turnMs": 383,
+          "firstChunkMs": 191
+        },
+        {
+          "turnMs": 1152,
+          "firstChunkMs": 203
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 17380,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 18
+      }
+    },
+    {
+      "id": "refactor-rename-pattern-05",
+      "firstToolCallMs": 1103,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1093,
+          "firstChunkMs": 260
+        },
+        {
+          "turnMs": 1708,
+          "firstChunkMs": 211
+        },
+        {
+          "turnMs": 2348,
+          "firstChunkMs": 152
+        },
+        {
+          "turnMs": 1062,
+          "firstChunkMs": 147
+        },
+        {
+          "turnMs": 4962,
+          "firstChunkMs": 156
+        },
+        {
+          "turnMs": 819,
+          "firstChunkMs": 217
+        },
+        {
+          "turnMs": 465,
+          "firstChunkMs": 194
+        },
+        {
+          "turnMs": 465,
+          "firstChunkMs": 188
+        },
+        {
+          "turnMs": 25890,
+          "firstChunkMs": 176
+        },
+        {
+          "turnMs": 3237,
+          "firstChunkMs": 197
+        },
+        {
+          "turnMs": 543,
+          "firstChunkMs": 176
+        },
+        {
+          "turnMs": 1958,
+          "firstChunkMs": 196
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 49855,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 50
+      }
+    },
+    {
+      "id": "review-code-quality-04",
+      "firstToolCallMs": 500,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 494,
+          "firstChunkMs": 261
+        },
+        {
+          "turnMs": 13124,
+          "firstChunkMs": 207
+        },
+        {
+          "turnMs": 481,
+          "firstChunkMs": 210
+        },
+        {
+          "turnMs": 3961,
+          "firstChunkMs": 212
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 18118,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 19
+      }
+    },
+    {
+      "id": "review-error-handling-03",
+      "firstToolCallMs": 683,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 676,
+          "firstChunkMs": 220
+        },
+        {
+          "turnMs": 10469,
+          "firstChunkMs": 187
+        },
+        {
+          "turnMs": 3552,
+          "firstChunkMs": 203
+        },
+        {
+          "turnMs": 4690,
+          "firstChunkMs": 196
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "agent: [\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"object\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"message\"\n    ],\n    \"message\": \"Required\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"boolean\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"done\"\n    ],\n    \"message\": \"Required\"\n  }\n]",
+        "try/catch introduced (file_contains src/pipeline.ts): pattern \"try|catch|catch \\\\(\" in pipeline.ts",
+        "errors are logged or handled (file_contains src/pipeline.ts): pattern \"(console\\\\.error|logger|return null)\" in pipeline.ts"
+      ],
+      "taskMs": 19470,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 20
+      }
+    },
+    {
+      "id": "review-performance-02",
+      "firstToolCallMs": 678,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 671,
+          "firstChunkMs": 213
+        },
+        {
+          "turnMs": 5468,
+          "firstChunkMs": 170
+        },
+        {
+          "turnMs": 4268,
+          "firstChunkMs": 191
+        },
+        {
+          "turnMs": 2066,
+          "firstChunkMs": 175
+        },
+        {
+          "turnMs": 454,
+          "firstChunkMs": 152
+        },
+        {
+          "turnMs": 1905,
+          "firstChunkMs": 157
+        },
+        {
+          "turnMs": 4597,
+          "firstChunkMs": 199
+        },
+        {
+          "turnMs": 2566,
+          "firstChunkMs": 157
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 22162,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 22
+      }
+    },
+    {
+      "id": "review-security-vuln-01",
+      "firstToolCallMs": 488,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 480,
+          "firstChunkMs": 222
+        },
+        {
+          "turnMs": 3064,
+          "firstChunkMs": 173
+        },
+        {
+          "turnMs": 541,
+          "firstChunkMs": 190
+        },
+        {
+          "turnMs": 2773,
+          "firstChunkMs": 177
+        },
+        {
+          "turnMs": 3445,
+          "firstChunkMs": 165
+        },
+        {
+          "turnMs": 928,
+          "firstChunkMs": 169
+        },
+        {
+          "turnMs": 506,
+          "firstChunkMs": 180
+        },
+        {
+          "turnMs": 2174,
+          "firstChunkMs": 186
+        },
+        {
+          "turnMs": 1402,
+          "firstChunkMs": 161
+        },
+        {
+          "turnMs": 4875,
+          "firstChunkMs": 174
+        },
+        {
+          "turnMs": 397,
+          "firstChunkMs": 158
+        },
+        {
+          "turnMs": 10250,
+          "firstChunkMs": 216
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "no raw string concatenation in queries (output_contains grep -c \"'\\\" + \" src/db.ts || true): command exit=2"
+      ],
+      "taskMs": 30916,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 31
+      }
+    },
+    {
+      "id": "testgen-edge-cases-02",
+      "firstToolCallMs": 1156,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1148,
+          "firstChunkMs": 280
+        },
+        {
+          "turnMs": 463,
+          "firstChunkMs": 142
+        },
+        {
+          "turnMs": 10936,
+          "firstChunkMs": 182
+        },
+        {
+          "turnMs": 634,
+          "firstChunkMs": 189
+        },
+        {
+          "turnMs": 1562,
+          "firstChunkMs": 177
+        },
+        {
+          "turnMs": 1005,
+          "firstChunkMs": 222
+        },
+        {
+          "turnMs": 806,
+          "firstChunkMs": 161
+        },
+        {
+          "turnMs": 1798,
+          "firstChunkMs": 160
+        },
+        {
+          "turnMs": 806,
+          "firstChunkMs": 158
+        },
+        {
+          "turnMs": 2303,
+          "firstChunkMs": 223
+        },
+        {
+          "turnMs": 2366,
+          "firstChunkMs": 165
+        },
+        {
+          "turnMs": 3847,
+          "firstChunkMs": 220
+        },
+        {
+          "turnMs": 3322,
+          "firstChunkMs": 184
+        },
+        {
+          "turnMs": 23234,
+          "firstChunkMs": 211
+        },
+        {
+          "turnMs": 11963,
+          "firstChunkMs": 218
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 69826,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 70
+      }
+    },
+    {
+      "id": "testgen-error-handling-05",
+      "firstToolCallMs": 1093,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1082,
+          "firstChunkMs": 277
+        },
+        {
+          "turnMs": 569,
+          "firstChunkMs": 141
+        },
+        {
+          "turnMs": 385,
+          "firstChunkMs": 131
+        },
+        {
+          "turnMs": 1643,
+          "firstChunkMs": 214
+        },
+        {
+          "turnMs": 813,
+          "firstChunkMs": 163
+        },
+        {
+          "turnMs": 12388,
+          "firstChunkMs": 172
+        },
+        {
+          "turnMs": 609,
+          "firstChunkMs": 255
+        },
+        {
+          "turnMs": 422,
+          "firstChunkMs": 163
+        },
+        {
+          "turnMs": 2679,
+          "firstChunkMs": 186
+        },
+        {
+          "turnMs": 810,
+          "firstChunkMs": 323
+        },
+        {
+          "turnMs": 1986,
+          "firstChunkMs": 231
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "agent: Error-burst guard: 4 consecutive tool errors. Terminating this turn. The session is still open."
+      ],
+      "taskMs": 29171,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 30
+      }
+    },
+    {
+      "id": "testgen-integration-api-04",
+      "firstToolCallMs": 867,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 860,
+          "firstChunkMs": 261
+        },
+        {
+          "turnMs": 425,
+          "firstChunkMs": 140
+        },
+        {
+          "turnMs": 922,
+          "firstChunkMs": 188
+        },
+        {
+          "turnMs": 10144,
+          "firstChunkMs": 157
+        },
+        {
+          "turnMs": 1538,
+          "firstChunkMs": 273
+        },
+        {
+          "turnMs": 1664,
+          "firstChunkMs": 216
+        },
+        {
+          "turnMs": 1443,
+          "firstChunkMs": 1105
+        },
+        {
+          "turnMs": 3164,
+          "firstChunkMs": 499
+        },
+        {
+          "turnMs": 7902,
+          "firstChunkMs": 174
+        },
+        {
+          "turnMs": 2361,
+          "firstChunkMs": 182
+        },
+        {
+          "turnMs": 3690,
+          "firstChunkMs": 2198
+        },
+        {
+          "turnMs": 16740,
+          "firstChunkMs": 183
+        },
+        {
+          "turnMs": 831,
+          "firstChunkMs": 229
+        },
+        {
+          "turnMs": 12260,
+          "firstChunkMs": 169
+        },
+        {
+          "turnMs": 618,
+          "firstChunkMs": 213
+        },
+        {
+          "turnMs": 1023,
+          "firstChunkMs": 200
+        },
+        {
+          "turnMs": 799,
+          "firstChunkMs": 177
+        },
+        {
+          "turnMs": 2137,
+          "firstChunkMs": 183
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 83653,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 84
+      }
+    },
+    {
+      "id": "testgen-mock-dependency-03",
+      "firstToolCallMs": 1048,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 1041,
+          "firstChunkMs": 302
+        },
+        {
+          "turnMs": 526,
+          "firstChunkMs": 139
+        },
+        {
+          "turnMs": 669,
+          "firstChunkMs": 190
+        },
+        {
+          "turnMs": 1303,
+          "firstChunkMs": 160
+        },
+        {
+          "turnMs": 8391,
+          "firstChunkMs": 160
+        },
+        {
+          "turnMs": 1464,
+          "firstChunkMs": 197
+        },
+        {
+          "turnMs": 1111,
+          "firstChunkMs": 186
+        },
+        {
+          "turnMs": 1140,
+          "firstChunkMs": 231
+        },
+        {
+          "turnMs": 1140,
+          "firstChunkMs": 178
+        },
+        {
+          "turnMs": 3307,
+          "firstChunkMs": 165
+        },
+        {
+          "turnMs": 5998,
+          "firstChunkMs": 159
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "agent: Error-burst guard: 4 consecutive tool errors. Terminating this turn. The session is still open."
+      ],
+      "taskMs": 26323,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 27
+      }
+    },
+    {
+      "id": "testgen-unit-function-01",
+      "firstToolCallMs": 798,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 792,
+          "firstChunkMs": 293
+        },
+        {
+          "turnMs": 370,
+          "firstChunkMs": 135
+        },
+        {
+          "turnMs": 770,
+          "firstChunkMs": 154
+        },
+        {
+          "turnMs": 7216,
+          "firstChunkMs": 153
+        },
+        {
+          "turnMs": 1402,
+          "firstChunkMs": 199
+        },
+        {
+          "turnMs": 834,
+          "firstChunkMs": 216
+        },
+        {
+          "turnMs": 2159,
+          "firstChunkMs": 218
+        },
+        {
+          "turnMs": 5172,
+          "firstChunkMs": 543
+        },
+        {
+          "turnMs": 1501,
+          "firstChunkMs": 173
+        },
+        {
+          "turnMs": 1294,
+          "firstChunkMs": 165
+        },
+        {
+          "turnMs": 763,
+          "firstChunkMs": 191
+        },
+        {
+          "turnMs": 2842,
+          "firstChunkMs": 387
+        },
+        {
+          "turnMs": 4612,
+          "firstChunkMs": 267
+        },
+        {
+          "turnMs": 1761,
+          "firstChunkMs": 191
+        },
+        {
+          "turnMs": 1534,
+          "firstChunkMs": 234
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "taskMs": 37458,
+      "memory": {
+        "status": "measured",
+        "peakResidentBytes": 14355844299,
+        "peakVramBytes": 14355844299,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 38
+      }
+    }
+  ]
+}

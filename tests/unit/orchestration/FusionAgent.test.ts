@@ -14,6 +14,7 @@ import {
 } from "../../../modules/coding/orchestration/FusionAgent.js";
 import { REDACTED } from "../../../core/observability/redactSecrets.js";
 import { makeOllamaClient } from "../../helpers/factories.js";
+import { NO_USER_SKILLS_DIR } from "../../helpers/noUserSkills.js";
 
 // v1.6.0 adoption-openrouter-fusion Phase 2 (OF004 + OF005 + OF006). The
 // FusionAgent is the judge half of the local panel-fusion technique: it fuses
@@ -178,7 +179,7 @@ describe("buildJudgeMessages", () => {
 
 describe("loadFusePrompt", () => {
   it("loads the real catalog fuse skill body declaring the schema and the untrusted-input rule", () => {
-    const prompt = loadFusePrompt(REAL_CATALOG_DIR, path.join(REAL_CATALOG_DIR, "__none__"));
+    const prompt = loadFusePrompt(REAL_CATALOG_DIR, NO_USER_SKILLS_DIR);
     for (const section of FUSION_SECTIONS) {
       expect(prompt).toContain(section);
     }
@@ -198,7 +199,7 @@ describe("loadFusePrompt", () => {
 describe("FusionAgent.fuse", () => {
   const FUSE_PROMPT = loadFusePrompt(
     REAL_CATALOG_DIR,
-    path.join(REAL_CATALOG_DIR, "__none__"),
+    NO_USER_SKILLS_DIR,
   );
 
   it("returns the judge output with a passing schema verdict and the fused count", async () => {

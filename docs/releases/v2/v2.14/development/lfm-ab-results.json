@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "gates": "docs/releases/v2/v2.14/development/gates.md",
+  "budgetSeconds": 36000,
+  "elapsedSeconds": 8415,
+  "budgetExhausted": false,
+  "arms": {
+    "candidate": {
+      "runs": [
+        {
+          "run": 1,
+          "model": "hf.co/LiquidAI/LFM2.5-24B-A2B-GGUF:QAD-Q4_0",
+          "toolFormat": "lfm-pythonic",
+          "options": {
+            "temperature": 0.1,
+            "top_k": 50,
+            "repeat_penalty": 1.05,
+            "num_ctx": 32768
+          },
+          "total": 28,
+          "completed": 19,
+          "complete": true,
+          "codecParseFailures": 0,
+          "offloaded": false,
+          "memoryMeasured": 28,
+          "peakVramBytes": 14355844299,
+          "peakRamBytes": 0
+        },
+        {
+          "run": 2,
+          "model": "hf.co/LiquidAI/LFM2.5-24B-A2B-GGUF:QAD-Q4_0",
+          "toolFormat": "lfm-pythonic",
+          "options": {
+            "temperature": 0.1,
+            "top_k": 50,
+            "repeat_penalty": 1.05,
+            "num_ctx": 32768
+          },
+          "total": 28,
+          "completed": 19,
+          "complete": true,
+          "codecParseFailures": 0,
+          "offloaded": false,
+          "memoryMeasured": 28,
+          "peakVramBytes": 14355844299,
+          "peakRamBytes": 0
+        },
+        {
+          "run": 3,
+          "model": "hf.co/LiquidAI/LFM2.5-24B-A2B-GGUF:QAD-Q4_0",
+          "toolFormat": "lfm-pythonic",
+          "options": {
+            "temperature": 0.1,
+            "top_k": 50,
+            "repeat_penalty": 1.05,
+            "num_ctx": 32768
+          },
+          "total": 28,
+          "completed": 21,
+          "complete": true,
+          "codecParseFailures": 0,
+          "offloaded": false,
+          "memoryMeasured": 28,
+          "peakVramBytes": 14355844299,
+          "peakRamBytes": 0
+        }
+      ],
+      "completeRuns": 3,
+      "completedPerRun": [
+        19,
+        19,
+        21
+      ],
+      "meanCompleted": 19.666666666666668,
+      "spread": [
+        19,
+        21
+      ],
+      "turnMsP50": 1273,
+      "turnMsP95": 10250,
+      "firstToolCallMsP50": 947,
+      "codecParseFailures": 0,
+      "offloaded": false
+    },
+    "holder": {
+      "runs": [
+        {
+          "run": 1,
+          "model": "nemotron-3.5-lightning:30b",
+          "toolFormat": "qwen-json",
+          "options": {
+            "temperature": 0.5,
+            "top_p": 0.9,
+            "top_k": 20,
+            "num_ctx": 32768
+          },
+          "total": 28,
+          "completed": 22,
+          "complete": true,
+          "codecParseFailures": 0,
+          "offloaded": true,
+          "memoryMeasured": 28,
+          "peakVramBytes": 13433097419,
+          "peakRamBytes": 12279579933
+        },
+        {
+          "run": 2,
+          "model": "nemotron-3.5-lightning:30b",
+          "toolFormat": "qwen-json",
+          "options": {
+            "temperature": 0.5,
+            "top_p": 0.9,
+            "top_k": 20,
+            "num_ctx": 32768
+          },
+          "total": 28,
+          "completed": 20,
+          "complete": true,
+          "codecParseFailures": 0,
+          "offloaded": true,
+          "memoryMeasured": 28,
+          "peakVramBytes": 13433097419,
+          "peakRamBytes": 12279579933
+        },
+        {
+          "run": 3,
+          "model": "nemotron-3.5-lightning:30b",
+          "toolFormat": "qwen-json",
+          "options": {
+            "temperature": 0.5,
+            "top_p": 0.9,
+            "top_k": 20,
+            "num_ctx": 32768
+          },
+          "total": 28,
+          "completed": 20,
+          "complete": true,
+          "codecParseFailures": 0,
+          "offloaded": true,
+          "memoryMeasured": 28,
+          "peakVramBytes": 13433097419,
+          "peakRamBytes": 12279579933
+        }
+      ],
+      "completeRuns": 3,
+      "completedPerRun": [
+        22,
+        20,
+        20
+      ],
+      "meanCompleted": 20.666666666666668,
+      "spread": [
+        20,
+        22
+      ],
+      "turnMsP50": 2957,
+      "turnMsP95": 18842,
+      "firstToolCallMsP50": 2513,
+      "codecParseFailures": 0,
+      "offloaded": true
+    }
+  },
+  "verdicts": {
+    "M-1": "PASS",
+    "M-2": "PASS",
+    "M-3": "PASS",
+    "M-3 reason": "(b) completion equal within spread and p95 turn time at least 25% better"
+  },
+  "interpretation": {
+    "rule": "overlapping completion ranges count as equal completion for M-3 (b)",
+    "decidedBy": "owner",
+    "date": "2026-10-17",
+    "alternative": "a literal reading of the HOLD sentence would have declined"
+  },
+  "decision": "ADMIT"
+}

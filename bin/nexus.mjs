@@ -24,6 +24,7 @@ import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync } from 
 import { homedir } from "node:os";
 import { createHash } from "node:crypto";
 import { createInterface } from "node:readline";
+import { createMetricsCollector, loadGoldenOptions } from "./goldenRunMetrics.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -58,6 +59,7 @@ Usage:
   nexus doctor [--migration-report] [--json] [--home <dir>] [--legacy-home <dir>] [--skills-root <dir>] [--stale-days <N>]
   nexus trace export --trace <id> --out <file> --db <path> [--title <t>]
   nexus golden run [--task <id>] [--mode dry|live] [--model <name>]
+                   [--options <file.json>] [--metrics <out.json>] [--tool-format <name>]
   nexus session new --json <body> [--token t] [--host 127.0.0.1] [--port 11500]
   nexus session send --json <body>
   nexus session list
@@ -894,6 +896,32 @@ export async function runGoldenRun(flags, stdout = process.stdout, stderr = proc
   const tasksDir = resolvePath(__dirname, "..", "tests", "golden", "tasks");
   const snapshotRoot = resolvePath(__dirname, "..", "tests", "golden", "snapshots");
 
+  // v2.14.0 T013: optional sampler options, per-turn metrics and a codec
+  // override for trial models. Each is validated before any task runs, and before the compiled
+  // runner loads, so a bad flag exits 2 even without a build.
+  if (flags.metrics === true || flags.options === true || flags["tool-format"] === true) {
+    stderr.write("nexus golden run: --options, --metrics and --tool-format need a value.\n");
+    return 2;
+  }
+  let llmOptions;
+  if (typeof flags.options === "string") {
+    try {
+      llmOptions = loadGoldenOptions(flags.options);
+    } catch (err) {
+      stderr.write(`nexus golden run: ${err instanceof Error ? err.message : String(err)}\n`);
+      return 2;
+    }
+  }
+  const toolFormat = typeof flags["tool-format"] === "string" ? flags["tool-format"] : undefined;
+  if (toolFormat !== undefined) {
+    const formats = await loadCompiled(["modules", "coding", "llm", "ToolCallFormat.js"], "ToolCallFormat");
+    if (!formats.TOOL_FORMAT_NAMES.includes(toolFormat)) {
+      stderr.write(`nexus golden run: unknown --tool-format "${toolFormat}".\n`);
+      return 2;
+    }
+  }
+  const metricsPath = typeof flags.metrics === "string" ? flags.metrics : undefined;
+
   const [runnerMod, loaderMod] = await Promise.all([
     loadCompiled(["modules", "coding", "evaluation", "GoldenTaskRunner.js"], "GoldenTaskRunner"),
     loadCompiled(["modules", "coding", "evaluation", "goldenTaskLoader.js"], "goldenTaskLoader"),
@@ -916,29 +944,46 @@ export async function runGoldenRun(flags, stdout = process.stdout, stderr = proc
     }
   }
 
+
   const options = { mode, snapshotRoot, initGit: false };
+  const model = typeof flags.model === "string" ? flags.model : "gemma4:e4b";
+  const metrics = metricsPath && mode === "live" ? createMetricsCollector({ model }) : null;
   if (mode === "live") {
-    const model = typeof flags.model === "string" ? flags.model : "gemma4:e4b";
     const [driverMod, llmMod] = await Promise.all([
       loadCompiled(["modules", "coding", "runtime", "HeadlessAgentDriver.js"], "HeadlessAgentDriver"),
-      loadCompiled(["modules", "coding", "llm", "OllamaClient.js"], "OllamaClient"),
+      // v2.14.0 T013: the vscode-free client. `OllamaClient.js` imports the
+      // extension's settings module, so a live run outside VS Code failed with
+      // "Cannot find module 'vscode'" before any task ran.
+      loadCompiled(["modules", "coding", "llm", "headlessOllamaClient.js"], "headlessOllamaClient"),
     ]);
+    const llm = llmMod.createHeadlessOllamaClient();
     options.driver = new driverMod.HeadlessAgentDriver({
-      llm: llmMod.createOllamaClient(),
+      llm: metrics ? metrics.wrapLlm(llm) : llm,
       model,
+      ...(llmOptions ? { llmOptions } : {}),
+      ...(toolFormat ? { toolFormat } : {}),
+      ...(metrics ? { onEvent: (event) => metrics.onEvent(event) } : {}),
     });
   }
 
   let passed = 0;
   const rows = [];
   for (const spec of tasks) {
+    metrics?.beginTask(spec.id);
     const result = await runnerMod.runGoldenTask(spec, options);
+    metrics?.endTask(result);
     if (result.passed) passed += 1;
     rows.push({ id: spec.id, passed: result.passed, failures: result.failures });
     if (!wantsJsonOutput(flags)) {
       const detail = result.failures.length > 0 ? ` -- ${result.failures[0]}` : "";
       stdout.write(`${result.passed ? "PASS" : "FAIL"} ${spec.id}${detail}\n`);
     }
+  }
+  if (metricsPath) {
+    const report = metrics
+      ? metrics.report({ model, mode, options: llmOptions ?? null, toolFormat: toolFormat ?? null, passed, total: tasks.length })
+      : { schemaVersion: 1, model, mode, status: "not_measured", reason: "metrics need --mode live", tasks: [] };
+    writeFileSync(metricsPath, `${JSON.stringify(report, null, 2)}\n`);
   }
   if (wantsJsonOutput(flags)) {
     writeJsonLines(stdout, rows);

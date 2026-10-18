@@ -6,6 +6,7 @@
  * adapted into the AgentLoop / HeadlessAgentSession `ParseResult` shape.
  */
 
+import { lookupAlias, toSidecarRuntime } from "../../../core/registry/modelAliases.js";
 import { randomUUID } from "crypto";
 import {
   ModelCatalog,
@@ -21,7 +22,12 @@ import { getToolCallFormat } from "./ToolCallFormat.js";
 import type { LLMToolCall } from "./types.js";
 
 export function toolFormatForModel(modelId: string): ToolFormatName {
-  return ModelCatalog.byId(modelId)?.toolFormat ?? "gemma4-xml";
+  // v2.14.0 T013: an entry known only to the installer catalog (an admitted
+  // `catalog.json` model) takes its declared or family codec, not Gemma's.
+  const coding = ModelCatalog.byId(modelId)?.toolFormat;
+  if (coding) return coding;
+  const alias = lookupAlias(modelId);
+  return (alias && toSidecarRuntime(alias)?.toolFormat) ?? "gemma4-xml";
 }
 
 export interface ToolCallSyntax {

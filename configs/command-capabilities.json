@@ -44,6 +44,14 @@
       "feature": "f002"
     },
     {
+      "command": "audio.speakCancel",
+      "feature": "f002"
+    },
+    {
+      "command": "audio.speakDrain",
+      "feature": "f002"
+    },
+    {
       "command": "audio.transcribe",
       "feature": "f002"
     },

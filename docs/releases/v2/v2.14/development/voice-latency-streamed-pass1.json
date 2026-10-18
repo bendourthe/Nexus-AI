@@ -1,0 +1,3106 @@
+{
+  "schemaVersion": 1,
+  "tool": "scripts/measure-voice-latency.mjs",
+  "mode": "streamed",
+  "model": "gemma-4-12b-it-gguf",
+  "startedAt": "2026-10-17T02:58:31.413Z",
+  "finishedAt": "2026-10-17T03:41:54.149Z",
+  "host": {
+    "platform": "win32",
+    "runtimeConfig": true
+  },
+  "runsPerFixture": {
+    "warm": 20,
+    "cold": 5,
+    "bargeIn": 5
+  },
+  "pollIntervalMs": 100,
+  "status": "measured",
+  "turns": [
+    {
+      "fixture": "short",
+      "temperature": "cold",
+      "run": 1,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5515,
+        "modelFirstToken": 9938,
+        "modelComplete": 10142,
+        "synthesis": 0,
+        "firstAudio": 18126,
+        "timeToFirstAudio": 18126,
+        "timeToLastAudio": 20426
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "cold",
+      "run": 2,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4654,
+        "modelFirstToken": 7386,
+        "modelComplete": 7608,
+        "synthesis": 0,
+        "firstAudio": 15055,
+        "timeToFirstAudio": 15055,
+        "timeToLastAudio": 17355
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "cold",
+      "run": 3,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4709,
+        "modelFirstToken": 8202,
+        "modelComplete": 8421,
+        "synthesis": 0,
+        "firstAudio": 15823,
+        "timeToFirstAudio": 15823,
+        "timeToLastAudio": 18123
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "cold",
+      "run": 4,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4755,
+        "modelFirstToken": 5691,
+        "modelComplete": 5906,
+        "synthesis": 0,
+        "firstAudio": 13235,
+        "timeToFirstAudio": 13235,
+        "timeToLastAudio": 15535
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "cold",
+      "run": 5,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4728,
+        "modelFirstToken": 8211,
+        "modelComplete": 8437,
+        "synthesis": 0,
+        "firstAudio": 16149,
+        "timeToFirstAudio": 16149,
+        "timeToLastAudio": 18449
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 1,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4086,
+        "modelFirstToken": 7932,
+        "modelComplete": 8137,
+        "synthesis": 0,
+        "firstAudio": 8676,
+        "timeToFirstAudio": 8676,
+        "timeToLastAudio": 10976
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 2,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4290,
+        "modelFirstToken": 7378,
+        "modelComplete": 7584,
+        "synthesis": 0,
+        "firstAudio": 8111,
+        "timeToFirstAudio": 8111,
+        "timeToLastAudio": 10411
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 3,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3979,
+        "modelFirstToken": 7055,
+        "modelComplete": 7240,
+        "synthesis": 0,
+        "firstAudio": 7812,
+        "timeToFirstAudio": 7812,
+        "timeToLastAudio": 10112
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 4,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4125,
+        "modelFirstToken": 8416,
+        "modelComplete": 8596,
+        "synthesis": 0,
+        "firstAudio": 9155,
+        "timeToFirstAudio": 9155,
+        "timeToLastAudio": 11455
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 5,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4160,
+        "modelFirstToken": 6833,
+        "modelComplete": 7034,
+        "synthesis": 0,
+        "firstAudio": 7658,
+        "timeToFirstAudio": 7658,
+        "timeToLastAudio": 9958
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 6,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3971,
+        "modelFirstToken": 8094,
+        "modelComplete": 8292,
+        "synthesis": 0,
+        "firstAudio": 8888,
+        "timeToFirstAudio": 8888,
+        "timeToLastAudio": 11188
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 7,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3875,
+        "modelFirstToken": 8293,
+        "modelComplete": 8497,
+        "synthesis": 0,
+        "firstAudio": 9113,
+        "timeToFirstAudio": 9113,
+        "timeToLastAudio": 11413
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 8,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3923,
+        "modelFirstToken": 7425,
+        "modelComplete": 7632,
+        "synthesis": 0,
+        "firstAudio": 8285,
+        "timeToFirstAudio": 8285,
+        "timeToLastAudio": 10585
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 9,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4171,
+        "modelFirstToken": 7823,
+        "modelComplete": 8029,
+        "synthesis": 0,
+        "firstAudio": 8649,
+        "timeToFirstAudio": 8649,
+        "timeToLastAudio": 10949
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 10,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3988,
+        "modelFirstToken": 5956,
+        "modelComplete": 6163,
+        "synthesis": 0,
+        "firstAudio": 6720,
+        "timeToFirstAudio": 6720,
+        "timeToLastAudio": 9020
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 11,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3900,
+        "modelFirstToken": 5956,
+        "modelComplete": 6144,
+        "synthesis": 0,
+        "firstAudio": 6748,
+        "timeToFirstAudio": 6748,
+        "timeToLastAudio": 9048
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 12,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3964,
+        "modelFirstToken": 5709,
+        "modelComplete": 5918,
+        "synthesis": 0,
+        "firstAudio": 6476,
+        "timeToFirstAudio": 6476,
+        "timeToLastAudio": 8776
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 13,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4044,
+        "modelFirstToken": 7857,
+        "modelComplete": 8036,
+        "synthesis": 0,
+        "firstAudio": 8633,
+        "timeToFirstAudio": 8633,
+        "timeToLastAudio": 10933
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 14,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4034,
+        "modelFirstToken": 8095,
+        "modelComplete": 8302,
+        "synthesis": 0,
+        "firstAudio": 8847,
+        "timeToFirstAudio": 8847,
+        "timeToLastAudio": 11147
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 15,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3950,
+        "modelFirstToken": 6635,
+        "modelComplete": 6841,
+        "synthesis": 0,
+        "firstAudio": 7449,
+        "timeToFirstAudio": 7449,
+        "timeToLastAudio": 9749
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 16,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3864,
+        "modelFirstToken": 5778,
+        "modelComplete": 5987,
+        "synthesis": 0,
+        "firstAudio": 6597,
+        "timeToFirstAudio": 6597,
+        "timeToLastAudio": 8897
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 17,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4087,
+        "modelFirstToken": 7777,
+        "modelComplete": 7963,
+        "synthesis": 0,
+        "firstAudio": 8580,
+        "timeToFirstAudio": 8580,
+        "timeToLastAudio": 10880
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 18,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3846,
+        "modelFirstToken": 7611,
+        "modelComplete": 7817,
+        "synthesis": 0,
+        "firstAudio": 8446,
+        "timeToFirstAudio": 8446,
+        "timeToLastAudio": 10746
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 19,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3687,
+        "modelFirstToken": 6669,
+        "modelComplete": 6876,
+        "synthesis": 0,
+        "firstAudio": 7508,
+        "timeToFirstAudio": 7508,
+        "timeToLastAudio": 9808
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "warm",
+      "run": 20,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4078,
+        "modelFirstToken": 7643,
+        "modelComplete": 7851,
+        "synthesis": 0,
+        "firstAudio": 8453,
+        "timeToFirstAudio": 8453,
+        "timeToLastAudio": 10753
+      },
+      "gapsMs": [],
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "barge-in",
+      "run": 1,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3874,
+        "modelFirstToken": 7878,
+        "modelComplete": 8085,
+        "synthesis": 0,
+        "firstAudio": 8701,
+        "timeToFirstAudio": 8701,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": null,
+        "state": "completed"
+      },
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "barge-in",
+      "run": 2,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4059,
+        "modelFirstToken": 7635,
+        "modelComplete": 7841,
+        "synthesis": 0,
+        "firstAudio": 8436,
+        "timeToFirstAudio": 8436,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": null,
+        "state": "completed"
+      },
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "barge-in",
+      "run": 3,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3957,
+        "modelFirstToken": 7328,
+        "modelComplete": 7532,
+        "synthesis": 0,
+        "firstAudio": 8114,
+        "timeToFirstAudio": 8114,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": null,
+        "state": "completed"
+      },
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "barge-in",
+      "run": 4,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4163,
+        "modelFirstToken": 7599,
+        "modelComplete": 7806,
+        "synthesis": 0,
+        "firstAudio": 8424,
+        "timeToFirstAudio": 8424,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": null,
+        "state": "completed"
+      },
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "short",
+      "temperature": "barge-in",
+      "run": 5,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3996,
+        "modelFirstToken": 5284,
+        "modelComplete": 5491,
+        "synthesis": 0,
+        "firstAudio": 6085,
+        "timeToFirstAudio": 6085,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": null,
+        "state": "completed"
+      },
+      "counts": {
+        "transcriptChars": 84,
+        "replyChars": 31,
+        "tokenEvents": 7,
+        "segments": 1,
+        "audioDurationMs": 2300
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "cold",
+      "run": 1,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4887,
+        "modelFirstToken": 15216,
+        "modelComplete": 18147,
+        "synthesis": 4199,
+        "firstAudio": 24706,
+        "timeToFirstAudio": 24706,
+        "timeToLastAudio": 48106
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 484,
+        "tokenEvents": 103,
+        "segments": 5,
+        "audioDurationMs": 23400
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "cold",
+      "run": 2,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4846,
+        "modelFirstToken": 27216,
+        "modelComplete": 30044,
+        "synthesis": 3635,
+        "firstAudio": 36681,
+        "timeToFirstAudio": 36681,
+        "timeToLastAudio": 57556
+      },
+      "gapsMs": [
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 452,
+        "tokenEvents": 97,
+        "segments": 4,
+        "audioDurationMs": 20875
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "cold",
+      "run": 3,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4931,
+        "modelFirstToken": 19170,
+        "modelComplete": 22353,
+        "synthesis": 4198,
+        "firstAudio": 29040,
+        "timeToFirstAudio": 29040,
+        "timeToLastAudio": 54740
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 530,
+        "tokenEvents": 112,
+        "segments": 5,
+        "audioDurationMs": 25700
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "cold",
+      "run": 4,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4881,
+        "modelFirstToken": 25532,
+        "modelComplete": 28668,
+        "synthesis": 4075,
+        "firstAudio": 34867,
+        "timeToFirstAudio": 34867,
+        "timeToLastAudio": 58317
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 478,
+        "tokenEvents": 107,
+        "segments": 5,
+        "audioDurationMs": 23450
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "cold",
+      "run": 5,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4956,
+        "modelFirstToken": 21560,
+        "modelComplete": 24444,
+        "synthesis": 5173,
+        "firstAudio": 30581,
+        "timeToFirstAudio": 30581,
+        "timeToLastAudio": 55806
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 491,
+        "tokenEvents": 103,
+        "segments": 5,
+        "audioDurationMs": 25225
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 1,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5311,
+        "modelFirstToken": 22221,
+        "modelComplete": 25193,
+        "synthesis": 3746,
+        "firstAudio": 24647,
+        "timeToFirstAudio": 24647,
+        "timeToLastAudio": 46822
+      },
+      "gapsMs": [
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 470,
+        "tokenEvents": 102,
+        "segments": 4,
+        "audioDurationMs": 22175
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 2,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4851,
+        "modelFirstToken": 25655,
+        "modelComplete": 29123,
+        "synthesis": 4632,
+        "firstAudio": 28339,
+        "timeToFirstAudio": 28339,
+        "timeToLastAudio": 54764
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 524,
+        "tokenEvents": 116,
+        "segments": 5,
+        "audioDurationMs": 26425
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 3,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4392,
+        "modelFirstToken": 15464,
+        "modelComplete": 18515,
+        "synthesis": 4171,
+        "firstAudio": 17841,
+        "timeToFirstAudio": 17841,
+        "timeToLastAudio": 41041
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 470,
+        "tokenEvents": 104,
+        "segments": 5,
+        "audioDurationMs": 23200
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 4,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4339,
+        "modelFirstToken": 15996,
+        "modelComplete": 19375,
+        "synthesis": 4651,
+        "firstAudio": 18771,
+        "timeToFirstAudio": 18771,
+        "timeToLastAudio": 44596
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 514,
+        "tokenEvents": 113,
+        "segments": 5,
+        "audioDurationMs": 25825
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 5,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4164,
+        "modelFirstToken": 12912,
+        "modelComplete": 16536,
+        "synthesis": 5502,
+        "firstAudio": 15618,
+        "timeToFirstAudio": 15618,
+        "timeToLastAudio": 44468
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 583,
+        "tokenEvents": 124,
+        "segments": 5,
+        "audioDurationMs": 28850
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 6,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4203,
+        "modelFirstToken": 18172,
+        "modelComplete": 21473,
+        "synthesis": 4733,
+        "firstAudio": 21096,
+        "timeToFirstAudio": 21096,
+        "timeToLastAudio": 48796
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 528,
+        "tokenEvents": 112,
+        "segments": 5,
+        "audioDurationMs": 27700
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 7,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4130,
+        "modelFirstToken": 15057,
+        "modelComplete": 18136,
+        "synthesis": 4714,
+        "firstAudio": 17565,
+        "timeToFirstAudio": 17565,
+        "timeToLastAudio": 42640
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 487,
+        "tokenEvents": 105,
+        "segments": 5,
+        "audioDurationMs": 25075
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 8,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4368,
+        "modelFirstToken": 21342,
+        "modelComplete": 24530,
+        "synthesis": 4512,
+        "firstAudio": 23802,
+        "timeToFirstAudio": 23802,
+        "timeToLastAudio": 48852
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 515,
+        "tokenEvents": 111,
+        "segments": 5,
+        "audioDurationMs": 25050
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 9,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4239,
+        "modelFirstToken": 20558,
+        "modelComplete": 23839,
+        "synthesis": 5169,
+        "firstAudio": 23027,
+        "timeToFirstAudio": 23027,
+        "timeToLastAudio": 50052
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 544,
+        "tokenEvents": 113,
+        "segments": 5,
+        "audioDurationMs": 27025
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 10,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4274,
+        "modelFirstToken": 16524,
+        "modelComplete": 19737,
+        "synthesis": 4418,
+        "firstAudio": 19024,
+        "timeToFirstAudio": 19024,
+        "timeToLastAudio": 42874
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 500,
+        "tokenEvents": 107,
+        "segments": 5,
+        "audioDurationMs": 23850
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 11,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4292,
+        "modelFirstToken": 14644,
+        "modelComplete": 18007,
+        "synthesis": 4732,
+        "firstAudio": 17282,
+        "timeToFirstAudio": 17282,
+        "timeToLastAudio": 43457
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 535,
+        "tokenEvents": 116,
+        "segments": 5,
+        "audioDurationMs": 26175
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 12,
+      "status": "ok",
+      "spans": {
+        "transcribe": 3978,
+        "modelFirstToken": 16992,
+        "modelComplete": 19820,
+        "synthesis": 4385,
+        "firstAudio": 19592,
+        "timeToFirstAudio": 19592,
+        "timeToLastAudio": 44017
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 454,
+        "tokenEvents": 94,
+        "segments": 5,
+        "audioDurationMs": 24425
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 13,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4786,
+        "modelFirstToken": 29046,
+        "modelComplete": 32246,
+        "synthesis": 4411,
+        "firstAudio": 31870,
+        "timeToFirstAudio": 31870,
+        "timeToLastAudio": 57570
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 517,
+        "tokenEvents": 109,
+        "segments": 5,
+        "audioDurationMs": 25700
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 14,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4753,
+        "modelFirstToken": 22098,
+        "modelComplete": 25490,
+        "synthesis": 5504,
+        "firstAudio": 24084,
+        "timeToFirstAudio": 24084,
+        "timeToLastAudio": 51309
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 537,
+        "tokenEvents": 114,
+        "segments": 5,
+        "audioDurationMs": 27225
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 15,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4394,
+        "modelFirstToken": 23534,
+        "modelComplete": 26841,
+        "synthesis": 4854,
+        "firstAudio": 26018,
+        "timeToFirstAudio": 26018,
+        "timeToLastAudio": 52193
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 519,
+        "tokenEvents": 110,
+        "segments": 5,
+        "audioDurationMs": 26175
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 16,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4196,
+        "modelFirstToken": 18286,
+        "modelComplete": 21514,
+        "synthesis": 5177,
+        "firstAudio": 20782,
+        "timeToFirstAudio": 20782,
+        "timeToLastAudio": 47107
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 518,
+        "tokenEvents": 111,
+        "segments": 5,
+        "audioDurationMs": 26325
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 17,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4269,
+        "modelFirstToken": 16896,
+        "modelComplete": 20072,
+        "synthesis": 5500,
+        "firstAudio": 18699,
+        "timeToFirstAudio": 18699,
+        "timeToLastAudio": 45224
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 522,
+        "tokenEvents": 106,
+        "segments": 5,
+        "audioDurationMs": 26525
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 18,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4386,
+        "modelFirstToken": 14868,
+        "modelComplete": 18160,
+        "synthesis": 5295,
+        "firstAudio": 17605,
+        "timeToFirstAudio": 17605,
+        "timeToLastAudio": 46180
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 548,
+        "tokenEvents": 114,
+        "segments": 5,
+        "audioDurationMs": 28575
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 19,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4142,
+        "modelFirstToken": 14941,
+        "modelComplete": 18489,
+        "synthesis": 5294,
+        "firstAudio": 17357,
+        "timeToFirstAudio": 17357,
+        "timeToLastAudio": 44907
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 549,
+        "tokenEvents": 119,
+        "segments": 5,
+        "audioDurationMs": 27550
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "warm",
+      "run": 20,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4381,
+        "modelFirstToken": 20405,
+        "modelComplete": 23633,
+        "synthesis": 4736,
+        "firstAudio": 22736,
+        "timeToFirstAudio": 22736,
+        "timeToLastAudio": 48211
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 516,
+        "tokenEvents": 109,
+        "segments": 5,
+        "audioDurationMs": 25475
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "barge-in",
+      "run": 1,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4447,
+        "modelFirstToken": 17466,
+        "modelComplete": 20954,
+        "synthesis": 0,
+        "firstAudio": 20272,
+        "timeToFirstAudio": 20272,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": 12,
+        "state": "cancelled"
+      },
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 546,
+        "tokenEvents": 118,
+        "segments": 1,
+        "audioDurationMs": 8075
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "barge-in",
+      "run": 2,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5150,
+        "modelFirstToken": 16469,
+        "modelComplete": 19924,
+        "synthesis": 0,
+        "firstAudio": 19024,
+        "timeToFirstAudio": 19024,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": 11,
+        "state": "cancelled"
+      },
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 541,
+        "tokenEvents": 115,
+        "segments": 1,
+        "audioDurationMs": 7925
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "barge-in",
+      "run": 3,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5026,
+        "modelFirstToken": 21124,
+        "modelComplete": 24083,
+        "synthesis": 0,
+        "firstAudio": 23709,
+        "timeToFirstAudio": 23709,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": 12,
+        "state": "cancelled"
+      },
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 467,
+        "tokenEvents": 100,
+        "segments": 1,
+        "audioDurationMs": 7175
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "barge-in",
+      "run": 4,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5321,
+        "modelFirstToken": 19064,
+        "modelComplete": 22257,
+        "synthesis": 0,
+        "firstAudio": 21588,
+        "timeToFirstAudio": 21588,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": 26,
+        "state": "cancelled"
+      },
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 514,
+        "tokenEvents": 111,
+        "segments": 1,
+        "audioDurationMs": 7875
+      }
+    },
+    {
+      "fixture": "medium",
+      "temperature": "barge-in",
+      "run": 5,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4754,
+        "modelFirstToken": 24638,
+        "modelComplete": 27997,
+        "synthesis": 0,
+        "firstAudio": 27293,
+        "timeToFirstAudio": 27293,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": 26,
+        "state": "cancelled"
+      },
+      "counts": {
+        "transcriptChars": 159,
+        "replyChars": 531,
+        "tokenEvents": 111,
+        "segments": 1,
+        "audioDurationMs": 7700
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "cold",
+      "run": 1,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4870,
+        "modelFirstToken": 25906,
+        "modelComplete": 30248,
+        "synthesis": 11617,
+        "firstAudio": 37052,
+        "timeToFirstAudio": 37052,
+        "timeToLastAudio": 90627
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 794,
+        "tokenEvents": 151,
+        "segments": 8,
+        "audioDurationMs": 53575
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "cold",
+      "run": 2,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4630,
+        "modelFirstToken": 29514,
+        "modelComplete": 34557,
+        "synthesis": 12924,
+        "firstAudio": 39406,
+        "timeToFirstAudio": 39406,
+        "timeToLastAudio": 101656
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 941,
+        "tokenEvents": 174,
+        "segments": 8,
+        "audioDurationMs": 62250
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "cold",
+      "run": 3,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4868,
+        "modelFirstToken": 24312,
+        "modelComplete": 28977,
+        "synthesis": 11692,
+        "firstAudio": 34070,
+        "timeToFirstAudio": 34070,
+        "timeToLastAudio": 90320
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 839,
+        "tokenEvents": 158,
+        "segments": 8,
+        "audioDurationMs": 56250
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "cold",
+      "run": 4,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4955,
+        "modelFirstToken": 18571,
+        "modelComplete": 23215,
+        "synthesis": 12338,
+        "firstAudio": 28238,
+        "timeToFirstAudio": 28238,
+        "timeToLastAudio": 83688
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 846,
+        "tokenEvents": 165,
+        "segments": 8,
+        "audioDurationMs": 55450
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "cold",
+      "run": 5,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4822,
+        "modelFirstToken": 27151,
+        "modelComplete": 32049,
+        "synthesis": 13152,
+        "firstAudio": 37086,
+        "timeToFirstAudio": 37086,
+        "timeToLastAudio": 97136
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 921,
+        "tokenEvents": 170,
+        "segments": 8,
+        "audioDurationMs": 60050
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 1,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5486,
+        "modelFirstToken": 19496,
+        "modelComplete": 24190,
+        "synthesis": 15222,
+        "firstAudio": 23328,
+        "timeToFirstAudio": 23328,
+        "timeToLastAudio": 80053
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 863,
+        "tokenEvents": 160,
+        "segments": 8,
+        "audioDurationMs": 56725
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 2,
+      "status": "ok",
+      "spans": {
+        "transcribe": 7255,
+        "modelFirstToken": 26303,
+        "modelComplete": 31364,
+        "synthesis": 26643,
+        "firstAudio": 28969,
+        "timeToFirstAudio": 28969,
+        "timeToLastAudio": 85269
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 853,
+        "tokenEvents": 166,
+        "segments": 8,
+        "audioDurationMs": 56300
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 3,
+      "status": "ok",
+      "spans": {
+        "transcribe": 7575,
+        "modelFirstToken": 23406,
+        "modelComplete": 28131,
+        "synthesis": 20142,
+        "firstAudio": 25470,
+        "timeToFirstAudio": 25470,
+        "timeToLastAudio": 78131
+      },
+      "gapsMs": [
+        36,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 781,
+        "tokenEvents": 156,
+        "segments": 8,
+        "audioDurationMs": 52625
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 4,
+      "status": "ok",
+      "spans": {
+        "transcribe": 7990,
+        "modelFirstToken": 25352,
+        "modelComplete": 30578,
+        "synthesis": 13230,
+        "firstAudio": 30169,
+        "timeToFirstAudio": 30169,
+        "timeToLastAudio": 91569
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 930,
+        "tokenEvents": 173,
+        "segments": 8,
+        "audioDurationMs": 61400
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 5,
+      "status": "ok",
+      "spans": {
+        "transcribe": 6636,
+        "modelFirstToken": 57077,
+        "modelComplete": 61649,
+        "synthesis": 11787,
+        "firstAudio": 63031,
+        "timeToFirstAudio": 63031,
+        "timeToLastAudio": 114606
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 779,
+        "tokenEvents": 149,
+        "segments": 8,
+        "audioDurationMs": 51575
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 6,
+      "status": "ok",
+      "spans": {
+        "transcribe": 6367,
+        "modelFirstToken": 20313,
+        "modelComplete": 25270,
+        "synthesis": 11935,
+        "firstAudio": 22489,
+        "timeToFirstAudio": 22489,
+        "timeToLastAudio": 81289
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 866,
+        "tokenEvents": 166,
+        "segments": 8,
+        "audioDurationMs": 58800
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 7,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5900,
+        "modelFirstToken": 20959,
+        "modelComplete": 26074,
+        "synthesis": 11471,
+        "firstAudio": 23199,
+        "timeToFirstAudio": 23199,
+        "timeToLastAudio": 80024
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 866,
+        "tokenEvents": 171,
+        "segments": 8,
+        "audioDurationMs": 56825
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 8,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5888,
+        "modelFirstToken": 20961,
+        "modelComplete": 25687,
+        "synthesis": 11076,
+        "firstAudio": 23103,
+        "timeToFirstAudio": 23103,
+        "timeToLastAudio": 77278
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 826,
+        "tokenEvents": 158,
+        "segments": 8,
+        "audioDurationMs": 54175
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 9,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5599,
+        "modelFirstToken": 25697,
+        "modelComplete": 30578,
+        "synthesis": 11520,
+        "firstAudio": 27930,
+        "timeToFirstAudio": 27930,
+        "timeToLastAudio": 83155
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 834,
+        "tokenEvents": 165,
+        "segments": 8,
+        "audioDurationMs": 55225
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 10,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5734,
+        "modelFirstToken": 23704,
+        "modelComplete": 28590,
+        "synthesis": 11734,
+        "firstAudio": 25999,
+        "timeToFirstAudio": 25999,
+        "timeToLastAudio": 84724
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 884,
+        "tokenEvents": 164,
+        "segments": 8,
+        "audioDurationMs": 58725
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 11,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5481,
+        "modelFirstToken": 26575,
+        "modelComplete": 31731,
+        "synthesis": 11514,
+        "firstAudio": 28752,
+        "timeToFirstAudio": 28752,
+        "timeToLastAudio": 87352
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 884,
+        "tokenEvents": 174,
+        "segments": 8,
+        "audioDurationMs": 58600
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 12,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4685,
+        "modelFirstToken": 24894,
+        "modelComplete": 30263,
+        "synthesis": 12810,
+        "firstAudio": 26690,
+        "timeToFirstAudio": 26690,
+        "timeToLastAudio": 89665
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 954,
+        "tokenEvents": 179,
+        "segments": 8,
+        "audioDurationMs": 62975
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 13,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5520,
+        "modelFirstToken": 31693,
+        "modelComplete": 36845,
+        "synthesis": 11503,
+        "firstAudio": 34061,
+        "timeToFirstAudio": 34061,
+        "timeToLastAudio": 89036
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 830,
+        "tokenEvents": 167,
+        "segments": 8,
+        "audioDurationMs": 54975
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 14,
+      "status": "ok",
+      "spans": {
+        "transcribe": 6022,
+        "modelFirstToken": 23387,
+        "modelComplete": 28276,
+        "synthesis": 21706,
+        "firstAudio": 29303,
+        "timeToFirstAudio": 29303,
+        "timeToLastAudio": 83378
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 828,
+        "tokenEvents": 161,
+        "segments": 8,
+        "audioDurationMs": 54075
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 15,
+      "status": "ok",
+      "spans": {
+        "transcribe": 9843,
+        "modelFirstToken": 38486,
+        "modelComplete": 43690,
+        "synthesis": 21979,
+        "firstAudio": 41178,
+        "timeToFirstAudio": 41178,
+        "timeToLastAudio": 99478
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 874,
+        "tokenEvents": 173,
+        "segments": 8,
+        "audioDurationMs": 58300
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 16,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5857,
+        "modelFirstToken": 26784,
+        "modelComplete": 31914,
+        "synthesis": 27853,
+        "firstAudio": 29520,
+        "timeToFirstAudio": 29520,
+        "timeToLastAudio": 87845
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 893,
+        "tokenEvents": 167,
+        "segments": 8,
+        "audioDurationMs": 58325
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 17,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5426,
+        "modelFirstToken": 20666,
+        "modelComplete": 25752,
+        "synthesis": 12424,
+        "firstAudio": 24012,
+        "timeToFirstAudio": 24012,
+        "timeToLastAudio": 81462
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 872,
+        "tokenEvents": 171,
+        "segments": 8,
+        "audioDurationMs": 57450
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 18,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5391,
+        "modelFirstToken": 52788,
+        "modelComplete": 57253,
+        "synthesis": 10633,
+        "firstAudio": 55607,
+        "timeToFirstAudio": 55607,
+        "timeToLastAudio": 109157
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 797,
+        "tokenEvents": 149,
+        "segments": 8,
+        "audioDurationMs": 53550
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 19,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4491,
+        "modelFirstToken": 17529,
+        "modelComplete": 22437,
+        "synthesis": 11465,
+        "firstAudio": 20051,
+        "timeToFirstAudio": 20051,
+        "timeToLastAudio": 73851
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 828,
+        "tokenEvents": 161,
+        "segments": 8,
+        "audioDurationMs": 53800
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "warm",
+      "run": 20,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4385,
+        "modelFirstToken": 20551,
+        "modelComplete": 24956,
+        "synthesis": 11171,
+        "firstAudio": 22777,
+        "timeToFirstAudio": 22777,
+        "timeToLastAudio": 75952
+      },
+      "gapsMs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 820,
+        "tokenEvents": 151,
+        "segments": 8,
+        "audioDurationMs": 53175
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "barge-in",
+      "run": 1,
+      "status": "ok",
+      "spans": {
+        "transcribe": 5107,
+        "modelFirstToken": 19591,
+        "modelComplete": 24480,
+        "synthesis": 0,
+        "firstAudio": 22546,
+        "timeToFirstAudio": 22546,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": 26,
+        "state": "cancelled"
+      },
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 867,
+        "tokenEvents": 161,
+        "segments": 1,
+        "audioDurationMs": 8600
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "barge-in",
+      "run": 2,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4562,
+        "modelFirstToken": 57548,
+        "modelComplete": 62992,
+        "synthesis": 0,
+        "firstAudio": 61701,
+        "timeToFirstAudio": 61701,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": 25,
+        "state": "cancelled"
+      },
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 928,
+        "tokenEvents": 177,
+        "segments": 1,
+        "audioDurationMs": 8175
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "barge-in",
+      "run": 3,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4949,
+        "modelFirstToken": 25802,
+        "modelComplete": 30716,
+        "synthesis": 0,
+        "firstAudio": 27933,
+        "timeToFirstAudio": 27933,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": 11,
+        "state": "cancelled"
+      },
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 865,
+        "tokenEvents": 165,
+        "segments": 1,
+        "audioDurationMs": 7000
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "barge-in",
+      "run": 4,
+      "status": "ok",
+      "spans": {
+        "transcribe": 4163,
+        "modelFirstToken": 43838,
+        "modelComplete": 48771,
+        "synthesis": 0,
+        "firstAudio": 48160,
+        "timeToFirstAudio": 48160,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": 25,
+        "state": "cancelled"
+      },
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 847,
+        "tokenEvents": 159,
+        "segments": 1,
+        "audioDurationMs": 8175
+      }
+    },
+    {
+      "fixture": "long",
+      "temperature": "barge-in",
+      "run": 5,
+      "status": "ok",
+      "spans": {
+        "transcribe": 6560,
+        "modelFirstToken": 88237,
+        "modelComplete": 92470,
+        "synthesis": 0,
+        "firstAudio": 90462,
+        "timeToFirstAudio": 90462,
+        "timeToLastAudio": null
+      },
+      "gapsMs": [],
+      "bargeIn": {
+        "cancelMs": 12,
+        "state": "cancelled"
+      },
+      "counts": {
+        "transcriptChars": 113,
+        "replyChars": 695,
+        "tokenEvents": 137,
+        "segments": 1,
+        "audioDurationMs": 6750
+      }
+    }
+  ],
+  "summary": {
+    "short:cold": {
+      "runs": 5,
+      "ok": 5,
+      "failures": [],
+      "stats": {
+        "transcribe": {
+          "n": 5,
+          "p50": 4728,
+          "p95": 5515,
+          "min": 4654,
+          "max": 5515
+        },
+        "modelFirstToken": {
+          "n": 5,
+          "p50": 8202,
+          "p95": 9938,
+          "min": 5691,
+          "max": 9938
+        },
+        "modelComplete": {
+          "n": 5,
+          "p50": 8421,
+          "p95": 10142,
+          "min": 5906,
+          "max": 10142
+        },
+        "synthesis": {
+          "n": 5,
+          "p50": 0,
+          "p95": 0,
+          "min": 0,
+          "max": 0
+        },
+        "firstAudio": {
+          "n": 5,
+          "p50": 15823,
+          "p95": 18126,
+          "min": 13235,
+          "max": 18126
+        },
+        "timeToFirstAudio": {
+          "n": 5,
+          "p50": 15823,
+          "p95": 18126,
+          "min": 13235,
+          "max": 18126
+        },
+        "timeToLastAudio": {
+          "n": 5,
+          "p50": 18123,
+          "p95": 20426,
+          "min": 15535,
+          "max": 20426
+        },
+        "interSegmentGap": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        },
+        "bargeInCancel": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    "short:warm": {
+      "runs": 20,
+      "ok": 20,
+      "failures": [],
+      "stats": {
+        "transcribe": {
+          "n": 20,
+          "p50": 3979,
+          "p95": 4171,
+          "min": 3687,
+          "max": 4290
+        },
+        "modelFirstToken": {
+          "n": 20,
+          "p50": 7425,
+          "p95": 8293,
+          "min": 5709,
+          "max": 8416
+        },
+        "modelComplete": {
+          "n": 20,
+          "p50": 7632,
+          "p95": 8497,
+          "min": 5918,
+          "max": 8596
+        },
+        "synthesis": {
+          "n": 20,
+          "p50": 0,
+          "p95": 0,
+          "min": 0,
+          "max": 0
+        },
+        "firstAudio": {
+          "n": 20,
+          "p50": 8285,
+          "p95": 9113,
+          "min": 6476,
+          "max": 9155
+        },
+        "timeToFirstAudio": {
+          "n": 20,
+          "p50": 8285,
+          "p95": 9113,
+          "min": 6476,
+          "max": 9155
+        },
+        "timeToLastAudio": {
+          "n": 20,
+          "p50": 10585,
+          "p95": 11413,
+          "min": 8776,
+          "max": 11455
+        },
+        "interSegmentGap": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        },
+        "bargeInCancel": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    "short:barge-in": {
+      "runs": 5,
+      "ok": 5,
+      "failures": [],
+      "stats": {
+        "transcribe": {
+          "n": 5,
+          "p50": 3996,
+          "p95": 4163,
+          "min": 3874,
+          "max": 4163
+        },
+        "modelFirstToken": {
+          "n": 5,
+          "p50": 7599,
+          "p95": 7878,
+          "min": 5284,
+          "max": 7878
+        },
+        "modelComplete": {
+          "n": 5,
+          "p50": 7806,
+          "p95": 8085,
+          "min": 5491,
+          "max": 8085
+        },
+        "synthesis": {
+          "n": 5,
+          "p50": 0,
+          "p95": 0,
+          "min": 0,
+          "max": 0
+        },
+        "firstAudio": {
+          "n": 5,
+          "p50": 8424,
+          "p95": 8701,
+          "min": 6085,
+          "max": 8701
+        },
+        "timeToFirstAudio": {
+          "n": 5,
+          "p50": 8424,
+          "p95": 8701,
+          "min": 6085,
+          "max": 8701
+        },
+        "timeToLastAudio": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        },
+        "interSegmentGap": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        },
+        "bargeInCancel": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    "medium:cold": {
+      "runs": 5,
+      "ok": 5,
+      "failures": [],
+      "stats": {
+        "transcribe": {
+          "n": 5,
+          "p50": 4887,
+          "p95": 4956,
+          "min": 4846,
+          "max": 4956
+        },
+        "modelFirstToken": {
+          "n": 5,
+          "p50": 21560,
+          "p95": 27216,
+          "min": 15216,
+          "max": 27216
+        },
+        "modelComplete": {
+          "n": 5,
+          "p50": 24444,
+          "p95": 30044,
+          "min": 18147,
+          "max": 30044
+        },
+        "synthesis": {
+          "n": 5,
+          "p50": 4198,
+          "p95": 5173,
+          "min": 3635,
+          "max": 5173
+        },
+        "firstAudio": {
+          "n": 5,
+          "p50": 30581,
+          "p95": 36681,
+          "min": 24706,
+          "max": 36681
+        },
+        "timeToFirstAudio": {
+          "n": 5,
+          "p50": 30581,
+          "p95": 36681,
+          "min": 24706,
+          "max": 36681
+        },
+        "timeToLastAudio": {
+          "n": 5,
+          "p50": 55806,
+          "p95": 58317,
+          "min": 48106,
+          "max": 58317
+        },
+        "interSegmentGap": {
+          "n": 19,
+          "p50": 0,
+          "p95": 0,
+          "min": 0,
+          "max": 0
+        },
+        "bargeInCancel": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    "medium:warm": {
+      "runs": 20,
+      "ok": 20,
+      "failures": [],
+      "stats": {
+        "transcribe": {
+          "n": 20,
+          "p50": 4292,
+          "p95": 4851,
+          "min": 3978,
+          "max": 5311
+        },
+        "modelFirstToken": {
+          "n": 20,
+          "p50": 16992,
+          "p95": 25655,
+          "min": 12912,
+          "max": 29046
+        },
+        "modelComplete": {
+          "n": 20,
+          "p50": 20072,
+          "p95": 29123,
+          "min": 16536,
+          "max": 32246
+        },
+        "synthesis": {
+          "n": 20,
+          "p50": 4732,
+          "p95": 5502,
+          "min": 3746,
+          "max": 5504
+        },
+        "firstAudio": {
+          "n": 20,
+          "p50": 19592,
+          "p95": 28339,
+          "min": 15618,
+          "max": 31870
+        },
+        "timeToFirstAudio": {
+          "n": 20,
+          "p50": 19592,
+          "p95": 28339,
+          "min": 15618,
+          "max": 31870
+        },
+        "timeToLastAudio": {
+          "n": 20,
+          "p50": 46180,
+          "p95": 54764,
+          "min": 41041,
+          "max": 57570
+        },
+        "interSegmentGap": {
+          "n": 79,
+          "p50": 0,
+          "p95": 0,
+          "min": 0,
+          "max": 0
+        },
+        "bargeInCancel": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    "medium:barge-in": {
+      "runs": 5,
+      "ok": 5,
+      "failures": [],
+      "stats": {
+        "transcribe": {
+          "n": 5,
+          "p50": 5026,
+          "p95": 5321,
+          "min": 4447,
+          "max": 5321
+        },
+        "modelFirstToken": {
+          "n": 5,
+          "p50": 19064,
+          "p95": 24638,
+          "min": 16469,
+          "max": 24638
+        },
+        "modelComplete": {
+          "n": 5,
+          "p50": 22257,
+          "p95": 27997,
+          "min": 19924,
+          "max": 27997
+        },
+        "synthesis": {
+          "n": 5,
+          "p50": 0,
+          "p95": 0,
+          "min": 0,
+          "max": 0
+        },
+        "firstAudio": {
+          "n": 5,
+          "p50": 21588,
+          "p95": 27293,
+          "min": 19024,
+          "max": 27293
+        },
+        "timeToFirstAudio": {
+          "n": 5,
+          "p50": 21588,
+          "p95": 27293,
+          "min": 19024,
+          "max": 27293
+        },
+        "timeToLastAudio": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        },
+        "interSegmentGap": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        },
+        "bargeInCancel": {
+          "n": 5,
+          "p50": 12,
+          "p95": 26,
+          "min": 11,
+          "max": 26
+        }
+      }
+    },
+    "long:cold": {
+      "runs": 5,
+      "ok": 5,
+      "failures": [],
+      "stats": {
+        "transcribe": {
+          "n": 5,
+          "p50": 4868,
+          "p95": 4955,
+          "min": 4630,
+          "max": 4955
+        },
+        "modelFirstToken": {
+          "n": 5,
+          "p50": 25906,
+          "p95": 29514,
+          "min": 18571,
+          "max": 29514
+        },
+        "modelComplete": {
+          "n": 5,
+          "p50": 30248,
+          "p95": 34557,
+          "min": 23215,
+          "max": 34557
+        },
+        "synthesis": {
+          "n": 5,
+          "p50": 12338,
+          "p95": 13152,
+          "min": 11617,
+          "max": 13152
+        },
+        "firstAudio": {
+          "n": 5,
+          "p50": 37052,
+          "p95": 39406,
+          "min": 28238,
+          "max": 39406
+        },
+        "timeToFirstAudio": {
+          "n": 5,
+          "p50": 37052,
+          "p95": 39406,
+          "min": 28238,
+          "max": 39406
+        },
+        "timeToLastAudio": {
+          "n": 5,
+          "p50": 90627,
+          "p95": 101656,
+          "min": 83688,
+          "max": 101656
+        },
+        "interSegmentGap": {
+          "n": 35,
+          "p50": 0,
+          "p95": 0,
+          "min": 0,
+          "max": 0
+        },
+        "bargeInCancel": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    "long:warm": {
+      "runs": 20,
+      "ok": 20,
+      "failures": [],
+      "stats": {
+        "transcribe": {
+          "n": 20,
+          "p50": 5734,
+          "p95": 7990,
+          "min": 4385,
+          "max": 9843
+        },
+        "modelFirstToken": {
+          "n": 20,
+          "p50": 23704,
+          "p95": 52788,
+          "min": 17529,
+          "max": 57077
+        },
+        "modelComplete": {
+          "n": 20,
+          "p50": 28590,
+          "p95": 57253,
+          "min": 22437,
+          "max": 61649
+        },
+        "synthesis": {
+          "n": 20,
+          "p50": 11787,
+          "p95": 26643,
+          "min": 10633,
+          "max": 27853
+        },
+        "firstAudio": {
+          "n": 20,
+          "p50": 26690,
+          "p95": 55607,
+          "min": 20051,
+          "max": 63031
+        },
+        "timeToFirstAudio": {
+          "n": 20,
+          "p50": 26690,
+          "p95": 55607,
+          "min": 20051,
+          "max": 63031
+        },
+        "timeToLastAudio": {
+          "n": 20,
+          "p50": 83378,
+          "p95": 109157,
+          "min": 73851,
+          "max": 114606
+        },
+        "interSegmentGap": {
+          "n": 140,
+          "p50": 0,
+          "p95": 0,
+          "min": 0,
+          "max": 36
+        },
+        "bargeInCancel": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    "long:barge-in": {
+      "runs": 5,
+      "ok": 5,
+      "failures": [],
+      "stats": {
+        "transcribe": {
+          "n": 5,
+          "p50": 4949,
+          "p95": 6560,
+          "min": 4163,
+          "max": 6560
+        },
+        "modelFirstToken": {
+          "n": 5,
+          "p50": 43838,
+          "p95": 88237,
+          "min": 19591,
+          "max": 88237
+        },
+        "modelComplete": {
+          "n": 5,
+          "p50": 48771,
+          "p95": 92470,
+          "min": 24480,
+          "max": 92470
+        },
+        "synthesis": {
+          "n": 5,
+          "p50": 0,
+          "p95": 0,
+          "min": 0,
+          "max": 0
+        },
+        "firstAudio": {
+          "n": 5,
+          "p50": 48160,
+          "p95": 90462,
+          "min": 22546,
+          "max": 90462
+        },
+        "timeToFirstAudio": {
+          "n": 5,
+          "p50": 48160,
+          "p95": 90462,
+          "min": 22546,
+          "max": 90462
+        },
+        "timeToLastAudio": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        },
+        "interSegmentGap": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        },
+        "bargeInCancel": {
+          "n": 5,
+          "p50": 25,
+          "p95": 26,
+          "min": 11,
+          "max": 26
+        }
+      }
+    }
+  }
+}
