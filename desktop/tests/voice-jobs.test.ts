@@ -136,6 +136,7 @@ describe("voice turns in the chat handler", () => {
 
   it("never sends reasoning, secrets, code or URLs to synthesis", async () => {
     const audio = new ScriptedAudio();
+    // nexus-check-allow-next-line: no-secret-patterns -- fake fixture for redaction tests
     const key = "AKIAABCDEFGHIJKLMNOP";
     await runVoiceTurn(
       [
