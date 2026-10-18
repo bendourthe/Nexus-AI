@@ -4,15 +4,15 @@
     "inputs": {
       "docs/handbooks/technical/transcript-and-workspaces.md": "712b61d40d13f27bba4f6b79eb497c93f13ecc8edeb1feab0f56c3b3ce5165fc",
       "scripts/generate-handbooks.mjs": "bf3b6a548a94c68c462d861dae9e4e469195d9408a36b12d155d7a6c9b64ed14",
-      "scripts/handbook-renderer.mjs": "05ba5507ff47b3bc62647ef32377c5ba301bea63af0375ace316205e89d132fa",
+      "scripts/handbook-renderer.mjs": "0850935742db242e576989c2ced66a5810a0bdfd0cad78791916cf5efb21566d",
       "docs/handbooks/_sources/storyboards.json": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013",
       "docs/handbooks/_sources/handbook.css": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf",
       "docs/handbooks/_sources/handbook-clones.js": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b",
       "docs/handbooks/_sources/dual-view.css": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
       "docs/handbooks/_sources/dual-view-runtime.js": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
       "desktop/public/nexus-mark.png": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05",
-      "package.json": "4cc033b1b60f5e23422a3cf0a66dc3dde02674ef81f49301d5b6c7e478433ab1",
-      "package-lock.json": "17cb86b3188d3efe34e81fed29cf03d4cab93166248713527231cb68e45c2cec",
+      "package.json": "26d927fd7e5fbaa926f7ddd368f2a3461077f833b49b259db76a913c4b4e07da",
+      "package-lock.json": "3eaefdf09503d18beb2e78058233735974acdc781247ff393e7be0408dc521aa",
       "core/chat/tokenUsage.ts": "501b2f411f37d1300a3cbdbef5f93c787125f688c3fd282bda7cefefb37cd645",
       "desktop/src/shared/chat/MessageBubble.tsx": "40d858daf20d99c0557c62a70825a4b5be706b2b8cae39fb56e76e7b505ed6e3",
       "desktop/src/shared/chat/transcriptChrome.ts": "00c5ef429245477b9a2adad6c7a58fe6d0bcd376e8b2594a48e434d967ccdb91",
@@ -28,13 +28,13 @@
   "checks": {
     "content": {
       "status": "pass",
-      "evidence": "docs/releases/v2/v2.14/development/v2.14.1-handbook-review.md",
-      "evidence_sha256": "d8b9e70eeb1019e0b95cdeac234388543c164c50d3b30e819a18056e03cf55f9"
+      "evidence": "docs/releases/v2/v2.14/development/v2.14.2-handbook-review.md",
+      "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
     },
     "build": {
       "status": "pass",
-      "evidence": "docs/releases/v2/v2.14/development/v2.14.1-handbook-review.md",
-      "evidence_sha256": "d8b9e70eeb1019e0b95cdeac234388543c164c50d3b30e819a18056e03cf55f9"
+      "evidence": "docs/releases/v2/v2.14/development/v2.14.2-handbook-review.md",
+      "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
     },
     "rendered": {
       "status": "pass",
