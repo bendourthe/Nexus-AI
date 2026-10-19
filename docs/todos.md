@@ -724,6 +724,14 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [ ] Evaluate EmbeddingGemma 2 text/code retrieval through the existing local adapter, resolve its context/terms discrepancies and measure the comparison's proposed gate before changing the model job map or defaults (E1/E2).
 - [ ] Implement and verify the planned durable recipe and shared commands for existing ImageViewer edits, including restart/reopen and UI-versus-command export equivalence, before adding broader creative-editor features (C1/C2).
 
+## Legacy known-gaps triage (queued v2.15.0)
+
+- [ ] Phase 1: pinned inventory and lossless converter ([plan](releases/v2/v2.15/plans/v2.15.0-legacy-known-gaps-triage.md)).
+- [ ] Phase 2: convert ledgers v1.17 to v2.12 and the carry-forward register to the checker's format.
+- [ ] Phase 3: triage the register and v2.12 (about 48 items); batch about 182 archived-only items for follow-up plans.
+- [ ] Phase 4: apply dispositions, verify migrations, record the checker-contract gap ([Nexus-Hub handoff](releases/v2/v2.15/development/v2.15.0-nexus-hub-checker-handoff.md)).
+- [ ] Phase 5: final phase and publication.
+
 ## Voice latency and LFM2.5-24B trial (v2.14.2, planned as v2.14.0)
 
 - [x] Phase 1: make desktop voice runnable on install (pinned Kokoro and Whisper files, voice packages in the media venv, sidecar audio interpreter, offline Kokoro, Windows CUDA DLL path), measure the baseline (medium warm time to first audio p50 38.6 s), probe LFM2.5-24B (GO on QAD-Q4_0) and freeze the gates ([Phase 1 evidence](archives/v2/v2.14/development/v2.14.0-phase1-evidence.md), 2026-10-16).
