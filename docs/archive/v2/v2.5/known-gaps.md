@@ -20,13 +20,14 @@ v2.5 plans in this directory are not started by the v2.4.11 tag.
 
 ## v2.5.0
 
-### CI-v251-1
+### CI-v251-1 - CLOSED 2026-10-19
 
 - **Class**: CI
 - **Source phase**: v2.5.1 Phase 4
 - **Plan reference**: `docs/archive/v2/v2.5/plans/v2.5.1-adoption-packaged-verification-and-accessibility.md`
 - **Reason**: On 2026-09-26 `develop` and `main` required checks were switched to the single context `ci-required`. The installer matrix workflow is `installer-matrix.yml`. Its first run is the archive pull request, and the run id is recorded in `docs/archive/v2/v2.6/known-gaps.md` and carried in `docs/v2/v2.12/known-gaps.md`.
 - **Suggested next step**: Record the matrix run id in the carried gap log when the workflow finishes, then close this row there.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md CI-v251-1
 
 ## Adjacent
 

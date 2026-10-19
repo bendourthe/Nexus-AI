@@ -27,11 +27,12 @@ v2.10 moved to `docs/archive/v2/v2.10/`. v2.10.0 is published. The rows below we
 | v2.7#QG-v270-1 | The handbook HTML check fails on a CRLF working tree. The index bytes are LF. | `docs/archive/v2/v2.7/known-gaps.md` |
 | v2.7#QG-v270-2 | Narrowed in v2.11.0: `ci.yml` now defaults to `permissions: contents: read`, and `package.json` has `fast`, `full`, and `platform` profiles composed from existing commands. Still open: no `report` profile (it needs a summary writer that reads other profiles' output) and no `release` profile (publication belongs to semantic-release), and `ci.yml` still runs its own steps rather than calling the profiles. Owner: the maintainer. | `docs/archive/v2/v2.7/known-gaps.md` |
 
-### QG-v211-1 - `docs/handbooks/html/atlas.html` scrolls sideways at 390 px (524 px wide) from a cause other than inline code, and CI does not run `npm run docs:handbooks:check`, which let `atlas.html` go stale until v2.11.0 regenerated it. Owner: the maintainer. Next step: find the wide element in the atlas, and add the handbook check to the `fast` profile and CI.
+### QG-v211-1 - `docs/handbooks/html/atlas.html` scrolls sideways at 390 px (524 px wide) from a cause other than inline code, and CI does not run `npm run docs:handbooks:check`, which let `atlas.html` go stale until v2.11.0 regenerated it. Owner: the maintainer. Next step: find the wide element in the atlas, and add the handbook check to the `fast` profile and CI. - CLOSED 2026-10-19
 
 - **Archived record**: `docs/v2/v2.11/development/v2.11.0-last-phase-evidence.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md QG-v211-1
 
-### QG-v211-2 - The production audit allowlist gained `global-agent`, `roarr`, and `sprintf-js` (GHSA-hp3w-g68c-fv3c, no patched `sprintf-js` release).
+### QG-v211-2 - The production audit allowlist gained `global-agent`, `roarr`, and `sprintf-js` (GHSA-hp3w-g68c-fv3c, no patched `sprintf-js` release). - CLOSED 2026-10-19
 
 All three load only from `onnxruntime-node/script/install.js`, its install-time binary download, never at runtime. Fixing them needs a semver-major `global-agent` under a parent that pins `^3.0.0`. Five other advisories in the same audit were fixed in range (`proxy-addr` 2.0.8, `undici` 7.30.0, `fast-uri` 3.1.8, `ip-address` 10.7.3, `source-map-js` 1.2.2). Owner: the maintainer. Next step: remove the three entries when `onnxruntime-node` moves to `global-agent` 4 or a patched `sprintf-js` ships.
 
@@ -44,76 +45,92 @@ All three load only from `onnxruntime-node/script/install.js`, its install-time 
 | v2.9#DF-v290-1 | CrisperWhisper 2.0 is not admitted. The fetched page has no weights, license, or size. No catalog row. | `docs/archive/v2/v2.9/known-gaps.md` |
 | v2.10#DF-v210-1 | Hosted Jev, Laya 0.3.20, and Kev 0.8B, 4B, 9B, and 27B are not admitted. No catalog row. | `docs/archive/v2/v2.10/known-gaps.md` |
 
-### DF-v211-1 - CLM-8B is not admitted, no catalog row.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md QG-v211-2
+
+### DF-v211-1 - CLM-8B is not admitted, no catalog row. - CLOSED 2026-10-19
 
 Its README gives Apache-2.0 code and weights, two frozen Qwen3-8B encoders with 20M-parameter heads, ranking over a closed candidate set, and a serve path of vLLM plus `clm-serve` with no Windows instructions. It does not close DF-11. The v2.10 hosted and license grounds no longer apply to it; the runtime, single-GPU, and job-map grounds still do. The PageIndex package and PageIndex Cloud are not adopted: default models are hosted, local mode asks for an OpenAI key, and OCR and MCP are cloud-only. The local equivalent is PI-1 in the v2.11.0 plan. AIRI was re-checked through 0.12.0-beta.5 with no new adoption.
 
 - **Archived record**: `docs/v2/v2.11/comparisons/v2.11.0-comparison-pageindex-airi-clm.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v211-1
 
-### DF-v211-2 - The outline tools ship off by default; the Phase 5 smoke is directional, not a promotion.
+### DF-v211-2 - The outline tools ship off by default; the Phase 5 smoke is directional, not a promotion. - CLOSED 2026-10-19
 
 Owner: the maintainer. Review at the v2.13.0 release: if no session-history or DEVLOG entry cites a workspace document hash and the answer obtained, remove the tools and the settings keys.
 
 - **Archived record**: `docs/v2/v2.11/development/outline-eval.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v211-2
 
-### DF-v211-3 - CPU OCR (RapidOCR, the portable default) costs about 6.8 s per text-dense page on this host: a 60-page PDF takes about 7 minutes on the first `document_outline` call, the same cost `parse_document` already pays. The GPU engine was not measured. The runtime also caps at 200 pages and reports `pageCount: 200`, hiding truncation past that.
+### DF-v211-3 - CPU OCR (RapidOCR, the portable default) costs about 6.8 s per text-dense page on this host: a 60-page PDF takes about 7 minutes on the first `document_outline` call, the same cost `parse_document` already pays. The GPU engine was not measured. The runtime also caps at 200 pages and reports `pageCount: 200`, hiding truncation past that. - CLOSED 2026-10-19
 
 - **Archived record**: `docs/v2/v2.11/development/outline-feasibility.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v211-3
 
-### DF-v211-7 - Outline budgets are per call (10% of the context window per outline, 25% per section read, a 3x-window session cap), but results accumulate in the conversation and the headless loop has no compaction. In the Phase 5 smoke run, qwen3.5:9b lost the question after about four reads on a 16k window ("Please let me know what you need assistance with!"), the same failure `parse_document` shows after one read. Owner: the maintainer. Next step: size each read from the room left in the window, or compact tool results in the headless loop, then re-run the smoke.
+### DF-v211-7 - Outline budgets are per call (10% of the context window per outline, 25% per section read, a 3x-window session cap), but results accumulate in the conversation and the headless loop has no compaction. In the Phase 5 smoke run, qwen3.5:9b lost the question after about four reads on a 16k window ("Please let me know what you need assistance with!"), the same failure `parse_document` shows after one read. Owner: the maintainer. Next step: size each read from the room left in the window, or compact tool results in the headless loop, then re-run the smoke. - CLOSED 2026-10-19
 
 - **Archived record**: `docs/v2/v2.11/development/outline-eval.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v211-7
 
-### DF-v211-6 - The outline tools refuse PPTX and XLSX, though the OCR runtime reads both (`runtimes/ocr/documents.py`).
+### DF-v211-6 - The outline tools refuse PPTX and XLSX, though the OCR runtime reads both (`runtimes/ocr/documents.py`). - CLOSED 2026-10-19
 
 Supporting them needs two new document kinds in the shared core and a determinism measurement of their extraction engines before outlines may be cached. Owner: the maintainer. Next step: add the kinds with ephemeral (uncached) outlines, then measure.
 
 - **Archived record**: `docs/v2/v2.11/development/v2.11.0-last-phase-evidence.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v211-6
 
-### WN-v211-6 - No egress from the OCR child process is proven at socket level.
+### WN-v211-6 - No egress from the OCR child process is proven at socket level. - CLOSED 2026-10-19
 
 The test traps sockets in the Node process and scans first-party OCR sources for network imports; third-party OCR packages and first-run model downloads are not covered. Not proven here.
 
 - **Archived record**: `tests/unit/modules/coding/documents/DocumentOutlineTools.test.ts`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md WN-v211-6
 
-### WN-v211-7 - When a parser returns markdown (the GPU OCR engine), per-page data is dropped, so `pagesParsed` reads 1 and sections carry no page range.
+### WN-v211-7 - When a parser returns markdown (the GPU OCR engine), per-page data is dropped, so `pagesParsed` reads 1 and sections carry no page range. - CLOSED 2026-10-19
 
 The CPU default and DOCX return pages and are unaffected; the GPU engine was not run here.
 
 - **Archived record**: `modules/coding/documents/DocumentOutlineTools.ts` (`createExtractor`)
+- **Superseded by**: docs/v2/v2.12/known-gaps.md WN-v211-7
 
-### DF-v211-5 - `AGENTS.md` names paths that moved: `src/llm/` and `src/llm/types.ts` (now `modules/coding/llm/`), `src/config/settings.ts` (now `modules/coding/config/settings.ts`), and `src/chat/PromptBuilder.ts` (now `modules/coding/chat/PromptBuilder.ts`). The plan records them rather than editing the directive in this release.
+### DF-v211-5 - `AGENTS.md` names paths that moved: `src/llm/` and `src/llm/types.ts` (now `modules/coding/llm/`), `src/config/settings.ts` (now `modules/coding/config/settings.ts`), and `src/chat/PromptBuilder.ts` (now `modules/coding/chat/PromptBuilder.ts`). The plan records them rather than editing the directive in this release. - CLOSED 2026-10-19
 
 - **Archived record**: `AGENTS.md` lines 209-243
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v211-5
 
-### DF-v211-4 - The desktop app has no Settings control for the outline tools.
+### DF-v211-4 - The desktop app has no Settings control for the outline tools. - CLOSED 2026-10-19
 
 The sidecar exposes `coding.documentOutline.status` and `setEnabled`, but no screen calls them; a desktop user enables the tools with `NEXUS_DOCUMENT_OUTLINE=1` or `~/.nexus/settings.json`. Add the control only if the tools are promoted (DF-v211-2).
 
 - **Archived record**: `docs/handbooks/technical/document-outline.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v211-4
 
-### WN-v211-1 - The OCR runtime's `parse` result carries no engine version, so the outline cache key uses the engine id, the device, and a fixed version label.
+### WN-v211-1 - The OCR runtime's `parse` result carries no engine version, so the outline cache key uses the engine id, the device, and a fixed version label. - CLOSED 2026-10-19
 
 An engine upgrade does not invalidate cached outlines by itself; the per-node anchor check refuses any slice from changed text, so the failure is safe but costs a rebuild.
 
 - **Archived record**: `docs/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-3.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md WN-v211-1
 
-### WN-v211-2 - The ACP control-surface path builds the outline tools without a model client, so node summaries are off there.
+### WN-v211-2 - The ACP control-surface path builds the outline tools without a model client, so node summaries are off there. - CLOSED 2026-10-19
 
 The desktop coding runner and the VS Code extension have them.
 
 - **Archived record**: `docs/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-4.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md WN-v211-2
 
-### WN-v211-4 - Both agent loops now send `tools` natively to every model whose catalog format is not `none` (the extension already did).
+### WN-v211-4 - Both agent loops now send `tools` natively to every model whose catalog format is not `none` (the extension already did). - CLOSED 2026-10-19
 
 A model Ollama reports without the `tools` capability may reject such a request. Not proven here: every chat model installed on this host declares `tools`.
 
 - **Archived record**: `docs/v2/v2.11/development/history/2026-10-03_v2.11.0-pageindex-airi-clm-phase-5.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md WN-v211-4
 
-### WN-v211-5 - Native tool calls are executed, but the conversation history still records them the old way: the assistant turn keeps only its text, and results go back as user-role `<|tool_result>` blocks, not as `tool`-role messages. qwen3.5:9b and gemma4:12b chained several calls this way on this host; other models are not proven here.
+### WN-v211-5 - Native tool calls are executed, but the conversation history still records them the old way: the assistant turn keeps only its text, and results go back as user-role `<|tool_result>` blocks, not as `tool`-role messages. qwen3.5:9b and gemma4:12b chained several calls this way on this host; other models are not proven here. - CLOSED 2026-10-19
 
 - **Archived record**: `docs/v2/v2.11/development/history/2026-10-03_v2.11.0-pageindex-airi-clm-phase-5.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md WN-v211-5
 
-### WN-v211-3 - The summary path's loopback check reuses `isLoopbackEndpoint`: an exact host match that rejects look-alike hosts, `0.0.0.0`, and IPv4-mapped addresses, but does not resolve DNS for `localhost` or refuse an HTTP redirect from the model server.
+### WN-v211-3 - The summary path's loopback check reuses `isLoopbackEndpoint`: an exact host match that rejects look-alike hosts, `0.0.0.0`, and IPv4-mapped addresses, but does not resolve DNS for `localhost` or refuse an HTTP redirect from the model server. - CLOSED 2026-10-19
 
 - **Archived record**: `docs/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-4.md`
+- **Superseded by**: docs/v2/v2.12/known-gaps.md WN-v211-3

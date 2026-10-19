@@ -36,7 +36,7 @@ v2.8 moved to `docs/archive/v2/v2.8/`. v2.8.0 is published. The rows below were 
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 1 | 0 |
+| Deferred (DF) | 0 | 1 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -48,9 +48,10 @@ The carry-forward table above stays open. Those rows are not items introduced by
 
 #### Deferred
 
-##### DF-v290-1 - CrisperWhisper 2.0 is not admitted
+##### DF-v290-1 - CrisperWhisper 2.0 is not admitted - CLOSED 2026-10-19
 
 - **Source phase**: Phase 1 - CrisperWhisper exclusion note
 - **Plan reference**: `docs/v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md` (T001)
 - **Reason**: CrisperWhisper 2.0 is not admitted. The page fetched on 2026-09-23 does not publish weights, a license, or a size. Disfluency F1 and the word-boundary figures are vendor-reported, and CrisperWhisper 2.0 Pro ranks above the named open model. Verbatim transcription and word timestamps are not what `runtimes/audio/engines.py` `transcribe` returns today, and closing that gap is a Faster-Whisper change, not a catalog row for this model. The living-bar sentence waited because the v2.8.0 exclusion sentences are not in the acceptance bar. not admitted, no catalog row.
 - **Suggested next step**: Add that sentence beside the v2.8.0 exclusion text when that text exists in the acceptance bar.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v290-1

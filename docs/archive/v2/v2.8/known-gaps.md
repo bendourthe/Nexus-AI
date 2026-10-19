@@ -35,7 +35,7 @@ v2.7 moved to `docs/archive/v2/v2.7/`. v2.7.0 is published. The rows below were 
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 1 | 0 |
+| Deferred (DF) | 0 | 1 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -47,9 +47,10 @@ The carry-forward table above stays open. Those rows are not items introduced by
 
 #### Deferred
 
-##### DF-v280-1 - Qwen-Image GGUF and Bespoke Nimble are not admitted
+##### DF-v280-1 - Qwen-Image GGUF and Bespoke Nimble are not admitted - CLOSED 2026-10-19
 
 - **Source phase**: Phase 1 - Qwen-Image and Nimble exclusion note
 - **Plan reference**: `docs/v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md` (T001)
 - **Reason**: `abenzerps/Qwen-Image-2.1-Uncensored-GGUF` is not an image-tier candidate. The Qwen Research License on official `Qwen/Qwen-Image-2.1` is non-commercial (research and evaluation only). The card's Q4_K_M file is 4.60 GB and its recommended Int8 text encoder is 9.35 GB. The documented loader is ComfyUI-GGUF, and `runtimes/diffusion/pipelines/real_execute.py` `_load_text_pipe` does not load GGUF. Uncensored photoreal is already held by `juggernaut-xl-v9` and `realvisxl-v5`. Official `QwenImage21Pipeline` stays out of this cycle. Bespoke Nimble and `bespokelabs/Bespoke-Nimble-9B` are not a chat or agent model. The scorer returns one token per flat enum or boolean field and cannot emit tool-call arguments. The GitHub repository has no license file. Serving it needs MLX or CUDA transformers, not Ollama. It does not close DF-11 (fast small-model command router) in `docs/archive/v2/v2.0/known-gaps.md`. The plan named `docs/v2/v2.0/known-gaps.md`; that file now lives at the archive path, and the row is still open. The living-bar sentences waited so they would not collide with the v2.7.0 edit. not admitted, no catalog row.
 - **Suggested next step**: Add those two sentences beside the v2.7.0 exclusion text when that text exists in the acceptance bar.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v280-1

@@ -37,7 +37,7 @@ v2.9 moved to `docs/archive/v2/v2.9/`. v2.9.0 is published. The rows below were 
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 1 | 0 |
+| Deferred (DF) | 0 | 1 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -49,10 +49,11 @@ The carry-forward table above stays open. Those rows were not introduced by this
 
 #### Deferred
 
-##### DF-v210-1 - Hosted Jev, Laya, and Kev are not admitted
+##### DF-v210-1 - Hosted Jev, Laya, and Kev are not admitted - CLOSED 2026-10-19
 
 - **Class**: DF
 - **Source phase**: Phase 1
 - **Plan reference**: `docs/v2/v2.10/plans/v2.10.0-adoption-system-one-models.md`
 - **Reason**: Hosted Jev is not a Nexus backend. A System One call would send state off the machine. Laya 0.3.20 is Apache-2.0, documents a Windows install, and is about 322M to 421M, and it is still not a catalog model: it needs a PyTorch download from Hugging Face, the base checkpoints lose to a majority-class baseline until a fine-tune, and it does not replace `PromptInjectionScanner` or close DF-11. Kev 0.8B, 4B, 9B, and 27B are not catalog models. The README serve path is CUDA, ROCm, or MLX, and the Modal deploy script is out of bounds. The Nimble refusal stays in `docs/archive/v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md`. not admitted, no catalog row.
 - **Suggested next step**: Leave the row in place. Do not copy it into `docs/reference/model-acceptance.md` until the v2.8.0 and v2.9.0 plans have finished their own edits of that file, and do not add a job-map holder when that copy happens.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v210-1
