@@ -16,6 +16,10 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-19] v2.15.0 Phase 1 - Ledger inventory and lossless converter
+
+The completion checker could not read 204 rows in the known-gaps ledgers from v1.17 to v2.12, so no minor run could finish. Phase 1 adds a pinned adapter to the checker's own parser (`scripts/known-gaps/checker-adapter.py`, which refuses a checker whose sha256 differs), a read-only inventory (`scripts/known-gaps/inventory.mjs`) with a dated baseline, and a one-time converter with an independent word-for-word preservation check. Dry runs convert all ten in-scope ledgers to zero problems. The main finding is that the v2.5 to v2.11 tables are snapshots of the carry-forward register: 120 of their rows copy entries recorded elsewhere, so they gain a `vX.Y#` prefix instead of becoming duplicate entries. Decisions: [v2.15.0-ledger-conversion-decisions.md](releases/v2/v2.15/development/v2.15.0-ledger-conversion-decisions.md). History: [v2.15.0-phase1.md](releases/v2/v2.15/development/history/v2.15.0-phase1.md).
+
 ## [2026-10-17] v2.14.0 Phase 5 - Known gaps, deep pass and local gate
 
 The last phase closed the inherited and in-run gaps it could: the in-app installer now fetches multi-file Hugging Face models (the voice weights) into `weights/<id>/` at their pinned commit, each file checked against its own sha256 and staged until complete; skill tests no longer write folders into the source catalog; and the two CodeQL patterns are fixed in code. The Tier 3 adversarial pass found that a secret wrapped in underscore emphasis could be spoken aloud, plus nine smaller defects across spoken replies, voice jobs, weights install and the digest check; eight were fixed with regression tests, including a cold-start bug where the Kokoro load counted against the 30 s segment bound. An independent Goal review recorded what did not land: the 2.0 s target (3.9 s today), the admission's post-results reading of M-3, and packaged-app voice evidence, now v2.15 DF-1, DF-3 and QG-1. Publication waits for the v2.14.1 decision. Evidence: `docs/archives/v2/v2.14/development/v2.14.2-last-phase-evidence.md`.

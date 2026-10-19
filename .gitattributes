@@ -20,3 +20,7 @@ tests/fixtures/documents/outline/docs/* -text
 tests/fixtures/rewrite-eval/*.json text eol=lf
 docs/archives/v2/v2.14/development/v2.14.1-rewrite-contract.json* text eol=lf
 docs/archives/v2/v2.14/development/rewrite-eval/*.json* text eol=lf
+
+# v2.15.0 -- the known-gaps fixtures are parsed once by the pinned checker and the
+# captured results are committed, so their bytes must not change with the checkout.
+tests/fixtures/known-gaps/** text eol=lf

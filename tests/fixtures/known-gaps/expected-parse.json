@@ -1,0 +1,167 @@
+{
+  "docs/archive/v1/v1.17/known-gaps.md": {
+    "items": [
+      {
+        "id": "DF-9",
+        "kind": "DF",
+        "title": " - gigatoken remains a watch item",
+        "state": "open",
+        "target": null,
+        "section": "v1.17.0",
+        "subsection": "Open Items",
+        "level": 5
+      }
+    ],
+    "problems": []
+  },
+  "docs/archive/v2/v2.4/known-gaps.md": {
+    "items": [
+      {
+        "id": "DF-v240-1",
+        "kind": "DF",
+        "title": " - Live NVIDIA splat generate is not proven.",
+        "state": "open",
+        "target": null,
+        "section": "v2.4.0",
+        "subsection": "Open Items",
+        "level": 4
+      },
+      {
+        "id": "DF-v240-3",
+        "kind": "DF",
+        "title": " - Older `docs/**/known-gaps.md` files still have open items.",
+        "state": "open",
+        "target": null,
+        "section": "v2.4.0",
+        "subsection": "Open Items",
+        "level": 4
+      },
+      {
+        "id": "BG-2",
+        "kind": "BG",
+        "title": " - Three catalog entries ship all-zero placeholder SHA-256 pins: `sana-controlnet-canny`.",
+        "state": "open",
+        "target": null,
+        "section": "v2.4.10",
+        "subsection": "Open Items",
+        "level": 4
+      },
+      {
+        "id": "WN-2",
+        "kind": "WN",
+        "title": " - The bundled template has no tools section",
+        "state": "open",
+        "target": null,
+        "section": "v2.4.10",
+        "subsection": "Open Items",
+        "level": 5
+      }
+    ],
+    "problems": []
+  },
+  "docs/archive/v2/v2.5/known-gaps.md": {
+    "items": [
+      {
+        "id": "CI-v251-1",
+        "kind": "CI",
+        "title": "",
+        "state": "open",
+        "target": null,
+        "section": "v2.5.0",
+        "subsection": "",
+        "level": 3
+      }
+    ],
+    "problems": []
+  },
+  "docs/archive/v2/v2.6/known-gaps.md": {
+    "items": [
+      {
+        "id": "DF-v260-1",
+        "kind": "DF",
+        "title": " - Chat search still matches titles only.",
+        "state": "open",
+        "target": null,
+        "section": "Known gaps carried forward",
+        "subsection": "",
+        "level": 3
+      },
+      {
+        "id": "WN-v260-1",
+        "kind": "WN",
+        "title": " - Release-scoped mentions stay as written: `a \\| b` and `<|tool_result>` blocks.",
+        "state": "open",
+        "target": null,
+        "section": "Known gaps carried forward",
+        "subsection": "",
+        "level": 3
+      },
+      {
+        "id": "QG-v240-1",
+        "kind": "QG",
+        "title": " - The full local suite was not run.",
+        "state": "open",
+        "target": null,
+        "section": "Known gaps carried forward",
+        "subsection": "",
+        "level": 3
+      }
+    ],
+    "problems": []
+  },
+  "docs/v2/v2.12/known-gaps.md": {
+    "items": [
+      {
+        "id": "DF-v212-4",
+        "kind": "DF",
+        "title": " - OpenAI-compatible clients retain envelope history. - CLOSED 2026-10-19",
+        "state": "resolved",
+        "target": null,
+        "section": "Known gaps carried forward",
+        "subsection": "",
+        "level": 3
+      },
+      {
+        "id": "BG-2",
+        "kind": "BG",
+        "title": " - SANA ControlNet pins are still the all-zero placeholder.",
+        "state": "open",
+        "target": null,
+        "section": "Known gaps carried forward",
+        "subsection": "",
+        "level": 3
+      },
+      {
+        "id": "DF-v260-1",
+        "kind": "DF",
+        "title": " - Chat search still matches titles only.",
+        "state": "open",
+        "target": null,
+        "section": "Known gaps carried forward",
+        "subsection": "",
+        "level": 3
+      },
+      {
+        "id": "WN-v211-5",
+        "kind": "WN",
+        "title": " - Native tool calls are recorded the old way.",
+        "state": "open",
+        "target": null,
+        "section": "Known gaps carried forward",
+        "subsection": "",
+        "level": 3
+      },
+      {
+        "id": "QG-v211-2",
+        "kind": "QG",
+        "title": " - The production audit allowlist gained three packages.",
+        "state": "open",
+        "target": null,
+        "section": "Known gaps carried forward",
+        "subsection": "",
+        "level": 3
+      }
+    ],
+    "problems": []
+  }
+}
