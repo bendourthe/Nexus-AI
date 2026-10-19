@@ -20,10 +20,13 @@
  *                   v2.12 release item once
  * --batches <file>  check that the follow-up batch list lists every
  *                   archived-only item once, in batches of at most 60
+ * --verify-migrations  run the pinned checker's migration check for every
+ *                   migrated item whose source ledger is in scope; others are
+ *                   listed as notes
  *
  * Given both, an item may sit in either file but in exactly one of them.
  * Exits 0 on success, 1 when the adapter fails, the baseline is unreadable, or
- * a --triage / --batches check fails.
+ * a --triage / --batches / --verify-migrations check fails.
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -31,7 +34,7 @@ import { resolve } from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
-import { discoverLedgers, ROOT } from "./adapter.mjs";
+import { discoverLedgers, ROOT, runAdapter } from "./adapter.mjs";
 import {
   compareMinor,
   fenceMask,
@@ -66,6 +69,33 @@ export function inScope(minor) {
 export function itemKey({ minor, section, id }) {
   const version = /^v\d+\.\d+\.\d+(?![0-9])/.exec((section ?? "").trim());
   return `${version ? version[0] : minor}#${id}`;
+}
+
+/** Patch version of an item key (`v2.4.10#DF-1` -> [2, 4, 10]); a minor-only key sorts first. */
+function keyVersion(key) {
+  return key.split("#")[0].slice(1).split(".").map(Number).concat([-1]).slice(0, 3);
+}
+
+/**
+ * The original a register entry carries among `candidates` (same id, in the
+ * ledger its record names): the one whose Superseded by line names the entry,
+ * else the one in the highest patch section, because a carry-forward row copies
+ * a gap's latest record. v2.4 holds five open `DF-1` items; the register's is
+ * v2.4.10's.
+ */
+export function carriedCandidate(id, candidates) {
+  const pointer = `**Superseded by**: ${REGISTER} ${id}`;
+  const superseded = candidates.find((c) =>
+    (c.body ?? "").split(/\r?\n/).some((line) => line.trim().replace(/^[-*+]\s+/, "") === pointer),
+  );
+  if (superseded) return superseded;
+  const newer = (a, b) => {
+    const [x, y] = [keyVersion(a.key), keyVersion(b.key)];
+    return (x[0] - y[0] || x[1] - y[1] || x[2] - y[2]) > 0;
+  };
+  let best = null;
+  for (const candidate of candidates) if (best === null || newer(candidate, best)) best = candidate;
+  return best;
 }
 
 /** A heading title without the separator the checker leaves in front of it. */
@@ -134,27 +164,34 @@ export function buildInventory(ledgers) {
   const others = items.filter((item) => item.ledger !== REGISTER);
   for (const carrier of carriers) {
     const named = ledgerPathsIn(carrier.record, REGISTER).filter((path) => path !== REGISTER);
-    const byRecord = others.find((item) => named.includes(item.ledger) && item.id === carrier.id);
-    const live = others.filter((item) => item.id === carrier.id && item.state !== "resolved" && item.ledger !== REGISTER);
-    const original = byRecord ?? (live.length === 1 ? live[0] : null);
-    carrier.carries = original ? { ledger: original.ledger, id: original.id, state: original.state } : null;
-    carrier.match = byRecord ? "record" : live.length === 1 ? "id" : live.length > 1 ? "ambiguous" : "none";
+    const byRecord = carriedCandidate(
+      carrier.id,
+      others.filter((item) => named.includes(item.ledger) && item.id === carrier.id),
+    );
+    const sameId = others.filter((item) => item.id === carrier.id);
+    const bySuperseded = byRecord ? null : carriedCandidate(carrier.id, sameId.filter((item) => item.state === "resolved"));
+    const pointed = bySuperseded && /\*\*Superseded by\*\*/.test(bySuperseded.body ?? "") ? bySuperseded : null;
+    const live = sameId.filter((item) => item.state !== "resolved");
+    const original = byRecord ?? pointed ?? (live.length === 1 ? live[0] : null);
+    carrier.carries = original ? { ledger: original.ledger, id: original.id, key: original.key, state: original.state } : null;
+    carrier.match = byRecord ? "record" : pointed ? "superseded" : live.length === 1 ? "id" : live.length > 1 ? "ambiguous" : "none";
     // The other v2.12 file owns an id both carry (decision 4): the register copy is the duplicate.
     carrier.duplicateOf = original && original.minor === register.minor && original.state === "open" ? original.ledger : null;
   }
 
+  // Keyed by ledger and full item key: one carried `DF-1` must not hide the
+  // other patch sections' `DF-1` items.
+  const unit = (item) => `${item.ledger}#${item.key}`;
   const carried = new Set(
     carriers
       .filter((c) => c.state === "open" && c.carries && !c.duplicateOf)
-      .map((c) => `${c.carries.ledger}#${c.carries.id}`),
+      .map((c) => `${c.carries.ledger}#${c.carries.key}`),
   );
   const openUnits = [
     ...carriers.filter((c) => c.state === "open" && !c.duplicateOf).map((c) => ({ ledger: REGISTER, id: c.id })),
-    ...others.filter((i) => i.state === "open" && !carried.has(`${i.ledger}#${i.id}`)).map((i) => ({ ledger: i.ledger, id: i.id })),
+    ...others.filter((i) => i.state === "open" && !carried.has(unit(i))).map((i) => ({ ledger: i.ledger, id: i.id })),
   ];
-  const archivedOnly = others.filter(
-    (i) => i.state === "open" && i.layout === "archive" && !carried.has(`${i.ledger}#${i.id}`),
-  );
+  const archivedOnly = others.filter((i) => i.state === "open" && i.layout === "archive" && !carried.has(unit(i)));
 
   const perLedger = scoped.map((ledger) => ({
     path: ledger.path,
@@ -240,7 +277,10 @@ export function checkCoverage(inventory, { triage = null, batches = null }) {
     .map((i) => i.key);
   const batchScope = inventory.archivedOnly.map((i) => i.key);
   const expected = new Set([...(triage !== null ? triageScope : []), ...(batches !== null ? batchScope : [])]);
-  const known = new Set([...triageScope, ...batchScope]);
+  // Once Phase 4 applies the dispositions, a triaged item is no longer open but
+  // stays a known key, so the record still checks after it has been acted on.
+  const triaged = inventory.items.filter((i) => i.ledger === REGISTER || i.ledger === RELEASE_V212).map((i) => i.key);
+  const known = new Set([...triaged, ...batchScope]);
   const fromTriage = triage !== null ? listedKeys(triage) : [];
   const fromBatches = batches !== null ? listedKeys(batches) : [];
   const counts = new Map();
@@ -256,6 +296,22 @@ export function checkCoverage(inventory, { triage = null, batches = null }) {
     oversized: [...perBatch].filter(([, n]) => n > BATCH_LIMIT).map(([heading, n]) => `${heading}: ${n}`),
   };
   return { ok: Object.values(result).every((list) => list.length === 0), ...result };
+}
+
+/**
+ * The checker's migration results split by scope: `ok` when every migration
+ * whose source ledger is in scope is `migration-copy-complete`; the others are
+ * returned as notes, never as failures of this plan.
+ */
+export function splitMigrations(migrations, minorOf) {
+  const inPlan = migrations.filter((m) => inScope(minorOf.get(m.source) ?? "v0.0"));
+  const failed = inPlan.filter((m) => m.status !== "migration-copy-complete");
+  return {
+    ok: failed.length === 0,
+    verified: inPlan.length - failed.length,
+    failed,
+    notes: migrations.filter((m) => !inPlan.includes(m) && m.status !== "migration-copy-complete"),
+  };
 }
 
 export function renderMarkdown(inventory, drift) {
@@ -295,6 +351,12 @@ function main(argv) {
   inventory.unreadable = found.unreadable;
   const today = new Date().toISOString().slice(0, 10);
   const current = snapshotOf(inventory, { date: today, pin: found.pin });
+  if (argv.includes("--verify-migrations")) {
+    const scopeOf = new Map(found.ledgers.map((l) => [l.path, l.minor]));
+    const result = splitMigrations(runAdapter(["verify-migrations", "--root", ROOT]).migrations, scopeOf);
+    process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    return result.ok ? 0 : 1;
+  }
   if (option("--triage") || option("--batches")) {
     const read = (name) => (option(name) ? readFileSync(resolve(ROOT, option(name)), "utf8") : null);
     const coverage = checkCoverage(inventory, { triage: read("--triage"), batches: read("--batches") });

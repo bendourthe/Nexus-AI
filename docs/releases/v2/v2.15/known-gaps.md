@@ -3,7 +3,7 @@
 **Project**: Nexus
 **Status**: in-progress
 **Last updated**: 2026-10-19
-**Open items**: 16
+**Open items**: 61
 
 ## v2.15.0
 
@@ -12,11 +12,11 @@
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 8 | 0 |
-| Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 7 | 0 |
-| Missing tests / coverage gaps (MT) | 0 | 1 |
-| Quality-gate gaps (QG) | 1 | 0 |
+| Deferred (DF) | 30 | 0 |
+| Bugs / regressions (BG) | 1 | 0 |
+| Warnings (WN) | 18 | 0 |
+| Missing tests / coverage gaps (MT) | 1 | 1 |
+| Quality-gate gaps (QG) | 11 | 0 |
 
 ### Open Items
 
@@ -173,6 +173,474 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 
 - **Migrated from**: v2.14#DF-5 on 2026-10-19 (reason: user-deferred)
 - **Migration evidence**: left open at the v2.14 close (v2.14.2 released 2026-10-19); needs an owner decision or evidence outside this run
+
+#### DF-9 - Legacy history for OpenAI-compatible backends
+
+- **Source phase**: Phase 3 - native tool history.
+- **Plan reference**: [outline-promotion-readiness](../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-task 3.1.
+- **Reason**: The LM Studio and headless OpenAI clients convert coding history to the existing assistant-text plus user-role envelope format. Native Ollama history is proven locally on qwen3.5:9b and gemma4:12b; native round trips through other backends are not proven here.
+- **Suggested next step**: Measure a live OpenAI-compatible native round trip and resume behavior before adding that backend's native message converter. Owner: the maintainer. Support tier: future for that native-history path.
+
+- **Why still owed**: OpenAI-compatible backends still use the legacy history format, and native round trips through them are unproven.
+- **Next step**: Record a live LM Studio native tool round trip and a resume, then add an 'openai' shape to toolHistory.toRequestMessages.
+- **Migrated from**: v2.12#DF-v212-4 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-8 - Historical evaluation diagnostic and timing limits
+
+- **Source phase**: Phase 6 - evaluation results, sub-task 6.3.
+- **Plan reference**: [outline-promotion-readiness](../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-tasks 6.3 and 6.4.
+- **Reason**: Both completed scored runs used a logger that omitted returned session errors. There are 51 error finishes with empty tails whose specific causes cannot be reconstructed; another 41 error-status rows finish at max-iterations. Only page caps 50 and 200 were prewarmed, so the original reports' claim that every question time excludes OCR is too broad. Counts, exact coverage and frozen scoring were validated; reporting was corrected after inference without modifying or rescoring the artifacts. Support tier: internal-compatible experimental path, candidate for promotion.
+- **Suggested next step**: Preserve these limits in Phase 7 and the v2.13 removal/narrowing review. Use the corrected error capture and qualified timings for any separately authorized future diagnostic run; do not infer the missing historical causes or schedule repeats after futility. Owner: the maintainer. [Results](../../../v2/v2.12/development/outline-eval.md), [metadata](../v2.12/development/evidence/phase-6-evaluation.json).
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): Nothing can be done: the causes cannot be recovered, the logger is fixed, and the limits are written into outline-eval.md. It belongs with DF-v211-2's decision.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#WN-v212-5 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-9 - Outline retention is not bounded by session or idle expiry
+
+- **Source phase**: Phase 7 - factual handbook review.
+- **Plan reference**: [outline-promotion-readiness](../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), handbook refresh and final verification.
+- **Reason**: The structure cache has a 50 MiB cap, but the summary store has no eviction cap. Text snapshots have lazy ten-minute idle expiry, while screened text persists for the tool instance's lifetime. Desktop and ACP reuse outline tools across sessions with identical workspace roots, including read authorization and call/output counters. Strict session isolation and ten-minute memory erasure are not implemented. The handbook now states these limits. Support tier: internal-compatible, experimental and off by default.
+- **Suggested next step**: Review cache bounds, tool-scope lifetime and session reset requirements alongside the planned removal/narrowing decision. Preserve these limits until changed behavior has real-boundary evidence. Owner: the maintainer. Sources: `core/documents/OutlineCache.ts`, `core/documents/OutlineSummaries.ts`, `modules/coding/documents/DocumentOutlineTools.ts`, `modules/coding/runtime/headlessTools.ts`, `desktop/sidecar/src/coding/headlessAgentRunner.ts`, and `desktop/sidecar/src/acp/AcpAgent.ts`.
+
+- **Why still owed**: The summary store is unbounded and outline state is not reset per session.
+- **Next step**: Decide with DF-v211-2; if the tools stay, add a byte cap and eviction to OutlineSummaries and reset per session.
+- **Migrated from**: v2.12#WN-v212-6 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-10 - Media smoke proof needs separate packaging and installation evidence
+
+- **Source phase**: Phase 7 - factual handbook review.
+- **Plan reference**: [outline-promotion-readiness](../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), packaged installer qualification and final verification.
+- **Reason**: The installed-media smoke harness records a supplied installer hash and exercises an installed sidecar; it does not install that candidate or establish installer-to-payload binding. Catalog-source reachability is a separate packaging check and is not invoked automatically by the Windows build. Generation-time artifact finalization checks are narrower than the smoke harness's decoded PNG and video probes. The corrected handbooks distinguish those evidence boundaries. Support tier: candidate for exact packaged installer/GPU qualification until the required operator evidence exists.
+- **Suggested next step**: Retain catalog reachability output, installation of the exact candidate, installer-to-payload binding, and decoded PNG/video results together during packaged qualification. Assess deterministic binding and packaging-check enforcement when that path is implemented; do not certify an arbitrary existing installation from a supplied hash alone. Owner: the maintainer. Sources: `scripts/installer/build/smoke-installed-media.ps1`, `scripts/installer/build/build-windows.ps1`, and `scripts/installer/build/check-hf-catalog.py`.
+
+- **Why still owed**: Installing the exact candidate, binding installer to payload, and the catalog reachability check are still missing; needs operator GPU hardware.
+- **Next step**: In the next packaged qualification on an NVIDIA Windows host, run check-hf-catalog.py, install the exact NexusSetup.exe, then smoke-installed-media.ps1, keeping the outputs with the installer hash.
+- **Migrated from**: v2.12#WN-v212-7 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### QG-2 - Terminal CI reconciliation requires explicit migration decisions
+
+- **Source phase**: Phase 7 - terminal CI/CD comparison.
+- **Plan reference**: [outline-promotion-readiness](../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-task 7.5 and T025.
+- **Reason**: The 23-field source/settings comparison has six PASS, eleven FAIL, three PARTIAL and three NOT PROVEN fields. Missing native report/release profiles, repeated feature-push/post-merge validation, incomplete pre-merge platform coverage, implicit permissions and inconsistent report publication are observable differences. On 2026-10-10 the maintainer approved, and Phase 7 applied, only the CI profile correctness patch and the action pin updates (four `actions/cache` references to v6.1.0 and the `scorecard.yml` `upload-sarif` commit pin); see the [pin evidence](../v2.12/development/evidence/phase-7-ci-action-pin-application.json). Those changes close none of the migration fields above. No permission, secret, required-check or settings change has been approved or applied. This is an incomplete gate, not an accepted bypass.
+- **Suggested next step**: Retain [the comparison](../v2.12/development/phase-7-ci-comparison.md) and [input hashes/settings](../v2.12/development/evidence/phase-7-ci-inputs.json), prove remaining source/security fields, prepare exact incremental profile/event/reporting changes, and obtain each consequential CI/permission/settings approval before applying it. Re-gate locally and observe the approved integration topology. Owner: the maintainer. Existing canonical-profile carry-forward gaps remain open.
+
+- **Why still owed**: None of the eleven FAIL fields is fixed; each needs a workflow, permission or settings change with its own approval.
+- **Next step**: Draft an approval-ready proposal for field 15: explicit `permissions: contents: read` defaults for the 14 workflows, with job-level write grants listed.
+- **Migrated from**: v2.12#QG-v212-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### BG-1 - SANA ControlNet SHA-256 pins are still the all-zero placeholder.
+
+The files were not fetched.
+
+- **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`
+
+- **Why still owed**: The three SANA ControlNet entries still ship all-zero pins and stay exempt, so an install of them has no integrity check.
+- **Next step**: Owner decides keep or drop: keep means rotate with `pin-hf-weights.py --from-dir` from an authenticated download or a public mirror; drop means remove the three rows. Either way, empty PLACEHOLDER_SHA_LEGACY_EXEMPT.
+- **Migrated from**: v2.12#BG-2 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-10 - MiniCPM tool tags are stripped by Ollama before Nexus can parse them.
+
+- **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`
+
+- **Why still owed**: A runtime-boundary blocker that waits on an Ollama change; neither exit route is open on the current version.
+- **Next step**: On an Ollama newer than 0.32.15, re-run the recorded echo prompt (`/api/generate`, `raw: true`) and check whether `<function` survives.
+- **Migrated from**: v2.12#DF-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-11 - The bundled MiniCPM template has no tools section.
+
+That template is outside this repo.
+
+- **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`
+
+- **Why still owed**: The recorded exit check still fails, though the Jinja template may already open the /api/chat route; not proven here.
+- **Next step**: Send one /api/chat request with a `tools` array to the MiniCPM tag and check whether the tool definitions reach the prompt; fold the result into the DF-1 re-probe.
+- **Migrated from**: v2.12#WN-2 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-11 - Live NVIDIA splat generate was not run.
+
+- **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`
+
+- **Why still owed**: The feature ships and no live NVIDIA run is recorded.
+- **Next step**: On a CUDA host with TripoSplat weights installed, run `node scripts/bench-gaussian-splat.mjs --real` and add the row to the splat baseline.
+- **Migrated from**: v2.12#DF-v240-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-12 - TripoSplat weight file hashes were not downloaded.
+
+`source.sha256` is the all-zero placeholder.
+
+- **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`
+
+- **Why still owed**: The TripoSplat files are still unpinned, and the pin check cannot see the entry, so the gap is also invisible to it.
+- **Next step**: Add a weights.files list for the TripoSplat files at revision 56a96e60, then run `pin-hf-weights.py --model triposplat`.
+- **Migrated from**: v2.12#DF-v240-2 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-13 - Older version gap logs still contain operator and hardware items that were not re-tested.
+
+- **Archived record**: `docs/archive/v1/` and `docs/archive/v2/v2.0` through `v2.3`
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): A pointer to other ledgers, not a gap of its own; the v2.15.0 inventory and follow-up batches now track each of those items individually. Superseded by v2.15.0-followup-batches.md.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#DF-v240-3 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### MT-2 - A real WebGL2 framebuffer was not captured.
+
+- **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`
+
+- **Why still owed**: The feature ships and no real GPU framebuffer capture exists.
+- **Next step**: On a GPU host, orbit a fixture splat in SplatViewerCanvas and save the canvas PNG and GL renderer string as evidence.
+- **Migrated from**: v2.12#MT-v240-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### QG-3 - The full local suite was not run on the Electron `better-sqlite3` ABI.
+
+CI Node 22 ran it on the merge.
+
+- **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): A one-session environment limit at v2.4.0 whose own next step is done on every merge.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#QG-v240-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### QG-4 - `develop` and `main` require only `ci-required`; `installer-required` is not a required context.
+
+Narrowed in v2.11.0: the gate now accepts `success` only, so a skipped installer leg fails it. Still open: the maintainer adds `installer-required` to branch protection after the v2.11.0 merge (a repository setting, not a file).
+
+- **Archived record**: `docs/archive/v2/v2.5/known-gaps.md`
+
+- **Why still owed**: The workflow side is done and its preconditions are met, but the repository setting that makes installer-required a required check is not applied.
+- **Next step**: Maintainer only (repository setting): record current protection for rollback, then add the installer-required context to develop and main required checks.
+- **Migrated from**: v2.12#CI-v251-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010); recorded as a QG item because this ledger has no CI category
+
+#### DF-14 - Chat search still matches titles only.
+
+A hit is not labelled with the branch it belongs to.
+
+- **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
+
+- **Why still owed**: Search still matches titles only and a hit does not name its branch; the exit condition is not met.
+- **Next step**: Add forkedFromChatId and the parent title to the search hit in ChatExplorerStore.search, asserted in desktop/tests/sidecar-node/chat-explorer-phase5.test.ts.
+- **Migrated from**: v2.12#DF-v260-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### QG-5 - The packaged offline probe was not re-run after adding Mermaid.
+
+The v2.6.0 asset build is not that probe.
+
+- **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
+
+- **Why still owed**: Proposed resolved at low confidence at v2.15.0 triage, not accepted (T010): A packaged build with Mermaid passed the same offline judge with zero findings. Low confidence: the named script was not run, and the probe may not render a Mermaid diagram.
+- **Next step**: Run `desktop/tests/packaged/offline.smoke.mjs` on the next packaged probe report and record `offline: PASS`.
+- **Migrated from**: v2.12#QG-v260-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-15 - User compaction is not written back to `chat_chat_messages`, so a restart reloads the pre-compact transcript.
+
+- **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
+
+- **Why still owed**: A compaction is still memory-only, so a restart reloads the pre-compact transcript.
+- **Next step**: Add a ChatExplorerStore method that writes the snapshot and replacement chat_chat_messages rows in one transaction, called from compactActiveChat through a sidecar handler.
+- **Migrated from**: v2.12#DF-v260-2 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-16 - The Qwen3.8 guard matches `id` and `source.url` only.
+
+- **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
+
+- **Why still owed**: Every residual bypass in the original record is still open, and no decision says catalog review covers them.
+- **Next step**: Widen the guard to family, name and displayName and a `p` separator, with tests in `TestQwen38FamilyGuard`.
+- **Migrated from**: v2.12#DF-v260-3 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-17 - Qwen3.8-27B is not admitted.
+
+- **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): The decision and its reopen conditions live in the acceptance bar and are enforced by the invariant; nothing is owed until a trigger fires.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#DF-v260-4 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-18 - No llama.cpp serving path.
+
+- **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
+
+- **Why still owed**: Catalog models that need mmproj or a draft model still cannot ship, and the runtime decision the exit condition requires has not been made.
+- **Next step**: Write a runtime comparison (llama.cpp as a catalog serving path versus Ollama only) and record the decision as an ADR.
+- **Migrated from**: v2.12#DF-v260-5 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-19 - The uncensored-LLM product question is unanswered.
+
+- **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
+
+- **Why still owed**: The exit condition is an explicit product decision, and none is recorded.
+- **Next step**: Owner records a yes or no on uncensored LLM entries (STRATEGY.md line or ADR), then close against it.
+- **Migrated from**: v2.12#DF-v260-6 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-12 - Release-scoped Qwen3.8 mentions under `docs/archive/` stay as written.
+
+- **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): A permanent decision not to rewrite archived release text; nothing is owed and nothing can change it.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#WN-v260-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### QG-6 - The handbook HTML check fails on a CRLF working tree.
+
+The index bytes are LF.
+
+- **Archived record**: `docs/archive/v2/v2.7/known-gaps.md`
+
+- **Why still owed**: The check still fails on a CRLF checkout although the committed HTML is current.
+- **Next step**: Normalize the target's CRLF before comparing in generate-handbooks.mjs, with a CRLF temp-dir test.
+- **Migrated from**: v2.12#QG-v270-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### QG-7 - Narrowed in v2.11.0: `ci.yml` now defaults to `permissions: contents: read`, and `package.json` has `fast`, `full`, and `platform` profiles composed from existing commands. Still open: no `report` profile (it needs a summary writer that reads other profiles' output) and no `release` profile (publication belongs to semantic-release), and `ci.yml` still runs its own steps rather than calling the profiles. Owner: the maintainer.
+
+- **Archived record**: `docs/archive/v2/v2.7/known-gaps.md`
+
+- **Why still owed**: No working report or release profile, and CI runs inline steps; overlaps QG-v212-1 fields 2 and 3, which keeps this entry separate.
+- **Next step**: Owner decides whether to fold this into v2.12.0#QG-v212-1; otherwise write the report summary writer, then (separate workflow approval) replace inline CI steps with profile calls.
+- **Migrated from**: v2.12#QG-v270-2 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### QG-8 - `docs/handbooks/html/atlas.html` scrolls sideways at 390 px (524 px wide) from a cause other than inline code, and CI does not run `npm run docs:handbooks:check`, which let `atlas.html` go stale until v2.11.0 regenerated it. Owner: the maintainer. Next step: find the wide element in the atlas, and add the handbook check to the `fast` profile and CI.
+
+- **Archived record**: `docs/archive/v2/v2.11/development/v2.11.0-last-phase-evidence.md`
+
+- **Why still owed**: The overflow is fixed, but the narrow atlas table still breaks words and no CI job or profile runs the handbook check.
+- **Next step**: After the QG-v270-1 fix, add docs:handbooks:check to the fast profile (CI wiring needs workflow approval), and set a wrap rule for the atlas table.
+- **Migrated from**: v2.12#QG-v211-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### QG-9 - The production audit allowlist gained `global-agent`, `roarr`, and `sprintf-js` (GHSA-hp3w-g68c-fv3c, no patched `sprintf-js` release).
+
+All three load only from `onnxruntime-node/script/install.js`, its install-time binary download, never at runtime. Fixing them needs a semver-major `global-agent` under a parent that pins `^3.0.0`. Five other advisories in the same audit were fixed in range (`proxy-addr` 2.0.8, `undici` 7.30.0, `fast-uri` 3.1.8, `ip-address` 10.7.3, `source-map-js` 1.2.2). Owner: the maintainer. Next step: remove the three entries when `onnxruntime-node` moves to `global-agent` 4 or a patched `sprintf-js` ships.
+
+- **Archived record**: `scripts/check-prod-audit.mjs`
+
+- **Why still owed**: The removal trigger fired (global-agent 4), but the unused allowlist entries are still in the script.
+- **Next step**: Remove the three entries and their comment, then rerun check-prod-audit.
+- **Migrated from**: v2.12#QG-v211-2 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### QG-10 - The three OS installers were not executed locally for the avatar plan.
+
+The installer matrix workflow already exists.
+
+- **Archived record**: `docs/archive/v2/v2.7/known-gaps.md`
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): Plan-scoped, its own next step is in force, and the plan owed no installer run; running a real installer is tracked by v2.12.0#WN-v212-7 and CI-v251-1.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#QG-v270-3 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-20 - The community Qwen-Image GGUF and Bespoke Nimble are not admitted.
+
+No catalog row. The living-bar sentences waited.
+
+- **Archived record**: `docs/archive/v2/v2.8/known-gaps.md`
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): The decline is recorded and indexed; the owed living-bar sentence was superseded by the declined-models index. The v2.8 record states no reopen conditions, which the owner may want to add.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#DF-v280-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-21 - CrisperWhisper 2.0 is not admitted.
+
+The fetched page has no weights, license, or size. No catalog row.
+
+- **Archived record**: `docs/archive/v2/v2.9/known-gaps.md`
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): Recorded and indexed; the remaining doc step was superseded by the index. Nothing is owed unless weights, a license and a size are published.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#DF-v290-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-22 - Hosted Jev, Laya 0.3.20, and Kev 0.8B, 4B, 9B, and 27B are not admitted.
+
+No catalog row.
+
+- **Archived record**: `docs/archive/v2/v2.10/known-gaps.md`
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): The decline is in the living index with its reasons and a guard test enforces it; nothing is owed.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#DF-v210-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-23 - CLM-8B is not admitted, no catalog row.
+
+Its README gives Apache-2.0 code and weights, two frozen Qwen3-8B encoders with 20M-parameter heads, ranking over a closed candidate set, and a serve path of vLLM plus `clm-serve` with no Windows instructions. It does not close DF-11. The v2.10 hosted and license grounds no longer apply to it; the runtime, single-GPU, and job-map grounds still do. The PageIndex package and PageIndex Cloud are not adopted: default models are hosted, local mode asks for an OpenAI key, and OCR and MCP are cloud-only. The local equivalent is PI-1 in the v2.11.0 plan. AIRI was re-checked through 0.12.0-beta.5 with no new adoption.
+
+- **Archived record**: `docs/archive/v2/v2.11/comparisons/v2.11.0-comparison-pageindex-airi-clm.md`
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): Recorded and indexed with the grounds that still apply, and enforced by a guard test; nothing is owed.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#DF-v211-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-24 - The outline tools remain experimental and off by default.
+
+The v2.12 Phase 6 frozen rule yields futility: expanded C cross-section scores are Qwen 0/20 and Gemma 4/20. Recommend removal or narrowing at the v2.13.0 review, with no repeats. Owner: the maintainer. M5 still requires a session-history or DEVLOG entry citing a workspace document hash and the answer obtained; absent that entry, remove the tools and settings keys at review.
+
+- **Archived record**: [Measured result](../../../v2/v2.12/development/outline-eval.md), original: `docs/archive/v2/v2.11/development/outline-eval.md`
+
+- **Why still owed**: The frozen futility result calls for removing or narrowing the tools; no M5 entry exists and the owner decision due at v2.13 is not made.
+- **Next step**: Owner decides: add the M5 DEVLOG entry (document hash and answer obtained), or remove the outline tools and their settings keys.
+- **Migrated from**: v2.12#DF-v211-2 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-25 - CPU OCR (RapidOCR, the portable default) costs about 6.8 s per text-dense page on this host: a 60-page PDF takes about 7 minutes on the first `document_outline` call, the same cost `parse_document` already pays. The GPU engine was not measured. The runtime also caps at 200 pages and reports `pageCount: 200`, hiding truncation past that.
+
+- **Archived record**: `docs/archive/v2/v2.11/development/outline-feasibility.md`
+
+- **Why still owed**: OCR cost is unchanged and the GPU engine is unmeasured; the page count still reports the capped value, though truncation is now marked.
+- **Next step**: Return the PDF's total page count from runtimes/ocr beside the parsed count, and time a 100-page first outline on the GPU engine.
+- **Migrated from**: v2.12#DF-v211-3 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-26 - The missing mechanisms were implemented in v2.12 Phases 2-4: per-turn remaining-room budgets, native Ollama tool-role history and shared result compaction.
+
+Phase 6 observed those paths, but the anchor A errors/no-answer including timeouts are Qwen 13 versus nine previously (target at most four), Gemma 15 versus 16 (target at most eight). Answer quality is not solved. Owner: the maintainer. Retain the measured miss and diagnostic limits in the v2.13 removal/narrowing review; do not schedule repeats after the frozen futility result.
+
+- **Archived record**: [Measured result](../../../v2/v2.12/development/outline-eval.md), [mechanism evidence](../v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md)
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): The mechanism half is built; the answer-quality half is the removal-or-narrowing decision DF-v211-2 owns, so nothing separate is owed. Superseded by docs/v2/v2.12/known-gaps.md DF-v211-2.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#DF-v211-7 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-27 - The outline tools refuse PPTX and XLSX, though the OCR runtime reads both (`runtimes/ocr/documents.py`).
+
+Supporting them needs two new document kinds in the shared core and a determinism measurement of their extraction engines before outlines may be cached. Owner: the maintainer. Next step: add the kinds with ephemeral (uncached) outlines, then measure.
+
+- **Archived record**: `docs/archive/v2/v2.11/development/v2.11.0-last-phase-evidence.md`
+
+- **Why still owed**: The outline tools still refuse PPTX and XLSX.
+- **Next step**: Add pptx and xlsx DocumentKinds with uncached outlines and measure extraction determinism; low priority while DF-v211-2's removal decision is open.
+- **Migrated from**: v2.12#DF-v211-6 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-13 - No egress from the OCR child process is proven at socket level.
+
+The test traps sockets in the Node process and scans first-party OCR sources for network imports; third-party OCR packages and first-run model downloads are not covered. Not proven here.
+
+- **Archived record**: `tests/unit/modules/coding/documents/DocumentOutlineTools.test.ts`
+
+- **Why still owed**: No process-level proof that the OCR child sends nothing out; third-party packages and first-run model downloads are uncovered.
+- **Next step**: Run the OCR child under an OS-level network block during an outline parse and record the result as evidence.
+- **Migrated from**: v2.12#WN-v211-6 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-14 - When a parser returns markdown (the GPU OCR engine), per-page data is dropped, so `pagesParsed` reads 1 and sections carry no page range.
+
+The CPU default and DOCX return pages and are unaffected; the GPU engine was not run here.
+
+- **Archived record**: `modules/coding/documents/DocumentOutlineTools.ts` (`createExtractor`)
+
+- **Why still owed**: Unchanged: GPU-engine markdown output still loses page ranges.
+- **Next step**: Have the GPU engine return per-page markdown or page offsets so createExtractor keeps pages, with a markdown-and-pages fixture test.
+- **Migrated from**: v2.12#WN-v211-7 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-15 - The OCR runtime's `parse` result carries no engine version, so the outline cache key uses the engine id, the device, and a fixed version label.
+
+An engine upgrade does not invalidate cached outlines by itself; the per-node anchor check refuses any slice from changed text, so the failure is safe but costs a rebuild.
+
+- **Archived record**: `docs/archive/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-3.md`
+
+- **Why still owed**: The cache key still uses a fixed version label; the failure is safe (a forced rebuild) but unchanged.
+- **Next step**: Return engineVersion from runtimes/ocr/parse.py and pass it into createExtractor's EngineIdentity.version.
+- **Migrated from**: v2.12#WN-v211-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-16 - The ACP control-surface path builds the outline tools without a model client, so node summaries are off there.
+
+The desktop coding runner and the VS Code extension have them.
+
+- **Archived record**: `docs/archive/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-4.md`
+
+- **Why still owed**: Summaries are still off on the ACP path.
+- **Next step**: Pass outlineLlm from AcpAgent's own client and active model, mirroring headlessAgentRunner, with a test that summaries are on.
+- **Migrated from**: v2.12#WN-v211-2 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-17 - Both agent loops now send `tools` natively to every model whose catalog format is not `none` (the extension already did).
+
+A model Ollama reports without the `tools` capability may reject such a request. Not proven here: every chat model installed on this host declares `tools`.
+
+- **Archived record**: `docs/archive/v2/v2.11/development/history/2026-10-03_v2.11.0-pageindex-airi-clm-phase-5.md`
+
+- **Why still owed**: Nothing checks model capabilities before sending native tools, and the behavior with a model that lacks them is unproven.
+- **Next step**: Read /api/show capabilities once per model and skip native tools when `tools` is missing, with a stubbed unit test.
+- **Migrated from**: v2.12#WN-v211-4 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-18 - The summary path's loopback check reuses `isLoopbackEndpoint`: an exact host match that rejects look-alike hosts, `0.0.0.0`, and IPv4-mapped addresses, but does not resolve DNS for `localhost` or refuse an HTTP redirect from the model server.
+
+- **Archived record**: `docs/archive/v2/v2.11/development/history/2026-10-02_v2.11.0-pageindex-airi-clm-phase-4.md`
+
+- **Why still owed**: The limit is unchanged; accepting or hardening it is an open owner decision.
+- **Next step**: Decide: accept as a documented limit, or make the summary request refuse redirects (fetch redirect: 'error') with a test.
+- **Migrated from**: v2.12#WN-v211-3 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-28 - Aleph Alpha's Kolibri-1 (released 2026-10-03, Apache-2.0, 78B total and 3.46B active parameters, about 78 GB in FP8) is not admitted, no catalog row.
+
+The smallest community GGUF (Q3_K_S, about 3.47 bits per weight) is roughly 34 GB by arithmetic, above the 24 GB top tier. Stock Ollama, llama.cpp, and LM Studio cannot load it; the official path needs vLLM with the vendor `aleph-alpha-inference` package. The trained context is 262,144 tokens; 1M is an extrapolation. It fails gates 3, 4, and 5 of the v2.3.0 admission record. Reopen conditions: BOTH a runtime condition (an official `ollama.com/library` tag, or Kolibri support merged into a released upstream llama.cpp) AND a size condition (a first-party Kolibri variant whose quantized weights plus KV cache at the tier's context fit 24 GB, or a raised top tier in `core/registry/recommended.json`). Meeting both reopens the acceptance bar; neither admits the model. Owner: the maintainer.
+
+- **Archived record**: `docs/v2/v2.12/comparisons/v2.12.0-comparison-kolibri-1.md`
+
+- **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): Recorded with explicit reopen conditions and enforced by a guard test. The guard test reads the register entry, so the entry text must stay in place when closed.
+- **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
+- **Migrated from**: v2.12#DF-v212-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-29 - No catalog-wide check that every entry's declared size fits its tier; the Kolibri-1 decision keeps a per-model guard instead (decided at the seed plan's grill).
+
+Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md`, parked gaps. Owner: the maintainer. Next step: a plan that already edits `core/registry/catalog.json` measures how many current entries such a check would flag before adopting it. Measured in v2.14.0 Phase 5 over 41 entries ([script](../../../archives/v2/v2.14/development/evidence/measure-catalog-size-check.mjs)): a tier-default check flags 1 (`qwen3.5:4b` is a cpu agentic default yet declares `requiredVramGB` 4); a field-consistency check flags 9 (six `hideBelowVramGB` values below the declared need, several apparently deliberate for offload builds; two embedding models with `vramGB` 1 over `requiredVramGB` 0; `triposplat` with no `sizeGB`). Adoption stays an owner decision.
+
+- **Archived record**: `docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md`
+
+- **Why still owed**: The measurement is done; the owner's adopt-or-decline decision is not, and the measurement surfaced unresolved field inconsistencies.
+- **Next step**: Owner decides from the v2.14 measurement: adopt the tier-default check after fixing the flagged entry, or record a decline.
+- **Migrated from**: v2.12#DF-v212-2 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### DF-30 - No catalog field separates a vendor's trained context from its extrapolated maximum (comparison KOL-2).
+
+Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md`, parked gaps. Owner: the maintainer. Next step: reopen when a second model with an extrapolated context claim reaches review.
+
+- **Archived record**: `docs/v2/v2.12/comparisons/v2.12.0-comparison-kolibri-1.md`
+
+- **Why still owed**: A watch item with a trigger that only this entry and a plan carry; closing it would lose the watch.
+- **Next step**: Move the trigger into model-acceptance.md as an open question, then close the entry against it.
+- **Migrated from**: v2.12#DF-v212-3 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### QG-11 - The completion checker's contract conflicts block every minor run here
+
+- **Source phase**: v2.15.0 Phase 4 (2026-10-19), from the v2.14 run and the v2.15 run.
+- **Plan reference**: v2.15.0 T015; [Nexus-Hub checker handoff](development/v2.15.0-nexus-hub-checker-handoff.md).
+- **Reason**: the Nexus-Hub completion checker (v4.13.13, `completion_minor.py` sha256 `f1689e72b6f96835`) has contract conflicts that are not missing work in this repository and that this repository cannot fix: (1) `gaps.minor` reaches every ledger back to v0.7, and the 142 problems left in v0.7 and v1.0 to v1.3 can never parse, so `MINOR COMPLETE` is unreachable without a legacy cutoff; (2) `tests.evidence` rejects an honest count of pre-existing failures; (3) `release.changelog` expects `## [x.y.z]` while semantic-release writes `# [x.y.z](...)`; (4) a re-recorded run resets `start_head`, and a plan rename reads as tampering; (5) run-owned merged branches are kept as `recently-active`; (6) `record block` rejects a legitimate `approval-not-covered`; (7) a blocker-answer paste was not captured in the v2.14 run (it was captured in v2.15); (8) `minor_close.py archive` repairs Markdown links only; (9) record lookup from a linked worktree fails (`record block`, `migrate`); (10) `check-minor` hides predicate detail when blocked; (11) `check_handbooks.py` hashes working-copy CRLF bytes; (12) `validate_unicode_safety.py --fix` rewrites raw evidence; (13) small items (relative `load_ledgers` root, the approval page's gap and time wording); (14) `record answer --text` spends the round on a note; (15) the turn-end gate reads the plan from the main checkout and opens `no-progress` while a run waits on its own agents; (16) no tool migrates a gap from an older minor into the current one. Each finding, with its evidence and a suggested fix, is in the handoff prompt.
+- **Suggested next step**: give the handoff prompt to the agent maintaining Nexus-Hub, and record its answer (fixed, already fixed, or declined, with reasons) here; then re-run `check_plan_completion.py check-minor v2.15` and close the findings it resolves.
 
 ### Resolved
 

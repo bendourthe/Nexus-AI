@@ -14,7 +14,7 @@
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
-| Quality-gate gaps (QG) | 3 | 0 |
+| Quality-gate gaps (QG) | 0 | 3 |
 
 ### Open Items
 
@@ -44,24 +44,27 @@ v2.6 moved to `docs/archive/v2/v2.6/`. v2.6.0 is published, and the asset build 
 
 #### Quality-Gate Gaps
 
-##### QG-v270-1 - Handbook byte check fails on a CRLF working tree
+##### QG-v270-1 - Handbook byte check fails on a CRLF working tree - CLOSED 2026-10-19
 
 - **Source phase**: Phase 3 - Living docs architecture
 - **Plan reference**: `docs/v2/v2.7/plans/v2.7.0-adoption-avatar-install-gate.md` (T010)
 - **Reason**: `npm run docs:handbooks:check` exits 1 here because `git ls-files --eol` shows index LF and working tree CRLF for the handbook HTML. This plan did not edit handbook Markdown. Regenerating on this checkout would fight `core.autocrlf` and would not change the committed LF bytes.
 - **Suggested next step**: Compare generated HTML to the git index blobs, or run the check on an LF checkout.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md QG-v270-1
 
-##### QG-v270-2 - Named CI profiles and workflow permissions were not added
+##### QG-v270-2 - Named CI profiles and workflow permissions were not added - CLOSED 2026-10-19
 
 - **Source phase**: Phase 3 - Terminal CI/CD reconciliation
 - **Plan reference**: `docs/v2/v2.7/plans/v2.7.0-adoption-avatar-install-gate.md` (T012)
 - **Reason**: GitHub Actions is the provider. `ci-required` already always resolves and is the only required check on `main` and `develop`. `package.json` has no `fast`, `full`, `platform`, `report`, or `release` scripts. `ci.yml` has no workflow-level `permissions` block. This plan's tests already run in `test-ts` and desktop Vitest. The workflow was not rewritten.
 - **Suggested next step**: A CI-owned change can add the five profile scripts and a workflow `permissions` block after checking which jobs need more than `contents: read`.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md QG-v270-2
 
-##### QG-v270-3 - Cross-OS installer executables were not run locally
+##### QG-v270-3 - Cross-OS installer executables were not run locally - CLOSED 2026-10-19
 
 - **Source phase**: Phase 3 - Terminal CI/CD reconciliation
 - **Plan reference**: `docs/v2/v2.7/plans/v2.7.0-adoption-avatar-install-gate.md` (T012)
 - **Reason**: `.github/workflows/installer-matrix.yml` already calls the Windows, Linux, and macOS installer workflows and aggregates them as `installer-required`. This plan changes no installer payload. The three OS installers were not executed on this machine.
 - **Suggested next step**: Keep the installer matrix on installer-touching pulls. Do not treat this avatar plan as an installer change.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md QG-v270-3
 

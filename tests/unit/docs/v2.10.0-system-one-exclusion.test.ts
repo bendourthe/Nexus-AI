@@ -49,7 +49,10 @@ describe("v2.10.0 System One exclusion", () => {
     const systemOneRows = gaps
       .split("\n")
       .map((line) => line.replace(/\r$/, ""))
-      .filter((line) => line.startsWith("##### DF-v210-"));
+      .filter((line) => line.startsWith("##### DF-v210-"))
+      // v2.15.0 marked the archived original superseded by the register entry
+      // that carries it; the record and its title are unchanged.
+      .map((line) => line.replace(/ - CLOSED \d{4}-\d{2}-\d{2}$/, ""));
     expect(systemOneRows).toStrictEqual([
       "##### DF-v210-1 - Hosted Jev, Laya, and Kev are not admitted",
     ]);

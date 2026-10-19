@@ -17,49 +17,56 @@ v2.5 moved to `docs/archive/v2/v2.5/`. The rows below were not closed. They are 
 | v2.4#QG-v240-1 | The full local suite was not run on the Electron `better-sqlite3` ABI. CI Node 22 ran it on the merge. | `docs/archive/v2/v2.4/known-gaps.md` |
 | v2.5#CI-v251-1 | `develop` and `main` now require only `ci-required`. The installer matrix workflow has not finished a run yet. | `docs/archive/v2/v2.5/known-gaps.md` |
 
-### DF-v260-1 - Chat search still matches titles only.
+### DF-v260-1 - Chat search still matches titles only. - CLOSED 2026-10-19
 
 A hit is not labelled with the branch it belongs to. Exit: a search hit from a branched chat includes that chat's title. Source phase: chat surface Phase 2. Plan: `docs/archive/v2/v2.6/plans/v2.6.0-adoption-chat-surface.md`. Reason: the organizer marker landed; title search was not part of the fork write path. Next: extend `ChatExplorerStore.search` when thread search is in scope.
 
 - **Archived record**: this file
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v260-1
 
-### QG-v260-1 - The packaged offline probe was not re-run after adding Mermaid.
+### QG-v260-1 - The packaged offline probe was not re-run after adding Mermaid. - CLOSED 2026-10-19
 
 Exit: `desktop/tests/packaged/offline.smoke.mjs` prints `offline: PASS` on a probe report from a build that includes this dependency. Source phase: chat surface Phase 3. Plan: `docs/archive/v2/v2.6/plans/v2.6.0-adoption-chat-surface.md`. Reason: the probe needs a packaged window capture, which this session did not produce. The component imports the npm package `mermaid` and contains no URL. Next: run the packaged smoke on the next installer build.
 
 - **Archived record**: this file
+- **Superseded by**: docs/v2/v2.12/known-gaps.md QG-v260-1
 
-### DF-v260-2 - A user compaction updates the open Chat page and can be undone there.
+### DF-v260-2 - A user compaction updates the open Chat page and can be undone there. - CLOSED 2026-10-19
 
 It is not written back to `chat_chat_messages`, so a restart reloads the pre-compact transcript. Exit: compacting a chat and reopening the app shows the compacted transcript, and undo still restores the snapshot. Source phase: chat surface Phase 5. Plan: `docs/archive/v2/v2.6/plans/v2.6.0-adoption-chat-surface.md`. Reason: the explorer store has no replace-transcript method. Next: persist the snapshot and the replacement rows in the same transaction.
 
 - **Archived record**: this file
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v260-2
 
-### DF-v260-3 - The Qwen3.8 guard matches `id` and `source.url` only.
+### DF-v260-3 - The Qwen3.8 guard matches `id` and `source.url` only. - CLOSED 2026-10-19
 
 Other separators, `qwen3p8`, a re-upload that drops the version from the repo name, and a row whose `family`, `name`, or `displayName` carries the family while id and url do not, all pass. Exit: a widened pattern with tests, or a recorded decision that catalog review covers the residual. Source phase: Qwen3.8 Phase 3. Plan: `docs/archive/v2/v2.6/plans/v2.6.0-adoption-qwen38-27b.md`.
 
 - **Archived record**: this file
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v260-3
 
-### DF-v260-4 - Qwen3.8-27B is not admitted.
+### DF-v260-4 - Qwen3.8-27B is not admitted. - CLOSED 2026-10-19
 
 Exit: the two-path reopening trigger in `docs/reference/model-acceptance.md` is met and the acceptance bar is taken with measured local numbers. Source phase: Qwen3.8 Phase 1. Plan: `docs/archive/v2/v2.6/plans/v2.6.0-adoption-qwen38-27b.md`.
 
 - **Archived record**: this file
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v260-4
 
-### DF-v260-5 - No llama.cpp serving path, so no catalog model that needs a separate `mmproj` or llama.cpp draft-model flags can ship.
+### DF-v260-5 - No llama.cpp serving path, so no catalog model that needs a separate `mmproj` or llama.cpp draft-model flags can ship. - CLOSED 2026-10-19
 
 Exit: a runtime decision with its own comparison. Source phase: Qwen3.8 Phase 3. Plan: `docs/archive/v2/v2.6/plans/v2.6.0-adoption-qwen38-27b.md`.
 
 - **Archived record**: this file
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v260-5
 
-### DF-v260-6 - The uncensored-LLM product question is unanswered.
+### DF-v260-6 - The uncensored-LLM product question is unanswered. - CLOSED 2026-10-19
 
 Current uncensored entries are image or video. Exit: an explicit product decision. Source phase: Qwen3.8 Phase 3. Plan: `docs/archive/v2/v2.6/plans/v2.6.0-adoption-qwen38-27b.md`.
 
 - **Archived record**: this file
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v260-6
 
-### WN-v260-1 - Release-scoped Qwen3.8 mentions under `docs/archive/` stay as written.
+### WN-v260-1 - Release-scoped Qwen3.8 mentions under `docs/archive/` stay as written. - CLOSED 2026-10-19
 
 Exit: that decision stands. Source phase: Qwen3.8 Phase 1. Plan: `docs/archive/v2/v2.6/plans/v2.6.0-adoption-qwen38-27b.md`.
 
@@ -72,3 +79,5 @@ NI-3 stays resolved in that same v2.4 file. Neither v2.6.0 plan closed it, becau
 `CI-v251-1` was re-checked on 2026-09-26: `gh api repos/bendourthe/Nexus-AI/branches/develop/protection` returns required contexts `["ci-required"]` only. `Installer tests` is not required. Adding it was not applied. Build-time enforcement through `nexus-installer.spec` remains the binding gate for the Qwen3.8 check.
 
 Record the installer-matrix run id on `CI-v251-1` when that workflow finishes, then move the row to a closed section.
+
+- **Superseded by**: docs/v2/v2.12/known-gaps.md WN-v260-1

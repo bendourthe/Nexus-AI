@@ -17,6 +17,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildInventory,
+  carriedCandidate,
   checkCoverage,
   driftFrom,
   itemKey,
@@ -24,6 +25,7 @@ import {
   readBaseline,
   registerRows,
   snapshotOf,
+  splitMigrations,
 } from "../../../scripts/known-gaps/inventory.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -63,7 +65,12 @@ describe("buildInventory", () => {
     const byId = Object.fromEntries(inventory.carriers.map((c: { id: string }) => [c.id, c]));
 
     expect(inventory.totals.problems).toBe(0);
-    expect(byId["BG-2"].carries).toEqual({ ledger: "docs/archive/v2/v2.4/known-gaps.md", id: "BG-2", state: "open" });
+    expect(byId["BG-2"].carries).toEqual({
+      ledger: "docs/archive/v2/v2.4/known-gaps.md",
+      id: "BG-2",
+      key: "v2.4.10#BG-2",
+      state: "open",
+    });
     expect(byId["BG-2"].match).toBe("record");
     expect(byId["DF-v260-1"].carries.ledger).toBe("docs/archive/v2/v2.6/known-gaps.md");
     expect(byId["DF-v212-4"].state).toBe("resolved");
@@ -182,6 +189,71 @@ describe("checkCoverage", () => {
 
     expect(checkCoverage(inventory, { batches }).ok).toBe(true);
     expect(listedKeys(batches).map((entry: { key: string }) => entry.key)).toEqual(["v2.4.9#QG-1", "v2.2.3#DF-1"]);
+  });
+});
+
+describe("carriedCandidate", () => {
+  // Phase 4 regression: v2.4 holds five open DF-1 items in different patch
+  // sections, and the register carries v2.4.10's.
+  const candidates = [
+    { key: "v2.4.1#DF-1", body: "" },
+    { key: "v2.4.10#DF-1", body: "" },
+    { key: "v2.4.7#DF-1", body: "" },
+  ];
+
+  it("should pick the highest patch section when no candidate is superseded", () => {
+    expect(carriedCandidate("DF-1", candidates)?.key).toBe("v2.4.10#DF-1");
+  });
+
+  it("should prefer the candidate whose Superseded by line names the register entry", () => {
+    const closed = { key: "v2.4.1#DF-1", body: `\r\n- **Superseded by**: ${REGISTER} DF-1\r\n` };
+
+    expect(carriedCandidate("DF-1", [closed, candidates[1]])?.key).toBe("v2.4.1#DF-1");
+    expect(carriedCandidate("DF-10", [closed])?.key).toBe("v2.4.1#DF-1");
+    expect(carriedCandidate("DF-1", [])).toBeNull();
+  });
+});
+
+describe("buildInventory carried originals", () => {
+  it("should keep a same-id item in another patch section archived-only", () => {
+    const item = (id: string, section: string, title: string) => ({ id, title: ` - ${title}`, state: "open", section, body: "" });
+    const archive = {
+      path: "docs/archive/v2/v2.4/known-gaps.md",
+      minor: "v2.4",
+      layout: "archive",
+      problems: [],
+      text: "",
+      items: [item("DF-1", "v2.4.10", "MiniCPM5-2B is not shipped"), item("DF-1", "v2.4.7", "Ollama reads as will be installed")],
+    };
+    const register = {
+      path: REGISTER,
+      minor: "v2.12",
+      layout: "active",
+      problems: [],
+      text: "",
+      items: [{ ...item("DF-1", "", "MiniCPM tool tags are stripped"), body: "\n- **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`\n" }],
+    };
+
+    const inventory = buildInventory([archive, register]);
+
+    expect(inventory.carriers[0].carries.key).toBe("v2.4.10#DF-1");
+    expect(inventory.archivedOnly.map((i: { key: string }) => i.key)).toEqual(["v2.4.7#DF-1"]);
+    expect(inventory.totals.distinctOpen).toBe(2);
+  });
+});
+
+describe("splitMigrations", () => {
+  it("should fail only on an in-scope migration and list the rest as notes", () => {
+    const minorOf = new Map([
+      ["docs/v2/v2.12/known-gaps.md", "v2.12"],
+      ["docs/releases/v2/v2.13/known-gaps.md", "v2.13"],
+    ]);
+    const done = { source: "docs/v2/v2.12/known-gaps.md", id: "BG-2", status: "migration-copy-complete" };
+    const outside = { source: "docs/releases/v2/v2.13/known-gaps.md", id: "WN-2", status: "migration-target-missing" };
+    const inside = { ...done, id: "DF-1", status: "migration-body-not-preserved" };
+
+    expect(splitMigrations([done, outside], minorOf)).toEqual({ ok: true, verified: 1, failed: [], notes: [outside] });
+    expect(splitMigrations([done, inside], minorOf)).toMatchObject({ ok: false, verified: 1, failed: [inside] });
   });
 });
 
