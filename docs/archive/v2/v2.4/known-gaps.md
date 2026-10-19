@@ -25,11 +25,25 @@ Gaussian splat viewer and optional generate. The viewer, honesty copy, queue, an
 
 ### Open Items
 
-- **DF-v240-1** - Live NVIDIA splat generate is not proven. Source phase: 4 and 5. Plan reference: T013, T015. Reason: the adapter is mocked and `--real` records `not proven here`. Suggested next step: run the adapter on a CUDA host with installed weights and record the benchmark row.
-- **DF-v240-2** - TripoSplat file SHA-256 pins are not in the catalog. Source phase: 5. Plan reference: T014. Reason: `source.sha256` is the all-zero placeholder the digest test requires, and `source.revision` is the Hugging Face commit observed on 2026-09-23. The weight files themselves were not hashed. Suggested next step: pin `diffusion_models/triposplat_fp16.safetensors` and the sibling files with `scripts/installer/build/pin-hf-weights.py` after a successful fetch.
-- **DF-v240-3** - Older `docs/**/known-gaps.md` files still have open operator and hardware items. Source phase: 6. Plan reference: T018. Reason: those items were not re-tested in this pass, so they stay open. Suggested next step: close each one only with its own evidence.
-- **MT-v240-1** - A real WebGL2 framebuffer was not captured. Source phase: 2. Plan reference: T005, T023. Reason: jsdom proves the fallback and the camera bounds. Suggested next step: orbit a fixture on a GPU canvas and save the PNG.
-- **QG-v240-1** - The full local `npm test` suite was not run in this shell. Source phase: 6. Plan reference: T024. Reason: `better-sqlite3` is NODE_MODULE_VERSION 146 and this Node expects 137. Suggested next step: let CI's Node 22 job run the suite. Do not `npm rebuild` the shared module.
+#### DF-v240-1 - Live NVIDIA splat generate is not proven.
+
+Source phase: 4 and 5. Plan reference: T013, T015. Reason: the adapter is mocked and `--real` records `not proven here`. Suggested next step: run the adapter on a CUDA host with installed weights and record the benchmark row.
+
+#### DF-v240-2 - TripoSplat file SHA-256 pins are not in the catalog.
+
+Source phase: 5. Plan reference: T014. Reason: `source.sha256` is the all-zero placeholder the digest test requires, and `source.revision` is the Hugging Face commit observed on 2026-09-23. The weight files themselves were not hashed. Suggested next step: pin `diffusion_models/triposplat_fp16.safetensors` and the sibling files with `scripts/installer/build/pin-hf-weights.py` after a successful fetch.
+
+#### DF-v240-3 - Older `docs/**/known-gaps.md` files still have open operator and hardware items.
+
+Source phase: 6. Plan reference: T018. Reason: those items were not re-tested in this pass, so they stay open. Suggested next step: close each one only with its own evidence.
+
+#### MT-v240-1 - A real WebGL2 framebuffer was not captured.
+
+Source phase: 2. Plan reference: T005, T023. Reason: jsdom proves the fallback and the camera bounds. Suggested next step: orbit a fixture on a GPU canvas and save the PNG.
+
+#### QG-v240-1 - The full local `npm test` suite was not run in this shell.
+
+Source phase: 6. Plan reference: T024. Reason: `better-sqlite3` is NODE_MODULE_VERSION 146 and this Node expects 137. Suggested next step: let CI's Node 22 job run the suite. Do not `npm rebuild` the shared module.
 
 ## v2.4.10
 
@@ -64,26 +78,33 @@ MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](c
 
 ### Open Items
 
-- **BG-2** - Three catalog entries ship all-zero placeholder SHA-256 pins: `sana-controlnet-canny`, `sana-controlnet-depth`, `sana-controlnet-pose`. Found by hoisting the placeholder-SHA rule catalog-wide in Phase 3; `pin-hf-weights.py --check` independently reports the same three ("3 unpinned weights file(s), 107 in scope"). They cannot be rotated here: `Efficient-Large-Model/SANA-ControlNet-*` returns HTTP 401 to an unauthenticated fetch, so the pin helper has nothing to read. They are also not flagged `gated` and `KNOWN_GATED_IDS` is empty, so invariants B and C never caught them either. A user installing these gets no integrity check at all.
-  - Source phase: 3
-  - Plan reference: sub-task 3.2, hoist 1
-  - Reason: pre-existing since v1.1.0 Phase 12 and outside this plan's scope. Named in `PLACEHOLDER_SHA_LEGACY_EXEMPT` so the new catalog-wide rule protects every other entry rather than being softened for all.
-  - Suggested next step: decide whether these three entries are still wanted. If yes, obtain a token and rotate with `pin-hf-weights.py --from-dir`, or repoint them at a public mirror; if no, drop them. Either way the id leaves the exemption list.
-  - Exit condition (evaluable): `PLACEHOLDER_SHA_LEGACY_EXEMPT` in `scripts/installer/src/nexus_installer/catalog_invariants.py` is empty, or `python scripts/installer/build/pin-hf-weights.py --check` exits zero. Checkable by running one command.
+#### BG-2 - Three catalog entries ship all-zero placeholder SHA-256 pins: `sana-controlnet-canny`, `sana-controlnet-depth`, `sana-controlnet-pose`.
 
-- **DF-1** - MiniCPM5-2B is not shipped as an agentic model. Through Ollama, the four structural tool-call tags are special tokens that the detokenizer strips, so the wire grammar is unrecoverable and no parser can be written against it. A parser over the stripped text would be a delimiter-free heuristic, and the two correct fixes (Ollama-side detokenization, or moving Nexus to Ollama `/api/chat` with structured `tool_calls`) both lie outside the plan's permitted edit sites, tripping the 2.2 hard stop condition.
-  - Source phase: 2
-  - Plan reference: sub-task 2.2, option 3
-  - Reason: not a model defect and not a Nexus defect; a runtime-boundary limitation proven by controlled experiment. Recorded rather than worked around, because every available workaround either ships dead code or ships a fragile heuristic under a grammar name.
-  - Suggested next step: re-probe when either condition below holds, then re-open the agentic question with the same five-way verdict method.
-  - Exit condition (evaluable): re-run the recorded echo experiment against a newer Ollama (`/api/generate`, `raw: true`, prompt asking the model to echo `<banana> <function <param </xyz>`). If `<function` appears in the response string, the blocker is gone. Alternatively, if Nexus gains an `/api/chat` tool-call path AND Ollama ships a tools-aware template for this GGUF, the second route opens. Both are checkable by running one command and reading one file.
+Found by hoisting the placeholder-SHA rule catalog-wide in Phase 3; `pin-hf-weights.py --check` independently reports the same three ("3 unpinned weights file(s), 107 in scope"). They cannot be rotated here: `Efficient-Large-Model/SANA-ControlNet-*` returns HTTP 401 to an unauthenticated fetch, so the pin helper has nothing to read. They are also not flagged `gated` and `KNOWN_GATED_IDS` is empty, so invariants B and C never caught them either. A user installing these gets no integrity check at all.
 
-- **WN-2** - Ollama's bundled template for `hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M` has no `{{ if .Tools }}` branch (204-byte template blob handling only `.System`, `.Prompt`, `.Response`). Tool definitions passed to `/api/chat` are therefore never rendered into the prompt, and the model answers as if no tools exist. This is independent of the detokenization blocker in DF-1 and would have to be solved too.
-  - Source phase: 2
-  - Plan reference: sub-task 2.1 probe method
-  - Reason: recorded while establishing why the probe uses `/api/generate` rather than `/api/chat`. Not actionable inside this plan.
-  - Suggested next step: fold into the DF-1 re-probe; a tools-aware template is a precondition for the `/api/chat` route.
-  - Exit condition (evaluable): `cat` the template blob named by the model's Ollama manifest and check for a `.Tools` reference. Checkable by reading one file.
+- Source phase: 3
+- Plan reference: sub-task 3.2, hoist 1
+- Reason: pre-existing since v1.1.0 Phase 12 and outside this plan's scope. Named in `PLACEHOLDER_SHA_LEGACY_EXEMPT` so the new catalog-wide rule protects every other entry rather than being softened for all.
+- Suggested next step: decide whether these three entries are still wanted. If yes, obtain a token and rotate with `pin-hf-weights.py --from-dir`, or repoint them at a public mirror; if no, drop them. Either way the id leaves the exemption list.
+- Exit condition (evaluable): `PLACEHOLDER_SHA_LEGACY_EXEMPT` in `scripts/installer/src/nexus_installer/catalog_invariants.py` is empty, or `python scripts/installer/build/pin-hf-weights.py --check` exits zero. Checkable by running one command.
+
+#### DF-1 - MiniCPM5-2B is not shipped as an agentic model.
+
+Through Ollama, the four structural tool-call tags are special tokens that the detokenizer strips, so the wire grammar is unrecoverable and no parser can be written against it. A parser over the stripped text would be a delimiter-free heuristic, and the two correct fixes (Ollama-side detokenization, or moving Nexus to Ollama `/api/chat` with structured `tool_calls`) both lie outside the plan's permitted edit sites, tripping the 2.2 hard stop condition.
+
+- Source phase: 2
+- Plan reference: sub-task 2.2, option 3
+- Reason: not a model defect and not a Nexus defect; a runtime-boundary limitation proven by controlled experiment. Recorded rather than worked around, because every available workaround either ships dead code or ships a fragile heuristic under a grammar name.
+- Suggested next step: re-probe when either condition below holds, then re-open the agentic question with the same five-way verdict method.
+- Exit condition (evaluable): re-run the recorded echo experiment against a newer Ollama (`/api/generate`, `raw: true`, prompt asking the model to echo `<banana> <function <param </xyz>`). If `<function` appears in the response string, the blocker is gone. Alternatively, if Nexus gains an `/api/chat` tool-call path AND Ollama ships a tools-aware template for this GGUF, the second route opens. Both are checkable by running one command and reading one file.
+
+#### WN-2 - Ollama's bundled template for `hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M` has no `{{ if .Tools }}` branch (204-byte template blob handling only `.System`, `.Prompt`, `.Response`). Tool definitions passed to `/api/chat` are therefore never rendered into the prompt, and the model answers as if no tools exist. This is independent of the detokenization blocker in DF-1 and would have to be solved too.
+
+- Source phase: 2
+- Plan reference: sub-task 2.1 probe method
+- Reason: recorded while establishing why the probe uses `/api/generate` rather than `/api/chat`. Not actionable inside this plan.
+- Suggested next step: fold into the DF-1 re-probe; a tools-aware template is a precondition for the `/api/chat` route.
+- Exit condition (evaluable): `cat` the template blob named by the model's Ollama manifest and check for a `.Tools` reference. Checkable by reading one file.
 
 
 ## v2.4.9

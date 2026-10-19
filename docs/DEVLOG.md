@@ -16,6 +16,10 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-19] v2.15.0 Phase 2 - Ledgers converted
+
+The ten in-scope known-gaps files now parse in the completion checker with zero problems (204 before). 75 rows that were an item's only record became heading entries; 122 rows that copied an entry recorded elsewhere kept their table place with a `vX.Y#` prefix; and the register's `DF-v212-4` became a superseded entry owned by the v2.12 release ledger. Every file passed the word-for-word preservation check, and the inventory's distinct open count stayed at 256. Only the legacy-cutoff ledgers (v0.7, v1.0 to v1.3) still report problems. Two docs tests were updated to read the entry form. Record: [v2.15.0-ledger-conversion.md](releases/v2/v2.15/development/v2.15.0-ledger-conversion.md).
+
 ## [2026-10-19] v2.15.0 Phase 1 - Ledger inventory and lossless converter
 
 The completion checker could not read 204 rows in the known-gaps ledgers from v1.17 to v2.12, so no minor run could finish. Phase 1 adds a pinned adapter to the checker's own parser (`scripts/known-gaps/checker-adapter.py`, which refuses a checker whose sha256 differs), a read-only inventory (`scripts/known-gaps/inventory.mjs`) with a dated baseline, and a one-time converter with an independent word-for-word preservation check. Dry runs convert all ten in-scope ledgers to zero problems. The main finding is that the v2.5 to v2.11 tables are snapshots of the carry-forward register: 120 of their rows copy entries recorded elsewhere, so they gain a `vX.Y#` prefix instead of becoming duplicate entries. Decisions: [v2.15.0-ledger-conversion-decisions.md](releases/v2/v2.15/development/v2.15.0-ledger-conversion-decisions.md). History: [v2.15.0-phase1.md](releases/v2/v2.15/development/history/v2.15.0-phase1.md).

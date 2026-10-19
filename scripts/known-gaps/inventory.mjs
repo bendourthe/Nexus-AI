@@ -207,7 +207,7 @@ export function renderMarkdown(inventory, drift) {
     "|---|---:|---:|---:|",
     ...inventory.ledgers.map((l) => `| ${l.path} | ${l.items} | ${l.open} | ${l.problems} |`),
     "",
-    "## Unmatched register entries",
+    "## Register entries without an archived original",
     "",
     ...(inventory.unmatched.length === 0
       ? ["None."]

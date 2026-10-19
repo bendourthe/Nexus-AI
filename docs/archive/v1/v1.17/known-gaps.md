@@ -88,8 +88,8 @@ _No new product behaviour._ Close-out added a RETAINED-NOT-DEAD header on `ChatI
 
 | ID | Class | Source phase | Item | Reason | Suggested next step |
 |---|---|---|---|---|---|
-| DF-9 | DF | Phase 6 | gigatoken N5 watch | See above | See above |
-| DF-10 | DF | Phase 6 | ChatInput retained, not mounted | See above | See above |
+| v1.17#DF-9 | DF | Phase 6 | gigatoken N5 watch | See above | See above |
+| v1.17#DF-10 | DF | Phase 6 | ChatInput retained, not mounted | See above | See above |
 
 ### Phase 6 reconciliation (terminal gate)
 
