@@ -14,7 +14,7 @@ import { load, hash, decode, literalScore, score, requestFor, safePath } from ".
 import { collect, pinFetch } from "../../../scripts/evaluate-local-rewrites.mjs";
 
 const root = resolve(__dirname, "../../..");
-const contractFile = "docs/releases/v2/v2.14/development/v2.14.1-rewrite-contract.json";
+const contractFile = "docs/archives/v2/v2.14/development/v2.14.1-rewrite-contract.json";
 const script = join(root, "scripts/evaluate-local-rewrites.mjs");
 const execute = promisify(execFile);
 const temporary: string[] = [];
@@ -208,7 +208,7 @@ describe("local rewrite evaluation boundary", () => {
   });
   test("saved baseline retains every held-out identity without implying outputs", () => {
     const loaded = load(root, contractFile);
-    const rows = readFileSync(join(root, "docs/releases/v2/v2.14/development/rewrite-eval/run-001.jsonl"), "utf8").trim().split("\n").map(JSON.parse);
+    const rows = readFileSync(join(root, "docs/archives/v2/v2.14/development/rewrite-eval/run-001.jsonl"), "utf8").trim().split("\n").map(JSON.parse);
     expect(rows.slice(1).map((r) => r.id)).toEqual(loaded.heldOut.map((item: { id: string }) => item.id));
     expect(rows.slice(1).every((r) => r.reason === "PILOT_HOLD_NOT_RUN")).toBe(true);
     expect(score(loaded, rows)).toMatchObject({ denominator: 16, present: 16, completedOutputs: 0, disposition: "HOLD", missing: loaded.heldOut.map((item: { id: string }) => item.id) });
