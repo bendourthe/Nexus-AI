@@ -16,6 +16,10 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-19] v2.15.0 Phase 5 - Cleanup, deep pass and local gate
+
+The one-time converter and dispositions tool are removed; the inventory and the pinned adapter stay. The Tier 3 deep pass exercised all 18 tooling and ledger features, and an adversarial review confirmed 9 robustness holes, all fixed in one cycle. The two most serious: the adapter's pin did not cover the checker's sibling modules, and a planted `.pyc` could run in place of the pinned source. The adapter now compiles every module from the exact bytes it hashed. Known-gaps reconciliation found two v2.13 migrations whose v2.14 copies were recorded only as table rows (`v2.15.0#WN-19`) and finalized the v2.12 release ledger. The full local gate passes apart from 7 pre-existing Windows line-ending failures in `evaluate-local-embeddings.test.ts`, which fail identically on `develop`. Evidence: [v2.15.0-last-phase-evidence.md](releases/v2/v2.15/development/v2.15.0-last-phase-evidence.md).
+
 ## [2026-10-19] v2.15.0 Phase 4 - Dispositions applied, register frozen
 
 The triage is now in the ledgers. Three register entries are marked resolved; 44 register and v2.12 items were copied word for word into the v2.15 ledger under new ids, and the pinned checker verifies every copy (`inventory.mjs --verify-migrations`: 44 of 44). The 39 archived originals the register carried are marked closed, each with a Superseded by line. The register's Status is finalized, and the v2.12 release ledger has no open item. QG-11 records the sixteen completion-checker conflicts, with the refreshed [Nexus-Hub handoff](releases/v2/v2.15/development/v2.15.0-nexus-hub-checker-handoff.md). While applying, an inventory bug surfaced: an item counted as carried by ledger and id alone hid six other open items in v2.4 that reuse the same short id. The inventory now keys items by patch section, and the follow-up batches hold 199 items, not 193.

@@ -42,6 +42,7 @@ import {
   isTableRow,
   leadingId,
   ledgerPathsIn,
+  parseHeading,
   splitCells,
   splitLines,
 } from "./ledger-text.mjs";
@@ -109,8 +110,16 @@ export function registerRows(text) {
   const mask = fenceMask(lines);
   const rows = [];
   let headers = null;
+  // A table inside an entry's body belongs to that entry, not to the register:
+  // skip from an item heading to the next heading at its level or above.
+  let itemLevel = 0;
   lines.forEach((line, index) => {
-    if (mask[index] || !isTableRow(line)) {
+    const heading = mask[index] ? null : parseHeading(line);
+    if (heading) {
+      if (itemLevel && heading.level <= itemLevel) itemLevel = 0;
+      if (heading.level >= 3 && leadingId(heading.text)) itemLevel = heading.level;
+    }
+    if (mask[index] || itemLevel || !isTableRow(line)) {
       headers = null;
       return;
     }
@@ -119,7 +128,7 @@ export function registerRows(text) {
       return;
     }
     if (isSeparatorRow(line)) return;
-    const cells = splitCells(line);
+    const cells = splitCells(line, headers.length);
     const id = leadingId(cells[0] ?? "");
     if (!id || cells[0].replaceAll("**", "").trim() !== id) return;
     const record = headers.findIndex((header) => /record/i.test(header));
@@ -201,8 +210,18 @@ export function buildInventory(ledgers) {
     open: ledger.items.filter((i) => i.state === "open").length,
     problems: ledger.problems.length,
   }));
+  // Two unresolved items in one ledger with the same key (same id in two
+  // sections that do not name a patch) would count as one; report them, so a
+  // caller can fail instead of undercounting.
+  const seen = new Map();
+  for (const item of items.filter((i) => i.state !== "resolved")) {
+    const key = `${item.ledger}#${item.key}`;
+    seen.set(key, (seen.get(key) ?? 0) + 1);
+  }
+  const collisions = [...seen].filter(([, n]) => n > 1).map(([key]) => key);
   return {
     ledgers: perLedger,
+    collisions,
     items: items.map(({ body, ...rest }) => rest),
     carriers,
     unmatched: carriers.filter((c) => c.match === "none" || c.match === "ambiguous"),
@@ -257,12 +276,16 @@ const KEY_CELL_RE = /^\|\s*`?(v\d+\.\d+(?:\.\d+)?#[A-Z]{2,4}-[A-Za-z0-9]+(?:-[A-
 export function listedKeys(text) {
   const listed = [];
   let heading = "";
-  for (const line of splitLines(text)) {
+  const lines = splitLines(text);
+  const mask = fenceMask(lines);
+  lines.forEach((line, index) => {
+    // An example table inside fenced code lists nothing.
+    if (mask[index]) return;
     const h = /^##\s+(.*?)\s*$/.exec(line);
     if (h) heading = h[1];
     const key = KEY_CELL_RE.exec(line);
     if (key) listed.push({ key: key[1], heading });
-  }
+  });
   return listed;
 }
 
@@ -285,15 +308,20 @@ export function checkCoverage(inventory, { triage = null, batches = null }) {
   const fromBatches = batches !== null ? listedKeys(batches) : [];
   const counts = new Map();
   for (const { key } of [...fromTriage, ...fromBatches]) counts.set(key, (counts.get(key) ?? 0) + 1);
+  // Every key in the batch list must sit under a `## Batch ...` heading, so the
+  // 60-item limit cannot be dodged by a differently named section.
+  const isBatch = (heading) => /^batch(?![a-z])/i.test(heading);
   const perBatch = new Map();
-  for (const { heading } of fromBatches.filter((entry) => /^Batch(?![A-Za-z])/.test(entry.heading))) {
+  for (const { heading } of fromBatches.filter((entry) => isBatch(entry.heading))) {
     perBatch.set(heading, (perBatch.get(heading) ?? 0) + 1);
   }
+  const unbatched = fromBatches.filter((entry) => !isBatch(entry.heading)).map((entry) => entry.key);
   const result = {
     missing: [...expected].filter((key) => !counts.has(key)).sort(),
     repeated: [...counts].filter(([, n]) => n > 1).map(([key]) => key).sort(),
     unknown: [...counts.keys()].filter((key) => !known.has(key)).sort(),
     oversized: [...perBatch].filter(([, n]) => n > BATCH_LIMIT).map(([heading, n]) => `${heading}: ${n}`),
+    unbatched,
   };
   return { ok: Object.values(result).every((list) => list.length === 0), ...result };
 }
@@ -344,10 +372,22 @@ export function renderMarkdown(inventory, drift) {
 function main(argv) {
   const option = (name) => {
     const at = argv.indexOf(name);
-    return at === -1 ? null : argv[at + 1];
+    if (at === -1) return null;
+    const value = argv[at + 1];
+    // A flag given without its file must fail, not silently skip its check.
+    if (!value || value.startsWith("--")) throw new Error(`${name} needs a file path`);
+    return value;
   };
   const found = discoverLedgers();
+  // A ledger the checker cannot read hides its items from every count and
+  // check below, so any unreadable ledger fails the run.
+  if (found.unreadable.length > 0) {
+    throw new Error(`unreadable ledgers (not UTF-8 or not readable): ${found.unreadable.join(", ")}`);
+  }
   const inventory = buildInventory(found.ledgers);
+  if (inventory.collisions.length > 0) {
+    throw new Error(`items sharing one key (rename one id): ${inventory.collisions.join(", ")}`);
+  }
   inventory.unreadable = found.unreadable;
   const today = new Date().toISOString().slice(0, 10);
   const current = snapshotOf(inventory, { date: today, pin: found.pin });

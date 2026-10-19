@@ -27,6 +27,7 @@ import {
   snapshotOf,
   splitMigrations,
 } from "../../../scripts/known-gaps/inventory.mjs";
+import { splitCells } from "../../../scripts/known-gaps/ledger-text.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, "../../..");
@@ -172,6 +173,7 @@ describe("checkCoverage", () => {
       repeated: ["v2.4.9#QG-1"],
       unknown: ["v2.9.0#DF-9"],
       oversized: [],
+      unbatched: [],
     });
   });
 
@@ -239,6 +241,68 @@ describe("buildInventory carried originals", () => {
     expect(inventory.carriers[0].carries.key).toBe("v2.4.10#DF-1");
     expect(inventory.archivedOnly.map((i: { key: string }) => i.key)).toEqual(["v2.4.7#DF-1"]);
     expect(inventory.totals.distinctOpen).toBe(2);
+  });
+});
+
+describe("deep-pass hardening", () => {
+  // v2.15.0 Phase 5 Tier 3 adversarial findings: each case below was a
+  // confirmed way to undercount or false-pass before the fix.
+  const table = (heading: string, keys: string[]) =>
+    [`## ${heading}`, "", "| Item | Ledger |", "|---|---|", ...keys.map((k) => `| ${k} | x |`), ""].join("\n");
+  const wide = { items: [], archivedOnly: [{ key: "v2.4.1#DF-1" }] };
+
+  it("should not count a key inside fenced code as listed", () => {
+    const batches = ["## Batch 1", "", "```md", "| v2.4.1#DF-1 | example |", "```", ""].join("\n");
+
+    expect(checkCoverage(wide, { batches })).toMatchObject({ ok: false, missing: ["v2.4.1#DF-1"] });
+  });
+
+  it("should match batch headings case-insensitively and fail a key outside any batch", () => {
+    expect(checkCoverage(wide, { batches: table("batch 1 - v2.15.1", ["v2.4.1#DF-1"]) }).ok).toBe(true);
+    expect(checkCoverage(wide, { batches: table("Follow-up", ["v2.4.1#DF-1"]) })).toMatchObject({
+      ok: false,
+      unbatched: ["v2.4.1#DF-1"],
+    });
+  });
+
+  it("should not read a table inside a register entry as a carrier", () => {
+    const text = [
+      "# Register",
+      "",
+      "### BG-1 - Pins are placeholders",
+      "",
+      "| ID | Why it is still open | Archived record |",
+      "| --- | --- | --- |",
+      "| DF-2 | see also | `docs/archive/v2/v2.4/known-gaps.md` |",
+    ].join("\n");
+
+    expect(registerRows(text)).toEqual([]);
+  });
+
+  it("should report two unresolved items that share one key", () => {
+    const item = (section: string) => ({ id: "DF-1", title: " - x", state: "open", section, body: "" });
+    const ledger = {
+      path: "docs/archive/v2/v2.4/known-gaps.md",
+      minor: "v2.4",
+      layout: "archive",
+      problems: [],
+      text: "",
+      items: [item("Open items"), item("Deferred")],
+    };
+
+    expect(buildInventory([ledger]).collisions).toEqual(["docs/archive/v2/v2.4/known-gaps.md#v2.4#DF-1"]);
+  });
+
+  it("should fall back to GFM's pipe split when a stray backtick breaks the header's cell count", () => {
+    const row = "| BG-9 | uses a ` char | `docs/archive/v2/v2.4/known-gaps.md` |";
+
+    expect(splitCells(row, 3)).toEqual(["BG-9", "uses a ` char", "`docs/archive/v2/v2.4/known-gaps.md`"]);
+    // A pipe inside a real code span still stays in its cell (v2.11's `<|tool_result>` row).
+    expect(splitCells("| WN-1 | back as `<|tool_result>` blocks | rec |", 3)).toEqual([
+      "WN-1",
+      "back as `<|tool_result>` blocks",
+      "rec",
+    ]);
   });
 });
 

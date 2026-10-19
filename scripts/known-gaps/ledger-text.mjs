@@ -74,7 +74,32 @@ export function isTableRow(line) {
  * that do it (v2.11's `<|tool_result>`) mean one cell, so the author's cell
  * count is the one kept.
  */
-export function splitCells(line) {
+export function splitCells(line, expected = null) {
+  const cells = splitCodeAware(line);
+  // When the code-aware split disagrees with the header's cell count, an
+  // unpaired backtick spanned a pipe it should not have; fall back to GFM's own
+  // rule, which splits on every unescaped pipe.
+  if (expected !== null && cells.length !== expected) {
+    const plain = splitPlain(line);
+    if (plain.length === expected) return plain;
+  }
+  return cells;
+}
+
+function trimRow(line) {
+  let body = line.trim();
+  if (body.startsWith("|")) body = body.slice(1);
+  if (body.endsWith("|") && !body.endsWith("\\|")) body = body.slice(0, -1);
+  return body;
+}
+
+function splitPlain(line) {
+  return trimRow(line)
+    .split(/(?<!\\)\|/)
+    .map((cell) => cell.trim());
+}
+
+function splitCodeAware(line) {
   let body = line.trim();
   if (body.startsWith("|")) body = body.slice(1);
   if (body.endsWith("|") && !body.endsWith("\\|")) body = body.slice(0, -1);
@@ -84,7 +109,9 @@ export function splitCells(line) {
   for (let i = 0; i < body.length; i += 1) {
     const char = body[i];
     if (char === "`") {
-      code = !code;
+      // A backtick opens a code span only when another one closes it later in
+      // the row; a stray one is literal and must not swallow the other cells.
+      if (code || body.indexOf("`", i + 1) !== -1) code = !code;
       current += char;
     } else if (char === "\\" && body[i + 1] === "|") {
       current += "\\|";

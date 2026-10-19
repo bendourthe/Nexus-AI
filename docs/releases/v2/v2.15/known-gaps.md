@@ -3,7 +3,7 @@
 **Project**: Nexus
 **Status**: in-progress
 **Last updated**: 2026-10-19
-**Open items**: 61
+**Open items**: 62
 
 ## v2.15.0
 
@@ -14,7 +14,7 @@
 | Not implemented (NI) | 0 | 0 |
 | Deferred (DF) | 30 | 0 |
 | Bugs / regressions (BG) | 1 | 0 |
-| Warnings (WN) | 18 | 0 |
+| Warnings (WN) | 19 | 0 |
 | Missing tests / coverage gaps (MT) | 1 | 1 |
 | Quality-gate gaps (QG) | 11 | 0 |
 
@@ -634,6 +634,13 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Next step**: Move the trigger into model-acceptance.md as an open question, then close the entry against it.
 - **Migrated from**: v2.12#DF-v212-3 on 2026-10-19 (reason: user-deferred)
 - **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### WN-19 - Two v2.13 migrations cannot be verified because v2.14 recorded their resolution as table rows
+
+- **Source phase**: v2.15.0 Phase 5 (2026-10-19), known-gaps reconciliation (T018).
+- **Plan reference**: v2.15.0 T018; `node scripts/known-gaps/inventory.mjs --verify-migrations` notes.
+- **Reason**: `docs/releases/v2/v2.13/known-gaps.md` marks `WN-2` ("Skill tests leave empty folders in the source catalog") and `QG-1` ("Two tests time out under full-suite load at vitest's 5 s default") ` - MIGRATED to v2.14.0`. Both were carried and fixed in v2.14.0 Phase 5: `docs/archives/v2/v2.14/known-gaps.md` lists them as `WN-3` and `QG-1` in its `### Resolved` table, with the fixes. A table row is not an entry to the completion checker, so its migration check finds no copy (`migration-target-missing`) and `gaps.minor` cannot verify the v2.13 ledger. The work is done; only the provenance the checker reads is missing.
+- **Suggested next step**: in the v2.14 archive's `### Resolved` subsection, add one entry per item whose title and body copy the v2.13 entry verbatim, followed by its resolution text from the table row and `- **Migrated from**: v2.13#<ID> on 2026-10-16 (reason: user-deferred)`. Then confirm with `inventory.mjs --verify-migrations` that both read `migration-copy-complete`.
 
 #### QG-11 - The completion checker's contract conflicts block every minor run here
 
