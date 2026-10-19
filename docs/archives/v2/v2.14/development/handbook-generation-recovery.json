@@ -25,12 +25,12 @@
   "checks": {
     "content": {
       "status": "pass",
-      "evidence": "docs/releases/v2/v2.14/development/v2.14.2-handbook-review.md",
+      "evidence": "docs/archives/v2/v2.14/development/v2.14.2-handbook-review.md",
       "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
     },
     "build": {
       "status": "pass",
-      "evidence": "docs/releases/v2/v2.14/development/v2.14.2-handbook-review.md",
+      "evidence": "docs/archives/v2/v2.14/development/v2.14.2-handbook-review.md",
       "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
     },
     "rendered": {
