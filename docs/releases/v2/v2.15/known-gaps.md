@@ -166,7 +166,7 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 #### DF-8 - Live rewrite quality remains unmeasured after pilot format HOLD
 
 - **Source phase**: v2.14.1 Phase 1, T002-T004.
-- **Plan reference**: [local rewrite evaluation](../v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), blocked-run continuation.
+- **Plan reference**: [local rewrite evaluation](../../../archives/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), blocked-run continuation.
 - **Reason**: The sole started pilot response completed but fenced its JSON. The frozen envelope rejects fences without repair or retry. Three pilot items and all sixteen held-out items are not run; no semantic, readability or language-quality verdict is available.
 - **Owner**: Maintainer.
 - **Suggested next step**: If another evaluation is wanted, separately preregister a revised experiment with retained ancestry and obtain qualified language review. Do not replay this experiment, infer a quality loss or admit Humanizer from this observation.

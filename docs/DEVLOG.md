@@ -2,8 +2,8 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
-- 2026-10-18 v2.14.2: spoken replies start from the first sentence (about 3.9 s, 2.0 s target open) and LFM2.5 24B-A2B is an opt-in 16 GB worker; planned as v2.14.0. [Plan](releases/v2/v2.14/plans/v2.14.2-adoption-voice-latency-lfm2.5-24b.md), [history](releases/v2/v2.14/development/history/), [known gaps](releases/v2/v2.14/known-gaps.md)
-- 2026-10-17 v2.14.1: bounded local rewrite evaluation ends in explicit HOLD, with Humanizer feasibility and unmeasured quality retained. [Plan](releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), [history](releases/v2/v2.14/development/history/), [known gaps](releases/v2/v2.14/known-gaps.md).
+- 2026-10-18 v2.14.2: spoken replies start from the first sentence (about 3.9 s, 2.0 s target open) and LFM2.5 24B-A2B is an opt-in 16 GB worker; planned as v2.14.0. [Plan](archives/v2/v2.14/plans/v2.14.2-adoption-voice-latency-lfm2.5-24b.md), [history](archives/v2/v2.14/development/history/), [known gaps](archives/v2/v2.14/known-gaps.md)
+- 2026-10-17 v2.14.1: bounded local rewrite evaluation ends in explicit HOLD, with Humanizer feasibility and unmeasured quality retained. [Plan](archives/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), [history](archives/v2/v2.14/development/history/), [known gaps](archives/v2/v2.14/known-gaps.md).
 
 - 2026-10-06 v2.11: the document-outline plan is archived at `docs/archive/v2/v2.11/`. v2.11.0 is published. Still-open items: `docs/v2/v2.12/known-gaps.md`.
 - 2026-09-28 v2.10: the System One plan is archived at `docs/archive/v2/v2.10/`. v2.10.0 is published. Still-open items: `docs/v2/v2.12/known-gaps.md`.
