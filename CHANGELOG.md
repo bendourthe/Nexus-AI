@@ -15,7 +15,7 @@ Voice loop (existing opt-in, behavior changed):
 - Validation: ask a three-sentence question by voice; speech should start before the reply text finishes.
 - Rollback: untick "Voice loop". The voice models stay installed; remove them in Settings > Models if wanted.
 - Authority: turning it on does not send audio or text off this machine (0 non-loopback connections measured during voice turns), and does not change typed turns or the model used.
-- Docs: [voice latency results](docs/releases/v2/v2.14/development/voice-latency-results.md)
+- Docs: [voice latency results](docs/archives/v2/v2.14/development/voice-latency-results.md)
 
 ## Models
 

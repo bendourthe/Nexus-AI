@@ -16,7 +16,7 @@
  * Usage (repo root, on the reference host, after `npm run build:sidecar`):
  *   node scripts/measure-voice-latency.mjs --model gemma4:12b \
  *     --fixtures tests/fixtures/voice/ \
- *     --output docs/releases/v2/v2.14/development/voice-latency-baseline.json
+ *     --output docs/archives/v2/v2.14/development/voice-latency-baseline.json
  *
  * Flags: --mode baseline|streamed, --warm N (20), --cold N (5),
  * --barge-in N (0; streamed only), --stage-timeout-ms N (180000),

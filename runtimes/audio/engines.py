@@ -34,7 +34,7 @@ KOKORO_VOICE = "af_heart"
 KOKORO_FILES = ("config.json", "kokoro-v1_0.pth", f"voices/{KOKORO_VOICE}.pt")
 KOKORO_SAMPLE_RATE = 24000
 
-# v2.14.0 frozen runtime bounds (docs/releases/v2/v2.14/development/gates.md).
+# v2.14.0 frozen runtime bounds (docs/archives/v2/v2.14/development/gates.md).
 MAX_SPEAK_CHARS = 8000
 MAX_SEGMENTS_PER_JOB = 200
 MAX_SEGMENT_BASE64_BYTES = 2 * 1024 * 1024

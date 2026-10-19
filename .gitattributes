@@ -18,5 +18,5 @@ tests/fixtures/documents/outline/docs/* -text
 
 # Frozen rewrite evaluation hashes require identical bytes on every host.
 tests/fixtures/rewrite-eval/*.json text eol=lf
-docs/releases/v2/v2.14/development/v2.14.1-rewrite-contract.json* text eol=lf
-docs/releases/v2/v2.14/development/rewrite-eval/*.json* text eol=lf
+docs/archives/v2/v2.14/development/v2.14.1-rewrite-contract.json* text eol=lf
+docs/archives/v2/v2.14/development/rewrite-eval/*.json* text eol=lf

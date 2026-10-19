@@ -491,7 +491,7 @@
         "Native Pythonic tool calling (lfm-pythonic codec) with zero parse failures in the local A/B"
       ],
       "whyRecommended": "The opt-in 16 GB MoE worker: it matched the expert-offload Nemotron's golden-task completion within run-to-run spread while its p95 turn time was 46% better, without spilling to system RAM.",
-      "differentiators": "Takes the 16 GB MoE worker job from nemotron-lightning:30b-a3b-offload on a measured local A/B (docs/releases/v2/v2.14/development/lfm-ab-results.json). Pinned to a Hugging Face commit and GGUF digest, checked after every pull. Opt-in only; never a pre-ticked default.",
+      "differentiators": "Takes the 16 GB MoE worker job from nemotron-lightning:30b-a3b-offload on a measured local A/B (docs/archives/v2/v2.14/development/lfm-ab-results.json). Pinned to a Hugging Face commit and GGUF digest, checked after every pull. Opt-in only; never a pre-ticked default.",
       "sizeGB": 13.58,
       "vramGB": 15,
       "requiredVramGB": 16,
@@ -528,7 +528,7 @@
         "status": "pass",
         "date": "2026-10-17",
         "hardwareTier": "16GB",
-        "result": "3 runs x 28 tasks: completed 19/19/21 vs holder 22/20/20 (ranges overlap), p95 turn 10,250 ms vs 18,842 ms, 0 codec parse failures, no offload; gates M-1..M-3 PASS under the owner's reading of M-3. docs/releases/v2/v2.14/development/lfm-ab-results.json"
+        "result": "3 runs x 28 tasks: completed 19/19/21 vs holder 22/20/20 (ranges overlap), p95 turn 10,250 ms vs 18,842 ms, 0 codec parse failures, no offload; gates M-1..M-3 PASS under the owner's reading of M-3. docs/archives/v2/v2.14/development/lfm-ab-results.json"
       },
       "tags": [
         "agentic",

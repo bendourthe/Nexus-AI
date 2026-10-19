@@ -1,8 +1,8 @@
 {
   "snapshot": {
-    "entry_sha256": "531ceed5139d3ee4d99cd6da0c0f0b60778aa8f483a3063d3406bcf0061e5c09",
+    "entry_sha256": "78c7abeaf2f651f105496140b4588325bd7b0e62a464b5ba7dc0bbc590ae3993",
     "inputs": {
-      "docs/handbooks/technical/installer-runtime.md": "1d45617a487f1ab7c44c3b6509e54253380748d74030e31be1f80a597b999b41",
+      "docs/handbooks/markdown/generation-recovery.md": "085dad5722b163522d97b16b939365fbb48e6ddf9bd3aff2ad568c7913953b73",
       "scripts/generate-handbooks.mjs": "bf3b6a548a94c68c462d861dae9e4e469195d9408a36b12d155d7a6c9b64ed14",
       "scripts/handbook-renderer.mjs": "0850935742db242e576989c2ced66a5810a0bdfd0cad78791916cf5efb21566d",
       "docs/handbooks/_sources/storyboards.json": "99d659ed47176030b98e11d3f72572c49c8a5c7f0ffbdfd9895b82d93fdef013",
@@ -14,32 +14,31 @@
       "package.json": "26d927fd7e5fbaa926f7ddd368f2a3461077f833b49b259db76a913c4b4e07da",
       "package-lock.json": "3eaefdf09503d18beb2e78058233735974acdc781247ff393e7be0408dc521aa",
       "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py": "f79a0bdba3b09b5600f877ff6bd78381fa528b838be09fc32099d1f4f922c661",
+      "scripts/installer/build/smoke-installed-media.ps1": "46fa1f928121d9ffb28a8df3dd90ecde3bbd51d24d92beccb3b764732168f341",
+      "desktop/sidecar/src/diffusion/runtimeFactory.ts": "de804bcdd5ebef82b3cab1f17ca6e566b6e0f8eb6de6d47db2fb6633e6880373",
       "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py": "6a5ad60fea06bd4c6e8e163cfdf8906455a6ab41a5873059455a45d3523f4c47",
-      "scripts/installer/src/nexus_installer/engine/hf_auth.py": "122dd264ed629aeedf1c95e09d4dd24dc5123a4b695e40d3e84423410feae52a",
-      "scripts/installer/src/nexus_installer/engine/gated_auth.py": "d8170932ed3f741876d63090ff85e208d184352223f19fa1d5b24f6ec9f45deb",
-      "runtimes/diffusion/repair.py": "52e702a84bbdf4cd7953b5315f9fdd2e5f29767ae3f2e1d265d39c646a736569",
-      "scripts/installer/src/nexus_installer/widgets/gated_auth_dialog.py": "4dcba881048c1f75f3dd6ce86eee60aa1a53071b9ebe3d4063752901d9bc3e49",
-      "scripts/installer/build/check-hf-catalog.py": "7f56ea7c14bdfd72e3ec93e8393dcaa67f1c97b62d57a81b61fbc4a555be4034"
+      "desktop/src/modules/image/ImageStudioPage.tsx": "a4eca1345edaf1fc2535c5fb3811146403756aedb1cdfdf6b3edb576bd180ec0",
+      "desktop/src/modules/video/VideoLabPage.tsx": "7f9d15dee314faa6e49549063dd378bc8a680bdf5657e44754289e76796bde97"
     },
-    "output_sha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05"
+    "output_sha256": "f12b89df38e96518389186caf202e6fc5ab992a3ab1a2aed5ee099ebfd155e23"
   },
   "checks": {
     "content": {
       "status": "pass",
-      "evidence": "docs/releases/v2/v2.14/development/v2.14.2-handbook-review.md",
-      "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
+      "evidence": "docs/archives/v2/v2.14/development/v2.14.2-handbook-review.md",
+      "evidence_sha256": "c71bfbe3d166edd8cd857733cb482028138e1a832d0df77d25411975563d82ef"
     },
     "build": {
       "status": "pass",
-      "evidence": "docs/releases/v2/v2.14/development/v2.14.2-handbook-review.md",
-      "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
+      "evidence": "docs/archives/v2/v2.14/development/v2.14.2-handbook-review.md",
+      "evidence_sha256": "c71bfbe3d166edd8cd857733cb482028138e1a832d0df77d25411975563d82ef"
     },
     "rendered": {
       "status": "pass",
       "evidence": "docs/releases/v2/v2.13/development/evidence/handbooks/render-observations.json",
       "evidence_sha256": "3bc7890afb4a1049625b2c7f31bcc588971986be97720dde177d6793c2731a7a",
       "browser": "Microsoft Edge 155 headless (Chromium, the WebView2 engine)",
-      "output_sha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05"
+      "output_sha256": "f12b89df38e96518389186caf202e6fc5ab992a3ab1a2aed5ee099ebfd155e23"
     }
   }
 }
