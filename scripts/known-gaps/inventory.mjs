@@ -16,8 +16,14 @@
  * --baseline  compare against the dated baseline block in <file>
  *             (default: docs/releases/v2/v2.15/development/v2.15.0-ledger-conversion.md)
  * --snapshot  print a baseline block for today's state and exit
+ * --triage <file>   check that the triage record lists every open register and
+ *                   v2.12 release item once
+ * --batches <file>  check that the follow-up batch list lists every
+ *                   archived-only item once, in batches of at most 60
  *
- * Exits 0 on success, 1 when the adapter fails or the baseline is unreadable.
+ * Given both, an item may sit in either file but in exactly one of them.
+ * Exits 0 on success, 1 when the adapter fails, the baseline is unreadable, or
+ * a --triage / --batches check fails.
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -39,6 +45,8 @@ import {
 
 export const REGISTER = "docs/v2/v2.12/known-gaps.md";
 export const SCOPE = { from: "v1.17", to: "v2.12", extra: ["v2.15"] };
+export const RELEASE_V212 = "docs/releases/v2/v2.12/known-gaps.md";
+export const BATCH_LIMIT = 60;
 export const DEFAULT_BASELINE = "docs/releases/v2/v2.15/development/v2.15.0-ledger-conversion.md";
 const BASELINE_RE = /<!-- inventory-baseline:start -->\s*```json\s*([\s\S]*?)```\s*<!-- inventory-baseline:end -->/;
 const RECORD_FIELD_RE = /^\s*[-*+]\s+\*\*Archived record\*\*\s*:\s*(.*)$/m;
@@ -47,6 +55,17 @@ export function inScope(minor) {
   return (
     (compareMinor(minor, SCOPE.from) >= 0 && compareMinor(minor, SCOPE.to) <= 0) || SCOPE.extra.includes(minor)
   );
+}
+
+/**
+ * An item's address across the ledgers: the patch version of its `## ` section
+ * when the section names one, else its minor, then its id (`v2.2.3#DF-1`,
+ * `v2.12#BG-2`). The checker allows a short id once per patch section, so this
+ * is unique among unresolved items.
+ */
+export function itemKey({ minor, section, id }) {
+  const version = /^v\d+\.\d+\.\d+(?![0-9])/.exec((section ?? "").trim());
+  return `${version ? version[0] : minor}#${id}`;
 }
 
 /** A heading title without the separator the checker leaves in front of it. */
@@ -92,6 +111,8 @@ export function buildInventory(ledgers) {
       ledger: ledger.path,
       minor: ledger.minor,
       layout: ledger.layout,
+      section: item.section,
+      key: itemKey({ minor: ledger.minor, section: item.section, id: item.id }),
       id: item.id,
       title: cleanTitle(item.title),
       state: item.state,
@@ -193,6 +214,50 @@ export function readBaseline(text) {
   return match ? JSON.parse(match[1]) : null;
 }
 
+const KEY_CELL_RE = /^\|\s*`?(v\d+\.\d+(?:\.\d+)?#[A-Z]{2,4}-[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)`?\s*\|/;
+
+/** Item keys in the first column of a document's table rows, with the `## ` heading each sits under. */
+export function listedKeys(text) {
+  const listed = [];
+  let heading = "";
+  for (const line of splitLines(text)) {
+    const h = /^##\s+(.*?)\s*$/.exec(line);
+    if (h) heading = h[1];
+    const key = KEY_CELL_RE.exec(line);
+    if (key) listed.push({ key: key[1], heading });
+  }
+  return listed;
+}
+
+/**
+ * Coverage of the triage record and the follow-up batch list against the
+ * inventory. Pass `null` for a file that was not given; its scope is then
+ * not required. Returns `{ ok, missing, repeated, unknown, oversized }`.
+ */
+export function checkCoverage(inventory, { triage = null, batches = null }) {
+  const triageScope = inventory.items
+    .filter((i) => (i.ledger === REGISTER || i.ledger === RELEASE_V212) && i.state === "open")
+    .map((i) => i.key);
+  const batchScope = inventory.archivedOnly.map((i) => i.key);
+  const expected = new Set([...(triage !== null ? triageScope : []), ...(batches !== null ? batchScope : [])]);
+  const known = new Set([...triageScope, ...batchScope]);
+  const fromTriage = triage !== null ? listedKeys(triage) : [];
+  const fromBatches = batches !== null ? listedKeys(batches) : [];
+  const counts = new Map();
+  for (const { key } of [...fromTriage, ...fromBatches]) counts.set(key, (counts.get(key) ?? 0) + 1);
+  const perBatch = new Map();
+  for (const { heading } of fromBatches.filter((entry) => /^Batch(?![A-Za-z])/.test(entry.heading))) {
+    perBatch.set(heading, (perBatch.get(heading) ?? 0) + 1);
+  }
+  const result = {
+    missing: [...expected].filter((key) => !counts.has(key)).sort(),
+    repeated: [...counts].filter(([, n]) => n > 1).map(([key]) => key).sort(),
+    unknown: [...counts.keys()].filter((key) => !known.has(key)).sort(),
+    oversized: [...perBatch].filter(([, n]) => n > BATCH_LIMIT).map(([heading, n]) => `${heading}: ${n}`),
+  };
+  return { ok: Object.values(result).every((list) => list.length === 0), ...result };
+}
+
 export function renderMarkdown(inventory, drift) {
   const t = inventory.totals;
   const out = [
@@ -230,6 +295,13 @@ function main(argv) {
   inventory.unreadable = found.unreadable;
   const today = new Date().toISOString().slice(0, 10);
   const current = snapshotOf(inventory, { date: today, pin: found.pin });
+  if (option("--triage") || option("--batches")) {
+    const read = (name) => (option(name) ? readFileSync(resolve(ROOT, option(name)), "utf8") : null);
+    const coverage = checkCoverage(inventory, { triage: read("--triage"), batches: read("--batches") });
+    process.stdout.write(`${JSON.stringify(coverage, null, 2)}
+`);
+    return coverage.ok ? 0 : 1;
+  }
   if (argv.includes("--snapshot")) {
     process.stdout.write(
       `<!-- inventory-baseline:start -->\n\`\`\`json\n${JSON.stringify(current, null, 2)}\n\`\`\`\n<!-- inventory-baseline:end -->\n`,

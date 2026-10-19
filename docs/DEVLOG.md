@@ -16,6 +16,10 @@ This log tracks significant development milestones, architectural decisions, and
 
 ---
 
+## [2026-10-19] v2.15.0 Phase 3 - Register and v2.12 triaged, archive batched
+
+All 47 open items in the carry-forward register and the v2.12 release ledger were checked against the current tree, with evidence a reader can rerun, and proposed a disposition. The owner continued past the decision stop without a decisions message, so T010's default applied: unsigned closures and the four proposed small fixes became migrations, each with its proposal kept as the next step. Final: 3 resolved (DF-v211-4, DF-v211-5, WN-v211-5), 44 to migrate. The 193 archived-only items sit once each in four follow-up batches of at most 60 (proposed v2.15.1 to v2.15.4), and `inventory.mjs --triage --batches` checks that the two lists cover every item exactly once. Record: [v2.15.0-gap-triage.md](releases/v2/v2.15/development/v2.15.0-gap-triage.md); batches: [v2.15.0-followup-batches.md](releases/v2/v2.15/development/v2.15.0-followup-batches.md).
+
 ## [2026-10-19] v2.15.0 Phase 2 - Ledgers converted
 
 The ten in-scope known-gaps files now parse in the completion checker with zero problems (204 before). 75 rows that were an item's only record became heading entries; 122 rows that copied an entry recorded elsewhere kept their table place with a `vX.Y#` prefix; and the register's `DF-v212-4` became a superseded entry owned by the v2.12 release ledger. Every file passed the word-for-word preservation check, and the inventory's distinct open count stayed at 256. Only the legacy-cutoff ledgers (v0.7, v1.0 to v1.3) still report problems. Two docs tests were updated to read the entry form. Record: [v2.15.0-ledger-conversion.md](releases/v2/v2.15/development/v2.15.0-ledger-conversion.md).
