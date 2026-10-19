@@ -2,8 +2,8 @@
 
 **Project**: Nexus
 **Status**: in-progress
-**Last updated**: 2026-10-17
-**Open items**: 9
+**Last updated**: 2026-10-19
+**Open items**: 16
 
 ## v2.15.0
 
@@ -12,9 +12,9 @@
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 3 | 0 |
+| Deferred (DF) | 8 | 0 |
 | Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 5 | 0 |
+| Warnings (WN) | 7 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 1 |
 | Quality-gate gaps (QG) | 1 | 0 |
 
@@ -82,6 +82,97 @@
 - **Plan reference**: v2.14.0 "Delivery done" (packaged Windows behavioral evidence), T009, T010 Verification Expectation; gate V-5 (playback stops within 150 ms).
 - **Reason**: every voice measurement drove the built sidecar over stdio with simulated playback; no run drove the installed app's window, microphone or speakers. V-5's PASS rests on the code path and a component test, not a timing. The packaged installer was rebuilt and smoke-tested in Phase 5, but that smoke does not exercise voice.
 - **Suggested next step**: the owner's field test of the v2.14 human testing items 1 to 6 on the rebuilt installer, and a webview timing mark for barge-in-to-silence so V-5 can be measured; a packaged-window driver would also serve v2.14 WN-2.
+
+#### DF-4 - Candidate runtime compatibility blocks scoring
+
+- **Source phase**: Phase 2.
+- **Plan reference**: T005; embedding-eval-results.json.
+- **Reason**: Ollama 0.32.15 rejected embeddinggemma-2:270m with HTTP 412 and required a newer runtime. The preflight manifest is pinned at 9e1df58d197e80e5a6c12110efb67b38ba6c8e23790a5044e1cafe6bea34b8f4, 378346995 artifact bytes; installation did not complete. Positive candidate inference and paired quality are not proven here. No runtime/default/index was changed.
+- **Suggested next step**: Qualify a compatible Ollama runtime without interrupting other sessions, then explicitly rerun the frozen evaluator to a new evidence file.
+
+- **Migrated from**: v2.13.0#DF-1 on 2026-10-16 (reason: user-deferred)
+- **Migration evidence**: left open by v2.13.0, the last plan of v2.13
+
+- **Migrated from**: v2.14#DF-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: left open at the v2.14 close (v2.14.2 released 2026-10-19); needs an owner decision or evidence outside this run
+
+#### DF-5 - Universal admission evidence is missing
+
+- **Source phase**: Phase 2.
+- **Plan reference**: T005 and conditional T007-T010; embedding-eval-results.json.
+- **Reason**: Required hardware tiers, whole-runtime peak RAM, supported-context/precision behavior, controlled coding coexistence, process-level offline containment and authoritative distribution terms remain unproven. Every corresponding gate is HOLD; there is no model-admission approval or waived gate.
+- **Suggested next step**: Gather each required gate under the frozen contract before proposing a default takeover. Retain the current default and alternative jobs; Phase 3 migration stays conditional. Plan tasks T008-T010 (migration design, identity enforcement, reversible rebuild) were moved out of the plan's task list on 2026-10-15 and are owned by this gap; restore them as tasks in the version that admits the model.
+
+- **Migrated from**: v2.13.0#DF-2 on 2026-10-16 (reason: user-deferred)
+- **Migration evidence**: left open by v2.13.0, the last plan of v2.13
+
+- **Migrated from**: v2.14#DF-2 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: left open at the v2.14 close (v2.14.2 released 2026-10-19); needs an owner decision or evidence outside this run
+
+#### DF-6 - Saved generated images outlive their session
+
+- **Source phase**: Phase 5.
+- **Plan reference**: T015; `desktop/sidecar/src/studio/generatedImages.ts`.
+- **Reason**: Phase 5 writes each generated Image Studio PNG to `~/.nexus/generations/images/<sha256>.png` so its turn can be reopened and edited. Deleting a session removes its turns and recipes, but not these files, because the plan requires shared original media to be preserved and one file can back several turns. A user who deletes a session may expect its images gone from disk.
+- **Suggested next step**: Decide the retention rule with the owner, then add reference-counted cleanup through the session deletion owner (`StudioSessionStore`), covering folder deletion too.
+
+- **Migrated from**: v2.13.0#DF-3 on 2026-10-16 (reason: user-deferred)
+- **Migration evidence**: left open by v2.13.0, the last plan of v2.13
+
+- **Migrated from**: v2.14#DF-3 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: left open at the v2.14 close (v2.14.2 released 2026-10-19); needs an owner decision or evidence outside this run
+
+#### DF-7 - An approved agent can replace the user's redo history
+
+- **Source phase**: Phase 7 Tier 3 deep pass (adversarial review).
+- **Plan reference**: T018; `core/image/ImageEditRecipe.ts` `reduceImageEditRecipe`.
+- **Reason**: an approved agent may undo to the start and then commit a new edit, which drops the redo branch, including the user's own earlier edits. This is ordinary undo semantics and the original image is never touched; the Ask inbox text now says so. No checkpoint restores the history as it was when the grant was issued.
+- **Suggested next step**: decide with the owner whether agents may branch below the cursor at grant time, or whether the recipe is checkpointed at grant issue so the user can restore it.
+
+- **Migrated from**: v2.13.0#DF-4 on 2026-10-16 (reason: user-deferred)
+- **Migration evidence**: left open by v2.13.0, the last plan of v2.13
+
+- **Migrated from**: v2.14#DF-4 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: left open at the v2.14 close (v2.14.2 released 2026-10-19); needs an owner decision or evidence outside this run
+
+#### WN-6 - Residual image-access hardening items from the adversarial review
+
+- **Source phase**: Phase 7 Tier 3 deep pass (adversarial review).
+- **Plan reference**: T018-T020; `image-command-contract.md`.
+- **Reason**: (a) pre-existing: a holder of the app token can capture the Nexus window through `GET /nexus/screenshot` or `POST /nexus/capture` while an image is on screen, without an image grant; (b) before approval, `access` error codes reveal whether a turn has an owned PNG; (c) a link or junction on a parent of `~/.nexus/generations/exports` at first use is not detected (the leaf and later swaps are); (d) a render response is not bound to its request beyond id, size and a valid PNG, which relies on the renderer being the app's own window over its private IPC. Fixed in Phase 7 instead: unverified-name warning and request code in the ask, duplicate folding and per-caller caps, per-grant replay caches, one render per grant and 8 in total, full PNG chunk and CRC validation, generic errors, validated actions before hashing, collision-free and idempotent export names, hard-link refusal, and serialized Ask inbox writes.
+- **Suggested next step**: decide whether capture routes should exclude image surfaces or require approval, and lstat every ancestor of the exports root at first use.
+
+- **Migrated from**: v2.13.0#WN-3 on 2026-10-16 (reason: user-deferred)
+- **Migration evidence**: left open by v2.13.0, the last plan of v2.13
+
+- **Migrated from**: v2.14#WN-1 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: left open at the v2.14 close (v2.14.2 released 2026-10-19); needs an owner decision or evidence outside this run
+
+#### WN-7 - The packaged desktop flows are not automated
+
+- **Source phase**: Phases 5 and 6.
+- **Plan reference**: Phase 5 and Phase 6 Verification Expectations; T016, T020.
+- **Reason**: Restart is proven at the sidecar (real `sessions.db` and PNG, new store and ops), in the viewer (unmount and remount over the same state), and for pixels in headless Edge, the Chromium engine behind WebView2. Agent renders are proven at the authenticated route, the bridge and the renderer's claim/answer protocol, with the shared pixel path in the same engine. No harness drives the installed Tauri window through generate, edit, quit, relaunch and export, or carries an agent render request through the real shell into a live window.
+- **Suggested next step**: Phase 7 human testing suggestions; a packaged-window driver if one is added later.
+
+- **Migrated from**: v2.13.0#WN-1 on 2026-10-16 (reason: user-deferred)
+- **Migration evidence**: left open by v2.13.0, the last plan of v2.13
+
+Prior v2.12 and older registers remain authoritative. These new items resolve none of them.
+
+- **Migrated from**: v2.14#WN-2 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: left open at the v2.14 close (v2.14.2 released 2026-10-19); needs an owner decision or evidence outside this run
+
+#### DF-8 - Live rewrite quality remains unmeasured after pilot format HOLD
+
+- **Source phase**: v2.14.1 Phase 1, T002-T004.
+- **Plan reference**: [local rewrite evaluation](../v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), blocked-run continuation.
+- **Reason**: The sole started pilot response completed but fenced its JSON. The frozen envelope rejects fences without repair or retry. Three pilot items and all sixteen held-out items are not run; no semantic, readability or language-quality verdict is available.
+- **Owner**: Maintainer.
+- **Suggested next step**: If another evaluation is wanted, separately preregister a revised experiment with retained ancestry and obtain qualified language review. Do not replay this experiment, infer a quality loss or admit Humanizer from this observation.
+
+- **Migrated from**: v2.14#DF-5 on 2026-10-19 (reason: user-deferred)
+- **Migration evidence**: left open at the v2.14 close (v2.14.2 released 2026-10-19); needs an owner decision or evidence outside this run
 
 ### Resolved
 

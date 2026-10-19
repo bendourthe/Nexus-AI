@@ -2,8 +2,8 @@
 
 **Project**: Nexus
 **Status**: in-progress
-**Last updated**: 2026-10-17
-**Open items**: 7
+**Last updated**: 2026-10-19
+**Open items**: 0
 
 ## v2.14.0
 
@@ -12,15 +12,15 @@
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 4 | 1 |
+| Deferred (DF) | 0 | 1 |
 | Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 2 | 5 |
+| Warnings (WN) | 0 | 5 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 1 |
 
 ### Open Items
 
-#### DF-1 - Candidate runtime compatibility blocks scoring
+#### DF-1 - Candidate runtime compatibility blocks scoring - MIGRATED to v2.15.0
 
 - **Source phase**: Phase 2.
 - **Plan reference**: T005; embedding-eval-results.json.
@@ -30,7 +30,7 @@
 - **Migrated from**: v2.13.0#DF-1 on 2026-10-16 (reason: user-deferred)
 - **Migration evidence**: left open by v2.13.0, the last plan of v2.13
 
-#### DF-2 - Universal admission evidence is missing
+#### DF-2 - Universal admission evidence is missing - MIGRATED to v2.15.0
 
 - **Source phase**: Phase 2.
 - **Plan reference**: T005 and conditional T007-T010; embedding-eval-results.json.
@@ -40,7 +40,7 @@
 - **Migrated from**: v2.13.0#DF-2 on 2026-10-16 (reason: user-deferred)
 - **Migration evidence**: left open by v2.13.0, the last plan of v2.13
 
-#### DF-3 - Saved generated images outlive their session
+#### DF-3 - Saved generated images outlive their session - MIGRATED to v2.15.0
 
 - **Source phase**: Phase 5.
 - **Plan reference**: T015; `desktop/sidecar/src/studio/generatedImages.ts`.
@@ -50,7 +50,7 @@
 - **Migrated from**: v2.13.0#DF-3 on 2026-10-16 (reason: user-deferred)
 - **Migration evidence**: left open by v2.13.0, the last plan of v2.13
 
-#### DF-4 - An approved agent can replace the user's redo history
+#### DF-4 - An approved agent can replace the user's redo history - MIGRATED to v2.15.0
 
 - **Source phase**: Phase 7 Tier 3 deep pass (adversarial review).
 - **Plan reference**: T018; `core/image/ImageEditRecipe.ts` `reduceImageEditRecipe`.
@@ -60,7 +60,7 @@
 - **Migrated from**: v2.13.0#DF-4 on 2026-10-16 (reason: user-deferred)
 - **Migration evidence**: left open by v2.13.0, the last plan of v2.13
 
-#### WN-1 - Residual image-access hardening items from the adversarial review
+#### WN-1 - Residual image-access hardening items from the adversarial review - MIGRATED to v2.15.0
 
 - **Source phase**: Phase 7 Tier 3 deep pass (adversarial review).
 - **Plan reference**: T018-T020; `image-command-contract.md`.
@@ -70,7 +70,7 @@
 - **Migrated from**: v2.13.0#WN-3 on 2026-10-16 (reason: user-deferred)
 - **Migration evidence**: left open by v2.13.0, the last plan of v2.13
 
-#### WN-2 - The packaged desktop flows are not automated
+#### WN-2 - The packaged desktop flows are not automated - MIGRATED to v2.15.0
 
 - **Source phase**: Phases 5 and 6.
 - **Plan reference**: Phase 5 and Phase 6 Verification Expectations; T016, T020.
@@ -100,11 +100,11 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 
 | Category | Open | Resolved |
 |---|---|---|
-| Deferred (DF) | 1 | 0 |
+| Deferred (DF) | 0 | 0 |
 
 ### Open Items
 
-##### DF-5 - Live rewrite quality remains unmeasured after pilot format HOLD
+##### DF-5 - Live rewrite quality remains unmeasured after pilot format HOLD - MIGRATED to v2.15.0
 
 - **Source phase**: v2.14.1 Phase 1, T002-T004.
 - **Plan reference**: [local rewrite evaluation](plans/v2.14.1-adoption-humanizer-handwired.md), blocked-run continuation.
