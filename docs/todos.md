@@ -731,7 +731,7 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Phase 3: prompt-opened reasoning in every path, golden-runner options and metrics (and a working live runner outside VS Code), paired A/B: LFM2.5-24B 19.7 vs 20.7 of 28 tasks with 46% better p95 turn time and no RAM spill; ADMIT under the owner's M-3 reading ([Phase 3 evidence](releases/v2/v2.14/development/v2.14.0-phase3-evidence.md), 2026-10-17).
 - [x] Phase 4: `lfm2.5:24b-a2b` admitted opt-in with a coding-catalog twin, commit and GGUF pin, and post-pull digest verification in both install paths; 16 GB MoE worker job moved; stale `lfm2.5:2.6b` pin corrected ([Phase 4 evidence](releases/v2/v2.14/development/v2.14.0-phase4-evidence.md), 2026-10-17).
 - [x] Phase 5: known gaps, deep pass (8 fixes), full local gate, installer rebuild; published and merged as PR #112 (`cea4674a`, 2026-10-18) after v2.14.1; releasing as v2.14.2 ([last-phase evidence](releases/v2/v2.14/development/v2.14.2-last-phase-evidence.md)).
-- [ ] Release v2.14.2: metadata, handbook receipts and release record prepared 2026-10-18 ([release record](releases/v2/v2.14/development/v2.14.2-release.md)); tag and GitHub Release pending.
+- [x] Release v2.14.2: published 2026-10-19 ([release](https://github.com/bendourthe/Nexus-AI/releases/tag/v2.14.2), [record](releases/v2/v2.14/development/v2.14.2-release.md)); artifacts verified.
 
 ## Local rewrite evaluation (shipped v2.14.1)
 
