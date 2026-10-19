@@ -17,7 +17,10 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildInventory,
+  checkCoverage,
   driftFrom,
+  itemKey,
+  listedKeys,
   readBaseline,
   registerRows,
   snapshotOf,
@@ -117,6 +120,68 @@ describe("baseline drift", () => {
 
     expect(readBaseline(`# Record\n\n${block}\n`)).toEqual({ date: "2026-10-19" });
     expect(readBaseline("# Record\n")).toBeNull();
+  });
+});
+
+describe("itemKey", () => {
+  it.each([
+    [{ minor: "v2.2", section: "v2.2.3", id: "DF-1" }, "v2.2.3#DF-1"],
+    [{ minor: "v2.2", section: "v2.2.10 follow-up", id: "DF-1" }, "v2.2.10#DF-1"],
+    [{ minor: "v2.12", section: "", id: "BG-2" }, "v2.12#BG-2"],
+    [{ minor: "v2.5", section: "Closed in v2.5", id: "QG-1" }, "v2.5#QG-1"],
+  ])("should address %j as %s", (item, key) => {
+    expect(itemKey(item)).toBe(key);
+  });
+});
+
+describe("checkCoverage", () => {
+  // Phase 3 (T012): the triage record and the batch list together must list
+  // every in-scope open item exactly once, in batches of at most 60.
+  const inventory = {
+    items: [
+      { ledger: REGISTER, key: "v2.12#BG-2", state: "open" },
+      { ledger: "docs/releases/v2/v2.12/known-gaps.md", key: "v2.12.0#WN-v212-5", state: "open" },
+      { ledger: REGISTER, key: "v2.12#DF-v212-4", state: "resolved" },
+    ],
+    archivedOnly: [{ key: "v2.4.9#QG-1" }, { key: "v2.2.3#DF-1" }],
+  };
+  const table = (heading: string, keys: string[]) =>
+    [`## ${heading}`, "", "| Item | Ledger |", "|---|---|", ...keys.map((k) => `| ${k} | x |`), ""].join("\n");
+
+  it("should pass when every item is listed once across the two files", () => {
+    const triage = table("Triage", ["`v2.12#BG-2`", "v2.12.0#WN-v212-5"]);
+    const batches = table("Batch 1 - v2.15.1", ["v2.4.9#QG-1", "v2.2.3#DF-1"]);
+
+    expect(checkCoverage(inventory, { triage, batches })).toMatchObject({ ok: true });
+  });
+
+  it("should name a missing, a repeated and an unknown item", () => {
+    const triage = table("Triage", ["v2.12#BG-2", "v2.4.9#QG-1"]);
+    const batches = table("Batch 1 - v2.15.1", ["v2.4.9#QG-1", "v2.2.3#DF-1", "v2.9.0#DF-9"]);
+
+    expect(checkCoverage(inventory, { triage, batches })).toEqual({
+      ok: false,
+      missing: ["v2.12.0#WN-v212-5"],
+      repeated: ["v2.4.9#QG-1"],
+      unknown: ["v2.9.0#DF-9"],
+      oversized: [],
+    });
+  });
+
+  it("should fail a batch that holds more than 60 items", () => {
+    const keys = Array.from({ length: 61 }, (_, i) => `v2.4.9#DF-${i + 1}`);
+    const wide = { items: [], archivedOnly: keys.map((key) => ({ key })) };
+
+    expect(checkCoverage(wide, { batches: table("Batch 1 - v2.15.1", keys) }).oversized).toEqual([
+      "Batch 1 - v2.15.1: 61",
+    ]);
+  });
+
+  it("should require only the scope of the file it was given", () => {
+    const batches = table("Batch 1 - v2.15.1", ["v2.4.9#QG-1", "v2.2.3#DF-1"]);
+
+    expect(checkCoverage(inventory, { batches }).ok).toBe(true);
+    expect(listedKeys(batches).map((entry: { key: string }) => entry.key)).toEqual(["v2.4.9#QG-1", "v2.2.3#DF-1"]);
   });
 });
 
