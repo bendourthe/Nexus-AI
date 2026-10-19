@@ -23,3 +23,10 @@ Audit mode only: no file moved.
 
 - Changed documents: the register (finalized), the v2.12 release ledger, eight archived ledgers (superseded markers), the v2.15 ledger (44 migrations, QG-11), the follow-up batch list (correction), and the Nexus-Hub handoff (refreshed). No document moved, and no scratch document was created.
 - Proposed cleanup: none.
+
+## Phase 5 (2026-10-19)
+
+- `node scripts/check-docs-layout.mjs`: `canonical layout OK`.
+- New document: `development/v2.15.0-last-phase-evidence.md`. Removed: the one-time tools under `scripts/known-gaps/migrations/` and their test and fixture (code, not documents).
+- Observed and left in place (outside this plan's scope): `docs/releases/v2/v2.12/` and `docs/releases/v2/v2.13/` remain in the active tree although both minors are released, and `docs/v2/v2.12/` is a legacy-layout register.
+- Proposed cleanup: none in this plan.

@@ -1,7 +1,7 @@
 # Known Gaps - v2.12
 
 **Project**: Nexus
-**Status**: in-progress
+**Status**: finalized 2026-10-19 by v2.15.0: every open item migrated to [the v2.15 ledger](../v2.15/known-gaps.md).
 **Last updated**: 2026-10-15
 
 The [existing carry-forward register](../../../v2/v2.12/known-gaps.md) remains the source for older open items. This canonical ledger records new phase dispositions without duplicating those items.

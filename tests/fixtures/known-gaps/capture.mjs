@@ -5,54 +5,34 @@
  * Needs the pinned Nexus-Hub checker (`~/.nexus-hub/scripts/completion_minor.py`),
  * so it runs on a maintainer machine, never in CI. It writes:
  *
- *   discovery.json            the checker's view of repo/ before conversion
- *   expected/<ledger path>    the converter's output for every ledger it changes
- *   expected-parse.json       the checker's parse of each expected output
- *   converted-discovery.json  the checker's view of repo/ with the outputs applied
+ *   discovery.json            the checker's view of repo/ (ledgers before conversion)
+ *   converted-discovery.json  the checker's view of repo/ with expected/ laid over it
  *
- * Review expected/ by eye after a capture: the unit tests assert the converter
- * still produces it, and expected-parse.json records that the checker reads it
- * with zero problems.
+ * expected/ holds the converted form of the fixture ledgers. It was produced by
+ * the one-time v2.15.0 converter, removed after that release, and is now plain
+ * fixture data: edit it by hand if a test needs another shape.
  *
  * Usage: node tests/fixtures/known-gaps/capture.mjs
  */
 
-import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { discoverLedgers, runAdapter } from "../../../scripts/known-gaps/adapter.mjs";
-import { convertLedger, inScope } from "../../../scripts/known-gaps/migrations/normalize.mjs";
+import { discoverLedgers } from "../../../scripts/known-gaps/adapter.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = join(HERE, "repo");
-const DATE = "2026-10-19";
 
 const strip = (found) => ({ ...found, ledgers: found.ledgers.map(({ text, ...rest }) => rest) });
 const save = (name, value) => writeFileSync(join(HERE, name), `${JSON.stringify(value, null, 2)}\n`, "utf8");
 
-const before = discoverLedgers(REPO);
-save("discovery.json", strip(before));
+save("discovery.json", strip(discoverLedgers(REPO)));
 
-rmSync(join(HERE, "expected"), { recursive: true, force: true });
 const converted = mkdtempSync(join(tmpdir(), "known-gaps-capture-"));
 cpSync(REPO, converted, { recursive: true });
-const parses = {};
-for (const ledger of before.ledgers.filter((l) => inScope(l.minor))) {
-  const { output, changed } = convertLedger(ledger, before.ledgers, { date: DATE });
-  if (!changed) continue;
-  const target = join(HERE, "expected", ledger.path);
-  mkdirSync(dirname(target), { recursive: true });
-  writeFileSync(target, output, "utf8");
-  writeFileSync(join(converted, ledger.path), output, "utf8");
-  const parsed = runAdapter(["parse", "--stdin"], output).files[0];
-  parses[ledger.path] = { items: parsed.items.map(({ body, ...rest }) => rest), problems: parsed.problems };
-}
-save("expected-parse.json", parses);
+cpSync(join(HERE, "expected"), converted, { recursive: true });
 save("converted-discovery.json", strip(discoverLedgers(converted)));
 rmSync(converted, { recursive: true, force: true });
-
-for (const [path, parsed] of Object.entries(parses)) {
-  process.stdout.write(`${path}: ${parsed.items.length} items, ${parsed.problems.length} problems\n`);
-}
+process.stdout.write("captured discovery.json and converted-discovery.json\n");
