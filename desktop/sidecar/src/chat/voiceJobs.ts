@@ -14,7 +14,7 @@
 
 import type { AudioRuntimeClient, AudioSpeakSegment } from "../../../../core/audio/AudioRuntimeClient.js";
 
-/** Bounds (docs/releases/v2/v2.14/development/gates.md). */
+/** Bounds (docs/archives/v2/v2.14/development/gates.md). */
 export const VOICE_JOB_MAX_BUFFERED_BYTES = 64 * 1024 * 1024;
 export const VOICE_JOB_MAX_SEGMENTS = 200;
 /** Remembered ids, so a reused id is rejected even after the job is evicted. */
