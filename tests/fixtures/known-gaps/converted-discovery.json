@@ -1,0 +1,238 @@
+{
+  "pin": "f1689e72b6f96835bb9eda7bd68280e63fbb0c4c644a2e45f8cff19a693cdfd4",
+  "unreadable": [],
+  "ledgers": [
+    {
+      "path": "docs/archive/v1/v1.17/known-gaps.md",
+      "minor": "v1.17",
+      "layout": "archive",
+      "items": [
+        {
+          "id": "DF-9",
+          "kind": "DF",
+          "title": " - gigatoken remains a watch item",
+          "state": "open",
+          "target": null,
+          "section": "v1.17.0",
+          "subsection": "Open Items",
+          "level": 5,
+          "body": "\n- **Source phase**: Phase 6\n- **Reason**: no release yet.\n\n"
+        }
+      ],
+      "problems": []
+    },
+    {
+      "path": "docs/archive/v2/v2.4/known-gaps.md",
+      "minor": "v2.4",
+      "layout": "archive",
+      "items": [
+        {
+          "id": "DF-v240-1",
+          "kind": "DF",
+          "title": " - Live NVIDIA splat generate is not proven.",
+          "state": "open",
+          "target": null,
+          "section": "v2.4.0",
+          "subsection": "Open Items",
+          "level": 4,
+          "body": "\nSource phase: 4 and 5. Reason: the adapter is mocked.\n\n"
+        },
+        {
+          "id": "DF-v240-3",
+          "kind": "DF",
+          "title": " - Older `docs/**/known-gaps.md` files still have open items.",
+          "state": "open",
+          "target": null,
+          "section": "v2.4.0",
+          "subsection": "Open Items",
+          "level": 4,
+          "body": "\nSource phase: 6.\n\n"
+        },
+        {
+          "id": "BG-2",
+          "kind": "BG",
+          "title": " - Three catalog entries ship all-zero placeholder SHA-256 pins: `sana-controlnet-canny`.",
+          "state": "open",
+          "target": null,
+          "section": "v2.4.10",
+          "subsection": "Open Items",
+          "level": 4,
+          "body": "\nFound in Phase 3.\n\n- Source phase: 3\n- Suggested next step: decide whether these entries are still wanted.\n\n"
+        },
+        {
+          "id": "WN-2",
+          "kind": "WN",
+          "title": " - The bundled template has no tools section",
+          "state": "open",
+          "target": null,
+          "section": "v2.4.10",
+          "subsection": "Open Items",
+          "level": 5,
+          "body": "\n- **Source phase**: 2\n- **Reason**: recorded while probing.\n"
+        }
+      ],
+      "problems": []
+    },
+    {
+      "path": "docs/archive/v2/v2.5/known-gaps.md",
+      "minor": "v2.5",
+      "layout": "archive",
+      "items": [
+        {
+          "id": "CI-v251-1",
+          "kind": "CI",
+          "title": "",
+          "state": "open",
+          "target": null,
+          "section": "v2.5.0",
+          "subsection": "",
+          "level": 3,
+          "body": "\n- **Class**: CI\n- **Source phase**: v2.5.1 Phase 4\n- **Reason**: The installer leg is not a required context.\n- **Suggested next step**: Record the matrix run id.\n\n"
+        }
+      ],
+      "problems": []
+    },
+    {
+      "path": "docs/archive/v2/v2.6/known-gaps.md",
+      "minor": "v2.6",
+      "layout": "archive",
+      "items": [
+        {
+          "id": "DF-v260-1",
+          "kind": "DF",
+          "title": " - Chat search still matches titles only.",
+          "state": "open",
+          "target": null,
+          "section": "Known gaps carried forward",
+          "subsection": "",
+          "level": 3,
+          "body": "\nA hit is not labelled with its branch, see [the bar](../../../reference/chat-surface-bar.md).\n\n- **Archived record**: this file\n\n"
+        },
+        {
+          "id": "WN-v260-1",
+          "kind": "WN",
+          "title": " - Release-scoped mentions stay as written: `a \\| b` and `<|tool_result>` blocks.",
+          "state": "open",
+          "target": null,
+          "section": "Known gaps carried forward",
+          "subsection": "",
+          "level": 3,
+          "body": "\n- **Archived record**: this file\n\n"
+        },
+        {
+          "id": "QG-v240-1",
+          "kind": "QG",
+          "title": " - The full local suite was not run.",
+          "state": "open",
+          "target": null,
+          "section": "Known gaps carried forward",
+          "subsection": "",
+          "level": 3,
+          "body": "\n- **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`\n"
+        }
+      ],
+      "problems": []
+    },
+    {
+      "path": "docs/releases/v2/v2.12/known-gaps.md",
+      "minor": "v2.12",
+      "layout": "active",
+      "items": [
+        {
+          "id": "DF-v212-4",
+          "kind": "DF",
+          "title": " - Legacy history for OpenAI-compatible backends",
+          "state": "open",
+          "target": null,
+          "section": "v2.12.0",
+          "subsection": "Open Items",
+          "level": 5,
+          "body": "\n- **Source phase**: Phase 3\n- **Reason**: native round trips are not proven here.\n\n"
+        }
+      ],
+      "problems": []
+    },
+    {
+      "path": "docs/v2/v2.12/known-gaps.md",
+      "minor": "v2.12",
+      "layout": "active",
+      "items": [
+        {
+          "id": "DF-v212-4",
+          "kind": "DF",
+          "title": " - OpenAI-compatible clients retain envelope history. - CLOSED 2026-10-19",
+          "state": "resolved",
+          "target": null,
+          "section": "Known gaps carried forward",
+          "subsection": "",
+          "level": 3,
+          "body": "\nOwner: the maintainer.\n\n- **Archived record**: [Canonical Phase 3 record](../../releases/v2/v2.12/known-gaps.md)\n- **Superseded by**: docs/releases/v2/v2.12/known-gaps.md DF-v212-4\n\n"
+        },
+        {
+          "id": "BG-2",
+          "kind": "BG",
+          "title": " - SANA ControlNet pins are still the all-zero placeholder.",
+          "state": "open",
+          "target": null,
+          "section": "Known gaps carried forward",
+          "subsection": "",
+          "level": 3,
+          "body": "\n- **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`\n\n"
+        },
+        {
+          "id": "DF-v260-1",
+          "kind": "DF",
+          "title": " - Chat search still matches titles only.",
+          "state": "open",
+          "target": null,
+          "section": "Known gaps carried forward",
+          "subsection": "",
+          "level": 3,
+          "body": "\n- **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`\n\n"
+        },
+        {
+          "id": "WN-v211-5",
+          "kind": "WN",
+          "title": " - Native tool calls are recorded the old way.",
+          "state": "open",
+          "target": null,
+          "section": "Known gaps carried forward",
+          "subsection": "",
+          "level": 3,
+          "body": "\n- **Archived record**: [Resolution and evidence](../../releases/v2/v2.12/known-gaps.md)\n\n"
+        },
+        {
+          "id": "QG-v211-2",
+          "kind": "QG",
+          "title": " - The production audit allowlist gained three packages.",
+          "state": "open",
+          "target": null,
+          "section": "Known gaps carried forward",
+          "subsection": "",
+          "level": 3,
+          "body": "\n- **Archived record**: `scripts/check-prod-audit.mjs`\n"
+        }
+      ],
+      "problems": []
+    },
+    {
+      "path": "docs/releases/v2/v2.15/known-gaps.md",
+      "minor": "v2.15",
+      "layout": "active",
+      "items": [
+        {
+          "id": "DF-1",
+          "kind": "DF",
+          "title": " - Spoken replies start in 4 s",
+          "state": "open",
+          "target": null,
+          "section": "v2.15.0",
+          "subsection": "Open Items",
+          "level": 4,
+          "body": "\n- **Source phase**: v2.14.0 Phase 2.\n- **Reason**: measured median 3,990 ms.\n"
+        }
+      ],
+      "problems": []
+    }
+  ]
+}
