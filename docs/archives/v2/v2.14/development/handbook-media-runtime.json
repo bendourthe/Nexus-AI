@@ -1,6 +1,6 @@
 {
   "snapshot": {
-    "entry_sha256": "708c251406304f02202b0af4900b8df274c3ba02715600da403474e99a369f67",
+    "entry_sha256": "f2d045d1566306210fcbabbf758b8e63a3000746d35ea72d36a6c4b3d9f13b56",
     "inputs": {
       "docs/handbooks/technical/media-runtime.md": "54bc8e07b5a6d777de76f4baa2dbcc09af2db9cb381e731897875d4ad5564190",
       "scripts/generate-handbooks.mjs": "bf3b6a548a94c68c462d861dae9e4e469195d9408a36b12d155d7a6c9b64ed14",
@@ -31,12 +31,12 @@
     "content": {
       "status": "pass",
       "evidence": "docs/archives/v2/v2.14/development/v2.14.2-handbook-review.md",
-      "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
+      "evidence_sha256": "c71bfbe3d166edd8cd857733cb482028138e1a832d0df77d25411975563d82ef"
     },
     "build": {
       "status": "pass",
       "evidence": "docs/archives/v2/v2.14/development/v2.14.2-handbook-review.md",
-      "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
+      "evidence_sha256": "c71bfbe3d166edd8cd857733cb482028138e1a832d0df77d25411975563d82ef"
     },
     "rendered": {
       "status": "pass",

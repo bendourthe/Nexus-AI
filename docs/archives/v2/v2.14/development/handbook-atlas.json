@@ -1,6 +1,6 @@
 {
   "snapshot": {
-    "entry_sha256": "669a8a476c2b9dc9f0031ba9d15b9555eb508ce76632023ab62c20515ff4f9ed",
+    "entry_sha256": "83119387cfc896c353afa0bde1041595de52e207f13e90d983f883945ddd74c7",
     "inputs": {
       "docs/handbooks/markdown/atlas.md": "80eff4033c1def65945fa9c43220d6f6c65f461ff78de53afced5ae2f9d8e642",
       "scripts/generate-handbooks.mjs": "bf3b6a548a94c68c462d861dae9e4e469195d9408a36b12d155d7a6c9b64ed14",
@@ -47,12 +47,12 @@
     "content": {
       "status": "pass",
       "evidence": "docs/archives/v2/v2.14/development/v2.14.2-handbook-review.md",
-      "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
+      "evidence_sha256": "c71bfbe3d166edd8cd857733cb482028138e1a832d0df77d25411975563d82ef"
     },
     "build": {
       "status": "pass",
       "evidence": "docs/archives/v2/v2.14/development/v2.14.2-handbook-review.md",
-      "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
+      "evidence_sha256": "c71bfbe3d166edd8cd857733cb482028138e1a832d0df77d25411975563d82ef"
     },
     "rendered": {
       "status": "pass",

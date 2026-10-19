@@ -1,6 +1,6 @@
 {
   "snapshot": {
-    "entry_sha256": "2b421b1a9f325afd889d8aaeec4281452ac7dcbf9f96ed00397b383e3568655d",
+    "entry_sha256": "b8ec3b6a75b33a72850abc7c4983fe8bbb269b354b4bc4e84a5d260c669f0032",
     "inputs": {
       "docs/handbooks/technical/transcript-and-workspaces.md": "712b61d40d13f27bba4f6b79eb497c93f13ecc8edeb1feab0f56c3b3ce5165fc",
       "scripts/generate-handbooks.mjs": "bf3b6a548a94c68c462d861dae9e4e469195d9408a36b12d155d7a6c9b64ed14",
@@ -29,12 +29,12 @@
     "content": {
       "status": "pass",
       "evidence": "docs/archives/v2/v2.14/development/v2.14.2-handbook-review.md",
-      "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
+      "evidence_sha256": "c71bfbe3d166edd8cd857733cb482028138e1a832d0df77d25411975563d82ef"
     },
     "build": {
       "status": "pass",
       "evidence": "docs/archives/v2/v2.14/development/v2.14.2-handbook-review.md",
-      "evidence_sha256": "29c346ba12bd1cc036be854731111a24bc12e17872916a72382dedcffee6e943"
+      "evidence_sha256": "c71bfbe3d166edd8cd857733cb482028138e1a832d0df77d25411975563d82ef"
     },
     "rendered": {
       "status": "pass",
