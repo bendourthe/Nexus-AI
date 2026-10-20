@@ -714,7 +714,7 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Save generated Image Studio PNGs and connect the viewer to durable edits: acknowledged saves, retry/reload, restart reopen, and preview/export pixel equality in the WebView engine ([Phase 5 evidence](releases/v2/v2.13/development/v2.13.0-phase5-evidence.md), 2026-10-15).
 - [x] Expose Image Studio edits to agents through `nexus image-edit` and `/nexus/image-edit/*`: Ask-inbox-approved per-image grants, idempotent apply, render through the running window, safe owned exports ([Phase 6 evidence](releases/v2/v2.13/development/v2.13.0-phase6-evidence.md), 2026-10-15).
 - [x] Run the final gate: handbooks rebuilt with receipts, CI comparison rechecked, Tier 3 deep pass with real-sidecar driver 24/24 and an adversarial review whose fixes landed, both full suites green; open gaps carried to v2.14 ([last-phase evidence](releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md), 2026-10-16).
-- [ ] Decide whether saved Image Studio PNGs are removed with their session (DF-3), whether agents may replace redo history (DF-4) and the residual image-access items (WN-3), and drive the packaged desktop restart and agent render flows by hand (WN-1); all now in `docs/releases/v2/v2.14/known-gaps.md`.
+- [ ] Decide whether saved Image Studio PNGs are removed with their session (DF-3), whether agents may replace redo history (DF-4) and the residual image-access items (WN-3), and drive the packaged desktop restart and agent render flows by hand (WN-1); all now in `docs/archives/v2/v2.14/known-gaps.md`.
 - [x] Record Phase 3 conditional retain/HOLD, verify ten unchanged production paths, and explicitly skip T008-T010 without claiming migration ([disposition](releases/v2/v2.13/development/embedding-migration-disposition.json)).
 
 
@@ -724,22 +724,30 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [ ] Evaluate EmbeddingGemma 2 text/code retrieval through the existing local adapter, resolve its context/terms discrepancies and measure the comparison's proposed gate before changing the model job map or defaults (E1/E2).
 - [ ] Implement and verify the planned durable recipe and shared commands for existing ImageViewer edits, including restart/reopen and UI-versus-command export equivalence, before adding broader creative-editor features (C1/C2).
 
+## Legacy known-gaps triage (queued v2.15.0)
+
+- [ ] Phase 1: pinned inventory and lossless converter ([plan](releases/v2/v2.15/plans/v2.15.0-legacy-known-gaps-triage.md)).
+- [ ] Phase 2: convert ledgers v1.17 to v2.12 and the carry-forward register to the checker's format.
+- [ ] Phase 3: triage the register and v2.12 (about 48 items); batch about 182 archived-only items for follow-up plans.
+- [ ] Phase 4: apply dispositions, verify migrations, record the checker-contract gap ([Nexus-Hub handoff](releases/v2/v2.15/development/v2.15.0-nexus-hub-checker-handoff.md)).
+- [ ] Phase 5: final phase and publication.
+
 ## Voice latency and LFM2.5-24B trial (v2.14.2, planned as v2.14.0)
 
-- [x] Phase 1: make desktop voice runnable on install (pinned Kokoro and Whisper files, voice packages in the media venv, sidecar audio interpreter, offline Kokoro, Windows CUDA DLL path), measure the baseline (medium warm time to first audio p50 38.6 s), probe LFM2.5-24B (GO on QAD-Q4_0) and freeze the gates ([Phase 1 evidence](releases/v2/v2.14/development/v2.14.0-phase1-evidence.md), 2026-10-16).
-- [x] Phase 2: speak from the first sentence through the sidecar, with barge-in cancelling synthesis. Time to first audio 3.99 s p50 (medium, warm) against a 38.6 s baseline; V-1 (2.0 s) missed and recorded in v2.15 DF-1 by owner decision, every other voice gate passes ([Phase 2 evidence](releases/v2/v2.14/development/v2.14.0-phase2-evidence.md), [results](releases/v2/v2.14/development/voice-latency-results.md), 2026-10-16).
-- [x] Phase 3: prompt-opened reasoning in every path, golden-runner options and metrics (and a working live runner outside VS Code), paired A/B: LFM2.5-24B 19.7 vs 20.7 of 28 tasks with 46% better p95 turn time and no RAM spill; ADMIT under the owner's M-3 reading ([Phase 3 evidence](releases/v2/v2.14/development/v2.14.0-phase3-evidence.md), 2026-10-17).
-- [x] Phase 4: `lfm2.5:24b-a2b` admitted opt-in with a coding-catalog twin, commit and GGUF pin, and post-pull digest verification in both install paths; 16 GB MoE worker job moved; stale `lfm2.5:2.6b` pin corrected ([Phase 4 evidence](releases/v2/v2.14/development/v2.14.0-phase4-evidence.md), 2026-10-17).
-- [x] Phase 5: known gaps, deep pass (8 fixes), full local gate, installer rebuild; published and merged as PR #112 (`cea4674a`, 2026-10-18) after v2.14.1; releasing as v2.14.2 ([last-phase evidence](releases/v2/v2.14/development/v2.14.2-last-phase-evidence.md)).
-- [ ] Release v2.14.2: metadata, handbook receipts and release record prepared 2026-10-18 ([release record](releases/v2/v2.14/development/v2.14.2-release.md)); tag and GitHub Release pending.
+- [x] Phase 1: make desktop voice runnable on install (pinned Kokoro and Whisper files, voice packages in the media venv, sidecar audio interpreter, offline Kokoro, Windows CUDA DLL path), measure the baseline (medium warm time to first audio p50 38.6 s), probe LFM2.5-24B (GO on QAD-Q4_0) and freeze the gates ([Phase 1 evidence](archives/v2/v2.14/development/v2.14.0-phase1-evidence.md), 2026-10-16).
+- [x] Phase 2: speak from the first sentence through the sidecar, with barge-in cancelling synthesis. Time to first audio 3.99 s p50 (medium, warm) against a 38.6 s baseline; V-1 (2.0 s) missed and recorded in v2.15 DF-1 by owner decision, every other voice gate passes ([Phase 2 evidence](archives/v2/v2.14/development/v2.14.0-phase2-evidence.md), [results](archives/v2/v2.14/development/voice-latency-results.md), 2026-10-16).
+- [x] Phase 3: prompt-opened reasoning in every path, golden-runner options and metrics (and a working live runner outside VS Code), paired A/B: LFM2.5-24B 19.7 vs 20.7 of 28 tasks with 46% better p95 turn time and no RAM spill; ADMIT under the owner's M-3 reading ([Phase 3 evidence](archives/v2/v2.14/development/v2.14.0-phase3-evidence.md), 2026-10-17).
+- [x] Phase 4: `lfm2.5:24b-a2b` admitted opt-in with a coding-catalog twin, commit and GGUF pin, and post-pull digest verification in both install paths; 16 GB MoE worker job moved; stale `lfm2.5:2.6b` pin corrected ([Phase 4 evidence](archives/v2/v2.14/development/v2.14.0-phase4-evidence.md), 2026-10-17).
+- [x] Phase 5: known gaps, deep pass (8 fixes), full local gate, installer rebuild; published and merged as PR #112 (`cea4674a`, 2026-10-18) after v2.14.1; releasing as v2.14.2 ([last-phase evidence](archives/v2/v2.14/development/v2.14.2-last-phase-evidence.md)).
+- [x] Release v2.14.2: published 2026-10-19 ([release](https://github.com/bendourthe/Nexus-AI/releases/tag/v2.14.2), [record](archives/v2/v2.14/development/v2.14.2-release.md)); artifacts verified.
 
 ## Local rewrite evaluation (shipped v2.14.1)
 
-- [x] Compare Humanizer and Handwired against Nexus and record the confirmed v2.14.1 adoption target after v2.14.0 ([comparison](releases/v2/v2.14/comparisons/v2.14.1-comparison-humanizer-handwired.md), 2026-10-16).
-- [x] Finalize the three-phase, 18-task text-only evaluation plan after seven-lens review and owner approval of Q1-Q4 ([plan](releases/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), [review](releases/v2/v2.14/development/v2.14.1-plan-review.md), 2026-10-16). Implementation was 0/18 at planning.
-- [x] Freeze the evaluation and run its single pilot under the owner's 2026-10-17 authorization to run v2.14.1 before v2.14.0; [Phase 1 evidence](releases/v2/v2.14/development/v2.14.1-phase1-evidence.md) records format HOLD with no retry.
-- [x] Record all sixteen held-out IDs as not-run/HOLD, retain missing-output counts, and assess exact-runtime Humanizer feasibility ([Phase 2 evidence](releases/v2/v2.14/development/v2.14.1-phase2-evidence.md)). Quality remains unmeasured under DF-5.
-- [x] Complete v2.14.1 implementation and merge PR #108 as 6673f0cf after required CI and CodeQL success; quality remains HOLD under DF-5. [Release assets and source CLI are verified](releases/v2/v2.14/development/v2.14.1-release-verification.json).
+- [x] Compare Humanizer and Handwired against Nexus and record the confirmed v2.14.1 adoption target after v2.14.0 ([comparison](archives/v2/v2.14/comparisons/v2.14.1-comparison-humanizer-handwired.md), 2026-10-16).
+- [x] Finalize the three-phase, 18-task text-only evaluation plan after seven-lens review and owner approval of Q1-Q4 ([plan](archives/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), [review](archives/v2/v2.14/development/v2.14.1-plan-review.md), 2026-10-16). Implementation was 0/18 at planning.
+- [x] Freeze the evaluation and run its single pilot under the owner's 2026-10-17 authorization to run v2.14.1 before v2.14.0; [Phase 1 evidence](archives/v2/v2.14/development/v2.14.1-phase1-evidence.md) records format HOLD with no retry.
+- [x] Record all sixteen held-out IDs as not-run/HOLD, retain missing-output counts, and assess exact-runtime Humanizer feasibility ([Phase 2 evidence](archives/v2/v2.14/development/v2.14.1-phase2-evidence.md)). Quality remains unmeasured under DF-5.
+- [x] Complete v2.14.1 implementation and merge PR #108 as 6673f0cf after required CI and CodeQL success; quality remains HOLD under DF-5. [Release assets and source CLI are verified](archives/v2/v2.14/development/v2.14.1-release-verification.json).
 - [x] Finish bounded HOLD continuation, Humanizer feasibility, final gates, approved integration and release; keep Humanizer installation, adapter/catalog changes and Handwired implementation outside this plan.
 
 ## Recurring Obligations

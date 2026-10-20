@@ -1,3 +1,23 @@
+# [2.15.0](https://github.com/bendourthe/Nexus-AI/compare/v2.14.2...v2.15.0) (2026-10-19)
+
+Maintenance release: the project's record of known gaps is now one countable list. No app, extension or installer behavior changes.
+
+## Known gaps
+
+- Every known-gaps file from v1.17 to v2.12, including the v2.12 carry-forward register, now reads cleanly in the release completion checker (204 unreadable rows before, 0 now), with no wording changed. Rows that only repeated an entry recorded elsewhere now point at it (`v2.4#BG-2`) instead of counting twice.
+- The 47 items still open in v2.12 were checked against the current code: 3 are resolved with evidence, and 44 moved into [the v2.15 known gaps](docs/releases/v2/v2.15/known-gaps.md) word for word, each with why it is still owed and a next step. The v2.12 register is finalized.
+- The 199 older items that are still open are listed once each in [four follow-up batches](docs/releases/v2/v2.15/development/v2.15.0-followup-batches.md), each sized for one plan (v2.15.1 to v2.15.4).
+- What is still owed: 62 items in v2.15 plus the 199 batched items, 261 in all, with none counted twice.
+
+## Tooling
+
+- `node scripts/known-gaps/inventory.mjs` reports every ledger's items, the open count, drift against a dated baseline, and (`--triage`, `--batches`, `--verify-migrations`) whether the triage record and batch list cover every item once and every migrated copy verifies. It reads ledgers through `scripts/known-gaps/checker-adapter.py`, which runs the completion checker only when its files match pinned hashes.
+
+## Not changed
+
+- The app, the VS Code extension and the installers behave as in v2.14.2. The installers are rebuilt by the release workflow from the same product code.
+- Release completion is still blocked by conflicts in the external completion checker, recorded with a handoff for its maintainer ([v2.15 QG-11](docs/releases/v2/v2.15/known-gaps.md)).
+
 # [2.14.2](https://github.com/bendourthe/Nexus-AI/compare/v2.14.1...v2.14.2) (2026-10-18)
 
 Planned and implemented as v2.14.0 ("Faster spoken replies and a measured LFM2.5-24B worker trial"); released as v2.14.2 because v2.14.1 shipped first and version numbers must keep increasing. This release includes everything in v2.14.1.
@@ -15,7 +35,7 @@ Voice loop (existing opt-in, behavior changed):
 - Validation: ask a three-sentence question by voice; speech should start before the reply text finishes.
 - Rollback: untick "Voice loop". The voice models stay installed; remove them in Settings > Models if wanted.
 - Authority: turning it on does not send audio or text off this machine (0 non-loopback connections measured during voice turns), and does not change typed turns or the model used.
-- Docs: [voice latency results](docs/releases/v2/v2.14/development/voice-latency-results.md)
+- Docs: [voice latency results](docs/archives/v2/v2.14/development/voice-latency-results.md)
 
 ## Models
 

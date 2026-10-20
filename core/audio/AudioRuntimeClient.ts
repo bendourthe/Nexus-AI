@@ -47,7 +47,7 @@ export interface AudioSpeakStreamResult {
   readonly segments: number;
 }
 
-/** Frozen bounds (docs/releases/v2/v2.14/development/gates.md). */
+/** Frozen bounds (docs/archives/v2/v2.14/development/gates.md). */
 export const SPEAK_STREAM_IDLE_TIMEOUT_MS = 30_000;
 export const SPEAK_STREAM_MAX_SEGMENTS = 200;
 export const SPEAK_STREAM_MAX_BYTES = 64 * 1024 * 1024;
