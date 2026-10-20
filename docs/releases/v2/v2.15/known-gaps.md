@@ -3,7 +3,7 @@
 **Project**: Nexus
 **Status**: in-progress
 **Last updated**: 2026-10-19
-**Open items**: 62
+**Open items**: 63
 
 ## v2.15.0
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
 | Deferred (DF) | 30 | 0 |
-| Bugs / regressions (BG) | 1 | 0 |
+| Bugs / regressions (BG) | 2 | 0 |
 | Warnings (WN) | 19 | 0 |
 | Missing tests / coverage gaps (MT) | 1 | 1 |
 | Quality-gate gaps (QG) | 11 | 0 |
@@ -634,6 +634,13 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Next step**: Move the trigger into model-acceptance.md as an open question, then close the entry against it.
 - **Migrated from**: v2.12#DF-v212-3 on 2026-10-19 (reason: user-deferred)
 - **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
+
+#### BG-2 - Installer puller tests pass or fail with the CI runner's free disk space
+
+- **Source phase**: v2.15.0 release (2026-10-20), on release PRs #121 and #122.
+- **Plan reference**: v2.15.0 T026 / release; `scripts/installer/src/nexus_installer/engine/hf_weights_puller.py:588`.
+- **Reason**: `install_model` checks `shutil.disk_usage(models_root)` against the model size plus the 10 GB OS reserve, and `scripts/installer/tests/test_hf_weights_puller.py` does not mock it. So the tests pass or fail with the host's real free space. "Installer tests + lint + smoke" failed 12 tests on #121 and #122 (two `Not enough disk space` errors in each log) and passed on #123. Locally, `TestPrecisionVariants::test_state_override_reaches_install_model` fails with "22.7 GB free, need ~15.0 GB plus the 10 GB OS reserve", on this branch and on untouched `develop` (`169d8b3b`). The check is not required; the product code is not wrong.
+- **Suggested next step**: monkeypatch `shutil.disk_usage` in those tests (a fixture in `scripts/installer/tests/conftest.py`), keep one test that asserts the real disk-space refusal with a small fake free value, then run `PYTHONPATH=src python -m pytest tests/test_hf_weights_puller.py` on a nearly full disk.
 
 #### WN-19 - Two v2.13 migrations cannot be verified because v2.14 recorded their resolution as table rows
 
