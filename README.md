@@ -118,7 +118,13 @@ Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" c
 | v2.4.1 | Field reliability, transcript reasoning, chat archives, unified models, and multi-root Agents workspaces | Tagged. Packaged Windows and live-GPU operator checks remain open in the archived gap log | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
 | v2.4.11 | Local splat viewer, optional CUDA generate, and the untagged 2.4.2-2.4.10 field work | Tagged from develop. Live NVIDIA generate and weight hashes remain open | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
 
-Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.11 live under `docs/archive/v2/`. v2.12 and later stay under `docs/v2/`. Deferred work that is still open is in [docs/v2/v2.12/known-gaps.md](docs/v2/v2.12/known-gaps.md).
+Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.11 live under `docs/archive/v2/`. v2.12 and later stay under `docs/v2/`. Deferred work that is still open is in [the v2.15 known gaps](docs/releases/v2/v2.15/known-gaps.md) and the [follow-up batch list](docs/releases/v2/v2.15/development/v2.15.0-followup-batches.md); the v2.12 register is finalized.
+
+### v2.15.0
+
+The project's known gaps are now one countable list: every gap file from v1.17 to v2.12 reads cleanly in the release checker, the 47 items left open in v2.12 were resolved (3) or moved into the v2.15 known gaps with a next step (44), and the 199 older open items are listed once in four follow-up batches. No app, extension or installer behavior changes.
+
+Evidence: [last-phase evidence](docs/releases/v2/v2.15/development/v2.15.0-last-phase-evidence.md), [gap triage](docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md), [follow-up batches](docs/releases/v2/v2.15/development/v2.15.0-followup-batches.md).
 
 ### v2.14.2
 
