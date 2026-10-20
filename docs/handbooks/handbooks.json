@@ -88,7 +88,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.14/development/handbook-atlas.json",
+      "evidence": "docs/releases/v2/v2.15/development/handbook-atlas.json",
       "presentation": true
     },
     {
@@ -136,7 +136,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.14/development/handbook-generation-recovery.json",
+      "evidence": "docs/releases/v2/v2.15/development/handbook-generation-recovery.json",
       "presentation": true
     },
     {
@@ -186,7 +186,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.14/development/handbook-installer-runtime.json",
+      "evidence": "docs/releases/v2/v2.15/development/handbook-installer-runtime.json",
       "presentation": true
     },
     {
@@ -244,7 +244,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.14/development/handbook-media-runtime.json",
+      "evidence": "docs/releases/v2/v2.15/development/handbook-media-runtime.json",
       "presentation": true
     },
     {
@@ -298,7 +298,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.14/development/handbook-transcript-and-workspaces.json",
+      "evidence": "docs/releases/v2/v2.15/development/handbook-transcript-and-workspaces.json",
       "presentation": true
     },
     {
@@ -388,7 +388,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.14/development/handbook-document-outline.json",
+      "evidence": "docs/releases/v2/v2.15/development/handbook-document-outline.json",
       "presentation": true
     }
   ],
