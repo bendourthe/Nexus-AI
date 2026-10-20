@@ -19,13 +19,15 @@ const BAR = join(REPO_ROOT, "docs/reference/model-acceptance.md");
 const FORBIDDEN_ID_TOKENS = ["clm", "contrastive", "pageindex"] as const;
 
 describe("v2.11.0 CLM and PageIndex exclusion", () => {
-  it("records CLM-8B, PageIndex, and the AIRI re-check in one known-gap row", () => {
-    const rows = readFileSync(GAPS, "utf8")
-      .split("\n")
-      .map((line) => line.replace(/\r$/, ""))
-      .filter((line) => line.startsWith("| DF-v211-1 |"));
-    expect(rows).toHaveLength(1);
-    const row = rows[0] ?? "";
+  it("records CLM-8B, PageIndex, and the AIRI re-check in one known-gap entry", () => {
+    // v2.15.0 converted the ledger's table rows into heading entries the
+    // completion checker reads; the record is now one entry, not one row.
+    const entries = readFileSync(GAPS, "utf8")
+      .replace(/\r\n/g, "\n")
+      .split(/\n(?=#{1,6} )/)
+      .filter((block) => /^#{3,6} DF-v211-1 /.test(block));
+    expect(entries).toHaveLength(1);
+    const row = entries[0] ?? "";
     expect(row).toContain("not admitted, no catalog row");
     expect(row).toContain("CLM-8B");
     expect(row).toContain("PageIndex");
