@@ -13,6 +13,10 @@ This is the living entry point for Nexus documentation. Active release plans and
 
 Markdown is the source of truth. Generated handbook HTML is checked with `npm run docs:handbooks:check`.
 
+## Known-gaps triage
+
+The [v2.15.0 last-phase evidence](releases/v2/v2.15/development/v2.15.0-last-phase-evidence.md) covers the conversion of the v1.17 to v2.12 gap files, the triage of the 47 items open in v2.12 and the follow-up batches for the older ones; what is still owed is in the [v2.15 known gaps](releases/v2/v2.15/known-gaps.md) and the [follow-up batch list](releases/v2/v2.15/development/v2.15.0-followup-batches.md).
+
 ## Spoken replies and the LFM2.5 24B worker
 
 The [v2.14.2 last-phase evidence](archives/v2/v2.14/development/v2.14.2-last-phase-evidence.md) covers streamed spoken replies, the opt-in LFM2.5 24B-A2B entry and their measured results; open items are in the [v2.15 known gaps](releases/v2/v2.15/known-gaps.md).
