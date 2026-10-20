@@ -3,7 +3,7 @@
 **Project**: Nexus
 **Status**: in-progress
 **Last updated**: 2026-10-19
-**Open items**: 62
+**Open items**: 63
 
 ## v2.15.0
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
 | Deferred (DF) | 30 | 0 |
-| Bugs / regressions (BG) | 1 | 0 |
+| Bugs / regressions (BG) | 2 | 0 |
 | Warnings (WN) | 19 | 0 |
 | Missing tests / coverage gaps (MT) | 1 | 1 |
 | Quality-gate gaps (QG) | 11 | 0 |
@@ -635,6 +635,13 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Migrated from**: v2.12#DF-v212-3 on 2026-10-19 (reason: user-deferred)
 - **Migration evidence**: triaged in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md` (v2.15.0 T009 and T010)
 
+#### BG-2 - Installer puller tests pass or fail with the CI runner's free disk space
+
+- **Source phase**: v2.15.0 release (2026-10-20), on release PRs #121 and #122.
+- **Plan reference**: v2.15.0 T026 / release; `scripts/installer/src/nexus_installer/engine/hf_weights_puller.py:588`.
+- **Reason**: `install_model` checks `shutil.disk_usage(models_root)` against the model size plus the 10 GB OS reserve, and `scripts/installer/tests/test_hf_weights_puller.py` does not mock it. So the tests pass or fail with the host's real free space. "Installer tests + lint + smoke" failed 12 tests on #121 and #122 (two `Not enough disk space` errors in each log) and passed on #123. Locally, `TestPrecisionVariants::test_state_override_reaches_install_model` fails with "22.7 GB free, need ~15.0 GB plus the 10 GB OS reserve", on this branch and on untouched `develop` (`169d8b3b`). The check is not required; the product code is not wrong.
+- **Suggested next step**: monkeypatch `shutil.disk_usage` in those tests (a fixture in `scripts/installer/tests/conftest.py`), keep one test that asserts the real disk-space refusal with a small fake free value, then run `PYTHONPATH=src python -m pytest tests/test_hf_weights_puller.py` on a nearly full disk.
+
 #### WN-19 - Two v2.13 migrations cannot be verified because v2.14 recorded their resolution as table rows
 
 - **Source phase**: v2.15.0 Phase 5 (2026-10-19), known-gaps reconciliation (T018).
@@ -646,7 +653,7 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 
 - **Source phase**: v2.15.0 Phase 4 (2026-10-19), from the v2.14 run and the v2.15 run.
 - **Plan reference**: v2.15.0 T015; [Nexus-Hub checker handoff](development/v2.15.0-nexus-hub-checker-handoff.md).
-- **Reason**: the Nexus-Hub completion checker (v4.13.13, `completion_minor.py` sha256 `f1689e72b6f96835`) has contract conflicts that are not missing work in this repository and that this repository cannot fix: (1) `gaps.minor` reaches every ledger back to v0.7, and the 142 problems left in v0.7 and v1.0 to v1.3 can never parse, so `MINOR COMPLETE` is unreachable without a legacy cutoff; (2) `tests.evidence` rejects an honest count of pre-existing failures; (3) `release.changelog` expects `## [x.y.z]` while semantic-release writes `# [x.y.z](...)`; (4) a re-recorded run resets `start_head`, and a plan rename reads as tampering; (5) run-owned merged branches are kept as `recently-active`; (6) `record block` rejects a legitimate `approval-not-covered`; (7) a blocker-answer paste was not captured in the v2.14 run (it was captured in v2.15); (8) `minor_close.py archive` repairs Markdown links only; (9) record lookup from a linked worktree fails (`record block`, `migrate`); (10) `check-minor` hides predicate detail when blocked; (11) `check_handbooks.py` hashes working-copy CRLF bytes; (12) `validate_unicode_safety.py --fix` rewrites raw evidence; (13) small items (relative `load_ledgers` root, the approval page's gap and time wording); (14) `record answer --text` spends the round on a note; (15) the turn-end gate reads the plan from the main checkout and opens `no-progress` while a run waits on its own agents; (16) no tool migrates a gap from an older minor into the current one. Each finding, with its evidence and a suggested fix, is in the handoff prompt.
+- **Reason**: the Nexus-Hub completion checker (v4.13.13, `completion_minor.py` sha256 `f1689e72b6f96835`) has contract conflicts that are not missing work in this repository and that this repository cannot fix: (1) `gaps.minor` reaches every ledger back to v0.7, and the 142 problems left in v0.7 and v1.0 to v1.3 can never parse, so `MINOR COMPLETE` is unreachable without a legacy cutoff; (2) `tests.evidence` rejects an honest count of pre-existing failures; (3) `release.changelog` expects `## [x.y.z]` while semantic-release writes `# [x.y.z](...)`; (4) a re-recorded run resets `start_head`, and a plan rename reads as tampering; (5) run-owned merged branches are kept as `recently-active`; (6) `record block` rejects a legitimate `approval-not-covered`; (7) a blocker-answer paste was not captured in the v2.14 run (it was captured in v2.15); (8) `minor_close.py archive` repairs Markdown links only; (9) record lookup from a linked worktree fails (`record block`, `migrate`); (10) `check-minor` hides predicate detail when blocked; (11) `check_handbooks.py` hashes working-copy CRLF bytes; (12) `validate_unicode_safety.py --fix` rewrites raw evidence; (13) small items (relative `load_ledgers` root, the approval page's gap and time wording); (14) `record answer --text` spends the round on a note; (15) the turn-end gate reads the plan from the main checkout and opens `no-progress` while a run waits on its own agents; (16) no tool migrates a gap from an older minor into the current one; (17) a task whose path a later phase deletes reads unmet after the merge, because the task-path log lacks `--full-history`. Each finding, with its evidence and a suggested fix, is in the handoff prompt.
 - **Suggested next step**: give the handoff prompt to the agent maintaining Nexus-Hub, and record its answer (fixed, already fixed, or declined, with reasons) here; then re-run `check_plan_completion.py check-minor v2.15` and close the findings it resolves.
 
 ### Resolved
