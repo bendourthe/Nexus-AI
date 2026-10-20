@@ -1,7 +1,7 @@
 # Known Gaps - v2.12
 
 **Project**: Nexus
-**Status**: in-progress
+**Status**: finalized 2026-10-19 by v2.15.0: every open item migrated to [the v2.15 ledger](../v2.15/known-gaps.md).
 **Last updated**: 2026-10-15
 
 The [existing carry-forward register](../../../v2/v2.12/known-gaps.md) remains the source for older open items. This canonical ledger records new phase dispositions without duplicating those items.
@@ -13,17 +13,17 @@ The [existing carry-forward register](../../../v2/v2.12/known-gaps.md) remains t
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 1 | 2 |
+| Deferred (DF) | 0 | 3 |
 | Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 3 | 1 |
+| Warnings (WN) | 0 | 4 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
-| Quality-gate gaps (QG) | 1 | 0 |
+| Quality-gate gaps (QG) | 0 | 1 |
 
 ### Open Items
 
 #### Deferred
 
-##### DF-v212-4 - Legacy history for OpenAI-compatible backends
+##### DF-v212-4 - Legacy history for OpenAI-compatible backends - MIGRATED to v2.15.0
 
 - **Source phase**: Phase 3 - native tool history.
 - **Plan reference**: [outline-promotion-readiness](../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-task 3.1.
@@ -32,21 +32,21 @@ The [existing carry-forward register](../../../v2/v2.12/known-gaps.md) remains t
 
 #### Warnings
 
-##### WN-v212-5 - Historical evaluation diagnostic and timing limits
+##### WN-v212-5 - Historical evaluation diagnostic and timing limits - MIGRATED to v2.15.0
 
 - **Source phase**: Phase 6 - evaluation results, sub-task 6.3.
 - **Plan reference**: [outline-promotion-readiness](../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-tasks 6.3 and 6.4.
 - **Reason**: Both completed scored runs used a logger that omitted returned session errors. There are 51 error finishes with empty tails whose specific causes cannot be reconstructed; another 41 error-status rows finish at max-iterations. Only page caps 50 and 200 were prewarmed, so the original reports' claim that every question time excludes OCR is too broad. Counts, exact coverage and frozen scoring were validated; reporting was corrected after inference without modifying or rescoring the artifacts. Support tier: internal-compatible experimental path, candidate for promotion.
 - **Suggested next step**: Preserve these limits in Phase 7 and the v2.13 removal/narrowing review. Use the corrected error capture and qualified timings for any separately authorized future diagnostic run; do not infer the missing historical causes or schedule repeats after futility. Owner: the maintainer. [Results](../../../v2/v2.12/development/outline-eval.md), [metadata](development/evidence/phase-6-evaluation.json).
 
-##### WN-v212-6 - Outline retention is not bounded by session or idle expiry
+##### WN-v212-6 - Outline retention is not bounded by session or idle expiry - MIGRATED to v2.15.0
 
 - **Source phase**: Phase 7 - factual handbook review.
 - **Plan reference**: [outline-promotion-readiness](../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), handbook refresh and final verification.
 - **Reason**: The structure cache has a 50 MiB cap, but the summary store has no eviction cap. Text snapshots have lazy ten-minute idle expiry, while screened text persists for the tool instance's lifetime. Desktop and ACP reuse outline tools across sessions with identical workspace roots, including read authorization and call/output counters. Strict session isolation and ten-minute memory erasure are not implemented. The handbook now states these limits. Support tier: internal-compatible, experimental and off by default.
 - **Suggested next step**: Review cache bounds, tool-scope lifetime and session reset requirements alongside the planned removal/narrowing decision. Preserve these limits until changed behavior has real-boundary evidence. Owner: the maintainer. Sources: `core/documents/OutlineCache.ts`, `core/documents/OutlineSummaries.ts`, `modules/coding/documents/DocumentOutlineTools.ts`, `modules/coding/runtime/headlessTools.ts`, `desktop/sidecar/src/coding/headlessAgentRunner.ts`, and `desktop/sidecar/src/acp/AcpAgent.ts`.
 
-##### WN-v212-7 - Media smoke proof needs separate packaging and installation evidence
+##### WN-v212-7 - Media smoke proof needs separate packaging and installation evidence - MIGRATED to v2.15.0
 
 - **Source phase**: Phase 7 - factual handbook review.
 - **Plan reference**: [outline-promotion-readiness](../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), packaged installer qualification and final verification.
@@ -55,7 +55,7 @@ The [existing carry-forward register](../../../v2/v2.12/known-gaps.md) remains t
 
 #### Quality-gate gaps
 
-##### QG-v212-1 - Terminal CI reconciliation requires explicit migration decisions
+##### QG-v212-1 - Terminal CI reconciliation requires explicit migration decisions - MIGRATED to v2.15.0
 
 - **Source phase**: Phase 7 - terminal CI/CD comparison.
 - **Plan reference**: [outline-promotion-readiness](../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-task 7.5 and T025.

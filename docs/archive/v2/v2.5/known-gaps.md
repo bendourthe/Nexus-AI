@@ -7,28 +7,35 @@ Version directories through v2.4 moved to `docs/archive/`. The items below were 
 
 | ID | Why it is still open | Archived record |
 | --- | --- | --- |
-| BG-2 | SANA ControlNet SHA-256 pins are still the all-zero placeholder. The files were not fetched. | `docs/archive/v2/v2.4/known-gaps.md` |
-| DF-1 | MiniCPM tool tags are stripped by Ollama before Nexus can parse them. | `docs/archive/v2/v2.4/known-gaps.md` |
-| WN-2 | The bundled MiniCPM template has no tools section. That template is outside this repo. | `docs/archive/v2/v2.4/known-gaps.md` |
-| DF-v240-1 | Live NVIDIA splat generate was not run. | `docs/archive/v2/v2.4/known-gaps.md` |
-| DF-v240-2 | TripoSplat weight file hashes were not downloaded. `source.sha256` is the all-zero placeholder. | `docs/archive/v2/v2.4/known-gaps.md` |
-| DF-v240-3 | Older version gap logs still contain operator and hardware items that were not re-tested. | `docs/archive/v1/` and `docs/archive/v2/v2.0` through `v2.3` |
-| MT-v240-1 | A real WebGL2 framebuffer was not captured. | `docs/archive/v2/v2.4/known-gaps.md` |
-| QG-v240-1 | The full local suite was not run on the Electron `better-sqlite3` ABI. CI Node 22 ran it on the merge. | `docs/archive/v2/v2.4/known-gaps.md` |
+| v2.4#BG-2 | SANA ControlNet SHA-256 pins are still the all-zero placeholder. The files were not fetched. | `docs/archive/v2/v2.4/known-gaps.md` |
+| v2.4#DF-1 | MiniCPM tool tags are stripped by Ollama before Nexus can parse them. | `docs/archive/v2/v2.4/known-gaps.md` |
+| v2.4#WN-2 | The bundled MiniCPM template has no tools section. That template is outside this repo. | `docs/archive/v2/v2.4/known-gaps.md` |
+| v2.4#DF-v240-1 | Live NVIDIA splat generate was not run. | `docs/archive/v2/v2.4/known-gaps.md` |
+| v2.4#DF-v240-2 | TripoSplat weight file hashes were not downloaded. `source.sha256` is the all-zero placeholder. | `docs/archive/v2/v2.4/known-gaps.md` |
+| v2.4#DF-v240-3 | Older version gap logs still contain operator and hardware items that were not re-tested. | `docs/archive/v1/` and `docs/archive/v2/v2.0` through `v2.3` |
+| v2.4#MT-v240-1 | A real WebGL2 framebuffer was not captured. | `docs/archive/v2/v2.4/known-gaps.md` |
+| v2.4#QG-v240-1 | The full local suite was not run on the Electron `better-sqlite3` ABI. CI Node 22 ran it on the merge. | `docs/archive/v2/v2.4/known-gaps.md` |
 
 v2.5 plans in this directory are not started by the v2.4.11 tag.
 
 ## v2.5.0
 
-| ID | Class | Source phase | Plan reference | Reason | Suggested next step |
-| --- | --- | --- | --- | --- | --- |
-| CI-v251-1 | CI | v2.5.1 Phase 4 | `docs/archive/v2/v2.5/plans/v2.5.1-adoption-packaged-verification-and-accessibility.md` | On 2026-09-26 `develop` and `main` required checks were switched to the single context `ci-required`. The installer matrix workflow is `installer-matrix.yml`. Its first run is the archive pull request, and the run id is recorded in `docs/archive/v2/v2.6/known-gaps.md` and carried in `docs/v2/v2.12/known-gaps.md`. | Record the matrix run id in the carried gap log when the workflow finishes, then close this row there. |
+### CI-v251-1 - CLOSED 2026-10-19
+
+- **Class**: CI
+- **Source phase**: v2.5.1 Phase 4
+- **Plan reference**: `docs/archive/v2/v2.5/plans/v2.5.1-adoption-packaged-verification-and-accessibility.md`
+- **Reason**: On 2026-09-26 `develop` and `main` required checks were switched to the single context `ci-required`. The installer matrix workflow is `installer-matrix.yml`. Its first run is the archive pull request, and the run id is recorded in `docs/archive/v2/v2.6/known-gaps.md` and carried in `docs/v2/v2.12/known-gaps.md`.
+- **Suggested next step**: Record the matrix run id in the carried gap log when the workflow finishes, then close this row there.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md CI-v251-1
 
 ## Adjacent
 
 NI-3 is resolved in `docs/archive/v2/v2.4/known-gaps.md` (2026-09-21). `MODEL_FAMILIES` in `core/registry/ModelCatalog` is the single family tuple, and `desktop/sidecar/src/protocol.ts` builds its Zod enum from that tuple. The v2.5.1 command-parity checker does not reopen NI-3. It also cannot see value-level enum drift, which is why Phase 2 was not allowed to claim NI-3 as its proving case.
 
 ## Closed in v2.5
+
+### Resolved
 
 | ID | Class | Source phase | Plan reference | Resolution |
 | --- | --- | --- | --- | --- |

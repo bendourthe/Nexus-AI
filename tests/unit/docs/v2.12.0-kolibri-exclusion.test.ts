@@ -21,13 +21,15 @@ const BAR = join(REPO_ROOT, "docs/reference/model-acceptance.md");
 const INDEX = join(REPO_ROOT, "docs/reference/declined-models.md");
 
 describe("v2.12.0 Kolibri-1 exclusion and the declined-models index", () => {
-  it("records the decline and its reopen conditions in one known-gap row", () => {
-    const rows = readFileSync(GAPS, "utf8")
-      .split("\n")
-      .map((line) => line.replace(/\r$/, ""))
-      .filter((line) => line.startsWith("| DF-v212-1 |"));
-    expect(rows).toHaveLength(1);
-    const row = rows[0] ?? "";
+  it("records the decline and its reopen conditions in one known-gap entry", () => {
+    // v2.15.0 converted the register's table rows into heading entries the
+    // completion checker reads; the record is now one entry, not one row.
+    const entries = readFileSync(GAPS, "utf8")
+      .replace(/\r\n/g, "\n")
+      .split(/\n(?=#{1,6} )/)
+      .filter((block) => /^#{3,6} DF-v212-1 /.test(block));
+    expect(entries).toHaveLength(1);
+    const row = entries[0] ?? "";
     for (const fact of [
       "Kolibri-1",
       "not admitted, no catalog row",

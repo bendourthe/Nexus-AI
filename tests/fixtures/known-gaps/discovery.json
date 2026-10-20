@@ -1,0 +1,126 @@
+{
+  "pin": "f1689e72b6f96835bb9eda7bd68280e63fbb0c4c644a2e45f8cff19a693cdfd4",
+  "unreadable": [],
+  "ledgers": [
+    {
+      "path": "docs/archive/v1/v1.17/known-gaps.md",
+      "minor": "v1.17",
+      "layout": "archive",
+      "items": [
+        {
+          "id": "DF-9",
+          "kind": "DF",
+          "title": " - gigatoken remains a watch item",
+          "state": "open",
+          "target": null,
+          "section": "v1.17.0",
+          "subsection": "Open Items",
+          "level": 5,
+          "body": "\n- **Source phase**: Phase 6\n- **Reason**: no release yet.\n\n"
+        }
+      ],
+      "problems": [
+        "line 19 row"
+      ]
+    },
+    {
+      "path": "docs/archive/v2/v2.4/known-gaps.md",
+      "minor": "v2.4",
+      "layout": "archive",
+      "items": [
+        {
+          "id": "WN-2",
+          "kind": "WN",
+          "title": " - The bundled template has no tools section",
+          "state": "open",
+          "target": null,
+          "section": "v2.4.10",
+          "subsection": "Open Items",
+          "level": 5,
+          "body": "\n- **Source phase**: 2\n- **Reason**: recorded while probing.\n"
+        }
+      ],
+      "problems": [
+        "line 9 row",
+        "line 10 row",
+        "line 20 row"
+      ]
+    },
+    {
+      "path": "docs/archive/v2/v2.5/known-gaps.md",
+      "minor": "v2.5",
+      "layout": "archive",
+      "items": [],
+      "problems": [
+        "line 9 row",
+        "line 10 row",
+        "line 16 row",
+        "line 22 row"
+      ]
+    },
+    {
+      "path": "docs/archive/v2/v2.6/known-gaps.md",
+      "minor": "v2.6",
+      "layout": "archive",
+      "items": [],
+      "problems": [
+        "line 7 row",
+        "line 8 row",
+        "line 9 row",
+        "line 10 row",
+        "line 11 row"
+      ]
+    },
+    {
+      "path": "docs/releases/v2/v2.12/known-gaps.md",
+      "minor": "v2.12",
+      "layout": "active",
+      "items": [
+        {
+          "id": "DF-v212-4",
+          "kind": "DF",
+          "title": " - Legacy history for OpenAI-compatible backends",
+          "state": "open",
+          "target": null,
+          "section": "v2.12.0",
+          "subsection": "Open Items",
+          "level": 5,
+          "body": "\n- **Source phase**: Phase 3\n- **Reason**: native round trips are not proven here.\n\n"
+        }
+      ],
+      "problems": []
+    },
+    {
+      "path": "docs/v2/v2.12/known-gaps.md",
+      "minor": "v2.12",
+      "layout": "active",
+      "items": [],
+      "problems": [
+        "line 9 row",
+        "line 10 row",
+        "line 11 row",
+        "line 12 row",
+        "line 13 row"
+      ]
+    },
+    {
+      "path": "docs/releases/v2/v2.15/known-gaps.md",
+      "minor": "v2.15",
+      "layout": "active",
+      "items": [
+        {
+          "id": "DF-1",
+          "kind": "DF",
+          "title": " - Spoken replies start in 4 s",
+          "state": "open",
+          "target": null,
+          "section": "v2.15.0",
+          "subsection": "Open Items",
+          "level": 4,
+          "body": "\n- **Source phase**: v2.14.0 Phase 2.\n- **Reason**: measured median 3,990 ms.\n"
+        }
+      ],
+      "problems": []
+    }
+  ]
+}

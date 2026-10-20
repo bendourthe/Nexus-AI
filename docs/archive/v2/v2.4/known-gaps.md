@@ -15,21 +15,45 @@ Plans: [v2.4.0 adoption](plans/v2.4.0-adoption-unsloth-qwen38-gaussian-splatting
 | Category | Open | Resolved |
 |---|---:|---:|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 3 | 0 |
+| Deferred (DF) | 0 | 3 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
-| Missing tests / coverage gaps (MT) | 1 | 0 |
-| Quality-gate gaps (QG) | 1 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 1 |
+| Quality-gate gaps (QG) | 0 | 1 |
 
 Gaussian splat viewer and optional generate. The viewer, honesty copy, queue, and mocked adapter are in the tree. Live GPU pixels, live CUDA generate, and TripoSplat file hashes are not observed.
 
 ### Open Items
 
-- **DF-v240-1** - Live NVIDIA splat generate is not proven. Source phase: 4 and 5. Plan reference: T013, T015. Reason: the adapter is mocked and `--real` records `not proven here`. Suggested next step: run the adapter on a CUDA host with installed weights and record the benchmark row.
-- **DF-v240-2** - TripoSplat file SHA-256 pins are not in the catalog. Source phase: 5. Plan reference: T014. Reason: `source.sha256` is the all-zero placeholder the digest test requires, and `source.revision` is the Hugging Face commit observed on 2026-09-23. The weight files themselves were not hashed. Suggested next step: pin `diffusion_models/triposplat_fp16.safetensors` and the sibling files with `scripts/installer/build/pin-hf-weights.py` after a successful fetch.
-- **DF-v240-3** - Older `docs/**/known-gaps.md` files still have open operator and hardware items. Source phase: 6. Plan reference: T018. Reason: those items were not re-tested in this pass, so they stay open. Suggested next step: close each one only with its own evidence.
-- **MT-v240-1** - A real WebGL2 framebuffer was not captured. Source phase: 2. Plan reference: T005, T023. Reason: jsdom proves the fallback and the camera bounds. Suggested next step: orbit a fixture on a GPU canvas and save the PNG.
-- **QG-v240-1** - The full local `npm test` suite was not run in this shell. Source phase: 6. Plan reference: T024. Reason: `better-sqlite3` is NODE_MODULE_VERSION 146 and this Node expects 137. Suggested next step: let CI's Node 22 job run the suite. Do not `npm rebuild` the shared module.
+#### DF-v240-1 - Live NVIDIA splat generate is not proven. - CLOSED 2026-10-19
+
+Source phase: 4 and 5. Plan reference: T013, T015. Reason: the adapter is mocked and `--real` records `not proven here`. Suggested next step: run the adapter on a CUDA host with installed weights and record the benchmark row.
+
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v240-1
+
+#### DF-v240-2 - TripoSplat file SHA-256 pins are not in the catalog. - CLOSED 2026-10-19
+
+Source phase: 5. Plan reference: T014. Reason: `source.sha256` is the all-zero placeholder the digest test requires, and `source.revision` is the Hugging Face commit observed on 2026-09-23. The weight files themselves were not hashed. Suggested next step: pin `diffusion_models/triposplat_fp16.safetensors` and the sibling files with `scripts/installer/build/pin-hf-weights.py` after a successful fetch.
+
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v240-2
+
+#### DF-v240-3 - Older `docs/**/known-gaps.md` files still have open operator and hardware items. - CLOSED 2026-10-19
+
+Source phase: 6. Plan reference: T018. Reason: those items were not re-tested in this pass, so they stay open. Suggested next step: close each one only with its own evidence.
+
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-v240-3
+
+#### MT-v240-1 - A real WebGL2 framebuffer was not captured. - CLOSED 2026-10-19
+
+Source phase: 2. Plan reference: T005, T023. Reason: jsdom proves the fallback and the camera bounds. Suggested next step: orbit a fixture on a GPU canvas and save the PNG.
+
+- **Superseded by**: docs/v2/v2.12/known-gaps.md MT-v240-1
+
+#### QG-v240-1 - The full local `npm test` suite was not run in this shell. - CLOSED 2026-10-19
+
+Source phase: 6. Plan reference: T024. Reason: `better-sqlite3` is NODE_MODULE_VERSION 146 and this Node expects 137. Suggested next step: let CI's Node 22 job run the suite. Do not `npm rebuild` the shared module.
+
+- **Superseded by**: docs/v2/v2.12/known-gaps.md QG-v240-1
 
 ## v2.4.10
 
@@ -38,9 +62,9 @@ Gaussian splat viewer and optional generate. The viewer, honesty copy, queue, an
 | Category | Open | Resolved |
 |---|---:|---:|
 | Not implemented (NI) | 0 | 3 |
-| Deferred (DF) | 1 | 0 |
-| Bugs / regressions (BG) | 1 | 3 |
-| Warnings (WN) | 1 | 1 |
+| Deferred (DF) | 0 | 1 |
+| Bugs / regressions (BG) | 0 | 4 |
+| Warnings (WN) | 0 | 2 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
@@ -64,26 +88,36 @@ MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](c
 
 ### Open Items
 
-- **BG-2** - Three catalog entries ship all-zero placeholder SHA-256 pins: `sana-controlnet-canny`, `sana-controlnet-depth`, `sana-controlnet-pose`. Found by hoisting the placeholder-SHA rule catalog-wide in Phase 3; `pin-hf-weights.py --check` independently reports the same three ("3 unpinned weights file(s), 107 in scope"). They cannot be rotated here: `Efficient-Large-Model/SANA-ControlNet-*` returns HTTP 401 to an unauthenticated fetch, so the pin helper has nothing to read. They are also not flagged `gated` and `KNOWN_GATED_IDS` is empty, so invariants B and C never caught them either. A user installing these gets no integrity check at all.
-  - Source phase: 3
-  - Plan reference: sub-task 3.2, hoist 1
-  - Reason: pre-existing since v1.1.0 Phase 12 and outside this plan's scope. Named in `PLACEHOLDER_SHA_LEGACY_EXEMPT` so the new catalog-wide rule protects every other entry rather than being softened for all.
-  - Suggested next step: decide whether these three entries are still wanted. If yes, obtain a token and rotate with `pin-hf-weights.py --from-dir`, or repoint them at a public mirror; if no, drop them. Either way the id leaves the exemption list.
-  - Exit condition (evaluable): `PLACEHOLDER_SHA_LEGACY_EXEMPT` in `scripts/installer/src/nexus_installer/catalog_invariants.py` is empty, or `python scripts/installer/build/pin-hf-weights.py --check` exits zero. Checkable by running one command.
+#### BG-2 - Three catalog entries ship all-zero placeholder SHA-256 pins: `sana-controlnet-canny`, `sana-controlnet-depth`, `sana-controlnet-pose`. - CLOSED 2026-10-19
 
-- **DF-1** - MiniCPM5-2B is not shipped as an agentic model. Through Ollama, the four structural tool-call tags are special tokens that the detokenizer strips, so the wire grammar is unrecoverable and no parser can be written against it. A parser over the stripped text would be a delimiter-free heuristic, and the two correct fixes (Ollama-side detokenization, or moving Nexus to Ollama `/api/chat` with structured `tool_calls`) both lie outside the plan's permitted edit sites, tripping the 2.2 hard stop condition.
-  - Source phase: 2
-  - Plan reference: sub-task 2.2, option 3
-  - Reason: not a model defect and not a Nexus defect; a runtime-boundary limitation proven by controlled experiment. Recorded rather than worked around, because every available workaround either ships dead code or ships a fragile heuristic under a grammar name.
-  - Suggested next step: re-probe when either condition below holds, then re-open the agentic question with the same five-way verdict method.
-  - Exit condition (evaluable): re-run the recorded echo experiment against a newer Ollama (`/api/generate`, `raw: true`, prompt asking the model to echo `<banana> <function <param </xyz>`). If `<function` appears in the response string, the blocker is gone. Alternatively, if Nexus gains an `/api/chat` tool-call path AND Ollama ships a tools-aware template for this GGUF, the second route opens. Both are checkable by running one command and reading one file.
+Found by hoisting the placeholder-SHA rule catalog-wide in Phase 3; `pin-hf-weights.py --check` independently reports the same three ("3 unpinned weights file(s), 107 in scope"). They cannot be rotated here: `Efficient-Large-Model/SANA-ControlNet-*` returns HTTP 401 to an unauthenticated fetch, so the pin helper has nothing to read. They are also not flagged `gated` and `KNOWN_GATED_IDS` is empty, so invariants B and C never caught them either. A user installing these gets no integrity check at all.
 
-- **WN-2** - Ollama's bundled template for `hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M` has no `{{ if .Tools }}` branch (204-byte template blob handling only `.System`, `.Prompt`, `.Response`). Tool definitions passed to `/api/chat` are therefore never rendered into the prompt, and the model answers as if no tools exist. This is independent of the detokenization blocker in DF-1 and would have to be solved too.
-  - Source phase: 2
-  - Plan reference: sub-task 2.1 probe method
-  - Reason: recorded while establishing why the probe uses `/api/generate` rather than `/api/chat`. Not actionable inside this plan.
-  - Suggested next step: fold into the DF-1 re-probe; a tools-aware template is a precondition for the `/api/chat` route.
-  - Exit condition (evaluable): `cat` the template blob named by the model's Ollama manifest and check for a `.Tools` reference. Checkable by reading one file.
+- Source phase: 3
+- Plan reference: sub-task 3.2, hoist 1
+- Reason: pre-existing since v1.1.0 Phase 12 and outside this plan's scope. Named in `PLACEHOLDER_SHA_LEGACY_EXEMPT` so the new catalog-wide rule protects every other entry rather than being softened for all.
+- Suggested next step: decide whether these three entries are still wanted. If yes, obtain a token and rotate with `pin-hf-weights.py --from-dir`, or repoint them at a public mirror; if no, drop them. Either way the id leaves the exemption list.
+- Exit condition (evaluable): `PLACEHOLDER_SHA_LEGACY_EXEMPT` in `scripts/installer/src/nexus_installer/catalog_invariants.py` is empty, or `python scripts/installer/build/pin-hf-weights.py --check` exits zero. Checkable by running one command.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md BG-2
+
+#### DF-1 - MiniCPM5-2B is not shipped as an agentic model. - CLOSED 2026-10-19
+
+Through Ollama, the four structural tool-call tags are special tokens that the detokenizer strips, so the wire grammar is unrecoverable and no parser can be written against it. A parser over the stripped text would be a delimiter-free heuristic, and the two correct fixes (Ollama-side detokenization, or moving Nexus to Ollama `/api/chat` with structured `tool_calls`) both lie outside the plan's permitted edit sites, tripping the 2.2 hard stop condition.
+
+- Source phase: 2
+- Plan reference: sub-task 2.2, option 3
+- Reason: not a model defect and not a Nexus defect; a runtime-boundary limitation proven by controlled experiment. Recorded rather than worked around, because every available workaround either ships dead code or ships a fragile heuristic under a grammar name.
+- Suggested next step: re-probe when either condition below holds, then re-open the agentic question with the same five-way verdict method.
+- Exit condition (evaluable): re-run the recorded echo experiment against a newer Ollama (`/api/generate`, `raw: true`, prompt asking the model to echo `<banana> <function <param </xyz>`). If `<function` appears in the response string, the blocker is gone. Alternatively, if Nexus gains an `/api/chat` tool-call path AND Ollama ships a tools-aware template for this GGUF, the second route opens. Both are checkable by running one command and reading one file.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md DF-1
+
+#### WN-2 - Ollama's bundled template for `hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M` has no `{{ if .Tools }}` branch (204-byte template blob handling only `.System`, `.Prompt`, `.Response`). Tool definitions passed to `/api/chat` are therefore never rendered into the prompt, and the model answers as if no tools exist. This is independent of the detokenization blocker in DF-1 and would have to be solved too. - CLOSED 2026-10-19
+
+- Source phase: 2
+- Plan reference: sub-task 2.1 probe method
+- Reason: recorded while establishing why the probe uses `/api/generate` rather than `/api/chat`. Not actionable inside this plan.
+- Suggested next step: fold into the DF-1 re-probe; a tools-aware template is a precondition for the `/api/chat` route.
+- Exit condition (evaluable): `cat` the template blob named by the model's Ollama manifest and check for a `.Tools` reference. Checkable by reading one file.
+- **Superseded by**: docs/v2/v2.12/known-gaps.md WN-2
 
 
 ## v2.4.9
@@ -94,10 +128,10 @@ MiniCPM5-2B catalog and runtime adoption, seeded from the [v2.4.10 comparison](c
 |---|---:|---:|
 | Not implemented (NI) | 2 | 0 |
 | Deferred (DF) | 3 | 3 |
-| Bugs / regressions (BG) | 5 | 12 |
+| Bugs / regressions (BG) | 3 | 12 |
 | Warnings (WN) | 1 | 2 |
-| Missing tests / coverage gaps (MT) | 2 | 2 |
-| Quality-gate gaps (QG) | 4 | 0 |
+| Missing tests / coverage gaps (MT) | 1 | 2 |
+| Quality-gate gaps (QG) | 3 | 0 |
 
 Operator-driven UX cycle against nine screenshots and three live failures from the packaged v2.4.8 build, plus an installer round. Not a planned phase set: every item traces to something the operator saw. Two live failures shared one root cause (the studio forms offered settings the selected model could not honour), which is what `desktop/src/shared/studio/modelCapabilities.ts` now exists to prevent. Nothing here has been published; the branch is uncommitted-then-committed local work awaiting integration.
 
@@ -261,9 +295,9 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 |---|---:|---:|
 | Not implemented (NI) | 0 | 0 |
 | Deferred (DF) | 5 | 0 |
-| Bugs / regressions (BG) | 0 | 4 |
+| Bugs / regressions (BG) | 2 | 4 |
 | Warnings (WN) | 0 | 0 |
-| Missing tests / coverage gaps (MT) | 7 | 0 |
+| Missing tests / coverage gaps (MT) | 8 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
 Phases 1-5 implemented against five operator screenshots of the v2.4.7 desktop. Three were correctness defects (double-counted reasoning tokens, an installer snapshot that named an embedding model as the Chat pick and an untagged model as the Agentic pick, and a Settings tab order that had drifted from the installer); two were chrome and dismissal feedback. Every earlier open row carries forward. Publication and release wait on explicit approval.
@@ -563,7 +597,7 @@ Phases 1-5 implemented against an operator screenshot of the v2.4.4 installer re
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 1 | 0 |
 | Missing tests / coverage gaps (MT) | 6 | 0 |
-| Quality-gate gaps (QG) | 0 | 1 |
+| Quality-gate gaps (QG) | 1 | 1 |
 
 Phases 1-7 are implemented locally against packaged post-v2.4.3 screenshots 1-6. Every change is proven by automated tests; none of the six field symptoms has been re-observed on the packaged 16 GB NVIDIA host, because that requires a rebuilt installer this cycle did not produce. The Diffusers pin moved 0.34.0 to 0.36.0 on distribution evidence, and a live import plus a Wan and SDXL re-smoke on the new pin are the highest-value operator items.
 
