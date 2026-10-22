@@ -50,6 +50,12 @@ import {
 export const REGISTER = "docs/v2/v2.12/known-gaps.md";
 export const SCOPE = { from: "v1.17", to: "v2.12", extra: ["v2.15"] };
 export const RELEASE_V212 = "docs/releases/v2/v2.12/known-gaps.md";
+// Exact logical identities survive archiving without changing captured fixtures.
+const REGISTER_PATHS = new Set([
+  REGISTER,
+  ["docs", "releases", "v2", "v2.12", "known-gaps.md"].join("/"),
+  ["docs", "archives", "v2", "v2.12", "known-gaps.md"].join("/"),
+]);
 export const BATCH_LIMIT = 60;
 export const DEFAULT_BASELINE = "docs/releases/v2/v2.15/development/v2.15.0-ledger-conversion.md";
 const BASELINE_RE = /<!-- inventory-baseline:start -->\s*```json\s*([\s\S]*?)```\s*<!-- inventory-baseline:end -->/;
@@ -85,9 +91,9 @@ function keyVersion(key) {
  * v2.4.10's.
  */
 export function carriedCandidate(id, candidates) {
-  const pointer = `**Superseded by**: ${REGISTER} ${id}`;
+  const pointers = [...REGISTER_PATHS].map((path) => `**Superseded by**: ${path} ${id}`);
   const superseded = candidates.find((c) =>
-    (c.body ?? "").split(/\r?\n/).some((line) => line.trim().replace(/^[-*+]\s+/, "") === pointer),
+    (c.body ?? "").split(/\r?\n/).some((line) => pointers.includes(line.trim().replace(/^[-*+]\s+/, ""))),
   );
   if (superseded) return superseded;
   const newer = (a, b) => {
@@ -158,21 +164,29 @@ export function buildInventory(ledgers) {
       body: item.body,
     })),
   );
-  const register = scoped.find((ledger) => ledger.path === REGISTER);
+  // The consolidated ledger keeps minor-level register identities separate
+  // from patch-level release items in the same file.
+  const isCarrier = (item) => item.ledger === REGISTER || (
+    REGISTER_PATHS.has(item.ledger) && /^v2\.12(?:\s|$)/.test(item.section ?? "")
+  );
+  const registerItems = items.filter(isCarrier);
+  const register = scoped.find((ledger) => ledger.path === REGISTER)
+    ?? scoped.find((ledger) => REGISTER_PATHS.has(ledger.path) && registerItems.length > 0);
+  const registerPath = register?.path ?? REGISTER;
   const carriers = [];
   if (register) {
-    for (const item of items.filter((i) => i.ledger === REGISTER)) {
+    for (const item of registerItems) {
       const record = RECORD_FIELD_RE.exec(item.body)?.[1]?.trim() ?? "";
       carriers.push({ id: item.id, title: item.title, state: item.state, record, form: "entry" });
     }
-    for (const row of registerRows(register.text)) {
+    for (const row of register.path === REGISTER ? registerRows(register.text) : []) {
       carriers.push({ id: row.id, title: row.title, state: "open", record: row.record, form: "row", line: row.line });
     }
   }
 
-  const others = items.filter((item) => item.ledger !== REGISTER);
+  const others = items.filter((item) => !isCarrier(item));
   for (const carrier of carriers) {
-    const named = ledgerPathsIn(carrier.record, REGISTER).filter((path) => path !== REGISTER);
+    const named = ledgerPathsIn(carrier.record, registerPath);
     const byRecord = carriedCandidate(
       carrier.id,
       others.filter((item) => named.includes(item.ledger) && item.id === carrier.id),
@@ -197,7 +211,7 @@ export function buildInventory(ledgers) {
       .map((c) => `${c.carries.ledger}#${c.carries.key}`),
   );
   const openUnits = [
-    ...carriers.filter((c) => c.state === "open" && !c.duplicateOf).map((c) => ({ ledger: REGISTER, id: c.id })),
+    ...carriers.filter((c) => c.state === "open" && !c.duplicateOf).map((c) => ({ ledger: registerPath, id: c.id })),
     ...others.filter((i) => i.state === "open" && !carried.has(unit(i))).map((i) => ({ ledger: i.ledger, id: i.id })),
   ];
   const archivedOnly = others.filter((i) => i.state === "open" && i.layout === "archive" && !carried.has(unit(i)));
@@ -296,13 +310,13 @@ export function listedKeys(text) {
  */
 export function checkCoverage(inventory, { triage = null, batches = null }) {
   const triageScope = inventory.items
-    .filter((i) => (i.ledger === REGISTER || i.ledger === RELEASE_V212) && i.state === "open")
+    .filter((i) => REGISTER_PATHS.has(i.ledger) && i.state === "open")
     .map((i) => i.key);
   const batchScope = inventory.archivedOnly.map((i) => i.key);
   const expected = new Set([...(triage !== null ? triageScope : []), ...(batches !== null ? batchScope : [])]);
   // Once Phase 4 applies the dispositions, a triaged item is no longer open but
   // stays a known key, so the record still checks after it has been acted on.
-  const triaged = inventory.items.filter((i) => i.ledger === REGISTER || i.ledger === RELEASE_V212).map((i) => i.key);
+  const triaged = inventory.items.filter((i) => REGISTER_PATHS.has(i.ledger)).map((i) => i.key);
   const known = new Set([...triaged, ...batchScope]);
   const fromTriage = triage !== null ? listedKeys(triage) : [];
   const fromBatches = batches !== null ? listedKeys(batches) : [];

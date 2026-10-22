@@ -1,0 +1,180 @@
+{
+  "utc": "2026-10-22T05:28:12.970652+00:00",
+  "head": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
+  "pending_merge": "efaa651dd447cc6c0efdad359bc5457118e5906a",
+  "required_checks": "pass",
+  "root": {
+    "passed": 6446,
+    "skipped": 12,
+    "coverage": [
+      84.94,
+      76.3,
+      86.97,
+      87.1
+    ]
+  },
+  "desktop": {
+    "passed": 2364,
+    "skipped": 1,
+    "coverage": [
+      80.78,
+      73.26,
+      81.21,
+      83.47
+    ],
+    "maxWorkers": 1
+  },
+  "installer": {
+    "passed": 1528,
+    "skipped": 3,
+    "count_basis": "complete pytest progress log",
+    "exit_code": 0
+  },
+  "remaining_gates": [
+    {
+      "name": "fast",
+      "command": [
+        "node",
+        "scripts/ci-profile.mjs",
+        "--profile",
+        "fast",
+        "--reports-dir",
+        "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-phase3-build-gates-vp5fcrrh\\fast-reports"
+      ],
+      "cwd": "C:\\nx-close",
+      "exit_code": 0,
+      "seconds": 13.91,
+      "utc": "2026-10-22T05:25:21.231700+00:00"
+    },
+    {
+      "name": "desktop-lint",
+      "command": [
+        "npm.cmd",
+        "run",
+        "--silent",
+        "lint",
+        "--workspace",
+        "@nexus/desktop"
+      ],
+      "cwd": "C:\\nx-close",
+      "exit_code": 0,
+      "seconds": 7.19,
+      "utc": "2026-10-22T05:25:28.433473+00:00"
+    },
+    {
+      "name": "root-build",
+      "command": [
+        "npm.cmd",
+        "run",
+        "--silent",
+        "build"
+      ],
+      "cwd": "C:\\nx-close",
+      "exit_code": 0,
+      "seconds": 9.41,
+      "utc": "2026-10-22T05:25:39.177312+00:00"
+    },
+    {
+      "name": "desktop-types",
+      "command": [
+        "npm.cmd",
+        "run",
+        "--silent",
+        "typecheck",
+        "--workspace",
+        "@nexus/desktop"
+      ],
+      "cwd": "C:\\nx-close",
+      "exit_code": 0,
+      "seconds": 13.52,
+      "utc": "2026-10-22T05:25:52.687263+00:00"
+    },
+    {
+      "name": "sidecar-build",
+      "command": [
+        "npm.cmd",
+        "run",
+        "--silent",
+        "build:sidecar"
+      ],
+      "cwd": "C:\\nx-close",
+      "exit_code": 0,
+      "seconds": 5.14,
+      "utc": "2026-10-22T05:25:57.836182+00:00"
+    },
+    {
+      "name": "web-build",
+      "command": [
+        "npm.cmd",
+        "run",
+        "--silent",
+        "build:web",
+        "--workspace",
+        "@nexus/desktop"
+      ],
+      "cwd": "C:\\nx-close",
+      "exit_code": 0,
+      "seconds": 33.47,
+      "utc": "2026-10-22T05:26:31.299774+00:00"
+    },
+    {
+      "name": "architecture",
+      "command": [
+        "npm.cmd",
+        "run",
+        "--silent",
+        "check-architecture"
+      ],
+      "cwd": "C:\\nx-close",
+      "exit_code": 0,
+      "seconds": 3.36,
+      "utc": "2026-10-22T05:26:34.655329+00:00"
+    },
+    {
+      "name": "feature-drift",
+      "command": [
+        "node",
+        "scripts/check-feature-drift.mjs"
+      ],
+      "cwd": "C:\\nx-close",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "utc": "2026-10-22T05:26:34.733853+00:00"
+    },
+    {
+      "name": "handbooks",
+      "command": [
+        "node",
+        "scripts/generate-handbooks.mjs",
+        "--check"
+      ],
+      "cwd": "C:\\nx-close",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "utc": "2026-10-22T05:26:34.813119+00:00"
+    },
+    {
+      "name": "attribution",
+      "command": [
+        "python",
+        "C:/Users/bdour/.nexus-hub/scripts/nexus_hub_cli.py",
+        "attribution",
+        "check"
+      ],
+      "cwd": "C:\\nx-close",
+      "exit_code": 0,
+      "seconds": 0.91,
+      "utc": "2026-10-22T05:26:35.718807+00:00"
+    }
+  ],
+  "additional_diagnostics": {
+    "installer_format": "failed: inherited missing blank line at catalog_invariants.py735, identical in base fad, outside changed hunk; CI invokes lint only",
+    "wrong_desktop_root": "stopped; not desktop evidence",
+    "desktop_two_workers": "one existing ESLint child timeout; unchanged isolated test and full one-worker suite pass"
+  },
+  "zip_sha256": "09caa9ad3e1eb722695dabee66162e5d1422364092071d9876c505a42e84a4d0",
+  "zip_entries": 27,
+  "no_pipeline_change": true,
+  "publication": "pending",
+  "archive": "not performed"
+}

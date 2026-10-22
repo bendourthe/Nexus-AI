@@ -7,7 +7,7 @@
  */
 
 import { afterEach, describe, expect, it } from "vitest";
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -19,6 +19,7 @@ import { LoopbackHttpServer } from "../../sidecar/src/controlSurface/loopbackSer
 import { persistGeneratedPng } from "../../sidecar/src/studio/generatedImages.js";
 import { AGENT_GRANT_TTL_MS, createImageEditOps, imageEditFailure, type AgentAccess } from "../../sidecar/src/studio/imageEditRuntime.js";
 import { ImageRenderBridge, isWellFormedPng } from "../../sidecar/src/studio/imageRenderBridge.js";
+import type { TrustedApprovalPreparation } from "../../../modules/coding/autonomy/AskInbox.js";
 
 const PNG_B64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVR4nGP4DwQACfsD/fteaysAAAAASUVORK5CYII=";
 const ADJUST = { kind: "adjustments", values: { brightness: 140, contrast: 100, saturation: 100, sharpness: 0 } };
@@ -39,9 +40,13 @@ function inbox() {
   const asks: { input: { summary: string; args?: Record<string, unknown> }; decide: (d: "approved" | "denied" | "expired") => void }[] = [];
   return {
     asks,
-    parkAndWait: (input: { summary: string; args?: Readonly<Record<string, unknown>> }) =>
+    parkAndWait: (input: { summary: string; args?: Readonly<Record<string, unknown>> }, prepare?: TrustedApprovalPreparation) =>
       new Promise<"approved" | "denied" | "expired">((resolve) => {
-        asks.push({ input: input as never, decide: resolve });
+        asks.push({ input: input as never, decide: (decision) => {
+          if (decision !== "approved") { resolve(decision); return; }
+          const prepared = prepare?.(randomUUID(), randomUUID());
+          resolve(prepared?.isValid() ? "approved" : "denied");
+        } });
       }),
   };
 }
@@ -349,6 +354,13 @@ describe("/nexus/image-edit routes", () => {
     const applied = await post("apply", { ...grant, action: ADJUST, expectedRevision: 0, idempotencyKey: "k1" });
     expect(applied.status).toBe(200);
     expect(await applied.json()).toMatchObject({ revision: 1, values: { brightness: 140 } });
+    // Even an approved agent cannot list or restore viewer recovery checkpoints.
+    const checkpoint = f.ops.checkpoints({ grantId: f.ops.open({ sessionId: f.session.id, turnId: f.turn.id }).grantId }).checkpoints[0]!;
+    for (const route of ["restore", "checkpoints"]) {
+      const refused = await post(route, { ...grant, checkpointId: checkpoint.id, expectedRevision: 1 });
+      expect(refused.status).toBe(404);
+      expect(await refused.json()).toMatchObject({ error: { code: "unknown_route" } });
+    }
     const conflict = await post("apply", { ...grant, action: { kind: "reset" }, expectedRevision: 0, idempotencyKey: "k1" });
     expect(conflict.status).toBe(409);
     expect(await conflict.json()).toMatchObject({ error: { code: "IDEMPOTENCY_CONFLICT" } });

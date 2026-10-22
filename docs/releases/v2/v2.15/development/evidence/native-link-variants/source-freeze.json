@@ -1,0 +1,28 @@
+{
+  "revision": 3,
+  "private_only": true,
+  "sha256": {
+    "check_plan_completion.py": "db10ccfe1ae04dbee66203152db4f52805d55acc20cd64905d9e22d49ff74eec",
+    "completion_minor.py": "ea48a449fd7d020ebaff2426f4b9b320a4c0ae9b648ce7a318ef442b56eb99e9",
+    "minor_close.py": "893e53af6ac68e46dfd193a33c1528cf37cd8d49cd1be07baeec147f5110ee57",
+    "approval_page.py": "244464d8a9929b25c5bc89ed7df28dd6efb782bf2dd5ded945eed2de3485b42f",
+    "approval_binding.py": "bbd1863ece314addd28f5c7d3c2caf304a6f4dbaefc37f9c55daa03117dd486b",
+    "repo_host.py": "dfeec69940715ad782a0885a6426214e2bce13c9d33ad41ecc6975a23f3147a7",
+    "cleanup_merged.py": "8116f67beeac2033f82d3f47689378447117f529121100f126a44cf84674b572"
+  },
+  "test_sha256": {
+    "test_exact_link_variants.py": "a5b8723c75a852f06592c1dc315c06514ea29800c989eba3f1bbce4d08721b49",
+    "test_exact_link_order.py": "3e385403caadb1f17549a71fe831e6bae57cefaa141fa5d2aaac3acfb4a365bb",
+    "test_exact_link_negative.py": "6b2053cbc1966f1ab2167fe2aea24785db766ccc277eb637df6f050ac795000b",
+    "test_exact_link_boundaries.py": "ae980f5b1a02eb3db8739caa5ae5801ca1a0b306f35d12ba1f84ae840121225c",
+    "test_post_repair_proof_races.py": "e98ba49f551fff079d2b2ed0a9bfcc4946137b756ce72aa004e8d4804e5a77f8",
+    "test_binary_proof_race.py": "b9bfef941f1755cdca1d60c9122aa6e5fd184a33214dbb828908366c19ce238e",
+    "test_variant_lifecycle.py": "d9a6b1bb67a0cd832c7a7235e585a479f7f5d5ae74dcd8fe82393626f0151c3c"
+  },
+  "predecessor": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-exact-plan-variant-work-ej8y7crm",
+  "v2_runtime_delta": [
+    "completion_minor.py",
+    "minor_close.py"
+  ],
+  "reused_unchanged_broad_compatibility": "Frozen v2 final run; test groups retain all original assertions. V3 reruns every opted-in branch plus lifecycle."
+}

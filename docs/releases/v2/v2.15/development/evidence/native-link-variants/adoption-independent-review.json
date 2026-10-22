@@ -1,0 +1,142 @@
+{
+  "review": "actual phase3 native and consumer adoption plus historical approval ordering",
+  "reviewed_at": "2026-10-21",
+  "mode": "read-only actual sources; new private receipt only",
+  "adopted_source_findings": [],
+  "native": {
+    "expected_qualified_v3_sha256": {
+      "check_plan_completion.py": "db10ccfe1ae04dbee66203152db4f52805d55acc20cd64905d9e22d49ff74eec",
+      "completion_minor.py": "ea48a449fd7d020ebaff2426f4b9b320a4c0ae9b648ce7a318ef442b56eb99e9",
+      "minor_close.py": "893e53af6ac68e46dfd193a33c1528cf37cd8d49cd1be07baeec147f5110ee57",
+      "approval_page.py": "244464d8a9929b25c5bc89ed7df28dd6efb782bf2dd5ded945eed2de3485b42f",
+      "approval_binding.py": "bbd1863ece314addd28f5c7d3c2caf304a6f4dbaefc37f9c55daa03117dd486b",
+      "repo_host.py": "dfeec69940715ad782a0885a6426214e2bce13c9d33ad41ecc6975a23f3147a7",
+      "cleanup_merged.py": "8116f67beeac2033f82d3f47689378447117f529121100f126a44cf84674b572"
+    },
+    "actual_sha256": {
+      "check_plan_completion.py": "db10ccfe1ae04dbee66203152db4f52805d55acc20cd64905d9e22d49ff74eec",
+      "completion_minor.py": "ea48a449fd7d020ebaff2426f4b9b320a4c0ae9b648ce7a318ef442b56eb99e9",
+      "minor_close.py": "893e53af6ac68e46dfd193a33c1528cf37cd8d49cd1be07baeec147f5110ee57",
+      "approval_page.py": "244464d8a9929b25c5bc89ed7df28dd6efb782bf2dd5ded945eed2de3485b42f",
+      "approval_binding.py": "bbd1863ece314addd28f5c7d3c2caf304a6f4dbaefc37f9c55daa03117dd486b",
+      "repo_host.py": "dfeec69940715ad782a0885a6426214e2bce13c9d33ad41ecc6975a23f3147a7",
+      "cleanup_merged.py": "8116f67beeac2033f82d3f47689378447117f529121100f126a44cf84674b572"
+    },
+    "source_freeze": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-exact-plan-variant-v3-2_0fx10t\\source-freeze.json",
+    "source_freeze_sha256": "0d6c2e8697afcfbb414d87443cc22f3e568c0dcd349dcf8d974aa41a79f1fada",
+    "adoption_receipt": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-phase3-native-adoption-ys7bdk_y\\adoption.json",
+    "adoption_receipt_sha256": "86b42684154099f1fd1f31e7cfda470608b6a12ded4813ca1ba490b93fecb1f6"
+  },
+  "consumer": {
+    "scripts/check-docs-layout.mjs": {
+      "raw_sha256": "6b6eb8025400fc6bee8cb44abf5d56644062d36b556d90df02a26699283528a6",
+      "lf_sha256": "a578aae27d94cd41ebffe4e654283e67d3b42c120a163652f1e656640b353442"
+    },
+    "scripts/known-gaps/inventory.mjs": {
+      "raw_sha256": "97ddce2c0e50f4f71591a1b6414f77b2ee9f3f68e52d30ceeb48de8224fb786d",
+      "lf_sha256": "39a887d900c07e836645f6c1d27461ffc24a20f50bfabd15d5ccd291bddee372"
+    },
+    "tests/unit/scripts/known-gaps-inventory.test.ts": {
+      "raw_sha256": "1a77b32f60cfec89e48f3f68a252fc32c5c75df1f6c85fde1a0589db9ec8f514",
+      "lf_sha256": "6ed18cab823245d0b6fcb88d568fd91898752792ae51966b6ba8a4574b448129"
+    },
+    "tests/unit/scripts/check-docs-layout.test.ts": {
+      "raw_sha256": "f001666ce21d28204abd90b451e18a5ad6fbf887a288bc6e16fd01d724e0bfe2",
+      "lf_sha256": "4f807a92d084ed74a1a84bd50d39eb2cee18d418e0510c487287e7de0678297d"
+    },
+    "tests/unit/scripts/known-gaps-register-layout.test.ts": {
+      "raw_sha256": "f8d254cab4a6da154e53385db2f297dd70d0ff8070863c4c6cc1685525e1ef04",
+      "lf_sha256": "a51bd54b22664463987245dd6f6c007cd1476589fc21f2b5d7cc3856ff252483"
+    }
+  },
+  "checker_adapter": {
+    "path": "scripts/known-gaps/checker-adapter.py",
+    "raw_sha256": "568cba3359a36fd887abebc521293efa3025036acd4f663d32f090ae08d506a0",
+    "git_diff_empty": true,
+    "historical_installed_pins_unchanged": true
+  },
+  "qualification_basis": {
+    "independent_retained_v2_full_cases_passed": 52,
+    "independent_retained_v3_focused_cases_passed": 20,
+    "independent_new_broad_rerun": false,
+    "actual_37_cases": "root reported passed; source compared against qualified packets, not independently rerun here",
+    "actual_layout_cli": "root reported passed"
+  },
+  "ordering_findings": [
+    {
+      "priority": "P2",
+      "confidence": 100,
+      "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-historical-link-consent-templates-ukihu8gf\\historical-approval-commands.md",
+      "line": 9,
+      "observed": "Unsigned prerequisite 1 requires a commit and absence of MERGE_HEAD/dirty state before rendering historical archive-only pages. Frozen T413 requires fresh authority and T415 requires read-only preflight plus actual refusals before the one phase3 commit.",
+      "native_contract": "Render/create bind current HEAD, current plan/spec/archive proofs and genuine captured approval. Neither checks MERGE_HEAD or dirty state. The archive dry-run separately refuses dirty-worktree. A commit between render and create changes the pending page and must be avoided.",
+      "suggested_fix": "Root corrects the unsigned prerequisite, retaining original. Stabilize all bound inputs and QA at current HEAD; render/capture/create both fresh archive-only records before HEAD advances; run T415 preflights and record genuine dirty-worktree refusals; make one phase3 merge commit including incoming integration; collect clean read-only probes afterward without another phase3 mutation or commit. Final T419 after publication remains authoritative; v2.13 readiness is conditional on v2.12-first."
+    }
+  ],
+  "source_anchors": [
+    {
+      "path": "C:/nh-checker/scripts/check_plan_completion.py",
+      "line": 1574,
+      "meaning": "_create_page includes current HEAD, plan/spec and archive proof bindings"
+    },
+    {
+      "path": "C:/nh-checker/scripts/check_plan_completion.py",
+      "line": 1786,
+      "meaning": "cmd_record_create rebuilds and consumes exact pending page"
+    },
+    {
+      "path": "C:/nh-checker/scripts/approval_binding.py",
+      "line": 426,
+      "meaning": "changed live page refuses page-changed"
+    },
+    {
+      "path": "C:/nh-checker/scripts/check_plan_completion.py",
+      "line": 762,
+      "meaning": "record load verifies signed archive-only plan binding"
+    },
+    {
+      "path": "C:/nh-checker/scripts/check_plan_completion.py",
+      "line": 768,
+      "meaning": "record load verifies current archive evidence against frozen proof dictionary"
+    },
+    {
+      "path": "C:/nh-checker/scripts/completion_minor.py",
+      "line": 2147,
+      "meaning": "archive evidence contains current absorbed seeds and proven migration bodies; it does not freeze current HEAD"
+    },
+    {
+      "path": "C:/nh-checker/scripts/completion_minor.py",
+      "line": 2244,
+      "meaning": "base archive evidence comparison remains exact"
+    },
+    {
+      "path": "C:/nh-checker/scripts/minor_close.py",
+      "line": 1222,
+      "meaning": "archive cleanliness gate, separate from render/create"
+    },
+    {
+      "path": "C:/nx-close/docs/releases/v2/v2.15/plans/v2.15.1-archive-readiness.md",
+      "line": 156,
+      "meaning": "T413 historical fresh authority duty"
+    },
+    {
+      "path": "C:/nx-close/docs/releases/v2/v2.15/plans/v2.15.1-archive-readiness.md",
+      "line": 177,
+      "meaning": "T415 preflight, actual refusal evidence and one local commit"
+    },
+    {
+      "path": "C:/nx-close/docs/releases/v2/v2.15/plans/v2.15.1-archive-readiness.md",
+      "line": 194,
+      "meaning": "T419 final read-only archive readiness receipts"
+    }
+  ],
+  "boundaries": {
+    "actual_sources_modified": false,
+    "actual_records_or_captures_accessed": false,
+    "git_state_changed": false,
+    "archive_performed": false,
+    "new_approval_round_opened": false,
+    "historical_task_met_claimed": false,
+    "plan_or_evidence_requirements_waived": false
+  }
+}

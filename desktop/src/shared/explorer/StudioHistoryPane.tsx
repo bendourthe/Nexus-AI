@@ -31,6 +31,7 @@ const IMAGE_COPY: FolderTreeCopy = {
   loadError: "Could not load sessions",
   emptyHint: "No sessions yet.",
   itemNoun: "session",
+  retainedMediaNotice: "Deleting image sessions or folders removes their history, saved edits and recovery checkpoints. Shared original image files stay on disk.",
 };
 
 const VIDEO_COPY: FolderTreeCopy = {

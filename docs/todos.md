@@ -1,5 +1,30 @@
 # Nexus - Progress Dashboard
 
+## Archive readiness (2026-10-21)
+
+**Active worktree**: `C:/nx-close`, branch `feat/v2.15-archive-readiness`, base `fadbf89b`. The owner's current goal is to complete the remaining v2.12, v2.13 and v2.15 plans until archive-ready. Earlier branch/version statements below are dated history, not the current state.
+
+**Run status**: Native approval IN54MRGB remains captured and signature-verified. Phase-one repairs are committed at `c43432f0`. All 245 carries and 14 closures completed, and the independent terminal audit verifies all 262 original identities, including three unchanged prior resolutions. All 245 destinations remain open obligations. The master and four absorbed supports now agree on 47 verified tasks of 52. Phases one through three are committed; phase four is in progress. Both historical archive-only approvals are genuinely captured and native signature-verified. T414 includes the independently qualified trailing-empty-line-only parser repair; all signed proofs and item bodies survive the v2.12 status-header normalization. T415 preserves both expected dirty-tree precommit refusals and the actual phase-three merge commit0cb4fc77. Clean historical previews now pass; v2.13 requires v2.12 first. The approved two-line workflow fix and16 regressions pass independent review, the fast profile and final root6462/12-skipped coverage. Final integration, publication and read-only archive preflight remain open. No archive, branch deletion or worktree deletion has occurred.
+
+| Measure | Current | Required |
+|---|---|---|
+| Follow-up triage | All 52 tasks retained; 45 checked; all 262 identities independently reconciled as 245 carries, 14 closures and three prior resolutions | Complete final qualification, publication and read-only readiness checks |
+| Carry application | 245/245 exact qualified copies verified, each with a distinct numeric ID and open v2.16.0 destination; 14 closures verified | Preserve every owed requirement and its next proving step |
+| Active v2.15 gaps | All original 63 accounted for: 46 carries, 14 evidenced closures and three unchanged prior resolutions | Keep carried hardware, packaged-app, provider and implementation guarantees owed |
+| Local verification | Phase-one root 6434/12 skips, desktop 2364/1 skip and installer 1528/3 skips; fresh zero-space module 54/1 skip; final data audit passed; merged root 6446/12 skips, desktop2364/1 skip, installer1528/3 skips, all required build/lint/profile gates and six dependency-aware handbook receipts pass | Fresh merged-tree suites, lint, builds and handbook receipts before publication |
+| Minor closeout | Historical v2.12/v2.13 release lineage and copies are proven; fresh archive-only pages rendered with exact two-link consent and actual release lineage; both genuine owner messages captured; v2.13 signed record verifies, v2.12 parser repair under qualification | Validated lineage, migration authority, safe reference binding and archive dry runs |
+
+- [ ] Complete the v2.15.1 master and four absorbed triage supports under `docs/releases/v2/v2.15/plans/`.
+- [x] Audit all 199 frozen batch IDs and all 63 original active IDs against current source.
+- [x] Prove and resolve the installer disk fixture, handbook CRLF comparison and missing v2.13 migration-copy provenance.
+- [x] Complete the owner-selected outline removal and image approval checkpoint/retention policies; real-boundary evidence and independent review pass.
+- [x] Complete full root/desktop coverage, installer tests, lint, builds, six handbook receipts and current fast CI profile.
+- [x] Preserve the qualified checker source in a verified 22-file local snapshot; record the separate existing upstream attribution gate failure ([preservation](releases/v2/v2.15/development/v2.15-native-checker-preservation.md)).
+- [x] Apply and independently verify all 245 open destinations and 14 closures; preserve the three prior resolutions and the complete execution history.
+- [x] Reconcile all 63 active v2.15 entries without treating hardware holds, carried obligations or owner decisions as implemented features.
+- [ ] Prove v2.12/v2.13 implementation and actual release mapping, repair layout/provenance, then verify archive readiness.
+- [ ] Complete independent review, final gates and required integration/release checks; keep readiness false until those pass.
+
 **Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.14.2-adoption-voice-latency-lfm2.5-24b`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
 
 ## v2.12 Phase 7 gates (2026-10-09)
@@ -700,8 +725,8 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Resolve the [remaining CI action updates](releases/v2/v2.12/development/phase-7-ci-action-update-proposal.md): pins merged in #97 with green post-merge develop; #42 and #43 closed as superseded after source comparison.
 - [x] Verify shared tool-result compaction in both loops, fork-resume ownership, cancellation and visible errors; complete nine live PDF section reads and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md)).
 - [x] Verify desktop outline Settings, including environment-preference preservation, real dispatcher/browser behavior, handbook update and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md)).
-- [x] After both frozen full runs finished, retain returned errors in future smoke results and qualify OCR timing prose; verify the actual patched harness with controlled adapters, preserve scored artifacts and record WN-v212-5 ([results](v2/v2.12/development/outline-eval.md)).
-- [x] Complete evaluation and final integration in the approved [v2.12 plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md): PR #97 merged into develop at `f24eac41`; field-testing installer handed over ([evidence](releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md)).
+- [x] After both frozen full runs finished, retain returned errors in future smoke results and qualify OCR timing prose; verify the actual patched harness with controlled adapters, preserve scored artifacts and record WN-v212-5 ([results](releases/v2/v2.12/development/outline-eval.md)).
+- [x] Complete evaluation and final integration in the approved [v2.12 plan](releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md): PR #97 merged into develop at `f24eac41`; field-testing installer handed over ([evidence](releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md)).
 - [ ] Field-test the v2.12 installer and record the M5 real-use DEVLOG entry (maintainer), then begin v2.13.
 
 ## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)
@@ -723,6 +748,16 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Select the v2.13.0 planning scope after v2.12 outline-readiness: accepted measured promotion gate, persisted Image Studio-only recipes and running-desktop-renderer export (owner: "all recommendations", 2026-10-08). Media search and video editing remain deferred.
 - [ ] Evaluate EmbeddingGemma 2 text/code retrieval through the existing local adapter, resolve its context/terms discrepancies and measure the comparison's proposed gate before changing the model job map or defaults (E1/E2).
 - [ ] Implement and verify the planned durable recipe and shared commands for existing ImageViewer edits, including restart/reopen and UI-versus-command export equivalence, before adding broader creative-editor features (C1/C2).
+
+## Nemotron Bolt E4B trial and model-proposal records (queued v2.16.0)
+
+- [x] Compare Humanizer, Handwired, Nemotron 3.5 (Super VL, Bolt 74B-A9B, Bolt E4B) and DeepSeek V4.1-Flash-1017 against Nexus ([comparison](releases/v2/v2.16/comparisons/v2.16.0-comparison-humanizer-handwired-nemotron-deepseek.md), 2026-10-20; corrected 2026-10-21 for the v2.14.1 Humanizer and Handwired record).
+- [x] Plan the adoption: five phases, 26 tasks; six review lenses, 21 findings applied; four owner decisions recorded ([plan](releases/v2/v2.16/plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), 2026-10-21).
+- [ ] Phase 1: preregister E4B gates; record Super VL, DeepSeek and Humanizer decisions; defer Bolt 74B-A9B (no 24 GB host).
+- [ ] Phase 2: E4B tag, license and tool-call probe (from 2026-10-23; tag window closes 2026-11-06).
+- [ ] Phase 3: golden runner `num_gpu`; E4B fit and golden-task A/B against `lfm2.5:2.6b` on the cpu and sub-6 GB slots.
+- [ ] Phase 4: admit E4B to each passing slot, or record the decline.
+- [ ] Phase 5: final phase, recorded VS Code extension run, and publication.
 
 ## Legacy known-gaps triage (queued v2.15.0)
 

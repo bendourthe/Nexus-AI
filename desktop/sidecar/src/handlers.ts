@@ -63,8 +63,6 @@ import {
   MediaSampleVideoFramesRequest,
   CodingParseDocumentStatusRequest,
   CodingParseDocumentSetEnabledRequest,
-  CodingDocumentOutlineStatusRequest,
-  CodingDocumentOutlineSetEnabledRequest,
   ModelsInstallRequest,
   ModelsRemoveRequest,
   ModelsInstallDrainRequest,
@@ -101,6 +99,7 @@ import {
   ChatExplorerMoveChatRequest,
   ChatExplorerMoveFolderRequest,
   ChatExplorerRenameChatRequest,
+  ChatExplorerSetFolderColorRequest,
   ChatExplorerRenameFolderRequest,
   ChatExplorerSearchRequest,
   ChatExplorerForkRequest,
@@ -119,6 +118,8 @@ import {
   StudioImageEditCommitRequest,
   StudioImageEditRevisionRequest,
   StudioImageEditCloseRequest,
+  StudioImageEditCheckpointsRequest,
+  StudioImageEditRestoreRequest,
   StudioImageRenderClaimRequest,
   StudioImageRenderCompleteRequest,
   StudioSessionMoveFolderRequest,
@@ -233,13 +234,6 @@ import {
   PARSE_DOCUMENT_SETTING_KEY,
   isParseDocumentEnabled,
 } from "../../../core/documents/parseDocumentEnabled.js";
-import {
-  DOCUMENT_OUTLINE_SETTING_KEY,
-  DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY,
-  isDocumentOutlineEnabled,
-  isDocumentOutlineSummariesEnabled,
-  documentOutlineEnvironmentOverrides,
-} from "../../../core/documents/documentOutlineEnabled.js";
 import {
   VIDEO2X_ENV_KEY,
   VIDEO2X_SETTING_KEY,
@@ -1739,6 +1733,10 @@ export const handlers: Record<Method, HandlerFn> = {
     (await explorerOps()).createFolder(
       ChatExplorerCreateFolderRequest.parse(params ?? {}),
     ),
+  "chat.explorer.setFolderColor": async (params) =>
+    (await explorerOps()).setFolderColor(
+      ChatExplorerSetFolderColorRequest.parse(params ?? {}),
+    ),
   "chat.explorer.renameFolder": async (params) =>
     (await explorerOps()).renameFolder(
       ChatExplorerRenameFolderRequest.parse(params ?? {}),
@@ -1888,6 +1886,10 @@ export const handlers: Record<Method, HandlerFn> = {
     (await imageEditOps(ctx)).revision(StudioImageEditRevisionRequest.parse(params ?? {})),
   "studio.image.edit.close": async (params, ctx) =>
     (await imageEditOps(ctx)).close(StudioImageEditCloseRequest.parse(params ?? {})),
+  "studio.image.edit.checkpoints": async (params, ctx) =>
+    (await imageEditOps(ctx)).checkpoints(StudioImageEditCheckpointsRequest.parse(params ?? {})),
+  "studio.image.edit.restore": async (params, ctx) =>
+    (await imageEditOps(ctx)).restore(StudioImageEditRestoreRequest.parse(params ?? {})),
   // v2.13.0 Phase 6: the running renderer claims and answers render requests.
   "studio.image.render.claim": async (params) => {
     StudioImageRenderClaimRequest.parse(params ?? {});
@@ -2344,36 +2346,6 @@ export const handlers: Record<Method, HandlerFn> = {
     const req = CodingParseDocumentSetEnabledRequest.parse(params ?? {});
     await resolveSettings(ctx).set(PARSE_DOCUMENT_SETTING_KEY, req.enabled);
     return { enabled: req.enabled };
-  },
-  "coding.documentOutline.status": async (params, ctx) => {
-    CodingDocumentOutlineStatusRequest.parse(params ?? {});
-    const settings = resolveSettings(ctx);
-    const storedValue = await settings.get<boolean>(DOCUMENT_OUTLINE_SETTING_KEY);
-    const enabled = isDocumentOutlineEnabled({ settingsValue: storedValue });
-    const summariesEnabled = isDocumentOutlineSummariesEnabled({
-      settingsValue: await settings.get<boolean>(DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY),
-      outlineEnabled: enabled,
-    });
-    const environmentOverrides = documentOutlineEnvironmentOverrides();
-    return {
-      enabled,
-      summariesEnabled,
-      ...(environmentOverrides.enabled ? { storedEnabled: isDocumentOutlineEnabled({ env: {}, settingsValue: storedValue }) } : {}),
-      ...(environmentOverrides.enabled || environmentOverrides.summariesEnabled ? { environmentOverrides } : {}),
-    };
-  },
-  "coding.documentOutline.setEnabled": async (params, ctx) => {
-    const req = CodingDocumentOutlineSetEnabledRequest.parse(params ?? {});
-    const settings = resolveSettings(ctx);
-    await settings.set(DOCUMENT_OUTLINE_SETTING_KEY, req.enabled);
-    if (req.summariesEnabled !== undefined) {
-      await settings.set(DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY, req.summariesEnabled);
-    }
-    const summariesEnabled = isDocumentOutlineSummariesEnabled({
-      settingsValue: await settings.get<boolean>(DOCUMENT_OUTLINE_SUMMARIES_SETTING_KEY),
-      outlineEnabled: req.enabled,
-    });
-    return { enabled: req.enabled, summariesEnabled };
   },
 };
 

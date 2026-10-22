@@ -1,0 +1,85 @@
+{
+  "utc": "2026-10-22T14:02:03.700324+00:00",
+  "records": [
+    {
+      "minor": "v2.12",
+      "plan": "docs/releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md",
+      "nonce": "df0e8ed93e0f0e998e5426deb68f8d5f",
+      "start_head": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
+      "record_sha256": "252674a2341d42ccc1be49bdfac5aa8ada522480e76e86e78860ac19b6a1b78c",
+      "signature_and_binding": "verified",
+      "source_branch": "feat/v2.12-outline-continuation",
+      "tag": "v2.12.1",
+      "classes": [
+        "archive-minor"
+      ],
+      "capture_sha256": "776a2ffcfab924c0c80ef8f9e60ca223019c4d5ed70f375148ff9171a0fe5aab",
+      "register_refusals": [],
+      "plan_refusals": [],
+      "precommit_dry_run": {
+        "exit_code": 3,
+        "stdout": "REFUSED: dirty-worktree (commit or stash first; rollback needs a clean tree)\r\n",
+        "stderr": "notice: residual-reference docs/archives/v2/v2.14/development/v2.14.1-gap-reconciliation.md count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.14/development/v2.14.2-last-phase-evidence.md count=1 (preserved)\r\nnotice: residual-reference docs/handbooks/handbooks.json count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/evidence/phase-7-ci-profile-before.json count=17 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/evidence/phase-7-ci-profile-progress-attestation.json count=11 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/evidence/phase-7-cycle-1-terminal-attestation.json count=2 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/evidence/phase-7-deep-inputs.json count=38 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/evidence/phase-7-deep-terminal-inputs.json count=101 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-final-c5673074/retention.json count=21 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/evidence/phase-7-handbooks/cycle1-initial-c4ef3396/retention.json count=16 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/evidence/phase-7-handbooks/source-review.json count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/evidence/phase-7-layout-scan.json count=66 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/evidence/phase-7-prepared-candidate-progress-attestation.json count=8 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/evidence/phase-7-root-candidate-inputs.json count=218 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/development/phase-7-layout-scan.md count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.12/docs-cleanup-report.md count=17 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md count=2 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md count=8 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.0-last-phase-evidence.md count=2 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.0-ledger-conversion-decisions.md count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.0-ledger-conversion.md count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.1-ci-contract-review.md count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.4-final-handbook-document-outline.json count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.4-final-handbooks-check.json count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.4-final-handbooks-verified.json count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.4-outline-retirement-handbook.json count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.4-v212-consolidation-evidence.md count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/docs-cleanup-report.md count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/plans/v2.15.0-legacy-known-gaps-triage.md count=4 (preserved)\r\nnotice: residual-reference tests/fixtures/known-gaps/converted-discovery.json count=2 (preserved)\r\nnotice: residual-reference tests/fixtures/known-gaps/discovery.json count=1 (preserved)\r\nnotice: residual-reference tests/fixtures/known-gaps/expected/docs/v2/v2.12/known-gaps.md count=1 (preserved)\r\n",
+        "command": [
+          "python",
+          "-I",
+          "C:/nh-checker/scripts/minor_close.py",
+          "archive",
+          "--minor",
+          "v2.12",
+          "--plan",
+          "C:\\nx-close\\docs\\releases\\v2\\v2.12\\plans\\v2.12.0-outline-promotion-readiness.md",
+          "--repo",
+          "C:\\nx-close",
+          "--session",
+          "01a15bc3-38c8-7cc0-ba5c-813feba8c119",
+          "--closing-branch",
+          "feat/v2.15-archive-readiness",
+          "--link-checker",
+          "C:/nh-checker/catalog/skills/code-cleanup/docs-layout-refactor/scripts/link-baseline.py",
+          "--dry-run"
+        ]
+      }
+    },
+    {
+      "minor": "v2.13",
+      "plan": "docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md",
+      "nonce": "2540132e682cee7b793b76e8837773a2",
+      "start_head": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
+      "record_sha256": "fe51868c8dc39fb1c1cb837514697d1acc4234079d891bcc7afb029d120e475d",
+      "signature_and_binding": "verified",
+      "source_branch": "feat/v2.13-craft-retrieval",
+      "tag": "v2.12.1",
+      "classes": [
+        "archive-minor"
+      ],
+      "capture_sha256": "33c116f763554942b28c7a81b00a5ee8658f572a7c01bcee7443b07393222bbd",
+      "register_refusals": [],
+      "plan_refusals": [],
+      "precommit_dry_run": {
+        "exit_code": 3,
+        "stdout": "REFUSED: dirty-worktree (commit or stash first; rollback needs a clean tree)\r\n",
+        "stderr": "notice: residual-reference .gitattributes count=1 (preserved)\r\nnotice: residual-reference .github/workflows/ci.yml count=1 (preserved)\r\nnotice: residual-reference .github/workflows/release.yml count=1 (preserved)\r\nnotice: residual-reference desktop/sidecar/src/controlSurface/imageEditRoutes.ts count=1 (preserved)\r\nnotice: residual-reference desktop/sidecar/src/studio/imageEditRuntime.ts count=1 (preserved)\r\nnotice: residual-reference desktop/sidecar/src/studio/imageRenderBridge.ts count=1 (preserved)\r\nnotice: residual-reference desktop/src/shared/studio/useImageRenderBridge.ts count=1 (preserved)\r\nnotice: residual-reference desktop/tests/ImageEditPersistence.test.tsx count=1 (preserved)\r\nnotice: residual-reference docs/DEVLOG.md count=3 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.14/comparisons/v2.14.0-comparison-airllm-digup-mimic-personaplex.md count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.14/comparisons/v2.14.0-comparison-lfm2.5-24b-a2b.md count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.14/development/handbook-atlas.json count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.14/development/handbook-document-outline.json count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.14/development/handbook-generation-recovery.json count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.14/development/handbook-installer-runtime.json count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.14/development/handbook-media-runtime.json count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.14/development/handbook-transcript-and-workspaces.json count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.14/development/v2.14.1-gap-reconciliation.md count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.12/development/evidence/phase-7-root-candidate-inputs.json count=6 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.13/development/embedding-eval.md count=3 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.13/development/evidence/handbook-atlas.json count=3 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.13/development/evidence/handbook-document-outline.json count=3 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.13/development/evidence/handbook-generation-recovery.json count=3 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.13/development/evidence/handbook-installer-runtime.json count=3 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.13/development/evidence/handbook-media-runtime.json count=3 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.13/development/evidence/handbook-transcript-and-workspaces.json count=3 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.13/development/v2.13.0-last-phase-evidence.md count=3 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.13/docs-cleanup-report.md count=1 (preserved)\r\nnotice: residual-reference docs/archives/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md count=4 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/handbook-atlas.json count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/handbook-document-outline.json count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/handbook-generation-recovery.json count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/handbook-installer-runtime.json count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/handbook-media-runtime.json count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/handbook-transcript-and-workspaces.json count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15-active-gap-source-audit.md count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15-closeout-first-repairs-review.md count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md count=2 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.0-last-phase-evidence.md count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/development/v2.15.4-carry-forward-manifest.json count=2 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/docs-cleanup-report.md count=1 (preserved)\r\nnotice: residual-reference docs/releases/v2/v2.15/known-gaps.md count=1 (preserved)\r\n",
+        "command": [
+          "python",
+          "-I",
+          "C:/nh-checker/scripts/minor_close.py",
+          "archive",
+          "--minor",
+          "v2.13",
+          "--plan",
+          "C:\\nx-close\\docs\\releases\\v2\\v2.13\\plans\\v2.13.0-adoption-craft-editors-embeddinggemma-2.md",
+          "--repo",
+          "C:\\nx-close",
+          "--session",
+          "01a15bc3-38c8-7cc0-ba5c-813feba8c119",
+          "--closing-branch",
+          "feat/v2.15-archive-readiness",
+          "--link-checker",
+          "C:/nh-checker/catalog/skills/code-cleanup/docs-layout-refactor/scripts/link-baseline.py",
+          "--dry-run"
+        ]
+      }
+    }
+  ]
+}

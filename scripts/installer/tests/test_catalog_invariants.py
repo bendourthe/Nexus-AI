@@ -680,7 +680,9 @@ class TestQwen38FamilyGuard:
             "QWEN38_ADMITTED_IDS",
             frozenset({"qwen3.8:27b"}),
         )
-        assert validate_catalog(_qwen_entry("qwen3.8:27b", "ollama://qwen3.8:27b")) == []
+        assert (
+            validate_catalog(_qwen_entry("qwen3.8:27b", "ollama://qwen3.8:27b")) == []
+        )
 
     def test_shipped_catalog_strings_do_not_match(self) -> None:
         catalog = json.loads(default_catalog_path().read_text(encoding="utf-8"))
@@ -699,7 +701,9 @@ class TestQwen38FamilyGuard:
 
     def test_admitted_ids_are_mirrored_in_the_living_bar(self) -> None:
         root = default_catalog_path().parents[2]
-        bar = (root / "docs" / "reference" / "model-acceptance.md").read_text(encoding="utf-8")
+        bar = (root / "docs" / "reference" / "model-acceptance.md").read_text(
+            encoding="utf-8"
+        )
         assert (root / "docs" / "reference" / "model-acceptance.md").is_file()
         for admitted in QWEN38_ADMITTED_IDS:
             assert admitted in bar

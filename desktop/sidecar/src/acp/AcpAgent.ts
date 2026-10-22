@@ -167,7 +167,7 @@ export class AcpAgent {
         confirm,
         documentParser: opts.documentParser,
         parseDocumentEnabled: opts.parseDocumentEnabled,
-        outlineContextTokens: () => loadedContext(this._activeModel),
+        documentContextTokens: () => loadedContext(this._activeModel),
       });
     this._tools = wrapBlocked(guarded);
   }

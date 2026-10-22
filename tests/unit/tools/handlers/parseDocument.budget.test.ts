@@ -75,7 +75,7 @@ describe("parse_document budget parity across channels", () => {
     const headless = createHeadlessTools({
       parseDocumentEnabled: true,
       documentParser: parser,
-      outlineContextTokens: () => WINDOW,
+      documentContextTokens: () => WINDOW,
     }).find((t) => t.name === "parse_document");
     const sidecar = await headless?.execute({ path: "scan.pdf" }, { workdir, workspaceRoots: [workdir], usedTokens: used });
     expect(sidecar?.output).toBe(extension.output);

@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-22T05:52:31.321881+00:00",
+  "old_sha256": "bbd1863ece314addd28f5c7d3c2caf304a6f4dbaefc37f9c55daa03117dd486b",
+  "new_sha256": "837fad0ad7d9fd6544cdc02b7002830554ad9c0a204a605693e2db2438b390d6",
+  "independent_receipt_sha256": "fbf824fffb78abf7f09e47733766ed265e9914ebe99350ecabad9a073fe0b080",
+  "all7runtime_pins": {
+    "approval_binding.py": "837fad0ad7d9fd6544cdc02b7002830554ad9c0a204a605693e2db2438b390d6",
+    "approval_page.py": "244464d8a9929b25c5bc89ed7df28dd6efb782bf2dd5ded945eed2de3485b42f",
+    "check_plan_completion.py": "db10ccfe1ae04dbee66203152db4f52805d55acc20cd64905d9e22d49ff74eec",
+    "cleanup_merged.py": "8116f67beeac2033f82d3f47689378447117f529121100f126a44cf84674b572",
+    "completion_minor.py": "ea48a449fd7d020ebaff2426f4b9b320a4c0ae9b648ce7a318ef442b56eb99e9",
+    "minor_close.py": "893e53af6ac68e46dfd193a33c1528cf37cd8d49cd1be07baeec147f5110ee57",
+    "repo_host.py": "dfeec69940715ad782a0885a6426214e2bce13c9d33ad41ecc6975a23f3147a7"
+  },
+  "protected_capture_round_main_and_v13_records_unchanged": true,
+  "actual_approval_state_written_by_adoption": false
+}
