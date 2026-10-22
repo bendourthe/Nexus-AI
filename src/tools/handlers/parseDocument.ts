@@ -37,9 +37,7 @@ import type { ToolHandler, ToolResult } from "../types.js";
 import { matchesSecretPath } from "../../../modules/coding/utils/secretPaths.js";
 import { redactSecrets } from "../../../core/observability/redactSecrets.js";
 import { resolveInsideWorkspace, workspaceRoot } from "./pathGuard.js";
-import { resolveEffectiveContextTokens } from "../../../modules/coding/documents/DocumentOutlineTools.js";
-import { sizeParsedDocument } from "../../../modules/coding/runtime/outputBudget.js";
-import { usedTokensParam } from "./documentOutline.js";
+import { sizeParsedDocument, resolveEffectiveContextTokens, usedTokensParam } from "../../../modules/coding/runtime/outputBudget.js";
 
 /** What the tool needs back from a parse. Mirrors `OcrParseResult` in core. */
 export interface ParsedDocumentResult {

@@ -18,6 +18,23 @@ describe("ChatExplorerStore", () => {
   });
 
   describe("folder CRUD", () => {
+    it("sets and clears folder color while rejecting invalid colors and missing folders", () => {
+      const folder = store.createFolder({ parentId: null, name: "Project", icon: "folder" });
+      const { updatedAt, ...unchanged } = folder;
+      const updated = store.setFolderColor(folder.id, "#9b5de5");
+      expect(updated).toMatchObject({ ...unchanged, color: "#9b5de5" });
+      expect(updated.updatedAt).toBeGreaterThanOrEqual(updatedAt);
+      expect(store.getFolder(folder.id)?.color).toBe("#9b5de5");
+      expect(store.setFolderColor(folder.id, "#abc").color).toBe("#abc");
+      for (const invalid of ["red", "", "#abcd", "#12zz56", "url(example)"]) {
+        expect(() => store.setFolderColor(folder.id, invalid)).toThrow("folder color");
+        expect(store.getFolder(folder.id)?.color).toBe("#abc");
+      }
+      expect(() => store.setFolderColor("missing", "#abc")).toThrow("folder not found");
+      expect(store.setFolderColor(folder.id, null).color).toBeNull();
+      expect(store.getFolder(folder.id)).toMatchObject({ ...unchanged, color: null });
+    });
+
     it("creates a folder and reads it back", () => {
       const folder = store.createFolder({ parentId: null, name: "Projects" });
       expect(folder.id).toBeDefined();

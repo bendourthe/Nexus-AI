@@ -1,0 +1,12 @@
+{
+  "outcomes": [
+    "Finish the recorded triage batches with each remaining obligation preserved at its exact destination.",
+    "Retire experimental document outlines while retaining document parsing and budgets.",
+    "Persist folder colors and recover image edit history from durable checkpoints.",
+    "Verify the historical releases and prepare the three minors for archive preflight."
+  ],
+  "parallel": {
+    "checked": true,
+    "plans": []
+  }
+}

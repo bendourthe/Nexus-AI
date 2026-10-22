@@ -1,0 +1,85 @@
+{
+  "findings": [],
+  "candidate": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-ide-empty-lines-fix-u2b34fx_\\scripts\\approval_binding.py",
+  "candidate_sha256": "837fad0ad7d9fd6544cdc02b7002830554ad9c0a204a605693e2db2438b390d6",
+  "baseline_live_sha256": "bbd1863ece314addd28f5c7d3c2caf304a6f4dbaefc37f9c55daa03117dd486b",
+  "patch": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-ide-empty-lines-fix-u2b34fx_\\approval-binding-empty-lines.patch",
+  "patch_sha256": "001b595f861f27981aebfed8c919bd4f354f51e0b46a231d3dd62b0c7cee4131",
+  "source_freeze": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-ide-empty-lines-fix-u2b34fx_\\source-freeze-v2.json",
+  "source_freeze_sha256": "819b5e703e01c75a0a37b5bdb65287343616178ecb1447dc6584c64d285e2e92",
+  "source_sha256": {
+    "approval_binding.py": "837fad0ad7d9fd6544cdc02b7002830554ad9c0a204a605693e2db2438b390d6",
+    "approval_page.py": "244464d8a9929b25c5bc89ed7df28dd6efb782bf2dd5ded945eed2de3485b42f",
+    "check_plan_completion.py": "db10ccfe1ae04dbee66203152db4f52805d55acc20cd64905d9e22d49ff74eec",
+    "cleanup_merged.py": "8116f67beeac2033f82d3f47689378447117f529121100f126a44cf84674b572",
+    "completion_minor.py": "ea48a449fd7d020ebaff2426f4b9b320a4c0ae9b648ce7a318ef442b56eb99e9",
+    "minor_close.py": "893e53af6ac68e46dfd193a33c1528cf37cd8d49cd1be07baeec147f5110ee57",
+    "repo_host.py": "dfeec69940715ad782a0885a6426214e2bce13c9d33ad41ecc6975a23f3147a7"
+  },
+  "test_sha256": {
+    "test_empty_trailing_lines.py": "379c33bbde25444fd8b69bc9d8a587adeea7a1bfe3cac5001affcdda1a1ace44",
+    "test_strict14_private.py": "ca83dfb6eded310359c66af4e5b9ca46e082ba917495e72e3e79f97cfc4caff5",
+    "test_one_plan_envelope_private.py": "f71356c468409733dc5788d09e18365ff996641a96abd3434428f635a539f8e7",
+    "test_two_lf_native_create_v2.py": "26d8509a8bd77d3d780960dfe6efce3fbea57704a320d61b0a9e7f54ef8e79f3"
+  },
+  "source_diff": "Exactly one byte: terminal request-envelope regex quantifier ? becomes *. All six siblings byte-identical final v3. No page, signing, start-head, scope, capture-event digest, provenance or claim code changes.",
+  "independent_results": {
+    "initial": "49 passed in56.68s, one new harness-only KeyError after successful isolated create; original frozen output retained",
+    "targeted": "Corrected new test passed in6.99s; only changed assertion computes native pending page canonical SHA256, no assertion removed",
+    "combined_final_coverage": 50,
+    "xml": [
+      {
+        "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-empty-lf-independent-s3i5vm9d\\independent.junit.xml",
+        "sha256": "82afe00abc419ac5ee153fc7161eeec7ccd3be8be3cea7f4573bf85dffffe752",
+        "suites": [
+          {
+            "name": "pytest",
+            "errors": "0",
+            "failures": "1",
+            "skipped": "0",
+            "tests": "50",
+            "time": "56.633",
+            "timestamp": "2026-10-21T22:48:42.438302-07:00",
+            "hostname": "ALIENWARE-WIN"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-empty-lf-targeted-independent-_jm2zudb\\independent.junit.xml",
+        "sha256": "de126881a502ad4da2f70d3fa897b6c5136a7d3b2a11fede9420dfab8ba3dcdb",
+        "suites": [
+          {
+            "name": "pytest",
+            "errors": "0",
+            "failures": "0",
+            "skipped": "0",
+            "tests": "1",
+            "time": "6.945",
+            "timestamp": "2026-10-21T22:50:12.053643-07:00",
+            "hostname": "ALIENWARE-WIN"
+          }
+        ]
+      }
+    ]
+  },
+  "coverage": [
+    "0,1,2,3,16 trailing empty LF and CRLF",
+    "32768-byte existing size cap;32769 refusal",
+    "request-size cap and strict headers",
+    "space/tab-only lines, bare CR, prose, Goal, second approval, extra header and fences refused",
+    "unchanged14 strict capture/context cases and8 one-plan cases",
+    "actual isolated native two-LF render/capture/create with whole captured-message digest, correct context, unchanged pending-page SHA, fresh start_head, once-only claim and replay refusal"
+  ],
+  "reviewed_boundaries": [
+    "fullmatch exact observed IDE frame remains",
+    "single non-CR/LF request only",
+    "only empty trailing newline sequences added",
+    "whole captured-message digest and canonical transcript/session/time/root/fullaccess context unchanged",
+    "native event availability and consumption unchanged",
+    "no fabricated actual capture or repeat owner approval required for this formatting-only refusal"
+  ],
+  "actual_state_operations": false,
+  "actual_record_capture_pending_read_or_write": false,
+  "actual_source_or_git_change": false,
+  "new_files": "private qualification outputs and this review receipt only"
+}

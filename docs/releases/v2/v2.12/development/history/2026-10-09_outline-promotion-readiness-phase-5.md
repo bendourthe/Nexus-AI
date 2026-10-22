@@ -1,6 +1,6 @@
 # v2.12.0 Phase 5: Desktop Settings switches
 
-**Date**: 2026-10-09. **Plan**: [outline-promotion-readiness](../../../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), T015-T016. **State**: verified; recorded in the single local Phase 5 commit containing this history.
+**Date**: 2026-10-09. **Plan**: [outline-promotion-readiness](../../plans/v2.12.0-outline-promotion-readiness.md), T015-T016. **State**: verified; recorded in the single local Phase 5 commit containing this history.
 
 ## Outcome
 

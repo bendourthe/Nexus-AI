@@ -1,0 +1,72 @@
+{
+  "status": "PASS_INDEPENDENT_TEST_CORRECTION_REVIEW",
+  "findings": [],
+  "at_utc": "2026-10-22T15:02:05.805886+00:00",
+  "HEAD": "40a5a9e17e5188f9a67ce29550f478ae9ec7e292",
+  "test": {
+    "path": "tests/unit/core/generations/ImageEditRecipeStore.test.ts",
+    "raw_sha256": "7db871f28dcdd72f54d7e7acf15c794e51dc4a0e4a8b5ec1c508b4e90a14d725",
+    "lf_sha256": "ae1b22766c5c7447360942026cd1b25dab18ef4cbfea9fc687d570d91f1e94e0",
+    "previous_LF_sha256": "3a2282043895647e0a60261f34600480d1245205a2b22b450544abce3494cbe0",
+    "existing_tests_unchanged_after_removing_exact_import_helper_and_appended_describe_delta": true,
+    "actual_diff_files": [
+      "tests/unit/core/generations/ImageEditRecipeStore.test.ts"
+    ],
+    "staged_diff_empty": true
+  },
+  "independent_run": {
+    "command": "node node_modules/vitest/vitest.mjs run --config configs/vitest.config.ts tests/unit/core/generations/ImageEditRecipeStore.test.ts --reporter=dot",
+    "cwd": "C:\\nx-close",
+    "passed": 37,
+    "failed": 0,
+    "duration_seconds": 1.31,
+    "test_seconds": 0.977,
+    "vitest": "4.1.11",
+    "coverage_requested": false,
+    "global_coverage_output_not_rewritten_by_reviewer": true,
+    "warning": "Existing future Vite native-loader config warning; no assertion failed"
+  },
+  "meaningful_proofs": [
+    "Actual production ImageEditRecipeStore and StudioSessionStore use explicit temporary sessions.db and PNG under mkdtemp; no real user home",
+    "Complete approval-time commands/cursor/redo survive commit branching, close/reopen and restore at currentRevision+1; redo reproduces text mark and immutable snapshot/originalPNG are checked",
+    "Revision-zero capture does not alter live recipe; successful attempt snapshot is immutable and later distinct attempt captures current edits",
+    "Invalid/bounded approval metadata creates no checkpoint, list is50 bounded rows with exact pagination and foreignturn cursor isolation",
+    "Wrong caller/run/grant/session checkpoint and stale revision refuse while live state and metadata remain unchanged",
+    "Source byte changes refuse capture/list/restore and do not mutate stored recipe/checkpoint",
+    "Post-write authorization/source changes throw and real transaction rolls recipe back",
+    "Owner transaction aborted after checkpoint+recipe writes rolls both back",
+    "Actual SQLite trigger failure maps STORAGE_UNAVAILABLE, creates no snapshot, and retry captures subsequently changed recipe",
+    "Direct SQLite checkpoint corruption is rejected without replacing current edits or originalPNG"
+  ],
+  "no_weakening": {
+    "existing_assertions_removed": false,
+    "production_mocked": false,
+    "coverage_threshold_exclusion_or_workflow_config_changed": false,
+    "production_source_changed": false,
+    "test_only_import_and_helper_additions": true
+  },
+  "coverage_context": {
+    "retained_failed_report": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-pr127-coverage-diff-failure\\local-report.md",
+    "retained_failed_report_sha256": "3db11c28c7a36ed9753f47a10868f78fc2868f06372ba00dbd9c6c591d2aec3f",
+    "root_diff_cover_failure": "Captured previous101changed/60missing/40%; new root module fills previously desktop-only checkpoint lines",
+    "focused_coverage": "Maker reported class96.61%lines/91.86%branches, isolated run exit1 due unchanged global thresholds; reviewer did not rerun or certify global coverage",
+    "mutant_sensitivity": "Parent reports maker in-memory redo-tail mutant fails durable-reopen regression; not independently rerun in this receipt",
+    "authoritative_full_root_coverage": "Root running separately; reviewer did not poll/overwrite/repeat it",
+    "unchanged_diff_cover_gate": "Root must run actual unchanged diff-cover after authoritative full coverage; no pass inferred from37 focused tests"
+  },
+  "production_and_contract_raw_sha256": {
+    "core/generations/ImageEditRecipeStore.ts": "592d952ddc7624d425221ef2fe938c5b7f97ed37b05230bde2bc14777a7f5c94",
+    "core/generations/StudioSessionStore.ts": "c61556b54ee07eec633f0cd585a9920be01986453b6d7ec0aeec79852432f519",
+    "core/image/ImageEditRecipe.ts": "a81dbd14629c7ae687de9d89e0d65310cb89d9afeca717e7ae1d79faf6f26fa0",
+    "configs/vitest.config.ts": "1bfa09bc902fb1846ef898a916fc0403eb60d98651be0530607aa5f0d9517a65",
+    "package.json": "87b4a1df611c9b2954e1515681172feea51c110caf31cb2b31dc05b361d01105",
+    ".github/workflows/ci.yml": "194453c42817b60f4454ae3f6b0bf23ccfd9589f35c936eac137cdddbf065137",
+    ".github/workflows/release.yml": "29a3a4e3ecf9990f0f485e3bf03efdfc841faae8a4f0358df2c5e931df55586e"
+  },
+  "no_source_git_records_publication_writes": true,
+  "limits": [
+    "This corrects root-suite placement of regression evidence, not production behavior",
+    "No full suite, diff-cover, hosted CI or repush success certified",
+    "AskInbox/desktop grant lifecycle and packaged/native surfaces retain their separately scoped evidence; these store tests do not replace them"
+  ]
+}

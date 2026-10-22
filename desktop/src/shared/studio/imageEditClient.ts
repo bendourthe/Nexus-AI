@@ -56,6 +56,19 @@ export interface DurableImageEdit {
   commit(grantId: string, action: unknown, expectedRevision: number): Promise<ImageEditRecipe>;
   revision(grantId: string): Promise<number>;
   close(grantId: string): Promise<void>;
+  /** Optional for older hosts: absence never grants restore authority. */
+  checkpoints?(grantId: string, beforeId?: string): Promise<ImageCheckpointSummary[]>;
+  restore?(grantId: string, checkpointId: string, expectedRevision: number): Promise<ImageEditRecipe>;
+}
+
+export interface ImageCheckpointSummary {
+  readonly id: string;
+  readonly createdAt: number;
+  readonly callerId: string;
+  readonly runId: string;
+  readonly revision: number;
+  readonly cursor: number;
+  readonly commands: number;
 }
 
 export interface StudioTurnRef {
@@ -70,6 +83,10 @@ export function createDurableImageEdit(turn: StudioTurnRef): DurableImageEdit {
       (await call<{ recipe: ImageEditRecipe }>("studio.image.edit.commit", { grantId, action, expectedRevision })).recipe,
     revision: async (grantId) =>
       (await call<{ revision: number }>("studio.image.edit.revision", { grantId })).revision,
+    checkpoints: async (grantId, beforeId) =>
+      (await call<{ checkpoints: ImageCheckpointSummary[] }>("studio.image.edit.checkpoints", { grantId, ...(beforeId ? { beforeId } : {}) })).checkpoints,
+    restore: async (grantId, checkpointId, expectedRevision) =>
+      (await call<{ recipe: ImageEditRecipe }>("studio.image.edit.restore", { grantId, checkpointId, expectedRevision })).recipe,
     close: async (grantId) => {
       await call("studio.image.edit.close", { grantId });
     },

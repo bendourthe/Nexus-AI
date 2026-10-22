@@ -36,6 +36,8 @@ export type ExplorerResult<T, Mode extends "sync" | "async"> = Mode extends "syn
 export interface ChatExplorerClient<Mode extends "sync" | "async"> {
   listTree(): ExplorerResult<FolderTreeNode, Mode>;
   createFolder(input: CreateFolderInput): ExplorerResult<Folder, Mode>;
+  /** Present when this explorer can persist folder colors. Null clears the color. */
+  setFolderColor?(id: string, color: string | null): ExplorerResult<Folder, Mode>;
   renameFolder(id: string, name: string): ExplorerResult<Folder, Mode>;
   moveFolder(id: string, newParentId: string | null): ExplorerResult<Folder, Mode>;
   deleteFolder(id: string): ExplorerResult<void, Mode>;
@@ -155,6 +157,17 @@ export class InMemoryChatExplorerClient implements SyncChatExplorerClient {
     };
     this.folders.set(folder.id, folder);
     return folder;
+  }
+
+  setFolderColor(id: string, color: string | null): Folder {
+    if (color !== null && (typeof color !== "string" || !/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(color))) {
+      throw new Error("folder color must be a three- or six-digit hex color or null");
+    }
+    const folder = this.folders.get(id);
+    if (!folder) throw new Error(`folder not found: ${id}`);
+    const updated: Folder = { ...folder, color, updatedAt: Date.now() };
+    this.folders.set(id, updated);
+    return updated;
   }
 
   renameFolder(id: string, name: string): Folder {

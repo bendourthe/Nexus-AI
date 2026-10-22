@@ -33,6 +33,7 @@ import type {
 export interface IpcChatExplorerClient {
   tree(): Promise<FolderTreeNode>;
   createFolder(parentId: string | null, name: string): Promise<Folder>;
+  setFolderColor(id: string, color: string | null): Promise<Folder>;
   renameFolder(id: string, name: string): Promise<Folder>;
   moveFolder(id: string, parentId: string | null): Promise<Folder>;
   deleteFolder(id: string): Promise<void>;
@@ -92,6 +93,7 @@ export function createIpcChatExplorerClient(): IpcChatExplorerClient {
     },
     createFolder: (parentId, name) =>
       call<Folder>("chat.explorer.createFolder", { parentId, name }),
+    setFolderColor: (id, color) => call<Folder>("chat.explorer.setFolderColor", { id, color }),
     renameFolder: (id, name) => call<Folder>("chat.explorer.renameFolder", { id, name }),
     moveFolder: (id, parentId) => call<Folder>("chat.explorer.moveFolder", { id, parentId }),
     async deleteFolder(id) {
@@ -235,14 +237,18 @@ export type ExplorerAdapter = AsyncChatExplorerClient &
 
 export function createExplorerAdapter(ipc: IpcChatExplorerClient): ExplorerAdapter {
   let cachedTree: FolderTreeNode | null = null;
+  let cacheGeneration = 0;
 
   const refreshTree = async (): Promise<FolderTreeNode> => {
+    const generation = cacheGeneration;
     const tree = await ipc.tree();
+    if (generation !== cacheGeneration) return cachedTree ?? refreshTree();
     cachedTree = tree;
     return tree;
   };
   const ensureTree = async (): Promise<FolderTreeNode> => cachedTree ?? refreshTree();
   const invalidate = <T>(value: T): T => {
+    cacheGeneration += 1;
     cachedTree = null;
     return value;
   };
@@ -250,23 +256,24 @@ export function createExplorerAdapter(ipc: IpcChatExplorerClient): ExplorerAdapt
   return {
     listTree: () => refreshTree(),
     createFolder: async (input) => invalidate(await ipc.createFolder(input.parentId, input.name)),
+    setFolderColor: async (id, color) => invalidate(await ipc.setFolderColor(id, color)),
     renameFolder: async (id, name) => invalidate(await ipc.renameFolder(id, name)),
     moveFolder: async (id, newParentId) => invalidate(await ipc.moveFolder(id, newParentId)),
     deleteFolder: async (id) => {
       await ipc.deleteFolder(id);
-      cachedTree = null;
+      invalidate(undefined);
     },
     createChat: async (input) => invalidate(await ipc.createChat(input)),
     renameChat: async (id, title, byUser) => invalidate(await ipc.renameChat(id, title, byUser)),
     moveChat: async (id, newFolderId) => invalidate(await ipc.moveChat(id, newFolderId)),
     deleteChat: async (id) => {
       await ipc.deleteChat(id);
-      cachedTree = null;
+      invalidate(undefined);
     },
     archiveChat: async (id) => {
       if (!ipc.archiveChat) throw new Error("Archive is unavailable.");
       await ipc.archiveChat(id);
-      cachedTree = null;
+      invalidate(undefined);
     },
     getFolder: async (id) => findFolderIn(await ensureTree(), id),
     getChat: async (id) => findChatIn(await ensureTree(), id),

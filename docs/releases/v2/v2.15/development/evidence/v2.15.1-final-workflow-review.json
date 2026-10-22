@@ -1,0 +1,146 @@
+{
+  "status": "PASS_T417_FINAL_DELTA_REVIEW",
+  "findings": [],
+  "at_utc": "2026-10-22T14:21:04.554738+00:00",
+  "HEAD": "0cb4fc776fefdb74650391741557b098293298e0",
+  "workflow_changes": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "removed": "          baseline=\"$(node -p \"require('./docs/releases/v2/v2.13/development/embedding-eval-contract.json').baselineHead\")\"",
+      "added": "          baseline=\"$(node -e 'const fs=require(\"node:fs\");const paths=[\"docs/releases/v2/v2.13/development/embedding-eval-contract.json\",\"docs/archives/v2/v2.13/development/embedding-eval-contract.json\"].filter(p=>fs.existsSync(p));if(paths.length!==1)throw new Error(\"Expected exactly one active or archived embedding contract\");const head=JSON.parse(fs.readFileSync(paths[0],\"utf8\")).baselineHead;if(typeof head!==\"string\"||!/^[0-9a-f]{40}$/i.test(head))throw new Error(\"Embedding baselineHead must be a 40-hex commit\");process.stdout.write(head);')\"",
+      "raw_sha256": "194453c42817b60f4454ae3f6b0bf23ccfd9589f35c936eac137cdddbf065137",
+      "lf_sha256": "d395ddce7824fc0dafbf2ee625d6777caf1fedaf78d3b489b6dff5766b649568",
+      "only_this_line_changed": true
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "removed": "          baseline=\"$(node -p \"require('./docs/releases/v2/v2.13/development/embedding-eval-contract.json').baselineHead\")\"",
+      "added": "          baseline=\"$(node -e 'const fs=require(\"node:fs\");const paths=[\"docs/releases/v2/v2.13/development/embedding-eval-contract.json\",\"docs/archives/v2/v2.13/development/embedding-eval-contract.json\"].filter(p=>fs.existsSync(p));if(paths.length!==1)throw new Error(\"Expected exactly one active or archived embedding contract\");const head=JSON.parse(fs.readFileSync(paths[0],\"utf8\")).baselineHead;if(typeof head!==\"string\"||!/^[0-9a-f]{40}$/i.test(head))throw new Error(\"Embedding baselineHead must be a 40-hex commit\");process.stdout.write(head);')\"",
+      "raw_sha256": "29a3a4e3ecf9990f0f485e3bf03efdfc841faae8a4f0358df2c5e931df55586e",
+      "lf_sha256": "7cb6a71019a2b7babf0715e6e4974e0767397b7a8d59d77f24493afcd5df2975",
+      "only_this_line_changed": true
+    }
+  ],
+  "exact_private_qualified_patch": {
+    "path": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-archive-workflow-candidate-xenuo872\\workflow-contract-location.patch",
+    "raw_sha256": "be89217305ae882e95011d6caf71a4bccacd9ba372c38d2dfc41e6d80a862bd9",
+    "matches_actual_normalized_two_line_replacements": true
+  },
+  "workflow_contracts": {
+    "events_permissions_jobs_gates_and_fetch_command_unchanged": true,
+    "one_literal_active_or_archive_contract_required": true,
+    "same_or_conflicting_duplicates_refused": true,
+    "malformed_missing_or_non40hex_baseline_refused": true,
+    "baseline_stdout_only_valid40hex": true,
+    "no_fetch_or_network_executed_by_tests": true
+  },
+  "focused_test": {
+    "path": "C:\\nx-close\\tests\\unit\\scripts\\embedding-contract-location.test.ts",
+    "raw_sha256": "3275021113801d3c457cf71be6429d1456faa51a6b18a9de037cde4fca76d216",
+    "command": "node node_modules/vitest/vitest.mjs run --config configs/vitest.config.ts tests/unit/scripts/embedding-contract-location.test.ts --reporter=dot",
+    "cwd": "C:\\nx-close",
+    "passed": 16,
+    "failed": 0,
+    "duration_seconds": 2.79,
+    "test_seconds": 1.94,
+    "vitest": "4.1.11",
+    "runner_warning": "Existing future Vite native-loader config warning; no assertion failed",
+    "actual_boundary": "Executes literal Node -e expression extracted from each real workflow against private temp filesystem; does not execute hosted workflow or git fetch"
+  },
+  "execution_map": {
+    "exactly_eight_actual_commit_fields_only": [
+      "T106",
+      "T210",
+      "T306",
+      "T413",
+      "T414",
+      "T415",
+      "T416",
+      "T417"
+    ],
+    "value": "0cb4fc776fefdb74650391741557b098293298e0",
+    "all52_acceptance_fields_preserved": true,
+    "status_metadata": {
+      "before": "Master phases 1 and 2 committed; phase 3 verified for one local merge commit; final integration and publication remain open",
+      "after": "Master phases 1-3 committed; final local qualification, integration, release and read-only readiness remain open",
+      "meaning": "Truthful phase3 completion summary; no gate waived"
+    }
+  },
+  "historical_authority": {
+    "actual_records_activated": [
+      {
+        "minor": "v2.12",
+        "signed_record_sha256": "252674a2341d42ccc1be49bdfac5aa8ada522480e76e86e78860ac19b6a1b78c",
+        "signature_and_binding": "verified as parent-observed receipt",
+        "classes": [
+          "archive-minor"
+        ],
+        "tag": "v2.12.1"
+      },
+      {
+        "minor": "v2.13",
+        "signed_record_sha256": "fe51868c8dc39fb1c1cb837514697d1acc4234079d891bcc7afb029d120e475d",
+        "signature_and_binding": "verified as parent-observed receipt",
+        "classes": [
+          "archive-minor"
+        ],
+        "tag": "v2.12.1"
+      }
+    ],
+    "attribution": "Parent native verified signed-record receipt inspected; no reviewer record load, capture, HMAC access or approval mutation",
+    "clean_preflight_outcomes": [
+      {
+        "minor": "v2.12",
+        "exit_code": 0,
+        "stdout": "WOULD ARCHIVE v2.12 docs/releases/v2/v2.12 -> docs/archives/v2/v2.12 links=70 mentions=4 files=19 residual_references=651"
+      },
+      {
+        "minor": "v2.13",
+        "exit_code": 0,
+        "stdout": "CONDITIONAL ARCHIVE READY v2.13 required-before=v2.12 docs/releases/v2/v2.13 -> docs/archives/v2/v2.13 links=20 mentions=39 files=10 residual_references=133"
+      }
+    ],
+    "scope": "Observed at clean committed0cb tree before current uncommitted phase4 changes; current dirty tree is not relabeled clean",
+    "v13_conditional_v12_first": true,
+    "archive_performed": false
+  },
+  "prior_T417": "Retained implementation/scope review and actual245+14 proof remain unchanged evidence; workflow delta introduces no new product implementation or gap disposition",
+  "open_gates": [
+    "Final phase4 local commit and pipeline/QA accounting",
+    "Owner-authorized integration publication and validated actual release",
+    "Actual release package/lock handbook metadata refresh if needed before strictly read-only finalT419",
+    "Final clean read-only readiness receipts; no actual archive/deletion authorized"
+  ],
+  "overall_goal_complete": false,
+  "no_source_git_approval_or_publication_writes": true,
+  "inputs": {
+    "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-archive-workflow-candidate-xenuo872\\workflow-contract-location.patch": {
+      "sha256": "be89217305ae882e95011d6caf71a4bccacd9ba372c38d2dfc41e6d80a862bd9",
+      "bytes": 2157
+    },
+    "C:\\nx-close\\.github\\workflows\\ci.yml": {
+      "sha256": "194453c42817b60f4454ae3f6b0bf23ccfd9589f35c936eac137cdddbf065137",
+      "bytes": 37697
+    },
+    "C:\\nx-close\\.github\\workflows\\release.yml": {
+      "sha256": "29a3a4e3ecf9990f0f485e3bf03efdfc841faae8a4f0358df2c5e931df55586e",
+      "bytes": 16319
+    },
+    "C:\\nx-close\\tests\\unit\\scripts\\embedding-contract-location.test.ts": {
+      "sha256": "3275021113801d3c457cf71be6429d1456faa51a6b18a9de037cde4fca76d216",
+      "bytes": 3474
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.1-execution-map.json": {
+      "sha256": "86bb77d0815c806ad75fac4a868c66972cbc7a6b8dcbda874f98c90a849d500f",
+      "bytes": 35477
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\evidence\\v2.15.1-historical-clean-previews.json": {
+      "sha256": "fd0f792f6b9365ce67740556a6aa247a970d6258e25f4dcc2619934564d18f33",
+      "bytes": 12666
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\evidence\\v2.15.1-historical-signed-precommit.json": {
+      "sha256": "6d41c35b988f7cc27e4266bc3c48cf5ff1d0591d40664cf4eea4dd13d90f80a7",
+      "bytes": 11511
+    }
+  }
+}

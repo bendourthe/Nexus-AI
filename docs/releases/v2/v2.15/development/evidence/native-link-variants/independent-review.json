@@ -1,0 +1,105 @@
+{
+    "status":  "PASS",
+    "findings":  [
+
+                 ],
+    "candidate_root":  "C:/Users/bdour/AppData/Local/Temp/nexus-exact-plan-variant-v3-2_0fx10t",
+    "paths":  {
+                  "v2_freeze":  "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-exact-plan-variant-work-ej8y7crm\\source-freeze-v2.json",
+                  "v3_freeze":  "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-exact-plan-variant-v3-2_0fx10t\\source-freeze.json",
+                  "v3_lifecycle_delta":  "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-exact-plan-variant-v3-2_0fx10t\\v3-lifecycle-only.diff",
+                  "v2_broad_junit":  "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-exact-variant-v2-independent-9e511fe77cbd48649886c12858478a9d\\independent.junit.xml",
+                  "v3_focused_junit":  "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-exact-variant-v3-independent-97243c15545b4e49807da002ba5713a4\\independent.junit.xml"
+              },
+    "artifact_sha256":  {
+                            "v2_freeze":  "5060c74d814a276ca9e63f1c4832d7c8af784e9e42dd9e48dc5a37b61ef6b0d3",
+                            "v3_freeze":  "0d6c2e8697afcfbb414d87443cc22f3e568c0dcd349dcf8d974aa41a79f1fada",
+                            "v3_lifecycle_delta":  "cfe0cd17eb983023ab2efeaf9ff194b59aedde6d477035f11e9e2d7cf0556ae2",
+                            "v2_broad_junit":  "3580355ab0e2f50de0eb2cd6957986bb647a76d5cb99f23139448b7d964712b8",
+                            "v3_focused_junit":  "5f78d3421a2b65e8e2c176d67c25e1917ebf2fe4fb9e80d4a31bc947533b2b7c"
+                        },
+    "final_modules_sha256":  {
+                                 "check_plan_completion.py":  "db10ccfe1ae04dbee66203152db4f52805d55acc20cd64905d9e22d49ff74eec",
+                                 "completion_minor.py":  "ea48a449fd7d020ebaff2426f4b9b320a4c0ae9b648ce7a318ef442b56eb99e9",
+                                 "minor_close.py":  "893e53af6ac68e46dfd193a33c1528cf37cd8d49cd1be07baeec147f5110ee57",
+                                 "approval_page.py":  "244464d8a9929b25c5bc89ed7df28dd6efb782bf2dd5ded945eed2de3485b42f",
+                                 "approval_binding.py":  "bbd1863ece314addd28f5c7d3c2caf304a6f4dbaefc37f9c55daa03117dd486b",
+                                 "repo_host.py":  "dfeec69940715ad782a0885a6426214e2bce13c9d33ad41ecc6975a23f3147a7",
+                                 "cleanup_merged.py":  "8116f67beeac2033f82d3f47689378447117f529121100f126a44cf84674b572"
+                             },
+    "final_tests_sha256":  {
+                               "test_exact_link_variants.py":  "a5b8723c75a852f06592c1dc315c06514ea29800c989eba3f1bbce4d08721b49",
+                               "test_exact_link_order.py":  "3e385403caadb1f17549a71fe831e6bae57cefaa141fa5d2aaac3acfb4a365bb",
+                               "test_exact_link_negative.py":  "6b2053cbc1966f1ab2167fe2aea24785db766ccc277eb637df6f050ac795000b",
+                               "test_exact_link_boundaries.py":  "ae980f5b1a02eb3db8739caa5ae5801ca1a0b306f35d12ba1f84ae840121225c",
+                               "test_post_repair_proof_races.py":  "e98ba49f551fff079d2b2ed0a9bfcc4946137b756ce72aa004e8d4804e5a77f8",
+                               "test_binary_proof_race.py":  "b9bfef941f1755cdca1d60c9122aa6e5fd184a33214dbb828908366c19ce238e",
+                               "test_variant_lifecycle.py":  "d9a6b1bb67a0cd832c7a7235e585a479f7f5d5ae74dcd8fe82393626f0151c3c"
+                           },
+    "v2_all_modules_stable":  true,
+    "v3_all_modules_stable":  true,
+    "original14_test_bytes_unchanged":  true,
+    "v3_runtime_delta_from_v2":  [
+                                     "completion_minor.py lifecycle answer-receipt shape and honest state loading",
+                                     "minor_close.py completed relocation-eligibility refusal"
+                                 ],
+    "qualification":  {
+                          "v2_broad":  {
+                                           "tests":  52,
+                                           "passed":  52,
+                                           "failures":  0,
+                                           "errors":  0,
+                                           "pytest_elapsed_seconds":  839.46,
+                                           "exit_code":  0,
+                                           "scope":  "All opted-in v2 groups, three proof races, unchanged14 and original archive compatibility"
+                                       },
+                          "v3_focused":  {
+                                             "tests":  20,
+                                             "passed":  20,
+                                             "failures":  0,
+                                             "errors":  0,
+                                             "pytest_elapsed_seconds":  244.47,
+                                             "exit_code":  0,
+                                             "scope":  "All opted-in branches, exact scope/hash/order negatives, proof preservation races and real native lifecycle block-answer"
+                                         },
+                          "reuse_reason":  "Only CM/MC lifecycle placement and strict native-answer audit validation changed; other5 modules identical; final focused suite repeats every opted-in branch. No broad assertion was weakened."
+                      },
+    "resolved_findings":  [
+                              {
+                                  "finding":  "Foreign proof dictionary drift after initial projection",
+                                  "resolution":  "Actual postrepair/precommit fulltext, HMAC binding, proof equality and authority snapshots rechecked; private races preserve external bytes and refuse before commit"
+                              },
+                              {
+                                  "finding":  "Rollback could overwrite externally edited proof input or abort on nonUTF8",
+                                  "resolution":  "Opted-in rollback checks exact preimages, preserves third bytes, catches UnicodeError, undoes moves and reports manual recovery instead of success"
+                              },
+                              {
+                                  "finding":  "Valid signed pause/block/completion or answered lifecycle record classified as tampered",
+                                  "resolution":  "Hash binding preserves lifecycle states; paired eligibility rejects paused/openblocked/completed; exact native answered-blocker receipts allowed without new operational permission"
+                              }
+                          ],
+    "strict_functions_source_identical_to_combined_baseline":  [
+                                                                   "check_plan_completion._sign",
+                                                                   "check_plan_completion._task_status",
+                                                                   "check_plan_completion.legacy_plan_hash_text",
+                                                                   "Context.plan_hash_matches",
+                                                                   "check_plan_completion.plan_hash_text",
+                                                                   "completion_minor.archived_followon_plan",
+                                                                   "completion_minor.planned_followon",
+                                                                   "completion_minor.planned_followon_copy",
+                                                                   "completion_minor.planned_followon_entry"
+                                                               ],
+    "authority_limits":  [
+                             "Both fresh genuine owner captures still required",
+                             "No arbitrary hash input or general normalization",
+                             "No schema2/task/follow-on waiver",
+                             "No foreign record writes",
+                             "v2.13 dryrun conditional before v2.12; actual order must prove completed move",
+                             "Foreign migration proof dictionary must remain unchanged"
+                         ],
+    "superseded_qualification":  "Initial v1 session34256 interrupted after private source changed; not used as qualification",
+    "actual_source_or_runtime_modified":  false,
+    "actual_ledgers_or_records_read":  false,
+    "actual_captures_or_approvals_consumed":  false,
+    "actual_archive_or_adoption":  false
+}

@@ -12,7 +12,7 @@
 import { readFileSync } from "node:fs";
 import * as path from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FolderTree } from "../src/modules/chat/FolderTree";
 import { ChatPage } from "../src/modules/chat/ChatPage";
@@ -66,6 +66,13 @@ function createIpcShapedFake(): {
       };
       folders.set(folder.id, folder);
       return folder;
+    },
+    setFolderColor: async (id, color) => {
+      const folder = folders.get(id);
+      if (!folder) throw new Error(`folder not found: ${id}`);
+      const updated: Folder = { ...folder, color, updatedAt: Date.now() };
+      folders.set(id, updated);
+      return updated;
     },
     renameFolder: async (id, name) => {
       const folder = folders.get(id);
@@ -178,6 +185,22 @@ describe("createExplorerAdapter", () => {
     expect((await Promise.resolve(adapter.getChat(created.id)))?.title).toBe("Fresh");
   });
 
+  it("discards a pre-mutation tree response arriving after the new color is cached", async () => {
+    const { fake } = createIpcShapedFake();
+    const folder = await fake.createFolder(null, "Work");
+    const oldTree = await fake.tree();
+    let finishOldRead!: (tree: FolderTreeNode) => void;
+    vi.spyOn(fake, "tree").mockImplementationOnce(() => new Promise((resolve) => { finishOldRead = resolve; }));
+    const adapter = createExplorerAdapter(fake);
+    const pending = adapter.listTree();
+    await adapter.setFolderColor!(folder.id, "#123456");
+    const current = await adapter.listTree();
+    expect(current.children[0]?.folder?.color).toBe("#123456");
+    finishOldRead(oldTree);
+    expect((await pending).children[0]?.folder?.color).toBe("#123456");
+    expect((await adapter.getFolder(folder.id))?.color).toBe("#123456");
+  });
+
   it("falls back to cached-tree search when the raw client has no search", async () => {
     const { fake } = createIpcShapedFake();
     await fake.createFolder(null, "Research");
@@ -213,6 +236,36 @@ describe("<FolderTree> with an async IPC-shaped client", () => {
       },
     };
   })();
+
+  it("persists and clears colors through async mutations and fresh tree reads", async () => {
+    const { fake } = createIpcShapedFake();
+    const folder = await fake.createFolder(null, "Color");
+    const adapter = createExplorerAdapter(fake);
+    const view = render(<FolderTree client={adapter} storageAdapter={storageAdapter} />);
+    fireEvent.contextMenu(await screen.findByTestId(`tree-row-folder-${folder.id}`));
+    fireEvent.click(await screen.findByTestId("ctx-change-color"));
+    await waitFor(() => expect(screen.getByTestId(`tree-row-folder-${folder.id}`).style.borderLeft).toBe("4px solid rgb(155, 93, 229)"));
+    expect((await adapter.getFolder(folder.id))?.color).toBe("#9b5de5");
+    view.unmount();
+    render(<FolderTree client={createExplorerAdapter(fake)} storageAdapter={storageAdapter} />);
+    fireEvent.contextMenu(await screen.findByTestId(`tree-row-folder-${folder.id}`));
+    fireEvent.click(await screen.findByTestId("ctx-clear-color"));
+    await waitFor(async () => expect((await adapter.listTree()).children[0]?.folder?.color).toBeNull());
+    await waitFor(() => expect(screen.getByTestId(`tree-row-folder-${folder.id}`).style.borderLeft).toBe("4px solid transparent"));
+  });
+
+  it("shows rejected color mutations without changing the stored or displayed color", async () => {
+    const { fake } = createIpcShapedFake();
+    const folder = await fake.createFolder(null, "Color");
+    await fake.setFolderColor(folder.id, "#123456");
+    fake.setFolderColor = async () => { throw new Error("database is read-only"); };
+    render(<FolderTree client={createExplorerAdapter(fake)} storageAdapter={storageAdapter} />);
+    fireEvent.contextMenu(await screen.findByTestId(`tree-row-folder-${folder.id}`));
+    fireEvent.click(await screen.findByTestId("ctx-change-color"));
+    expect(await screen.findByTestId("folder-tree-error")).toHaveTextContent("database is read-only");
+    expect(screen.getByTestId(`tree-row-folder-${folder.id}`).style.borderLeft).toBe("4px solid rgb(18, 52, 86)");
+    expect((await fake.tree()).children[0]?.folder?.color).toBe("#123456");
+  });
 
   it("renders the tree from the async adapter instead of throwing (P0, U7)", async () => {
     const { fake } = createIpcShapedFake();

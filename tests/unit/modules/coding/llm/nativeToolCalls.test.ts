@@ -15,11 +15,11 @@ describe("LLMStreamChunkSchema", () => {
       message: {
         role: "assistant",
         content: "",
-        tool_calls: [{ id: "call_1", function: { index: 0, name: "document_outline", arguments: { path: "a.md" } } }],
+        tool_calls: [{ id: "call_1", function: { index: 0, name: "parse_document", arguments: { path: "a.md" } } }],
       },
       done: true,
     });
-    expect(chunk.message.tool_calls).toEqual([{ id: "call_1", function: { name: "document_outline", arguments: { path: "a.md" } } }]);
+    expect(chunk.message.tool_calls).toEqual([{ id: "call_1", function: { name: "parse_document", arguments: { path: "a.md" } } }]);
   });
 });
 

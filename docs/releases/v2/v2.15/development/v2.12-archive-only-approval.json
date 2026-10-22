@@ -1,0 +1,17 @@
+{
+  "repo": "bendourthe/Nexus-AI",
+  "source_branch": "feat/v2.12-outline-continuation",
+  "target_branch": "develop",
+  "release_version": "v2.12.1",
+  "tag": "v2.12.1",
+  "classes": [
+    {
+      "class": "archive-minor"
+    }
+  ],
+  "archive_link_relocation": {
+    "moved_minor": "v2.12",
+    "affected_plan": "docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md"
+  },
+  "ratify_existing_migrations": true
+}

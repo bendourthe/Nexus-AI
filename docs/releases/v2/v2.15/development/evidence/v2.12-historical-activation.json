@@ -1,0 +1,16 @@
+{
+  "minor": "v2.12",
+  "plan": "docs/releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md",
+  "nonce": "df0e8ed93e0f0e998e5426deb68f8d5f",
+  "start_head": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
+  "record_sha256": "252674a2341d42ccc1be49bdfac5aa8ada522480e76e86e78860ac19b6a1b78c",
+  "signature_and_binding": "verified",
+  "source_branch": "feat/v2.12-outline-continuation",
+  "tag": "v2.12.1",
+  "classes": [
+    "archive-minor"
+  ],
+  "capture_sha256": "776a2ffcfab924c0c80ef8f9e60ca223019c4d5ed70f375148ff9171a0fe5aab",
+  "register_refusals": [],
+  "plan_refusals": []
+}

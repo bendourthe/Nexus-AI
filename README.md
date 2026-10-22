@@ -144,10 +144,10 @@ This release carries the v2.12 and v2.13 plans. Its installers and VSIX packages
 
 - **Durable Image Studio edits** - Edits to a generated image are saved as a versioned recipe with undo and redo, survive a restart, and never change the original bytes. Generated images are now kept under `~/.nexus/generations/images/` so their turns can be reopened. Preview and export render through one pixel path.
 - **Approved agent edits** - `nexus image-edit` and `/nexus/image-edit/*` let an agent describe, apply, render and export edits to one image only after you approve its request in the Ask inbox. The grant is bound to that agent's caller id, run and image, and lasts one hour. Exports go only to `~/.nexus/generations/exports`.
-- **Outline and tool-history groundwork (experimental)** - Document output is budgeted from the current prompt usage, native tool calls keep their history, both agent loops compact tool results, and the desktop has outline Settings. The outline smoke evaluation was futile, so the outline tools stay experimental pending an owner decision (DF-v211-2).
+- **Document output and tool history** - Document parsing is budgeted from current prompt usage, native tool calls keep their history, and both agent loops compact tool results. The experimental outline tools and their Settings controls were retired under the frozen evaluation fallback; generic OCR and `parse_document` remain available.
 - **EmbeddingGemma 2 is not admitted** - A bounded local evaluator exists, but Ollama 0.32.15 rejects the candidate, so the current embedder is retained (DF-1, DF-2). Kolibri-1 is declined and recorded in the declined-models index.
 
-Plans: [v2.13.0](docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md), [v2.12 gaps](docs/v2/v2.12/known-gaps.md). Open items: [v2.14 carried gaps](docs/archives/v2/v2.14/known-gaps.md).
+Plans: [v2.13.0](docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md), [v2.12 gaps](docs/releases/v2/v2.12/known-gaps.md). Open items: [v2.14 carried gaps](docs/archives/v2/v2.14/known-gaps.md).
 
 ### What's new in v2.10.0
 
@@ -181,7 +181,7 @@ Image Studio can open a local `.splat` or `.ply` beside a finished image, with t
 - **Source image stays** - A splat download is a different file from the PNG.
 - **Optional generate** - Set `NEXUS_SPLAT_NVIDIA=1` and `NEXUS_SPLAT_CUDA=1` only on a machine that actually has them, and place the MIT weights yourself. The fake benchmark is `node scripts/bench-gaussian-splat.mjs`.
 
-Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/v2/v2.12/known-gaps.md).
+Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/releases/v2/v2.12/known-gaps.md).
 
 ### What's new in v2.4.1
 
