@@ -154,9 +154,7 @@ describe("headless document tools size output from the room left", () => {
   function tools(): HeadlessTool[] {
     return createHeadlessTools({
       parseDocumentEnabled: true,
-      documentOutlineEnabled: true,
-      outlineCacheDir: null,
-      outlineContextTokens: () => WINDOW,
+      documentContextTokens: () => WINDOW,
       documentParser: {
         parse: async () => ({ engine: "rapidocr", text: parsedText, markdown: null, pageCount: 3 }),
       },
@@ -183,23 +181,6 @@ describe("headless document tools size output from the room left", () => {
     expect(full.output.length).toBeLessThan(empty.output.length);
     expect(empty.output.length).toBe(unknown.output.length);
     expect(empty.output).toContain("characters withheld");
-  });
-
-  it("returns less document_read_section text when the conversation already fills most of the window", async () => {
-    writeFileSync(join(workdir, "long.md"), `# Title\n\n## Only\n${"word ".repeat(4_000)}\n`);
-    const set = tools();
-    const outline = set.find((t) => t.name === "document_outline");
-    const read = set.find((t) => t.name === "document_read_section");
-    if (!outline || !read) throw new Error("outline tools missing");
-    const o = await outline.execute({ path: "long.md" }, ctx(0));
-    const ids = [...o.output.matchAll(/\[([0-9a-f]{8}-[0-9a-f]{12})\]/g)].map((m) => m[1] ?? "");
-    const treeHash = /tree_hash=([0-9a-f]{64})/.exec(o.output)?.[1] ?? "";
-    const args = { path: "long.md", node_id: ids.at(-1) ?? "", tree_hash: treeHash };
-    const roomy = await read.execute(args, ctx(0));
-    const tight = await read.execute(args, ctx(WINDOW - RESERVE_TOKENS - 200));
-    expect(roomy.success && tight.success).toBe(true);
-    expect(tight.output.length).toBeLessThan(roomy.output.length);
-    expect(tight.output.length).toBeGreaterThan(FLOOR_CHARS / 2);
   });
 
   it("caps parse_document at the default fixed share when the host does not know the window or usage", async () => {

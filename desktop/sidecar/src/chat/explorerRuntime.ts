@@ -87,6 +87,7 @@ export interface ExplorerTreeDto {
 export interface ChatExplorerOps {
   tree(): ExplorerTreeDto;
   createFolder(input: { parentId: string | null; name: string }): Folder;
+  setFolderColor(input: { id: string; color: string | null }): Folder;
   renameFolder(input: { id: string; name: string }): Folder;
   moveFolder(input: { id: string; parentId: string | null }): Folder;
   deleteFolder(input: { id: string }): { ok: true };
@@ -114,6 +115,7 @@ export function createChatExplorerOps(
   return {
     tree: () => ({ tree: store.listTree() }),
     createFolder: (input) => store.createFolder({ parentId: input.parentId, name: input.name }),
+    setFolderColor: (input) => store.setFolderColor(input.id, input.color),
     renameFolder: (input) => store.renameFolder(input.id, input.name),
     moveFolder: (input) => store.moveFolder(input.id, input.parentId),
     deleteFolder: (input) => {

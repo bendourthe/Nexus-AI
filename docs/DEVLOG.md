@@ -83,13 +83,13 @@ Image Studio edits now have a versioned recipe (four adjustments, stroke and tex
 
 ## [2026-10-09] v2.12.0 Phase 6 - Completed evaluation
 
-Both scored runs completed within the approved ceiling, with exact coverage (expanded 152/152, anchor 96/96) and zero restarts. The unchanged preregistered rule yields futility: arm C cross-section scores are Qwen 0/20 and Gemma 4/20. Both arm A user-outcome targets were missed. The flag stays experimental and off; recommend removal or narrowing at the v2.13 review with no repeats. Post-run reporting corrections retain future returned errors and qualify uncached OCR timing. Fresh checks: 36 fixture/question tests, scoped strict TypeScript and lint, and the actual harness's controlled-adapter reporting exercise passed. Historical diagnostic limits remain WN-v212-5. [Results](v2/v2.12/development/outline-eval.md), [history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [metadata](releases/v2/v2.12/development/evidence/phase-6-evaluation.json). One local results commit; no remote CI. Phase 7 remains open.
+Both scored runs completed within the approved ceiling, with exact coverage (expanded 152/152, anchor 96/96) and zero restarts. The unchanged preregistered rule yields futility: arm C cross-section scores are Qwen 0/20 and Gemma 4/20. Both arm A user-outcome targets were missed. The flag stays experimental and off; recommend removal or narrowing at the v2.13 review with no repeats. Post-run reporting corrections retain future returned errors and qualify uncached OCR timing. Fresh checks: 36 fixture/question tests, scoped strict TypeScript and lint, and the actual harness's controlled-adapter reporting exercise passed. Historical diagnostic limits remain WN-v212-5. [Results](releases/v2/v2.12/development/outline-eval.md), [history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [metadata](releases/v2/v2.12/development/evidence/phase-6-evaluation.json). One local results commit; no remote CI. Phase 7 remains open.
 
 ---
 
 ## [2026-10-09] v2.12.0 Phase 6 - Evaluation preregistration
 
-Prepared a deterministic 123-page manual and 38 expanded questions without changing the v2.11 anchor. The Phase 6 decision rule is frozen before inference. Shared deadline/cancellation and exclusive reports preserve the approved 14-hour bound and existing evidence. Fresh preparation checks: 36 tests, scoped strict lint and TypeScript pass. Results remain pending. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [preregistered rule](v2/v2.12/development/outline-eval.md). Local preregistration only; no remote CI.
+Prepared a deterministic 123-page manual and 38 expanded questions without changing the v2.11 anchor. The Phase 6 decision rule is frozen before inference. Shared deadline/cancellation and exclusive reports preserve the approved 14-hour bound and existing evidence. Fresh preparation checks: 36 tests, scoped strict lint and TypeScript pass. Results remain pending. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [preregistered rule](releases/v2/v2.12/development/outline-eval.md). Local preregistration only; no remote CI.
 
 ---
 
@@ -111,7 +111,7 @@ Verified: 672 expanded tests, 46 targeted desktop tests, strict lint, both typec
 
 ## [2026-10-09] v2.12.0 Phase 3 - Native tool history
 
-Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md), [captured evidence](releases/v2/v2.12/development/evidence/phase-3-native-history.json).
+Index: [plan](releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md), [captured evidence](releases/v2/v2.12/development/evidence/phase-3-native-history.json).
 
 Both coding loops retain native assistant calls and matching tool-role results for Ollama, including screened result bytes. Compaction and range compression preserve complete batches; guarded or interrupted calls get matching failure results. Persistence keeps user-role rows and rebuilds the legacy prompt on resume. OpenAI-compatible backends keep their current history format, recorded as DF-v212-4.
 
@@ -121,7 +121,7 @@ Verification: 1,674 coding tests and 2,227 desktop tests passed, with existing s
 
 ## [2026-10-09] v2.12.0 Phase 2 - Window-aware document output
 
-Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md).
+Index: [plan](releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md).
 
 Both coding loops size each document-tool result from current prompt usage and results already added in the turn. Unknown counts retain fixed-share caps; rewritten histories invalidate stale usage. OpenAI-shaped streams retain late usage with a bounded terminal wait and preserve completed responses after a subsequent transport reset.
 
@@ -131,7 +131,7 @@ Verification: 6,162 root tests passed with 12 existing skips; lint/build and des
 
 ## [2026-10-08] v2.12.0 Phase 1 - Kolibri-1 decline and the declined-models index
 
-Index: [plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), absorbed seed [kolibri-1](v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md), history [P1](v2/v2.12/development/history/2026-10-08_v2.12.0-outline-promotion-readiness-phase-1.md).
+Index: [plan](releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), absorbed seed [kolibri-1](releases/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md), history [P1](releases/v2/v2.12/development/history/2026-10-08_v2.12.0-outline-promotion-readiness-phase-1.md).
 
 ### What Changed
 

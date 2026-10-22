@@ -34,8 +34,6 @@ const BY_TOOL: Readonly<Record<string, ToolResultOrigin>> = {
   watch_path: "workspace_file",
   hash_file: "workspace_file",
   parse_document: "workspace_file",
-  document_outline: "workspace_file",
-  document_read_section: "workspace_file",
   run_terminal: "terminal",
   tail_output: "terminal",
   grep_output: "terminal",

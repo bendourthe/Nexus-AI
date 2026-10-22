@@ -6,7 +6,7 @@ This page lists the model proposals Nexus declined and where each decision is re
 
 | Proposal | Declined in | Reason in one line | Record |
 |---|---|---|---|
-| Kolibri-1 (Aleph Alpha) | v2.12.0 | The smallest community GGUF is about 34 GB, above the 24 GB top tier, and stock Ollama, llama.cpp, and LM Studio cannot load it. | `DF-v212-1` in [v2.12 known gaps](../v2/v2.12/known-gaps.md); [comparison](../v2/v2.12/comparisons/v2.12.0-comparison-kolibri-1.md) |
+| Kolibri-1 (Aleph Alpha) | v2.12.0 | The smallest community GGUF is about 34 GB, above the 24 GB top tier, and stock Ollama, llama.cpp, and LM Studio cannot load it. | `DF-v212-1` in [v2.12 known gaps](../releases/v2/v2.12/known-gaps.md); [comparison](../releases/v2/v2.12/comparisons/v2.12.0-comparison-kolibri-1.md) |
 | Qwen3.8-Flash-Next | v2.3.0 | Rejected for catalog admission against the six admission gates; kept as a deferred watchlist candidate. | [Admission record](../archive/v2/v2.3/development/model-admission-qwen38.md) |
 | `abenzerps/Qwen-Image-2.1-Uncensored-GGUF` and Bespoke Nimble | v2.8.0 | Not admitted, no catalog row. | `DF-v280-1` in [v2.8 known gaps](../archive/v2/v2.8/known-gaps.md) |
 | CrisperWhisper 2.0 | v2.9.0 | The fetched page has no weights, license, or size; not admitted, no catalog row. | `DF-v290-1` in [v2.9 known gaps](../archive/v2/v2.9/known-gaps.md) |

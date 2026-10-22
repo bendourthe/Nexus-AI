@@ -2,6 +2,8 @@
 
 This handbook describes the supported operator path for recovering local image and video generation after an interrupted install. It applies to the packaged Windows installer and installed Nexus desktop application.
 
+Saved Image Studio edits have a separate recovery path. Each agent approval attempt captures the complete saved edit and undo/redo history before access can be granted; a storage failure grants no access. In the image viewer, open "Recovery checkpoints", inspect the approval metadata, choose a checkpoint and confirm "Restore and save". Pending edits are saved first. Recovery replaces the current edit history, ends earlier agent access to that image and refuses a conflicting revision; reload if another editor changed it. Deleting an image session or folder removes its history, edits and checkpoints, while shared original image files stay on disk.
+
 ## Recover the runtime
 
 1. Close Nexus and any active installer window.

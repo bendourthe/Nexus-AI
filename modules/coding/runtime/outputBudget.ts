@@ -11,6 +11,24 @@
  * No dependency on either loop, the extension, or the sidecar.
  */
 
+/** Conservative fallback when the active context window is unknown. */
+export const DEFAULT_CONTEXT_TOKENS = 8192;
+export interface ContextSources {
+  readonly configuredTokens?: number | null;
+  readonly catalogTokens?: number | null;
+}
+export function resolveEffectiveContextTokens(sources: ContextSources = {}): number {
+  for (const value of [sources.configuredTokens, sources.catalogTokens]) {
+    if (typeof value === "number" && Number.isFinite(value) && value > 0) return Math.floor(value);
+  }
+  return DEFAULT_CONTEXT_TOKENS;
+}
+/** Usage supplied by the agent loop; absence means unknown. */
+export function usedTokensParam(parameters: Record<string, unknown>): number | undefined {
+  const value = parameters["_usedTokens"];
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : undefined;
+}
+
 /** Characters per token used to turn token counts into character budgets. */
 export const CHARS_PER_TOKEN = 4;
 /** Tokens left free for the model's answer when a tool sizes its output. */
@@ -88,7 +106,7 @@ export function sizeParsedDocument(
   const cut = truncateToBudget(body, budget.chars);
   const notes = [
     cut.withheld > 0
-      ? `[parse_document output truncated: ${cut.withheld} characters withheld to fit the context window. Use document_outline and document_read_section to read a long document by section, or a smaller max_pages.]`
+      ? `[parse_document output truncated: ${cut.withheld} characters withheld to fit the context window. Use a smaller max_pages to read fewer pages.]`
       : "",
     budget.nearlyFull ? NEARLY_FULL_NOTE : "",
   ].filter((l) => l.length > 0);

@@ -104,6 +104,10 @@
       "feature": "f002"
     },
     {
+      "command": "chat.explorer.setFolderColor",
+      "feature": "f002"
+    },
+    {
       "command": "chat.explorer.search",
       "feature": "f002"
     },
@@ -146,14 +150,6 @@
     {
       "command": "coding.chat.autocomplete",
       "feature": "f001"
-    },
-    {
-      "command": "coding.documentOutline.setEnabled",
-      "feature": "f005"
-    },
-    {
-      "command": "coding.documentOutline.status",
-      "feature": "f005"
     },
     {
       "command": "coding.memory.snapshot",
@@ -520,6 +516,14 @@
     },
     {
       "command": "studio.image.edit.revision",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.image.edit.restore",
+      "feature": "f003"
+    },
+    {
+      "command": "studio.image.edit.checkpoints",
       "feature": "f003"
     },
     {

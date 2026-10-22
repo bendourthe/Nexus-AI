@@ -94,6 +94,28 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 | WN-7 | The provisioned venv's numpy differs from its lock | v2.14.0 Phase 5 (cause found) | No Nexus provisioner changes numpy. On 2026-10-01 a `rapidocr-onnxruntime` install, which no provisioner performs, pulled `opencv-python` 5.0.0.93 (needs `numpy>=2`), upgrading numpy to 2.5.3. The lock stays correct for what Nexus installs; the OCR provisioning gap and its numpy conflict are v2.15 WN-2 |
 | QG-1 | Two tests time out under full-suite load | v2.14.0 Phase 5 (cause found and fixed) | Root half fixed in v2.13. The Video2X test failed again in the merged-tree desktop run, and its v2.13 assertion printed the cause: the run ended with `process_timeout` before the source hash started. The adapter's deadline reads `performance.now()`, which the test's fake timers do not freeze, so under load the 100 ms deadline ran on the real clock during staging; the filesystem-deadline test had the same race. Both now drive the adapter's `monotonicNow` option from fake time. 10 of 10 concurrent runs beside a CPU-burning process pass |
 
+#### WN-3 - Skill tests leave empty folders in the source catalog - RESOLVED
+
+- **Source phase**: Phase 7 architecture refactor scan.
+- **Plan reference**: T022.
+- **Reason**: `modules/coding/skills/catalog/__none__` and `__nonexistent_user__` are created inside the source tree by `tests/unit/skills/SkillLoader.test.ts`, `tests/unit/skills/fuse.test.ts`, `tests/unit/orchestration/FusionAgent.test.ts`, `tests/integration/commands/skill-execution.test.ts` and `tests/integration/orchestration/PanelFusion.test.ts`. They are empty and untracked, and also exist in the main checkout, so they predate this plan.
+- **Suggested next step**: point those tests at a temporary catalog root and remove the two folders.
+
+- **Migrated from**: v2.13.0#WN-2. The original v2.14.0 Phase 5 resolution remains in the table above; this parseable provenance copy was added on 2026-10-20.
+- **Resolution**: The five tests use `tests/helpers/noUserSkills.ts`, under the OS temporary folder. The two source-catalog folders were removed. The existing Phase 5 table records the successful five-file rerun. This entry preserves the complete v2.13 source body; it records no new implementation or approval.
+
+#### QG-1 - Two tests time out under full-suite load at vitest's 5 s default - RESOLVED
+
+- **Source phase**: Phase 4 (root suite, 2026-10-14) and Phase 5 (desktop suite, 2026-10-15).
+- **Plan reference**: Phase 7 T030.
+- **Reason**: `tests/integration/golden/golden-runner-end-to-end.test.ts` (dry path) and `desktop/tests/video2x-adapter.test.ts` ("bounds a hanging source hash with the run-local deadline") pass alone (about 2.5 s and 3 of 3 runs) and time out only beside parallel workers. The golden file's own comment gives this cause for its sibling block, which already has a 30 s timeout. Neither test was changed by this plan.
+- **Suggested next step**: In Phase 7, give each the same explicit timeout its sibling uses, with the measured duration as the reason, then re-run both full suites.
+
+Prior v2.12 and older registers remain authoritative. These new items resolve none of them.
+
+- **Migrated from**: v2.13.0#QG-1. The original v2.14.0 Phase 5 resolution remains in the table above; this parseable provenance copy was added on 2026-10-20.
+- **Resolution**: The root timeout was fixed in v2.13. The Video2X deadline race was fixed in v2.14.0 Phase 5 by driving `monotonicNow` from fake time. The existing table records ten successful concurrent runs beside a CPU-burning process. This entry preserves the complete v2.13 source body; it records no new implementation or approval.
+
 ## v2.14.1
 
 ### Summary
