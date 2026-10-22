@@ -8,9 +8,9 @@
 
 import { afterEach, describe, expect, it } from "vitest";
 import { createHash, randomUUID } from "node:crypto";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 
 import { StudioSessionStore } from "../../../core/generations/StudioSessionStore.js";
 import { CodingSessionManager } from "../../sidecar/src/coding/sessionManager";
@@ -51,7 +51,7 @@ function inbox() {
   };
 }
 
-function fixture(options: { deadlineMs?: number; now?: () => number } = {}) {
+function fixture(options: { deadlineMs?: number; now?: () => number; aliasedExportParent?: boolean } = {}) {
   const root = mkdtempSync(join(tmpdir(), "nexus-image-agent-"));
   roots.push(root);
   const media = join(root, "images");
@@ -62,7 +62,16 @@ function fixture(options: { deadlineMs?: number; now?: () => number } = {}) {
   const turn = store.appendTurn({ sessionId: session.id, role: "assistant", content: "", mediaRef: saved.outputPath });
   const askInbox = inbox();
   const bridge = new ImageRenderBridge(options.deadlineMs ?? 2000);
-  const exportsRoot = join(root, "exports");
+  let exportParent = root;
+  if (options.aliasedExportParent) {
+    const physicalParent = join(root, "canonical-export-parent");
+    mkdirSync(physicalParent);
+    exportParent = join(root, "temp-parent-alias");
+    // Both link and target belong to this fixture; cleanup never follows it
+    // outside the temporary workspace. The export folder itself is not a link.
+    symlinkSync(physicalParent, exportParent, process.platform === "win32" ? "junction" : "dir");
+  }
+  const exportsRoot = join(exportParent, "exports");
   const ops = createImageEditOps(store, {
     mediaRoot: media, exportsRoot, askInbox, renderBridge: bridge, ...(options.now ? { now: options.now } : {}),
   });
@@ -215,8 +224,8 @@ describe("agent mutations", () => {
 });
 
 describe("agent render and export", () => {
-  it("previews and exports through the renderer with the pinned source, never overwriting", async () => {
-    const f = fixture();
+  it.each([false, true])("previews and exports through the renderer with the pinned source, never overwriting (aliased parent: %s)", async (aliasedExportParent) => {
+    const f = fixture({ aliasedExportParent });
     const a = await grantFor(f);
     f.ops.apply(a, { action: ADJUST, expectedRevision: 0, idempotencyKey: "k1" });
     const r = renderer(f.bridge, () => ({ ok: true, png: PNG_B64 }));
@@ -228,7 +237,7 @@ describe("agent render and export", () => {
 
       const exported = await f.ops.render(a, { mode: "export", expectedRevision: 1 });
       expect(readFileSync(exported.path!)).toEqual(Buffer.from(PNG_B64, "base64"));
-      expect(exported.path!.startsWith(f.exportsRoot.replace(/\\/g, "/")) || exported.path!.startsWith(f.exportsRoot)).toBe(true);
+      expect(dirname(realpathSync(exported.path!))).toBe(realpathSync(f.exportsRoot));
       // The same edit exported again returns the file already there.
       expect((await f.ops.render(a, { mode: "export", expectedRevision: 1 })).path).toBe(exported.path);
       // A different file under that name is never overwritten.
