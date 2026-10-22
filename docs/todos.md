@@ -724,6 +724,16 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [ ] Evaluate EmbeddingGemma 2 text/code retrieval through the existing local adapter, resolve its context/terms discrepancies and measure the comparison's proposed gate before changing the model job map or defaults (E1/E2).
 - [ ] Implement and verify the planned durable recipe and shared commands for existing ImageViewer edits, including restart/reopen and UI-versus-command export equivalence, before adding broader creative-editor features (C1/C2).
 
+## Nemotron Bolt E4B trial and model-proposal records (queued v2.16.0)
+
+- [x] Compare Humanizer, Handwired, Nemotron 3.5 (Super VL, Bolt 74B-A9B, Bolt E4B) and DeepSeek V4.1-Flash-1017 against Nexus ([comparison](releases/v2/v2.16/comparisons/v2.16.0-comparison-humanizer-handwired-nemotron-deepseek.md), 2026-10-20; corrected 2026-10-21 for the v2.14.1 Humanizer and Handwired record).
+- [x] Plan the adoption: five phases, 26 tasks; six review lenses, 21 findings applied; four owner decisions recorded ([plan](releases/v2/v2.16/plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), 2026-10-21).
+- [ ] Phase 1: preregister E4B gates; record Super VL, DeepSeek and Humanizer decisions; defer Bolt 74B-A9B (no 24 GB host).
+- [ ] Phase 2: E4B tag, license and tool-call probe (from 2026-10-23; tag window closes 2026-11-06).
+- [ ] Phase 3: golden runner `num_gpu`; E4B fit and golden-task A/B against `lfm2.5:2.6b` on the cpu and sub-6 GB slots.
+- [ ] Phase 4: admit E4B to each passing slot, or record the decline.
+- [ ] Phase 5: final phase, recorded VS Code extension run, and publication.
+
 ## Legacy known-gaps triage (queued v2.15.0)
 
 - [ ] Phase 1: pinned inventory and lossless converter ([plan](releases/v2/v2.15/plans/v2.15.0-legacy-known-gaps-triage.md)).
