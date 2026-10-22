@@ -1,3 +1,14 @@
+## [2.15.1](https://github.com/bendourthe/Nexus-AI/compare/v2.15.0...v2.15.1) (2026-10-22)
+
+
+### Bug Fixes
+
+* **closeout:** merge bounded archive-readiness work ([3998b20](https://github.com/bendourthe/Nexus-AI/commit/3998b202a5a4ba29bccc4984668a7305302a7b13))
+* **closeout:** qualify archive contract location and final gate ([9b4ffec](https://github.com/bendourthe/Nexus-AI/commit/9b4ffec6724b7bec5d8e235244543050843b38bd))
+* **closeout:** reconcile historical archive authority and evidence ([0cb4fc7](https://github.com/bendourthe/Nexus-AI/commit/0cb4fc776fefdb74650391741557b098293298e0))
+* **deps:** raise MCP SDK and hono floors past new production advisories ([893a1a3](https://github.com/bendourthe/Nexus-AI/commit/893a1a3677e316b519fc924a3c3722a55fe62580))
+* **v2.15:** finish bounded archive-readiness repairs ([c43432f](https://github.com/bendourthe/Nexus-AI/commit/c43432f04facf3540f20df537d722d973779860b))
+
 # [2.15.0](https://github.com/bendourthe/Nexus-AI/compare/v2.14.2...v2.15.0) (2026-10-19)
 
 Maintenance release: the project's record of known gaps is now one countable list. No app, extension or installer behavior changes.
