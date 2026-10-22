@@ -391,7 +391,7 @@ DF-2 (packaged Explorer) and DF-4 (live GPU generate) stay open. BG-43 through B
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 12 | 1 |
+| Deferred (DF) | 2 | 1 |
 | Bugs / regressions (BG) | 0 | 10 |
 | Warnings (WN) | 2 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |

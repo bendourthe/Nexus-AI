@@ -1,5 +1,29 @@
 # Nexus - Progress Dashboard
 
+## Archive readiness (2026-10-20)
+
+**Active worktree**: `C:/nx-close`, branch `feat/v2.15-archive-readiness`, base `fadbf89b`. The owner's current goal is to complete the remaining v2.12, v2.13 and v2.15 plans until archive-ready. Earlier branch/version statements below are dated history, not the current state.
+
+**Run status**: Native approval IN54MRGB is captured and signature-verified for the fresh v2.15.1 run. The exact old v2.15.0 authority is preserved as a historical receipt. Bounded repairs and evidence form the consolidated master phase-one commit; 28 of 52 task checks accompany that atomic commit. Covered ledger application, historical archive approvals, integration, release and archive preflight remain open.
+
+| Measure | Current | Required |
+|---|---|---|
+| Follow-up triage | One v2.15.1 master plus four absorbed supports; all 52 tasks retained, 28 checks accompanying the phase-one commit; disposition and publication duties remain open; 199 identities audited (55/47/54/43) | Verified disposition for every identity, preserving every owed requirement |
+| Active v2.15 gaps | 60 open; 3 of the original 63 resolved with evidence | Resolve with evidence or explicitly covered carry-forward; no hidden debt |
+| Local verification | Root 6434/12 skips, desktop 2364/1 skip, installer 1528/3 skips pass; coverage/lint/builds pass | Final source-appropriate verification before publication |
+| Minor closeout | v2.12 layout/absorbed-seed issues; v2.13 release-map/provenance issues | Validated lineage, migration authority and archive dry runs |
+
+- [ ] Complete the v2.15.1 master and four absorbed triage supports under `docs/releases/v2/v2.15/plans/`.
+- [x] Audit all 199 frozen batch IDs and all 63 original active IDs against current source.
+- [x] Prove and resolve the installer disk fixture, handbook CRLF comparison and missing v2.13 migration-copy provenance.
+- [x] Complete the owner-selected outline removal and image approval checkpoint/retention policies; real-boundary evidence and independent review pass.
+- [x] Complete full root/desktop coverage, installer tests, lint, builds, six handbook receipts and current fast CI profile.
+- [x] Preserve the qualified checker source in a verified 22-file local snapshot; record the separate existing upstream attribution gate failure ([preservation](releases/v2/v2.15/development/v2.15-native-checker-preservation.md)).
+- [ ] Create the native approved successor and apply the 245-open-destination proposal; native successor/capture qualification and real run verification pass; no ledger migration has occurred.
+- [ ] Reconcile the 63 active v2.15 entries without treating hardware holds or owner decisions as completed work.
+- [ ] Prove v2.12/v2.13 implementation and actual release mapping, repair layout/provenance, then verify archive readiness.
+- [ ] Complete independent review, final gates and required integration/release checks; keep readiness false until those pass.
+
 **Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.14.2-adoption-voice-latency-lfm2.5-24b`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
 
 ## v2.12 Phase 7 gates (2026-10-09)
@@ -700,8 +724,8 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Resolve the [remaining CI action updates](releases/v2/v2.12/development/phase-7-ci-action-update-proposal.md): pins merged in #97 with green post-merge develop; #42 and #43 closed as superseded after source comparison.
 - [x] Verify shared tool-result compaction in both loops, fork-resume ownership, cancellation and visible errors; complete nine live PDF section reads and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md)).
 - [x] Verify desktop outline Settings, including environment-preference preservation, real dispatcher/browser behavior, handbook update and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md)).
-- [x] After both frozen full runs finished, retain returned errors in future smoke results and qualify OCR timing prose; verify the actual patched harness with controlled adapters, preserve scored artifacts and record WN-v212-5 ([results](v2/v2.12/development/outline-eval.md)).
-- [x] Complete evaluation and final integration in the approved [v2.12 plan](v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md): PR #97 merged into develop at `f24eac41`; field-testing installer handed over ([evidence](releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md)).
+- [x] After both frozen full runs finished, retain returned errors in future smoke results and qualify OCR timing prose; verify the actual patched harness with controlled adapters, preserve scored artifacts and record WN-v212-5 ([results](releases/v2/v2.12/development/outline-eval.md)).
+- [x] Complete evaluation and final integration in the approved [v2.12 plan](releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md): PR #97 merged into develop at `f24eac41`; field-testing installer handed over ([evidence](releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md)).
 - [ ] Field-test the v2.12 installer and record the M5 real-use DEVLOG entry (maintainer), then begin v2.13.
 
 ## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)

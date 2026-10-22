@@ -23,13 +23,13 @@ export function createScheduledHeadlessRunner(
   options: ScheduledHeadlessRunnerOptions = {},
 ): (run: HeadlessScheduledRun) => Promise<void> {
   const llm = options.llm ?? createHeadlessOllamaClient();
-  // Outline output is sized from the window the run's model was loaded with.
+  // Document output is sized from the window the run's model was loaded with.
   const loadedContext = createLoadedContextProbe();
   return async (run) => {
     const model = process.env.NEXUS_SCHEDULER_MODEL ?? process.env.NEXUS_ACP_MODEL ?? "gemma4:e4b";
     const tools =
       options.toolsForRun?.(run) ??
-      createSidecarHeadlessTools({ confirm: run.confirm, outlineContextTokens: () => loadedContext(model) });
+      createSidecarHeadlessTools({ confirm: run.confirm, documentContextTokens: () => loadedContext(model) });
     const session = new HeadlessAgentSession(llm, tools);
     await runEnrichedHeadlessSession({
       session,

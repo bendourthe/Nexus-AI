@@ -1,7 +1,7 @@
 # Window-aware document output: Phase 2
 
 **Date**: 2026-10-09
-**Plan**: [outline-promotion-readiness](../../../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), T006-T008.
+**Plan**: [outline-promotion-readiness](../../plans/v2.12.0-outline-promotion-readiness.md), T006-T008.
 **Status**: Local verification complete. T006-T008 are ready for the single Phase 2 local commit; no publication occurred.
 
 **Support tier**: Internal-compatible. The compiled headless runtime was exercised with local Ollama and real OCR; the native GUI was not observed here.

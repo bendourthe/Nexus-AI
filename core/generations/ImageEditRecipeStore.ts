@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { closeSync, fstatSync, openSync, readSync, realpathSync, statSync } from "node:fs";
 import { isAbsolute, relative } from "node:path";
-import { StudioSessionStore } from "./StudioSessionStore.js";
+import { StudioSessionStore, type ImageEditCheckpoint, type ImageEditCheckpointSummary } from "./StudioSessionStore.js";
 import type { StudioTurn } from "./StudioSessionStore.types.js";
 import {
   createImageEditRecipe, IMAGE_EDIT_LIMITS, ImageEditError, parseImageEditRecipe, PNG_SIGNATURE, reduceImageEditRecipe,
@@ -59,6 +59,51 @@ export class ImageEditRecipeStore {
       this.checkAccess(access, identity);
       scope.commit(next, expectedRevision);
       // The transaction rolls back if authorization or source ownership changes.
+      this.source(scope.turn, identity);
+      this.checkAccess(access, identity);
+      return next;
+    }));
+  }
+
+  /** Called only by the trusted approval owner, not an agent request handler. */
+  captureCheckpoint(identityInput: ImageEditIdentity, metadata: Omit<ImageEditCheckpoint, "recipe">): ImageEditCheckpoint {
+    const identity = this.identity(identityInput);
+    if ([metadata.id, metadata.requestId, metadata.approvalId, metadata.callerId, metadata.runId]
+      .some((value) => typeof value !== "string" || !value || value.length > 256)
+      || !Number.isSafeInteger(metadata.createdAt) || metadata.createdAt < 0) {
+      throw new ImageEditError("INVALID_RECIPE", "Invalid checkpoint approval metadata.");
+    }
+    return this.storage(() => this.sessions.withImageRecipe(identity.studioSessionId, identity.studioTurnId, (scope) => {
+      const source = this.source(scope.turn, identity);
+      const recipe = this.existing(scope.recipeJson, identity, source, scope.storedRevision, scope.storedSourceSha256);
+      return scope.checkpoint({ ...metadata, recipe });
+    }));
+  }
+
+  listCheckpoints(identityInput: ImageEditIdentity, access: ImageEditAccess, beforeId?: string): ImageEditCheckpointSummary[] {
+    const identity = this.identity(identityInput);
+    this.checkAccess(access, identity);
+    return this.storage(() => this.sessions.withImageRecipe(identity.studioSessionId, identity.studioTurnId, (scope) => {
+      this.source(scope.turn, identity);
+      this.checkAccess(access, identity);
+      return scope.checkpoints(beforeId);
+    }));
+  }
+
+  restoreCheckpoint(identityInput: ImageEditIdentity, access: ImageEditAccess, checkpointId: string, expectedRevision: number): ImageEditRecipe {
+    const identity = this.identity(identityInput);
+    this.checkAccess(access, identity);
+    return this.storage(() => this.sessions.withImageRecipe(identity.studioSessionId, identity.studioTurnId, (scope) => {
+      const source = this.source(scope.turn, identity);
+      const previous = this.existing(scope.recipeJson, identity, source, scope.storedRevision, scope.storedSourceSha256);
+      if (previous.revision !== expectedRevision) throw new ImageEditError("REVISION_CONFLICT", "The image recipe revision is stale.");
+      const checkpoint = scope.findCheckpoint(checkpointId);
+      if (!checkpoint) throw new ImageEditError("FORBIDDEN", "No recovery checkpoint matches this image.");
+      const saved = this.existing(JSON.stringify(checkpoint.recipe), identity, source,
+        checkpoint.recipe.revision, checkpoint.recipe.identity.sourceSha256);
+      const next = parseImageEditRecipe({ ...saved, revision: previous.revision + 1 });
+      this.checkAccess(access, identity);
+      scope.commit(next, expectedRevision);
       this.source(scope.turn, identity);
       this.checkAccess(access, identity);
       return next;

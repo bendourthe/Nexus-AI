@@ -42,7 +42,17 @@
         "desktop/src/pages/settings/ArchivedChatsSettings.tsx",
         "desktop/sidecar/src/main.ts",
         "desktop/sidecar/src/studio/imageEditRuntime.ts",
-        "desktop/src/shared/studio/ImageViewer.tsx"
+        "desktop/src/shared/studio/ImageViewer.tsx",
+        "core/generations/StudioSessionStore.ts",
+        "core/generations/ImageEditRecipeStore.ts",
+        "modules/coding/autonomy/AskInbox.ts",
+        "desktop/src/shared/studio/useDurableImageEdit.ts",
+        "desktop/src/shared/studio/imageEditClient.ts",
+        "desktop/src/shared/explorer/StudioHistoryPane.tsx",
+        "modules/chat/storage/ChatExplorerStore.ts",
+        "desktop/sidecar/src/chat/explorerRuntime.ts",
+        "desktop/src/modules/chat/ipcChatExplorerClient.ts",
+        "desktop/src/modules/chat/FolderTree.tsx"
       ],
       "code_inputs": [
         "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py",
@@ -71,7 +81,17 @@
         "desktop/src/pages/settings/ArchivedChatsSettings.tsx",
         "desktop/sidecar/src/main.ts",
         "desktop/sidecar/src/studio/imageEditRuntime.ts",
-        "desktop/src/shared/studio/ImageViewer.tsx"
+        "desktop/src/shared/studio/ImageViewer.tsx",
+        "core/generations/StudioSessionStore.ts",
+        "core/generations/ImageEditRecipeStore.ts",
+        "modules/coding/autonomy/AskInbox.ts",
+        "desktop/src/shared/studio/useDurableImageEdit.ts",
+        "desktop/src/shared/studio/imageEditClient.ts",
+        "desktop/src/shared/explorer/StudioHistoryPane.tsx",
+        "modules/chat/storage/ChatExplorerStore.ts",
+        "desktop/sidecar/src/chat/explorerRuntime.ts",
+        "desktop/src/modules/chat/ipcChatExplorerClient.ts",
+        "desktop/src/modules/chat/FolderTree.tsx"
       ],
       "builder": {
         "identity": "node scripts/generate-handbooks.mjs",
@@ -88,7 +108,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/handbook-atlas.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.4-final-handbook-atlas.json",
       "presentation": true
     },
     {
@@ -111,7 +131,15 @@
         "desktop/sidecar/src/diffusion/runtimeFactory.ts",
         "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py",
         "desktop/src/modules/image/ImageStudioPage.tsx",
-        "desktop/src/modules/video/VideoLabPage.tsx"
+        "desktop/src/modules/video/VideoLabPage.tsx",
+        "core/generations/StudioSessionStore.ts",
+        "core/generations/ImageEditRecipeStore.ts",
+        "modules/coding/autonomy/AskInbox.ts",
+        "desktop/sidecar/src/studio/imageEditRuntime.ts",
+        "desktop/src/shared/studio/ImageViewer.tsx",
+        "desktop/src/shared/studio/useDurableImageEdit.ts",
+        "desktop/src/shared/studio/imageEditClient.ts",
+        "desktop/src/shared/explorer/StudioHistoryPane.tsx"
       ],
       "code_inputs": [
         "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py",
@@ -119,7 +147,15 @@
         "desktop/sidecar/src/diffusion/runtimeFactory.ts",
         "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py",
         "desktop/src/modules/image/ImageStudioPage.tsx",
-        "desktop/src/modules/video/VideoLabPage.tsx"
+        "desktop/src/modules/video/VideoLabPage.tsx",
+        "core/generations/StudioSessionStore.ts",
+        "core/generations/ImageEditRecipeStore.ts",
+        "modules/coding/autonomy/AskInbox.ts",
+        "desktop/sidecar/src/studio/imageEditRuntime.ts",
+        "desktop/src/shared/studio/ImageViewer.tsx",
+        "desktop/src/shared/studio/useDurableImageEdit.ts",
+        "desktop/src/shared/studio/imageEditClient.ts",
+        "desktop/src/shared/explorer/StudioHistoryPane.tsx"
       ],
       "builder": {
         "identity": "node scripts/generate-handbooks.mjs",
@@ -136,7 +172,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/handbook-generation-recovery.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.4-final-handbook-generation-recovery.json",
       "presentation": true
     },
     {
@@ -186,7 +222,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/handbook-installer-runtime.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.4-final-handbook-installer-runtime.json",
       "presentation": true
     },
     {
@@ -244,7 +280,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/handbook-media-runtime.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.4-final-handbook-media-runtime.json",
       "presentation": true
     },
     {
@@ -270,7 +306,11 @@
         "desktop/src/modules/coding/WorkspaceSelector.tsx",
         "modules/coding/runtime/headlessTools.ts",
         "desktop/src/shared/chat/MessageList.tsx",
-        "desktop/src/shared/models/selectionPolicy.ts"
+        "desktop/src/shared/models/selectionPolicy.ts",
+        "modules/chat/storage/ChatExplorerStore.ts",
+        "desktop/sidecar/src/chat/explorerRuntime.ts",
+        "desktop/src/modules/chat/ipcChatExplorerClient.ts",
+        "desktop/src/modules/chat/FolderTree.tsx"
       ],
       "code_inputs": [
         "core/chat/tokenUsage.ts",
@@ -281,7 +321,11 @@
         "desktop/src/modules/coding/WorkspaceSelector.tsx",
         "modules/coding/runtime/headlessTools.ts",
         "desktop/src/shared/chat/MessageList.tsx",
-        "desktop/src/shared/models/selectionPolicy.ts"
+        "desktop/src/shared/models/selectionPolicy.ts",
+        "modules/chat/storage/ChatExplorerStore.ts",
+        "desktop/sidecar/src/chat/explorerRuntime.ts",
+        "desktop/src/modules/chat/ipcChatExplorerClient.ts",
+        "desktop/src/modules/chat/FolderTree.tsx"
       ],
       "builder": {
         "identity": "node scripts/generate-handbooks.mjs",
@@ -298,7 +342,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/handbook-transcript-and-workspaces.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.4-final-handbook-transcript-and-workspaces.json",
       "presentation": true
     },
     {
@@ -316,26 +360,17 @@
         "desktop/public/nexus-mark.png",
         "package.json",
         "package-lock.json",
-        "modules/coding/documents/DocumentOutlineTools.ts",
         "modules/coding/runtime/outputBudget.ts",
         "modules/coding/runtime/HeadlessAgentSession.ts",
         "modules/coding/llm/toolHistory.ts",
         "src/tools/AgentLoop.ts",
-        "core/documents/OutlineCache.ts",
-        "core/documents/OutlineSession.ts",
-        "core/documents/OutlineSummaries.ts",
-        "core/storage/OutlineFileStore.ts",
-        "modules/coding/documents/OutlineSummaryProvider.ts",
         "modules/coding/guardrails/permissionTierMap.ts",
         "modules/coding/chat/ConversationManager.ts",
         "modules/coding/chat/CompactionStrategy.ts",
         "desktop/src/pages/settings/SecuritySettings.tsx",
-        "core/documents/documentOutlineEnabled.ts",
         "modules/coding/runtime/headlessTools.ts",
-        "core/documents/DocumentOutline.ts",
-        "modules/coding/documents/createDocumentOutlineTools.ts",
         "src/tools/handlers/parseDocument.ts",
-        "docs/v2/v2.12/development/outline-eval.md",
+        "docs/releases/v2/v2.12/development/outline-eval.md",
         "docs/archive/v2/v2.11/development/outline-feasibility.md",
         "modules/coding/llm/OllamaClient.ts",
         "modules/coding/llm/LmStudioClient.ts",
@@ -343,27 +378,23 @@
         "modules/coding/llm/headlessOpenAiClient.ts",
         "desktop/sidecar/src/coding/headlessAgentRunner.ts",
         "desktop/sidecar/src/acp/AcpAgent.ts",
-        "desktop/sidecar/src/handlers.ts"
+        "desktop/sidecar/src/handlers.ts",
+        "desktop/sidecar/src/coding/scheduledHeadlessRunner.ts",
+        "desktop/sidecar/src/coding/sidecarHeadlessTools.ts",
+        "src/tools/ToolRegistryBuilder.ts",
+        "src/tools/ToolCatalog.ts",
+        "modules/coding/config/settings.ts"
       ],
       "code_inputs": [
-        "modules/coding/documents/DocumentOutlineTools.ts",
         "modules/coding/runtime/outputBudget.ts",
         "modules/coding/runtime/HeadlessAgentSession.ts",
         "modules/coding/llm/toolHistory.ts",
         "src/tools/AgentLoop.ts",
-        "core/documents/OutlineCache.ts",
-        "core/documents/OutlineSession.ts",
-        "core/documents/OutlineSummaries.ts",
-        "core/storage/OutlineFileStore.ts",
-        "modules/coding/documents/OutlineSummaryProvider.ts",
         "modules/coding/guardrails/permissionTierMap.ts",
         "modules/coding/chat/ConversationManager.ts",
         "modules/coding/chat/CompactionStrategy.ts",
         "desktop/src/pages/settings/SecuritySettings.tsx",
-        "core/documents/documentOutlineEnabled.ts",
         "modules/coding/runtime/headlessTools.ts",
-        "core/documents/DocumentOutline.ts",
-        "modules/coding/documents/createDocumentOutlineTools.ts",
         "src/tools/handlers/parseDocument.ts",
         "modules/coding/llm/OllamaClient.ts",
         "modules/coding/llm/LmStudioClient.ts",
@@ -371,7 +402,12 @@
         "modules/coding/llm/headlessOpenAiClient.ts",
         "desktop/sidecar/src/coding/headlessAgentRunner.ts",
         "desktop/sidecar/src/acp/AcpAgent.ts",
-        "desktop/sidecar/src/handlers.ts"
+        "desktop/sidecar/src/handlers.ts",
+        "desktop/sidecar/src/coding/scheduledHeadlessRunner.ts",
+        "desktop/sidecar/src/coding/sidecarHeadlessTools.ts",
+        "src/tools/ToolRegistryBuilder.ts",
+        "src/tools/ToolCatalog.ts",
+        "modules/coding/config/settings.ts"
       ],
       "builder": {
         "identity": "node scripts/generate-handbooks.mjs",
@@ -388,7 +424,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/handbook-document-outline.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.4-final-handbook-document-outline.json",
       "presentation": true
     }
   ],

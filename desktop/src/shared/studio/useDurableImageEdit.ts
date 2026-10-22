@@ -19,10 +19,11 @@ import {
   ImageEditRequestError,
   toImageEditError,
   type DurableImageEdit,
+  type ImageCheckpointSummary,
 } from "./imageEditClient";
 
 /** `off`: no durable source (Chat attachments); the viewer keeps in-memory editing. */
-export type DurableEditStatus = "off" | "loading" | "saved" | "saving" | "error" | "conflict" | "unavailable";
+export type DurableEditStatus = "off" | "loading" | "saved" | "saving" | "restoring" | "error" | "conflict" | "unavailable";
 
 export interface DurableEditView {
   readonly status: DurableEditStatus;
@@ -33,6 +34,11 @@ export interface DurableEditView {
   readonly state: ImageEditState | null;
   readonly canUndo: boolean;
   readonly canRedo: boolean;
+  readonly recoveryAvailable: boolean;
+  readonly checkpoints: readonly ImageCheckpointSummary[];
+  readonly recoveryMessage: string | null;
+  refreshCheckpoints(older?: boolean): Promise<void>;
+  restoreCheckpoint(id: string): Promise<boolean>;
   apply(action: unknown): void;
   retry(): void;
   reload(): void;
@@ -56,6 +62,9 @@ export function useDurableImageEdit(source: DurableImageEdit | undefined): Durab
   const [message, setMessage] = useState<string | null>(null);
   const [src, setSrc] = useState<string | null>(null);
   const [projected, setProjected] = useState<ImageEditRecipe | null>(null);
+  const [checkpoints, setCheckpoints] = useState<ImageCheckpointSummary[]>([]);
+  const [recoveryMessage, setRecoveryMessage] = useState<string | null>(null);
+  const restoringRef = useRef(false);
 
   const grantRef = useRef<string | null>(null);
   const ackedRef = useRef<ImageEditRecipe | null>(null);
@@ -81,7 +90,7 @@ export function useDurableImageEdit(source: DurableImageEdit | undefined): Durab
   }, [show]);
 
   const open = useCallback(async (): Promise<void> => {
-    if (!source) return;
+    if (!source || restoringRef.current) return;
     setStatus("loading");
     setMessage(null);
     queueRef.current = [];
@@ -144,7 +153,7 @@ export function useDurableImageEdit(source: DurableImageEdit | undefined): Durab
 
   const apply = useCallback((action: unknown): void => {
     const current = projectedRef.current;
-    if (!current || status === "loading" || status === "unavailable" || status === "conflict") return;
+    if (!current || restoringRef.current || status === "loading" || status === "unavailable" || status === "conflict") return;
     let next: ImageEditRecipe;
     try {
       next = reduceImageEditRecipe(current, action, current.revision);
@@ -162,6 +171,7 @@ export function useDurableImageEdit(source: DurableImageEdit | undefined): Durab
   }, [drain, show, status]);
 
   const retry = useCallback((): void => {
+    if (restoringRef.current) return;
     const action = failedRef.current;
     if (status !== "error" || action === null) return;
     setStatus("saved");
@@ -184,9 +194,49 @@ export function useDurableImageEdit(source: DurableImageEdit | undefined): Durab
   }, [open]);
 
   const flush = useCallback(async (): Promise<boolean> => {
-    if (queueRef.current.length === 0 && !drainingRef.current) return status !== "error";
+    if (queueRef.current.length === 0 && !drainingRef.current) return status === "saved" || status === "off";
     return drain();
   }, [drain, status]);
+
+  const refreshCheckpoints = useCallback(async (older = false): Promise<void> => {
+    const grant = grantRef.current;
+    if (!grant || !source?.checkpoints) return;
+    try {
+      const next = await source.checkpoints(grant, older ? checkpoints.at(-1)?.id : undefined);
+      if (!aliveRef.current || grantRef.current !== grant) return;
+      setCheckpoints((current) => older ? [...current, ...next.filter((entry) => !current.some((existing) => existing.id === entry.id))] : next);
+      setRecoveryMessage(next.length ? null : "No approval recovery checkpoints for this image yet.");
+    } catch (error) {
+      if (aliveRef.current) setRecoveryMessage(`Recovery checkpoints unavailable: ${failure(error).message}`);
+    }
+  }, [checkpoints, source]);
+
+  const restoreCheckpoint = useCallback(async (id: string): Promise<boolean> => {
+    if (!source?.restore || restoringRef.current) return false;
+    restoringRef.current = true;
+    setRecoveryMessage(null);
+    try {
+      if (!await flush()) return false;
+      const grant = grantRef.current;
+      const acked = ackedRef.current;
+      if (!grant || !acked || !aliveRef.current) return false;
+      setStatus("restoring");
+      const next = await source.restore(grant, id, acked.revision);
+      if (!aliveRef.current || grantRef.current !== grant) return false;
+      ackedRef.current = next;
+      failedRef.current = null;
+      show(next);
+      setStatus("saved");
+      setMessage(null);
+      setRecoveryMessage("Recovery checkpoint restored and saved. Previous agent access has ended.");
+      return true;
+    } catch (error) {
+      if (aliveRef.current) fail(error);
+      return false;
+    } finally {
+      restoringRef.current = false;
+    }
+  }, [fail, flush, show, source]);
 
   useEffect(() => {
     if (!source) return undefined;
@@ -222,6 +272,11 @@ export function useDurableImageEdit(source: DurableImageEdit | undefined): Durab
     state: projected ? deriveImageEditState(projected) : null,
     canUndo: projected ? projected.cursor > 0 : false,
     canRedo: projected ? projected.cursor < projected.commands.length : false,
+    recoveryAvailable: !!source?.checkpoints && !!source.restore,
+    checkpoints,
+    recoveryMessage,
+    refreshCheckpoints,
+    restoreCheckpoint,
     apply,
     retry,
     reload,

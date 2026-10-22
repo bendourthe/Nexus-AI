@@ -66,7 +66,7 @@ Phases 1-6 repaired the Windows wizard. PR 53 merged to `develop` at `838268f`. 
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
 | Deferred (DF) | 4 | 0 |
-| Bugs / regressions (BG) | 0 | 1 |
+| Bugs / regressions (BG) | 1 | 1 |
 | Warnings (WN) | 1 | 0 |
 | Missing tests / coverage gaps (MT) | 1 | 0 |
 | Quality-gate gaps (QG) | 2 | 0 |

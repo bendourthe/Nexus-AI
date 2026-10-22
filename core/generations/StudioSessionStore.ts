@@ -33,6 +33,29 @@ export interface StudioImageRecipeScope {
   readonly storedRevision: number;
   readonly storedSourceSha256: string | null;
   commit(recipe: ImageEditRecipe, expectedRevision: number): void;
+  checkpoints(beforeId?: string): ImageEditCheckpointSummary[];
+  findCheckpoint(id: string): ImageEditCheckpoint | null;
+  checkpoint(input: ImageEditCheckpoint): ImageEditCheckpoint;
+}
+
+/** Immutable recovery data, never an authorization grant. */
+export interface ImageEditCheckpoint {
+  readonly id: string;
+  readonly requestId: string;
+  readonly approvalId: string;
+  readonly callerId: string;
+  readonly runId: string;
+  readonly createdAt: number;
+  readonly recipe: ImageEditRecipe;
+}
+export interface ImageEditCheckpointSummary {
+  readonly id: string;
+  readonly createdAt: number;
+  readonly callerId: string;
+  readonly runId: string;
+  readonly revision: number;
+  readonly cursor: number;
+  readonly commands: number;
 }
 
 interface FolderRow {
@@ -279,6 +302,15 @@ export class StudioSessionStore {
         recipe_json TEXT NOT NULL,
         FOREIGN KEY (turn_id, session_id) REFERENCES studio_turns(id, session_id) ON DELETE CASCADE
       );
+      CREATE TABLE IF NOT EXISTS studio_image_edit_checkpoints (
+        id TEXT PRIMARY KEY,
+        turn_id TEXT NOT NULL,
+        session_id TEXT NOT NULL,
+        checkpoint_json TEXT NOT NULL,
+        FOREIGN KEY (turn_id, session_id) REFERENCES studio_turns(id, session_id) ON DELETE CASCADE
+      );
+      CREATE INDEX IF NOT EXISTS idx_studio_image_edit_checkpoints_owner
+        ON studio_image_edit_checkpoints(turn_id, session_id);
     `);
     const columns = this.db.prepare(`PRAGMA table_info(studio_sessions)`).all() as Array<{ name: string }>;
     if (!columns.some((column) => column.name === "archived_at")) {
@@ -528,6 +560,44 @@ export class StudioSessionStore {
         recipeJson: stored?.recipe_json ?? null,
         storedRevision: stored?.revision ?? 0,
         storedSourceSha256: stored?.source_sha256 ?? null,
+        checkpoints: (beforeId) => this.db.prepare(`
+          SELECT id, json_extract(checkpoint_json, '$.createdAt') AS createdAt,
+            json_extract(checkpoint_json, '$.callerId') AS callerId, json_extract(checkpoint_json, '$.runId') AS runId,
+            json_extract(checkpoint_json, '$.recipe.revision') AS revision, json_extract(checkpoint_json, '$.recipe.cursor') AS cursor,
+            json_array_length(checkpoint_json, '$.recipe.commands') AS commands
+          FROM studio_image_edit_checkpoints WHERE turn_id = ? AND session_id = ?
+            AND (? IS NULL OR rowid < (SELECT rowid FROM studio_image_edit_checkpoints WHERE id = ? AND turn_id = ? AND session_id = ?))
+          ORDER BY rowid DESC LIMIT 50
+        `).all(turnId, sessionId, beforeId ?? null, beforeId ?? null, turnId, sessionId) as ImageEditCheckpointSummary[],
+        findCheckpoint: (id) => {
+          const checkpoint = this.db.prepare("SELECT checkpoint_json FROM studio_image_edit_checkpoints WHERE id = ? AND turn_id = ? AND session_id = ?")
+            .get(id, turnId, sessionId) as { checkpoint_json: string } | undefined;
+          return checkpoint ? JSON.parse(checkpoint.checkpoint_json) as ImageEditCheckpoint : null;
+        },
+        checkpoint: (input) => {
+          const recipe = parseImageEditRecipe(input.recipe);
+          if (recipe.identity.studioSessionId !== sessionId || recipe.identity.studioTurnId !== turnId) {
+            throw new ImageEditError("REVISION_CONFLICT", "The recovery checkpoint does not match the current image.");
+          }
+          const existing = this.db.prepare("SELECT checkpoint_json FROM studio_image_edit_checkpoints WHERE id = ?")
+            .get(input.id) as { checkpoint_json: string } | undefined;
+          if (existing) {
+            const previous = JSON.parse(existing.checkpoint_json) as ImageEditCheckpoint;
+            if (previous.requestId !== input.requestId || previous.approvalId !== input.approvalId
+              || previous.callerId !== input.callerId || previous.runId !== input.runId
+              || JSON.stringify(previous.recipe.identity) !== JSON.stringify(recipe.identity)) {
+              throw new ImageEditError("FORBIDDEN", "The checkpoint belongs to another approval.");
+            }
+            return previous;
+          }
+          if (recipe.revision !== (stored?.revision ?? 0)) {
+            throw new ImageEditError("REVISION_CONFLICT", "The recovery checkpoint does not match the current image.");
+          }
+          const checkpoint = { ...input, recipe };
+          this.db.prepare("INSERT INTO studio_image_edit_checkpoints (id, turn_id, session_id, checkpoint_json) VALUES (?, ?, ?, ?)")
+            .run(input.id, turnId, sessionId, JSON.stringify(checkpoint));
+          return checkpoint;
+        },
         commit: (input, expectedRevision) => {
           const recipe = parseImageEditRecipe(input);
           if (committed || !Number.isSafeInteger(expectedRevision)

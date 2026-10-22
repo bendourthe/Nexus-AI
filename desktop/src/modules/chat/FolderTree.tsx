@@ -127,6 +127,8 @@ export interface FolderTreeCopy {
   emptyHint: string;
   /** Used when a delete target has no title. History chrome: "session". */
   itemNoun?: string;
+  /** Image-only retention policy; other pillars keep their existing copy. */
+  retainedMediaNotice?: string;
 }
 
 export const CHAT_FOLDER_TREE_COPY: FolderTreeCopy = {
@@ -750,29 +752,11 @@ export function FolderTree({
 
   const onChangeColor = useCallback(
     (folderId: string | null, color: string | null) => {
-      if (folderId === null) return;
+      if (folderId === null || !client.setFolderColor) return;
+      const setFolderColor = client.setFolderColor.bind(client);
       resolveMaybe(
-        () => client.getFolder(folderId),
-        (folder) => {
-          if (!folder) return;
-          // The color is stored on the folder row by re-creating via update path.
-          // The client doesn't expose an updateFolder yet; use moveFolder
-          // (same parent) plus a renameFolder no-op for now. The real path is to
-          // extend the client with `updateFolder`. Keep behaviour minimal here
-          // and persist the color via a direct mutation on the returned object.
-          // The InMemoryChatExplorerClient stores Folder by reference in its
-          // map, so reassigning the returned object's color is not durable; we
-          // rename to itself which triggers an updatedAt bump and let the caller
-          // see the color via the contextMenu state.
-          resolveMaybe(
-            () => client.renameFolder(folderId, folder.name), // touch updatedAt
-            () => {
-              Object.assign(folder, { color });
-              refresh();
-            },
-            (err) => setLoadError(errorMessage(err)),
-          );
-        },
+        () => setFolderColor(folderId, color),
+        () => refresh(),
         (err) => setLoadError(errorMessage(err)),
       );
       closeContextMenu();
@@ -1398,7 +1382,7 @@ export function FolderTree({
             </button>
           </li>
           {contextMenu.target.kind === "folder" &&
-            contextMenu.target.id !== null && (
+            contextMenu.target.id !== null && client.setFolderColor && (
               <li>
                 <button
                   type="button"
@@ -1409,6 +1393,14 @@ export function FolderTree({
                   style={ctxButtonStyle}
                 >
                   Change color
+                </button>
+                <button
+                  type="button"
+                  data-testid="ctx-clear-color"
+                  onClick={() => onChangeColor(contextMenu.target.id, null)}
+                  style={ctxButtonStyle}
+                >
+                  Clear color
                 </button>
               </li>
             )}
@@ -1453,6 +1445,7 @@ export function FolderTree({
                     .irreversible
                 }
               </p>
+              {copy.retainedMediaNotice ? <p style={{ color: "var(--fg-muted)" }}>{copy.retainedMediaNotice}</p> : null}
               <div
                 style={{
                   display: "flex",
@@ -1536,6 +1529,7 @@ export function FolderTree({
                   ? "You can restore them from Settings."
                   : "This cannot be undone."}
               </p>
+              {confirmBulk.kind === "delete" && copy.retainedMediaNotice ? <p style={{ color: "var(--fg-muted)" }}>{copy.retainedMediaNotice}</p> : null}
               <div
                 style={{
                   display: "flex",
