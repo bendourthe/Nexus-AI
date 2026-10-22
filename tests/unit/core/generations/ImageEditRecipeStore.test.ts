@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { linkSync, mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import Database from "better-sqlite3";
-import { StudioSessionStore } from "../../../../core/generations/StudioSessionStore.js";
+import { StudioSessionStore, type ImageEditCheckpoint } from "../../../../core/generations/StudioSessionStore.js";
 import { ImageEditRecipeStore, type ImageEditAccess } from "../../../../core/generations/ImageEditRecipeStore.js";
 import { createImageEditRecipe, deriveImageEditState, reduceImageEditRecipe, type ImageEditIdentity } from "../../../../core/image/ImageEditRecipe.js";
 
@@ -14,6 +14,11 @@ const actor = { callerId: "fixture-ui", runId: "fixture-run", grantId: "fixture-
 const roots: string[] = [];
 const sessions: StudioSessionStore[] = [];
 const adjustment = { kind: "adjustments", values: { brightness: 120, contrast: 130, saturation: 80, sharpness: 25 } };
+
+function checkpointMetadata(): Omit<ImageEditCheckpoint, "recipe"> {
+  return { id: randomUUID(), requestId: randomUUID(), approvalId: randomUUID(),
+    callerId: actor.callerId, runId: actor.runId, createdAt: 1000 };
+}
 
 function fixture() {
   const root = mkdtempSync(join(tmpdir(), "nexus-image-recipe-"));
@@ -212,6 +217,221 @@ describe("hard-linked sources", () => {
     const f = fixture();
     linkSync(f.source, join(f.root, "outside-copy.png"));
     expect(() => f.recipes.describe(f.session.id, f.turn.id)).toThrow(expect.objectContaining({ code: "FORBIDDEN" }));
+  });
+});
+
+describe("durable approval checkpoints", () => {
+  it("recovers the complete approval-time redo branch across database close/reopen at a new revision", () => {
+    const f = fixture();
+    let approved = f.recipes.commit(f.identity, actor, adjustment, 0);
+    approved = f.recipes.commit(f.identity, actor, { kind: "mark", mark: {
+      kind: "text", color: "#ffffff", size: 32, text: "Recover this", x: 0, y: 0,
+    } }, approved.revision);
+    approved = f.recipes.commit(f.identity, actor, { kind: "undo" }, approved.revision);
+    const metadata = checkpointMetadata();
+    const checkpoint = f.recipes.captureCheckpoint(f.identity, metadata);
+    expect(checkpoint).toEqual({ ...metadata, recipe: approved });
+    expect(approved.cursor).toBe(1);
+    expect(approved.commands).toHaveLength(2);
+    expect(f.recipes.load(f.identity, actor)).toEqual(approved);
+
+    const branched = f.recipes.commit(f.identity, actor, { kind: "reset" }, approved.revision);
+    expect(deriveImageEditState(branched).marks).toEqual([]);
+    expect(branched.commands).not.toContainEqual(approved.commands[1]);
+    f.owner.close();
+    const owner = new StudioSessionStore(f.db);
+    sessions.push(owner);
+    const reopened = new ImageEditRecipeStore(owner, f.media, f.authorize);
+    const restored = reopened.restoreCheckpoint(f.identity, actor, checkpoint.id, branched.revision);
+    expect(restored).toEqual({ ...approved, revision: branched.revision + 1 });
+    const redone = reopened.commit(f.identity, actor, { kind: "redo" }, restored.revision);
+    expect(deriveImageEditState(redone).marks).toEqual([expect.objectContaining({ text: "Recover this" })]);
+    expect(owner.withImageRecipe(f.session.id, f.turn.id, (scope) => scope.findCheckpoint(checkpoint.id))).toEqual(checkpoint);
+    expect(readFileSync(f.source)).toEqual(png);
+  });
+
+  it("captures revision zero without changing live state and keeps one immutable snapshot per attempt", () => {
+    const f = fixture();
+    const metadata = checkpointMetadata();
+    const first = f.recipes.captureCheckpoint(f.identity, metadata);
+    expect(first.recipe).toEqual(createImageEditRecipe(f.identity, 1, 1));
+    expect(f.owner.withImageRecipe(f.session.id, f.turn.id, (scope) => ({ revision: scope.storedRevision, json: scope.recipeJson })))
+      .toEqual({ revision: 0, json: null });
+    const edited = f.recipes.commit(f.identity, actor, adjustment, 0);
+    expect(f.recipes.captureCheckpoint(f.identity, { ...metadata, createdAt: 2000 })).toEqual(first);
+    expect(f.recipes.listCheckpoints(f.identity, actor)).toEqual([{
+      id: metadata.id, createdAt: 1000, callerId: actor.callerId, runId: actor.runId, revision: 0, cursor: 0, commands: 0,
+    }]);
+    expect(() => f.recipes.captureCheckpoint(f.identity, { ...metadata, approvalId: "another-approval" }))
+      .toThrow(expect.objectContaining({ code: "FORBIDDEN" }));
+    const retry = f.recipes.captureCheckpoint(f.identity, checkpointMetadata());
+    expect(retry.id).not.toBe(first.id);
+    expect(retry.recipe).toEqual(edited);
+    expect(f.recipes.listCheckpoints(f.identity, actor)).toHaveLength(2);
+    expect(f.recipes.load(f.identity, actor)).toEqual(edited);
+  });
+
+  it.each([
+    { id: "" }, { requestId: "x".repeat(257) }, { approvalId: "" },
+    { callerId: "" }, { runId: "" }, { createdAt: -1 }, { createdAt: 1.5 },
+  ])("rejects invalid approval metadata %j without creating recovery data", (invalid) => {
+    const f = fixture();
+    expect(() => f.recipes.captureCheckpoint(f.identity, { ...checkpointMetadata(), ...invalid }))
+      .toThrow(expect.objectContaining({ code: "INVALID_RECIPE" }));
+    expect(f.recipes.listCheckpoints(f.identity, actor)).toEqual([]);
+    expect(f.recipes.load(f.identity, actor).revision).toBe(0);
+  });
+
+  it("returns bounded ordered metadata pages scoped to the selected turn and refuses a foreign cursor", () => {
+    const f = fixture();
+    const captured: ImageEditCheckpoint[] = [];
+    for (let index = 0; index < 52; index += 1) {
+      captured.push(f.recipes.captureCheckpoint(f.identity, { ...checkpointMetadata(), createdAt: 1000 + index }));
+    }
+    const page = f.recipes.listCheckpoints(f.identity, actor);
+    expect(page).toHaveLength(50);
+    expect(page.map((entry) => entry.id)).toEqual(captured.slice(2).reverse().map((entry) => entry.id));
+    expect(page[0]).toEqual({ id: captured[51]!.id, createdAt: 1051, callerId: actor.callerId,
+      runId: actor.runId, revision: 0, cursor: 0, commands: 0 });
+    const older = f.recipes.listCheckpoints(f.identity, actor, page.at(-1)!.id);
+    expect(older.map((entry) => entry.id)).toEqual([captured[1]!.id, captured[0]!.id]);
+    expect(f.recipes.listCheckpoints(f.identity, actor, older.at(-1)!.id)).toEqual([]);
+
+    const other = f.owner.appendTurn({ sessionId: f.session.id, role: "assistant", content: "other turn", mediaRef: f.source });
+    const foreignIdentity = { ...f.identity, studioTurnId: other.id };
+    const foreign = f.recipes.captureCheckpoint(foreignIdentity, checkpointMetadata());
+    expect(f.owner.withImageRecipe(f.session.id, other.id, (scope) => scope.checkpoints()).map((entry) => entry.id)).toEqual([foreign.id]);
+    expect(f.recipes.listCheckpoints(f.identity, actor, foreign.id)).toEqual([]);
+    expect(f.recipes.listCheckpoints(f.identity, actor, "missing-cursor")).toEqual([]);
+    expect(f.recipes.listCheckpoints(f.identity, actor)).toEqual(page);
+    expect(f.recipes.restoreCheckpoint(f.identity, actor, captured[0]!.id, 0).revision).toBe(1);
+    expect(f.recipes.listCheckpoints(f.identity, actor)).toEqual(page);
+  });
+
+  it("enforces restore revision, checkpoint ownership and caller authority without replacing live state", () => {
+    const f = fixture();
+    const checkpoint = f.recipes.captureCheckpoint(f.identity, checkpointMetadata());
+    const saved = f.recipes.commit(f.identity, actor, adjustment, 0);
+    const metadata = f.recipes.listCheckpoints(f.identity, actor);
+    expect(() => f.recipes.restoreCheckpoint(f.identity, actor, checkpoint.id, 0))
+      .toThrow(expect.objectContaining({ code: "REVISION_CONFLICT" }));
+    expect(() => f.recipes.restoreCheckpoint(f.identity, actor, "missing-checkpoint", saved.revision))
+      .toThrow(expect.objectContaining({ code: "FORBIDDEN" }));
+    for (const denied of [{ ...actor, callerId: "other" }, { ...actor, runId: "other" }, { ...actor, grantId: "other" }]) {
+      expect(() => f.recipes.listCheckpoints(f.identity, denied)).toThrow(expect.objectContaining({ code: "FORBIDDEN" }));
+      expect(() => f.recipes.restoreCheckpoint(f.identity, denied, checkpoint.id, saved.revision))
+        .toThrow(expect.objectContaining({ code: "FORBIDDEN" }));
+    }
+    const otherSession = f.owner.createSession({ folderId: null, pillar: "image", title: "Other", modelId: "fixture" });
+    const otherTurn = f.owner.appendTurn({ sessionId: otherSession.id, role: "assistant", content: "shared source", mediaRef: f.source });
+    const otherIdentity = { ...f.identity, studioSessionId: otherSession.id, studioTurnId: otherTurn.id };
+    const otherActor = { ...actor, grantId: "other-viewer" };
+    const otherRecipes = new ImageEditRecipeStore(f.owner, f.media, (access, identity) => access.grantId === otherActor.grantId
+      && identity.studioSessionId === otherSession.id && identity.studioTurnId === otherTurn.id && identity.sourceSha256 === f.identity.sourceSha256);
+    expect(otherRecipes.listCheckpoints(otherIdentity, otherActor)).toEqual([]);
+    expect(() => otherRecipes.restoreCheckpoint(otherIdentity, otherActor, checkpoint.id, 0))
+      .toThrow(expect.objectContaining({ code: "FORBIDDEN" }));
+    expect(otherRecipes.load(otherIdentity, otherActor).revision).toBe(0);
+    expect(f.recipes.load(f.identity, actor)).toEqual(saved);
+    expect(f.recipes.listCheckpoints(f.identity, actor)).toEqual(metadata);
+  });
+
+  it("rejects changed source bytes during checkpoint capture, listing and recovery without changing stored history", () => {
+    const f = fixture();
+    const checkpoint = f.recipes.captureCheckpoint(f.identity, checkpointMetadata());
+    const saved = f.recipes.commit(f.identity, actor, adjustment, 0);
+    writeFileSync(f.source, Buffer.concat([png, Buffer.from("changed original")]));
+    for (const operation of [
+      () => f.recipes.captureCheckpoint(f.identity, checkpointMetadata()),
+      () => f.recipes.listCheckpoints(f.identity, actor),
+      () => f.recipes.restoreCheckpoint(f.identity, actor, checkpoint.id, saved.revision),
+    ]) expect(operation).toThrow(expect.objectContaining({ code: "SOURCE_CHANGED" }));
+    writeFileSync(f.source, png);
+    expect(f.recipes.load(f.identity, actor)).toEqual(saved);
+    expect(f.owner.withImageRecipe(f.session.id, f.turn.id, (scope) => scope.findCheckpoint(checkpoint.id))).toEqual(checkpoint);
+    expect(f.recipes.listCheckpoints(f.identity, actor)).toHaveLength(1);
+  });
+
+  it("rolls back recovery when authorization is revoked after its recipe write", () => {
+    const f = fixture();
+    const checkpoint = f.recipes.captureCheckpoint(f.identity, checkpointMetadata());
+    const saved = f.recipes.commit(f.identity, actor, adjustment, 0);
+    let checks = 0;
+    const revoked = new ImageEditRecipeStore(f.owner, f.media, (access, identity) => ++checks < 3 && f.authorize(access, identity));
+    expect(() => revoked.restoreCheckpoint(f.identity, actor, checkpoint.id, saved.revision))
+      .toThrow(expect.objectContaining({ code: "FORBIDDEN" }));
+    expect(checks).toBe(3);
+    expect(f.recipes.load(f.identity, actor)).toEqual(saved);
+    expect(f.owner.withImageRecipe(f.session.id, f.turn.id, (scope) => scope.findCheckpoint(checkpoint.id))).toEqual(checkpoint);
+    expect(readFileSync(f.source)).toEqual(png);
+  });
+
+  it("rolls back recovery when source ownership changes between validation and acknowledgment", () => {
+    const f = fixture();
+    const checkpoint = f.recipes.captureCheckpoint(f.identity, checkpointMetadata());
+    const saved = f.recipes.commit(f.identity, actor, adjustment, 0);
+    let checks = 0;
+    const racing = new ImageEditRecipeStore(f.owner, f.media, (access, identity) => {
+      if (++checks === 2) writeFileSync(f.source, Buffer.concat([png, Buffer.from("changed during restore")]));
+      return f.authorize(access, identity);
+    });
+    expect(() => racing.restoreCheckpoint(f.identity, actor, checkpoint.id, saved.revision))
+      .toThrow(expect.objectContaining({ code: "SOURCE_CHANGED" }));
+    writeFileSync(f.source, png);
+    expect(f.recipes.load(f.identity, actor)).toEqual(saved);
+    expect(f.owner.withImageRecipe(f.session.id, f.turn.id, (scope) => scope.findCheckpoint(checkpoint.id))).toEqual(checkpoint);
+  });
+
+  it("rolls back the checkpoint and recipe together when the owning SQLite transaction fails", () => {
+    const f = fixture();
+    const recipe = createImageEditRecipe(f.identity, 1, 1);
+    const metadata = checkpointMetadata();
+    expect(() => f.owner.withImageRecipe(f.session.id, f.turn.id, (scope) => {
+      scope.checkpoint({ ...metadata, recipe });
+      scope.commit(reduceImageEditRecipe(recipe, adjustment, 0), 0);
+      throw new Error("transaction aborted after both writes");
+    })).toThrow("transaction aborted after both writes");
+    expect(f.recipes.listCheckpoints(f.identity, actor)).toEqual([]);
+    expect(f.recipes.load(f.identity, actor)).toEqual(recipe);
+    expect(readFileSync(f.source)).toEqual(png);
+  });
+
+  it("fails closed on an injected checkpoint storage failure and retries against the current recipe", () => {
+    const f = fixture();
+    const saved = f.recipes.commit(f.identity, actor, adjustment, 0);
+    const injector = new Database(f.db);
+    injector.exec("CREATE TRIGGER reject_checkpoint BEFORE INSERT ON studio_image_edit_checkpoints BEGIN SELECT RAISE(ABORT, 'injected checkpoint failure'); END");
+    try {
+      expect(() => f.recipes.captureCheckpoint(f.identity, checkpointMetadata()))
+        .toThrow(expect.objectContaining({ code: "STORAGE_UNAVAILABLE" }));
+      expect(f.recipes.listCheckpoints(f.identity, actor)).toEqual([]);
+      expect(f.recipes.load(f.identity, actor)).toEqual(saved);
+    } finally {
+      injector.exec("DROP TRIGGER reject_checkpoint");
+      injector.close();
+    }
+    const edited = f.recipes.commit(f.identity, actor, { kind: "reset" }, saved.revision);
+    expect(f.recipes.captureCheckpoint(f.identity, checkpointMetadata()).recipe).toEqual(edited);
+  });
+
+  it("refuses corrupted checkpoint recipes rather than overwriting current edits", () => {
+    const f = fixture();
+    const checkpoint = f.recipes.captureCheckpoint(f.identity, checkpointMetadata());
+    const saved = f.recipes.commit(f.identity, actor, adjustment, 0);
+    const corruptor = new Database(f.db);
+    try {
+      for (const [recipe, code] of [
+        [{ ...checkpoint.recipe, cursor: 10 }, "INVALID_RECIPE"],
+        [{ ...checkpoint.recipe, identity: { ...checkpoint.recipe.identity, sourceSha256: "b".repeat(64) } }, "SOURCE_CHANGED"],
+      ] as const) {
+        corruptor.prepare("UPDATE studio_image_edit_checkpoints SET checkpoint_json = ? WHERE id = ?")
+          .run(JSON.stringify({ ...checkpoint, recipe }), checkpoint.id);
+        expect(() => f.recipes.restoreCheckpoint(f.identity, actor, checkpoint.id, saved.revision))
+          .toThrow(expect.objectContaining({ code }));
+        expect(f.recipes.load(f.identity, actor)).toEqual(saved);
+      }
+    } finally { corruptor.close(); }
+    expect(readFileSync(f.source)).toEqual(png);
   });
 });
 
