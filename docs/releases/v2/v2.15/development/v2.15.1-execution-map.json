@@ -1,5 +1,5 @@
 {
-  "status": "Master phase 1 committed; remaining disposition, qualification and publication phases open",
+  "status": "Master phases 1 and 2 committed; phase 3 verified for one local merge commit; final integration and publication remain open",
   "master": "docs/releases/v2/v2.15/plans/v2.15.1-archive-readiness.md",
   "source_base": "fadbf89b92cbc2124a6f4961b9ec439ce2c48060",
   "tasks": [
@@ -44,7 +44,7 @@
       "master_phase": 2,
       "description": "Prepare accountable dispositions docs/releases/v2/v2.15/development/v2.15.1-triage.md",
       "acceptance_sha256": "4c874651b04680265d6948ebcd3599ffb2f76d7a1869c6de12a692207fbff634",
-      "actual_commit": null,
+      "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -55,7 +55,7 @@
       "master_phase": 2,
       "description": "Apply and verify covered dispositions docs/releases/v2/v2.16/known-gaps.md",
       "acceptance_sha256": "c64f16e02ebd053fbf3ece88da4e183108108edaa7a198a5f55b1c19ef4714b8",
-      "actual_commit": null,
+      "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -165,7 +165,7 @@
       "master_phase": 2,
       "description": "Prepare accountable dispositions docs/releases/v2/v2.15/development/v2.15.2-triage.md",
       "acceptance_sha256": "9d3428838432e50900756f6d10309481e29f7b154b3c368666b1ba903fb57958",
-      "actual_commit": null,
+      "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -176,7 +176,7 @@
       "master_phase": 2,
       "description": "Apply and verify covered dispositions docs/releases/v2/v2.16/known-gaps.md",
       "acceptance_sha256": "f05e2fb253c8b85f8fa4059589d0383d41b5180339a5b4429908d65927ae66a6",
-      "actual_commit": null,
+      "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -242,7 +242,7 @@
       "master_phase": 2,
       "description": "Prepare accountable dispositions docs/releases/v2/v2.15/development/v2.15.3-triage.md",
       "acceptance_sha256": "6327cb6ed1c6e7123168e6b9aa107cdfeb6efc48a51ea4e2c8b5a5edf16683d1",
-      "actual_commit": null,
+      "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -253,7 +253,7 @@
       "master_phase": 2,
       "description": "Apply and verify covered dispositions docs/releases/v2/v2.16/known-gaps.md",
       "acceptance_sha256": "9afc05dce30175dafc6476b02e92e450d6797751cc080c7ed68e7094d4239df7",
-      "actual_commit": null,
+      "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -319,7 +319,7 @@
       "master_phase": 2,
       "description": "Prepare accountable dispositions docs/releases/v2/v2.15/development/v2.15.4-triage.md",
       "acceptance_sha256": "5193b1aba252316d2f4942faeff413fd974699c6d5d0b570394e53abca147a13",
-      "actual_commit": null,
+      "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -330,7 +330,7 @@
       "master_phase": 2,
       "description": "Apply and verify covered dispositions docs/releases/v2/v2.16/known-gaps.md",
       "acceptance_sha256": "d7054776af426c009aa0ddc3155319bb65ee746d27ab2f9c9e7761bd46b18cdf",
-      "actual_commit": null,
+      "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -341,7 +341,7 @@
       "master_phase": 2,
       "description": "Stabilize and commit batch dispositions docs/releases/v2/v2.15/development/v2.15.4-phase2-history.md",
       "acceptance_sha256": "7c098b8f129fd0e0e360c9eda5d0fd18161af128cc0d5fc925652048f10661d6",
-      "actual_commit": null,
+      "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -473,7 +473,7 @@
       "master_phase": 2,
       "description": "Apply only proven or explicitly covered active dispositions docs/releases/v2/v2.15/known-gaps.md",
       "acceptance_sha256": "46456d8532d54f4227317c44618f54cceded6d7ad39634710816e25f62f86920",
-      "actual_commit": null,
+      "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -484,7 +484,7 @@
       "master_phase": 2,
       "description": "Stabilize and commit the active-gap phase docs/releases/v2/v2.15/development/v2.15.4-phase3-history.md",
       "acceptance_sha256": "69e5492c6407ad1873ef90ab108d506f49b28343acec1ae7e3e829ab161562f6",
-      "actual_commit": null,
+      "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
