@@ -1,0 +1,113 @@
+{
+  "utc": "2026-10-22T19:24:36.760324+00:00",
+  "results": [
+    {
+      "name": "fast-profile",
+      "command": [
+        "node",
+        "scripts/ci-profile.mjs",
+        "--profile",
+        "fast"
+      ],
+      "exit_code": 0,
+      "seconds": 7.91,
+      "stdout_sha256": "878a2b87d8e7be7cecdd0dc5e8332528602e52283c43c302cf5b9a9fc9b3a3ac",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "dependencies",
+      "command": [
+        "npm.cmd",
+        "run",
+        "--silent",
+        "deps:check"
+      ],
+      "exit_code": 0,
+      "seconds": 10.75,
+      "stdout_sha256": "465241223a8ed6a6daaded2fb3497803ec85855c00b94f0fca1e801c17bffdc2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "permissions",
+      "command": [
+        "npm.cmd",
+        "run",
+        "--silent",
+        "perm-tier:check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.45,
+      "stdout_sha256": "39adb33ceb47b0475dd6bcec9ce2205788b12b50b46295571e3545bf9f0c804f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "feature-inventory",
+      "command": [
+        "node",
+        "scripts/check-feature-drift.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.06,
+      "stdout_sha256": "58296af5ed965ce5479d72db44eca3d90f08d87e410922d035b0ec90cf661780",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "docs-layout",
+      "command": [
+        "npm.cmd",
+        "run",
+        "--silent",
+        "check:docs-layout"
+      ],
+      "exit_code": 0,
+      "seconds": 0.47,
+      "stdout_sha256": "fc96ab37345f833cc0d431b4c8e24b1bd7929139f193be64884e892ef57deec8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "handbooks",
+      "command": [
+        "C:\\Users\\bdour\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "C:/nh-checker/catalog/skills/documentation/technical-documentation/scripts/check_handbooks.py",
+        "--root",
+        "C:\\nx-close"
+      ],
+      "exit_code": 0,
+      "seconds": 0.58,
+      "stdout_sha256": "35c1abd137c41b659d5abba990d6e11701f372ec53beab2ae42aad87a29397e0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.06,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7d86e4eeeaedc71772e5c51e0060161c1ae37ec230b0ce4e2c180f058474eda2"
+    }
+  ],
+  "catalog_check_exit_code": 0,
+  "source_base": "63ba7453238e605ecd8bb8b211f3fe7be0a779ee",
+  "log_directory": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v215-security-review-gates-3pq5648d",
+  "raw_receipt_sha256": "54f788fdff5d05db545e75676b9d4b5b862727992a82733eeff33971eac3edfc",
+  "published": false,
+  "archive_readiness_claim": false,
+  "architecture_warnings": 18,
+  "notes": "All checks ran after security correction evidence, current dashboard/release record and refreshed handbook bindings; later added late-automation proposal documentation has no runnable surface. Full patched-runtime suites are recorded separately.",
+  "reference_check": {
+    "totals": {
+      "after": 3774,
+      "before": 3774,
+      "fixed": 0,
+      "newly_broken": 0,
+      "unchanged": 3774
+    },
+    "private_output": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v215-security-reference-check-qodxqou5",
+    "diff_sha256": "af7547b2111edb1ebdbdc590d852d3a89aa39cf757617924b74e099bca0f038c",
+    "real_index_not_modified": true
+  }
+}

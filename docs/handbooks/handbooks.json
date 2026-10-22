@@ -108,7 +108,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-prepared-handbook-atlas.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-atlas.json",
       "presentation": true
     },
     {
@@ -172,7 +172,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-prepared-handbook-generation-recovery.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-generation-recovery.json",
       "presentation": true
     },
     {
@@ -222,7 +222,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-prepared-handbook-installer-runtime.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-installer-runtime.json",
       "presentation": true
     },
     {
@@ -280,7 +280,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-prepared-handbook-media-runtime.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-media-runtime.json",
       "presentation": true
     },
     {
@@ -342,7 +342,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-prepared-handbook-transcript-and-workspaces.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-transcript-and-workspaces.json",
       "presentation": true
     },
     {
@@ -424,7 +424,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-prepared-handbook-document-outline.json",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-document-outline.json",
       "presentation": true
     }
   ],
