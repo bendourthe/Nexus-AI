@@ -1,0 +1,92 @@
+{
+  "utc": "2026-10-22T14:23:37.471126+00:00",
+  "phase3_commit": "0cb4fc776fefdb74650391741557b098293298e0",
+  "root": {
+    "command": [
+      "node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "configs/vitest.config.ts",
+      "--coverage",
+      "--maxWorkers=2",
+      "--reporter=dot"
+    ],
+    "exit_code": 0,
+    "seconds": 181.91,
+    "utc": "2026-10-22T14:21:43.437861+00:00"
+  },
+  "summary": [
+    "Test Files  592 passed | 3 skipped (595)",
+    "Tests  6462 passed | 12 skipped (6474)",
+    "Duration  178.49s (transform 8.70s, setup 10.29s, import 79.40s, tests 123.36s, environment 11.65s)"
+  ],
+  "coverage": {
+    "lines": {
+      "total": 26421,
+      "covered": 23013,
+      "skipped": 0,
+      "pct": 87.1
+    },
+    "statements": {
+      "total": 29665,
+      "covered": 25198,
+      "skipped": 0,
+      "pct": 84.94
+    },
+    "functions": {
+      "total": 4991,
+      "covered": 4341,
+      "skipped": 0,
+      "pct": 86.97
+    },
+    "branches": {
+      "total": 18991,
+      "covered": 14492,
+      "skipped": 0,
+      "pct": 76.3
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "fast": {
+    "profile": "fast",
+    "status": "PASS",
+    "groups": [
+      {
+        "name": "npm run lint",
+        "status": "PASS",
+        "durationMs": 25446
+      },
+      {
+        "name": "node bin/nexus-check.mjs --baseline configs/nexus-check-baseline.json",
+        "status": "PASS",
+        "durationMs": 685
+      },
+      {
+        "name": "node scripts/check-command-parity.mjs",
+        "status": "PASS",
+        "durationMs": 78
+      },
+      {
+        "name": "node scripts/check-release-assets.mjs",
+        "status": "PASS",
+        "durationMs": 63
+      },
+      {
+        "name": "node scripts/check-docs-layout.mjs",
+        "status": "PASS",
+        "durationMs": 46
+      }
+    ]
+  },
+  "independent_findings": [],
+  "independent_focused_tests_passed": 16,
+  "packet_sha256": "9bbdc8e46490b6c073dc8cf0a9877babe6037efe0e90288527a1a2c954be83a9",
+  "packet_entries": 9,
+  "unchanged_result_reuse": "desktop2364/1skip installer1528/3skip builds and six handbooks; tested source/dependencies/config unchanged since phase3; final delta only2workflowlines and16newrootregressions plus docs"
+}

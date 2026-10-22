@@ -1,5 +1,5 @@
 {
-  "status": "Master phases 1 and 2 committed; phase 3 verified for one local merge commit; final integration and publication remain open",
+  "status": "Master phases 1-3 committed; final local qualification, integration, release and read-only readiness remain open",
   "master": "docs/releases/v2/v2.15/plans/v2.15.1-archive-readiness.md",
   "source_base": "fadbf89b92cbc2124a6f4961b9ec439ce2c48060",
   "tasks": [
@@ -66,7 +66,7 @@
       "master_phase": 3,
       "description": "Complete final local verification docs/releases/v2/v2.15/development/v2.15.1-last-phase-evidence.md",
       "acceptance_sha256": "df0054547c71aa1d7327d67295a5c0e3ed9533084194db0168d7b153351f6426",
-      "actual_commit": null,
+      "actual_commit": "0cb4fc776fefdb74650391741557b098293298e0",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -187,7 +187,7 @@
       "master_phase": 3,
       "description": "Complete final local verification docs/releases/v2/v2.15/development/v2.15.2-last-phase-evidence.md",
       "acceptance_sha256": "6596799537eefe2ed0338cb94787222f48e69e43b258691d8c41a403d4c6a4c8",
-      "actual_commit": null,
+      "actual_commit": "0cb4fc776fefdb74650391741557b098293298e0",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -264,7 +264,7 @@
       "master_phase": 3,
       "description": "Complete final local verification docs/releases/v2/v2.15/development/v2.15.3-last-phase-evidence.md",
       "acceptance_sha256": "033da0ef611bcdca135e6b52394be56064bbcf65b4efc70f60acb6464e8643dd",
-      "actual_commit": null,
+      "actual_commit": "0cb4fc776fefdb74650391741557b098293298e0",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -506,7 +506,7 @@
       "master_phase": 3,
       "description": "Repair the two missing v2.13 provenance copies docs/archives/v2/v2.14/known-gaps.md",
       "acceptance_sha256": "473948b22313ff8b23b78512e1135d417dcf6342bc913ce7bcec29ce8a1ce44f",
-      "actual_commit": null,
+      "actual_commit": "0cb4fc776fefdb74650391741557b098293298e0",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -517,7 +517,7 @@
       "master_phase": 3,
       "description": "Qualify necessary checker contract repairs docs/releases/v2/v2.15/development/v2.15-closeout-reconciliation.md",
       "acceptance_sha256": "acea02ace86729c60840a08ae355649ca5b051c95bb2b3181715d6398b3b4f9b",
-      "actual_commit": null,
+      "actual_commit": "0cb4fc776fefdb74650391741557b098293298e0",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -528,7 +528,7 @@
       "master_phase": 3,
       "description": "Stabilize and commit historical reconciliation docs/releases/v2/v2.15/development/v2.15.4-phase4-history.md",
       "acceptance_sha256": "5af7216b8654dea4eb8aa587585638c6903e40c2ee8cc88d2cb4a875993d1b5b",
-      "actual_commit": null,
+      "actual_commit": "0cb4fc776fefdb74650391741557b098293298e0",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -539,7 +539,7 @@
       "master_phase": 3,
       "description": "Complete final local verification docs/releases/v2/v2.15/development/v2.15.4-last-phase-evidence.md",
       "acceptance_sha256": "73189b11e308f2d57f2bfee1c4935cf0d5ad27419a6002c67d68bc98d17087de",
-      "actual_commit": null,
+      "actual_commit": "0cb4fc776fefdb74650391741557b098293298e0",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -550,7 +550,7 @@
       "master_phase": 3,
       "description": "Independently review archive readiness docs/releases/v2/v2.15/development/v2.15-closeout-reconciliation.md",
       "acceptance_sha256": "773bf1a4a428e0a8cd0d24e271560b724233f34199c6be46c79e03ff1d8fe8df",
-      "actual_commit": null,
+      "actual_commit": "0cb4fc776fefdb74650391741557b098293298e0",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
