@@ -33,6 +33,14 @@ from nexus_installer.installer_state import InstallerState
 _MOD = "nexus_installer.engine.hf_weights_puller"
 
 
+@pytest.fixture
+def ample_download_space(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Mocked downloads must not depend on the runner's physical free space."""
+    usage = MagicMock()
+    usage.free = 100 * 2**30
+    monkeypatch.setattr(f"{_MOD}.shutil.disk_usage", lambda _path: usage)
+
+
 def _entry(
     model_id: str = "sana-1.6b-int4",
     repo: str = "Efficient-Large-Model/SANA1.5_1.6B_1024px_int4",
@@ -213,6 +221,7 @@ class TestDiskPrecheck:
         assert any("warn" in call.args[1] for call in log.call_args_list)
 
 
+@pytest.mark.usefixtures("ample_download_space")
 class TestInstallModel:
     def _install(
         self,
@@ -469,6 +478,7 @@ class TestDownloadResume:
         assert headers.get("Authorization") == "Bearer secret-token"
 
 
+@pytest.mark.usefixtures("ample_download_space")
 class TestGatedModels:
     def test_gated_without_token_skips_fast(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
@@ -522,6 +532,7 @@ class TestHfTokenFromEnv:
         assert hf_token_from_env() == "xyz"
 
 
+@pytest.mark.usefixtures("ample_download_space")
 class TestPermanentErrorInstall:
     def test_permanent_error_not_retried(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
@@ -613,6 +624,7 @@ def _variant_entry() -> dict[str, object]:
     }
 
 
+@pytest.mark.usefixtures("ample_download_space")
 class TestPrecisionVariants:
     def test_default_variant_selected_when_it_fits(self) -> None:
         manifest = load_weights_manifest(_variant_entry(), vram_gb=24)

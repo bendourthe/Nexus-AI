@@ -265,9 +265,10 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         admitted = QWEN38_ADMITTED_IDS
         id_text = str(model_id) if model_id else ""
         url_text = str(source.get("url") or "") if isinstance(source, dict) else ""
-        if (QWEN38_FAMILY_PATTERN.search(id_text) or QWEN38_FAMILY_PATTERN.search(url_text)) and (
-            id_text not in admitted
-        ):
+        if (
+            QWEN38_FAMILY_PATTERN.search(id_text)
+            or QWEN38_FAMILY_PATTERN.search(url_text)
+        ) and id_text not in admitted:
             problems.append(
                 f"{where}: Qwen3.8 family is not admitted. See "
                 "docs/reference/model-acceptance.md"

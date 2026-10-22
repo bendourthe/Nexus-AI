@@ -117,6 +117,7 @@ export const IPC_METHODS = [
   // v2.2.0 Phase 5 (5.1): persistent chat explorer (closes 3.P1.N).
   "chat.explorer.tree",
   "chat.explorer.createFolder",
+  "chat.explorer.setFolderColor",
   "chat.explorer.renameFolder",
   "chat.explorer.moveFolder",
   "chat.explorer.deleteFolder",
@@ -150,6 +151,8 @@ export const IPC_METHODS = [
   "studio.image.edit.open",
   "studio.image.edit.commit",
   "studio.image.edit.revision",
+  "studio.image.edit.checkpoints",
+  "studio.image.edit.restore",
   "studio.image.edit.close",
   // v2.13.0 Phase 6 -- the renderer side of the bounded render bridge.
   "studio.image.render.claim",
@@ -212,8 +215,6 @@ export const IPC_METHODS = [
   "coding.parseDocument.status",
   "coding.parseDocument.setEnabled",
   // v2.11.0 Phase 4.3 -- outline tools flag, mirrored from the extension setting.
-  "coding.documentOutline.status",
-  "coding.documentOutline.setEnabled",
 ] as const;
 
 export type Method = (typeof IPC_METHODS)[number];
@@ -939,6 +940,9 @@ export const ChatExplorerCreateFolderRequest = z
   .object({ parentId: z.string().nullable(), name: z.string().min(1) })
   .strict();
 export const ChatExplorerFolderResponse = ChatFolderDto;
+export const ChatExplorerSetFolderColorRequest = z
+  .object({ id: z.string().min(1), color: z.string().regex(/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i).nullable() })
+  .strict();
 export const ChatExplorerRenameFolderRequest = z
   .object({ id: z.string(), name: z.string().min(1) })
   .strict();
@@ -1159,6 +1163,15 @@ export const StudioImageEditRevisionResponse = z
   .strict();
 export const StudioImageEditCloseRequest = StudioImageGrantRequest;
 export const StudioImageEditCloseResponse = z.object({ ok: z.literal(true) }).strict();
+export const StudioImageEditCheckpointsRequest = StudioImageGrantRequest.extend({ beforeId: z.string().uuid().optional() }).strict();
+export const StudioImageEditCheckpointsResponse = z.object({ checkpoints: z.array(z.object({
+  id: z.string().uuid(), createdAt: z.number().int().nonnegative(), callerId: z.string(), runId: z.string(),
+  revision: z.number().int().nonnegative(), cursor: z.number().int().nonnegative(), commands: z.number().int().nonnegative(),
+}).strict()) }).strict();
+export const StudioImageEditRestoreRequest = StudioImageGrantRequest.extend({
+  checkpointId: z.string().uuid(), expectedRevision: z.number().int().nonnegative(),
+}).strict();
+export const StudioImageEditRestoreResponse = StudioImageEditState.strict();
 export const StudioImageRenderClaimRequest = z.object({}).strict();
 export const StudioImageRenderClaimResponse = z
   .object({
@@ -2204,22 +2217,6 @@ export const CodingParseDocumentSetEnabledRequest = z
 export const CodingParseDocumentSetEnabledResponse = z
   .object({ enabled: z.boolean() })
   .strict();
-export const CodingDocumentOutlineStatusRequest = z.object({}).strict();
-export const CodingDocumentOutlineStatusResponse = z
-  .object({
-    enabled: z.boolean(),
-    summariesEnabled: z.boolean(),
-    storedEnabled: z.boolean().optional(),
-    environmentOverrides: z.object({ enabled: z.boolean(), summariesEnabled: z.boolean() }).strict().optional(),
-  })
-  .strict();
-export const CodingDocumentOutlineSetEnabledRequest = z
-  .object({ enabled: z.boolean(), summariesEnabled: z.boolean().optional() })
-  .strict();
-export const CodingDocumentOutlineSetEnabledResponse = z
-  .object({ enabled: z.boolean(), summariesEnabled: z.boolean() })
-  .strict();
-
 // ---- v1.1.0 Phase 11 -- VS Code extension surface ---------------------------
 
 export const ModelCapability = z.enum(["chat", "tool-use", "coding"]);
@@ -3437,6 +3434,11 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
     response: ChatExplorerFolderResponse,
     implemented: true,
   },
+  "chat.explorer.setFolderColor": {
+    request: ChatExplorerSetFolderColorRequest,
+    response: ChatExplorerFolderResponse,
+    implemented: true,
+  },
   "chat.explorer.renameFolder": {
     request: ChatExplorerRenameFolderRequest,
     response: ChatExplorerFolderResponse,
@@ -3595,6 +3597,16 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
   "studio.image.edit.close": {
     request: StudioImageEditCloseRequest,
     response: StudioImageEditCloseResponse,
+    implemented: true,
+  },
+  "studio.image.edit.checkpoints": {
+    request: StudioImageEditCheckpointsRequest,
+    response: StudioImageEditCheckpointsResponse,
+    implemented: true,
+  },
+  "studio.image.edit.restore": {
+    request: StudioImageEditRestoreRequest,
+    response: StudioImageEditRestoreResponse,
     implemented: true,
   },
   "studio.image.render.claim": {
@@ -3835,16 +3847,6 @@ export const METHOD_SCHEMAS: Record<Method, MethodSchema> = {
   "coding.parseDocument.setEnabled": {
     request: CodingParseDocumentSetEnabledRequest,
     response: CodingParseDocumentSetEnabledResponse,
-    implemented: true,
-  },
-  "coding.documentOutline.status": {
-    request: CodingDocumentOutlineStatusRequest,
-    response: CodingDocumentOutlineStatusResponse,
-    implemented: true,
-  },
-  "coding.documentOutline.setEnabled": {
-    request: CodingDocumentOutlineSetEnabledRequest,
-    response: CodingDocumentOutlineSetEnabledResponse,
     implemented: true,
   },
 };

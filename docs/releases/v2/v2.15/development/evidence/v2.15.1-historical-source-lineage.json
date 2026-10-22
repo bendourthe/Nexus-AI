@@ -1,0 +1,29 @@
+{
+  "utc": "2026-10-22T05:16:49.802156+00:00",
+  "repo": "bendourthe/Nexus-AI",
+  "pull_requests": [
+    {
+      "baseRefName": "develop",
+      "headRefName": "feat/v2.12-outline-continuation",
+      "mergeCommit": {
+        "oid": "f24eac41efd6a9672105a6bfb2ce9c3a92d93fc7"
+      },
+      "number": 97,
+      "state": "MERGED",
+      "url": "https://github.com/bendourthe/Nexus-AI/pull/97"
+    },
+    {
+      "baseRefName": "develop",
+      "headRefName": "feat/v2.13-craft-retrieval",
+      "mergeCommit": {
+        "oid": "98e277e94a9742a8ae0f363995675dab0e93bb44"
+      },
+      "number": 101,
+      "state": "MERGED",
+      "url": "https://github.com/bendourthe/Nexus-AI/pull/101"
+    }
+  ],
+  "release_commit": "844daf99b43941323fd0875db3fd2d77e72c4e73",
+  "main_contains_tag": true,
+  "correction": "Unissued v2.12 draft source branch corrected from no-matching-PR branch to actual PR97 head; no native relaxation or record mutation"
+}

@@ -1,0 +1,78 @@
+{
+  "browser": "Microsoft Edge headless via CDP",
+  "observedAt": "2026-10-21T02:21:27.053Z",
+  "observations": [
+    {
+      "label": "desktop",
+      "reading": {
+        "width": 1440,
+        "documentWidth": 1425,
+        "reading": 1336,
+        "title": "Document Output",
+        "slides": 4
+      },
+      "presentation": [
+        {
+          "index": 0,
+          "deckVisible": true,
+          "slideCount": 4,
+          "title": "Document Output"
+        },
+        {
+          "index": 1,
+          "deckVisible": true,
+          "slideCount": 4,
+          "title": "Document Parsing"
+        },
+        {
+          "index": 2,
+          "deckVisible": true,
+          "slideCount": 4,
+          "title": "Conversation Space"
+        },
+        {
+          "index": 3,
+          "deckVisible": true,
+          "slideCount": 4,
+          "title": "Retained Evidence"
+        }
+      ]
+    },
+    {
+      "label": "phone",
+      "reading": {
+        "width": 390,
+        "documentWidth": 390,
+        "reading": 390,
+        "title": "Document Output",
+        "slides": 4
+      },
+      "presentation": [
+        {
+          "index": 0,
+          "deckVisible": true,
+          "slideCount": 4,
+          "title": "Document Output"
+        },
+        {
+          "index": 1,
+          "deckVisible": true,
+          "slideCount": 4,
+          "title": "Document Parsing"
+        },
+        {
+          "index": 2,
+          "deckVisible": true,
+          "slideCount": 4,
+          "title": "Conversation Space"
+        },
+        {
+          "index": 3,
+          "deckVisible": true,
+          "slideCount": 4,
+          "title": "Retained Evidence"
+        }
+      ]
+    }
+  ]
+}

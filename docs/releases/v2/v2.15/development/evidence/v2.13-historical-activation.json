@@ -1,0 +1,27 @@
+{
+  "minor": "v2.13",
+  "plan": "docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md",
+  "signature_and_binding": "verified",
+  "nonce": "2540132e682cee7b793b76e8837773a2",
+  "start_head": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
+  "classes": [
+    "archive-minor"
+  ],
+  "tag": "v2.12.1",
+  "source_branch": "feat/v2.13-craft-retrieval",
+  "record_sha256": "fe51868c8dc39fb1c1cb837514697d1acc4234079d891bcc7afb029d120e475d",
+  "register_refusals": [],
+  "plan_refusals": [],
+  "archive_performed": false,
+  "authorization_context": {
+    "origin": "codex-host-transcript",
+    "permission_mode": "bypassPermissions",
+    "session_id": "01a15bc3-38c8-7cc0-ba5c-813feba8c119",
+    "prompt_sha256": "33c116f763554942b28c7a81b00a5ee8658f572a7c01bcee7443b07393222bbd",
+    "at": 1792647708.5154302,
+    "envelope": "codex-vscode-ide-context-v1",
+    "request_sha256": "3cb0196871c225768d69df53dfde29dde5d4b4dbb4a53dbd9bf23fffd84b3468"
+  },
+  "verified_at_utc": "2026-10-22T05:49:51.510287+00:00",
+  "actual_message_was_captured": true
+}

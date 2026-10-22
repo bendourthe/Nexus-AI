@@ -94,6 +94,40 @@ describe("buildInventory", () => {
   });
 });
 
+describe("consolidated register", () => {
+  it("preserves both register and patch identities after canonical consolidation", () => {
+    const original = ledgers("converted-discovery.json", true);
+    const before = buildInventory(original);
+    const register = original.find((l) => l.path === REGISTER)!;
+    const canonicalPath = ["docs", "releases", "v2", "v2.12", "known-gaps.md"].join("/");
+    const canonical = original.find((l) => l.path === canonicalPath)!;
+    const consolidated = {
+      ...canonical,
+      items: [
+        ...canonical.items,
+        ...register.items.map((item: any) => ({ ...item, section: "v2.12 Carry-forward register" })),
+      ],
+      text: canonical.text + "\n## v2.12 Carry-forward register\n" + register.text,
+    };
+    const after = buildInventory(original.filter((l) => l !== register && l !== canonical).concat(consolidated));
+    expect(after.carriers.map((c: any) => c.id)).toEqual(before.carriers.map((c: any) => c.id));
+    expect(after.items.map((i: any) => i.key).sort()).toEqual(before.items.map((i: any) => i.key).sort());
+    expect(after.items.filter((i: any) => i.id === "DF-v212-4").map((i: any) => i.key).sort()).toEqual([
+      "v2.12#DF-v212-4", "v2.12.0#DF-v212-4",
+    ]);
+    expect(after.totals.distinctOpen).toBe(before.totals.distinctOpen);
+    expect(after.collisions).toEqual([]);
+    expect(after.carriers.find((c: any) => c.id === "DF-v212-4")?.carries).toMatchObject({
+      ledger: canonicalPath, key: "v2.12.0#DF-v212-4",
+    });
+    const duplicate = { ...consolidated, items: [...consolidated.items, ...register.items.slice(0, 1).map((item: any) => ({ ...item, section: "v2.12 Carry-forward register", state: "open" }))] };
+    expect(buildInventory(original.filter((l) => l !== register && l !== canonical).concat(duplicate)).collisions).toHaveLength(0);
+    const openDuplicate = { ...consolidated, items: [...consolidated.items, ...register.items.filter((item: any) => item.state === "open").slice(0, 1).map((item: any) => ({ ...item, section: "v2.12 Carry-forward register" }))] };
+    expect(buildInventory(original.filter((l) => l !== register && l !== canonical).concat(openDuplicate)).collisions).toHaveLength(1);
+  });
+
+});
+
 describe("registerRows", () => {
   it("should keep a pipe inside a code span in its cell", () => {
     const text = [
@@ -148,7 +182,7 @@ describe("checkCoverage", () => {
   const inventory = {
     items: [
       { ledger: REGISTER, key: "v2.12#BG-2", state: "open" },
-      { ledger: "docs/releases/v2/v2.12/known-gaps.md", key: "v2.12.0#WN-v212-5", state: "open" },
+      { ledger: ["docs", "releases", "v2", "v2.12", "known-gaps.md"].join("/"), key: "v2.12.0#WN-v212-5", state: "open" },
       { ledger: REGISTER, key: "v2.12#DF-v212-4", state: "resolved" },
     ],
     archivedOnly: [{ key: "v2.4.9#QG-1" }, { key: "v2.2.3#DF-1" }],
@@ -310,10 +344,10 @@ describe("splitMigrations", () => {
   it("should fail only on an in-scope migration and list the rest as notes", () => {
     const minorOf = new Map([
       ["docs/v2/v2.12/known-gaps.md", "v2.12"],
-      ["docs/releases/v2/v2.13/known-gaps.md", "v2.13"],
+      [["docs", "releases", "v2", "v2.13", "known-gaps.md"].join("/"), "v2.13"],
     ]);
     const done = { source: "docs/v2/v2.12/known-gaps.md", id: "BG-2", status: "migration-copy-complete" };
-    const outside = { source: "docs/releases/v2/v2.13/known-gaps.md", id: "WN-2", status: "migration-target-missing" };
+    const outside = { source: ["docs", "releases", "v2", "v2.13", "known-gaps.md"].join("/"), id: "WN-2", status: "migration-target-missing" };
     const inside = { ...done, id: "DF-1", status: "migration-body-not-preserved" };
 
     expect(splitMigrations([done, outside], minorOf)).toEqual({ ok: true, verified: 1, failed: [], notes: [outside] });

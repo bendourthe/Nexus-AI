@@ -172,6 +172,7 @@ describe("sidecar handlers", () => {
           // v2.2.0 Phase 5 wired chat persistence and auto-titling.
           "chat.explorer.tree",
           "chat.explorer.createFolder",
+          "chat.explorer.setFolderColor",
           "chat.explorer.renameFolder",
           "chat.explorer.moveFolder",
           "chat.explorer.deleteFolder",
@@ -205,6 +206,8 @@ describe("sidecar handlers", () => {
           "studio.image.edit.commit",
           "studio.image.edit.revision",
           "studio.image.edit.close",
+          "studio.image.edit.checkpoints",
+          "studio.image.edit.restore",
           // v2.13.0 Phase 6 wired the renderer side of the render bridge.
           "studio.image.render.claim",
           "studio.image.render.complete",

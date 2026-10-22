@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="source-sha256" content="80eff4033c1def65945fa9c43220d6f6c65f461ff78de53afced5ae2f9d8e642"><title>Nexus Architecture Atlas</title><style>/* Namespaced mechanics; project authors retain composition and brand tokens. */
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="source-sha256" content="ac2b800380bcf20d078d0f12e2741f9ecf00677397002d81701f0c6ff947b5ac"><title>Nexus Architecture Atlas</title><style>/* Namespaced mechanics; project authors retain composition and brand tokens. */
 [data-dv-deck][hidden], [data-dv-slide][hidden] { display: none !important; }
 [data-dv-open], [data-dv-chapter] { display: none; }
 [data-dv-ready] [data-dv-open], [data-dv-ready] [data-dv-chapter] { display: inline-flex; }
@@ -107,26 +107,26 @@ ol,ul{padding-left:1.4em}li{margin-bottom:.45em}li p{margin-block:.3em}
 <tbody><tr>
 <td>Install or repair media</td>
 <td><code>scripts/installer/</code></td>
-<td>Owner-aware lease and atomic runtime state</td>
-<td>Installer tests plus packaged operator run</td>
+<td>Owner-aware lease; atomic runtime state</td>
+<td>Tests; packaged run</td>
 </tr>
 <tr>
 <td>Generate an image</td>
-<td><code>desktop/sidecar/src/diffusion/dispatcher.ts</code> and Python pipelines</td>
-<td>Shared diffusion readiness API</td>
-<td>PNG validator and retained artifact</td>
+<td><a href="../../../desktop/sidecar/src/diffusion/dispatcher.ts">Image dispatcher</a> and Python pipelines</td>
+<td>Shared readiness API</td>
+<td>Validated PNG artifact</td>
 </tr>
 <tr>
-<td>Edit a saved image, by hand or by an approved agent</td>
-<td><code>desktop/sidecar/src/studio/imageEditRuntime.ts</code> and the Image Studio viewer</td>
-<td>One recipe store with revisions, Ask-inbox grants per image, one pixel path for preview and export</td>
-<td>Restart, conflict and grant tests plus a WebView pixel check</td>
+<td>Edit or recover an image</td>
+<td><a href="../../../desktop/sidecar/src/studio/imageEditRuntime.ts">Image edit runtime</a> and viewer</td>
+<td>Revisioned recipes; approval recovery; retained originals</td>
+<td>Retry, restart, restore and grant tests</td>
 </tr>
 <tr>
 <td>Generate a video</td>
-<td><code>desktop/sidecar/src/diffusion/videoDispatcher.ts</code> and Python pipelines</td>
-<td>Shared diffusion readiness API</td>
-<td>Video probe and retained artifact</td>
+<td><a href="../../../desktop/sidecar/src/diffusion/videoDispatcher.ts">Video dispatcher</a> and Python pipelines</td>
+<td>Shared readiness API</td>
+<td>Probed video artifact</td>
 </tr>
 <tr>
 <td>Browse and install models</td>
@@ -141,10 +141,10 @@ ol,ul{padding-left:1.4em}li{margin-bottom:.45em}li p{margin-block:.3em}
 <td>Protocol, hydration, and UI tests</td>
 </tr>
 <tr>
-<td>Work across local folders</td>
-<td>Coding page and workspace scope</td>
-<td>Union-of-roots path boundary</td>
-<td>Picker, persistence, and denial tests</td>
+<td>Organize chats; select workspaces</td>
+<td>Chat explorer and Coding workspace</td>
+<td>Persisted folder colors; union-of-roots boundary</td>
+<td>Database reopen, picker and denial tests</td>
 </tr>
 </tbody></table>
 </div></section>

@@ -106,12 +106,14 @@ export function ImageViewer({
   const [redo, setRedo] = useState<readonly EditMark[]>([]);
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
   const [exportError, setExportError] = useState<string | null>(null);
+  const [recoveryOpen, setRecoveryOpen] = useState(false);
+  const [restoreId, setRestoreId] = useState<string | null>(null);
 
   // v2.13.0: a persisted Image Studio image keeps its edits in the sidecar. A
   // slider drag previews locally and commits once, on release.
   const saved = useDurableImageEdit(durable);
   const isDurable = saved.status !== "off" && saved.status !== "unavailable";
-  const editingLocked = isDurable && (saved.status === "loading" || saved.state === null);
+  const editingLocked = isDurable && (saved.status === "loading" || saved.status === "restoring" || saved.state === null);
   const [dragAdjustments, setDragAdjustments] = useState<ImageAdjustments | null>(null);
   const adjustments: ImageAdjustments = isDurable
     ? dragAdjustments ?? saved.state?.adjustments ?? NEUTRAL_ADJUSTMENTS
@@ -582,6 +584,35 @@ export function ImageViewer({
         onReload={saved.reload}
       />
 
+      {isDurable && saved.recoveryAvailable ? (
+        <section aria-label="Image recovery" style={{ padding: "var(--space-2)", color: "var(--fg-0)" }}>
+          <button type="button" data-testid={`${testId}-recovery`} disabled={editingLocked} onClick={() => {
+            commitAdjustments();
+            setRecoveryOpen(!recoveryOpen);
+            if (!recoveryOpen) void saved.refreshCheckpoints();
+          }}>Recovery checkpoints</button>
+          {recoveryOpen ? <div>
+            <p>Approval attempts save your complete edit and redo history. Restoring replaces the current history and ends agent access to this image. The original image stays unchanged.</p>
+            {saved.checkpoints.map((checkpoint) => <div key={checkpoint.id}>
+              <span>{new Date(checkpoint.createdAt).toLocaleString()} - {checkpoint.callerId} / {checkpoint.runId}, revision {checkpoint.revision}, history {checkpoint.cursor}/{checkpoint.commands}</span>{" "}
+              <button type="button" disabled={editingLocked} data-testid={`${testId}-restore-${checkpoint.id}`} onClick={() => {
+                commitAdjustments();
+                setRestoreId(checkpoint.id);
+              }}>Restore checkpoint</button>
+            </div>)}
+            {saved.checkpoints.length >= 50 ? <button type="button" disabled={editingLocked} onClick={() => void saved.refreshCheckpoints(true)}>Load older checkpoints</button> : null}
+            <p role="status">{saved.recoveryMessage}</p>
+            {restoreId ? <div role="alertdialog" aria-label="Confirm image recovery">
+              <p>Replace current edits and undo/redo history with this checkpoint? Pending edits will be saved first. Agent access will end.</p>
+              <button type="button" disabled={editingLocked} onClick={() => setRestoreId(null)}>Cancel recovery</button>
+              <button type="button" disabled={editingLocked} data-testid={`${testId}-restore-confirm`} onClick={() => {
+                void saved.restoreCheckpoint(restoreId).then((ok) => { if (ok) setRestoreId(null); });
+              }}>Restore and save</button>
+            </div> : null}
+          </div> : null}
+        </section>
+      ) : null}
+
       {pendingAction ? (
         <div
           data-testid={`${testId}-version-choice`}
@@ -843,6 +874,7 @@ function EditStatusLine({
     message ??
     (status === "loading" ? "Loading saved edits..." :
       status === "saving" ? "Saving..." :
+        status === "restoring" ? "Restoring and saving checkpoint..." :
         status === "saved" ? "Edits saved" : null);
   if (!text) return null;
   return (

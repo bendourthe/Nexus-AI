@@ -63,7 +63,7 @@ describe("HeadlessAgentSession", () => {
     const { client } = scriptedLlm([toolCall("parse_document", { path: "scan.pdf" }), "Done."]);
     const session = new HeadlessAgentSession(client, createHeadlessTools({
       parseDocumentEnabled: true,
-      outlineContextTokens: () => 4_096,
+      documentContextTokens: () => 4_096,
       documentParser: { parse: async () => ({ engine: "rapidocr", text: "word ".repeat(8_000), markdown: null, pageCount: 1 }) },
     }));
     const events: HeadlessAgentEvent[] = [];
@@ -84,7 +84,7 @@ describe("HeadlessAgentSession", () => {
     ], { promptCounts: [0, 13_000, 15_000] });
     const session = new HeadlessAgentSession(client, createHeadlessTools({
       parseDocumentEnabled: true,
-      outlineContextTokens: () => 16_384,
+      documentContextTokens: () => 16_384,
       documentParser: { parse: async () => ({ engine: "rapidocr", text: "word ".repeat(16_000), markdown: null, pageCount: 1 }) },
     }));
     const events: HeadlessAgentEvent[] = [];

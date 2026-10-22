@@ -2,7 +2,8 @@
 
 **Project**: Nexus AI Studio
 **Status**: finalized
-**Last updated**: 2026-08-20 (develop follow-up after tag `v2.1.0`; no retag)
+**Last updated**: 2026-10-21
+**Open items**: 0
 
 Per-version tracker of unfinished work, deferrals, and follow-ups. The next `/plan` ingests this file to decide what carries forward. Classifications: `NI` not-implemented, `DF` deferred, `BG` bug/known-issue, `MT` missing-tests/coverage, `WN` warning/suppressed, `QG` bypassed-gate/CI.
 
@@ -17,7 +18,7 @@ Phase 7 reconciliation plus post-cut known-gaps sweeps: hardware, license, and l
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 6 | 18 |
+| Deferred (DF) | 0 | 18 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -27,7 +28,7 @@ Phase 7 reconciliation plus post-cut known-gaps sweeps: hardware, license, and l
 
 #### Deferred
 
-##### DF-1 - DiffusionGemma is a watch item, not a catalog entry
+##### DF-1 - DiffusionGemma is a watch item, not a catalog entry - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Unsloth Dynamic quant references + capability flags + watch item (1.4 / A4b)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 1.4)
@@ -38,35 +39,35 @@ Phase 7 reconciliation plus post-cut known-gaps sweeps: hardware, license, and l
   2. Sub-16 GB quants are published.
 - **Suggested next step**: Re-open as a catalog entry only when both flip conditions hold. Gate `diffusion: true` and `codingEligible: false` so it never becomes a coding-harness default.
 
-##### DF-2 - Live golden-task re-verification of Muse Glimmer and Nemotron Lightning was not run
+##### DF-2 - Live golden-task re-verification of Muse Glimmer and Nemotron Lightning was not run - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Local benchmark re-verification (1.5)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 1.5)
 - **Reason**: This cycle had no proven 24 GB-tier host with either model loaded. Catalog `localEval.status` is `not_run`. Vendor-reported SWE-Bench Verified 76.0 stays in `vendorReported` only. `recommended.json` was not changed.
 - **Suggested next step**: On a 24 GB-tier machine, run `runCatalogModelEval` against Muse Glimmer K-Quant-17GB and Lightning Q4_K_M, persist the blocks, and only then propose a default-route change.
 
-##### DF-7 - Live 20-job GPU restart soak is unproven
+##### DF-7 - Live 20-job GPU restart soak is unproven - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3 - Persistent generation job queue (3.2)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 3.2)
 - **Reason**: Interactive Image Studio / Video Lab clicks now enqueue `priority: "interactive"` and fire-and-forget `pumpOnce` (same GPU slot as batches). Restart recovery remains unit-tested (`running` -> `interrupted` -> `queued`, id-stable). A 20-job batch surviving a real app restart on a GPU host was not run. not_run != pass.
 - **Suggested next step**: Soak a 20-job seed sweep across a sidecar restart on a diffusion-capable machine.
 
-##### DF-8 - Muse Glimmer hf.co GGUF is gated vision:false
+##### DF-8 - Muse Glimmer hf.co GGUF is gated vision:false - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 - Chat attachment ingestion + visual-token budgeting (4.1)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 4.1)
 - **Reason**: Native Muse is multimodal. The catalog pull is `ollama://hf.co/meta-models/Muse-Glimmer-30B-GGUF:...`. This cycle did not prove that GGUF ships mmproj. `vision` is false so Chat will not send image bytes to a text-only serving path.
 - **Suggested next step**: After a local Ollama load of the K-Quant-17GB tag, check for a vision projector. If present, set `vision: true` and a visual-token budget. If absent, keep the gate and leave the native library tag as a follow-up.
 
-##### DF-13 - Live Unsloth QLoRA was not run on GPU
+##### DF-13 - Live Unsloth QLoRA was not run on GPU - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5 - QLoRA orchestration (5.4 / 5.5)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 5.4)
 - **Reason**: CI uses `stubTrainer` and `runtimes/tuning/train.py --stub`. `NEXUS_TUNING_LIVE=1` is documented. No 16 GB NVIDIA host ran a real `import unsloth` train this cycle. not_run != pass.
 - **Suggested next step**: On a supported host, provision from Settings, run a tiny JSONL job with `NEXUS_TUNING_LIVE=1`, and record the wall-clock plus peak VRAM.
 
-##### DF-21 - Live GPU layer-streaming OOM rescue is unproven
+##### DF-21 - Live GPU layer-streaming OOM rescue is unproven - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 6 - Diffusion VRAM-budget knobs (6.3)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 6.3)

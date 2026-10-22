@@ -43,7 +43,7 @@ for (const source of files) {
   const target = outputPath(source);
   const expected = render(source);
   if (checkOnly) {
-    if (!existsSync(target) || readFileSync(target, "utf8") !== expected) {
+    if (!existsSync(target) || readFileSync(target, "utf8").replace(/\r\n/g, "\n") !== expected.replace(/\r\n/g, "\n")) {
       drift.push(relative(root, target));
     }
     continue;

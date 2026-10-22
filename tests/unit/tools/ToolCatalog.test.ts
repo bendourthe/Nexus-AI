@@ -3,7 +3,7 @@ import { TOOL_CATALOG } from "../../../src/tools/ToolCatalog.js";
 import { TOOL_NAMES } from "../../../src/tools/types.js";
 
 describe("TOOL_CATALOG", () => {
-  it("contains exactly 27 entries (advertised tools only)", () => {
+  it("contains exactly 32 entries (advertised tools only)", () => {
     // v0.7.0 Phase 3 added compress_range + compress_message, both
     // permission-tier 0 model-callable compression tools.
     // v0.7.0 Phase 4.4 added update_todos, also permission-tier 0.
@@ -16,8 +16,7 @@ describe("TOOL_CATALOG", () => {
     // v1.16.0 Phase 4 (A6) added parse_document.
     // v1.19.1 Phase 2.8 added watch_path + hash_file.
     // v2.0.0 Phase 2 added five browser_* tools (DANGEROUS, specialty-trimmed).
-    // v2.11.0 Phase 4 added document_outline + document_read_section (+2, CONFIRM, specialty-trimmed).
-    expect(TOOL_CATALOG).toHaveLength(34);
+    expect(TOOL_CATALOG).toHaveLength(32);
   });
 
   it("every entry name matches a value from TOOL_NAMES", () => {

@@ -26,6 +26,7 @@ import {
 } from "../../../../core/image/ImageEditRecipe.js";
 import type { StudioSessionStore } from "../../../../core/generations/StudioSessionStore.js";
 import type { ParkAskInput } from "../../../../modules/coding/autonomy/types.js";
+import type { TrustedApprovalPreparation } from "../../../../modules/coding/autonomy/AskInbox.js";
 import { nexusHome } from "../../../../core/storage/paths.js";
 import { generatedImagesRoot } from "./generatedImages.js";
 import type { ImageRenderBridge } from "./imageRenderBridge.js";
@@ -47,6 +48,8 @@ interface AgentGrant extends Grant {
   readonly callerId: string;
   readonly runId: string;
   readonly expiresAt: number;
+  readonly generation: number;
+  readonly checkpointId: string;
 }
 
 type AccessState = "pending" | "approved" | "denied" | "expired";
@@ -55,8 +58,20 @@ interface AccessRequest {
   readonly callerId: string;
   readonly runId: string;
   readonly identity: ImageEditIdentity;
+  readonly generation: number;
   state: AccessState;
   grantId?: string;
+  checkpointId?: string;
+}
+
+export interface ImageCheckpointSummary {
+  readonly id: string;
+  readonly createdAt: number;
+  readonly callerId: string;
+  readonly runId: string;
+  readonly revision: number;
+  readonly cursor: number;
+  readonly commands: number;
 }
 
 export interface OpenedImageEdit {
@@ -86,6 +101,7 @@ export interface AgentImageState {
   readonly limits: ReturnType<typeof imageEditCapabilities>["limits"];
   readonly actions: readonly string[];
   readonly expiresAt: number;
+  readonly checkpointId: string;
 }
 
 export interface ImageEditOps {
@@ -96,6 +112,11 @@ export interface ImageEditOps {
     capabilities: ReturnType<typeof imageEditCapabilities>;
   };
   revision(input: { grantId: string }): { revision: number };
+  checkpoints(input: { grantId: string; beforeId?: string }): { checkpoints: ImageCheckpointSummary[] };
+  restore(input: { grantId: string; checkpointId: string; expectedRevision: number }): {
+    recipe: ImageEditRecipe;
+    capabilities: ReturnType<typeof imageEditCapabilities>;
+  };
   close(input: { grantId: string }): { ok: true };
   /** Called by the session deletion owner; ends every grant and request for that session. */
   revokeSession(sessionId: string): void;
@@ -118,7 +139,7 @@ export interface ImageEditOpsOptions {
   readonly mediaRoot?: string;
   readonly exportsRoot?: string;
   /** The human confirmation owner for agent access requests. */
-  readonly askInbox?: { parkAndWait(input: ParkAskInput): Promise<"approved" | "denied" | "expired"> };
+  readonly askInbox?: { parkAndWait(input: ParkAskInput, prepare?: TrustedApprovalPreparation): Promise<"approved" | "denied" | "expired"> };
   readonly renderBridge?: ImageRenderBridge;
   readonly now?: () => number;
 }
@@ -174,6 +195,10 @@ export function createImageEditOps(
   // One replay cache per grant, so another caller cannot evict this grant's entries.
   const replay = new Map<string, Map<string, { hash: string; result: AgentImageState }>>();
   const rendering = new Set<string>();
+  const generations = new Map<string, number>();
+  const restoring = new Set<string>();
+  const imageKey = (identity: ImageEditIdentity): string => JSON.stringify(identity);
+  const generation = (identity: ImageEditIdentity): number => generations.get(imageKey(identity)) ?? 0;
   const dropGrant = (grantId: string): void => {
     agentGrants.delete(grantId);
     replay.delete(grantId);
@@ -189,6 +214,7 @@ export function createImageEditOps(
     }
     const grant = agentGrants.get(access.grantId);
     return grant !== undefined && grant.expiresAt > now()
+      && grant.generation === generation(grant.identity) && !restoring.has(imageKey(grant.identity))
       && grant.callerId === access.callerId && grant.runId === access.runId
       && sameImage(grant.identity, requested);
   };
@@ -207,6 +233,10 @@ export function createImageEditOps(
     if (grant.expiresAt <= now()) {
       dropGrant(access.grantId);
       throw new ImageEditError("FORBIDDEN", "The image grant expired. Request access again.");
+    }
+    if (grant.generation !== generation(grant.identity) || restoring.has(imageKey(grant.identity))) {
+      dropGrant(access.grantId);
+      throw new ImageEditError("FORBIDDEN", "Image recovery ended this agent grant. Request access again.");
     }
     return grant;
   };
@@ -231,6 +261,7 @@ export function createImageEditOps(
       limits: caps.limits,
       actions: ["adjustments", "mark", "reset", "undo", "redo"],
       expiresAt: grant.expiresAt,
+      checkpointId: grant.checkpointId,
     };
   };
 
@@ -298,12 +329,17 @@ export function createImageEditOps(
   };
 
   const issueAgentGrant = (request: AccessRequest): string => {
+    if (!request.checkpointId || request.generation !== generation(request.identity)) {
+      throw new ImageEditError("FORBIDDEN", "Approval has no current recovery checkpoint.");
+    }
     const grantId = randomUUID();
     agentGrants.set(grantId, {
       identity: request.identity,
       callerId: request.callerId,
       runId: request.runId,
       expiresAt: now() + AGENT_GRANT_TTL_MS,
+      generation: request.generation,
+      checkpointId: request.checkpointId,
     });
     return grantId;
   };
@@ -336,6 +372,29 @@ export function createImageEditOps(
     revision: (input) => guarded(() => {
       const grant = granted(input.grantId);
       return { revision: recipes.revision(grant.identity, uiAccess(input.grantId)) };
+    }),
+    checkpoints: (input) => guarded(() => {
+      const grant = granted(input.grantId);
+      return { checkpoints: recipes.listCheckpoints(grant.identity, uiAccess(input.grantId), input.beforeId) };
+    }),
+    restore: (input) => guarded(() => {
+      const grant = granted(input.grantId);
+      const key = imageKey(grant.identity);
+      if (restoring.has(key)) throw new ImageEditError("REVISION_CONFLICT", "Image recovery is already in progress.");
+      restoring.add(key);
+      try {
+        const recipe = recipes.restoreCheckpoint(grant.identity, uiAccess(input.grantId), input.checkpointId, input.expectedRevision);
+        generations.set(key, generation(grant.identity) + 1);
+        for (const [id, agent] of agentGrants) if (sameImage(agent.identity, grant.identity)) dropGrant(id);
+        for (const request of requests.values()) if (sameImage(request.identity, grant.identity)) {
+          request.state = "denied";
+          delete request.grantId;
+          delete request.checkpointId;
+        }
+        return { recipe, capabilities: imageEditCapabilities(recipe) };
+      } finally {
+        restoring.delete(key);
+      }
     }),
     close: (input) => {
       grants.delete(input.grantId);
@@ -371,7 +430,8 @@ export function createImageEditOps(
       const decided = [...requests.entries()].filter(([, r]) => r.state !== "pending");
       for (const [id] of decided.slice(0, Math.max(0, decided.length - MAX_DECIDED_REQUESTS + 1))) requests.delete(id);
       const requestId = randomUUID();
-      const request: AccessRequest = { callerId, runId: agentRun, identity, state: "pending" };
+      if (restoring.has(imageKey(identity))) throw new ImageEditError("FORBIDDEN", "Image recovery is in progress.");
+      const request: AccessRequest = { callerId, runId: agentRun, identity, generation: generation(identity), state: "pending" };
       requests.set(requestId, request);
       // Caller and run ids are whatever the requester sent; the request code lets
       // the user match this ask to the agent that is actually waiting for it.
@@ -383,15 +443,31 @@ export function createImageEditOps(
           + "The caller and run names are reported by the requester and are not verified. "
           + `Session ${identity.studioSessionId}, turn ${identity.studioTurnId}, source sha256 ${identity.sourceSha256}. `
           + "For one hour the agent may change adjustments and marks, undo and redo (including undoing your own edits, "
-          + "which a new edit then replaces), and export a copy. The original image is never changed.",
+          + "which a new edit then replaces), and export a copy. Approval saves a recoverable checkpoint of all current edits and redo history. "
+          + "You can restore it in the image viewer; restoration ends this image's agent access. The original image is never changed.",
         args: { sessionId: identity.studioSessionId, turnId: identity.studioTurnId, callerId, runId: agentRun },
         runMode: "headless",
         runId: agentRun,
         sessionId: identity.studioSessionId,
         ttlMs: AGENT_GRANT_TTL_MS,
+      }, (approvalId, attemptId) => {
+        if (request.state !== "pending" || request.generation !== generation(identity) || restoring.has(imageKey(identity))) {
+          throw new ImageEditError("FORBIDDEN", "This image approval is no longer current.");
+        }
+        // Private attempt identity, freshly issued by the inbox at actual approval.
+        const checkpoint = recipes.captureCheckpoint(identity, {
+          id: attemptId, requestId, approvalId, callerId, runId: agentRun, createdAt: now(),
+        });
+        request.checkpointId = checkpoint.id;
+        return { isValid: () => request.state === "pending" && request.generation === generation(identity)
+          && !restoring.has(imageKey(identity)) };
       }).then(
         (decision) => {
           if (request.state !== "pending") return;
+          if (decision === "approved" && (!request.checkpointId || request.generation !== generation(identity))) {
+            request.state = "denied";
+            return;
+          }
           request.state = decision;
           if (decision === "approved") request.grantId = issueAgentGrant(request);
         },
@@ -476,6 +552,8 @@ export function createImageEditOps(
           marks: state.marks,
           png: source.bytes.toString("base64"),
         });
+        // Preview bytes are authority too; a restore/expiry during render revokes them.
+        agentGranted(access);
         const digest = sha256(png);
         if (input.mode === "preview") {
           return { revision: recipe.revision, sha256: digest, bytes: png.length, png: png.toString("base64") };

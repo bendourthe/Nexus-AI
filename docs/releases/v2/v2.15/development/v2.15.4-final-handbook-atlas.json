@@ -1,0 +1,75 @@
+{
+  "snapshot": {
+    "entry_sha256": "c427d656f456695a1233a028c2751f4d0160d8ce33c97fc0ba8c1e74bee97014",
+    "inputs": {
+      "docs/handbooks/markdown/atlas.md": "ac2b800380bcf20d078d0f12e2741f9ecf00677397002d81701f0c6ff947b5ac",
+      "scripts/generate-handbooks.mjs": "e0d4eba3098ba99ce83eda35ce53b04b27d9fc2b7e2feb07ba29881f27dc02d8",
+      "scripts/handbook-renderer.mjs": "0850935742db242e576989c2ced66a5810a0bdfd0cad78791916cf5efb21566d",
+      "docs/handbooks/_sources/storyboards.json": "bdc1c561b3bf3980e6a140661ff6a4724009d1a140ab1a3fb259876d4045d651",
+      "docs/handbooks/_sources/handbook.css": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf",
+      "docs/handbooks/_sources/handbook-clones.js": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b",
+      "docs/handbooks/_sources/dual-view.css": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
+      "docs/handbooks/_sources/dual-view-runtime.js": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
+      "desktop/public/nexus-mark.png": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05",
+      "package.json": "ec0f9845c4e932681ffe83329853d8a22bf3f387aebdd5ee4a56a39e4845b2b6",
+      "package-lock.json": "bb4af47ca998a2fb9a54b0db163892ae87d6f63e72a0173ac007e747e019d44c",
+      "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py": "6a5ad60fea06bd4c6e8e163cfdf8906455a6ab41a5873059455a45d3523f4c47",
+      "desktop/sidecar/src/diffusion/runtimeFactory.ts": "de804bcdd5ebef82b3cab1f17ca6e566b6e0f8eb6de6d47db2fb6633e6880373",
+      "desktop/src/modules/coding/CodingPage.tsx": "5b1418eab5df76c310165cfb8e7835f7be040840abf20ea145da5c2d2eb25f72",
+      "desktop/sidecar/src/diffusion/resultGuard.ts": "3e792fc65a090b9644689cad5f24f7829335665d3815110da1685716effd780c",
+      "desktop/src/shared/studio/usablePayload.ts": "8ce0edc62cac7ae15b5815cf6fb132326776738d65d5a5584ab7ee83846b7f73",
+      "desktop/src/shared/studio/mediaRuntimeClient.ts": "e75accd75149ae25a793f8e573731e0487c9cd53028e57a1021558821f69a7f3",
+      "scripts/installer/build/smoke-installed-media.ps1": "46fa1f928121d9ffb28a8df3dd90ecde3bbd51d24d92beccb3b764732168f341",
+      "runtimes/diffusion/pipelines/base.py": "2c00525a6da852c0aa97bf539d7b09e183b3e53af059bf8f9a7d9af32f7decc4",
+      "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py": "f79a0bdba3b09b5600f877ff6bd78381fa528b838be09fc32099d1f4f922c661",
+      "scripts/installer/build/check-hf-catalog.py": "7f56ea7c14bdfd72e3ec93e8393dcaa67f1c97b62d57a81b61fbc4a555be4034",
+      "desktop/src/shared/models/catalogTabs.ts": "616becbc31e1dd6ad6e67f758a1399e0187188a7f3d267a71bd32c1b4a5ec42c",
+      "scripts/installer/src/nexus_installer/catalog_tab_sort.py": "52e9e51918a11e8b481a050e7463f95566fc39111547f9ae99cfdd709f79a620",
+      "desktop/src/shared/models/selectionPolicy.ts": "fcd3d3662b79cbe231736b5f903ec43588f9c948e7786af34c6b3308ee2e9b3b",
+      "core/chat/tokenUsage.ts": "501b2f411f37d1300a3cbdbef5f93c787125f688c3fd282bda7cefefb37cd645",
+      "desktop/src/shared/chat/transcriptChrome.ts": "00c5ef429245477b9a2adad6c7a58fe6d0bcd376e8b2594a48e434d967ccdb91",
+      "modules/coding/runtime/headlessTools.ts": "f7aa1e83db362090cfbbc34d71ef49651376cd45560cdcba5434aff7cb9e4e91",
+      "runtimes/diffusion/pipelines/real_execute.py": "f9b94af7d0d3e2750ecccedf3d328fdfb32e0452c6003d81dcef77f7aad035f2",
+      "scripts/installer/src/nexus_installer/engine/desktop_payload.py": "f64dbfb69ded6733b6022cdef57a49c7506fdf53fae927879a746e516c7a7c6d",
+      "scripts/installer/src/nexus_installer/engine/desktop_provisioner.py": "daa83ced4e4ac42a791392871d04b5f019dedb4e8b8319a570cbae06394aa838",
+      "core/registry/NexusModelRegistry.ts": "ef03b9839b805db13b2f4edc1b2a7889e0e8e71b9271fe7826e6530910aa5af4",
+      "desktop/src/pages/settings/ModelsSettings.tsx": "a973e761ab76f58551cc782d66863561cd541260fbda195182370abeeb730673",
+      "desktop/sidecar/src/diffusion/dispatcher.ts": "4fb2b71bd0797d6f08d4f4a676ec51dac9b5346552a63c2bd8ae8dcf0cc4e121",
+      "desktop/sidecar/src/diffusion/videoDispatcher.ts": "17e9b83cfc9b35183b4c36093b270b044779e490a3fc311a031c4ae37f9884ea",
+      "desktop/src/pages/settings/ArchivedChatsSettings.tsx": "81b90aee42292d9ddfa7d03814cbc9134a9d6c5ec08a91d61ed8a48c45be4910",
+      "desktop/sidecar/src/main.ts": "89c1f562a35666e9eded3ac0b657709f42a11f95e528aac402565e5c6e9197a9",
+      "desktop/sidecar/src/studio/imageEditRuntime.ts": "80ef98c52fc2dc4b540f266cb640575e49f7391cd069d7baa280438d4b14625f",
+      "desktop/src/shared/studio/ImageViewer.tsx": "b5cd58d890492f6cf19ca03bb3e25d9d7bc51cd5152e58c0b12d1b61cb65dace",
+      "core/generations/StudioSessionStore.ts": "9fbb1533dd055a521f07c6ffe84a3e4152d24734c9394b99fc03cb0648c86607",
+      "core/generations/ImageEditRecipeStore.ts": "997fd2c8c2af1f475ef3b195f6acbe6f14d28e2845ed858263be84b4f8c77877",
+      "modules/coding/autonomy/AskInbox.ts": "2141d9d03f50e99ba851ea1ad3336b17877906bc178c132746b06ca2f40fcf6b",
+      "desktop/src/shared/studio/useDurableImageEdit.ts": "4a38643b55c0f6dbf89f3c688aa571c67a96ebea432eebcba634e3b0829c28ec",
+      "desktop/src/shared/studio/imageEditClient.ts": "1f470040550beeb000fb78f145e7cbaafd1180204380cfd9764e2ac5d84bb85d",
+      "desktop/src/shared/explorer/StudioHistoryPane.tsx": "b3ede080785d68cbe1ae0fe5af4df8b25fea1dd98f0c9dde6db53e8b1ebf4ba1",
+      "modules/chat/storage/ChatExplorerStore.ts": "2d5c86f80dc4ba2f381df9f681542262796e0c5cdd7edead188fdde4e0a8cdff",
+      "desktop/sidecar/src/chat/explorerRuntime.ts": "3ad0f62d9f9a3c504673db5d0dea7d21545ace08793393989bc563c45faa8c1f",
+      "desktop/src/modules/chat/ipcChatExplorerClient.ts": "07225b2497b087c2c6a4df2714c3caba9a3cb262957c3b47be9fe7fdbed691bd",
+      "desktop/src/modules/chat/FolderTree.tsx": "37043985bc57621a43650d59ed26b32343777274264db1c794e1e7f03a4027a8"
+    },
+    "output_sha256": "03d07b44167ba2db91533928cb2068bcbb36e3986a3dfbde0f977e1f6705d78d"
+  },
+  "checks": {
+    "content": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.4-final-handbook-review.md",
+      "evidence_sha256": "c295d5bd8239d411bd2f379f02b1bf80d6baed41936ea87e17b71d6647bf4f41"
+    },
+    "build": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.15/development/v2.15.4-final-handbook-review.md",
+      "evidence_sha256": "c295d5bd8239d411bd2f379f02b1bf80d6baed41936ea87e17b71d6647bf4f41"
+    },
+    "rendered": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.15/development/evidence/final-handbooks/iteration2/render-observations.json",
+      "evidence_sha256": "47f1ae5963da5e71b9e026872983d71920bf29a99b56c518a914a7c05577e98e",
+      "browser": "Playwright bundled Chromium 153.0.8010.12; six named viewports; local file URLs",
+      "output_sha256": "03d07b44167ba2db91533928cb2068bcbb36e3986a3dfbde0f977e1f6705d78d"
+    }
+  }
+}
