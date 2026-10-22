@@ -1,5 +1,5 @@
 {
-  "status": "pre-approval mapping",
+  "status": "Master phase 1 committed; remaining disposition, qualification and publication phases open",
   "master": "docs/releases/v2/v2.15/plans/v2.15.1-archive-readiness.md",
   "source_base": "fadbf89b92cbc2124a6f4961b9ec439ce2c48060",
   "tasks": [
@@ -11,7 +11,7 @@
       "master_phase": 1,
       "description": "Audit every frozen identity docs/releases/v2/v2.15/development/v2.15-batches-1-2-source-audit.md",
       "acceptance_sha256": "74fab17f59ddb2953acdb3a08f2758a501fd954dc80aee9d371f71b05ecc9c7a",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -22,7 +22,7 @@
       "master_phase": 1,
       "description": "Verify or repair source-backed candidates docs/releases/v2/v2.15/development/v2.15.1-triage.md",
       "acceptance_sha256": "cdcb958ffa698f5df72fdf732e9717f86a6573b2a5241f4d17d2f067b3171c60",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -33,7 +33,7 @@
       "master_phase": 1,
       "description": "Stabilize and commit Phase 1 docs/releases/v2/v2.15/development/v2.15.1-phase1-history.md",
       "acceptance_sha256": "3da7e91e23babd3f058301b805eab38a0c3263c7be9c0ec589d5391ca896a772",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -88,7 +88,7 @@
       "master_phase": 1,
       "description": "Audit every frozen identity docs/releases/v2/v2.15/development/v2.15-batches-1-2-source-audit.md",
       "acceptance_sha256": "ef607e72978ea382f9db9d7950e02bfc83a0b915390ed2914be400ebb7387f77",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -99,7 +99,7 @@
       "master_phase": 1,
       "description": "Verify or repair source-backed candidates docs/releases/v2/v2.15/development/v2.15.2-triage.md",
       "acceptance_sha256": "d23f00ca63ae221d2925c7a0c5d8cd1ecc85198011e34af6841af141aee21de7",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -110,7 +110,7 @@
       "master_phase": 1,
       "description": "Stabilize and commit Phase 1 docs/releases/v2/v2.15/development/v2.15.2-phase1-history.md",
       "acceptance_sha256": "40456a3618d730ea5b5e3c2b630aa03a837f20299c08c9a230384c80a6429830",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -121,7 +121,7 @@
       "master_phase": 1,
       "description": "Persist and validate folder color modules/chat/storage/ChatExplorerStore.ts",
       "acceptance_sha256": "c9b06ee2d49edf9dda26d3250e287f7be1032a0f73c6a43504e6f72b0a3fc2f6",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -132,7 +132,7 @@
       "master_phase": 1,
       "description": "Route authoritative folder-color updates through IPC desktop/sidecar/src/chat/explorerRuntime.ts",
       "acceptance_sha256": "93406abd7a222b56390676dbb3069d464d7976ccbb77f552df40d3a71743bb8a",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -143,7 +143,7 @@
       "master_phase": 1,
       "description": "Exercise folder-color UI and restart behavior desktop/src/modules/chat/FolderTree.tsx",
       "acceptance_sha256": "5a46105f2ac5a70e24142fe41674d9a7d9cb8cd53de647c426cefbf678ab0bbf",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -154,7 +154,7 @@
       "master_phase": 1,
       "description": "Stabilize and commit folder-color persistence docs/releases/v2/v2.15/development/v2.15.2-phase2-history.md",
       "acceptance_sha256": "65ebf033b314323e03ac6174928c432501f5a14737641e5a9656f95494f63f3e",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -209,7 +209,7 @@
       "master_phase": 1,
       "description": "Audit every frozen identity docs/releases/v2/v2.15/development/v2.15-batches-3-4-source-audit.md",
       "acceptance_sha256": "2984c3a0331c86c73f78dced52c5d523b6eab6608f526a5d523a4d7d728511ed",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -220,7 +220,7 @@
       "master_phase": 1,
       "description": "Verify or repair source-backed candidates docs/releases/v2/v2.15/development/v2.15.3-triage.md",
       "acceptance_sha256": "fd7029c6255ff43d0a6b02c9afc99b7352795cee8a5072791e6b62c895b933d1",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -231,7 +231,7 @@
       "master_phase": 1,
       "description": "Stabilize and commit Phase 1 docs/releases/v2/v2.15/development/v2.15.3-phase1-history.md",
       "acceptance_sha256": "f84f72907eb7a79edf760d27c1acb41bee04f9de7530e688cd32b976f9c71465",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -286,7 +286,7 @@
       "master_phase": 1,
       "description": "Audit every frozen identity docs/releases/v2/v2.15/development/v2.15-batches-3-4-source-audit.md",
       "acceptance_sha256": "6dfd7f28cd7b759c5b502b96a1a6b701f267d5630657e8e15fd1c87be9d77eb0",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -297,7 +297,7 @@
       "master_phase": 1,
       "description": "Verify or repair source-backed candidates docs/releases/v2/v2.15/development/v2.15.4-triage.md",
       "acceptance_sha256": "136fb010406ea0ce05dd4013d81d88205a073dfec4ab9e28fbca2e41b5b7b54b",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -308,7 +308,7 @@
       "master_phase": 1,
       "description": "Stabilize and commit Phase 1 docs/releases/v2/v2.15/development/v2.15.4-phase1-history.md",
       "acceptance_sha256": "046a8052f81ad4f7623fe749e9e189396fc9b64ade6f22f995a3e63d549dc09e",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -352,7 +352,7 @@
       "master_phase": 1,
       "description": "Retire outline exposure while preserving document budgets modules/coding/runtime/outputBudget.ts",
       "acceptance_sha256": "8eb84081a602517b4294680121b1ffcb1823579954c533d31853b27fbaf820ff",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -363,7 +363,7 @@
       "master_phase": 1,
       "description": "Remove outline settings and host endpoints desktop/src/pages/settings/SecuritySettings.tsx",
       "acceptance_sha256": "eb23d6caf0e8cbea4e9766e2eeae1737675c6591b84893293bcacdff2839ad69",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -374,7 +374,7 @@
       "master_phase": 1,
       "description": "Verify retirement and reconcile living documentation docs/handbooks/technical/document-outline.md",
       "acceptance_sha256": "7950f400f157d9090074e67019d7aad17a1b61fc4fd26f8a4c3b653bb256ead1",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -385,7 +385,7 @@
       "master_phase": 1,
       "description": "Disclose retained shared originals desktop/src/shared/explorer/StudioHistoryPane.tsx",
       "acceptance_sha256": "d54bbe7e1e2e0c3b3fd36234c2382a498ea340d2452320f879a69d027d19ef6e",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -396,7 +396,7 @@
       "master_phase": 1,
       "description": "Capture approval-time recovery checkpoints atomically core/generations/StudioSessionStore.ts",
       "acceptance_sha256": "2d4024c42d9bf4b4c1c6c6dc98df66f0c98182ed2be79d5dd359da616ebcd602",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -407,7 +407,7 @@
       "master_phase": 1,
       "description": "Provide authorized viewer recovery desktop/src/shared/studio/ImageViewer.tsx",
       "acceptance_sha256": "91b9bacde1fe36f3aed9257c08a6872ad6a6997a5adb56a160e56e980dc3f248",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -418,7 +418,7 @@
       "master_phase": 1,
       "description": "Prove policy behavior through real boundaries docs/releases/v2/v2.15/development/v2.15.4-policy-evidence.md",
       "acceptance_sha256": "cc58e7d31e451c583dfc1de573202e0cef6bc8d9be864abe5f2ca960524f8f0f",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -429,7 +429,7 @@
       "master_phase": 1,
       "description": "Audit the 63 active identities docs/releases/v2/v2.15/development/v2.15-active-gap-source-audit.md",
       "acceptance_sha256": "72260232d433a9da636abba78394442d971cb5bf5f15dd103eac0384604ddfb3",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -440,7 +440,7 @@
       "master_phase": 1,
       "description": "Remove host disk dependence from mocked installer tests scripts/installer/tests/test_hf_weights_puller.py",
       "acceptance_sha256": "095bd134709a25870dbfe32f86b56e605516bacf2c65c83f51a0d5472ee652da",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -451,7 +451,7 @@
       "master_phase": 1,
       "description": "Verify handbook text drift independently of checkout line endings scripts/generate-handbooks.mjs",
       "acceptance_sha256": "a21bd6b1df35cbc5d378726cb662a0d5fd9e276d9b345a0f5431315c1259718f",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -462,7 +462,7 @@
       "master_phase": 2,
       "description": "Prepare active-gap disposition and blocker manifest docs/releases/v2/v2.15/development/v2.15-active-gap-dispositions.md",
       "acceptance_sha256": "c1c9dca0cad2af57bb1bf82c6b5a432c534e270b18ce71517be4f09601ed7d35",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -495,7 +495,7 @@
       "master_phase": 3,
       "description": "Consolidate v2.12 documentation without evidence loss docs/releases/v2/v2.15/development/v2.15-closeout-reconciliation.md",
       "acceptance_sha256": "57d76bad760ea4aa4aa7a8e34060a71bd4226fd96dcab9dd3b13a553a34904a0",
-      "actual_commit": null,
+      "actual_commit": "c43432f04facf3540f20df537d722d973779860b",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     },
     {
@@ -582,5 +582,8 @@
     "docs/releases/v2/v2.15/plans/v2.15.3-image-runtime-qualification-triage.md": "0e6344319c5ed3bb64a22f7812ded73d5a0008a288d696c3a933cc1c45d00087",
     "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md": "c721c427508670961d00356665ee2117cd5421cc395111da9e1c08d452ff53c3"
   },
-  "acceptance_hash_contract": "UTF-8 LF task block; task checkbox canonicalized to unchecked; no other acceptance text normalization"
+  "acceptance_hash_contract": "UTF-8 LF task block; task checkbox canonicalized to unchecked; no other acceptance text normalization",
+  "phase_commits": {
+    "1": "c43432f04facf3540f20df537d722d973779860b"
+  }
 }

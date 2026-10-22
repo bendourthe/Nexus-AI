@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-21T21:03:01.959588-07:00",
+  "exit": 0,
+  "log": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-incoming-installer-zero-space-3tf23e3m\\result.log",
+  "sha256": "b03a2a8445810600134c2f220a093ef4a291c22e48b3e2e9649cd52ac464454a",
+  "scope": "fresh host-zero-space module verification; no hosted CI claim",
+  "remote_failure_run": 39709249038
+}

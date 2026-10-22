@@ -2,7 +2,8 @@
 
 **Project**: Nexus AI Studio
 **Status**: finalized
-**Last updated**: 2026-08-20 (v2.1.0 follow-up; no retag)
+**Last updated**: 2026-10-21
+**Open items**: 0
 
 Per-version tracker of unfinished work, deferrals, and follow-ups. The next `/plan` ingests this file to decide what carries forward. Classifications: `NI` not-implemented, `DF` deferred, `BG` bug/known-issue, `MT` missing-tests/coverage, `WN` warning/suppressed, `QG` bypassed-gate/CI.
 
@@ -19,7 +20,7 @@ Carry-forward source: [../v1.17/known-gaps.md](../v1.17/known-gaps.md) (reconcil
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 10 | 8 |
+| Deferred (DF) | 0 | 8 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -29,70 +30,70 @@ Carry-forward source: [../v1.17/known-gaps.md](../v1.17/known-gaps.md) (reconcil
 
 #### Deferred
 
-##### DF-1 - Live llama-server round-trip is not proven here
+##### DF-1 - Live llama-server round-trip is not proven here - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Skill-native adoptions + llama.cpp recipe (LG-A5)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 1.2)
 - **Reason**: The recipe, example manifest, and `validateLocalAdapterManifest` tests are in-repo. A live `GET /v1/models` plus a Nexus chat against a user-started llama-server was not run on this host. Support tier for that path is `internal-compatible` (not_observed != absent). Same class as v1.16 LSO.P5.A (macOS MLX smoke).
 - **Suggested next step**: On a machine with llama.cpp installed, start llama-server on `127.0.0.1`, register the example manifest, set `nexus.llm.backend` to `llamacpp`, and record the smoke. Do not bundle the runtime.
 
-##### DF-2 - Hub catalog presence is not CI-gated
+##### DF-2 - Hub catalog presence is not CI-gated - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Skill-native adoptions (OW-B1, OI-A4-web)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 1.1)
 - **Reason**: CI does not ship `~/.nexus-ai/catalog/`. The Phase 1 test asserts the mapping note and that `modules/coding/skills/catalog/` has no duplicate `agent-presets` / `browser-testing-with-devtools` / `morning-briefing` entries. Live Hub files were confirmed on the operator machine during implementation, not in CI.
 - **Suggested next step**: Keep the builtin-catalog negative check. An optional operator step is `nexus skills sync` then list those two skills under `~/.nexus-ai/catalog/skills/`. Do not vendor Hub skills into this repo.
 
-##### DF-5 - Deeper scaffold knobs remain off `HarnessProfile` (EM.P1.C remainder)
+##### DF-5 - Deeper scaffold knobs remain off `HarnessProfile` (EM.P1.C remainder) - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2 - Named per-family harness profiles (OI-A2)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 2.2); v1.12 EM.P1.C
 - **Reason**: Named family profiles (`concise-loop`, `plan-first`, `structured-edit`, `minimal`) now exist as data and drive the three existing `PromptContext` knobs. Tool-exposure verbosity and retry / step granularity are still described in `docs/reference/low-cost-model-optimization.md` and are not fields on `HarnessProfile` / `PromptContext`.
 - **Suggested next step**: After a live weak-model A/B (EM.P1.B), extend `PromptContext` only if the A/B shows those knobs move quality. Do not add a fourth prompt style without a `PromptBuilder` change.
 
-##### DF-7 - `gemma4:26b` MoE copy has no published active/total counts
+##### DF-7 - `gemma4:26b` MoE copy has no published active/total counts - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3 - Catalog schema (LG-A3)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 3.1)
 - **Reason**: The 26B entry describes MoE routing. No in-repo published active-parameter count was available, so `activeParams` / `totalParams` stay omitted (dense-schema default). MoE numbers are populated only on `deepseek-coder-v2:16b` (2.4B active / 16B total, already in that entry's copy).
 - **Suggested next step**: When Google publishes a stable active-parameter figure for Gemma 4 26B, add both MoE fields together. Do not guess.
 
-##### DF-10 - ACP is HTTP JSON-RPC on the shared listener, not a stdio subprocess
+##### DF-10 - ACP is HTTP JSON-RPC on the shared listener, not a stdio subprocess - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5 - ACP agent surface (OI-A3)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 5.1 / 5.2)
 - **Reason**: The open ACP spec commonly uses stdio. This cycle mounts JSON-RPC 2.0 at `POST /acp` on the v1.16 serving `LoopbackHttpServer` so there is one loopback bind and one bearer token (`nexus.serving.token`). `session/update` notifications are returned on `session/prompt` as `updates[]`, and also flushed as SSE when the client sends `Accept: text/event-stream`.
 - **Suggested next step**: If an editor requires stdio ACP, add a thin stdio bridge that forwards to `POST /acp` rather than a second agent engine. Do not vendor Open Interpreter.
 
-##### DF-11 - Windows sandbox does not kernel-enforce filesystem or network
+##### DF-11 - Windows sandbox does not kernel-enforce filesystem or network - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 6 - OS process sandbox (OI-A1)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 6.4)
 - **Reason**: Job objects plus a best-effort restricted token do confine process lifetime and resource caps. They do not implement a filesystem or network allow-list comparable to Seatbelt or Landlock. AppContainer was not applied (capability SIDs break typical coding CLIs). Mode on Windows is therefore `partial`, never `confined`. Writable-root and network-deny policy stay tool-layer (denylists, confirmation) on this OS. Matrix: `modules/coding/sandbox/windowsMatrix.ts`.
 - **Suggested next step**: Revisit AppContainer or an equivalent FS/network restriction only if a coding-CLI-compatible capability set is proven. Do not report Windows as confined until filesystem and network are actually enforced.
 
-##### DF-12 - Laguna-S-2.1 catalog entry stays gated (LG-A1)
+##### DF-12 - Laguna-S-2.1 catalog entry stays gated (LG-A1) - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7 - Known-gaps reconciliation (gated this cycle)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (Deferred and Gated Items)
 - **Reason**: EM.P3 (`extremeLowBit.ts` fail-closed at `999.0.0`) and EM.P4 (`patientTier.ts` disabled) stay closed. Phase 3 prepared schema and UD-label recognition only. No Laguna catalog row, and no independent benchmark.
 - **Suggested next step**: After those gates open and a benchmark exists, add the entry in a serving-oriented cycle. Do not guess quant or VRAM numbers.
 
-##### DF-13 - 1M-context budget policy is not built (LG-A4)
+##### DF-13 - 1M-context budget policy is not built (LG-A4) - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7 - Known-gaps reconciliation (gated this cycle)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (Deferred and Gated Items)
 - **Reason**: Depends on LG-A1. No context-window budget policy landed.
 - **Suggested next step**: After LG-A1 ships, add a 1M-context budget policy in the same serving/catalog cycle. Do not add a dummy window size.
 
-##### DF-14 - Native-app computer-use driver is not built (OI-A4-native)
+##### DF-14 - Native-app computer-use driver is not built (OI-A4-native) - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7 - Known-gaps reconciliation (gated this cycle)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (Deferred and Gated Items)
 - **Reason**: High effort, new local capability. Browser-half is skill-native (`browser-testing-with-devtools`). Native driver must be internal (no `trycua`), permission-tiered, and confirmation-gated.
 - **Suggested next step**: A later cycle after the Hub browser-QA skill has proven the workflow. Do not vendor Open Interpreter or CUA runtimes.
 
-##### DF-15 - Harness selector shipped default stays off (EM.P1.B)
+##### DF-15 - Harness selector shipped default stays off (EM.P1.B) - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2 - Live harness activation; recorded in Phase 7
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 2.1); v1.12 EM.P1.B
