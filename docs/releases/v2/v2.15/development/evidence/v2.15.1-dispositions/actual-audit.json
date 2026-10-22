@@ -1,0 +1,1576 @@
+{
+  "status": "PASS",
+  "authority": "independent read-only actual data audit; no publication/archive approval",
+  "recorded_at_utc": "2026-10-22T04:16:29.430232+00:00",
+  "manifest_sha256": "a1d392405d27d08bbf23ea13f159a3842910c7b8608228f54b828be06cbc4fc3",
+  "journal_sha256": "bb50dbdf8b055aa6a7e795efeaab155626ff9250539811248b5701438cb6dbe4",
+  "execution_date": "2026-10-21",
+  "counts": {
+    "carry": 245,
+    "closure": 14,
+    "already-resolved": 3
+  },
+  "original_identities": 262,
+  "actual_ledgers": 11,
+  "parser_problems_in_those_11": 0,
+  "untargeted_unchanged_including_three_already_resolved": 111,
+  "targeted_original_body_prefixes": 259,
+  "frozen_inputs": 18,
+  "native_modules": 6,
+  "raw_capture_files": 553,
+  "raw_capture_comparison_start_utc": "2026-10-22T01:09:05.868106+00:00",
+  "raw_capture_scope": "Tracked docs files under any evidence directory, plus tracked docs image/text/log captures; exact bytes compared from this preparation snapshot, not an invented pre-run observation.",
+  "actual_ledger_sha256": {
+    "docs/archive/v1/v1.17/known-gaps.md": "34da80f6b94ddfad39b4159a800eb0240f1b83ebf16dc3e6b05bd6b9c37316a5",
+    "docs/archive/v1/v1.18/known-gaps.md": "9dd8e87a0334a8208c304cd6b08236a8026e4eed3583807074b644cb65744057",
+    "docs/archive/v1/v1.19/known-gaps.md": "914121a1056bc5db3c62a1e0c844607b78323159854b91c02bd4d9553a83666b",
+    "docs/archive/v1/v1.20/known-gaps.md": "db5fdf17814a4853793493f5772fbd6c6b4a94391d8bab3deb8a4f945f2af875",
+    "docs/archive/v2/v2.0/known-gaps.md": "9e566ce355df06bdfed25d807c58249d14e0de85ee592d1e53aa58c4d12f7667",
+    "docs/archive/v2/v2.1/known-gaps.md": "3686170a222d7e144e1527560d0b72b48674edc94172d96b192d529b699e5fbb",
+    "docs/archive/v2/v2.2/known-gaps.md": "349b18c1710f7bbc444d05ba99a1f953ccfea849d537b0a28da23b41a82b2b18",
+    "docs/archive/v2/v2.3/known-gaps.md": "c2238758fa57381f3b6ff17697f09d05e02ae2df511cc34bc8a8fed187151e5e",
+    "docs/archive/v2/v2.4/known-gaps.md": "a891dc7147f8f2cc763b139ed9eb3d023ebfd27299af0ed3ab83bd95bab8196b",
+    "docs/releases/v2/v2.15/known-gaps.md": "16ea673072b321cafcc05b7290f27821d75b40505047c44b41ee086be0d2ceb2",
+    "docs/releases/v2/v2.16/known-gaps.md": "6f1e510f4db483af29b5ad543442c026c938d2064143f0821c2fa290119affc3"
+  },
+  "results": [
+    {
+      "source_key": "v1.17.0#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-1",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.17.0#DF-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-2",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.17.0#DF-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-3",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.17.0#DF-8",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-4",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.17.0#DF-9",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-5",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.17.0#DF-10",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-6",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.18.0#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-7",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.18.0#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-8",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.18.0#DF-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-9",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.18.0#DF-7",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-10",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.18.0#DF-10",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-11",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.18.0#DF-11",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-12",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.18.0#DF-12",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-13",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.18.0#DF-13",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-14",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.18.0#DF-14",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-15",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.18.0#DF-15",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-16",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.0#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-17",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.0#DF-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-18",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.0#DF-7",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-19",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.0#DF-8",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-20",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.0#DF-9",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-21",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.0#DF-10",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-22",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.0#DF-11",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-23",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.1#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-24",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.1#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-25",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.2#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-26",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.2#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-27",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.19.2#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-28",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.20.0#DF-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-29",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v1.20.0#DF-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-30",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.0.0#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-31",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.0.0#DF-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-32",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.0.0#DF-8",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-33",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.0.0#DF-9",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-34",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.0.0#DF-10",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-35",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.0.0#DF-11",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-36",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.0.0#DF-12",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-37",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.0.0#DF-13",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-38",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.0.0#DF-14",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-39",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.1.0#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-40",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.1.0#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-41",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.1.0#DF-7",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-42",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.1.0#DF-8",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-43",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.1.0#DF-13",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-44",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.1.0#DF-21",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-45",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.3.1#MT-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-1",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.3.0#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-46",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.3.0#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-47",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.3.0#DF-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-48",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.3.0#WN-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-1",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.3.0#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-49",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.3.0#QG-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-1",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.3.0#QG-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-2",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.3.0#BG-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#BG-1",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.3.0#MT-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-2",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-50",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-51",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-52",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#DF-14",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-53",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#DF-16",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-54",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#DF-17",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-55",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#DF-18",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-56",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#DF-19",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-57",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#DF-20",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.2.3#DF-21",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-58",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#DF-22",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-59",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#WN-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-2",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.3#WN-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-3",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.2#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-60",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.2#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-61",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.2#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-62",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.2#DF-14",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-63",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.2#DF-16",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-64",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.2#DF-17",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-65",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.2#DF-18",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-66",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.2#DF-19",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-67",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.1#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-68",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.1#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-69",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.1#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-70",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.1#DF-16",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-71",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.1#DF-17",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-72",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.1#DF-18",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-73",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-74",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-75",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-76",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-77",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-78",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-79",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-7",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-80",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-8",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-81",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-9",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-82",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-10",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-83",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-11",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-84",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-12",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-85",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-13",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-86",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-14",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-87",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-15",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-88",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-16",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-89",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#DF-17",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-90",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#MT-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-3",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#MT-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-4",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.0#MT-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-5",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.9#DF-36",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-91",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.9#WN-8",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-4",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.9#WN-9",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-5",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.9#MT-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-6",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.9#DF-37",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-92",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.9#DF-38",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-93",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.9#MT-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-7",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.8#DF-33",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-94",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.8#DF-34",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-95",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.7#DF-28",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-96",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.7#DF-29",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-97",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.7#DF-30",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-98",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.7#DF-31",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-99",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.7#WN-7",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-6",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.6#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-100",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.6#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-101",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.6#DF-25",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-102",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.6#DF-26",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-103",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.6#DF-27",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-104",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.5#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-105",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.5#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-106",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.4#DF-23",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-107",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.2.4#DF-24",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-108",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.4#MT-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-8",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.4#MT-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-9",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.4#MT-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-10",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.4#MT-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-11",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.4#MT-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-12",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.4#MT-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-13",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.4#QG-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-3",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.4#WN-1",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.4.3#MT-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-14",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.3#MT-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-15",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.3#MT-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-16",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.3#MT-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-17",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.3#MT-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-18",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.3#MT-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-19",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.3#MT-7",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-20",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.2#MT-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-21",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.2#MT-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-22",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.2#MT-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-23",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.2#MT-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-24",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.2#MT-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-25",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.2#MT-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-26",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.1#DF-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-109",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.1#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-110",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.1#DF-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-111",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.1#DF-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-112",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.1#DF-7",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-113",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.1#QG-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-4",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.1#QG-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-5",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.1#QG-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-6",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.1#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-114",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.4#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-115",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#QG-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-7",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#NI-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#NI-1",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#MT-11",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-27",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#DF-9",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-116",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#BG-16",
+      "disposition": "migrated",
+      "destination": "v2.16.0#BG-2",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#BG-19",
+      "disposition": "migrated",
+      "destination": "v2.16.0#BG-3",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#QG-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-8",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#QG-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-9",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#DF-10",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-117",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#NI-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#NI-2",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#DF-11",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-118",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#BG-20",
+      "disposition": "migrated",
+      "destination": "v2.16.0#BG-4",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#MT-10",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-28",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#BG-14",
+      "disposition": "migrated",
+      "destination": "v2.16.0#BG-5",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#BG-15",
+      "disposition": "migrated",
+      "destination": "v2.16.0#BG-6",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#MT-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-29",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#MT-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-30",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#MT-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-31",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#MT-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-32",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#MT-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-33",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#MT-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-34",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#MT-7",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-35",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#DF-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-119",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-120",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-121",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#DF-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-122",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.7#MT-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-36",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.7#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-123",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.6#MT-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-37",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.6#MT-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-38",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.6#MT-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-39",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.6#MT-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-40",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.6#MT-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-41",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.6#MT-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-42",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.6#MT-7",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-43",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.6#WN-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-7",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.5#MT-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-44",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.5#MT-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-45",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.5#WN-1",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.4.6#WN-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-8",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.7#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-124",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.8#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-125",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.4.9#WN-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-9",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-126",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-127",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#WN-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-10",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#WN-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-11",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#WN-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-12",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#WN-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-13",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#WN-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-14",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-128",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#QG-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-10",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-129",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-130",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-6",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.15.0#DF-7",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.15.0#WN-6",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-15",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#WN-7",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-16",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-8",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-131",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-9",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-132",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#WN-8",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.15.0#WN-9",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.15.0#WN-10",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-17",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#QG-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-11",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#BG-1",
+      "disposition": "migrated",
+      "destination": "v2.16.0#BG-7",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-10",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-133",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#WN-11",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-18",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-11",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-134",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-12",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-135",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-13",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-136",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#MT-2",
+      "disposition": "migrated",
+      "destination": "v2.16.0#MT-46",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#QG-3",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-12",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#QG-4",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-13",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-14",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-137",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#QG-5",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-14",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-15",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-138",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-16",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-139",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-17",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-140",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-18",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-141",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-19",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-142",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#WN-12",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-19",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#QG-6",
+      "disposition": "already-resolved-unchanged"
+    },
+    {
+      "source_key": "v2.15.0#QG-7",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-15",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#QG-8",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-16",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#QG-9",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-17",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#QG-10",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-18",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-20",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-143",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-21",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-144",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-22",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-145",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-23",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-146",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-24",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.15.0#DF-25",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-147",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-26",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.15.0#DF-27",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.15.0#WN-13",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-20",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#WN-14",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.15.0#WN-15",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.15.0#WN-16",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.15.0#WN-17",
+      "disposition": "migrated",
+      "destination": "v2.16.0#WN-21",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#WN-18",
+      "disposition": "resolved-narrow-evidence"
+    },
+    {
+      "source_key": "v2.15.0#DF-28",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-148",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-29",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-149",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#DF-30",
+      "disposition": "migrated",
+      "destination": "v2.16.0#DF-150",
+      "native_proof": "migration-copy-complete"
+    },
+    {
+      "source_key": "v2.15.0#BG-2",
+      "disposition": "already-resolved-unchanged"
+    },
+    {
+      "source_key": "v2.15.0#WN-19",
+      "disposition": "already-resolved-unchanged"
+    },
+    {
+      "source_key": "v2.15.0#QG-11",
+      "disposition": "migrated",
+      "destination": "v2.16.0#QG-19",
+      "native_proof": "migration-copy-complete"
+    }
+  ]
+}

@@ -2,7 +2,8 @@
 
 **Project**: Nexus AI Studio
 **Status**: finalized
-**Last updated**: 2026-08-28 (v2.2.9 release preparation)
+**Last updated**: 2026-10-21
+**Open items**: 0
 
 Per-version tracker of unfinished work, deferrals, and follow-ups. The next `/plan` ingests this file to decide what carries forward. Classifications: `NI` not-implemented, `DF` deferred, `BG` bug/known-issue, `MT` missing-tests/coverage, `WN` warning/suppressed, `QG` bypassed-gate/CI.
 
@@ -17,10 +18,10 @@ Plan: [plans/v2.2.0-runtime-repair-and-ux-overhaul.md](plans/v2.2.0-runtime-repa
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 3 | 2 |
+| Deferred (DF) | 0 | 2 |
 | Bugs / regressions (BG) | 0 | 1 |
-| Warnings (WN) | 2 | 0 |
-| Missing tests / coverage gaps (MT) | 2 | 0 |
+| Warnings (WN) | 0 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
 Phases 1-7 landed at unit/integration evidence. Release preparation passed aggregate root coverage (5488 tests, 88.56% lines), desktop coverage (1603 tests across 182 files, 88.61% lines), installer pytest (1160 passed, 3 skipped), and python diffusion (261 passed). Those aggregate gates provide release-level evidence but cannot retroactively close MT-4's missing per-phase measurements. The 2026-08-25 operator field session (screenshots 1-10, inventoried in the v2.2.9 plan) is the packaged-observation evidence base for this reconciliation. It closes DF-32 and DF-35 (recorded under v2.2.8 Resolved, their origin cycle) and DF-28 and DF-31 (below). DF-30 is partially observed (Context pill on packaged Chatbot; the 80% CTA was not observed) and stays open under v2.2.7 with an annotation. DF-29 and DF-25 are not evidenced by the session and stay open unchanged. DF-4 stays open: no GPU PNG/MP4 was recorded; screenshot 7 showed the old combined fail-closed string, which Phase 4's typed CUDA-missing / weights-missing / GPU-not-ready errors have since replaced, so the operator will now see different copy. DF-33, DF-23, DF-24, DF-26, and DF-27 carry from earlier cycles. DF-34 stays open because the 2026-08-25 Settings/installer screenshots predate the Phase 5 shared card grammar. The unsigned Windows installer was rebuilt and passed three smoke probes, but the v2.2.9 operator checklist items 1-7 were explicitly deferred and remain not observed as DF-36. Release audit also proved raw Tauri desktop bundles cannot start the sidecar reliably without the installer-provisioned Node 22.11.0 runtime, so they are withheld under DF-38. not_observed != absent throughout.
@@ -29,49 +30,49 @@ Phases 1-7 landed at unit/integration evidence. Release preparation passed aggre
 
 ### Open this cycle
 
-##### DF-36 - Packaged v2.2.9 chrome and catalog surfaces are unproven
+##### DF-36 - Packaged v2.2.9 chrome and catalog surfaces are unproven - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.9 Phases 1-6
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md` (Operator field checklist)
 - **Reason**: The v2.2.9 UI changes (meta above the bubble, orb caption rotator, studio Chats copy, visual Context bar, typed generate errors in the UI, catalog name-row pills, Hub sync staging) are unit-proven across the desktop, root, installer, and python diffusion suites. The final unsigned Windows installer was rebuilt during release preparation and passed version, registry, and embedded-desktop-payload probes, but those probes do not observe the seven visual/operator behaviors. The 2026-08-25 screenshots predate every Phase 1-6 change. not_observed != absent.
 - **Suggested next step**: Run the plan's operator field checklist items 1-7 against the rebuilt unsigned Windows installer (chrome/picker split, meta and titles after `Hi`, composing pill, studio history and Context, typed generate outcome, installer = Settings cards, Hub banner/sync).
 
-##### WN-8 - Root vitest run mutates the memory-tier benchmark fixture
+##### WN-8 - Root vitest run mutates the memory-tier benchmark fixture - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.9 Phases 1-6 verification
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md` (Phase 7.7); commit `f7120ae`
 - **Reason**: The root vitest suite rewrites timing fields in `tests/fixtures/memory-tier-benchmark-results/2026-05-26/results.json` on every run. Release preparation reproduced the timing-only drift during root coverage, desktop coverage, and the canonical package test run; the fixture was restored after verification. See commit `f7120ae`, `chore(tests): restore benchmark fixture mutated by root test run`, for the earlier occurrence.
 - **Suggested next step**: Make the benchmark write its results to a temp directory instead of the tracked fixture, or gitignore the timing fields it mutates.
 
-##### WN-9 - Desktop suite 5000ms-timeout flakes under host load
+##### WN-9 - Desktop suite 5000ms-timeout flakes under host load - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.9 Phases 1-6 verification
 - **Plan reference**: WN-2 class (`docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` Phase 8.5)
 - **Reason**: Under host load, desktop tests intermittently exceed the 5000ms per-test timeout across unrelated files. Observed twice this cycle; quiet-machine reruns pass all 1603 tests across 182 files. These are environment-load timeouts of the WN-2 renderer-environment class, not failed assertions.
 - **Suggested next step**: Rerun the desktop suite on a quiet machine before treating a timeout as a regression; consider raising the timeout for known-slow suites or isolating the desktop job in CI.
 
-##### MT-4 - Per-phase line coverage was not measured this cycle
+##### MT-4 - Per-phase line coverage was not measured this cycle - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.9 Phases 1-6
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md` (phase stability gates)
 - **Reason**: Desktop, root, installer, and Python suites passed at phase boundaries without coverage instrumentation. Aggregate root and desktop coverage passed during release preparation, but that final-state measurement cannot reconstruct the per-phase percentages the plan requested.
 - **Suggested next step**: Require and record the applicable coverage command at each phase boundary in the next release plan so missing per-phase evidence cannot recur.
 
-##### DF-37 - Typed diffusion error kinds are prose-only across the wire
+##### DF-37 - Typed diffusion error kinds are prose-only across the wire - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.9 Phase 7 (Goal-vs-codebase review finding on Phase 4)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md` (Phase 4.1)
 - **Reason**: `RuntimeNotReady.kind` (`cuda-torch-missing` / `weights-missing` / `gpu-not-available`) is machine-readable inside Python, but `runtimes/diffusion/main.py` serializes only the message text, so TypeScript sees the classification as prose. The UI goal (operators can tell the cases apart) is met; downstream code cannot branch on kind.
 - **Suggested next step**: If any consumer needs to branch on failure kind, add a `kind` field to the diffusion error envelope and thread it through `resultGuard`.
 
-##### DF-38 - Raw Tauri desktop bundles are not self-contained release artifacts
+##### DF-38 - Raw Tauri desktop bundles are not self-contained release artifacts - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.9 release preparation
 - **Plan reference**: release packaging audit; carried architectural gap DF-1 from v2.2.0
 - **Reason**: `tauri.conf.json` packages the sidecar bundle but not Node. The desktop resolves Node through `NEXUS_NODE_PATH`, installer-written `~/.nexus/runtime.json`, the installer-provisioned path, then bare `node` on `PATH`; only the Python provisioning installer downloads checksummed Node 22.11.0 and writes the manifest. The sidecar's `better-sqlite3` targets Node ABI 127, so another system Node can spawn and then fail on the first SQLite open. The former universal macOS path also carried only one host-architecture native addon. Publishing those raw bundles would overstate standalone support, so v2.2.9 attaches only the complete Windows installer and three platform VSIXes.
 - **Suggested next step**: Bundle a pinned per-target Node runtime through Tauri `externalBin` or resources, resolve it before installer/PATH fallbacks, build architecture-correct macOS artifacts, and pass clean-host sidecar health checks before restoring standalone desktop attachments.
 
-##### MT-5 - Publisher map and Agentic-pill guard have no cross-language parity test
+##### MT-5 - Publisher map and Agentic-pill guard have no cross-language parity test - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.9 Phase 7 (Goal-vs-codebase review finding on Phase 5)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md` (Phase 5.1, WN-7 discipline)
@@ -112,7 +113,7 @@ DF-32 and DF-35 are recorded as Resolved under v2.2.8 (their origin cycle), obse
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 2 | 3 |
+| Deferred (DF) | 0 | 3 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -122,14 +123,14 @@ Packaged Explorer launch is observed (DF-2 closed). Hub apply quarantines high-s
 
 ### Open this cycle
 
-##### DF-33 - Agents folders are a local overlay, not sidecar schema
+##### DF-33 - Agents folders are a local overlay, not sidecar schema - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.8 Phase 2
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.8-working-local-studio.md` (Phase 2.1, folders optional)
 - **Reason**: `coding.session.*` has no folder rows. FolderTree on Agents uses `localStorage` (`nexus.coding.explorerFolders`) so New folder is not a dead control. Sessions stay in sidecar `sessions.json`. Deleting an overlay folder reparents sessions instead of calling `coding.session.delete`. Folders do not roam with the sidecar store.
 - **Suggested next step**: If Agents folders must survive a storage wipe the same way Chatbot folders do, add a sidecar folder table keyed by workspace, or document overlay-only as the product contract.
 
-##### DF-34 - Packaged Settings vs installer Models identity is unproven
+##### DF-34 - Packaged Settings vs installer Models identity is unproven - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.8 Phase 4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.8-working-local-studio.md` (Phase 4 Stability Gate)
@@ -170,9 +171,9 @@ Hub quarantine apply remains unit/integration evidence. Packaged Hub update agai
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 4 | 0 |
+| Deferred (DF) | 0 | 0 |
 | Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 1 | 0 |
+| Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
@@ -180,35 +181,35 @@ Settings and installer Context chips are unit-proven as `<val>k` with no trailin
 
 ### Open this cycle
 
-##### DF-28 - Packaged Settings and installer Context chips are unproven
+##### DF-28 - Packaged Settings and installer Context chips are unproven - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.7 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md` (Phase 1)
 - **Reason**: Closed in v2.2.9 Phase 7. The 2026-08-25 field session screenshotted the packaged Settings > Models tab (screenshot 9, chips rendering) and the running installer Models tab (screenshot 8, `Context: 256k`-class pills). Historical row kept so v2.2.7 readers can follow the close; the chip grammar itself was superseded by the v2.2.9 Phase 5 shared name-row pills.
 - **Suggested next step**: None. See v2.2.9 Resolved DF-28 (new-grammar verification travels with DF-34 and DF-36).
 
-##### DF-29 - Live Ollama usage and thinking fields are unproven
+##### DF-29 - Live Ollama usage and thinking fields are unproven - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.7 Phase 2
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md` (Phase 2)
 - **Reason**: Unit fixtures persist `prompt_eval_count` / `eval_count` / `message.thinking` onto the chat done event and round-trip chat/studio/coding stores. A live Gemma 4 Ollama final chunk was not captured this phase. Coding agent turns estimate when the runner does not attach counters. The 2026-08-25 field session (v2.2.9 plan screenshot 2) shows `75 think + 96 out` rendering on a packaged reply, which is consistent with live usage persist but does not verify that the persisted row matches the final Ollama chunk, so this row stays open. not_observed != absent.
 - **Suggested next step**: Send one Chatbot turn against a local Ollama Gemma 4 model and confirm the persisted assistant row matches the final chunk; if thinking is in `message.thinking`, confirm it counts toward used tokens.
 
-##### DF-30 - Packaged four-tab Context meter and 80% CTA are unproven
+##### DF-30 - Packaged four-tab Context meter and 80% CTA are unproven - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.7 Phase 3
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md` (Phase 3)
 - **Reason**: Component tests cover 79% without CTA, 80% CTA creating a new Chatbot session without deleting the old tree row, hidden bar when no window or visual budget, and pickers under `composer-context-row` on Chat/Agents/Images/Videos. Partially observed 2026-08-25: the Context pill rendered on packaged Chatbot (v2.2.9 plan screenshot 1, which also drove the Phase 1 width rebalance), but the 80% CTA was not observed, and Images/Videos showed no meter because pre-v2.2.9 studio rows had no visual budget (added in v2.2.9 Phase 3). Partial observation is an annotation, not a close. not_observed != absent.
 - **Suggested next step**: On a rebuilt packaged build, send Chatbot turns until the pill reaches 80%, accept Start a new session, confirm the old chat remains; confirm the Images/Videos Context pill now fills against `visualTokenBudget` and that peeking does not load weights (DF-36 field checklist item 4).
 
-##### DF-31 - Packaged transcript date, time, and token chrome is unproven
+##### DF-31 - Packaged transcript date, time, and token chrome is unproven - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.7 Phase 4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md` (Phase 4)
 - **Reason**: Closed in v2.2.9 Phase 7. The 2026-08-25 field session (v2.2.9 plan screenshot 2) shows the packaged Chatbot transcript rendering the clock and per-role token chrome this row asked for (`8:34 p.m.`, user `1 in`, assistant `75 think + 96 out`). Historical row kept so v2.2.7 readers can follow the close; the `N in` / em-dash copy this row verified was superseded by v2.2.9 Phase 1 full-word meta above the bubble.
 - **Suggested next step**: None. See v2.2.9 Resolved DF-31 (new-copy verification travels with DF-36).
 
-##### WN-7 - Context chip formatters are duplicated across TypeScript and Python
+##### WN-7 - Context chip formatters are duplicated across TypeScript and Python - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.7 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md` (T002)
@@ -228,7 +229,7 @@ None. Usage persist is new work, not a prior BG.
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 5 | 0 |
+| Deferred (DF) | 0 | 0 |
 | Bugs / regressions (BG) | 0 | 4 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -238,35 +239,35 @@ DF-2 (packaged Explorer) and DF-4 (live GPU generate) stay open. BG-51 through B
 
 ### Open this cycle
 
-##### DF-2 - Packaged Explorer launch is unproven
+##### DF-2 - Packaged Explorer launch is unproven - MIGRATED to v2.16.0
 
 - **Source phase**: carried from v2.2.5
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md` (Phase 6.2)
 - **Reason**: Closed in v2.2.8 Phase 6. Packaged Explorer launch was observed 2026-08-24 (v2.2.8 plan Review verdict). Historical row kept so v2.2.6 readers can follow the close.
 - **Suggested next step**: None. See v2.2.8 Resolved DF-2.
 
-##### DF-4 - Live GPU image/video generate is unproven
+##### DF-4 - Live GPU image/video generate is unproven - MIGRATED to v2.16.0
 
 - **Source phase**: carried from v2.2.5
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md` (operator field checklist)
 - **Reason**: Fail-closed envelopes and last-output follow-up are unit-proven. An operator GPU generate that paints a SANA image or a video clip was not recorded this session. Still open after the 2026-08-25 field session: screenshot 7 (v2.2.9 plan) recorded a packaged Image generate fail-closing with the combined `GPU or diffusion weights unavailable` string on a host showing 15 GB free NVIDIA VRAM; that observes fail-closed behavior, not a generate. v2.2.9 Phase 4 has since split that combined string into typed CUDA-missing vs weights-missing vs GPU-not-ready messages, so the operator will now see one of the typed strings instead.
 - **Suggested next step**: Run one Image Studio generate and one Video Lab generate on a host with weights and CUDA-enabled diffusion Python, and record the PNG/MP4; or confirm the new typed CUDA/weights/GPU message in the UI (DF-36 field checklist item 5). The combined-only string is now a miss.
 
-##### DF-25 - Packaged session persist (quit/reopen) is unproven
+##### DF-25 - Packaged session persist (quit/reopen) is unproven - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.6 Phases 1-5
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md` (Phase 6.2)
 - **Reason**: Image/Video SQLite, Agents `sessions.json`, and Chatbot explorer DB round-trips are unit-proven. A packaged Explorer quit/reopen soak was not run. The 2026-08-25 field session (v2.2.9 plan) did not include a quit/reopen, so this row is unchanged. not_observed != absent.
 - **Suggested next step**: Install the unsigned Windows build, take one turn in each pillar, quit, reopen, and record whether the same session hydrates.
 
-##### DF-26 - Video remount cannot restore `continueFrom`
+##### DF-26 - Video remount cannot restore `continueFrom` - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.6 Phase 3
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md` (Phase 3)
 - **Reason**: `continueFrom` needs `priorJobId`. The studio session schema stores `lastOutputRef` (mp4 path), not the job id. After remount, a follow-up is a new text2video. `lastFramePath` is that mp4 path; there is no frame extractor.
 - **Suggested next step**: Persist `priorJobId` (or a generations-index job key) on the session row, or extract a last-frame PNG and document the quality limit.
 
-##### DF-27 - Agents resume does not restore tool-call cards
+##### DF-27 - Agents resume does not restore tool-call cards - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.6 Phase 4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md` (Phase 4)
@@ -308,7 +309,7 @@ DF-2 (packaged Explorer) and DF-4 (live GPU generate) stay open. BG-51 through B
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 2 | 0 |
+| Deferred (DF) | 0 | 0 |
 | Bugs / regressions (BG) | 0 | 8 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -318,14 +319,14 @@ DF-2 (packaged Explorer) and DF-4 (live GPU generate) stay open. BG-43 through B
 
 ### Open this cycle
 
-##### DF-2 - Packaged Explorer launch is unproven
+##### DF-2 - Packaged Explorer launch is unproven - MIGRATED to v2.16.0
 
 - **Source phase**: carried from v2.2.4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.5-first-successful-generation.md` (Phase 6.2)
 - **Reason**: Closed in v2.2.8 Phase 6. Packaged Explorer launch was observed 2026-08-24 (v2.2.8 plan Review verdict). Historical row kept so v2.2.5 readers can follow the close.
 - **Suggested next step**: None. See v2.2.8 Resolved DF-2.
 
-##### DF-4 - Live GPU image/video generate is unproven
+##### DF-4 - Live GPU image/video generate is unproven - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.5 Phase 2
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.5-first-successful-generation.md` (Phase 2 field gate)
@@ -391,7 +392,7 @@ DF-2 (packaged Explorer) and DF-4 (live GPU generate) stay open. BG-43 through B
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 2 | 1 |
+| Deferred (DF) | 0 | 1 |
 | Bugs / regressions (BG) | 0 | 10 |
 | Warnings (WN) | 2 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -401,14 +402,14 @@ Open deferred items remain those carried from v2.2.3 (DF-1, DF-2, DF-4, DF-14, D
 
 ### Open this cycle
 
-##### DF-23 - Packaged Hub Update against a live git clone is not executed
+##### DF-23 - Packaged Hub Update against a live git clone is not executed - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.4 Phase 6 / 7
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.4-chatbot-first-and-runtime-honesty.md` (Phase 6 residual, Phase 7.2)
 - **Reason**: Vitest and Rust prove `skills.sync` waits up to 10 minutes and Hub timeout copy. A packaged Windows build pulling a real Nexus-Hub clone over the network was not run. Still open after the 2026-08-25 field session: screenshot 10 (v2.2.9 plan) shows packaged Active matching GitHub latest `v3.21.0` (which closed DF-35), but no clone log was captured and the tag could have come from the pack-time snapshot, so the live git-clone Update path remains undistinguished. not_observed != absent; packaged Hub update over a live clone is unproven here.
 - **Suggested next step**: Run Update now from a packaged shell with network, confirm the clone finishes, and capture log evidence.
 
-##### DF-24 - Unix installer complete-path snapshot write is not proven
+##### DF-24 - Unix installer complete-path snapshot write is not proven - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.4 Phase 7
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.4-chatbot-first-and-runtime-honesty.md` (Phase 7.4)
@@ -495,9 +496,9 @@ Open deferred items remain those carried from v2.2.3 (DF-1, DF-2, DF-4, DF-14, D
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 11 | 1 |
+| Deferred (DF) | 0 | 2 |
 | Bugs / regressions (BG) | 0 | 18 |
-| Warnings (WN) | 2 | 0 |
+| Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
@@ -505,77 +506,81 @@ Open deferred items remain those carried from v2.2.3 (DF-1, DF-2, DF-4, DF-14, D
 
 #### Deferred
 
-##### DF-1 - Node SEA / externalBin bundling remains deferred
+##### DF-1 - Node SEA / externalBin bundling remains deferred - MIGRATED to v2.16.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Out of scope)
 - **Reason**: The sidecar still uses the verified Node resolution chain rather than a Tauri `externalBin` or Node SEA artifact.
 - **Suggested next step**: Revisit only in a packaging-focused cycle with clean-install validation for the replacement artifact.
 
-##### DF-2 - Packaged clean-VM and Explorer-launch acceptance not executed
+##### DF-2 - Packaged clean-VM and Explorer-launch acceptance not executed - MIGRATED to v2.16.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Residual risks)
 - **Reason**: Vitest proves the async adapter and route behavior, the debug Tauri build validates the scoped asset-protocol configuration, and the Phase 8 platform contract names the Windows artifact and acceptance gap. This cycle has not launched a packaged shell from Explorer, run a clean-VM install, or played a generated MP4 through a packaged asset URL. Packaged Chatbot first paint and packaged video playback are not proven here.
 - **Suggested next step**: Launch the packaged application from Explorer on a clean Windows VM, confirm `/chatbot` renders without a console or blank pane, and play a generated MP4 from the scoped outputs directory.
 
-##### DF-4 - Live-GPU image and video generation soaks not executed
+##### DF-4 - Live-GPU image and video generation soaks not executed - MIGRATED to v2.16.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Residual risks, DF-4)
 - **Reason**: Automated tests now prove that queue failures, empty image completes, empty video completes, and decode failures become written errors with no false media actions. Real SANA and LTX generation were not executed on a supported GPU, so successful bytes, runtime duration, and asset playback under live load remain unproven.
 - **Suggested next step**: Run the existing image and video generation smoke on a supported GPU and capture successful output plus packaged playback evidence.
 
-##### DF-14 - CodingInput retains a separate composer implementation
+##### DF-14 - CodingInput retains a separate composer implementation - MIGRATED to v2.16.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 8.1)
 - **Reason**: Phase 8 extracts the byte-identical composer surface, right-control, icon-cluster, document-chip, and remove-button styles into `composerSurfaceStyles.ts`. CodingInput still owns separate markup and behavior for slash-command discovery, audio state, and coding-only controls, so replacing both components with one renderer would broaden behavior rather than remove exact duplication.
 - **Suggested next step**: Revisit a shared markup primitive only when the two composers' interaction contracts converge; keep the shared structural styles as the current deduplication boundary.
 
-##### DF-16 - Native file dialogs remain unavailable
+##### DF-16 - Native file dialogs remain unavailable - MIGRATED to v2.16.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 6.1, Phase 8.2)
 - **Reason**: The repository has no Tauri dialog plugin. Phase 6 ships a validated workspace text field persisted under `nexus.coding.workspacePath`, while Settings data transfer also remains path-text based.
 - **Suggested next step**: Add and capability-scope the dialog plugin in a dedicated cross-platform file-dialog task.
 
-##### DF-17 - Settings tabs are not URL-addressable
+##### DF-17 - Settings tabs are not URL-addressable - MIGRATED to v2.16.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 8.2)
 - **Reason**: Resolved in v2.2.4 Phase 2. `SettingsPage` now reads `?tab=` via `useSearchParams` so `/settings?tab=models` opens Models even when Settings is already mounted.
 - **Suggested next step**: Nested Settings routes remain optional; query-param tabs satisfy the deep-link contract.
 
-##### DF-18 - Packaged macOS and Linux sidecar native-addon paths are not proven
+##### DF-18 - Packaged macOS and Linux sidecar native-addon paths are not proven - MIGRATED to v2.16.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 8.2)
 - **Reason**: The Phase 8 parity contract and packaging tests show that macOS and Linux build scripts do not stage the desktop sidecar payload that Windows embeds. No macOS `.app` or Linux AppImage was executed in this session, so native-addon resolution on those targets is not proven here.
 - **Suggested next step**: Stage the desktop sidecar payload in both Unix installer builds, then run packaged `--healthcheck` acceptance on each operating system and record the resolved addon path.
 
-##### DF-19 - CREATE_NO_WINDOW parity is N/A on macOS and Linux
+##### DF-19 - CREATE_NO_WINDOW parity is N/A on macOS and Linux - MIGRATED to v2.16.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 8.4)
 - **Reason**: The Phase 8 parity contract records the Windows creation flag as supported and macOS/Linux as not applicable. The Windows flag has no direct Unix counterpart; absence of an observed terminal window on other platforms is still not proven here.
 - **Suggested next step**: Record platform-specific packaged-launch evidence and keep the Windows-only flag classified as N/A elsewhere.
 
-##### DF-20 - Folder color changes are not persisted through the IPC adapter
+##### DF-20 - Folder color changes are not persisted through the IPC adapter - RESOLVED 2026-10-21
 
 - **Source phase**: v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (verification addendum item 33)
 - **Reason**: The explorer protocol exposes no `updateFolder` method. The existing UI can reflect a local color touch for the in-memory client, but a production IPC client cannot persist it.
 - **Suggested next step**: Add an explicit explorer `updateFolder` protocol method and a persistence regression test in a later chat-organization phase.
 
-##### DF-21 - Local Chatbot reply transport remains batched
+
+- **Resolution in v2.15.1**: An explicit validated color setter reaches SQLite through the production client/dispatcher, set and clear survive reopen, and failed writes do not fabricate UI success. Independent cache-generation follow-up covers the inherited response-order finding.
+- **Evidence**: docs/releases/v2/v2.15/development/v2.15.2-folder-color-evidence.md; docs/releases/v2/v2.15/development/v2.15-folder-color-and-handbook-review.md
+- **Limits**: Local SQLite/dispatch and React boundaries; no native packaged-window or release qualification is asserted.
+##### DF-21 - Local Chatbot reply transport remains batched - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.3 Phase 4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 4)
 - **Reason**: The sidecar chat protocol is request/response only and exposes no incremental token event channel. Phase 4 keeps the visible Composing orb until the complete reply arrives rather than simulating streaming.
 - **Suggested next step**: Add a typed incremental chat event protocol and cancellation contract in a transport-focused cycle, then replace the single terminal response without changing transcript persistence.
 
-##### DF-22 - Workspace Hub hook scripts are not executed by the desktop sidecar
+##### DF-22 - Workspace Hub hook scripts are not executed by the desktop sidecar - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.3 Phase 8 reconciliation of Phase 6
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 6.3, Phase 8.2)
@@ -584,14 +589,14 @@ Open deferred items remain those carried from v2.2.3 (DF-1, DF-2, DF-4, DF-14, D
 
 #### Warnings
 
-##### WN-1 - Pre-existing SIM117 in installer Complete test
+##### WN-1 - Pre-existing SIM117 in installer Complete test - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.3 Phase 7 verification
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (7.4)
 - **Reason**: Ruff reports a nested `with patch(...)` at `scripts/installer/tests/test_complete.py:13`. The line predates v2.2.3 and is outside the Phase 7 hunks; changing it would be unrelated cleanup. All Phase 7 source and newly changed test paths pass ruff, and every touched file passes `ruff format --check`.
 - **Suggested next step**: Combine the two patch contexts during a dedicated installer test-cleanup task.
 
-##### WN-2 - Desktop DOM suites emit known renderer-environment warnings
+##### WN-2 - Desktop DOM suites emit known renderer-environment warnings - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.3 Phase 8 verification
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 8.5)
@@ -745,7 +750,7 @@ Open deferred items remain those carried from v2.2.3 (DF-1, DF-2, DF-4, DF-14, D
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 8 | 0 |
+| Deferred (DF) | 0 | 0 |
 | Bugs / regressions (BG) | 0 | 6 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -757,35 +762,35 @@ v2.2.2 does not re-run v2.2.0 or v2.2.1. It closes what the 2026-08-22 post-heal
 
 #### Deferred (carried from v2.2.0 / v2.2.1)
 
-##### DF-1 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead)
+##### DF-1 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead) - MIGRATED to v2.16.0
 
 Unchanged. Spawn now also sets `CREATE_NO_WINDOW` on Windows. The Node binary is still resolved from the installer chain, not a Tauri `externalBin`.
 
-##### DF-2 - Packaged-build acceptance legs not executed (clean-VM smoke)
+##### DF-2 - Packaged-build acceptance legs not executed (clean-VM smoke) - MIGRATED to v2.16.0
 
 A 2026-08-22 Complete-page healthcheck on this Windows host printed sidecar ok. That is not a clean-VM proof, and this coding session did not launch `nexus-shell.exe` from Explorer to confirm zero Node consoles after the flag change. Unit tests cover the flag helper.
 
-##### DF-4 - Live-GPU generation smoke written but not executed
+##### DF-4 - Live-GPU generation smoke written but not executed - MIGRATED to v2.16.0
 
 Unchanged. Out of scope for v2.2.2.
 
-##### DF-14 - CodingInput still has its own composer implementation
+##### DF-14 - CodingInput still has its own composer implementation - MIGRATED to v2.16.0
 
 Unchanged as a shared primitive. v2.2.2 restyled CodingInput to the same in-field + / icon-send contract as MediaComposer (slash autocomplete stays). The duplicated surface style objects were not extracted.
 
-##### DF-16 remaining - no native file dialog for data transfer
+##### DF-16 remaining - no native file dialog for data transfer - MIGRATED to v2.16.0
 
 Unchanged. Settings > Data still takes a path string. Page padding now matches Models.
 
-##### DF-17 - Settings tabs are not URL-addressable
+##### DF-17 - Settings tabs are not URL-addressable - MIGRATED to v2.16.0
 
 Unchanged. Out of scope.
 
-##### DF-18 - Sidecar cwd + native addon on macOS .app and Linux AppImage
+##### DF-18 - Sidecar cwd + native addon on macOS .app and Linux AppImage - MIGRATED to v2.16.0
 
 Unchanged. This session did not execute a macOS `.app` or Linux AppImage install (`not_observed != absent`).
 
-##### DF-19 - CREATE_NO_WINDOW / hidden Node console not applicable on macOS or Linux
+##### DF-19 - CREATE_NO_WINDOW / hidden Node console not applicable on macOS or Linux - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.2 Phase 1 / Phase 6.4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.2-ready-shell-and-studio-chrome.md` (1.1, 6.4)
@@ -841,7 +846,7 @@ Unchanged. This session did not execute a macOS `.app` or Linux AppImage install
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 6 | 0 |
+| Deferred (DF) | 0 | 0 |
 | Bugs / regressions (BG) | 0 | 6 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -853,27 +858,27 @@ v2.2.1 does not re-run the v2.2.0 cycle. It closes what the 2026-08-22 field ins
 
 #### Deferred (carried from v2.2.0)
 
-##### DF-1 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead)
+##### DF-1 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead) - MIGRATED to v2.16.0
 
 Unchanged. Spawn now sets cwd to the script directory and waits for liveness; the Node binary is still resolved from the installer chain, not a Tauri `externalBin`.
 
-##### DF-2 - Packaged-build acceptance legs not executed (clean-VM smoke)
+##### DF-2 - Packaged-build acceptance legs not executed (clean-VM smoke) - MIGRATED to v2.16.0
 
 A 2026-08-22 rebuild of `nexus-shell.exe --healthcheck` on this Windows host printed `"sidecar":"ok"` with `catalogRows: 38` after two packaging fixes: copy `unsloth-pins.json` next to the bundle (import-time ENOENT), and fetch `better-sqlite3` for installer Node 22.11.0 (ABI 127) instead of the developer Node 24 (ABI 137). The Complete-page install of a freshly built `dist/NexusSetup.exe` is still the remaining live-install proof.
 
-##### DF-4 - Live-GPU generation smoke written but not executed
+##### DF-4 - Live-GPU generation smoke written but not executed - MIGRATED to v2.16.0
 
 Unchanged. Out of scope for v2.2.1.
 
-##### DF-16 remaining - no native file dialog for data transfer
+##### DF-16 remaining - no native file dialog for data transfer - MIGRATED to v2.16.0
 
 Unchanged. Settings > Data still takes a path string. Preview-and-stage import is not a full restore into final destinations.
 
-##### DF-17 - Settings tabs are not URL-addressable
+##### DF-17 - Settings tabs are not URL-addressable - MIGRATED to v2.16.0
 
 Unchanged. Out of scope.
 
-##### DF-18 - Sidecar cwd + native addon on macOS .app and Linux AppImage
+##### DF-18 - Sidecar cwd + native addon on macOS .app and Linux AppImage - MIGRATED to v2.16.0
 
 - **Source phase**: v2.2.1 Phase 1 / Phase 5.4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.1-field-repair-and-chrome-completion.md` (5.4)
@@ -928,122 +933,122 @@ Unchanged. Out of scope.
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 17 | 7 |
+| Deferred (DF) | 0 | 7 |
 | Bugs / regressions (BG) | 0 | 2 |
 | Warnings (WN) | 0 | 0 |
-| Missing tests / coverage gaps (MT) | 3 | 1 |
+| Missing tests / coverage gaps (MT) | 0 | 1 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
 ### Open Items
 
 #### Deferred
 
-##### DF-1 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead)
+##### DF-1 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead) - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Sidecar Packaging and Runtime Wiring Repair (1.2)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 1.2)
 - **Reason**: The plan prefers a Node SEA or Tauri `externalBin` next to the resources so the app is fully self-contained. This phase shipped the resolution chain (`NEXUS_NODE_PATH` -> `~/.nexus/runtime.json` `nodePath` -> per-OS provisioned path -> PATH `node`) plus a guaranteed installer runtime step (payload copy or pinned nodejs.org download, sha256-verified), which covers every installer-driven path. A machine whose app is installed WITHOUT the Nexus installer (raw NSIS bundle) and with no system Node still has no runtime.
 - **Suggested next step**: Evaluate Tauri `externalBin` with the Node 22 binary at desktop build time in a later phase; if adopted, it becomes resolution source 2 and the download leg becomes repair-only.
 
-##### DF-2 - Packaged-build acceptance legs not executed (clean-VM smoke)
+##### DF-2 - Packaged-build acceptance legs not executed (clean-VM smoke) - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 (1.1 / 1.2 / 1.4 acceptance criteria)
 - **Plan reference**: sub-tasks 1.1, 1.2, 1.4
 - **Reason**: The 1.1/1.2/1.4 acceptance criteria include running a packaged NSIS build on a clean VM (resource-dir resolution, no-system-Node spawn, installer health-check verdict). This session validated the contracts statically (packaging assertion tests, Rust resolution-chain tests, stubbed healthcheck pytest) but did not produce and execute a full installer build.
 - **Suggested next step**: On the next installer build (`build-windows.ps1` -> nexus-installer exe), run the install on a clean Windows VM/sandbox and confirm the Complete page reports `sidecar ok; catalogRows>0`. Phase 2's stability gate re-checks this on the reference machine.
 
-##### DF-3 - provisioner_dispatch chain remains dead code in the GUI flow
+##### DF-3 - provisioner_dispatch chain remains dead code in the GUI flow - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 (discovered during 1.3)
 - **Plan reference**: sub-task 1.3
 - **Reason**: The live `InstallEngine.run` never consumed `provisioner_dispatch.chain_for` ("node", "ffmpeg", python-venv provisioners) - that is WHY no Node was ever provisioned in shipped installs. Phase 1 added a dedicated always-on runtime step rather than rewiring the whole dispatch chain (diffusion venv wheels provisioning is still not wired into the GUI flow; runtime.json records the venv only if present).
 - **Suggested next step**: Either wire the dispatch chain into `InstallEngine.run` (diffusion venv + ffmpeg steps) or delete the dead chain in the final refactor phase; the diffusion venv step matters for Phase 2's generation smoke on hosts that never had v1.x installs.
 
-##### DF-4 - Live-GPU generation smoke written but not executed
+##### DF-4 - Live-GPU generation smoke written but not executed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2 - Model Availability End to End (2.5)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 2.5)
 - **Reason**: `scripts/smoke/live-gpu-generation.mjs` renders one real image (sana-1.6b-2k) and one short clip (ltx-video) through the built sidecar and the installed weights, gated behind `NEXUS_LIVE_GPU=1`. It was verified to skip cleanly (exit 2) without the gate, but the actual GPU run was NOT performed in this session - no live render has been proven end to end. The mocked integration test covers routing and the typed `runtime-unavailable` path only.
 - **Suggested next step**: Run `NEXUS_LIVE_GPU=1 node scripts/smoke/live-gpu-generation.mjs` on the RTX 3080 host after the next install, and record the outcome here. This is the leg that closes Phase 2's stability gate for real.
 
-##### DF-5 - GPU telemetry reports no queue depth or active model
+##### DF-5 - GPU telemetry reports no queue depth or active model - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2 (2.4)
 - **Plan reference**: sub-task 2.4
 - **Reason**: `gpuRuntime.ts` builds `GpuTelemetrySource` with the default `activeJobProvider`, so `activeModelId` is null and `queuedJobs` is 0 in every sample. Real GPU/VRAM/device numbers are live, but the widget's "Idle vs model name" line and queue count are not yet fed by the scheduler. Wiring them means giving the sidecar handler access to the GpuScheduler snapshot, which is exactly what Phase 4's `ModelResidencyContext` introduces.
 - **Suggested next step**: Feed the scheduler snapshot into `gpuTelemetrySource()` during Phase 4 (4.3), then assert a non-null `activeModelId` while a job runs.
 
-##### DF-6 - Ollama upgrade path reaches through to a private helper
+##### DF-6 - Ollama upgrade path reaches through to a private helper - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2 (2.3)
 - **Plan reference**: sub-task 2.3
 - **Reason**: `ensure_ollama_supports()` calls `OllamaInstaller._ollama_version()` (a private method, flagged with `noqa: SLF001`) because there is no public version accessor. Correct behavior, slightly leaky boundary.
 - **Suggested next step**: Promote `_ollama_version` to a public `installed_version()` during the Phase 8 refactor and drop the noqa.
 
-##### DF-7 [RESOLVED 2026-08-22, Phase 8] - Bundled hub snapshot is not produced by the release build yet
+##### DF-7 [RESOLVED 2026-08-22, Phase 8] - Bundled hub snapshot is not produced by the release build yet - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3 - Nexus-Hub Harness Provisioning (3.1)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 3.1)
 - **Reason**: `scripts/installer/build/build-hub-snapshot.py` produces a checksummed `catalog.tar.gz` + `manifest.json`, the PyInstaller spec stages them when present (refusing a placeholder digest), and the provisioner extracts them. But no snapshot has been built and no build script calls the builder, so today's installer still falls back to the network sync. The OFFLINE-install guarantee is therefore implemented but not yet delivered.
 - **Suggested next step**: Call `build-hub-snapshot.py` from `build-windows.ps1` (and the macOS/Linux build scripts) after a sync, so the release installer always carries a snapshot; then verify an offline install lands a populated catalog.
 
-##### DF-8 - Hub tar extraction uses a minimal in-house reader
+##### DF-8 - Hub tar extraction uses a minimal in-house reader - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3 (3.1)
 - **Plan reference**: sub-task 3.1
 - **Reason**: `extractHubSnapshot` implements a small ustar reader (with a tar-slip guard) rather than adding a tar dependency to the sidecar bundle. It handles the regular-file and directory entries a catalog snapshot contains, but not symlinks, long-name (GNU/PAX) headers, or sparse entries. A snapshot built by `build-hub-snapshot.py` never contains those; a hand-rolled archive could.
 - **Suggested next step**: Either keep it and assert the constraint in the builder (reject symlinks/long names at pack time), or vendor a small tar implementation, during the Phase 8 refactor.
 
-##### DF-9 [RESOLVED 2026-08-22, Phase 8] - The switch policy is wired to one submit surface, not four
+##### DF-9 [RESOLVED 2026-08-22, Phase 8] - The switch policy is wired to one submit surface, not four - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 - Smart Single-GPU Model Orchestration (4.3)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 4.3)
 - **Reason**: sub-task 4.3 calls for integrating the policy into "the studios' and chat/coding submit paths". Only `ImageStudioPage.handleSubmit` is wired (classify, dialog, chip, resume-after-confirm). Video Lab, Local Chatbot, and the Agentic composer still submit without consulting the policy, so a submit from those surfaces cannot raise the confirm dialog.
 - **Suggested next step**: Apply the same four-line gate to `VideoLabPage`, the chat composer, and the coding composer. The hook and dialog are surface-agnostic; the remaining work is per-surface wiring plus one test each.
 
-##### DF-10 [RESOLVED 2026-08-22, Phase 8] - The policy is not fed live residency or scheduler state
+##### DF-10 [RESOLVED 2026-08-22, Phase 8] - The policy is not fed live residency or scheduler state - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 (4.1 / 4.3)
 - **Plan reference**: sub-tasks 4.1, 4.3
 - **Reason**: `ImageStudioPage` accepts `hostVramFreeGB` and `activeSchedulerJob` props, but `App.tsx` does not yet supply them, and `useModelResidency` starts with an empty resident list that nothing updates from the scheduler. In the shipped app the policy therefore sees "nothing loaded, VRAM unknown" and takes the no-incumbent path on every submit. The decision matrix is correct and fully tested; it is simply not being given real inputs yet. This is the same missing feed as DF-5 (telemetry carries no active model or queue depth).
 - **Suggested next step**: Expose a `scheduler.snapshot` IPC (active job + queued) alongside the existing `gpu.sample`, feed `resident`/`freeVramGB`/`activeJob` from it in `App.tsx`, and assert an end-to-end confirm in a page test. Closing this also closes DF-5.
 
-##### DF-11 [RESOLVED 2026-08-22, Phase 8] - Cross-model orchestration is not wired to the real agent tools
+##### DF-11 [RESOLVED 2026-08-22, Phase 8] - Cross-model orchestration is not wired to the real agent tools - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 (4.2)
 - **Plan reference**: sub-task 4.2
 - **Reason**: `runCrossModelRequest` implements hold -> classify -> run -> restore with the three failure modes, and is covered by tests against a mock runtime (which is what the sub-task's acceptance asks for). It is not yet called by the coding agent's image/video tools, so an actual agentic session cannot exercise it, and the Trace-panel progress lines it emits are not rendered anywhere.
 - **Suggested next step**: Call it from the agent's image/video tool handlers, passing the session's current model as `agenticModelId`, and render `CrossModelProgress` in the coding Trace panel.
 
-##### DF-12 [RESOLVED 2026-08-22, Phase 8] - The chat rail is not yet the chat-first session history (5.2)
+##### DF-12 [RESOLVED 2026-08-22, Phase 8] - The chat rail is not yet the chat-first session history (5.2) - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5 - Local Chatbot Rebuild (5.2)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 5.2)
 - **Reason**: 5.2 asks for a rebuilt rail: composer-first empty state, a "New chat" primary action, recent chats at root, an optional Projects section, drag between root/projects/folders, and a collapsible rail. This phase delivered the storage, titling, persona, and composer work; `FolderTree` still renders its original "Create your first folder" empty state and the page still requires selecting a chat before the composer is usable. The user's specific complaint ("it only starts a chat when we create a folder") is therefore NOT yet fixed in the UI, even though the store has supported root-level chats all along.
 - **Suggested next step**: Rework `FolderTree` into the session rail and make `ChatPage` render the composer with no active chat, creating a root chat on first send. The storage calls it needs (`createChat` with `folderId: null`, `listMessages`) are already wired and tested.
 
-##### DF-13 [RESOLVED 2026-08-22, Phase 8] - Auto-titling is implemented end to end but not called on first send
+##### DF-13 [RESOLVED 2026-08-22, Phase 8] - Auto-titling is implemented end to end but not called on first send - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5 (5.3)
 - **Plan reference**: sub-task 5.3
 - **Reason**: `chat.generateTitle` (sidecar), `fallbackTitle`/`sanitizeTitle`, the `userRenamed` pin, and the `renameChat({byUser})` split are all implemented and tested. The client-side trigger - set the fallback title on first send, request the generated one in the background, apply unless the user renamed - is not yet in `ChatPage.handleSubmit`, so chats created today still carry the title `FolderTree` gives them.
 - **Suggested next step**: In `handleSubmit`, when the chat has no messages yet, set the fallback title immediately, then call `generateTitle` and apply the result via `renameChat(id, title)` (machine path, so it never sets `userRenamed`).
 
-##### DF-14 - CodingInput still has its own composer implementation
+##### DF-14 - CodingInput still has its own composer implementation - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5 (5.4)
 - **Plan reference**: sub-task 5.4 ("Update CodingInput to reuse the same base composer")
 - **Reason**: `MediaComposer` was rebuilt as the single in-field surface used by Chat, Image Studio, and Video Lab. `CodingInput` keeps its own layout and its own duplicated `addBtnStyle`/`docChipStyle`/`removeBtnStyle` objects, because it carries the slash-command dropdown that the shared composer has no concept of.
 - **Suggested next step**: Extract the surface (field + in-field controls) into a shared primitive that accepts an overlay slot, then have `CodingInput` supply its dropdown through that slot. Phase 6's ui-primitives work is the natural place.
 
-##### DF-15 - Token aliases added rather than call sites migrated
+##### DF-15 - Token aliases added rather than call sites migrated - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 6 - Shell UI Modernization (6.4)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 6.4)
 - **Reason**: `--border-1`, `--accent-primary`, `--accent-danger`, and `--accent-warning` were referenced in 71 places but never defined, so each usage fell through to whatever inline literal its author happened to write. They are now DEFINED as aliases of the canonical tokens, which fixes the rendering immediately. The plan also asked to migrate the 71 call sites and delete the aliases; that rename was deliberately not done inside a UI phase, where it would have been a large mechanical diff competing with real behaviour changes.
 - **Suggested next step**: Sweep the call sites to the canonical names and delete the alias block during the Phase 8 refactor, with the existing token test as the guard.
 
-##### DF-16 [PARTIALLY RESOLVED 2026-08-22, Phase 8] - Data transfer has no IPC surface or file dialogs yet
+##### DF-16 [PARTIALLY RESOLVED 2026-08-22, Phase 8] - Data transfer has no IPC surface or file dialogs yet - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7 - Settings modernization and data transfer (7.4)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 7.4)
@@ -1051,7 +1056,7 @@ Unchanged. Out of scope.
 - **Resolution (Phase 8)**: `data.categories`, `data.export`, and `data.import` are declared, handled, and covered; Settings > Data now reaches the real runtime, exports to an editable path defaulting to a timestamped name, and offers Preview before Import.
 - **Remaining**: no native file dialog. Adding one means a Tauri plugin plus a capability change, which is not a change to slip into a release build; the path fields cover the same ground without it. The import apply path still stages under `~/.nexus/import-staging` rather than merging into final destinations, so an import is a preview-and-stage, not yet a full restore.
 
-##### DF-17 - Settings tabs are still not URL-addressable
+##### DF-17 - Settings tabs are still not URL-addressable - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7 (7.2)
 - **Plan reference**: sub-task 7.2
@@ -1060,21 +1065,21 @@ Unchanged. Out of scope.
 
 #### Missing tests / coverage
 
-##### MT-3 - Studio backend-down banner not covered by a page-level test
+##### MT-3 - Studio backend-down banner not covered by a page-level test - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2 (2.2)
 - **Plan reference**: sub-task 2.2
 - **Reason**: The classifier, the hook, and the settings pages are covered, but no test renders `ImageStudioPage` / `VideoLabPage` with a stubbed `sidecar_status` reporting `running: false` to assert the banner replaces the "No image models installed" button. The pages read the status through a Tauri command that is absent under Vitest (`ipc-unavailable` -> unknown -> not down), so this needs an injectable seam.
 - **Suggested next step**: Add a `sidecarStatus` prop (or a context provider) to the studio pages in Phase 6's shell work and assert both branches.
 
-##### MT-1 - Sidecar boot wiring (main.ts) covered only indirectly
+##### MT-1 - Sidecar boot wiring (main.ts) covered only indirectly - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 (1.3)
 - **Plan reference**: sub-task 1.3
 - **Reason**: `applyRuntimeConfigEnv` is unit-tested, but the `main.ts` call site (applied before runtime construction, stderr log line) has no direct test - `main.ts` is the process entry and has no test harness today.
 - **Suggested next step**: Cover via the Phase 2 sidecar-level integration test (spawn the built sidecar with a fixture `NEXUS_AI_HOME`/home and assert the boot log line).
 
-##### MT-2 - Complete-page health detail line untested
+##### MT-2 - Complete-page health detail line untested - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 (1.4)
 - **Plan reference**: sub-task 1.4

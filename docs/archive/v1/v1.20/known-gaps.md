@@ -2,7 +2,8 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-08-20 (v2.1.0 follow-up; no retag)
+**Last updated**: 2026-10-21
+**Open items**: 0
 
 Per-version tracker of unfinished work, deferrals, and follow-ups. The next `/plan` ingests this file to decide what carries forward. Classifications: `NI` not-implemented, `DF` deferred, `BG` bug/known-issue, `MT` missing-tests/coverage, `WN` warning/suppressed, `QG` bypassed-gate/CI.
 
@@ -17,7 +18,7 @@ Carry-forward source: [../v1.16/known-gaps.md](../v1.16/known-gaps.md) (LSO.P4.B
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 2 | 7 |
+| Deferred (DF) | 0 | 7 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -27,14 +28,14 @@ Carry-forward source: [../v1.16/known-gaps.md](../v1.16/known-gaps.md) (LSO.P4.B
 
 #### Deferred
 
-##### DF-5 - A4 Docling layout engine deferred; OCR on-device QA incomplete
+##### DF-5 - A4 Docling layout engine deferred; OCR on-device QA incomplete - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 - Layout bake-off (4.1 / 4.2)
 - **Plan reference**: `docs/archive/v1/v1.20/plans/v1.20.0-adoption-docling.md` (Phase 4); note `docs/archive/v1/v1.20/development/ocr-layout-bakeoff-2026-08.md`
 - **Reason**: Decision is DEFER, not DECLINE and not DEFER-BUILD. RapidOCR default ONNX models were smoked on synthetic fixtures (wall-of-text tables). Nexus catalog RapidOCR is still blocked by placeholder SHA (LSO.P3.A / IRSC.P4.B). Unlimited-OCR was not run (torch absent in the probe interpreter despite an RTX 3080 Ti). Docling was not installed.
 - **Suggested next step**: After catalog RapidOCR can install, and with torch in the Nexus OCR/diffusion venv, parse a real table PDF and a scan with RapidOCR vs Unlimited-OCR. Only then consider a local-only `docling-slim` extra. Do not merge torch into `runtimes/ocr/requirements.txt`.
 
-##### DF-6 - `runtimes/ocr/` not renamed to `runtimes/documents/`
+##### DF-6 - `runtimes/ocr/` not renamed to `runtimes/documents/` - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5 - Architecture refactor (5.1)
 - **Plan reference**: `docs/archive/v1/v1.20/plans/v1.20.0-adoption-docling.md` (sub-task 5.1)

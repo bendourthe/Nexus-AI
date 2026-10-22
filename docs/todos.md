@@ -1,17 +1,18 @@
 # Nexus - Progress Dashboard
 
-## Archive readiness (2026-10-20)
+## Archive readiness (2026-10-21)
 
 **Active worktree**: `C:/nx-close`, branch `feat/v2.15-archive-readiness`, base `fadbf89b`. The owner's current goal is to complete the remaining v2.12, v2.13 and v2.15 plans until archive-ready. Earlier branch/version statements below are dated history, not the current state.
 
-**Run status**: Native approval IN54MRGB is captured and signature-verified for the fresh v2.15.1 run. The exact old v2.15.0 authority is preserved as a historical receipt. Bounded repairs and evidence form the consolidated master phase-one commit; 28 of 52 task checks accompany that atomic commit. Covered ledger application, historical archive approvals, integration, release and archive preflight remain open.
+**Run status**: Native approval IN54MRGB remains captured and signature-verified. Phase-one repairs are committed at `c43432f0`. All 245 carries and 14 closures completed, and the independent terminal audit verifies all 262 original identities, including three unchanged prior resolutions. All 245 destinations remain open obligations. The master and four absorbed supports now agree on 39 verified tasks of 52; this phase-two commit records the dispositions. Historical authority, incoming integration, final qualification, actual release and archive preflight remain open. No archive, branch deletion or worktree deletion has occurred.
 
 | Measure | Current | Required |
 |---|---|---|
-| Follow-up triage | One v2.15.1 master plus four absorbed supports; all 52 tasks retained, 28 checks accompanying the phase-one commit; disposition and publication duties remain open; 199 identities audited (55/47/54/43) | Verified disposition for every identity, preserving every owed requirement |
-| Active v2.15 gaps | 60 open; 3 of the original 63 resolved with evidence | Resolve with evidence or explicitly covered carry-forward; no hidden debt |
-| Local verification | Root 6434/12 skips, desktop 2364/1 skip, installer 1528/3 skips pass; coverage/lint/builds pass | Final source-appropriate verification before publication |
-| Minor closeout | v2.12 layout/absorbed-seed issues; v2.13 release-map/provenance issues | Validated lineage, migration authority and archive dry runs |
+| Follow-up triage | All 52 tasks retained; 39 checked; all 262 identities independently reconciled as 245 carries, 14 closures and three prior resolutions | Complete final qualification, publication and read-only readiness checks |
+| Carry application | 245/245 exact qualified copies verified, each with a distinct numeric ID and open v2.16.0 destination; 14 closures verified | Preserve every owed requirement and its next proving step |
+| Active v2.15 gaps | All original 63 accounted for: 46 carries, 14 evidenced closures and three unchanged prior resolutions | Keep carried hardware, packaged-app, provider and implementation guarantees owed |
+| Local verification | Phase-one root 6434/12 skips, desktop 2364/1 skip and installer 1528/3 skips; fresh zero-space module 54/1 skip; final data audit passed | Fresh merged-tree suites, lint, builds and handbook receipts before publication |
+| Minor closeout | Historical v2.12/v2.13 release lineage and copies are proven; fresh authority remains pending; two v2.13 plan links expose a cross-record archive-binding blocker | Validated lineage, migration authority, safe reference binding and archive dry runs |
 
 - [ ] Complete the v2.15.1 master and four absorbed triage supports under `docs/releases/v2/v2.15/plans/`.
 - [x] Audit all 199 frozen batch IDs and all 63 original active IDs against current source.
@@ -19,8 +20,8 @@
 - [x] Complete the owner-selected outline removal and image approval checkpoint/retention policies; real-boundary evidence and independent review pass.
 - [x] Complete full root/desktop coverage, installer tests, lint, builds, six handbook receipts and current fast CI profile.
 - [x] Preserve the qualified checker source in a verified 22-file local snapshot; record the separate existing upstream attribution gate failure ([preservation](releases/v2/v2.15/development/v2.15-native-checker-preservation.md)).
-- [ ] Create the native approved successor and apply the 245-open-destination proposal; native successor/capture qualification and real run verification pass; no ledger migration has occurred.
-- [ ] Reconcile the 63 active v2.15 entries without treating hardware holds or owner decisions as completed work.
+- [x] Apply and independently verify all 245 open destinations and 14 closures; preserve the three prior resolutions and the complete execution history.
+- [x] Reconcile all 63 active v2.15 entries without treating hardware holds, carried obligations or owner decisions as implemented features.
 - [ ] Prove v2.12/v2.13 implementation and actual release mapping, repair layout/provenance, then verify archive readiness.
 - [ ] Complete independent review, final gates and required integration/release checks; keep readiness false until those pass.
 

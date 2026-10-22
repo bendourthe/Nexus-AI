@@ -2,7 +2,8 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-09-22
+**Last updated**: 2026-10-21
+**Open items**: 0
 
 Per-version tracker of unfinished work, deferrals, and follow-ups. The next plan ingests this file to decide what carries forward. Classifications: `NI` not-implemented, `DF` deferred, `BG` bug/known-issue, `MT` missing-tests/coverage, `WN` warning/suppressed, `QG` bypassed-gate/CI.
 
@@ -126,12 +127,12 @@ Through Ollama, the four structural tool-call tags are special tokens that the d
 
 | Category | Open | Resolved |
 |---|---:|---:|
-| Not implemented (NI) | 2 | 0 |
-| Deferred (DF) | 3 | 3 |
-| Bugs / regressions (BG) | 3 | 12 |
-| Warnings (WN) | 1 | 2 |
-| Missing tests / coverage gaps (MT) | 1 | 2 |
-| Quality-gate gaps (QG) | 3 | 0 |
+| Not implemented (NI) | 0 | 0 |
+| Deferred (DF) | 0 | 3 |
+| Bugs / regressions (BG) | 0 | 12 |
+| Warnings (WN) | 0 | 2 |
+| Missing tests / coverage gaps (MT) | 0 | 2 |
+| Quality-gate gaps (QG) | 0 | 0 |
 
 Operator-driven UX cycle against nine screenshots and three live failures from the packaged v2.4.8 build, plus an installer round. Not a planned phase set: every item traces to something the operator saw. Two live failures shared one root cause (the studio forms offered settings the selected model could not honour), which is what `desktop/src/shared/studio/modelCapabilities.ts` now exists to prevent. Nothing here has been published; the branch is uncommitted-then-committed local work awaiting integration.
 
@@ -165,21 +166,21 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 
 ### Open Items
 
-##### QG-1 - No end-to-end run against a real GPU job
+##### QG-1 - No end-to-end run against a real GPU job - MIGRATED to v2.16.0
 
 - **Source**: this cycle, all rounds
 - **Impact**: Every change is verified by typecheck, lint, build, unit tests and a rendered screenshot harness. NONE of it has been exercised against a live generation on the operator's hardware. Specifically, the capability caps have not been observed PREVENTING a real failure, only shown to produce the right option lists.
 - **Owner**: Operator
 - **Next step**: On Videos with Wan 2.1 selected, confirm the duration dropdown offers only 2-5 s and resolution only 480p, then generate one clip and check the bracketed time matches the wall clock. Then repeat one image generation and open the viewer.
 
-##### WN-2 - jsdom cannot see CSS math functions, so width regressions are untestable in unit tests
+##### WN-2 - jsdom cannot see CSS math functions, so width regressions are untestable in unit tests - MIGRATED to v2.16.0
 
 - **Source**: this cycle, progress bar
 - **Impact**: jsdom's `cssstyle` silently drops `min()` / `clamp()` from inline styles, so a `width: min(22rem, 100%)` is invisible to a test assertion. This is why the SECOND width regression (a `fit-content` parent leaking caption length back into the bar) passed the whole unit suite and was caught only by rendering the component and looking at it. Mitigated in the touched files by using `width` + `max-width` pairs instead of `min()`, but the blind spot remains repo-wide.
 - **Owner**: Mitigated, not closed
 - **Next step**: `desktop/tests/inlineStyleMathGuard.test.ts` now fails if `width` or `minWidth` uses `min()` / `max()` / `clamp()` in the three files whose geometry is asserted, and it self-retires (a test fails) if jsdom ever learns to parse them. `max-width` caps are deliberately exempt: a cap can only shrink an element, so it cannot produce the containing-block bug, and banning it would force less correct fixed values purely to satisfy the harness. The real fix is a browser-based visual check in CI, which this repo does not have.
 
-##### NI-1 - The two model registries are not tested against each other
+##### NI-1 - The two model registries are not tested against each other - MIGRATED to v2.16.0
 
 - **Source**: v2.4.9 Phase 1 (sub-task 1.1)
 - **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; recorded as OQ-1 to OQ-4 in [docs/reference/model-acceptance.md](../../reference/model-acceptance.md)
@@ -189,7 +190,7 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Exit condition**: A test asserts `catalog.json` LLM entries and `ModelCatalog.ts` bindings against each other, and each of the 13 divergent ids is either bound, removed, or recorded as deliberately unbound. Evaluable by running that test.
 - **Suggested next step**: Decide the eight bindings' status first, since that decides whether the test asserts equality or a documented subset.
 
-##### MT-11 - The standards judge was never dispatched through the agent registry
+##### MT-11 - The standards judge was never dispatched through the agent registry - MIGRATED to v2.16.0
 
 - **Source**: v2.4.9 Phase 1 (sub-task 1.4)
 - **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1 Verification Expectation
@@ -198,7 +199,7 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Exit condition**: In a session started after this commit, dispatch `nexus-standards-judge` by name against any pinned range and confirm it returns the verdict format with the declared tool scope. One invocation closes it.
 - **Suggested next step**: Do it at the start of Phase 2, which needs a review anyway; the tool scope also gets exercised there because Phase 2's evidence rests on locally-run counts.
 
-##### DF-9 - `prompt-*` budget checks still do not cover `.claude/`
+##### DF-9 - `prompt-*` budget checks still do not cover `.claude/` - MIGRATED to v2.16.0
 
 - **Source**: v2.4.9 Phase 1 (sub-task 1.2), confirming pre-existing gap 10.N.H
 - **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; required by AGENTS.md "## Claude Code addenda"
@@ -208,7 +209,7 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Exit condition**: `check:prompts` reports a budget line for at least one `.claude/agents/` file, or 10.N.H is closed with a recorded decision that `.claude/` is deliberately exempt.
 - **Suggested next step**: Fold into the Phase 5.5 terminal CI/CD reconciliation, where the check surface is being compared anyway.
 
-##### BG-16 - 216 stale relative links in the living `docs/DEVLOG.md`
+##### BG-16 - 216 stale relative links in the living `docs/DEVLOG.md` - MIGRATED to v2.16.0
 
 - **Source**: v2.4.9 Phase 1 (sub-task 1.4 link verification)
 - **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; surfaced incidentally while verifying this phase's own links
@@ -218,7 +219,7 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Exit condition**: A committed link checker over the living docs roots reports zero unresolved relative targets, or DEVLOG's pre-rename entries carry a stated convention (a note that historical paths are as-written and not maintained) that the checker honours. Evaluable by running the checker.
 - **Suggested next step**: Decide the convention before repairing anything, since it determines whether the fix is 216 rewrites or one documented exemption plus a checker.
 
-##### BG-19 - `npm audit (production deps)` is red, and `sharp` has no fix
+##### BG-19 - `npm audit (production deps)` is red, and `sharp` has no fix - MIGRATED to v2.16.0
 
 - **Source**: v2.4.9 Phase 2 (sub-task 2.5, while selecting required checks)
 - **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 2
@@ -228,7 +229,7 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Exit condition**: `npm audit --omit=dev` exits zero, or the residual advisories are recorded as accepted with a dated review, and `npm audit (production deps)` joins the required-check set. Evaluable by running the command.
 - **Suggested next step**: Run `npm audit fix` for `hono` and `protobufjs` first, since those are free, then decide `sharp` separately on its own merits.
 
-##### QG-2 - Two gating checks are not yet in the required-check set
+##### QG-2 - Two gating checks are not yet in the required-check set - MIGRATED to v2.16.0
 
 - **Source**: v2.4.9 Phase 2 (sub-task 2.5)
 - **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 2, D2
@@ -237,7 +238,7 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Exit condition**: Both checks show one green run on the integration pull request, then both context names are added to the required list on `develop` and `main`. Evaluable by reading `gh api repos/:owner/:repo/branches/<b>/protection`.
 - **Suggested next step**: Do it during 5.10, where the integration pull request produces the first runs anyway.
 
-##### QG-3 - Required checks are 17 individual contexts, not an aggregate gate
+##### QG-3 - Required checks are 17 individual contexts, not an aggregate gate - MIGRATED to v2.16.0
 
 - **Source**: v2.4.9 Phase 2 (sub-task 2.5)
 - **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 5.5 terminal CI/CD reconciliation
@@ -247,7 +248,7 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Exit condition**: One required context that always resolves, covering the path-filtered workflows through their skip states. Evaluable by opening a pull request that touches no installer path and confirming the aggregate still resolves.
 - **Suggested next step**: Compare against the contract in 5.5 before adding more individual contexts, so the list does not grow into something that has to be unwound.
 
-##### DF-10 - The feature inventory covers two README regions, not the whole file
+##### DF-10 - The feature inventory covers two README regions, not the whole file - MIGRATED to v2.16.0
 
 - **Source**: v2.4.9 Phase 3 (sub-task 3.1, decision D3 part B)
 - **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 3; contract in [docs/reference/feature-inventory.md](../../reference/feature-inventory.md)
@@ -257,7 +258,7 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Exit condition**: Either an additional region is added to `REGIONS` in the checker with its own entries, or this document records the decision that the two regions are the whole contract and the others are prose. Evaluable by reading the checker's `REGIONS` map against the README's `## ` headings.
 - **Suggested next step**: `### CLI tools (already shipped)` is the strongest candidate, since "already shipped" is exactly the claim this gate exists to keep honest.
 
-##### NI-2 - Crash classes were not derived from data, because there is no data
+##### NI-2 - Crash classes were not derived from data, because there is no data - MIGRATED to v2.16.0
 
 - **Source**: v2.4.9 Phase 4 (sub-task 4.2)
 - **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 4
@@ -267,7 +268,7 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Exit condition**: Re-derive the classes from at least 20 issues filed through the bug form, and record the sample. Clears on the same trigger as "first non-empty crash-class report".
 - **Suggested next step**: Do both at once, once the form has collected reports; a re-derivation and a first real distribution are the same exercise.
 
-##### DF-11 - The crash-class report is operator-run, not scheduled
+##### DF-11 - The crash-class report is operator-run, not scheduled - MIGRATED to v2.16.0
 
 - **Source**: v2.4.9 Phase 4 (sub-task 4.3)
 - **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 4
@@ -277,7 +278,7 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 - **Exit condition**: Either a scheduled job publishes the report where someone reads it, or this gap records the decision that it stays operator-run. Evaluable by looking for the job.
 - **Suggested next step**: Revisit alongside NI-2; a trend report is worth scheduling once there is a trend.
 
-##### BG-20 - `core/storage/StorageMigration.ts` outlived its own removal note
+##### BG-20 - `core/storage/StorageMigration.ts` outlived its own removal note - MIGRATED to v2.16.0
 
 - **Source**: v2.4.9 Phase 5 (sub-task 5.1, architecture refactor)
 - **Plan reference**: [v2.4.9 plan](plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 5.1, which predicted this finding by name
@@ -294,10 +295,10 @@ From 2026-09-10 this subsection also carries the [v2.4.9 VoiceStudio field-disci
 | Category | Open | Resolved |
 |---|---:|---:|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 5 | 0 |
-| Bugs / regressions (BG) | 2 | 4 |
+| Deferred (DF) | 0 | 0 |
+| Bugs / regressions (BG) | 0 | 4 |
 | Warnings (WN) | 0 | 0 |
-| Missing tests / coverage gaps (MT) | 8 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
 Phases 1-5 implemented against five operator screenshots of the v2.4.7 desktop. Three were correctness defects (double-counted reasoning tokens, an installer snapshot that named an embedding model as the Chat pick and an untagged model as the Agentic pick, and a Settings tab order that had drifted from the installer); two were chrome and dismissal feedback. Every earlier open row carries forward. Publication and release wait on explicit approval.
@@ -311,105 +312,105 @@ Phases 1-5 implemented against five operator screenshots of the v2.4.7 desktop. 
 
 ### Open Items
 
-##### MT-10 - `video2x-adapter.test.ts` is flaky under full-suite load
+##### MT-10 - `video2x-adapter.test.ts` is flaky under full-suite load - MIGRATED to v2.16.0
 
 - **Source**: this cycle, observed while re-establishing the test baseline
 - **Impact**: One case in `desktop/tests/video2x-adapter.test.ts` fails intermittently in a FULL `vitest run` (2 of 3 runs) and passes every time the file runs alone. It imports nothing changed this cycle (`node:crypto`, `fs`, `path`, `SettingsStore`, a temp-dir helper), was last touched in v2.3.0, and uses real filesystem temp directories with timing-sensitive waits - consistent with temp-dir or scheduling contention on Windows under parallel load. It is therefore a pre-existing test-quality defect, not a regression, but it means the "36-failure baseline" for this host is really "36 plus an intermittent 37th".
 - **Owner**: Open
 - **Next step**: Identify the specific case (the JSON reporter shows the file but the run that captured names passed), then either isolate its temp dir per test or mark the file `sequential`.
 
-##### BG-14 - Two catalog video entries declare an incoherent frame budget
+##### BG-14 - Two catalog video entries declare an incoherent frame budget - MIGRATED to v2.16.0
 
 - **Source**: this cycle, MT-8's new catalog assertion
 - **Impact**: `longcat-video-avatar-1.5` and `sana-video-2b-720p` both declare `maxVideoFrames: 8` with `maxVideoSeconds: 8` - one frame per second, which is not a video. The two Wan entries are coherent by contrast (121/5 is 24 fps, 81/5 is 16 fps), so the field is meaningful where it was filled in properly and a placeholder here. The capability map keeps conservative hand-set values for the two, and the test carries a named allowlist so a correction (or a new model with the same placeholder) fails loudly rather than passing.
 - **Owner**: Open
 - **Next step**: Establish the real frame limits for both checkpoints, correct `core/registry/catalog.json`, then delete the allowlist entry in `modelCapabilities.test.ts`.
 
-##### BG-15 - Three SANA ControlNet repos are gated, so they can be neither pinned nor downloaded
+##### BG-15 - Three SANA ControlNet repos are gated, so they can be neither pinned nor downloaded - MIGRATED to v2.16.0
 
 - **Source**: this cycle, BG-12's pin sweep
 - **Impact**: `Efficient-Large-Model/SANA-ControlNet-{Canny,Depth,Pose}` return HTTP 401 on the model-info endpoint itself, not 404, so the repos exist but require Hugging Face credentials. Their three weight files are the last unpinned entries (3 of 107). The wider consequence is not the pin: if a user ever enables one of these ControlNets, the DOWNLOAD will 401 too. They are `type: controlnet` with no `task`, so they do not appear in the model picker and no user has hit this yet.
 - **Owner**: Open
 - **Next step**: Decide whether these belong in the catalog at all. Pinning them would require shipping or prompting for an HF token, which breaches the local-first, zero-credential posture; the honest alternatives are to drop the three entries or to mark them as requiring user-supplied credentials.
 
-##### MT-1 - Packaged token label is not observed
+##### MT-1 - Packaged token label is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Token split
 - **Impact**: Tests pin the screenshot case (215 thinking bytes, 32 reply bytes, `eval_count: 72` -> 63 / 9) and the sum invariant. No packaged turn has been observed since.
 - **Owner**: Operator, this cycle's installer rebuild
 - **Next step**: Operator item 1 in `last-phase-evidence-v2.4.8-desktop-corrections.md`.
 
-##### MT-2 - Packaged composer dismissal and Persona chrome are not observed
+##### MT-2 - Packaged composer dismissal and Persona chrome are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2
 - **Impact**: jsdom pointer and Escape events prove the hook; a real Tauri webview pointer has not.
 - **Owner**: Operator, this cycle's installer rebuild
 - **Next step**: Operator items 2-3.
 
-##### MT-3 - Packaged Sessions title is not observed on all four pillars
+##### MT-3 - Packaged Sessions title is not observed on all four pillars - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3
 - **Impact**: Tests pin copy and tokens on FolderTree and both studio panes; the packaged Agents pane title is asserted only through CodingPage copy.
 - **Owner**: Operator, this cycle's installer rebuild
 - **Next step**: Operator item 4.
 
-##### MT-4 - Packaged Settings card is not compared against the packaged installer picker side by side
+##### MT-4 - Packaged Settings card is not compared against the packaged installer picker side by side - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4
 - **Impact**: Parity is asserted on values (tab order, colors, pill order) and on structure, not on rendered pixels. Font family differs by platform (Qt `FONT_PRIMARY` vs. the app's `--font-sans` stack) and is not asserted.
 - **Owner**: Operator, this cycle's installer rebuild
 - **Next step**: Operator item 5.
 
-##### MT-5 - Packaged picker order and default are not observed after a fresh snapshot
+##### MT-5 - Packaged picker order and default are not observed after a fresh snapshot - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5
 - **Impact**: The desktop rule is proven against the stale on-disk snapshot; the installer's corrected writer is proven in pytest. The two have not been observed together on the operator host.
 - **Owner**: Operator, this cycle's installer rebuild
 - **Next step**: Operator items 6-7, then `type ~/.nexus/selected-models.json` to confirm `recommendedByTask.chat` and `.agentic` read `gemma-4-12b-it-gguf`.
 
-##### MT-6 - Packaged Phase 7 card cluster and collapsible groups are not observed
+##### MT-6 - Packaged Phase 7 card cluster and collapsible groups are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7 (added 2026-09-07)
 - **Impact**: Tests pin size-then-action in the title row, the absence of star / checkmark / action row, the three headings with counts, collapse per tab, and disabled incompatible cards. None of it has rendered in the packaged desktop.
 - **Owner**: Operator, this cycle's second installer rebuild
 - **Next step**: Operator items 8-9 in `last-phase-evidence-v2.4.8-desktop-corrections.md`.
 
-##### MT-7 - Packaged Phase 8 surfaces are not observed
+##### MT-7 - Packaged Phase 8 surfaces are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 8 (added 2026-09-07)
 - **Impact**: Tests pin the torch floor on three layers, the `loading` / `generating` stages, the `Loading model...` bubble state, the centered composer cluster, and the footer copy. No packaged install has yet reprovisioned the venv to torch 2.5.1 or generated a video on it.
 - **Owner**: Operator, this cycle's third installer rebuild
 - **Next step**: Operator items 10-15 in `last-phase-evidence-v2.4.8-desktop-corrections.md`.
 
-##### DF-5 - The stale torch 2.3.0 venv is repaired only by a reinstall or a Settings > Video Repair
+##### DF-5 - The stale torch 2.3.0 venv is repaired only by a reinstall or a Settings > Video Repair - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 8
 - **Impact**: The desktop now reports the stale venv as repairable and offers Repair; the runtime refuses to generate with a typed message. Nothing upgrades the venv automatically. The wheel download is about 2.4 GB on Windows.
 - **Owner**: Operator
 - **Next step**: Re-run the rebuilt installer (the changed manifest fingerprint reprovisions) or press Repair in Settings > Video.
 
-##### DF-4 - Settings no longer offers a way to set or clear a favorite model
+##### DF-4 - Settings no longer offers a way to set or clear a favorite model - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7
 - **Impact**: The star was the only Settings control for a favorite. Pickers still write a favorite on every model change and `resolveDefaultId` still honors it, so a favorite once set cannot be cleared from the UI.
 - **Owner**: Next desktop cycle
 - **Next step**: Decide whether favorites are dropped entirely (remove `writeFavorite` from the pickers) or get a small control on the picker itself.
 
-##### DF-1 - The inferred reasoning / output split is not flagged in the tooltip
+##### DF-1 - The inferred reasoning / output split is not flagged in the tooltip - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1
 - **Impact**: When the provider gives only a total, the split is proportional and estimated while the total is exact. No protocol field carries "split inferred", so the tooltip states both numbers plainly.
 - **Owner**: Next desktop cycle
 - **Next step**: Add an optional `reasoningSplit: "provider" | "inferred"` to the `done` event and render `~` on inferred parts.
 
-##### DF-2 - Uncommitted installer wizard-merge state rides in the rebuilt installer
+##### DF-2 - Uncommitted installer wizard-merge state rides in the rebuilt installer - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 6
 - **Impact**: `develop` carries 30 modified and 6 untracked files (installer wizard merge rounds 1-3, recorded only in `docs/todos.md`). This plan neither staged nor reverted them; the rebuilt `NexusSetup.exe` includes them, as did the installer the operator already field-tested.
 - **Owner**: Operator
 - **Next step**: Decide whether the wizard merge becomes its own plan and commit, or is discarded, before v2.4.8 publishes.
 
-##### DF-3 - Stale `recommendedByTask` on already-installed hosts is only masked, not rewritten
+##### DF-3 - Stale `recommendedByTask` on already-installed hosts is only masked, not rewritten - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5
 - **Impact**: The desktop rule keeps pickers and defaults correct against the stale snapshot; the file itself still says `chat: embeddinggemma` until the installer runs again. Settings downloads append to it without correcting it.
@@ -423,31 +424,31 @@ Phases 1-5 implemented against five operator screenshots of the v2.4.7 desktop. 
 | Category | Open | Resolved |
 |---|---:|---:|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 2 | 0 |
+| Deferred (DF) | 0 | 0 |
 | Bugs / regressions (BG) | 0 | 1 |
 | Warnings (WN) | 0 | 0 |
-| Missing tests / coverage gaps (MT) | 1 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
 Phases 1-5 implemented against four operator screenshots of the v2.4.6 installer. One was a defect this project introduced in v2.4.5; three were density and scope feedback. Every earlier open row carries forward, because the v2.4.7 rebuild is the first installer since v2.4.6 merged.
 
 ### Open Items
 
-##### MT-1 - The reworked wizard is not observed in the packaged window
+##### MT-1 - The reworked wizard is not observed in the packaged window - MIGRATED to v2.16.0
 
 - **Source phase**: Phases 1-4
 - **Impact**: Tests pin selection-scoped sizing across four consumers, the derived component resolver, the overlaid Browse button, the column-scoped Ollama URL, the hidden VS Code paragraph, one-line storage in the facts column, and the counter row. None of it has rendered in the packaged wizard, and Qt geometry does not resolve headlessly.
 - **Owner**: Operator, this cycle's installer rebuild
 - **Next step**: Operator items 1-5 in `last-phase-evidence-v2.4.7-wizard-density.md`.
 
-##### DF-1 - An already-installed Ollama still reads as "will be installed"
+##### DF-1 - An already-installed Ollama still reads as "will be installed" - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2 - Configuration scope
 - **Impact**: `state.ollama_installed` could mark the row satisfied rather than pending. The installer step is already idempotent, so this is imprecise wording rather than wrong behavior.
 - **Owner**: Next installer cycle
 - **Next step**: Render a distinct "already present" state for a satisfied required component.
 
-##### DF-2 - Category labels are not coloured chips
+##### DF-2 - Category labels are not coloured chips - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 - Review density and model summary
 - **Impact**: Screenshot 4's mockup colours each category label. The counter row delivers the visual separation the operator asked for; recolouring the labels is cosmetic and carries a palette decision with no correctness content.
@@ -470,71 +471,71 @@ Phases 1-5 implemented against four operator screenshots of the v2.4.6 installer
 | Not implemented (NI) | 0 | 0 |
 | Deferred (DF) | 0 | 0 |
 | Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 2 | 0 |
-| Missing tests / coverage gaps (MT) | 7 | 0 |
+| Warnings (WN) | 0 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
 Phase 7 of field-delivery is implemented locally. Chat, Agents, Image, and Video pickers fail closed on the this-install allowlist, recommend order, Stop, studio captions without Shaping, Advanced on the context row, RealVis default when owned, and GPU busy while a scheduler job is active. Packaged four-tab chrome is not yet observed. Every earlier v2.4.5 / v2.4.4 open item carries forward.
 
 ### Open Items
 
-##### MT-1 - Packaged payload fingerprint and maximized first show are not observed
+##### MT-1 - Packaged payload fingerprint and maximized first show are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Packaged delivery and installer window
 - **Impact**: Tests pin stale-bundle refusal, Settings fingerprint copy, and `present_installer_window` calling `showMaximized`. None of it has run in a frozen NexusSetup.exe on the operator host.
 - **Owner**: Operator, this cycle's installer rebuild
 - **Next step**: Phase 8 human items (1) and (5).
 
-##### MT-2 - Packaged Setup compactness is not observed
+##### MT-2 - Packaged Setup compactness is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2 - Installer Setup compactness
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 2.1-2.3)
 - **Reason**: Qt tests pin two-column prereqs, a title-row Re-check icon, one-line GPU text, worker replacement, elision, and no trailing stretch. None of it has run in a frozen NexusSetup.exe on the operator host.
 - **Suggested next step**: Phase 8 human item for Setup screenshot 1.
 
-##### MT-3 - Packaged Configuration, Review groups, and VS Code 1.136 VSIX load are not observed
+##### MT-3 - Packaged Configuration, Review groups, and VS Code 1.136 VSIX load are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3 - Configuration, VS Code host, and Review groups
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 3.1-3.4)
 - **Reason**: Tests pin Unsloth default-on when Compatible, 1.136 enabled and checked, absent Gemma/Video2X copy, and Review headings that keep juggernaut-xl-v9 under Image. None of it has run in a frozen NexusSetup.exe, and the VSIX has not been loaded in Microsoft VS Code 1.136.0 on the operator host.
 - **Suggested next step**: Phase 8 human items for screenshots 2-4 and a `code --install-extension` on 1.136.
 
-##### MT-4 - Packaged VS Code owned-agentic picker is not observed
+##### MT-4 - Packaged VS Code owned-agentic picker is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 - VS Code Agentic Model Surface
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 4.1-4.4)
 - **Reason**: Unit tests pin the AD-13 allowlist, empty-snapshot fail-closed, leftover installed ids absent, default `gemma-4-12b-it-gguf` when owned, and tool dispatch plus ConfirmationGate after a model switch. The command, status bar, and `/model` have not been clicked in a VSIX loaded on Microsoft VS Code 1.136.0.
 - **Suggested next step**: Phase 8 human item: install the rebuilt VSIX, open Select Agentic Model, confirm leftover Ollama tags are absent.
 
-##### MT-5 - Packaged Sessions History chrome is not observed
+##### MT-5 - Packaged Sessions History chrome is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5 - Sessions History chrome and Session nouns
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 5.1-5.4)
 - **Reason**: Desktop tests pin the empty header, left-aligned create actions, `HISTORY_HAIRLINE_GAP` on both sides of the rule, Session copy, and the unchanged Chatbot tab label. None of it has run in a frozen desktop from this cycle's installer on the operator host.
 - **Suggested next step**: Phase 8 human item (6): empty and filled Sessions History, centered hairline, Session copy, Chatbot tab unchanged.
 
-##### MT-6 - Packaged Settings compact cards are not observed
+##### MT-6 - Packaged Settings compact cards are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 6 - Settings model cards
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 6.1-6.2)
 - **Reason**: Desktop tests fail if Details, Best for, Why this one, `Also agentic`, `Backend model:`, or `ID:` return, and they pin the Gemma 4 12B three-line card plus a centered action row. None of it has run in a frozen desktop from this cycle's installer on the operator host.
 - **Suggested next step**: Phase 8 human item (7): Settings Gemma card matches the three-line spec, no Details.
 
-##### MT-7 - Packaged four-tab runtime chrome is not observed
+##### MT-7 - Packaged four-tab runtime chrome is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7 - Four-tab runtime chrome
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 7.1-7.4)
 - **Reason**: Desktop vitest pins leftover exclusion on Chat/Agents/Image/Video, Gemma 4 12B before LFM and gpt-oss among owned ids, RealVis default when owned, Stop replacing Send while streaming, Creating/Generating labels (orb state remains shaping), Advanced in `composer-advanced-slot`, and GPU not Idle at 0% while a job is active. None of it has run in a frozen desktop from this cycle's installer on the operator host.
 - **Suggested next step**: Phase 8 human items for Chat tokens/Stop, Agents recommend order, Image RealVis plus captions, Video Generating, leftover absence, and GPU busy during a live turn.
 
-##### WN-1 - Mtime freshness cannot catch a freshly copied stale NSIS
+##### WN-1 - Mtime freshness cannot catch a freshly copied stale NSIS - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Packaged delivery and installer window
 - **Impact**: Staging compares desktop source mtimes to the bundle mtime. Last week's tauri output left in `desktop/src-tauri/target` fails as intended. An old NSIS copied onto disk *after* source last changed gets a new timestamp and can still freeze.
 - **Owner**: Phase 8 if field evidence shows a copied stale payload
 - **Next step**: Prefer `cd desktop; npm run build:shell` immediately before `build-windows.ps1`. A source-tree stamp from `build:shell` would close the hole.
 
-##### WN-2 - Electron ABI for VS Code 1.136 is inferred from 1.134/1.135
+##### WN-2 - Electron ABI for VS Code 1.136 is inferred from 1.134/1.135 - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3 - Configuration, VS Code host, and Review groups
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-task 3.2)
@@ -550,35 +551,39 @@ Phase 7 of field-delivery is implemented locally. Chat, Agents, Image, and Video
 | Not implemented (NI) | 0 | 0 |
 | Deferred (DF) | 0 | 0 |
 | Bugs / regressions (BG) | 0 | 1 |
-| Warnings (WN) | 1 | 0 |
-| Missing tests / coverage gaps (MT) | 2 | 0 |
+| Warnings (WN) | 0 | 1 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
 Phases 1-5 implemented against an operator screenshot of the v2.4.4 installer rebuild: the Review step refused to proceed with `Insufficient disk space (need 204.4 GB free, have 201.0 GB)` on a host already holding 176 GB of the selected models. Measuring the store first established there were no duplicate downloads, which relocated the defect from the downloader to the precheck. Every v2.4.4 open item carries forward unchanged, because this cycle's installer rebuild is the first opportunity to observe any of them.
 
 ### Open Items
 
-##### MT-1 - Packaged installer behavior is not observed
+##### MT-1 - Packaged installer behavior is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phases 2-4
 - **Impact**: Tests pin the probe across both stores and every failure mode, the Downloaded pill, first-load auto-selection that defers to user edits, two-column Review with per-model marks, a pending-only estimate, and the guard passing the exact field reproduction while still blocking a 500 GB new selection. None of it has run in the packaged wizard.
 - **Owner**: Operator, this cycle's installer rebuild
 - **Next step**: Operator items 1-4 in `last-phase-evidence-v2.4.5-installer-downloaded.md`.
 
-##### MT-2 - Ollama API detection path is not exercised against a live daemon
+##### MT-2 - Ollama API detection path is not exercised against a live daemon - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Downloaded-model probe
 - **Impact**: The `/api/tags` branch is covered by an injected fake and the disk-manifest fallback by real fixture files. A live Ollama returning its real payload shape has not been probed. A response shape change would silently fall back to the manifest path, which is correct but slower and would log a `probe_errors` line.
 - **Owner**: Operator, next packaged run
 - **Next step**: Operator item 4 (chat models detected with Ollama running, and again with it stopped).
 
-##### WN-1 - Two pre-existing ruff F401 findings remain
+##### WN-1 - Two pre-existing ruff F401 findings remain - RESOLVED 2026-10-21
 
 - **Source phase**: Carried from v2.4.4 WN-1; unchanged by this cycle
 - **Impact**: `runtimes/diffusion/vram_lifecycle.py:35` and `tests/python/diffusion/test_registry.py:6`. Neither file is touched by this plan.
 - **Owner**: Next cleanup pass
 - **Next step**: Both are auto-fixable; left alone because they trace to no line in this plan.
 
+
+- **Resolution in v2.15.1**: Both specifically named F401 findings are gone: the earlier unused Any import was absent and the root removed only the unused sys import. Attributed two-file Ruff passed and registry pytest reported2passed.
+- **Evidence**: docs/releases/v2/v2.15/development/v2.15.3-triage.md; docs/releases/v2/v2.15/development/v2.15.4-triage.md
+- **Limits**: Apply only with the retained attributable root command receipt and owning phase commit. No broader lint, hardware or packaged claim.
 ### Resolved
 
 ##### BG-1 - Installer refused an install for models already on disk (resolved)
@@ -593,77 +598,81 @@ Phases 1-5 implemented against an operator screenshot of the v2.4.4 installer re
 | Category | Open | Resolved |
 |---|---:|---:|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 1 | 0 |
+| Deferred (DF) | 0 | 0 |
 | Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 1 | 0 |
-| Missing tests / coverage gaps (MT) | 6 | 0 |
-| Quality-gate gaps (QG) | 1 | 1 |
+| Warnings (WN) | 0 | 1 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
+| Quality-gate gaps (QG) | 0 | 1 |
 
 Phases 1-7 are implemented locally against packaged post-v2.4.3 screenshots 1-6. Every change is proven by automated tests; none of the six field symptoms has been re-observed on the packaged 16 GB NVIDIA host, because that requires a rebuilt installer this cycle did not produce. The Diffusers pin moved 0.34.0 to 0.36.0 on distribution evidence, and a live import plus a Wan and SDXL re-smoke on the new pin are the highest-value operator items.
 
 ### Open Items
 
-##### MT-1 - Packaged transcript gutters and pill glow are not observed
+##### MT-1 - Packaged transcript gutters and pill glow are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Transcript Gutters and Thinking Pill
 - **Impact**: The gutter is proven as one `paddingInline` on the list with no downstream inset, and list, row, and pending are all overflow-visible. jsdom does not lay out a packaged transcript, so whether the glow is uncropped at 100% and 150% zoom is not observed here.
 - **Owner**: Operator, next packaged build
 - **Next step**: Operator item 1. Supersedes v2.4.3 MT-3, which stated the same limit against the 12px inset this phase deleted.
 
-##### MT-2 - Packaged hairline centering and title inset are not observed
+##### MT-2 - Packaged hairline centering and title inset are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2 - History Hairline, Title Inset, and Bulk Actions
 - **Impact**: Tests pin one symmetric `marginBlock` on the rule, zero padding-top on the tree header, and a chat title as the first node after the selection rail. Pixel spacing in a packaged window is not observed here. Archive All and Delete All are proven against an in-memory client, including chats inside collapsed folders, but not against the real IPC store.
 - **Owner**: Operator, next packaged build
 - **Next step**: Operator item 2. Supersedes v2.4.3 MT-2.
 
-##### MT-3 - Packaged NVIDIA restyle identity is not observed
+##### MT-3 - Packaged NVIDIA restyle identity is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3 - Image Restyle Identity on the GPU
 - **Impact**: Four contributors are fixed and each is pinned by a test: the parser accepts trailing punctuation, the send always resolves to img2img with the identity prompt or fails closed, strength 0 survives, the seed is forwarded, and a pipeline that echoes its source raises `unchanged-output`. Whether a real SANA/SDXL img2img at strength 0.85 produces black fur on this host is not observed here.
 - **Owner**: Operator, next packaged build
 - **Next step**: Operator item 3. Supersedes v2.4.3 MT-6; this is the third cycle to carry it.
 
-##### MT-4 - Live SANA import on the 0.36.0 pin is not observed
+##### MT-4 - Live SANA import on the 0.36.0 pin is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 - SANA Family Diffusers Pin
 - **Impact**: 0.36.0 was verified from published wheels to contain the SANA video pipeline modules and to export both class names, and to declare no torch or transformers upper bound. `from diffusers import SanaPipeline, SanaVideoPipeline` has not been executed in a provisioned venv, because Diffusers resolves pipelines lazily and the probe needs the full media runtime.
 - **Owner**: Operator, next packaged build
 - **Next step**: Operator item 4. Supersedes v2.4.3 MT-7.
 
-##### DF-1 - Wan and SDXL are not re-smoked on the new Diffusers pin
+##### DF-1 - Wan and SDXL are not re-smoked on the new Diffusers pin - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 - SANA Family Diffusers Pin
 - **Impact**: The pin change touches every Image and Video model on the host, not only SANA. Nothing in the automated suites exercises a real pipeline load, so a regression in Wan or SDXL under 0.36.0 would not be caught locally.
 - **Owner**: Operator, next packaged build
 - **Next step**: Operator item 4, second half. This is the highest-blast-radius unobserved change in the cycle.
 
-##### MT-5 - Packaged generation liveness is not observed
+##### MT-5 - Packaged generation liveness is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5 - Generation Liveness and Studio Captions
 - **Impact**: The reader is proven to answer `health` while a job is inside its handler, heartbeats are proven to emit and stop, and a pending studio orb is proven unpaused. Whether the packaged freeze is fully explained by the blocked reader, or partly by GPU compositor starvation on a 16 GB laptop, is not established. No headroom value was changed, deliberately, because there is no evidence for choosing one.
 - **Owner**: Operator, next packaged build
 - **Next step**: Operator item 5. If the window still stalls with the reader unblocked, compositor VRAM is the remaining hypothesis and `workingMemReserveGB` becomes the next lever.
 
-##### MT-6 - Packaged Settings density is not observed
+##### MT-6 - Packaged Settings density is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 6 - Settings Models Density and Details
 - **Impact**: Tests pin search inside the tab row container, a centered horizontal action row, no card min-height, split pill label/value colours, and Best for as bullets. Real-viewport card height and wrap behaviour at the packaged Settings width are not observed here.
 - **Owner**: Operator, next packaged build
 - **Next step**: Operator item 6. Supersedes v2.4.3 MT-4.
 
-##### QG-1 - Develop-targeted pull requests now run the full merge-result gate (resolved)
+##### QG-1 - Develop-targeted pull requests now run the full merge-result gate (resolved) - MIGRATED to v2.16.0
 
 - **Resolved**: 2026-08-31 in Phase 7, with explicit operator approval.
 - **Evidence**: Carried from v2.4.3 QG-5. Every substantive workflow filtered `pull_request` to `main`, so PR 58 (which targets `develop`) ran only commitlint: the push trigger tested the branch head, but the merge result was never tested. `develop` was added to the `pull_request.branches` filter of `ci.yml`, `shell-build.yml`, `installer-tests.yml`, `coverage-diff.yml`, and `pr-quality.yml`; no job logic changed. Confirmed by observation, not assertion: `gh pr checks 58` now reports 42 pass, 1 skipping (path-gated `init.ps1`), 0 fail on head `4b1771da`, against a pull request that previously ran one check.
 
-##### WN-1 - Two pre-existing ruff F401 findings remain
+##### WN-1 - Two pre-existing ruff F401 findings remain - RESOLVED 2026-10-21
 
 - **Source phase**: Phase 3 - Image Restyle Identity on the GPU (observed, not caused)
 - **Impact**: `runtimes/diffusion/vram_lifecycle.py:35` imports `typing.Any` unused and `tests/python/diffusion/test_registry.py:6` imports `sys` unused. Neither file was touched by this cycle, and every file that was touched passes ruff.
 - **Owner**: Next cleanup pass
 - **Next step**: Both are auto-fixable. Left alone here because they trace to no line in this plan.
 
+
+- **Resolution in v2.15.1**: Both specifically named F401 findings are gone: the earlier unused Any import was absent and the root removed only the unused sys import. Attributed two-file Ruff passed and registry pytest reported2passed.
+- **Evidence**: docs/releases/v2/v2.15/development/v2.15.3-triage.md; docs/releases/v2/v2.15/development/v2.15.4-triage.md
+- **Limits**: Apply only with the retained attributable root command receipt and owning phase commit. No broader lint, hardware or packaged claim.
 ## v2.4.3
 
 ### Summary
@@ -674,56 +683,56 @@ Phases 1-7 are implemented locally against packaged post-v2.4.3 screenshots 1-6.
 | Deferred (DF) | 0 | 0 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
-| Missing tests / coverage gaps (MT) | 7 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
 Phases 1-7 are implemented locally. A packaged wizard screenshot of the two-column Configuration/Review pages and Unsloth lock on this 16 GB NVIDIA host is not observed here. Hairline pixels and dialog centering in a packaged window are not observed here. Thinking-pill glow containment in a packaged transcript is not proven in jsdom. Packaged Settings nowrap facts and icon colors are not observed here. Packaged Agents picker order on this 16 GB install is not observed here. Packaged NVIDIA restyle before/after is not observed here. A packaged NVIDIA SANA-Video clip (or a live missing-file string from that install) is not observed here.
 
 ### Open Items
 
-##### MT-1 - Packaged installer two-column layout and Unsloth lock are not observed
+##### MT-1 - Packaged installer two-column layout and Unsloth lock are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Installer Two-Column Layout and Unsloth Lock
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](plans/v2.4.3-field-density-identity-and-runtime.md) T001 / 1.1
 - **Reason**: Pytest proves two-column widgets, Unsloth disabled when Incompatible, Compatible after NVIDIA 16384 on showEvent, Review 16 GB, and the renamed time label. A packaged wizard run on this host is not recorded here.
 - **Suggested next step**: Last-phase operator item (Configuration two columns and Unsloth Compatible on this 16 GB NVIDIA host).
 
-##### MT-2 - Hairline pixels and delete-dialog centering are not proven in jsdom
+##### MT-2 - Hairline pixels and delete-dialog centering are not proven in jsdom - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2 - History Chrome, Selection, Titles, and Delete Overlay
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](plans/v2.4.3-field-density-identity-and-runtime.md) T007 / 2.1
 - **Reason**: Tests assert the hairline node on `/images` (absent on Settings), New chat `onSelect`/`onOpenChat`, a pre-created Image title change, and `folder-tree-confirm-delete` as a child of `document.body`. jsdom does not layout a packaged window so the hairline's appearance and the dialog's visual center are not observed here.
 - **Suggested next step**: Last-phase operator items (hairline under tabs; New chat selects empty; Image first prompt titles the row; delete dialog centered).
 
-##### MT-3 - Thinking-pill glow pixel containment is not proven in jsdom
+##### MT-3 - Thinking-pill glow pixel containment is not proven in jsdom - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3 - Thinking Pill Geometry
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](plans/v2.4.3-field-density-identity-and-runtime.md) T013 / 3.1
 - **Reason**: Tests pin min-width to `Searching...`, a 12 px left inset, and overflow visible on the pill host and chat pending row. jsdom does not layout a packaged transcript, so glow pixels vs the pane edge are not observed here. v2.4.2 MT-1 remains the prior-cycle statement of the same limit.
 - **Suggested next step**: Last-phase operator item (thinking pill glow at 100% and 150% zoom).
 
-##### MT-4 - Packaged Settings compact-card nowrap and icon colors are not observed
+##### MT-4 - Packaged Settings compact-card nowrap and icon colors are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 - Settings Models Compact Cards
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](plans/v2.4.3-field-density-identity-and-runtime.md) T016 / 4.1
 - **Reason**: Tests pin a nowrap facts row without Company/License pills, pills inside Details, and green / red / blue action colors via inline style. A packaged Settings screenshot is not recorded here.
 - **Suggested next step**: Last-phase operator item (Settings one facts line and icon colors).
 
-##### MT-5 - Packaged Agents picker order and empty-session default are not observed
+##### MT-5 - Packaged Agents picker order and empty-session default are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5 - Shared Picker Rank and Default
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](plans/v2.4.3-field-density-identity-and-runtime.md) T020 / 5.1
 - **Reason**: Tests prove `resolveDefaultId` prefers `gemma-4-12b-it-gguf` over a gpt-oss favorite, and QuickModelSwitcher lists Gemma before gpt-oss at 16 GB with recommendOrder. A packaged Agents screenshot on this host is not recorded here.
 - **Suggested next step**: Last-phase operator item (Agents empty session defaults to Gemma 4 12B on this install).
 
-##### MT-6 - Packaged NVIDIA restyle identity is not observed
+##### MT-6 - Packaged NVIDIA restyle identity is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 6 - Image Restyle Identity
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](plans/v2.4.3-field-density-identity-and-runtime.md) T024 / 6.1
 - **Reason**: Tests prove restyle strength 0.7, identity prompt, no SAM2, and fail-closed without last output. A packaged NVIDIA before/after of "Make the puppy black" is not recorded here. v2.4.2 MT-3 remains the prior-cycle statement of the same limit.
 - **Suggested next step**: Last-phase operator item (Make the puppy black restyles fur).
 
-##### MT-7 - Packaged NVIDIA SANA-Video clip is not observed
+##### MT-7 - Packaged NVIDIA SANA-Video clip is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7 - SANA-Video Layout and Executor
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](plans/v2.4.3-field-density-identity-and-runtime.md) T028 / 7.1
@@ -740,49 +749,49 @@ Phases 1-7 are implemented locally. A packaged wizard screenshot of the two-colu
 | Deferred (DF) | 0 | 0 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 0 |
-| Missing tests / coverage gaps (MT) | 6 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
 Phases 1-7 are implemented locally. Phase 7 recorded last-phase evidence and is waiting on T043 push/PR approval against `develop` ([PR 58](https://github.com/bendourthe/Nexus-AI/pull/58)). jsdom cannot prove thinking-pill pixel containment, a live overflow pane jumping to the latest turn, or two Settings cards filling a real viewport. Packaged img2img identity, empty-video fail-closed, and a live installer GPU/Unsloth/VS Code screenshot are not observed here. Operator items 1-9 remain Not observed (`not_observed != absent`).
 
 ### Open Items
 
-##### MT-1 - Thinking-pill pixel containment is not proven in jsdom layout
+##### MT-1 - Thinking-pill pixel containment is not proven in jsdom layout - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 - Sidebar History Host and Shared Chrome
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](plans/v2.4.2-field-ui-history-and-generation.md) T005 / 1.5
 - **Reason**: jsdom does not layout. The Phase 1 test asserts overflow visible, sibling pill chrome (so `border-radius: 999px` is not on the canvas host), and `rectFullyInside` with mocked boxes. A real `getBoundingClientRect()` crop cannot be observed here.
 - **Suggested next step**: Phase 7 operator item 1 (thinking pill at 100% and 150% zoom) is the layout proof.
 
-##### MT-2 - Composer stick-to-bottom is proven on a mocked scroller, not a live pane
+##### MT-2 - Composer stick-to-bottom is proven on a mocked scroller, not a live pane - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 2 - Transcript Honesty
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](plans/v2.4.2-field-ui-history-and-generation.md) T009 / 2.1
 - **Reason**: `useStickToBottom` tests assign `scrollHeight` / `clientHeight` and assert `stickNow` sets `scrollTop`. They do not layout Chat, Agents, Image, or Video overflow panes with real content height after send.
 - **Suggested next step**: Phase 7 operator send on each of the four tabs and confirm the new user turn is in view unless the user scrolled up.
 
-##### MT-3 - Packaged img2img identity for "Make that puppy black" is not observed
+##### MT-3 - Packaged img2img identity for "Make that puppy black" is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3 - Image Follow-up Identity
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](plans/v2.4.2-field-ui-history-and-generation.md) T016 / 3.1
 - **Reason**: Automated tests prove img2img against last PNG bytes, strength 0.45, and no SAM2 for that phrase. A packaged NVIDIA run that the same puppy is recolored rather than resampled is not recorded here.
 - **Suggested next step**: Phase 7 operator item: generate a puppy, send "Make that puppy black" with no attachment, capture before/after.
 
-##### MT-4 - Packaged empty-video fail-closed is not observed
+##### MT-4 - Packaged empty-video fail-closed is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 - Video Fail-Closed Output
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](plans/v2.4.2-field-ui-history-and-generation.md) T020 / 4.1
 - **Reason**: Automated tests prove persist of the playable-clip error, Settings > Models on missing weights, and fail-closed when `resolveMp4Url` is empty. A packaged NVIDIA run that a first puppy-in-grass turn never paints an empty success bubble is not recorded here.
 - **Suggested next step**: Phase 7 operator item: send a Video Lab prompt that cannot produce a clip (missing weights or empty path) and capture the written failure.
 
-##### MT-5 - Settings Models density is not proven on a real viewport
+##### MT-5 - Settings Models density is not proven on a real viewport - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5 - Settings Models Density
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](plans/v2.4.2-field-ui-history-and-generation.md) T024 / 5.1
 - **Reason**: Tests assert the catalog fingerprint is absent, chrome gap is `--space-1`, and card padding is `--space-2`. jsdom does not layout two downloaded cards against a packaged window height.
 - **Suggested next step**: Phase 7 operator item 8 (Settings Models density).
 
-##### MT-6 - Live installer VRAM / Unsloth / VS Code merge is not observed
+##### MT-6 - Live installer VRAM / Unsloth / VS Code merge is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 6 - Installer VRAM, Unsloth, and VS Code Merge
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](plans/v2.4.2-field-ui-history-and-generation.md) T028 / 6.1
@@ -796,73 +805,73 @@ Phases 1-7 are implemented locally. Phase 7 recorded last-phase evidence and is 
 | Category | Open | Resolved |
 |---|---:|---:|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 6 | 1 |
+| Deferred (DF) | 0 | 1 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 2 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
-| Quality-gate gaps (QG) | 3 | 3 |
+| Quality-gate gaps (QG) | 0 | 3 |
 
 Phases 1-6 of the generation-recovery plan are committed locally. Phase 7 proved packaged NVIDIA image and video generation on this host (exact installer SHA-256 `E29725ADE5671271962CE9FB6DE66DCAA38BA182DC257802DFA835C78120490D`). Remaining operator checklist items (clean-install visuals, gated Hugging Face account, reboot persistence, Settings/Data/Training, transcript/Agents screenshots) stay Not observed. Publication still requires the full local gate, one Phase 7 commit, and explicit push/PR approval. `not_observed != absent` throughout.
 
 ### Open Items
 
-##### DF-1 - Packaged Windows clean and repair installer behavior is not observed
+##### DF-1 - Packaged Windows clean and repair installer behavior is not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 1 and Phase 8 human testing
 - **Plan reference**: Phase 8.7 operator items 1-3
 - **Reason**: The prior packaged field run exposed imperceptible fixed-value motion, low percentage contrast, and hidden finalization work that left the bar at 73% while visible groups said Done. The replacement implements and tests a repeating liquid gradient, contrast capsule, and complete visible step mapping, and its frozen smoke passes. A clean/repair visual run of the replacement is not observed.
 - **Owner / next evidence**: Release operator. Run checklist items 1-3 on a clean Windows Sandbox and an existing Nexus install, then attach screenshots and `nexus-install-nexus-desktop-log.txt`.
 
-##### DF-3 - Reasoning disclosure is not observed with a thinking-capable local model
+##### DF-3 - Reasoning disclosure is not observed with a thinking-capable local model - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3 and Phase 8 human testing
 - **Plan reference**: Phase 8.7 operator item 6
 - **Reason**: Component and hydration tests prove collapsed-by-default disclosure, keyboard access, absence when no reasoning exists, and token tooltip detail. No local provider turn with separate reasoning content was run here.
 - **Owner / next evidence**: Desktop operator. Use a catalog model that emits separate reasoning, confirm the disclosure expands without moving reasoning into the answer bubble, and capture collapsed and expanded states.
 
-##### DF-4 - Archive, delete, reset, and restore are not observed across all four pillars
+##### DF-4 - Archive, delete, reset, and restore are not observed across all four pillars - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 4 and Phase 8 human testing
 - **Plan reference**: Phase 8.7 operator item 7
 - **Reason**: Store, IPC, cancellation, late-event, and page-reset tests cover Chatbot, Agents, Images, and Videos. A packaged four-pillar operator matrix was not run.
 - **Owner / next evidence**: Desktop operator. Complete checklist item 7 and record one session id per pillar plus the reset and restore result.
 
-##### DF-5 - Installer/Settings visual parity and live disk-meter change are not observed
+##### DF-5 - Installer/Settings visual parity and live disk-meter change are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 5 and Phase 8 human testing
 - **Plan reference**: Phase 8.7 operator item 8
 - **Reason**: The prior packaged field run exposed Nomic as incorrectly required and incompatible rows above compatible rows. The replacement makes EmbeddingGemma 300M the required/default app-wide embedder and compatibility the first ordering partition in installer and Settings. Automated shared-policy tests pass; replacement visual parity and an observed free-space change after model install/remove are not recorded.
 - **Owner / next evidence**: Release operator. Capture the same model in both surfaces, then install/remove it and record the disk meter before and after.
 
-##### DF-6 - Native folder pickers outside Windows are not observed
+##### DF-6 - Native folder pickers outside Windows are not observed - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7
 - **Plan reference**: Phase 8.7 operator item 9
 - **Reason**: The Tauri command and frontend cancellation/stale-result behavior are automated. macOS and Linux picker behavior was not run on native hosts.
 - **Owner / next evidence**: Platform operator. On macOS and Linux, select, cancel, and rapidly reopen the picker and record the resulting workspace chips.
 
-##### DF-7 - Windows multi-root OS sandbox confinement remains partial
+##### DF-7 - Windows multi-root OS sandbox confinement remains partial - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 6 and Phase 8 human testing
 - **Plan reference**: Phase 8.7 operator item 9
 - **Reason**: Canonical path guards and scoped tool tests allow both selected roots and deny outside paths. The Windows sandbox backend still does not kernel-enforce filesystem or network confinement, so the support tier remains partial even when the UI and path guard behave correctly.
 - **Owner / next evidence**: Security owner. Keep the existing loud partial/unconfined status. A later sandbox phase must add kernel-enforced Windows filesystem and network boundaries before claiming confined support.
 
-##### QG-2 - Indexed skill catalog paths remain absent from this checkout
+##### QG-2 - Indexed skill catalog paths remain absent from this checkout - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 8 architecture, known-gaps, docs layout, and CI reconciliation; generation-recovery Phase 7
 - **Plan reference**: Phase 8.1-8.5 and generation-recovery T089-T093
 - **Reason**: The plan-indexed `catalog/skills/...` paths and the repository `.agents/skills` bundle still do not contain `project-refactor`, `docs-layout-refactor`, `known-gaps-tracker`, `cicd-architect`, `verification-before-completion`, or `dev-progress-tracker`. This Phase 7 session loaded the user-level copies under `C:\Users\bdour\.agents\skills` and followed those procedures. The repo-local mapping is still missing.
 - **Suggested next step**: Vendor or map the canonical skill files into the repository catalog before the next planning session, or update plan templates to the user-level install path.
 
-##### QG-5 - Develop-targeted pull requests miss several merge-result workflows
+##### QG-5 - Develop-targeted pull requests miss several merge-result workflows - MIGRATED to v2.16.0
 
 - **Source phase**: Generation-recovery Phase 7 terminal CI comparison
 - **Plan reference**: T093
 - **Reason**: `ci.yml`, `installer-tests.yml`, `shell-build.yml`, `pr-quality.yml`, `coverage-diff.yml`, and `codeql.yml` limit `pull_request.branches` to `main`. Feature-branch `push` still runs `ci.yml` and path-gated installer tests, and `commitlint.yml` runs on any PR. There is no always-resolving aggregate required-check job, and `package.json` has no `fast` / `full` / `platform` / `report` / `release` profile scripts. Workflow files were not changed; silence is not approval.
 - **Suggested next step**: After explicit approval, add `develop` to the listed `pull_request.branches` (or an aggregate gate job) in the smallest set of workflows that must validate the merge result. Record any remaining profile-script differences as environment-only.
 
-##### QG-6 - Model-prompting freshness helper is absent
+##### QG-6 - Model-prompting freshness helper is absent - MIGRATED to v2.16.0
 
 - **Source phase**: Generation-recovery Phase 7 advisory governance check
 - **Plan reference**: implement-phase 9.0 duty 8
