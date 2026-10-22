@@ -83,7 +83,7 @@ jobs:
       # contract's pinned baseline commit, which the depth-1 checkout lacks.
       - name: Fetch pinned embedding-eval baseline commit
         run: |
-          baseline="$(node -p "require('./docs/releases/v2/v2.13/development/embedding-eval-contract.json').baselineHead")"
+          baseline="$(node -e 'const fs=require("node:fs");const paths=["docs/releases/v2/v2.13/development/embedding-eval-contract.json","docs/archives/v2/v2.13/development/embedding-eval-contract.json"].filter(p=>fs.existsSync(p));if(paths.length!==1)throw new Error("Expected exactly one active or archived embedding contract");const head=JSON.parse(fs.readFileSync(paths[0],"utf8")).baselineHead;if(typeof head!=="string"||!/^[0-9a-f]{40}$/i.test(head))throw new Error("Embedding baselineHead must be a 40-hex commit");process.stdout.write(head);')"
           git fetch --no-tags --depth=1 origin "$baseline"
 
       - name: Lint extension source

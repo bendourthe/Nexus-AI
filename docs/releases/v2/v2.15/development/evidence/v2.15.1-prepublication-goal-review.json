@@ -1,0 +1,1386 @@
+{
+  "status": "PASS_IMPLEMENTATION_AND_SCOPE_REVIEW_WITH_READINESS_GATES_OPEN",
+  "implementation_findings": [],
+  "scope_findings": [],
+  "at_utc": "2026-10-22T05:32:07.886905+00:00",
+  "snapshot": {
+    "HEAD": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
+    "MERGE_HEAD": "efaa651dd447cc6c0efdad359bc5457118e5906a",
+    "working_tree": "resolved integration merge; phase3 documentation/checkboxes still owned by root",
+    "checked_tasks_at_snapshot": 40,
+    "tasks": 52
+  },
+  "goals": [
+    {
+      "path": "docs/releases/v2/v2.15/plans/v2.15.1-batch1-catalog-harness-video-triage.md",
+      "goal": "Every one of the 55 identities frozen in batch 1 of the v2.15.0 follow-up list has a verified, accountable disposition, with no lost obligation or unsupported completion claim."
+    },
+    {
+      "path": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+      "goal": "Every one of the 47 identities frozen in batch 2 of the v2.15.0 follow-up list has a verified, accountable disposition, with no lost obligation or unsupported completion claim."
+    },
+    {
+      "path": "docs/releases/v2/v2.15/plans/v2.15.1-batch3-image-runtime-qualification-triage.md",
+      "goal": "Every one of the 54 identities frozen in batch 3 of the v2.15.0 follow-up list has a verified, accountable disposition, with no lost obligation or unsupported completion claim."
+    },
+    {
+      "path": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+      "goal": "Every one of the 43 identities frozen in batch 4 of the v2.15.0 follow-up list has a verified, accountable disposition, with no lost obligation or unsupported completion claim."
+    }
+  ],
+  "frozen_scope": {
+    "sets": {
+      "batch-1": 55,
+      "batch-2": 47,
+      "batch-3": 54,
+      "batch-4": 43,
+      "active-63": 63
+    },
+    "unique_identities": 262,
+    "additions": {
+      "entries": [],
+      "scope": "No new ledger identity was assigned by this manifest. The inherited folder cache race is repaired and reviewed in the folder evidence follow-up. New findings from final verification must be named separately without changing frozen262."
+    },
+    "actual_dispositions": {
+      "carry": 245,
+      "closure": 14,
+      "already-resolved": 3
+    },
+    "245_destinations_remain_open": true,
+    "all_carries_have_original_rule_justification_and_next_step": true,
+    "actual_eleven_byte_hashes_unchanged_since_final_audit": true,
+    "source_bodies_titles_provenance_and_native245_copy_proofs": "Reused unchanged audit558 and independent seal e596; no broad repeat",
+    "untargeted_preserved": 111,
+    "targeted_original_prefixes_preserved": 259,
+    "raw_capture_preservation": {
+      "files": 553,
+      "scope": "Reused completed audit relative to its preparation snapshot; no invented pre-run claim"
+    }
+  },
+  "acceptance_contract": {
+    "all52_master_support_map_descriptions_prompts_and_checkbox_states_match": true,
+    "all52_hashes_match": true,
+    "hash_convention": "Exact two-line task/Prompt with checkbox canonicalized unchecked, LF line separator, no trailing newline",
+    "tasks": [
+      {
+        "task": "T101",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.1-catalog-harness-video-triage.md",
+        "original_task": "T001",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch1-catalog-harness-video-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "74fab17f59ddb2953acdb3a08f2758a501fd954dc80aee9d371f71b05ecc9c7a",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T102",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.1-catalog-harness-video-triage.md",
+        "original_task": "T002",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch1-catalog-harness-video-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "cdcb958ffa698f5df72fdf732e9717f86a6573b2a5241f4d17d2f067b3171c60",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T103",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.1-catalog-harness-video-triage.md",
+        "original_task": "T003",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch1-catalog-harness-video-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "3da7e91e23babd3f058301b805eab38a0c3263c7be9c0ec589d5391ca896a772",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T104",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.1-catalog-harness-video-triage.md",
+        "original_task": "T004",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch1-catalog-harness-video-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "4c874651b04680265d6948ebcd3599ffb2f76d7a1869c6de12a692207fbff634",
+        "master_phase": 2,
+        "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96"
+      },
+      {
+        "task": "T105",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.1-catalog-harness-video-triage.md",
+        "original_task": "T005",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch1-catalog-harness-video-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "c64f16e02ebd053fbf3ece88da4e183108108edaa7a198a5f55b1c19ef4714b8",
+        "master_phase": 2,
+        "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96"
+      },
+      {
+        "task": "T106",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.1-catalog-harness-video-triage.md",
+        "original_task": "T006",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch1-catalog-harness-video-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "df0054547c71aa1d7327d67295a5c0e3ed9533084194db0168d7b153351f6426",
+        "master_phase": 3,
+        "actual_commit": null
+      },
+      {
+        "task": "T107",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.1-catalog-harness-video-triage.md",
+        "original_task": "T007",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch1-catalog-harness-video-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "97fc7333c87c235831ce053d62ddc038a9d390b2fd71e34a4d5bd6b125eb5c85",
+        "master_phase": 4,
+        "actual_commit": null
+      },
+      {
+        "task": "T201",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.2-desktop-packaging-composer-triage.md",
+        "original_task": "T001",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "ef607e72978ea382f9db9d7950e02bfc83a0b915390ed2914be400ebb7387f77",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T202",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.2-desktop-packaging-composer-triage.md",
+        "original_task": "T002",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "d23f00ca63ae221d2925c7a0c5d8cd1ecc85198011e34af6841af141aee21de7",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T203",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.2-desktop-packaging-composer-triage.md",
+        "original_task": "T003",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "40456a3618d730ea5b5e3c2b630aa03a837f20299c08c9a230384c80a6429830",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T204",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.2-desktop-packaging-composer-triage.md",
+        "original_task": "T004",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "c9b06ee2d49edf9dda26d3250e287f7be1032a0f73c6a43504e6f72b0a3fc2f6",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T205",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.2-desktop-packaging-composer-triage.md",
+        "original_task": "T005",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "93406abd7a222b56390676dbb3069d464d7976ccbb77f552df40d3a71743bb8a",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T206",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.2-desktop-packaging-composer-triage.md",
+        "original_task": "T006",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "5a46105f2ac5a70e24142fe41674d9a7d9cb8cd53de647c426cefbf678ab0bbf",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T207",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.2-desktop-packaging-composer-triage.md",
+        "original_task": "T007",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "65ebf033b314323e03ac6174928c432501f5a14737641e5a9656f95494f63f3e",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T208",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.2-desktop-packaging-composer-triage.md",
+        "original_task": "T008",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "9d3428838432e50900756f6d10309481e29f7b154b3c368666b1ba903fb57958",
+        "master_phase": 2,
+        "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96"
+      },
+      {
+        "task": "T209",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.2-desktop-packaging-composer-triage.md",
+        "original_task": "T009",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "f05e2fb253c8b85f8fa4059589d0383d41b5180339a5b4429908d65927ae66a6",
+        "master_phase": 2,
+        "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96"
+      },
+      {
+        "task": "T210",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.2-desktop-packaging-composer-triage.md",
+        "original_task": "T010",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "6596799537eefe2ed0338cb94787222f48e69e43b258691d8c41a403d4c6a4c8",
+        "master_phase": 3,
+        "actual_commit": null
+      },
+      {
+        "task": "T211",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.2-desktop-packaging-composer-triage.md",
+        "original_task": "T011",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch2-desktop-packaging-composer-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "beb725d178bdb4d18b03d203c9a99d0a6f057f6522e6ab991d795069fc4d86c4",
+        "master_phase": 4,
+        "actual_commit": null
+      },
+      {
+        "task": "T301",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.3-image-runtime-qualification-triage.md",
+        "original_task": "T001",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch3-image-runtime-qualification-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "2984c3a0331c86c73f78dced52c5d523b6eab6608f526a5d523a4d7d728511ed",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T302",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.3-image-runtime-qualification-triage.md",
+        "original_task": "T002",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch3-image-runtime-qualification-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "fd7029c6255ff43d0a6b02c9afc99b7352795cee8a5072791e6b62c895b933d1",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T303",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.3-image-runtime-qualification-triage.md",
+        "original_task": "T003",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch3-image-runtime-qualification-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "f84f72907eb7a79edf760d27c1acb41bee04f9de7530e688cd32b976f9c71465",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T304",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.3-image-runtime-qualification-triage.md",
+        "original_task": "T004",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch3-image-runtime-qualification-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "6327cb6ed1c6e7123168e6b9aa107cdfeb6efc48a51ea4e2c8b5a5edf16683d1",
+        "master_phase": 2,
+        "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96"
+      },
+      {
+        "task": "T305",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.3-image-runtime-qualification-triage.md",
+        "original_task": "T005",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch3-image-runtime-qualification-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "9afc05dce30175dafc6476b02e92e450d6797751cc080c7ed68e7094d4239df7",
+        "master_phase": 2,
+        "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96"
+      },
+      {
+        "task": "T306",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.3-image-runtime-qualification-triage.md",
+        "original_task": "T006",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch3-image-runtime-qualification-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "033da0ef611bcdca135e6b52394be56064bbcf65b4efc70f60acb6464e8643dd",
+        "master_phase": 3,
+        "actual_commit": null
+      },
+      {
+        "task": "T307",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.3-image-runtime-qualification-triage.md",
+        "original_task": "T007",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch3-image-runtime-qualification-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "b8b1f94b262ac323fe316464f94e54c453804c78286e168b2abb8b8c364bd43b",
+        "master_phase": 4,
+        "actual_commit": null
+      },
+      {
+        "task": "T401",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T001",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "6dfd7f28cd7b759c5b502b96a1a6b701f267d5630657e8e15fd1c87be9d77eb0",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T402",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T002",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "136fb010406ea0ce05dd4013d81d88205a073dfec4ab9e28fbca2e41b5b7b54b",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T403",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T003",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "046a8052f81ad4f7623fe749e9e189396fc9b64ade6f22f995a3e63d549dc09e",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T404",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T004",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "5193b1aba252316d2f4942faeff413fd974699c6d5d0b570394e53abca147a13",
+        "master_phase": 2,
+        "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96"
+      },
+      {
+        "task": "T405",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T005",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "d7054776af426c009aa0ddc3155319bb65ee746d27ab2f9c9e7761bd46b18cdf",
+        "master_phase": 2,
+        "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96"
+      },
+      {
+        "task": "T406",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T006",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "7c098b8f129fd0e0e360c9eda5d0fd18161af128cc0d5fc925652048f10661d6",
+        "master_phase": 2,
+        "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96"
+      },
+      {
+        "task": "T422",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T022",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "8eb84081a602517b4294680121b1ffcb1823579954c533d31853b27fbaf820ff",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T423",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T023",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "eb23d6caf0e8cbea4e9766e2eeae1737675c6591b84893293bcacdff2839ad69",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T424",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T024",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "7950f400f157d9090074e67019d7aad17a1b61fc4fd26f8a4c3b653bb256ead1",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T425",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T025",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "d54bbe7e1e2e0c3b3fd36234c2382a498ea340d2452320f879a69d027d19ef6e",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T426",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T026",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "2d4024c42d9bf4b4c1c6c6dc98df66f0c98182ed2be79d5dd359da616ebcd602",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T427",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T027",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "91b9bacde1fe36f3aed9257c08a6872ad6a6997a5adb56a160e56e980dc3f248",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T428",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T028",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "cc58e7d31e451c583dfc1de573202e0cef6bc8d9be864abe5f2ca960524f8f0f",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T407",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T007",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "72260232d433a9da636abba78394442d971cb5bf5f15dd103eac0384604ddfb3",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T408",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T008",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "095bd134709a25870dbfe32f86b56e605516bacf2c65c83f51a0d5472ee652da",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T421",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T021",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "a21bd6b1df35cbc5d378726cb662a0d5fd9e276d9b345a0f5431315c1259718f",
+        "master_phase": 1,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T409",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T009",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "c1c9dca0cad2af57bb1bf82c6b5a432c534e270b18ce71517be4f09601ed7d35",
+        "master_phase": 2,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T410",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T010",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "46456d8532d54f4227317c44618f54cceded6d7ad39634710816e25f62f86920",
+        "master_phase": 2,
+        "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96"
+      },
+      {
+        "task": "T411",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T011",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "69e5492c6407ad1873ef90ab108d506f49b28343acec1ae7e3e829ab161562f6",
+        "master_phase": 2,
+        "actual_commit": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96"
+      },
+      {
+        "task": "T412",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T012",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "57d76bad760ea4aa4aa7a8e34060a71bd4226fd96dcab9dd3b13a553a34904a0",
+        "master_phase": 3,
+        "actual_commit": "c43432f04facf3540f20df537d722d973779860b"
+      },
+      {
+        "task": "T413",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T013",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "473948b22313ff8b23b78512e1135d417dcf6342bc913ce7bcec29ce8a1ce44f",
+        "master_phase": 3,
+        "actual_commit": null
+      },
+      {
+        "task": "T414",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T014",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": true,
+        "acceptance_sha256": "acea02ace86729c60840a08ae355649ca5b051c95bb2b3181715d6398b3b4f9b",
+        "master_phase": 3,
+        "actual_commit": null
+      },
+      {
+        "task": "T415",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T015",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "5af7216b8654dea4eb8aa587585638c6903e40c2ee8cc88d2cb4a875993d1b5b",
+        "master_phase": 3,
+        "actual_commit": null
+      },
+      {
+        "task": "T416",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T016",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "73189b11e308f2d57f2bfee1c4935cf0d5ad27419a6002c67d68bc98d17087de",
+        "master_phase": 3,
+        "actual_commit": null
+      },
+      {
+        "task": "T417",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T017",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "773bf1a4a428e0a8cd0d24e271560b724233f34199c6be46c79e03ff1d8fe8df",
+        "master_phase": 3,
+        "actual_commit": null
+      },
+      {
+        "task": "T418",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T018",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "5604a17e538e3dbfa087ed4d886dab59f9f15776cd13d8d1f11b0813fbbc21e3",
+        "master_phase": 4,
+        "actual_commit": null
+      },
+      {
+        "task": "T419",
+        "original_plan": "docs/releases/v2/v2.15/plans/v2.15.4-installer-registry-closeout-triage.md",
+        "original_task": "T019",
+        "support_plan": "docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md",
+        "checked_at_review": false,
+        "acceptance_sha256": "bee8d8120895f44889d1eb15cfb4d979e32615cc36f5d4a8a2280784c11f0e84",
+        "master_phase": 4,
+        "actual_commit": null
+      }
+    ]
+  },
+  "source_integrity": {
+    "phase1_commit": "c43432f04facf3540f20df537d722d973779860b",
+    "git_content_diff_in_core_modules_desktop_src_installer": [],
+    "untracked_product_source": [],
+    "key_source_sha256": {
+      "modules/chat/storage/ChatExplorerStore.ts": "b61d2c585befcd736014b60531a470e6cd497799541679bc8e422c3f939fb437",
+      "desktop/sidecar/src/protocol.ts": "19b62a749d40d47a3b4487ba8dad2c74b9f5e4e1e3e04e85ee4a2e1124057304",
+      "desktop/sidecar/src/handlers.ts": "df177e3ff2d6acf1cdc78a6fa34da5b92d5bc5fa390cdab08e009be2951e58ba",
+      "desktop/sidecar/src/chat/explorerRuntime.ts": "4049f8e23f4f17912a775c9da79a4d6dd8557124838d1895ead9657adceeb7c1",
+      "desktop/src/modules/chat/chatExplorerClient.ts": "71626b13cb97d868623a495f394ca75a08d01c37c04fc465c630516cabb38a3f",
+      "desktop/src/modules/chat/ipcChatExplorerClient.ts": "4df2d21ead3cf0c6bf5ac6ab76fc7fd5d29478373817d5f16bc7c35bd0642074",
+      "desktop/src/modules/chat/FolderTree.tsx": "dff2c506a38a89736c384d7184f6a0669d29d498e69a354928d9126b6f968671",
+      "core/generations/StudioSessionStore.ts": "c61556b54ee07eec633f0cd585a9920be01986453b6d7ec0aeec79852432f519",
+      "core/generations/ImageEditRecipeStore.ts": "592d952ddc7624d425221ef2fe938c5b7f97ed37b05230bde2bc14777a7f5c94",
+      "modules/coding/autonomy/AskInbox.ts": "a671771043d5f56df8b0036be72e274b05bd92105635fc547ec9995df650ece1",
+      "desktop/sidecar/src/studio/imageEditRuntime.ts": "5a96ac248440a190365b4ee0bd04c88c3eacedc2cf11714a9a9ae942ae091b23",
+      "desktop/src/shared/studio/ImageViewer.tsx": "bd271c101f0c4f1fc5f44ab706335d362958187489c53b9600906875e3f1cc2e",
+      "desktop/src/shared/explorer/StudioHistoryPane.tsx": "028ae5d9c1cea6701a8b16713b2935e2e271752bf1147673269a6a0d721cd19a",
+      "modules/coding/runtime/outputBudget.ts": "d8b9f46f72afa5cebba37aba96db4a7504ca68edfd937dfa6a1ba607a288ff95",
+      "modules/coding/runtime/HeadlessAgentSession.ts": "1684dd6f3cd939b5d7ef8e106cd0238a851412a207f5c53d7c3def8631a2d157",
+      "desktop/sidecar/src/coding/scheduledHeadlessRunner.ts": "227290198a422377929c4cb1112f66e96c105a600970ac7859a111fdff912b01",
+      "desktop/src/pages/settings/SecuritySettings.tsx": "26995bc46a3026e5d2ce8017eaf804a72eba30a227bdf8aec5dd60143ff700d2",
+      "src/tools/handlers/parseDocument.ts": "2c53492c912abf8979e006843558af3f1da8c98d8acb3c8cd8a7e30f36c452b3",
+      "src/tools/ToolCatalog.ts": "0979620dc0b68aa10dd552e5da3eb0dc6840e101916af9108e53d694de0fbcdd",
+      "scripts/installer/tests/test_hf_weights_puller.py": "5a14014b29eba9390c5c3d7dfb0b5e528e87da3004aea22428e5aa86d7203d61",
+      "tests/python/diffusion/test_registry.py": "6096c8413781c78bd1c1a25e99365ad9f2fed1edfe074d2f5667df65a642a365",
+      "scripts/generate-handbooks.mjs": "2861c10cef6eca116742c292b232976661628bac520e297d8cb3f21b91bfeec1",
+      "scripts/check-docs-layout.mjs": "6b6eb8025400fc6bee8cb44abf5d56644062d36b556d90df02a26699283528a6",
+      "scripts/known-gaps/inventory.mjs": "97ddce2c0e50f4f71591a1b6414f77b2ee9f3f68e52d30ceeb48de8224fb786d",
+      "scripts/known-gaps/checker-adapter.py": "568cba3359a36fd887abebc521293efa3025036acd4f663d32f090ae08d506a0",
+      "package.json": "87b4a1df611c9b2954e1515681172feea51c110caf31cb2b31dc05b361d01105",
+      "package-lock.json": "684c54ed37db5878d474e4be8a75b0b317da8c8caa5e59c03401a748fc3c6eb9"
+    },
+    "merge_dependency_versions": {
+      "sdk": "1.32.1",
+      "hono": "4.13.13"
+    },
+    "queued_v216_model_plan": "proposed future work only; no catalog/default/runtime production source changed"
+  },
+  "implemented_selected_policies": [
+    {
+      "policy": "Folder colors",
+      "proof": "Reviewed persistent setter/strictIPC/optional UI/error/cache generation; unchanged phase1 source; existing real temporary SQLite/dispatch and restart proof reused",
+      "limit": "No packaged native-window claim"
+    },
+    {
+      "policy": "Outline retirement",
+      "proof": "Active discovery/settings/endpoints removed; generic parse_document/output budgets/history retained; unchanged reviewed phase1 source",
+      "limit": "Retained offline helpers and historical evidence are not product exposure; no M5 testimony invented"
+    },
+    {
+      "policy": "Retained shared originals",
+      "proof": "Image deletion disclosure and SQLite cascade preserve identical shared PNG original bytes; no media deletion introduced",
+      "limit": "Only owning session history/recipes/checkpoints delete"
+    },
+    {
+      "policy": "Approval-time checkpoints and viewer recovery",
+      "proof": "Actual trusted preparation captures immutable complete recipe/cursor/redo before grant; SQLite commit then JSON decision then waiter; fresh attempt on failure/edit/retry; viewer-only scoped CAS restore with authorization-generation fencing and post-await reauthorization",
+      "limit": "No cross-store atomicity, packaged IPC or restart-surviving grant claim"
+    }
+  ],
+  "reused_independent_implementation_reports": [
+    "v2.15-preapproval-goal-review.md",
+    "v2.15-policy-implementation-review.md",
+    "v2.15-folder-color-and-handbook-review.md",
+    "v2.15-closeout-first-repairs-review.md"
+  ],
+  "current_native_checker": {
+    "qualified_V3_seven_source_hashes_match": {
+      "check_plan_completion.py": "db10ccfe1ae04dbee66203152db4f52805d55acc20cd64905d9e22d49ff74eec",
+      "completion_minor.py": "ea48a449fd7d020ebaff2426f4b9b320a4c0ae9b648ce7a318ef442b56eb99e9",
+      "minor_close.py": "893e53af6ac68e46dfd193a33c1528cf37cd8d49cd1be07baeec147f5110ee57",
+      "approval_page.py": "244464d8a9929b25c5bc89ed7df28dd6efb782bf2dd5ded945eed2de3485b42f",
+      "approval_binding.py": "bbd1863ece314addd28f5c7d3c2caf304a6f4dbaefc37f9c55daa03117dd486b",
+      "repo_host.py": "dfeec69940715ad782a0885a6426214e2bce13c9d33ad41ecc6975a23f3147a7",
+      "cleanup_merged.py": "8116f67beeac2033f82d3f47689378447117f529121100f126a44cf84674b572"
+    },
+    "adopted_findings": [],
+    "historical_adapter_byte_sha256": "568cba3359a36fd887abebc521293efa3025036acd4f663d32f090ae08d506a0",
+    "phase2_native_proof": "Captured old six-source execution remains historical; current seven-source V3 adoption is explicitly qualified, not silently substituted",
+    "historical_pages_pure_content_review": [],
+    "ordering": "Corrected historical review explicitly renders/captures/creates at unchanged current HEAD before phase3 commit; precommit dirty refusal retained; no automatic archive"
+  },
+  "qa": {
+    "attribution": "Root-observed fresh merged-tree suites/gates, not rerun by this reviewer",
+    "root": {
+      "passed": 6446,
+      "skipped": 12,
+      "coverage": [
+        84.94,
+        76.3,
+        86.97,
+        87.1
+      ]
+    },
+    "desktop": {
+      "passed": 2364,
+      "skipped": 1,
+      "coverage": [
+        80.78,
+        73.26,
+        81.21,
+        83.47
+      ],
+      "retained_residual": "Initial two-worker ESLint timeout retained; unchanged isolated and final full one-worker runs passed"
+    },
+    "installer": {
+      "passed": 1528,
+      "skipped": 3,
+      "ruff_check": "PASS",
+      "optional_ruff_format": "FAIL one inherited blank-line requirement in catalog_invariants.py near735; matching helper region unchanged from fadbf89 and outside modifiedhunk, not reported green"
+    },
+    "build_gate_results": [
+      {
+        "name": "fast",
+        "command": [
+          "node",
+          "scripts/ci-profile.mjs",
+          "--profile",
+          "fast",
+          "--reports-dir",
+          "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-phase3-build-gates-vp5fcrrh\\fast-reports"
+        ],
+        "cwd": "C:\\nx-close",
+        "exit_code": 0,
+        "seconds": 13.91,
+        "utc": "2026-10-22T05:25:21.231700+00:00"
+      },
+      {
+        "name": "desktop-lint",
+        "command": [
+          "npm.cmd",
+          "run",
+          "--silent",
+          "lint",
+          "--workspace",
+          "@nexus/desktop"
+        ],
+        "cwd": "C:\\nx-close",
+        "exit_code": 0,
+        "seconds": 7.19,
+        "utc": "2026-10-22T05:25:28.433473+00:00"
+      },
+      {
+        "name": "root-build",
+        "command": [
+          "npm.cmd",
+          "run",
+          "--silent",
+          "build"
+        ],
+        "cwd": "C:\\nx-close",
+        "exit_code": 0,
+        "seconds": 9.41,
+        "utc": "2026-10-22T05:25:39.177312+00:00"
+      },
+      {
+        "name": "desktop-types",
+        "command": [
+          "npm.cmd",
+          "run",
+          "--silent",
+          "typecheck",
+          "--workspace",
+          "@nexus/desktop"
+        ],
+        "cwd": "C:\\nx-close",
+        "exit_code": 0,
+        "seconds": 13.52,
+        "utc": "2026-10-22T05:25:52.687263+00:00"
+      },
+      {
+        "name": "sidecar-build",
+        "command": [
+          "npm.cmd",
+          "run",
+          "--silent",
+          "build:sidecar"
+        ],
+        "cwd": "C:\\nx-close",
+        "exit_code": 0,
+        "seconds": 5.14,
+        "utc": "2026-10-22T05:25:57.836182+00:00"
+      },
+      {
+        "name": "web-build",
+        "command": [
+          "npm.cmd",
+          "run",
+          "--silent",
+          "build:web",
+          "--workspace",
+          "@nexus/desktop"
+        ],
+        "cwd": "C:\\nx-close",
+        "exit_code": 0,
+        "seconds": 33.47,
+        "utc": "2026-10-22T05:26:31.299774+00:00"
+      },
+      {
+        "name": "architecture",
+        "command": [
+          "npm.cmd",
+          "run",
+          "--silent",
+          "check-architecture"
+        ],
+        "cwd": "C:\\nx-close",
+        "exit_code": 0,
+        "seconds": 3.36,
+        "utc": "2026-10-22T05:26:34.655329+00:00"
+      },
+      {
+        "name": "feature-drift",
+        "command": [
+          "node",
+          "scripts/check-feature-drift.mjs"
+        ],
+        "cwd": "C:\\nx-close",
+        "exit_code": 0,
+        "seconds": 0.08,
+        "utc": "2026-10-22T05:26:34.733853+00:00"
+      },
+      {
+        "name": "handbooks",
+        "command": [
+          "node",
+          "scripts/generate-handbooks.mjs",
+          "--check"
+        ],
+        "cwd": "C:\\nx-close",
+        "exit_code": 0,
+        "seconds": 0.08,
+        "utc": "2026-10-22T05:26:34.813119+00:00"
+      },
+      {
+        "name": "attribution",
+        "command": [
+          "python",
+          "C:/Users/bdour/.nexus-hub/scripts/nexus_hub_cli.py",
+          "attribution",
+          "check"
+        ],
+        "cwd": "C:\\nx-close",
+        "exit_code": 0,
+        "seconds": 0.91,
+        "utc": "2026-10-22T05:26:35.718807+00:00"
+      }
+    ],
+    "remaining_gate_results": [
+      {
+        "name": "desktop-coverage",
+        "command": [
+          "node",
+          "../node_modules/vitest/vitest.mjs",
+          "run",
+          "--config",
+          "vitest.config.ts",
+          "--coverage",
+          "--maxWorkers=1",
+          "--reporter=dot"
+        ],
+        "cwd": "C:\\nx-close\\desktop",
+        "exit_code": 0,
+        "seconds": 491.75,
+        "utc": "2026-10-22T05:22:52.720275+00:00"
+      },
+      {
+        "name": "installer-tests",
+        "command": [
+          "uv",
+          "run",
+          "--quiet",
+          "--python",
+          "3.11",
+          "pytest",
+          "-q",
+          "--disable-warnings"
+        ],
+        "cwd": "C:\\nx-close\\scripts\\installer",
+        "exit_code": 0,
+        "seconds": 54.8,
+        "utc": "2026-10-22T05:23:47.534099+00:00"
+      },
+      {
+        "name": "installer-ruff",
+        "command": [
+          "uv",
+          "run",
+          "--quiet",
+          "--python",
+          "3.11",
+          "ruff",
+          "check",
+          "."
+        ],
+        "cwd": "C:\\nx-close\\scripts\\installer",
+        "exit_code": 0,
+        "seconds": 1.22,
+        "utc": "2026-10-22T05:23:48.775481+00:00"
+      },
+      {
+        "name": "installer-format",
+        "command": [
+          "uv",
+          "run",
+          "--quiet",
+          "--python",
+          "3.11",
+          "ruff",
+          "format",
+          "--check",
+          "."
+        ],
+        "cwd": "C:\\nx-close\\scripts\\installer",
+        "exit_code": 1,
+        "seconds": 0.27,
+        "utc": "2026-10-22T05:23:49.040535+00:00"
+      }
+    ],
+    "handbooks": {
+      "six_fresh_receipts": "PASS full inventory",
+      "HTML_and_assets": "unchanged; actual browser evidence explicitly reused, not rerun",
+      "publication_duty": "Semantic-release package/lock change can stale receipts; T418 must refresh before read-only T419"
+    }
+  },
+  "readiness_gates": [
+    {
+      "tasks": [
+        "T413"
+      ],
+      "state": "OPEN",
+      "required": "Genuine owner capture and native create of the fresh v2.12/v2.13 archive-only pages at unchanged bound inputs/HEAD; pending WNEVLC4G and TOYDWIVT are not approvals"
+    },
+    {
+      "tasks": [
+        "T106",
+        "T210",
+        "T306",
+        "T416"
+      ],
+      "state": "FINAL_METADATA_PENDING_AT_SNAPSHOT",
+      "required": "Root finish current full-QA packet and literal final-duty records; successful commands alone do not write those records"
+    },
+    {
+      "tasks": [
+        "T417"
+      ],
+      "state": "THIS_INDEPENDENT_PREPUBLICATION_REVIEW",
+      "required": "Root account this receipt and keep later consent/publication/readiness duties separate"
+    },
+    {
+      "tasks": [
+        "T415"
+      ],
+      "state": "OPEN",
+      "required": "Record actual precommit read-only archive refusals/preflight, Plan delta/CI impact, one phase3 merge commit; preserve all bound inputs through capture/create"
+    },
+    {
+      "tasks": [
+        "T107",
+        "T211",
+        "T307",
+        "T418"
+      ],
+      "state": "OPEN",
+      "required": "One validated integration and actual v2.15.1 release/tag/assets/ancestry, under publication authorization; no empty historical release or four invented releases"
+    },
+    {
+      "tasks": [
+        "T419"
+      ],
+      "state": "OPEN",
+      "required": "Clean closing branch strictly read-only archive receipts after publication; v2.13 readiness conditional on v2.12-first; no actual archive/deletion authorized"
+    }
+  ],
+  "unchecked_tasks_at_snapshot": [
+    "T413",
+    "T106",
+    "T210",
+    "T306",
+    "T416",
+    "T417",
+    "T415",
+    "T107",
+    "T211",
+    "T307",
+    "T418",
+    "T419"
+  ],
+  "overall_goal_complete": false,
+  "archive_ready_certified": false,
+  "no_actual_source_plan_ledger_record_capture_git_writes": true,
+  "inputs": {
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\plans\\v2.15.1-archive-readiness.md": {
+      "sha256": "7d1a4f1d6df42d00e674d14b5e86761c6efc2946299dc17c67b41e515cfcd667",
+      "bytes": 33234
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.1-execution-map.json": {
+      "sha256": "340cbf592da7976778657167a9992bead4b8ec1292a314905f7eb6fc287d336c",
+      "bytes": 35748
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\plans\\v2.15.1-batch1-catalog-harness-video-triage.md": {
+      "sha256": "c1104f0f26a415e5eec6c7cfb87fafc91076cc528f75949483d951d4fd0aff33",
+      "bytes": 9971
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\plans\\v2.15.1-batch2-desktop-packaging-composer-triage.md": {
+      "sha256": "1ef738cdbe1498f339d45dd4b9c29ffb5fafcd3148a6242a17d0af6a638a15fa",
+      "bytes": 12153
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\plans\\v2.15.1-batch3-image-runtime-qualification-triage.md": {
+      "sha256": "9fb32bb92a98244673d6b9fe7cb2af6b54b085c0c037e96b5b508412b9474f0b",
+      "bytes": 9599
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\plans\\v2.15.1-batch4-installer-registry-closeout-triage.md": {
+      "sha256": "badc358d4ed69bfd3458e170cc0520e15acba303f5f61494624edd442e2cbc92",
+      "bytes": 23269
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.4-carry-forward-manifest.json": {
+      "sha256": "a1d392405d27d08bbf23ea13f159a3842910c7b8608228f54b828be06cbc4fc3",
+      "bytes": 1926516
+    },
+    "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-independent-final-disposition-review-9n7m918u\\reviewer-receipt.json": {
+      "sha256": "e596d9886115f09cbd5c73cd853cd30666ef5030f4abed18521d7eddc4cdf1b0",
+      "bytes": 8484
+    },
+    "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-independent-actual-disposition-audit-py95h371\\actual-audit.json": {
+      "sha256": "558e0745c53cfc4310da996dd39a5d2b771a5c7165229b35e9789ab6fdd8a47b",
+      "bytes": 46609
+    },
+    "C:\\nx-close\\docs\\archive\\v1\\v1.17\\known-gaps.md": {
+      "sha256": "34da80f6b94ddfad39b4159a800eb0240f1b83ebf16dc3e6b05bd6b9c37316a5",
+      "bytes": 10111
+    },
+    "C:\\nx-close\\docs\\archive\\v1\\v1.18\\known-gaps.md": {
+      "sha256": "9dd8e87a0334a8208c304cd6b08236a8026e4eed3583807074b644cb65744057",
+      "bytes": 11645
+    },
+    "C:\\nx-close\\docs\\archive\\v1\\v1.19\\known-gaps.md": {
+      "sha256": "914121a1056bc5db3c62a1e0c844607b78323159854b91c02bd4d9553a83666b",
+      "bytes": 16272
+    },
+    "C:\\nx-close\\docs\\archive\\v1\\v1.20\\known-gaps.md": {
+      "sha256": "db5fdf17814a4853793493f5772fbd6c6b4a94391d8bab3deb8a4f945f2af875",
+      "bytes": 4111
+    },
+    "C:\\nx-close\\docs\\archive\\v2\\v2.0\\known-gaps.md": {
+      "sha256": "9e566ce355df06bdfed25d807c58249d14e0de85ee592d1e53aa58c4d12f7667",
+      "bytes": 9602
+    },
+    "C:\\nx-close\\docs\\archive\\v2\\v2.1\\known-gaps.md": {
+      "sha256": "3686170a222d7e144e1527560d0b72b48674edc94172d96b192d529b699e5fbb",
+      "bytes": 10419
+    },
+    "C:\\nx-close\\docs\\archive\\v2\\v2.2\\known-gaps.md": {
+      "sha256": "349b18c1710f7bbc444d05ba99a1f953ccfea849d537b0a28da23b41a82b2b18",
+      "bytes": 98617
+    },
+    "C:\\nx-close\\docs\\archive\\v2\\v2.3\\known-gaps.md": {
+      "sha256": "c2238758fa57381f3b6ff17697f09d05e02ae2df511cc34bc8a8fed187151e5e",
+      "bytes": 13814
+    },
+    "C:\\nx-close\\docs\\archive\\v2\\v2.4\\known-gaps.md": {
+      "sha256": "a891dc7147f8f2cc763b139ed9eb3d023ebfd27299af0ed3ab83bd95bab8196b",
+      "bytes": 99249
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\known-gaps.md": {
+      "sha256": "16ea673072b321cafcc05b7290f27821d75b40505047c44b41ee086be0d2ceb2",
+      "bytes": 74913
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.16\\known-gaps.md": {
+      "sha256": "6f1e510f4db483af29b5ad543442c026c938d2064143f0821c2fa290119affc3",
+      "bytes": 294482
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.0-followup-batches.md": {
+      "sha256": "67d4cc0c796307f4cb20b31ac15751055a311ff12a98cdbf7fd33bedb21ff88f",
+      "bytes": 27015
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.1-triage.md": {
+      "sha256": "37f92c3287cefc26217f49f6f04afba482b3b335c5101b2f8fcbe8d526a4a80a",
+      "bytes": 44932
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.2-triage.md": {
+      "sha256": "13d593cc73dd685fec9afefa687a0deb28de548ac18d856709668826b689e66f",
+      "bytes": 37327
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.3-triage.md": {
+      "sha256": "ac8de72da858d814714220c3fd7fa6d98cc54755d789ce508b4a5db9b1a17dd3",
+      "bytes": 51973
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.4-triage.md": {
+      "sha256": "2453b9b8455d0c3f9f60942b3cf417d95ad46d8f0d981734b6b5e3bdec1e0da5",
+      "bytes": 43779
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15-active-gap-dispositions.md": {
+      "sha256": "ec11e0feb3e5418b1aff4b1a741c2b914b1f51bd362b7c62257e3d8c1dc4f074",
+      "bytes": 52323
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15-active-gap-source-audit.md": {
+      "sha256": "7b63f4fcbc4f62387a65d667308232c29f7d2d9560fd77cbb64c145c1e0bb9a0",
+      "bytes": 35797
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15-batches-1-2-source-audit.md": {
+      "sha256": "475090fc291429c402c8fdd102406512cdf9730aa3769ab5a739838f62c46194",
+      "bytes": 33031
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15-batches-3-4-source-audit.md": {
+      "sha256": "99a75008bc18abe7fe84bd54e7aa4980f49a2cf330c5faffec66baba93f024f9",
+      "bytes": 44955
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.2-folder-color-evidence.md": {
+      "sha256": "be9e431ac8ce6ce89bb334d149d52fe65a01c677e86b8faf55f13945327a4c56",
+      "bytes": 5675
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15-folder-color-and-handbook-review.md": {
+      "sha256": "5feeaa882e4d4b4ff2c0a4a7f2ade52d9f87449c6fc0a0dd52a888783378c5e0",
+      "bytes": 11653
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15-policy-implementation-review.md": {
+      "sha256": "2b85590d156d0622c9517625af288a49135ad64649e6f4e95bbf05cc0b40ce5d",
+      "bytes": 10504
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.4-outline-retirement-evidence.md": {
+      "sha256": "04c1396e830a25eddcbaa2ad8987d055f3f29199976063add66b4f70d1e2c2be",
+      "bytes": 8776
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.4-image-checkpoint-evidence.md": {
+      "sha256": "c3b5d651d8023c6835f5319c57eae8a15b51ae65f3827c44f898c57f5ce90d19",
+      "bytes": 5797
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15-owner-closeout-decisions.md": {
+      "sha256": "992b0ff8a1cf973d892357bd7f3f396f0f4556027abcd73fa1a80b4024aff09f",
+      "bytes": 1743
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.4-installer-disk-test-evidence.md": {
+      "sha256": "455263577703a43a3c10e8896b668c904731c312e6e145baec1f40aff2dcc507",
+      "bytes": 3089
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.4-handbook-line-ending-evidence.md": {
+      "sha256": "8bea8f92657cc01384471933285e01e06cf365479056f39f40ca362031de4e49",
+      "bytes": 1663
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15-closeout-first-repairs-review.md": {
+      "sha256": "89b6e31336e731af251df7cd8765a71b52fbbc95c0cc1175e7723f148721b589",
+      "bytes": 10181
+    },
+    "C:\\nx-close\\modules\\chat\\storage\\ChatExplorerStore.ts": {
+      "sha256": "b61d2c585befcd736014b60531a470e6cd497799541679bc8e422c3f939fb437",
+      "bytes": 33622
+    },
+    "C:\\nx-close\\desktop\\sidecar\\src\\protocol.ts": {
+      "sha256": "19b62a749d40d47a3b4487ba8dad2c74b9f5e4e1e3e04e85ee4a2e1124057304",
+      "bytes": 119604
+    },
+    "C:\\nx-close\\desktop\\sidecar\\src\\handlers.ts": {
+      "sha256": "df177e3ff2d6acf1cdc78a6fa34da5b92d5bc5fa390cdab08e009be2951e58ba",
+      "bytes": 85866
+    },
+    "C:\\nx-close\\desktop\\sidecar\\src\\chat\\explorerRuntime.ts": {
+      "sha256": "4049f8e23f4f17912a775c9da79a4d6dd8557124838d1895ead9657adceeb7c1",
+      "bytes": 6556
+    },
+    "C:\\nx-close\\desktop\\src\\modules\\chat\\chatExplorerClient.ts": {
+      "sha256": "71626b13cb97d868623a495f394ca75a08d01c37c04fc465c630516cabb38a3f",
+      "bytes": 13428
+    },
+    "C:\\nx-close\\desktop\\src\\modules\\chat\\ipcChatExplorerClient.ts": {
+      "sha256": "4df2d21ead3cf0c6bf5ac6ab76fc7fd5d29478373817d5f16bc7c35bd0642074",
+      "bytes": 12909
+    },
+    "C:\\nx-close\\desktop\\src\\modules\\chat\\FolderTree.tsx": {
+      "sha256": "dff2c506a38a89736c384d7184f6a0669d29d498e69a354928d9126b6f968671",
+      "bytes": 58507
+    },
+    "C:\\nx-close\\core\\generations\\StudioSessionStore.ts": {
+      "sha256": "c61556b54ee07eec633f0cd585a9920be01986453b6d7ec0aeec79852432f519",
+      "bytes": 31348
+    },
+    "C:\\nx-close\\core\\generations\\ImageEditRecipeStore.ts": {
+      "sha256": "592d952ddc7624d425221ef2fe938c5b7f97ed37b05230bde2bc14777a7f5c94",
+      "bytes": 12728
+    },
+    "C:\\nx-close\\modules\\coding\\autonomy\\AskInbox.ts": {
+      "sha256": "a671771043d5f56df8b0036be72e274b05bd92105635fc547ec9995df650ece1",
+      "bytes": 13709
+    },
+    "C:\\nx-close\\desktop\\sidecar\\src\\studio\\imageEditRuntime.ts": {
+      "sha256": "5a96ac248440a190365b4ee0bd04c88c3eacedc2cf11714a9a9ae942ae091b23",
+      "bytes": 27550
+    },
+    "C:\\nx-close\\desktop\\src\\shared\\studio\\ImageViewer.tsx": {
+      "sha256": "bd271c101f0c4f1fc5f44ab706335d362958187489c53b9600906875e3f1cc2e",
+      "bytes": 32253
+    },
+    "C:\\nx-close\\desktop\\src\\shared\\explorer\\StudioHistoryPane.tsx": {
+      "sha256": "028ae5d9c1cea6701a8b16713b2935e2e271752bf1147673269a6a0d721cd19a",
+      "bytes": 4698
+    },
+    "C:\\nx-close\\modules\\coding\\runtime\\outputBudget.ts": {
+      "sha256": "d8b9f46f72afa5cebba37aba96db4a7504ca68edfd937dfa6a1ba607a288ff95",
+      "bytes": 7976
+    },
+    "C:\\nx-close\\modules\\coding\\runtime\\HeadlessAgentSession.ts": {
+      "sha256": "1684dd6f3cd939b5d7ef8e106cd0238a851412a207f5c53d7c3def8631a2d157",
+      "bytes": 21188
+    },
+    "C:\\nx-close\\desktop\\sidecar\\src\\coding\\scheduledHeadlessRunner.ts": {
+      "sha256": "227290198a422377929c4cb1112f66e96c105a600970ac7859a111fdff912b01",
+      "bytes": 2144
+    },
+    "C:\\nx-close\\desktop\\src\\pages\\settings\\SecuritySettings.tsx": {
+      "sha256": "26995bc46a3026e5d2ce8017eaf804a72eba30a227bdf8aec5dd60143ff700d2",
+      "bytes": 10924
+    },
+    "C:\\nx-close\\src\\tools\\handlers\\parseDocument.ts": {
+      "sha256": "2c53492c912abf8979e006843558af3f1da8c98d8acb3c8cd8a7e30f36c452b3",
+      "bytes": 9782
+    },
+    "C:\\nx-close\\src\\tools\\ToolCatalog.ts": {
+      "sha256": "0979620dc0b68aa10dd552e5da3eb0dc6840e101916af9108e53d694de0fbcdd",
+      "bytes": 18775
+    },
+    "C:\\nx-close\\scripts\\installer\\tests\\test_hf_weights_puller.py": {
+      "sha256": "5a14014b29eba9390c5c3d7dfb0b5e528e87da3004aea22428e5aa86d7203d61",
+      "bytes": 28552
+    },
+    "C:\\nx-close\\tests\\python\\diffusion\\test_registry.py": {
+      "sha256": "6096c8413781c78bd1c1a25e99365ad9f2fed1edfe074d2f5667df65a642a365",
+      "bytes": 1368
+    },
+    "C:\\nx-close\\scripts\\generate-handbooks.mjs": {
+      "sha256": "2861c10cef6eca116742c292b232976661628bac520e297d8cb3f21b91bfeec1",
+      "bytes": 2386
+    },
+    "C:\\nx-close\\scripts\\check-docs-layout.mjs": {
+      "sha256": "6b6eb8025400fc6bee8cb44abf5d56644062d36b556d90df02a26699283528a6",
+      "bytes": 2534
+    },
+    "C:\\nx-close\\scripts\\known-gaps\\inventory.mjs": {
+      "sha256": "97ddce2c0e50f4f71591a1b6414f77b2ee9f3f68e52d30ceeb48de8224fb786d",
+      "bytes": 19965
+    },
+    "C:\\nx-close\\scripts\\known-gaps\\checker-adapter.py": {
+      "sha256": "568cba3359a36fd887abebc521293efa3025036acd4f663d32f090ae08d506a0",
+      "bytes": 7967
+    },
+    "C:\\nx-close\\package.json": {
+      "sha256": "87b4a1df611c9b2954e1515681172feea51c110caf31cb2b31dc05b361d01105",
+      "bytes": 60493
+    },
+    "C:\\nx-close\\package-lock.json": {
+      "sha256": "684c54ed37db5878d474e4be8a75b0b317da8c8caa5e59c03401a748fc3c6eb9",
+      "bytes": 834724
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15-preapproval-goal-review.md": {
+      "sha256": "ebe4590468565953bd2ea81522c4cface4972cfd38ccd24d2bca7a9f5967bea7",
+      "bytes": 25288
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15-source-backed-verification-receipt.md": {
+      "sha256": "ca3117e26038b63ef40fe0da8cc665a78eb2c8b4186101b62a71e2b94a27ab0b",
+      "bytes": 4342
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.1-phase3-handbook-review.md": {
+      "sha256": "72d47b2069e3b926fa04359864f708a9620b54b672f1d25f924d8e4d1711d4aa",
+      "bytes": 2074
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.1-historical-approval-review.md": {
+      "sha256": "ca23c50cd439ba993d3bfcae886f785ecdfdb0c85f7d01e82074c809254f4f86",
+      "bytes": 2134
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\evidence\\native-link-variants\\source-freeze.json": {
+      "sha256": "0d6c2e8697afcfbb414d87443cc22f3e568c0dcd349dcf8d974aa41a79f1fada",
+      "bytes": 1818
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\evidence\\native-link-variants\\adoption-independent-review.json": {
+      "sha256": "f7e1c6f6cbf557affc0e218643e4b8573e5807c8a11ff0ea218f0655754d1cfb",
+      "bytes": 7653
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\evidence\\native-link-variants\\historical-pages-independent-review.json": {
+      "sha256": "20376a0c7fc45330b67fca07769ec4db147d9a04ebe6ec6e2c5c9024bb0461e6",
+      "bytes": 116897
+    },
+    "C:\\nh-checker\\scripts\\check_plan_completion.py": {
+      "sha256": "db10ccfe1ae04dbee66203152db4f52805d55acc20cd64905d9e22d49ff74eec",
+      "bytes": 104794
+    },
+    "C:\\nh-checker\\scripts\\completion_minor.py": {
+      "sha256": "ea48a449fd7d020ebaff2426f4b9b320a4c0ae9b648ce7a318ef442b56eb99e9",
+      "bytes": 197828
+    },
+    "C:\\nh-checker\\scripts\\minor_close.py": {
+      "sha256": "893e53af6ac68e46dfd193a33c1528cf37cd8d49cd1be07baeec147f5110ee57",
+      "bytes": 88832
+    },
+    "C:\\nh-checker\\scripts\\approval_page.py": {
+      "sha256": "244464d8a9929b25c5bc89ed7df28dd6efb782bf2dd5ded945eed2de3485b42f",
+      "bytes": 49037
+    },
+    "C:\\nh-checker\\scripts\\approval_binding.py": {
+      "sha256": "bbd1863ece314addd28f5c7d3c2caf304a6f4dbaefc37f9c55daa03117dd486b",
+      "bytes": 48073
+    },
+    "C:\\nh-checker\\scripts\\repo_host.py": {
+      "sha256": "dfeec69940715ad782a0885a6426214e2bce13c9d33ad41ecc6975a23f3147a7",
+      "bytes": 22637
+    },
+    "C:\\nh-checker\\scripts\\cleanup_merged.py": {
+      "sha256": "8116f67beeac2033f82d3f47689378447117f529121100f126a44cf84674b572",
+      "bytes": 49870
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\evidence\\v2.15.1-phase3-handbook-check.json": {
+      "sha256": "902601534dbbc3aa649b98d17d3754b830298d7a2c7c7602d6a00bba08aa72c1",
+      "bytes": 23455
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.1-phase3-handbook-atlas.json": {
+      "sha256": "ce25ca8c8b5ec2de21f02833382e8e65bb90b78a106ad2dc96d696403e29e9cf",
+      "bytes": 7137
+    },
+    "C:\\nx-close\\docs\\handbooks\\html\\atlas.html": {
+      "sha256": "03d07b44167ba2db91533928cb2068bcbb36e3986a3dfbde0f977e1f6705d78d",
+      "bytes": 169411
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.1-phase3-handbook-generation-recovery.json": {
+      "sha256": "bb4d027d28ea84d94fe802b4d7073677e0dfae46a8d05f025f84fa7def3f54ff",
+      "bytes": 4349
+    },
+    "C:\\nx-close\\docs\\handbooks\\html\\generation-recovery.html": {
+      "sha256": "43ed4692dc0d5fdb0d782d952eee7d97ac5c87f59aa1cda72ba5982e77d36cae",
+      "bytes": 171337
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.1-phase3-handbook-installer-runtime.json": {
+      "sha256": "fe97ec16eb3aa24b5ceeaa85cd240c269b6aeb6fbc7843d57d942490b90298e9",
+      "bytes": 3528
+    },
+    "C:\\nx-close\\docs\\handbooks\\html\\technical\\installer-runtime.html": {
+      "sha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05",
+      "bytes": 167385
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.1-phase3-handbook-media-runtime.json": {
+      "sha256": "1caa7fef3c2262242f8a097d48d317347d4533da3252a4c3f90fb2ce54e4f73f",
+      "bytes": 3910
+    },
+    "C:\\nx-close\\docs\\handbooks\\html\\technical\\media-runtime.html": {
+      "sha256": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51",
+      "bytes": 167186
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.1-phase3-handbook-transcript-and-workspaces.json": {
+      "sha256": "dbb271000800cf93af360b8a177e1b968f794acf0f0641c8b62d6984b577f701",
+      "bytes": 4150
+    },
+    "C:\\nx-close\\docs\\handbooks\\html\\technical\\transcript-and-workspaces.html": {
+      "sha256": "908aa4ffccf6e2bf186cbbbf4426423ccdaa3694d3390d5a725e6c95365b7bfe",
+      "bytes": 167758
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.15.1-phase3-handbook-document-outline.json": {
+      "sha256": "23567e02bb007318d1f7d6546bd70732eb10f2a9bdd83abd16521bf082aad6d1",
+      "bytes": 5418
+    },
+    "C:\\nx-close\\docs\\handbooks\\html\\technical\\document-outline.html": {
+      "sha256": "24be87b83bc25436e2b6361cac2f9cfeb4ec9d3b2e05fdc9454fe7771ab744ba",
+      "bytes": 170558
+    },
+    "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-phase3-build-gates-vp5fcrrh\\results.json": {
+      "sha256": "f85b21b1d5463d08631f6030380a16b92016092a3633a9d0ba9e090c13d9607d",
+      "bytes": 2847
+    },
+    "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-phase3-remaining-gates-3v7couur\\results.json": {
+      "sha256": "3771bfb818eda39d64ef3894e9f1aad8a8fce6470ade32f3c0f9a8ca28c883f7",
+      "bytes": 1412
+    },
+    "C:\\nx-close\\scripts\\installer\\src\\nexus_installer\\catalog_invariants.py": {
+      "sha256": "207a0264b16e40861b1f34b1700b6fc908a7857cb92db8d242e96b1c34645723",
+      "bytes": 33176
+    },
+    "C:\\nx-close\\node_modules\\@modelcontextprotocol\\sdk\\package.json": {
+      "sha256": "0216319ea53177f7ed419d660b2f52ccc7e3327e57f9ee2ef03225ff543aeae4",
+      "bytes": 6511
+    },
+    "C:\\nx-close\\node_modules\\hono\\package.json": {
+      "sha256": "169a02072e32d85aacb089ad14b62b027d975479d811f741771fbd0f559fb5c9",
+      "bytes": 23931
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.12-archive-approval-page.md": {
+      "sha256": "afeefc58e76ab663da990d888cc0d52dccd18532ce2a8543b3491109336129fa",
+      "bytes": 33683
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.13-archive-approval-page.md": {
+      "sha256": "1780dee0a9e4990378009620ddacd2c3d6faaca37fbb000ddadc5349264c379c",
+      "bytes": 4573
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.12-archive-only-approval.json": {
+      "sha256": "d3162fa2b69fe5255d378d8525e709c8babde558f3e4e72a4db5f26c4379a896",
+      "bytes": 457
+    },
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.13-archive-only-approval.json": {
+      "sha256": "5ebc1cf5655ab5cd0d2f431d5728c1a741f26892a64333e66fda76d3f72d1257",
+      "bytes": 413
+    }
+  }
+}

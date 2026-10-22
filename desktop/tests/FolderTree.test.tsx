@@ -387,7 +387,24 @@ describe("<FolderTree>", () => {
     fireEvent.contextMenu(row);
     fireEvent.click(await screen.findByTestId("ctx-change-color"));
     const updated = screen.getByTestId(`tree-row-folder-${folder.id}`);
-    expect(updated.getAttribute("style")).toContain("border-left");
+    expect(updated.style.borderLeft).toBe("4px solid rgb(155, 93, 229)");
+    expect(client.getFolder(folder.id)?.color).toBe("#9b5de5");
+    fireEvent.contextMenu(updated);
+    fireEvent.click(await screen.findByTestId("ctx-clear-color"));
+    expect(client.getFolder(folder.id)?.color).toBeNull();
+    expect(screen.getByTestId(`tree-row-folder-${folder.id}`).style.borderLeft).toBe("4px solid transparent");
+  });
+
+  it("hides folder color actions when the explorer cannot persist them", async () => {
+    const client = setupClient();
+    const folder = client.createFolder({ parentId: null, name: "No color support" });
+    const unsupported = Object.create(client) as InMemoryChatExplorerClient;
+    Object.defineProperty(unsupported, "setFolderColor", { value: undefined });
+    render(<FolderTree client={unsupported} storageAdapter={storageAdapter} />);
+    fireEvent.contextMenu(screen.getByTestId(`tree-row-folder-${folder.id}`));
+    expect(await screen.findByTestId("ctx-rename")).toBeInTheDocument();
+    expect(screen.queryByTestId("ctx-change-color")).toBeNull();
+    expect(screen.queryByTestId("ctx-clear-color")).toBeNull();
   });
 
   it("context-menu New folder creates a folder under the right parent", async () => {

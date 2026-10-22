@@ -1,0 +1,24 @@
+{
+  "authorization_prompt_sha256": "685c8d6c64d165703645e46a0d06e42eeb410828c19135c2f8aeaca09111911e",
+  "bounds": [
+    null
+  ],
+  "class": "push-merge",
+  "consent_bound": [
+    null
+  ],
+  "counters_consumed": false,
+  "member": "v2.15.1",
+  "origin": "approved-plan",
+  "request": {},
+  "scope": {
+    "push_remote_url": "https://github.com/bendourthe/Nexus-AI.git",
+    "release_version": "v2.15.1",
+    "remote_url": "https://github.com/bendourthe/Nexus-AI.git",
+    "repo": "bendourthe/Nexus-AI",
+    "source_branch": "feat/v2.15-archive-readiness",
+    "tag": "v2.15.1",
+    "target_branch": "develop"
+  },
+  "verification_and_spend_limits_unchanged": true
+}

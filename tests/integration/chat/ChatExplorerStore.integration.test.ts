@@ -27,6 +27,34 @@ describe("ChatExplorerStore (integration)", () => {
     }
   });
 
+  it("persists folder color and clearing across reopen without changing other user data", () => {
+    const first = new ChatExplorerStore(dbPath);
+    const parent = first.createFolder({ parentId: null, name: "Parent" });
+    const folder = first.createFolder({ parentId: parent.id, name: "Projects", icon: "book" });
+    const other = first.createFolder({ parentId: null, name: "Other", color: "#123456" });
+    const chat = first.createChat({ folderId: folder.id, title: "Keep me", modelId: "m" });
+    const message = first.appendMessage({ chatId: chat.id, role: "user", content: "Keep this transcript" });
+    const { updatedAt: _updatedAt, ...unchanged } = folder;
+    const savedChat = first.getChat(chat.id);
+    first.setFolderColor(folder.id, "#9b5de5");
+    first.close();
+
+    const second = new ChatExplorerStore(dbPath);
+    expect(second.getFolder(folder.id)).toMatchObject({ ...unchanged, color: "#9b5de5" });
+    expect(second.getFolder(parent.id)).toEqual(parent);
+    expect(second.getFolder(other.id)).toEqual(other);
+    expect(second.getChat(chat.id)).toEqual(savedChat);
+    expect(second.listMessages(chat.id)).toEqual([message]);
+    second.setFolderColor(folder.id, null);
+    second.close();
+
+    const third = new ChatExplorerStore(dbPath);
+    expect(third.getFolder(folder.id)).toMatchObject({ ...unchanged, color: null });
+    expect(third.getFolder(other.id)).toEqual(other);
+    expect(third.listMessages(chat.id)).toEqual([message]);
+    third.close();
+  });
+
   it("creates the schema on first open and reuses it on re-open", () => {
     const first = new ChatExplorerStore(dbPath);
     const folder = first.createFolder({ parentId: null, name: "Projects" });

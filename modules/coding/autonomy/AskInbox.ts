@@ -83,6 +83,9 @@ export interface AskInboxOptions {
 
 type Waiter = (state: Extract<AskState, "approved" | "denied" | "expired">) => void;
 
+/** Process-local trusted hook. It is never deserialized from ask arguments. */
+export type TrustedApprovalPreparation = (approvalId: string, attemptId: string) => { isValid(): boolean };
+
 export class AskInbox {
   private readonly _store: AskInboxStore;
   private readonly _now: () => number;
@@ -92,6 +95,8 @@ export class AskInbox {
   private _items: ParkedAsk[] = [];
   private _loaded = false;
   private readonly _waiters = new Map<string, Waiter>();
+  private readonly _preparations = new Map<string, TrustedApprovalPreparation>();
+  private readonly _approving = new Set<string>();
 
   constructor(opts: AskInboxOptions = {}) {
     this._store =
@@ -140,6 +145,7 @@ export class AskInbox {
       const waiter = this._waiters.get(item.id);
       if (waiter) {
         this._waiters.delete(item.id);
+        this._preparations.delete(item.id);
         waiter("expired");
       }
       return next;
@@ -199,7 +205,7 @@ export class AskInbox {
     });
   }
 
-  async parkAndWait(input: ParkAskInput): Promise<Extract<AskState, "approved" | "denied" | "expired">> {
+  async parkAndWait(input: ParkAskInput, prepare?: TrustedApprovalPreparation): Promise<Extract<AskState, "approved" | "denied" | "expired">> {
     await this.ensureLoaded();
     this.expireDue();
     const now = this._now();
@@ -231,7 +237,15 @@ export class AskInbox {
       this._waiters.set(ask.id, resolve);
     });
     this._items.push(ask);
-    await this.persist();
+    if (prepare) this._preparations.set(ask.id, prepare);
+    try {
+      await this.persist();
+    } catch (error) {
+      this._waiters.delete(ask.id);
+      this._preparations.delete(ask.id);
+      this._items = this._items.filter((item) => item.id !== ask.id);
+      throw error;
+    }
     return decision;
   }
 
@@ -243,6 +257,7 @@ export class AskInbox {
     if (!ask || ask.state !== "pending") {
       return { ok: false, reason: "Ask is not pending.", executed: false };
     }
+    if (this._approving.has(id)) return { ok: false, reason: "Approval is already being saved.", executed: false };
     const replay = replayAsk(ask, this._replay);
     const waiter = this._waiters.get(id);
     const now = this._now();
@@ -269,20 +284,50 @@ export class AskInbox {
         decisionReason: replay.reason,
       };
       this._waiters.delete(id);
+      this._preparations.delete(id);
       waiter("denied");
       await this.persist();
       return { ok: false, reason: replay.reason, replay, executed: false };
     }
-    this._items[index] = {
-      ...ask,
-      state: "approved",
-      decidedAt: now,
-      decisionReason: replay.reason,
-    };
-    this._waiters.delete(id);
-    waiter("approved");
-    await this.persist();
-    return { ok: true, reason: replay.reason, replay, executed: false };
+    this._approving.add(id);
+    try {
+      // A failed attempt is never reused: the next click captures fresh state.
+      const prepared = this._preparations.get(id)?.(id, randomUUID());
+      const valid = (): boolean => this._items.find((item) => item.id === id)?.state === "pending"
+        && this._waiters.get(id) === waiter && ask.expiresAt > this._now() && (prepared?.isValid() ?? true);
+      if (!valid()) return { ok: false, reason: "Approval is no longer valid. Request access again.", replay, executed: false };
+      const next = this._saving.catch(() => undefined).then(async () => {
+        if (!valid()) return false;
+        const approved: ParkedAsk = { ...ask, state: "approved", decidedAt: now, decisionReason: replay.reason };
+        // Keep the visible/live item pending until the decision has been saved.
+        await this._store.save(this._items.map((item) => item.id === id ? approved : item));
+        if (!valid()) {
+          // A restore, denial or expiry during save must never activate a grant.
+          const current = this._items.findIndex((item) => item.id === id);
+          if (current >= 0 && this._items[current]!.state === "pending") {
+            this._items[current] = { ...ask, state: "denied", decidedAt: this._now(), decisionReason: "approval invalidated while saving" };
+          }
+          this._waiters.delete(id);
+          this._preparations.delete(id);
+          waiter("denied");
+          await this._store.save(this._items);
+          return false;
+        }
+        this._items = this._items.map((item) => item.id === id ? approved : item);
+        this._waiters.delete(id);
+        this._preparations.delete(id);
+        waiter("approved");
+        return true;
+      });
+      this._saving = next.then(() => undefined, () => undefined);
+      const saved = await next;
+      return { ok: saved, reason: saved ? replay.reason : "Approval was invalidated before activation.", replay, executed: false };
+    } catch {
+      // Checkpoint/save failure leaves a pending retry, with no live grant.
+      return { ok: false, reason: "Approval could not be saved. No access was granted. Retry approval.", replay, executed: false };
+    } finally {
+      this._approving.delete(id);
+    }
   }
 
   async deny(id: string, reason = "denied by user"): Promise<{ ok: boolean; reason: string }> {
@@ -302,6 +347,7 @@ export class AskInbox {
     const waiter = this._waiters.get(id);
     if (waiter) {
       this._waiters.delete(id);
+      this._preparations.delete(id);
       waiter("denied");
     }
     await this.persist();

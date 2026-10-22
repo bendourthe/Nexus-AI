@@ -24,7 +24,7 @@ No workflow file changes and no remote CI. Existing default script/fixture tests
 
 ## Evidence and next gate
 
-Fixture generation and question building were exercised through their real script boundary, including byte-equality tests against committed artifacts. Preregistration commit `e8ee872d6081ee3f2851a83d47ff96f27a91f540` precedes all inference. [Frozen rule, results and decision](../../../../../v2/v2.12/development/outline-eval.md), [metadata evidence](../evidence/phase-6-evaluation.json). All four invocations exited 0, with 8/8 outcomes in each dry run, 152/152 expanded outcomes and 96/96 anchor outcomes. Exact coverage and completed result SHA-256 values were checked. A final pre-edit freeze check passed before any reporting correction.
+Fixture generation and question building were exercised through their real script boundary, including byte-equality tests against committed artifacts. Preregistration commit `e8ee872d6081ee3f2851a83d47ff96f27a91f540` precedes all inference. [Frozen rule, results and decision](../outline-eval.md), [metadata evidence](../evidence/phase-6-evaluation.json). All four invocations exited 0, with 8/8 outcomes in each dry run, 152/152 expanded outcomes and 96/96 anchor outcomes. Exact coverage and completed result SHA-256 values were checked. A final pre-edit freeze check passed before any reporting correction.
 
 ## Observed results
 

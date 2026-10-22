@@ -1,6 +1,6 @@
 # v2.12.0 Phase 4: Shared tool-result compaction
 
-**Date**: 2026-10-09. **Plan**: [outline-promotion-readiness](../../../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), T013-T014.
+**Date**: 2026-10-09. **Plan**: [outline-promotion-readiness](../../plans/v2.12.0-outline-promotion-readiness.md), T013-T014.
 
 ## Outcome
 

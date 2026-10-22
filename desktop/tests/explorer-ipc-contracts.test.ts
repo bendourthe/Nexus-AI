@@ -26,6 +26,10 @@ describe("chat explorer IPC contracts", () => {
     reply = { id: "folder", parentId: null, name: "Work", createdAt: 1, updatedAt: 1 };
     expect(await client.createFolder(null, "Work")).toEqual(reply);
     expectRequest("chat.explorer.createFolder", { parentId: null, name: "Work" });
+    await client.setFolderColor("folder", "#9b5de5");
+    expectRequest("chat.explorer.setFolderColor", { id: "folder", color: "#9b5de5" });
+    await client.setFolderColor("folder", null);
+    expectRequest("chat.explorer.setFolderColor", { id: "folder", color: null });
     await client.renameFolder("folder", "Renamed");
     expectRequest("chat.explorer.renameFolder", { id: "folder", name: "Renamed" });
     await client.moveFolder("folder", null);

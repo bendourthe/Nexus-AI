@@ -3,7 +3,7 @@
  * v1.10.0 Phase 8 (T048) -- docs-layout consistency gate.
  *
  * The docs tree was canonicalized to the version-first scheme in v1.10.0:
- *   active:  docs/v<MAJOR>/v<MAJOR>.<MINOR>/...
+ *   active:  docs/releases/v<MAJOR>/v<MAJOR>.<MINOR>/...
  *   archive: docs/archive/v<MAJOR>/v<MAJOR>.<MINOR>/...
  * dropping the legacy `docs/versions/` and `docs/archive/versions/` wrappers.
  *
@@ -18,8 +18,8 @@ import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const RETIRED = ["docs/versions", "docs/archive/versions"];
-// v2.4.11 archived v1 and v2.0-v2.4. v2.5 was archived on 2026-09-26. v2.6, v2.7, and v2.8 were archived on 2026-09-27. v2.9 was archived on 2026-09-27. v2.10 was archived on 2026-09-28. v2.11 was archived on 2026-10-06. Active plans stay under docs/v2.
-const EXPECTED = ["docs/v2", "docs/archive/v0", "docs/archive/v1", "docs/archive/v2"];
+// v2.4.11 archived v1 and v2.0-v2.4. v2.5 was archived on 2026-09-26. v2.6, v2.7, and v2.8 were archived on 2026-09-27. v2.9 was archived on 2026-09-27. v2.10 was archived on 2026-09-28. v2.11 was archived on 2026-10-06. Active plans now use docs/releases/v2; historical archives retain their existing roots.
+const EXPECTED = ["docs/releases/v2", "docs/archive/v0", "docs/archive/v1", "docs/archive/v2"];
 
 const problems = [];
 for (const dir of RETIRED) {
@@ -29,9 +29,9 @@ for (const dir of EXPECTED) {
   if (!existsSync(dir)) problems.push(`expected canonical dir missing: ${dir}/`);
 }
 
-// Also fail if any docs/v<MAJOR>/ contains a three-segment vX.Y.Z minor dir
+// Also fail if any canonical minor root contains a three-segment vX.Y.Z minor dir
 // (the patch level should be collapsed into the vX.Y minor bucket).
-for (const major of ["docs/v2", "docs/archive/v0", "docs/archive/v1", "docs/archive/v2"]) {
+for (const major of ["docs/releases/v2", "docs/archive/v0", "docs/archive/v1", "docs/archive/v2"]) {
   if (!existsSync(major)) continue;
   for (const entry of readdirSync(major, { withFileTypes: true })) {
     if (entry.isDirectory() && /^v\d+\.\d+\.\d+$/.test(entry.name)) {

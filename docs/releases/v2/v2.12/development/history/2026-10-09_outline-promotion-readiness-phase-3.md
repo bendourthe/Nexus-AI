@@ -1,7 +1,7 @@
 # Native tool history: Phase 3
 
 **Date**: 2026-10-09
-**Plan**: [outline-promotion-readiness](../../../../../v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), T009-T012.
+**Plan**: [outline-promotion-readiness](../../plans/v2.12.0-outline-promotion-readiness.md), T009-T012.
 **Status**: Local implementation and verification complete; ready for the single Phase 3 local commit. No push, pull request, or remote CI.
 **Support tier**: Internal-compatible. Real local Ollama sessions and a real SQLite reopen in the VS Code test host were exercised. Full product activation and the native GUI were not exercised.
 

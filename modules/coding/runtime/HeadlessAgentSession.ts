@@ -50,7 +50,7 @@ import {
 import type { HeadlessTool, HeadlessToolResult } from "./headlessTools.js";
 import { TurnLedger, type TurnCounters } from "./outputBudget.js";
 import { elideToolResults } from "./elideToolResults.js";
-import { resolveEffectiveContextTokens } from "../documents/DocumentOutlineTools.js";
+import { resolveEffectiveContextTokens } from "./outputBudget.js";
 
 export const DEFAULT_HEADLESS_MAX_ITERATIONS = 12;
 export const COMPACT_AT = 0.6;
@@ -179,8 +179,6 @@ function buildSystemPrompt(
  */
 const HEADLESS_INBOUND_TOOLS = new Set([
   "parse_document",
-  "document_outline",
-  "document_read_section",
   "browser_navigate",
   "browser_click",
   "browser_type",

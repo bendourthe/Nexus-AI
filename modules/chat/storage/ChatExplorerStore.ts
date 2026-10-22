@@ -330,6 +330,19 @@ export class ChatExplorerStore {
     };
   }
 
+  setFolderColor(id: string, color: string | null): Folder {
+    if (color !== null && (typeof color !== "string" || !/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(color))) {
+      throw new Error("folder color must be a three- or six-digit hex color or null");
+    }
+    const existing = this._getFolderRow(id);
+    if (!existing) throw new Error(`folder not found: ${id}`);
+    const now = Date.now();
+    this._db
+      .prepare(`UPDATE chat_folders SET color = ?, updated_at = ? WHERE id = ?`)
+      .run(color, now, id);
+    return { ...rowToFolder(existing), color, updatedAt: now };
+  }
+
   renameFolder(id: string, name: string): Folder {
     const trimmed = name.trim();
     if (!trimmed) throw new Error("folder name is required");

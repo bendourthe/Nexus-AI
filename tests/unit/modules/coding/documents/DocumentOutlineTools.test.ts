@@ -263,42 +263,10 @@ describe("screening and the wrapper", () => {
     await expect(readGuardedFile(realpathSync(join(workspace, "handbook.md")), "markdown")).resolves.toBeInstanceOf(Buffer);
   });
 
-  it("refuses, in the sidecar channel, a path that only resolves to a secret file", async () => {
-    writeFileSync(join(workspace, ".env.md"), "# Keys\nAPI=1");
-    const outline = createHeadlessTools({ documentOutlineEnabled: true, outlineCacheDir: null }).find((t) => t.name === "document_outline");
-    const r = await outline?.execute({ path: "./.env.md" }, { workdir: workspace, workspaceRoots: [workspace] });
-    expect(r?.success).toBe(false);
-    expect(r?.error ?? r?.output).toMatch(/resolves to a secret-path file/);
-  });
-
-  it("refuses a resolved-only secret path when the workspace root is a junction or symlink", async () => {
-    const link = join(outside, "linked-root");
-    symlinkSync(realpathSync(workspace), link, process.platform === "win32" ? "junction" : "dir");
-    writeFileSync(join(workspace, ".env.md"), "# Keys\nAPI=1");
-    const outline = createHeadlessTools({ documentOutlineEnabled: true, outlineCacheDir: null }).find((t) => t.name === "document_outline");
-    const r = await outline?.execute({ path: "./.env.md" }, { workdir: link, workspaceRoots: [link] });
-    expect(r?.success).toBe(false);
-    expect(r?.error ?? r?.output).toMatch(/resolves to a secret-path file/);
-  });
-
-  it("applies the operator's extra secret patterns to the resolved path", async () => {
-    mkdirSync(join(workspace, "private"));
-    writeFileSync(join(workspace, "private", "x.md"), "# Notes\nhidden");
-    const outline = createHeadlessTools({
-      documentOutlineEnabled: true,
-      outlineCacheDir: null,
-      guards: { confirm: async () => false, secretPathDenyExtra: ["**/private/**"] },
-    }).find((t) => t.name === "document_outline");
-    const r = await outline?.execute({ path: "./private/x.md" }, { workdir: workspace, workspaceRoots: [workspace] });
-    expect(r?.success).toBe(false);
-  });
-
   it("leaves later side-effecting tools behind their own confirmation tiers", () => {
     for (const tool of ["run_terminal", "write_file", "delete_file", "fetch_page"]) {
       expect(getPermissionTier(tool), tool).toBeGreaterThanOrEqual(PermissionTier.CONFIRM);
     }
-    expect(getPermissionTier("document_outline")).toBe(PermissionTier.CONFIRM);
-    expect(getPermissionTier("document_read_section")).toBe(PermissionTier.CONFIRM);
   });
 });
 

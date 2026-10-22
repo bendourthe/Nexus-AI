@@ -1,0 +1,28 @@
+[
+  {
+    "minor": "v2.12",
+    "head": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
+    "plan": "docs/releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md",
+    "plan_raw_sha256": "450456bcb2ee521acb8a105cc26b8734a071f0c863feda7d4dd51bb453d3a7ee",
+    "spec_sha256": "d3162fa2b69fe5255d378d8525e709c8babde558f3e4e72a4db5f26c4379a896",
+    "page": "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.12-archive-approval-page.md",
+    "page_sha256": "afeefc58e76ab663da990d888cc0d52dccd18532ce2a8543b3491109336129fa",
+    "paste_output": [
+      "Approve /implement v2.12.0 (approval WNEVLC4G)",
+      "Goal: Finish /implement v2.12.0 (approval WNEVLC4G). Do every step: 1) implement every task in every phase of the plan; 2) add or update the tests and CI/CD the work needs, and make both pass on the final tree; 3) fix the open known gaps; 4) run /update release; 5) merge every pull request, then delete the merged branches, worktrees, and their local copies; 6) record every gap still open in the next version's known-gaps section; 7) when this is the last plan in its version folder, archive that folder and delete any folder left empty. Done only when the completion check's first output line starts with PLAN COMPLETE followed by the v2.12.0 plan file; stop and report when it starts with BLOCKED or PAUSED."
+    ]
+  },
+  {
+    "minor": "v2.13",
+    "head": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
+    "plan": "docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md",
+    "plan_raw_sha256": "466f76e383ed69a6e817ffea889272f3d6f4ea19818b0651cd85033b9b387f5d",
+    "spec_sha256": "5ebc1cf5655ab5cd0d2f431d5728c1a741f26892a64333e66fda76d3f72d1257",
+    "page": "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.13-archive-approval-page.md",
+    "page_sha256": "1780dee0a9e4990378009620ddacd2c3d6faaca37fbb000ddadc5349264c379c",
+    "paste_output": [
+      "Approve /implement v2.13.0 (approval TOYDWIVT)",
+      "Goal: Finish /implement v2.13.0 (approval TOYDWIVT). Do every step: 1) implement every task in every phase of the plan; 2) add or update the tests and CI/CD the work needs, and make both pass on the final tree; 3) fix the open known gaps; 4) run /update release; 5) merge every pull request, then delete the merged branches, worktrees, and their local copies; 6) record every gap still open in the next version's known-gaps section; 7) when this is the last plan in its version folder, archive that folder and delete any folder left empty. Done only when the completion check's first output line starts with PLAN COMPLETE followed by the v2.13.0 plan file; stop and report when it starts with BLOCKED or PAUSED."
+    ]
+  }
+]
