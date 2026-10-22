@@ -1,0 +1,84 @@
+{
+  "utc": "2026-10-22T15:05:44.086916+00:00",
+  "failed_head": "40a5a9e17e5188f9a67ce29550f478ae9ec7e292",
+  "failed_workflow": "https://github.com/bendourthe/Nexus-AI/actions/runs/39797623828",
+  "original_diff": {
+    "lines": 101,
+    "missing": 60,
+    "coverage_percent": 40
+  },
+  "corrected_diff": {
+    "lines": 101,
+    "missing": 16,
+    "coverage_percent_reported": 84,
+    "exit_code": 0,
+    "command": [
+      "uvx",
+      "--from",
+      "diff-cover==9.2.0",
+      "diff-cover",
+      "coverage/lcov.info",
+      "--compare-branch=origin/main",
+      "--fail-under=80",
+      "--markdown-report=C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-pr127-coverage-diff-failure\\local-corrected-report.md"
+    ]
+  },
+  "root": {
+    "command": [
+      "node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "configs/vitest.config.ts",
+      "--coverage",
+      "--maxWorkers=2",
+      "--reporter=dot"
+    ],
+    "exit_code": 0,
+    "seconds": 145.91,
+    "utc": "2026-10-22T15:02:05.504641+00:00",
+    "passed": 6479,
+    "skipped": 12
+  },
+  "coverage": {
+    "lines": {
+      "total": 26421,
+      "covered": 23062,
+      "skipped": 0,
+      "pct": 87.28
+    },
+    "statements": {
+      "total": 29665,
+      "covered": 25254,
+      "skipped": 0,
+      "pct": 85.13
+    },
+    "functions": {
+      "total": 4991,
+      "covered": 4355,
+      "skipped": 0,
+      "pct": 87.25
+    },
+    "branches": {
+      "total": 18991,
+      "covered": 14528,
+      "skipped": 0,
+      "pct": 76.49
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "root_checkpoint_tests": 37,
+  "added_tests": 17,
+  "independent_findings": [],
+  "test_sha256": "7db871f28dcdd72f54d7e7acf15c794e51dc4a0e4a8b5ec1c508b4e90a14d725",
+  "production_unchanged": true,
+  "thresholds_and_inputs_unchanged": true,
+  "packet_sha256": "e6d09a171e9ed87b2793c0be4c2471ed93d12809b66e17d952f299d551f16c54",
+  "packet_entries": 14,
+  "hosted_new_head_verdict": "pending; local pass does not replace hosted validation"
+}
