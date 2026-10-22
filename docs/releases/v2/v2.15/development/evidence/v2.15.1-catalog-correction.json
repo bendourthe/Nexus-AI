@@ -1,0 +1,21 @@
+{
+  "initial_head": "9b4ffec6724b7bec5d8e235244543050843b38bd",
+  "locally_reproduced": true,
+  "initial_catalog_exit": 1,
+  "failure": "Generated module LOC counts stale after outline retirement",
+  "changed_rows": {
+    "panels": [
+      10345,
+      10336
+    ],
+    "tools": [
+      8776,
+      8695
+    ]
+  },
+  "generator_repeat_exit": 0,
+  "idempotent_candidate_sha256": "de205ec18d7784ad7582853a3655c5b4fe76233e9a80e4d8a79bc30fe0318b1b",
+  "source_changed": false,
+  "postcommit_catalog_check": "required before correction push",
+  "pre_generation_guard": "Initial catalog:check invocation wrote before an initial guard snapshot; precommand clean Git tree proves committed before-copy. Official diff against that preserved copy confirmed exactly these two rows; no user edit was lost. Current generator repeat is officially checked and recorded."
+}
