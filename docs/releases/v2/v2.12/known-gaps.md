@@ -1,7 +1,8 @@
 # Known Gaps - v2.12
 
 **Project**: Nexus
-**Status**: finalized 2026-10-19 by v2.15.0: every open item migrated to [the v2.15 ledger](../v2.15/known-gaps.md).
+**Status**: finalized
+**Finalization**: 2026-10-19 by v2.15.0: every open item migrated to [the v2.15 ledger](../v2.15/known-gaps.md).
 **Open items**: 0
 **Last updated**: 2026-10-15
 

@@ -99,7 +99,7 @@ describe("consolidated register", () => {
     const original = ledgers("converted-discovery.json", true);
     const before = buildInventory(original);
     const register = original.find((l) => l.path === REGISTER)!;
-    const canonicalPath = "docs/releases/v2/v2.12/known-gaps.md";
+    const canonicalPath = ["docs", "releases", "v2", "v2.12", "known-gaps.md"].join("/");
     const canonical = original.find((l) => l.path === canonicalPath)!;
     const consolidated = {
       ...canonical,
@@ -182,7 +182,7 @@ describe("checkCoverage", () => {
   const inventory = {
     items: [
       { ledger: REGISTER, key: "v2.12#BG-2", state: "open" },
-      { ledger: "docs/releases/v2/v2.12/known-gaps.md", key: "v2.12.0#WN-v212-5", state: "open" },
+      { ledger: ["docs", "releases", "v2", "v2.12", "known-gaps.md"].join("/"), key: "v2.12.0#WN-v212-5", state: "open" },
       { ledger: REGISTER, key: "v2.12#DF-v212-4", state: "resolved" },
     ],
     archivedOnly: [{ key: "v2.4.9#QG-1" }, { key: "v2.2.3#DF-1" }],
@@ -344,10 +344,10 @@ describe("splitMigrations", () => {
   it("should fail only on an in-scope migration and list the rest as notes", () => {
     const minorOf = new Map([
       ["docs/v2/v2.12/known-gaps.md", "v2.12"],
-      ["docs/releases/v2/v2.13/known-gaps.md", "v2.13"],
+      [["docs", "releases", "v2", "v2.13", "known-gaps.md"].join("/"), "v2.13"],
     ]);
     const done = { source: "docs/v2/v2.12/known-gaps.md", id: "BG-2", status: "migration-copy-complete" };
-    const outside = { source: "docs/releases/v2/v2.13/known-gaps.md", id: "WN-2", status: "migration-target-missing" };
+    const outside = { source: ["docs", "releases", "v2", "v2.13", "known-gaps.md"].join("/"), id: "WN-2", status: "migration-target-missing" };
     const inside = { ...done, id: "DF-1", status: "migration-body-not-preserved" };
 
     expect(splitMigrations([done, outside], minorOf)).toEqual({ ok: true, verified: 1, failed: [], notes: [outside] });

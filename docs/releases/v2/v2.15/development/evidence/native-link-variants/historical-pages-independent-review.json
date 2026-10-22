@@ -1,0 +1,686 @@
+{
+  "findings": [],
+  "mode": "pinned native pure APIs; no actual record, capture, pending round or HMAC accessed",
+  "native_sha256": {
+    "check_plan_completion.py": "db10ccfe1ae04dbee66203152db4f52805d55acc20cd64905d9e22d49ff74eec",
+    "completion_minor.py": "ea48a449fd7d020ebaff2426f4b9b320a4c0ae9b648ce7a318ef442b56eb99e9",
+    "minor_close.py": "893e53af6ac68e46dfd193a33c1528cf37cd8d49cd1be07baeec147f5110ee57",
+    "approval_page.py": "244464d8a9929b25c5bc89ed7df28dd6efb782bf2dd5ded945eed2de3485b42f",
+    "approval_binding.py": "bbd1863ece314addd28f5c7d3c2caf304a6f4dbaefc37f9c55daa03117dd486b",
+    "repo_host.py": "dfeec69940715ad782a0885a6426214e2bce13c9d33ad41ecc6975a23f3147a7",
+    "cleanup_merged.py": "8116f67beeac2033f82d3f47689378447117f529121100f126a44cf84674b572"
+  },
+  "source_freeze": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-exact-plan-variant-v3-2_0fx10t\\source-freeze.json",
+  "source_freeze_sha256": "0d6c2e8697afcfbb414d87443cc22f3e568c0dcd349dcf8d974aa41a79f1fada",
+  "render_receipt": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-actual-historical-corrected-pages-xnqi8r8o\\actual-pages.json",
+  "render_receipt_sha256": "01ec4148e1105ba973621e89c3080aea1737dc127d31e02ea95a5eb046b041d8",
+  "pages": [
+    {
+      "minor": "v2.12",
+      "head": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
+      "plan": "docs/releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md",
+      "plan_raw_sha256": "450456bcb2ee521acb8a105cc26b8734a071f0c863feda7d4dd51bb453d3a7ee",
+      "spec_sha256": "d3162fa2b69fe5255d378d8525e709c8babde558f3e4e72a4db5f26c4379a896",
+      "page": "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.12-archive-approval-page.md",
+      "page_sha256": "afeefc58e76ab663da990d888cc0d52dccd18532ce2a8543b3491109336129fa",
+      "paste_output": [
+        "Approve /implement v2.12.0 (approval WNEVLC4G)",
+        "Goal: Finish /implement v2.12.0 (approval WNEVLC4G). Do every step: 1) implement every task in every phase of the plan; 2) add or update the tests and CI/CD the work needs, and make both pass on the final tree; 3) fix the open known gaps; 4) run /update release; 5) merge every pull request, then delete the merged branches, worktrees, and their local copies; 6) record every gap still open in the next version's known-gaps section; 7) when this is the last plan in its version folder, archive that folder and delete any folder left empty. Done only when the completion check's first output line starts with PLAN COMPLETE followed by the v2.12.0 plan file; stop and report when it starts with BLOCKED or PAUSED."
+      ]
+    },
+    {
+      "minor": "v2.13",
+      "head": "0ca2c2ed1d2d8712a03ff63687f9083b21433c96",
+      "plan": "docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md",
+      "plan_raw_sha256": "466f76e383ed69a6e817ffea889272f3d6f4ea19818b0651cd85033b9b387f5d",
+      "spec_sha256": "5ebc1cf5655ab5cd0d2f431d5728c1a741f26892a64333e66fda76d3f72d1257",
+      "page": "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.13-archive-approval-page.md",
+      "page_sha256": "1780dee0a9e4990378009620ddacd2c3d6faaca37fbb000ddadc5349264c379c",
+      "paste_output": [
+        "Approve /implement v2.13.0 (approval TOYDWIVT)",
+        "Goal: Finish /implement v2.13.0 (approval TOYDWIVT). Do every step: 1) implement every task in every phase of the plan; 2) add or update the tests and CI/CD the work needs, and make both pass on the final tree; 3) fix the open known gaps; 4) run /update release; 5) merge every pull request, then delete the merged branches, worktrees, and their local copies; 6) record every gap still open in the next version's known-gaps section; 7) when this is the last plan in its version folder, archive that folder and delete any folder left empty. Done only when the completion check's first output line starts with PLAN COMPLETE followed by the v2.13.0 plan file; stop and report when it starts with BLOCKED or PAUSED."
+      ]
+    }
+  ],
+  "v12_ratified_rows_exact_identity_path_body_hash_match": 44,
+  "v12_title_display": "All44 source/destination titles match native approval_page.quoted formatting; full originals retained in proof dictionaries. Initial strict raw-title equality refused on formatter whitespace/capping, then verified formatter rule without weakening body hashes.",
+  "v12_existing_migrations": [
+    {
+      "source_id": "v2.12#BG-2",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - SANA ControlNet SHA-256 pins are still the all-zero placeholder. - MIGRATED to v2.15.0",
+      "source_body_sha256": "50df12fbd51247c5843e54730431d51937ec951a1c6e70d810cd10f2ed7de2c1",
+      "destination_id": "v2.15.0#BG-1",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - SANA ControlNet SHA-256 pins are still the all-zero placeholder. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "4c349776592d7c1e9dc5b152ae7eeb7f1963f21895b8352f05af7f02fe91c0a0"
+    },
+    {
+      "source_id": "v2.12#CI-v251-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - `develop` and `main` require only `ci-required`; `installer-required` is not a required context. - MIGRATED to v2.15.0",
+      "source_body_sha256": "8a899e77a59a6ae938b77e05b8b73d7101fe1b6265de5e41b22a1ad113eeb2b5",
+      "destination_id": "v2.15.0#QG-4",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - `develop` and `main` require only `ci-required`; `installer-required` is not a required context. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "9876f89c333a5a4a89a891021f9fa8f96e9a88a960a326da5450f9ed1bf8a067"
+    },
+    {
+      "source_id": "v2.12#DF-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - MiniCPM tool tags are stripped by Ollama before Nexus can parse them. - MIGRATED to v2.15.0",
+      "source_body_sha256": "646e730c4ec2a2b647e677841e628db5cbdf08a989fee0d68d9a4f947081a572",
+      "destination_id": "v2.15.0#DF-10",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - MiniCPM tool tags are stripped by Ollama before Nexus can parse them. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "e30ce2c4693ab7ce46582c3e8097fd5cb07602f558f1054b71bfca007d38a1af"
+    },
+    {
+      "source_id": "v2.12#DF-v210-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Hosted Jev, Laya 0.3.20, and Kev 0.8B, 4B, 9B, and 27B are not admitted. - MIGRATED to v2.15.0",
+      "source_body_sha256": "24f8cce64107425b86ce80af0d6fde50732a8ec3dcd372e0b104b15398707a20",
+      "destination_id": "v2.15.0#DF-22",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Hosted Jev, Laya 0.3.20, and Kev 0.8B, 4B, 9B, and 27B are not admitted. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "db244c0dd30f2e4ef45d73209cf3a4b690e7c6cbf28e9767f623cdf0eeec00ee"
+    },
+    {
+      "source_id": "v2.12#DF-v211-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - CLM-8B is not admitted, no catalog row. - MIGRATED to v2.15.0",
+      "source_body_sha256": "d3c790159169f9f52a13fdddd14c31c7fea8a71529270ab2eaaa6869d5a21e25",
+      "destination_id": "v2.15.0#DF-23",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - CLM-8B is not admitted, no catalog row. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "670b61ea441632d59729b3a313e79073f162785300099d0c449c8eb0f63bf69e"
+    },
+    {
+      "source_id": "v2.12#DF-v211-2",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The outline tools remain experimental and off by default. - MIGRATED to v2.15.0",
+      "source_body_sha256": "8093e36e93896fc3ff5be84cdcfb4283161075f1023769351caaf4c78e89de1a",
+      "destination_id": "v2.15.0#DF-24",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The outline tools remain experimental and off by default. - RESOLVED 2026-10-21",
+      "destination_body_sha256": "ae8293defdfadccb28d6e70379595e2097fdd6de1855b7d87bbacb7874f88fe9"
+    },
+    {
+      "source_id": "v2.12#DF-v211-3",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - CPU OCR (RapidOCR, the portable default) costs about 6.8 s per text-dense page on this host: a 60-page PDF takes about 7 minutes on the first `document_outline` call, the same cost `parse_document` already pays. The GPU engine was not measured. The runtime also caps at 200 pages and reports `pageCount: 200`, hiding truncation past that. - MIGRATED to v2.15.0",
+      "source_body_sha256": "aec870e1514db661452790bda6c4b611b56ce58101c6e37cb451c97f09118fee",
+      "destination_id": "v2.15.0#DF-25",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - CPU OCR (RapidOCR, the portable default) costs about 6.8 s per text-dense page on this host: a 60-page PDF takes about 7 minutes on the first `document_outline` call, the same cost `parse_document` already pays. The GPU engine was not measured. The runtime also caps at 200 pages and reports `pageCount: 200`, hiding truncation past that. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "5a473e9625bd5afffb0a0a04fa868100e4323c254081644356aea6ee5f428489"
+    },
+    {
+      "source_id": "v2.12#DF-v211-6",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The outline tools refuse PPTX and XLSX, though the OCR runtime reads both (`runtimes/ocr/documents.py`). - MIGRATED to v2.15.0",
+      "source_body_sha256": "316077870c8bed52b39a9f85e3705ba553a11189d66ac8acdf7b43971acea34f",
+      "destination_id": "v2.15.0#DF-27",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The outline tools refuse PPTX and XLSX, though the OCR runtime reads both (`runtimes/ocr/documents.py`). - RESOLVED 2026-10-21",
+      "destination_body_sha256": "9807c7d444d64b1c2b96e0f28fe3a9271b34372b3a07d3c1ef3785e8415a78db"
+    },
+    {
+      "source_id": "v2.12#DF-v211-7",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The missing mechanisms were implemented in v2.12 Phases 2-4: per-turn remaining-room budgets, native Ollama tool-role history and shared result compaction. - MIGRATED to v2.15.0",
+      "source_body_sha256": "f99ef39645fe7c4900d08e107331ecccc9609b306ab627d4f4964bf756a0ad5c",
+      "destination_id": "v2.15.0#DF-26",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The missing mechanisms were implemented in v2.12 Phases 2-4: per-turn remaining-room budgets, native Ollama tool-role history and shared result compaction. - RESOLVED 2026-10-21",
+      "destination_body_sha256": "8764594e055f3a42d27c1ddad13495eeb710828f018a555c9bdc0a11ee44b593"
+    },
+    {
+      "source_id": "v2.12#DF-v212-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Aleph Alpha's Kolibri-1 (released 2026-10-03, Apache-2.0, 78B total and 3.46B active parameters, about 78 GB in FP8) is not admitted, no catalog row. - MIGRATED to v2.15.0",
+      "source_body_sha256": "ccb28296b69dc660b5ed109fb609e119091c97d141cc60c44a1f9ca90a99608b",
+      "destination_id": "v2.15.0#DF-28",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Aleph Alpha's Kolibri-1 (released 2026-10-03, Apache-2.0, 78B total and 3.46B active parameters, about 78 GB in FP8) is not admitted, no catalog row. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "0a65d6f7537290eeb3a13b8593bb44696c6071d518e2bd55d9dd929fbbb53a02"
+    },
+    {
+      "source_id": "v2.12#DF-v212-2",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - No catalog-wide check that every entry's declared size fits its tier; the Kolibri-1 decision keeps a per-model guard instead (decided at the seed plan's grill). - MIGRATED to v2.15.0",
+      "source_body_sha256": "afa1e5516a6a451bb8a069693f375e5fed1e13fc6f68694769341f8bdae9f0f3",
+      "destination_id": "v2.15.0#DF-29",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - No catalog-wide check that every entry's declared size fits its tier; the Kolibri-1 decision keeps a per-model guard instead (decided at the seed plan's grill). - MIGRATED to v2.16.0",
+      "destination_body_sha256": "ef6e694e7dc47a499e6aa4e29d65499bab99e026bd5e3a5affdb22e72b4bb536"
+    },
+    {
+      "source_id": "v2.12#DF-v212-3",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - No catalog field separates a vendor's trained context from its extrapolated maximum (comparison KOL-2). - MIGRATED to v2.15.0",
+      "source_body_sha256": "734adcbc8e1b0e0a1eeeedfffe10946ecc1f28e500f38604fddc7fd1887b9287",
+      "destination_id": "v2.15.0#DF-30",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - No catalog field separates a vendor's trained context from its extrapolated maximum (comparison KOL-2). - MIGRATED to v2.16.0",
+      "destination_body_sha256": "82f6292687829447dec547ee954a8ebac7b3468a971e33a797f899bd5a2089ea"
+    },
+    {
+      "source_id": "v2.12#DF-v240-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Live NVIDIA splat generate was not run. - MIGRATED to v2.15.0",
+      "source_body_sha256": "646e730c4ec2a2b647e677841e628db5cbdf08a989fee0d68d9a4f947081a572",
+      "destination_id": "v2.15.0#DF-11",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Live NVIDIA splat generate was not run. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "19b048aa34570aa26d6c8c2e0b54c508033908e82316c339eadae6378f119110"
+    },
+    {
+      "source_id": "v2.12#DF-v240-2",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - TripoSplat weight file hashes were not downloaded. - MIGRATED to v2.15.0",
+      "source_body_sha256": "710481e6b4c11f5cf11c161dfb1977f8598fbca1587d0b27c5beb5ce2f8d6800",
+      "destination_id": "v2.15.0#DF-12",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - TripoSplat weight file hashes were not downloaded. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "552b7021a308aee4896bb89e5243cc7c269b4a5e56641d4c38ccbb85c800efdc"
+    },
+    {
+      "source_id": "v2.12#DF-v240-3",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Older version gap logs still contain operator and hardware items that were not re-tested. - MIGRATED to v2.15.0",
+      "source_body_sha256": "065aa4019137c2867574c08bd3985d0de9c6576a37eb81d19aca9655f282721f",
+      "destination_id": "v2.15.0#DF-13",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Older version gap logs still contain operator and hardware items that were not re-tested. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "96636ca4eb9ede4a5db7f8ef618428dd968c94067e1144a027fb3d6cb5e3fbf2"
+    },
+    {
+      "source_id": "v2.12#DF-v260-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Chat search still matches titles only. - MIGRATED to v2.15.0",
+      "source_body_sha256": "d45dd2971116926088f1a61fdd4e99fa0deb3ea216fe0ed914084a3c19634594",
+      "destination_id": "v2.15.0#DF-14",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Chat search still matches titles only. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "61ca89a886d117e671428833a53bf91ba3265de0050293b155c6c08575896e67"
+    },
+    {
+      "source_id": "v2.12#DF-v260-2",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - User compaction is not written back to `chat_chat_messages`, so a restart reloads the pre-compact transcript. - MIGRATED to v2.15.0",
+      "source_body_sha256": "7424d6ad21374a40015cd54b78e91ab89ded2ee4538a5304560c0f3598ceff10",
+      "destination_id": "v2.15.0#DF-15",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - User compaction is not written back to `chat_chat_messages`, so a restart reloads the pre-compact transcript. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "a8755d52cb4ce5c7b7d5e2f28fa407014d143bd5b57965320e39ac13a805d667"
+    },
+    {
+      "source_id": "v2.12#DF-v260-3",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The Qwen3.8 guard matches `id` and `source.url` only. - MIGRATED to v2.15.0",
+      "source_body_sha256": "7424d6ad21374a40015cd54b78e91ab89ded2ee4538a5304560c0f3598ceff10",
+      "destination_id": "v2.15.0#DF-16",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The Qwen3.8 guard matches `id` and `source.url` only. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "4179c544a2e01e1378e6f0b56eb03852f3a375136e2d7b75032585d8bdc15a27"
+    },
+    {
+      "source_id": "v2.12#DF-v260-4",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Qwen3.8-27B is not admitted. - MIGRATED to v2.15.0",
+      "source_body_sha256": "7424d6ad21374a40015cd54b78e91ab89ded2ee4538a5304560c0f3598ceff10",
+      "destination_id": "v2.15.0#DF-17",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Qwen3.8-27B is not admitted. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "491ffbf091777bbdee30b1e5232384cfd542aa71a7c4bdc814799ea9b3e16966"
+    },
+    {
+      "source_id": "v2.12#DF-v260-5",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - No llama.cpp serving path. - MIGRATED to v2.15.0",
+      "source_body_sha256": "7424d6ad21374a40015cd54b78e91ab89ded2ee4538a5304560c0f3598ceff10",
+      "destination_id": "v2.15.0#DF-18",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - No llama.cpp serving path. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "ab538a83f56d1af3868f656d11e81f3ef01c62f7315c0bf5a93d2ca2debce74f"
+    },
+    {
+      "source_id": "v2.12#DF-v260-6",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The uncensored-LLM product question is unanswered. - MIGRATED to v2.15.0",
+      "source_body_sha256": "7424d6ad21374a40015cd54b78e91ab89ded2ee4538a5304560c0f3598ceff10",
+      "destination_id": "v2.15.0#DF-19",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The uncensored-LLM product question is unanswered. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "2eca9e07e8ac7761b550bc37804e1638c55d16ffc4bbbbe12720d44440e01593"
+    },
+    {
+      "source_id": "v2.12#DF-v280-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The community Qwen-Image GGUF and Bespoke Nimble are not admitted. - MIGRATED to v2.15.0",
+      "source_body_sha256": "0d037c7f3d26e881cd8d982116dd5a875c372bb3b0866cf26b4e2d1553efad7a",
+      "destination_id": "v2.15.0#DF-20",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The community Qwen-Image GGUF and Bespoke Nimble are not admitted. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "8c750a7d23c5be12576fa9e179d470308e45517b15423cc3c07852ecabb2f9f2"
+    },
+    {
+      "source_id": "v2.12#DF-v290-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - CrisperWhisper 2.0 is not admitted. - MIGRATED to v2.15.0",
+      "source_body_sha256": "6114ba35269707463eaefedb0f89e4afeca735e8812fbab499c960b988b4e0fa",
+      "destination_id": "v2.15.0#DF-21",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - CrisperWhisper 2.0 is not admitted. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "293c909dc34a0fcdade63d5e3ccd93e211a9b59ab045b51f05a27a538e6b22ab"
+    },
+    {
+      "source_id": "v2.12#MT-v240-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - A real WebGL2 framebuffer was not captured. - MIGRATED to v2.15.0",
+      "source_body_sha256": "646e730c4ec2a2b647e677841e628db5cbdf08a989fee0d68d9a4f947081a572",
+      "destination_id": "v2.15.0#MT-2",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - A real WebGL2 framebuffer was not captured. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "363c0ead352115dacc06f8d193fee4731e2f504e59c0521fb23ed5f24a44feec"
+    },
+    {
+      "source_id": "v2.12#QG-v211-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - `docs/handbooks/html/atlas.html` scrolls sideways at 390 px (524 px wide) from a cause other than inline code, and CI does not run `npm run docs:handbooks:check`, which let `atlas.html` go stale until v2.11.0 regenerated it. Owner: the maintainer. Next step: find the wide element in the atlas, and add the handbook check to the `fast` profile and CI. - MIGRATED to v2.15.0",
+      "source_body_sha256": "9c619cf1cb0b60266d49def1fcfd66e9d882c9d90ea39450541276fcfd76e9cb",
+      "destination_id": "v2.15.0#QG-8",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - `docs/handbooks/html/atlas.html` scrolls sideways at 390 px (524 px wide) from a cause other than inline code, and CI does not run `npm run docs:handbooks:check`, which let `atlas.html` go stale until v2.11.0 regenerated it. Owner: the maintainer. Next step: find the wide element in the atlas, and add the handbook check to the `fast` profile and CI. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "a51e6a44a013b9998d90e5d72678d095c2d7b8bceac96efc59d71b9c94d610b3"
+    },
+    {
+      "source_id": "v2.12#QG-v211-2",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The production audit allowlist gained `global-agent`, `roarr`, and `sprintf-js` (GHSA-hp3w-g68c-fv3c, no patched `sprintf-js` release). - MIGRATED to v2.15.0",
+      "source_body_sha256": "4eb92c213173cfaf422129e14ea68c4ca8e7abb50cbe5514f89dd7d9acddaee4",
+      "destination_id": "v2.15.0#QG-9",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The production audit allowlist gained `global-agent`, `roarr`, and `sprintf-js` (GHSA-hp3w-g68c-fv3c, no patched `sprintf-js` release). - MIGRATED to v2.16.0",
+      "destination_body_sha256": "cb650f5d9f06a093d20d395f9a188e426f1b183dad99c28314708c21e8a56f0e"
+    },
+    {
+      "source_id": "v2.12#QG-v240-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The full local suite was not run on the Electron `better-sqlite3` ABI. - MIGRATED to v2.15.0",
+      "source_body_sha256": "404ca8cf1b4d9ad05ed4f870dc9c4508611af123d6682a5e2cbccf23f30cbe71",
+      "destination_id": "v2.15.0#QG-3",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The full local suite was not run on the Electron `better-sqlite3` ABI. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "61a55b53593128f8765f0ae128caaa49682f38d42e4a97283fc5165dc65ac749"
+    },
+    {
+      "source_id": "v2.12#QG-v260-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The packaged offline probe was not re-run after adding Mermaid. - MIGRATED to v2.15.0",
+      "source_body_sha256": "08d73e3251c553126ff6cba6cca7f4b6f90e7d8399bd3775c87b4ecbfce520f0",
+      "destination_id": "v2.15.0#QG-5",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The packaged offline probe was not re-run after adding Mermaid. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "04131fed87b96bf6b934699f9d4b52a400cb10a757abb2eed7fe3c17deef9979"
+    },
+    {
+      "source_id": "v2.12#QG-v270-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The handbook HTML check fails on a CRLF working tree. - MIGRATED to v2.15.0",
+      "source_body_sha256": "3ec860c114035b03c38870a1411ab007eefd036d59337a811cfd2a47241b0199",
+      "destination_id": "v2.15.0#QG-6",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The handbook HTML check fails on a CRLF working tree. - RESOLVED 2026-10-20",
+      "destination_body_sha256": "06ac1be6d99aba48cd9b9a384257aaf19981932d551ff3d7d9079a41fd38e769"
+    },
+    {
+      "source_id": "v2.12#QG-v270-2",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Narrowed in v2.11.0: `ci.yml` now defaults to `permissions: contents: read`, and `package.json` has `fast`, `full`, and `platform` profiles composed from existing commands. Still open: no `report` profile (it needs a summary writer that reads other profiles' output) and no `release` profile (publication belongs to semantic-release), and `ci.yml` still runs its own steps rather than calling the profiles. Owner: the maintainer. - MIGRATED to v2.15.0",
+      "source_body_sha256": "b8dc62a16a0d1a5497565a1dcd5920ba51dbbb49174e7539896978306273138c",
+      "destination_id": "v2.15.0#QG-7",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Narrowed in v2.11.0: `ci.yml` now defaults to `permissions: contents: read`, and `package.json` has `fast`, `full`, and `platform` profiles composed from existing commands. Still open: no `report` profile (it needs a summary writer that reads other profiles' output) and no `release` profile (publication belongs to semantic-release), and `ci.yml` still runs its own steps rather than calling the profiles. Owner: the maintainer. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "4a3738b3e8d31210854f2426bf2748df5f1b79d7c41a89b50bda15609f3c49e0"
+    },
+    {
+      "source_id": "v2.12#QG-v270-3",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The three OS installers were not executed locally for the avatar plan. - MIGRATED to v2.15.0",
+      "source_body_sha256": "999d912c8d301a50c089d12263691528390a27cedfaa3228a0218db3936cfec3",
+      "destination_id": "v2.15.0#QG-10",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The three OS installers were not executed locally for the avatar plan. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "6e8350585c17eb9aa50f78902ec21e1b25367d30949c8c426a691847f90f3c6c"
+    },
+    {
+      "source_id": "v2.12#WN-2",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The bundled MiniCPM template has no tools section. - MIGRATED to v2.15.0",
+      "source_body_sha256": "f175a92b0927dfd6e791fa2ad1174b638884d1b4665a1ab9ffe8c0345af22b86",
+      "destination_id": "v2.15.0#WN-11",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The bundled MiniCPM template has no tools section. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "f2041032b9848d44eddc8325fa91e38d7e05479de7c548f4f80d6a36b763640c"
+    },
+    {
+      "source_id": "v2.12#WN-v211-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The OCR runtime's `parse` result carries no engine version, so the outline cache key uses the engine id, the device, and a fixed version label. - MIGRATED to v2.15.0",
+      "source_body_sha256": "e83b771d134b07693e0be5fb403f5770c7e6166ecab7c956aa0d6608be0a8106",
+      "destination_id": "v2.15.0#WN-15",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The OCR runtime's `parse` result carries no engine version, so the outline cache key uses the engine id, the device, and a fixed version label. - RESOLVED 2026-10-21",
+      "destination_body_sha256": "1aa1e3753971ae63153ca715e9919215bfe1a3cb4051fccd62e8d1bb61f34a37"
+    },
+    {
+      "source_id": "v2.12#WN-v211-2",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The ACP control-surface path builds the outline tools without a model client, so node summaries are off there. - MIGRATED to v2.15.0",
+      "source_body_sha256": "2d5684abefe415cd7c946dd544421e6926351b670043722547b688b3bdb2910f",
+      "destination_id": "v2.15.0#WN-16",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The ACP control-surface path builds the outline tools without a model client, so node summaries are off there. - RESOLVED 2026-10-21",
+      "destination_body_sha256": "ff224af531011d5ab6b1b7888f114640f5ef8eb3108625d5f836e68011fbe774"
+    },
+    {
+      "source_id": "v2.12#WN-v211-3",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - The summary path's loopback check reuses `isLoopbackEndpoint`: an exact host match that rejects look-alike hosts, `0.0.0.0`, and IPv4-mapped addresses, but does not resolve DNS for `localhost` or refuse an HTTP redirect from the model server. - MIGRATED to v2.15.0",
+      "source_body_sha256": "9c7cdce4d43f7ac5b3a021cfe56458d7b36fca6de6a865fe90656dff42e2f6b4",
+      "destination_id": "v2.15.0#WN-18",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - The summary path's loopback check reuses `isLoopbackEndpoint`: an exact host match that rejects look-alike hosts, `0.0.0.0`, and IPv4-mapped addresses, but does not resolve DNS for `localhost` or refuse an HTTP redirect from the model server. - RESOLVED 2026-10-21",
+      "destination_body_sha256": "4f36af290d0ffc6ae1a13fefea9b9dfcce5ddf610b89294cf2fffa869a85bce3"
+    },
+    {
+      "source_id": "v2.12#WN-v211-4",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Both agent loops now send `tools` natively to every model whose catalog format is not `none` (the extension already did). - MIGRATED to v2.15.0",
+      "source_body_sha256": "a5fa0c197208b8e09ec54c42bd2c91af1a2b581354f1671a189fd1429dd72ed1",
+      "destination_id": "v2.15.0#WN-17",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Both agent loops now send `tools` natively to every model whose catalog format is not `none` (the extension already did). - MIGRATED to v2.16.0",
+      "destination_body_sha256": "a30f53d3b2d5e52c96039886614bca82e7e84bf8d1eba6dbb84ffe77bbacea2b"
+    },
+    {
+      "source_id": "v2.12#WN-v211-6",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - No egress from the OCR child process is proven at socket level. - MIGRATED to v2.15.0",
+      "source_body_sha256": "d4ba88600b7b0d903790f1b242426ef6b2dfdde25eecfe81b1ef9f5758a8ea37",
+      "destination_id": "v2.15.0#WN-13",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - No egress from the OCR child process is proven at socket level. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "10b73e720ce3dfd05170ec519f8909113ab22d63eb45dc08471844edc7902488"
+    },
+    {
+      "source_id": "v2.12#WN-v211-7",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - When a parser returns markdown (the GPU OCR engine), per-page data is dropped, so `pagesParsed` reads 1 and sections carry no page range. - MIGRATED to v2.15.0",
+      "source_body_sha256": "6b33779309b53a75cc4c7938a9891ad4261604c119cdef474cece7841dde6439",
+      "destination_id": "v2.15.0#WN-14",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - When a parser returns markdown (the GPU OCR engine), per-page data is dropped, so `pagesParsed` reads 1 and sections carry no page range. - RESOLVED 2026-10-21",
+      "destination_body_sha256": "1ddde398605541ad582aa811e9cadab99e5d028bb7d911679c82fdc5ce008579"
+    },
+    {
+      "source_id": "v2.12#WN-v260-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Release-scoped Qwen3.8 mentions under `docs/archive/` stay as written. - MIGRATED to v2.15.0",
+      "source_body_sha256": "7424d6ad21374a40015cd54b78e91ab89ded2ee4538a5304560c0f3598ceff10",
+      "destination_id": "v2.15.0#WN-12",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Release-scoped Qwen3.8 mentions under `docs/archive/` stay as written. - MIGRATED to v2.16.0",
+      "destination_body_sha256": "fce8c0f90f1894235ae37cfebe638ce86d988ccbb214d001b44a1411cdd73cc3"
+    },
+    {
+      "source_id": "v2.12.0#DF-v212-4",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Legacy history for OpenAI-compatible backends - MIGRATED to v2.15.0",
+      "source_body_sha256": "dccb4655f26d498ad30e739f14c5d2041c5b946f2a343fe28f07707e88eda035",
+      "destination_id": "v2.15.0#DF-9",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Legacy history for OpenAI-compatible backends - MIGRATED to v2.16.0",
+      "destination_body_sha256": "74abbffd514b6aa17a6a4eb52d7f7498637157e024b2851a30942d6347e39dc1"
+    },
+    {
+      "source_id": "v2.12.0#QG-v212-1",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Terminal CI reconciliation requires explicit migration decisions - MIGRATED to v2.15.0",
+      "source_body_sha256": "a065d1b031d8221d4ec4bb0fd739979e0dfdff1868d22afffa7032fc3e075223",
+      "destination_id": "v2.15.0#QG-2",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Terminal CI reconciliation requires explicit migration decisions - MIGRATED to v2.16.0",
+      "destination_body_sha256": "d308bb3058d3fed2487158e467b8b45fdbd203c7a662ea6d3fc93ee6d0d1ccab"
+    },
+    {
+      "source_id": "v2.12.0#WN-v212-5",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Historical evaluation diagnostic and timing limits - MIGRATED to v2.15.0",
+      "source_body_sha256": "07af625555386eb1235afd681f7e3e711f5c41bb05829bf4e13b35d5a86d022d",
+      "destination_id": "v2.15.0#WN-8",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Historical evaluation diagnostic and timing limits - RESOLVED 2026-10-21",
+      "destination_body_sha256": "c249ac658cb2a5410062697a373cf4edcb22ec2cda8155df3ad43a5a3f9cbbd4"
+    },
+    {
+      "source_id": "v2.12.0#WN-v212-6",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Outline retention is not bounded by session or idle expiry - MIGRATED to v2.15.0",
+      "source_body_sha256": "6176bd567b145e90669f731d3d2082697358be54c742ad56ced6372a55a2169f",
+      "destination_id": "v2.15.0#WN-9",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Outline retention is not bounded by session or idle expiry - RESOLVED 2026-10-21",
+      "destination_body_sha256": "0ba30c222d3f83c062fe87dddbb307a6d2c88093a6a92e19c41a586bcafc39ba"
+    },
+    {
+      "source_id": "v2.12.0#WN-v212-7",
+      "source_path": "docs/releases/v2/v2.12/known-gaps.md",
+      "source_title": " - Media smoke proof needs separate packaging and installation evidence - MIGRATED to v2.15.0",
+      "source_body_sha256": "9becb666a6d8dc6e57b18c054b053b120ab3f21f1f9d4eb46a33611570e46de8",
+      "destination_id": "v2.15.0#WN-10",
+      "destination_path": "docs/releases/v2/v2.15/known-gaps.md",
+      "destination_title": " - Media smoke proof needs separate packaging and installation evidence - MIGRATED to v2.16.0",
+      "destination_body_sha256": "25a7e1bd4e9f7405d7fcbd1c98e9a80d0832f041d9b72a37b744b3ce53f581aa"
+    }
+  ],
+  "absorbed_seeds_exact_match": [
+    {
+      "plan_path": "docs/releases/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md",
+      "plan_sha256": "801a613cbf109db7f92e9352985af460d6a1f234472e1f84be4eb9c87053380e"
+    }
+  ],
+  "v13_qualified_copy_count": 8,
+  "v13_qualified_copies": [
+    {
+      "source_id": "v2.13.0#DF-1",
+      "source_path": "docs/releases/v2/v2.13/known-gaps.md",
+      "source_title": " - Candidate runtime compatibility blocks scoring - MIGRATED to v2.14.0",
+      "source_body_sha256": "4a3c9b4a62725423ee2a652e9302793cdc734b1dd9b17c4b9245e2b9353ee06d",
+      "target": "v2.14.0",
+      "destination_id": "v2.14.0#DF-1",
+      "destination_path": "docs/archives/v2/v2.14/known-gaps.md",
+      "destination_title": " - Candidate runtime compatibility blocks scoring - MIGRATED to v2.15.0",
+      "destination_body_sha256": "2a6e710df1c8b74b244b448dd308fc5de904e7f83d80ac7dcca388670bb07d79",
+      "native_status": "migration-copy-complete"
+    },
+    {
+      "source_id": "v2.13.0#DF-2",
+      "source_path": "docs/releases/v2/v2.13/known-gaps.md",
+      "source_title": " - Universal admission evidence is missing - MIGRATED to v2.14.0",
+      "source_body_sha256": "9b72fc1a68e9512c4848d5f50adb02185bfea40fc68377fa439e49bbc444cbda",
+      "target": "v2.14.0",
+      "destination_id": "v2.14.0#DF-2",
+      "destination_path": "docs/archives/v2/v2.14/known-gaps.md",
+      "destination_title": " - Universal admission evidence is missing - MIGRATED to v2.15.0",
+      "destination_body_sha256": "53874a9bc958b4ad793625f129f3728388e7bda5cf4beed73f18558cbaf73d9a",
+      "native_status": "migration-copy-complete"
+    },
+    {
+      "source_id": "v2.13.0#DF-3",
+      "source_path": "docs/releases/v2/v2.13/known-gaps.md",
+      "source_title": " - Saved generated images outlive their session - MIGRATED to v2.14.0",
+      "source_body_sha256": "fa5aafaf241877b8ca2da2776afb0e46176beeea63a232109b802655ec264d4b",
+      "target": "v2.14.0",
+      "destination_id": "v2.14.0#DF-3",
+      "destination_path": "docs/archives/v2/v2.14/known-gaps.md",
+      "destination_title": " - Saved generated images outlive their session - MIGRATED to v2.15.0",
+      "destination_body_sha256": "29a5945c7be48eed9af6ff03cd0e9e0556ad6976df91ea72765ad516e4ac07c8",
+      "native_status": "migration-copy-complete"
+    },
+    {
+      "source_id": "v2.13.0#DF-4",
+      "source_path": "docs/releases/v2/v2.13/known-gaps.md",
+      "source_title": " - An approved agent can replace the user's redo history - MIGRATED to v2.14.0",
+      "source_body_sha256": "ef382e3086e61c80f77f5c47cb0bf1915e557f83e84f3ac499dadb2be12d8ad5",
+      "target": "v2.14.0",
+      "destination_id": "v2.14.0#DF-4",
+      "destination_path": "docs/archives/v2/v2.14/known-gaps.md",
+      "destination_title": " - An approved agent can replace the user's redo history - MIGRATED to v2.15.0",
+      "destination_body_sha256": "952c2652ac8b1b088aeeb2dc563e8d14213d9b2e7c51a22ae85083e6ca2b8101",
+      "native_status": "migration-copy-complete"
+    },
+    {
+      "source_id": "v2.13.0#WN-3",
+      "source_path": "docs/releases/v2/v2.13/known-gaps.md",
+      "source_title": " - Residual image-access hardening items from the adversarial review - MIGRATED to v2.14.0",
+      "source_body_sha256": "61177b1e7a2643db7dacceffdf4e6ee6f56267b246906118d86a8801b63c3417",
+      "target": "v2.14.0",
+      "destination_id": "v2.14.0#WN-1",
+      "destination_path": "docs/archives/v2/v2.14/known-gaps.md",
+      "destination_title": " - Residual image-access hardening items from the adversarial review - MIGRATED to v2.15.0",
+      "destination_body_sha256": "dbc04b4b5c94594a0f7a72aa714740f915c96db2b5ccc82fcff2656b967000f2",
+      "native_status": "migration-copy-complete"
+    },
+    {
+      "source_id": "v2.13.0#WN-1",
+      "source_path": "docs/releases/v2/v2.13/known-gaps.md",
+      "source_title": " - The packaged desktop flows are not automated - MIGRATED to v2.14.0",
+      "source_body_sha256": "d0c5f5c5447898046900c97b47e2a1349af9dfd86be5e7a77b4c88107bd19886",
+      "target": "v2.14.0",
+      "destination_id": "v2.14.0#WN-2",
+      "destination_path": "docs/archives/v2/v2.14/known-gaps.md",
+      "destination_title": " - The packaged desktop flows are not automated - MIGRATED to v2.15.0",
+      "destination_body_sha256": "f069708c9448106ebb0dd1e48e917b0304f62bae022e6eb0feb9638a91cc15bd",
+      "native_status": "migration-copy-complete"
+    },
+    {
+      "source_id": "v2.13.0#WN-2",
+      "source_path": "docs/releases/v2/v2.13/known-gaps.md",
+      "source_title": " - Skill tests leave empty folders in the source catalog - MIGRATED to v2.14.0",
+      "source_body_sha256": "76e5f1bdbc6f9ba7c12f3aece80785d1218800b8555f75087f582d9e3034aae2",
+      "target": "v2.14.0",
+      "destination_id": "v2.14.0#WN-3",
+      "destination_path": "docs/archives/v2/v2.14/known-gaps.md",
+      "destination_title": " - Skill tests leave empty folders in the source catalog - RESOLVED",
+      "destination_body_sha256": "14b7d7ea3dad0c09f3e537d9a2b8e6e7570346e726595fbaf8fb06f60de72c3f",
+      "native_status": "migration-copy-complete"
+    },
+    {
+      "source_id": "v2.13.0#QG-1",
+      "source_path": "docs/releases/v2/v2.13/known-gaps.md",
+      "source_title": " - Two tests time out under full-suite load at vitest's 5 s default - MIGRATED to v2.14.0",
+      "source_body_sha256": "d94371a7f69ed5179474d3089b4e3f2553e6fa737f44390229b73d39b3da2754",
+      "target": "v2.14.0",
+      "destination_id": "v2.14.0#QG-1",
+      "destination_path": "docs/archives/v2/v2.14/known-gaps.md",
+      "destination_title": " - Two tests time out under full-suite load at vitest's 5 s default - RESOLVED",
+      "destination_body_sha256": "4011ec5983c71f296f115d77d28be9b9740aa489abdec3db4b18821dfed36912",
+      "native_status": "migration-copy-complete"
+    }
+  ],
+  "native_link_payload": {
+    "schema": 1,
+    "repo": "bendourthe/nexus-ai",
+    "repo_root": "C:\\nx-close",
+    "common_git_dir": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI\\.git",
+    "moved_minor": "v2.12",
+    "affected_minor": "v2.13",
+    "affected_plan": "docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md",
+    "moved_plan": "docs/releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md",
+    "source_tree": "docs/releases/v2/v2.12",
+    "archive_tree": "docs/archives/v2/v2.12",
+    "order": [
+      "v2.12",
+      "v2.13"
+    ],
+    "affected_version": "v2.13.0",
+    "original_text": "# Plan - Durable image edits and measured local retrieval\n\n**Project**: Nexus\n**Version**: v2.13.0\n**Filename**: v2.13.0-adoption-craft-editors-embeddinggemma-2.md\n**Slug**: adoption-craft-editors-embeddinggemma-2\n**Plan Type**: Feature / Enhancement\n**Created**: 2026-10-08\n**Status**: shipped 2026-10-16. All seven phases merged through PR #101 and released by owner decision as v2.12.0 (tag only; its release build failed, WN-5) and v2.12.1 (published build). Model admission remains HOLD (DF-1, DF-2); open gaps carried to docs/archives/v2/v2.14/known-gaps.md.\n**Seeded from**: [Craft editors and EmbeddingGemma 2 comparison](../comparisons/v2.13.0-comparison-craft-editors-embeddinggemma-2.md)\n**Goal**: Let the solo creator reopen and undo existing Image Studio edits without losing the original, execute those same edits through authorized local commands, and decide EmbeddingGemma 2 adoption from reproducible local retrieval and resource evidence with a reversible migration only if the admission gates pass.\n**Adoption target**: v2.13.0; planned after the approved v2.12 outline-readiness work. This is planning placement, not a release commitment.\n**Baseline**: package 2.11.0; HEAD bfc0fbc665ee7917b81d5fd504d48ac40badc8ce; branch feat/v2.12-outline-readiness; existing uncommitted work is preserved.\n\n## Overview\n\nSeven phases turn the comparison's E1/E2 and C1/C2 recommendations into bounded Nexus work. The embedding branch first measures the currently consuming memory path, then permits a separate migration and job-map decision only when evidence supports it. A failed, inconclusive or unavailable model evaluation is a valid retain-current-model result, not a reason to block the independent image-editing branch.\n\nThe image branch preserves the existing brightness, contrast, saturation, sharpness, brush and text features. It adds a small versioned edit recipe and complete history, connects the existing viewer to durable storage, then exposes the same commands and rendering through the current authenticated control surface. This plan adopts concepts from the four editors; it does not import their code or build hooks, replace React with egui, or implement an Adobe-compatible document format.\n\nThe plan is an assessment and execution contract, not implemented behavior. All net-new capabilities are candidate support until their phase evidence exists. Published claims may become supported only on the observed Windows packaged surface. Missing runtime or hardware evidence is written as not proven here.\n\n## Goals First / Definition of Done\n\n- **Target problem and persona**: the single-machine builder/creator in [STRATEGY.md](../../../../../STRATEGY.md) loses editable image state after closing the viewer and cannot ask the local agent to perform the same bounded edits. The maintainer also lacks project-specific evidence for changing an occupied embedding job.\n- **Strategy grounding**: preserve the local-first and single-GPU principles. Use the strategy's proposed M2 resource budget and M3 zero non-loopback ordinary-use checks as acceptance constraints; durable reopen addresses M4 reliability and offers a concrete M5 real-work rehearsal. These metric proposals are not silently promoted into approved strategy.\n- **Image done**: a persisted Image Studio image can be adjusted and marked, saved, reopened after process restart, undone/redone across adjustments and marks, and exported through UI and command paths with equivalent decoded pixels. Source byte hash stays unchanged.\n- **Retrieval done**: publish a repeatable paired baseline/candidate report on a frozen corpus and recipe; choose retain or admit with measured quality, latency, memory, offline and terms evidence. Evaluation alone satisfies the retrieval goal when admission is declined.\n- **Migration done, if admitted**: no mixed vector spaces; interrupted rebuild leaves old retrieval usable; activation and rollback restore the same source records and recipe identity without data loss. Do not tick implementation tasks as completed when the branch is skipped: record conditional task disposition instead.\n- **Agent done**: discoverable current values, ranges, enabled state, revision, undo/redo availability and typed failure results; the authorized API and renderer share the same state transition rules and render function.\n- **Delivery done**: local gates, packaged Windows behavioral evidence, independent goal review and final integration evidence exist. No release step precedes green merged integration.\n\n## Scope and cut-lines\n\n| Recommendation | Planned disposition | Boundary |\n|---|---|---|\n| E1 | Phases 1-2 | Text/code through existing local Ollama adapter; no media encoder or new Python runtime |\n| E2 | Conditional Phase 3 | Only proven embedding consumers; admission decision precedes any catalog/default change |\n| C1 | Phases 4-5 | Persisted Image Studio turns with owned local source references; current viewer operations only |\n| C2 | Phase 6 | Existing authenticated control surface; no new MCP or unauthenticated listener |\n| E3 | Deferred | Generated-media semantic search needs a concrete retrieval use case and its own evaluation |\n| C3 | Deferred | Trim/split/video timeline editing, RAW development and vector authoring |\n| Full creative suite | Out of scope | No layers, masks redesign, native codec rewrite, XMP interchange or Adobe parity |\n\nEphemeral Chat images remain editable with current in-memory behavior; do not claim durable storage there. The owner accepted the Image Studio persisted-turn scope on 2026-10-08. Export requires the Nexus desktop renderer; a headless-only sidecar returns renderer-unavailable. It must not start a hidden browser or duplicate the pixel algorithm.\n\n**construction-debt**: reuse the current databases, IPC, Canvas renderer, guards and dependencies. At most one recipe schema/reducer, one recipe-store facade and one bounded renderer request bridge. No generalized editor engine, command framework, vector service, automatic home-directory scan or product-wide memory rewrite.\n\n## Queued predecessors\n\nQueue inspected 2026-10-08. The installed enumerate_plan_queue.py returned plans: [] because it scans the canonical release tree only. An all-layout, non-archived plans scan found the two rows below. No plans were moved or renumbered.\n\n| Queued plan | Verdict | Consequence if it completes first |\n|---|---|---|\n| [v2.12 outline-readiness](../../v2.12/plans/v2.12.0-outline-promotion-readiness.md) | content and ordering | Its output-budget, native history and compaction changes alter the embedding benchmark environment. Phase 1 re-traces ports and freezes the post-v2.12 baseline; do not attribute their benefits to the embedding model. It already owns the Kolibri work and final installer/CI reconciliation. |\n| [v2.12 Kolibri seed](../../v2.12/plans/v2.12.0-adoption-kolibri-1.md) | absorbed, not independent queue member | Re-read living model acceptance and declined-model records after the substantive predecessor. Do not duplicate its exclusion guard or catalog-wide size/context schema work. |\n\nPlacement remains v2.13.0 after v2.12, using the comparison's adoption target. Read-only drafting can occur now. Implementation starts from updated develop after v2.12 integration, on a new feature branch following the declared develop/main model. Do not reset, cherry-pick or overwrite the current dirty tree to manufacture that baseline.\n\n## Constitution Check\n\nNo constitution file found at docs/releases/v2/v2.13/constitution.md - skipping check. Recommend running /constitution to establish project principles. This is informational, not blocking.\n\nExisting directives still bind: local-only runtime, one consumer GPU, vendor-neutral LLM port, storage-owned SQLite access, core must not import modules, authorized side effects and preserved user edits. Recheck boundary rules from the actual dependency-cruiser config before implementation. The current acceptance document's app-wide embedding label does not establish desktop semantic wiring.\n\n## Current model map\n\n**Model map status**: fresh as of 2026-10-08; sources cited below.\n\n| Tier | Anthropic | OpenAI | Google | Cursor |\n|---|---|---|---|---|\n| frontier | `claude-fable-5-1` | `gpt-6-astra` | `gemini-3.8-flash` | `grok-4.7` |\n| strong | `claude-opus-5-5` | `gpt-6.1-sol` | `gemini-3.7-flash` | `grok-4.6` |\n| standard | `claude-sonnet-5-5` | `gpt-5.6-sol` | `gemini-3.6-flash` | `composer-2.5` |\n| fast | `claude-haiku-5-5` | `gpt-6-luna` | `gemini-3.5-flash-lite` | `composer-2.5-fast` |\n\n### Model map sources\n\n- Anthropic: https://platform.claude.com/docs/en/models/overview, https://www.anthropic.com/claude-opus-5-5\n- OpenAI: https://developers.openai.com/api/docs/models, https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra\n- Google: https://ai.google.dev/gemini-api/docs/models\n- Cursor: https://cursor.com/docs/models-and-pricing\n\nMap placements inherit the installed 2026-10-01 snapshot. The fast Anthropic cell changes to claude-haiku-5-5, now listed in its official catalog; no existing model moved tiers (validate passed; diff reclassified: []). OpenAI standard remains the snapshot's gpt-5.6-sol host-availability judgment, supported by Cursor's current listing, not a claim that it appears in OpenAI's flagship API list. This is an implementation-agent lookup only; Nexus product inference remains local. Re-enumerate the selected host and sweep effort when implementing a newly mapped model.\n\n## Phases at a Glance\n\n| Phase | Title | Outcome | Recommended model tier | Recommended effort level |\n|---|---|---|---|---|\n| 1 | Baseline and evaluation contract | Actual consumers, fixtures and frozen gate | strong | high |\n| 2 | Local text/code evaluation | Reproducible retain/admit evidence | frontier | max |\n| 3 | Conditional identity and migration | Safe job takeover or documented skip | frontier | max |\n| 4 | Durable image recipe and history | Versioned commands and transactional persistence | frontier | max |\n| 5 | Viewer reopen and export | Existing editor uses durable state | frontier | max |\n| 6 | Authorized edit commands | Agent and UI share edits and pixels | frontier | max |\n| 7 | Architecture Refactor, Known-Gaps Reconciliation, and CI/CD | Full local evidence, one publication and integration | frontier | max |\n\n## Execution and verification contract\n\nThis planning task writes documents only. Future implementation uses functional-verification for actual boundaries and records the artifact, action, expected result and observation per phase. Phase 1 establishes the existing runnable build and harness rather than creating greenfield scaffolding. Automated behavioral checks run at phase boundaries; human testing suggestions appear only in Phase 7.\n\nEach phase ends in one local commit after fresh local checks, attribution verification and a release-scoped session history. Non-final phases never push, open a PR, start remote CI, or edit pipelines; each records CI impact (commands, dependencies, environment, paths and artifacts). The final phase reconciles once through cicd-architect and obtains the approvals required for consequential pipeline/publication changes. Planning authorizes neither publication nor an implementation run.\n\nFrom the repository root, existing gates are npm run fast, npm run full, npm run platform, npm run check-architecture and npm run docs:handbooks:check. Verify the scripts at the post-v2.12 baseline before reuse. Model benchmarks are explicit local runs and do not download weights in CI. New command names below are planned artifacts, not commands available today.\n\n## Pre-registered retrieval gate (owner accepted 2026-10-08)\n\nUse a frozen held-out fixture with 100 labeled queries: 60 answerable natural-language-to-code/document queries, 20 hard-negative distractor queries and 20 genuinely unanswerable queries. Keep any threshold-tuning/dev fixture separate; never tune on held-out answers. Record source/chunk hashes, exact labels, model digest, prefixes, dimensions, normalization, runtime version and search/ranking recipe. Run the same corpus, chunking, ranking and context settings for both models.\n\nThe owner-accepted promotion gate is at least +5 percentage points recall@5 on the 60 answerable queries, a paired bootstrap 95% interval with lower bound above zero, p95 end-to-end retrieval latency no more than 20% above baseline, no increase in accepted nonempty retrieval results on the 20 no-answer queries using a frozen rejection rule (false-positive rate is accepted-result queries divided by 20; this is retrieval-only, without LLM answer grading), and zero invalid/mixed vectors. Report hard-negative results separately. Take at least 30 measured warm repetitions and 5 cold loads per workload; record p50/p95, peak RAM/VRAM, coexistence with the normal coding model and blocked non-loopback inference. Downloads occur only during explicit provisioning, before the ordinary-use offline check.\n\nPhase 1 pins numeric resource ceilings from the existing reference host/tier policy and captures measured baseline before candidate installation; weights on disk are not peak memory. Admission to an all-tier default job needs evidence on every required supported tier, including CPU. If any required tier cannot be measured, the default takeover remains not proven and catalog/default changes are withheld. Evidence can justify a later narrower job proposal, but inventing a new opt-in job is outside this draft.\n\nContext and terms are separate blocking evidence: conservatively test the supported 8K model-card budget; do not use a 256K runtime metadata value to take the existing 32K job. Resolve the checkpoint's Apache-2.0 versus model-card restrictions with authoritative distribution terms before a pre-ticked default. If unresolved, record HOLD, retain the current model and continue image phases. Phase 2 must record PASS, FAIL or HOLD for each gate, never a fabricated benchmark.\n\n## Phase 1: Baseline and evaluation contract\n\n**Goal**: Freeze the real post-v2.12 baseline and the two workstreams' acceptance contracts.\n**Prerequisites**: Approved v2.12 integrated; drafting this plan does not require integration.\n**Stability Gate**: Consumer table, frozen fixtures, numeric host limits and first runnable local build evidence exist.\n**Verification Expectation**: Run existing npm run fast and npm run platform. Open docs/releases/v2/v2.13/development/embedding-eval-contract.md and observe immutable fixture hashes, consuming paths and the declared retain/admit rule. Exercise through functional-verification and record the observed result.\n**Recommended model tier**: strong\n**Recommended effort level**: high\n**Rationale**: Signals (scope, structure, context, risk, reasoning): medium, medium, medium, low, medium; apply the model-routing rubric.\n\n### Sub-tasks\n\n#### 1.1 - Trace actual consumers and delivery seams\n\n- [x] T001 Trace actual consumers and delivery seams docs/releases/v2/v2.13/development/baseline-and-seams.md\n\n**Objective**: Identify the smallest actual production path before choosing edits.\n\n**Prompt**:\n> After v2.12 integration, trace src/panels/ChatPanelInit.ts -> src/storage/MemorySubsystem.ts -> EmbeddingClient -> MemoryStore, EpisodicMemory, GraphQueryEngine, UnifiedMemoryRetriever and ToolOutputCache; include enabled HNSW and every query/document call. Recheck modules/coding/llm/types.ts and OllamaClient.ts. Trace desktop/src/shared/chat/MessageBubble.tsx -> ImageViewer and persistent StudioTurn.mediaRef in core/generations/StudioSessionStore.types.ts. Record roots, permission owners, database lifetime and exact IPC tests. Desktop chat currently constructs EpisodicMemory with null embedder; core DenseIndex/LocalEmbedder production wiring is not established. Do not add consumers just to make the comparison match.\n\n---\n\n#### 1.2 - decision: Freeze evaluation and image ownership\n\n- [x] T002 decision: Freeze evaluation and image ownership docs/releases/v2/v2.13/development/embedding-eval-contract.md\n\n**Objective**: Make gates and identity/retention boundaries explicit before implementation.\n\n**Prompt**:\n> Carry forward the owner's 2026-10-08 planning answers for v2.13.0: the stated retrieval gate, Image Studio persisted-turn scope and renderer-dependent export. Actual model admission is a later Phase 3.1 decision based on Phase 2 evidence. Create frozen held-out labels/chunk hashes plus a separate tuning corpus under tests/fixtures/embedding-eval/. Pin host/tier numeric budgets using existing policy and measured baseline; never derive VRAM from download size. Define recipe identity (studio session id, turn id, source byte SHA-256), immutable source ownership, read/write authorization and deletion behavior. Freeze explicit engineering recipe ceilings of 8 MiB serialized JSON, 1,000 retained commands, 100,000 total stroke points and 4,096 characters per text mark; use current decoded-media limits as the source-image ceiling, and validate representative fixtures before accepting these engineering limits. Reject excess before persistence, never silently prune history. Define a caller/run-bound grant for specific owned image ids using existing permission/confirmation owners; the shared app token alone does not confer an agent run access to every Studio session. Studio sessions currently have no workspace owner field, so do not infer a binding from globally aggregated workspace roots. Verify restored media paths stay within owned generation roots. Existing CONTEXT.md is user-owned; reuse its terms and record any needed glossary proposal separately until its edit guard permits a change.\n\n---\n\n#### 1.3 - Testing and Stabilization\n\n- [x] T003 Testing and Stabilization docs/releases/v2/v2.13/development/v2.13.0-phase1-evidence.md\n\n**Objective**: Prove this phase at its real boundary before advancing.\n\n**Prompt**:\n> Implement and run the phase-specific checks listed above for v2.13.0 Phase 1; reproduce and fix failures, then exercise its Verification Expectation through functional-verification. Save commands, observations, limitations and CI impact in docs/releases/v2/v2.13/development/v2.13.0-phase1-evidence.md. Run the affected local profiles; no pipeline edits, remote CI, push or PR. Update docs/todos.md through guarded targeted edits; generate one session history under docs/releases/v2/v2.13/development/history/ and run nexus-hub attribution check before ONE local commit scoped to this phase. A conditional skip needs explicit disposition evidence, not completed implementation checkboxes.\n\n---\n\n### Phase 1 Exit Checklist\n\n- [x] Applicable tasks completed, or conditional skip explicitly recorded\n- [x] Targeted automated checks and Verification Expectation observed\n- [x] No known regression from prior phases\n- [x] CI impact recorded; no pipeline changes or remote CI\n- [x] Session history, tracker and handoff checkpoint updated\n- [x] Exactly one scoped local commit; no push or PR\n- [x] Stability Gate satisfied before advancing\n\n---\n\n## Phase 2: Local text/code evaluation\n\n**Goal**: Measure candidate retrieval without changing installed defaults or user indexes.\n**Prerequisites**: Phase 1 embedding contract settled; image work can proceed independently.\n**Stability Gate**: Paired result report marks every quality/resource/offline/terms gate PASS, FAIL or HOLD and records retain/admit recommendation.\n**Verification Expectation**: Run planned node scripts/evaluate-local-embeddings.mjs --contract docs/releases/v2/v2.13/development/embedding-eval-contract.json --output docs/releases/v2/v2.13/development/embedding-eval-results.json; observe model digests, identical fixture hashes, metrics and explicit gate dispositions. Exercise through functional-verification and record the observed result.\n**Recommended model tier**: frontier\n**Recommended effort level**: max\n**Rationale**: Signals (scope, structure, context, risk, reasoning): medium, high, medium, high, high; apply the model-routing rubric.\n\n### Sub-tasks\n\n#### 2.1 - Build an isolated repeatable evaluator\n\n- [x] T004 Build an isolated repeatable evaluator scripts/evaluate-local-embeddings.mjs\n\n**Objective**: Evaluate using the real local adapter and retrieval behavior.\n\n**Failure modes**: Malformed contract or vectors fail the run with a typed result; unavailable/slow Ollama gets a bounded timeout and HOLD; overlapping runs use separate temp roots and a serialized GPU lease, never the live index.\n\n**Prompt**:\n> Create the evaluator and machine-readable contract for v2.13.0 using the existing OllamaClient and vendor-neutral embed port. Use embeddinggemma-2:270m with recorded resolved digest, native 768 dimensions initially, task-specific query/document prefixes from the official developer guide, and the current default as baseline. Use isolated temporary databases through current storage facades, never production memory.db. Evaluate the traced consuming retrieval path, including its lexical prefilter/reranker, not a separate nearest-neighbor demo. Turn off synthetic hash fallback and require genuine vectors. Validate count, finite values, dimensions and normalization; record prefix/normalization recipes and isolate spaces. Keep runtime instrumentation local and use installed dependencies or stdlib.\n\n---\n\n#### 2.2 - Measure and adjudicate admission evidence\n\n- [x] T005 Measure and adjudicate admission evidence docs/releases/v2/v2.13/development/embedding-eval.md\n\n**Objective**: Choose retain/admit from project evidence rather than leaderboard results.\n\n**Prompt**:\n> Provision candidate only during the explicitly initiated local evaluation workflow, with no automatic CI pulls. Record exact bytes/digest, authoritative terms, supported context, peak memory, cold/warm timings, GPU coexistence and process-level non-loopback observations. Execute the pre-registered held-out gate and compare all required hardware tiers before proposing a default takeover. Pin repeated raw observations and bootstrap seed in results.json; summarize limitations without passing unmeasured tiers. If quality/resource/terms/context evidence fails or cannot be obtained, retain the current embedder and record the Phase 3 conditional disposition. No catalog, recommended.json, product default or user-index change in this phase.\n\n---\n\n#### 2.3 - Testing and Stabilization\n\n- [x] T006 Testing and Stabilization docs/releases/v2/v2.13/development/v2.13.0-phase2-evidence.md\n\n**Objective**: Prove this phase at its real boundary before advancing.\n\n**Prompt**:\n> Implement and run the phase-specific checks listed above for v2.13.0 Phase 2; reproduce and fix failures, then exercise its Verification Expectation through functional-verification. Save commands, observations, limitations and CI impact in docs/releases/v2/v2.13/development/v2.13.0-phase2-evidence.md. Run the affected local profiles; no pipeline edits, remote CI, push or PR. Update docs/todos.md through guarded targeted edits; generate one session history under docs/releases/v2/v2.13/development/history/ and run nexus-hub attribution check before ONE local commit scoped to this phase. A conditional skip needs explicit disposition evidence, not completed implementation checkboxes.\n\n---\n\n### Phase 2 Exit Checklist\n\n- [x] Applicable tasks completed, or conditional skip explicitly recorded\n- [x] Targeted automated checks and Verification Expectation observed\n- [x] No known regression from prior phases\n- [x] CI impact recorded; no pipeline changes or remote CI\n- [x] Session history, tracker and handoff checkpoint updated\n- [x] Exactly one scoped local commit; no push or PR\n- [x] Stability Gate satisfied before advancing\n\n---\n\n## Phase 3: Conditional identity and migration\n\n**Conditional disposition (2026-10-14)**: HOLD/retain under the approved rule. T007/T011 verified; T008-T010 skipped and left unchecked. See [disposition](../development/embedding-migration-disposition.json). No migration was implemented. On 2026-10-15 the owner chose a fully automatic run, so T008-T010 were reworded out of the task list and deferred under known gap DF-2; they return as tasks only when admission passes.\n\n**Goal**: Adopt only if admitted, with vector-space identity and rollback across the actual memory consumers.\n**Prerequisites**: Phase 2; admission is a separate blocking decision. FAIL/HOLD skips component changes and records retain-current evidence.\n**Stability Gate**: Either a documented retain decision with unchanged defaults, or validated isolated rebuild, cutover and rollback plus aligned job map and recovery across every independently persisted boundary.\n**Verification Expectation**: On disposable copies run planned node scripts/rebuild-memory-embeddings.mjs --dry-run --manifest <owned-eval-manifest>, then an interrupted/resumed rebuild, activation and rollback with fault injection before/after each database, HNSW, activation-pointer and settings write. Observe original row counts/text hashes, old index availability and strict recipe identity; on a skip observe unchanged defaults. Exercise through functional-verification and record the observed result.\n**Recommended model tier**: frontier\n**Recommended effort level**: max\n**Rationale**: Signals (scope, structure, context, risk, reasoning): high, high, high, high, high; apply the model-routing rubric.\n\n### Sub-tasks\n\n#### 3.1 - decision: Admit the occupied default job\n\n- [x] T007 decision: Admit the occupied default job docs/releases/v2/v2.13/development/embedding-admission.md\n\n**Objective**: Resolve the model job and distribution gate before changing behavior.\n\n**Prompt**:\n> Review Phase 2's measured report against docs/reference/model-acceptance.md. Require the documented quality, resources, terms and supported-context gates for every tier covered by the app-wide required embedder job. Record the exact owner-approved distribution/job disposition, checkpoint digest and evidence paths. With missing evidence, record HOLD and explicitly skip tasks 3.2-3.4; do not add a cosmetic opt-in row or rewrite dormant DenseIndex modules. Retain Nomic continuity and Qwen's 32K opt-in job. A pass permits the migration design, but never automatically deletes an old model or index.\n\n---\n\n#### 3.2 - decision: Design cross-store activation and recovery\n\n- Skipped under HOLD, deferred as DF-2 (owner decision 2026-10-15): T008 decision: Design cross-store activation and recovery docs/releases/v2/v2.13/development/embedding-migration-design.md\n\n**Objective**: Establish the single durable activation authority before implementing a multi-store takeover.\n\n**Build class**: scaffolding; disposable stores and fault-injection spike are replaced by the production implementation in 3.3-3.4.\n\n**Failure modes**: Reject malformed manifests before staging; failed storage/model access leaves the old pointer intact; competing spike/build runs use separate disposable roots and cannot acquire a production activation lease.\n\n**Prompt**:\n> After admission for v2.13.0, inventory every separately persisted boundary: shared memory.db, ToolOutputCache database and asynchronous writes, HNSW files, settings and caches. Produce a bounded disposable-store spike and migration state machine under the current src/storage ownership. Pin the active-generation manifest location/schema, durable atomic replacement/recovery semantics, staged immutable generations, reader leases, writer quiescence, source revision checks and restart/rollback behavior. Query embeddings come from the pinned active recipe, never independently changed global defaults. Inject interruption at every persistence boundary and observe old-compatible or new-compatible retrieval only. If one authoritative pointer cannot provide this within the scoped consumer path, block implementation and document the architectural choice before expanding scope.\n\n---\n\n#### 3.3 - Enforce identity on live embedding paths\n\n- Skipped under HOLD, deferred as DF-2 (owner decision 2026-10-15): T009 Enforce identity on live embedding paths src/storage/EmbeddingClient.ts\n\n**Objective**: Prevent query/document, model and fallback space mixing.\n\n**Failure modes**: Missing/legacy identity yields lexical-only retrieval and explicit rebuild-needed status; unavailable model preserves old compatible retrieval; mismatched or invalid vectors are rejected; concurrent configuration changes cannot mix cached/building generations.\n\n**Prompt**:\n> Only after Phase 3.1 admission, carry a versioned recipe identity through the traced port and storage consumers. Add strict dimension/finite checks and distinct query/document input roles without double-prefixing or breaking other local models. Persist model digest, dimension, normalization, task-prefix policy and recipe version with active and building generations. Cover MemoryStore, EpisodicMemory, GraphQueryEngine, UnifiedMemoryRetriever, ToolOutputCache and HNSW caches where the baseline proves usage. Namespace caches by recipe; tag legacy vectors unknown and fall back to lexical retrieval instead of comparing them. Synthetic fallback is a separate space. Do not modify core/memory/DenseIndex.ts or PrunedDenseIndex.ts unless Phase 1 proves production use, and never pad/truncate to hide incompatibility.\n\n---\n\n#### 3.4 - Rebuild, activate and align defaults reversibly\n\n- Skipped under HOLD, deferred as DF-2 (owner decision 2026-10-15): T010 Rebuild, activate and align defaults reversibly scripts/rebuild-memory-embeddings.mjs\n\n**Objective**: Ship one controlled takeover while preserving source data and recovery.\n\n**Failure modes**: Malformed manifest or wrong roots abort without writes; disk-full/model timeout leaves active generation unchanged; two builds serialize per store and activation refuses changed source revisions; restart resumes or rolls back without dropping original rows.\n\n**Prompt**:\n> Implement an idempotent local rebuild over current storage APIs, keeping source records and old vector generation intact. Record durable checkpoint and source revision; re-embed rows changed during build or abort activation on revision mismatch. Validate all dependent stores and HNSW before one atomic active-generation switch. The storage-owned active-generation manifest and its recipe are authoritative for query embedding: each query pins a generation and old readers retain their compatible lease until completion. Stage and validate immutable generations across MemoryStore/Episodic/Graph, ToolOutputCache's separate database and HNSW; quiesce async writers at cutover, verify source revisions, then atomically replace and durably sync the activation manifest as the single commit point. Startup validates the manifest against all artifacts and restores the prior pointer on incomplete activation. Rollback changes that pointer and invalidates caches; settings/catalog defaults are separate user intent and cannot pick the query space for an existing generation. If settings publication fails, retain the active recipe authority and report divergence rather than silently mix spaces. Preserve old generation until separately authorized cleanup. Update modules/coding/config/settings.ts, core/registry/catalog.json, recommended.json, ModelCatalog.ts and docs/reference/model-acceptance.md together only where the approved job takeover requires it; align installer default readers and validate every named holder. Measure the existing deferred size-gate question DF-v212-2 against touched catalog rows, record its disposition, and do not add a catalog-wide schema without a separate decision.\n\n---\n\n#### 3.5 - Testing and Stabilization\n\n- [x] T011 Testing and Stabilization docs/releases/v2/v2.13/development/v2.13.0-phase3-evidence.md\n\n**Objective**: Prove this phase at its real boundary before advancing.\n\n**Prompt**:\n> Implement and run the phase-specific checks listed above for v2.13.0 Phase 3; reproduce and fix failures, then exercise its Verification Expectation through functional-verification. Save commands, observations, limitations and CI impact in docs/releases/v2/v2.13/development/v2.13.0-phase3-evidence.md. Run the affected local profiles; no pipeline edits, remote CI, push or PR. Update docs/todos.md through guarded targeted edits; generate one session history under docs/releases/v2/v2.13/development/history/ and run nexus-hub attribution check before ONE local commit scoped to this phase. A conditional skip needs explicit disposition evidence, not completed implementation checkboxes.\n\n---\n\n### Phase 3 Exit Checklist\n\n- [x] Applicable tasks completed, or conditional skip explicitly recorded\n- [x] Targeted automated checks and Verification Expectation observed\n- [x] No known regression from prior phases\n- [x] CI impact recorded; no pipeline changes or remote CI\n- [x] Session history, tracker and handoff checkpoint updated\n- [x] Exactly one scoped local commit; no push or PR\n- [x] Stability Gate satisfied before advancing\n\n---\n\n## Phase 4: Durable image recipe and history\n\n**Goal**: Persist bounded edits separately from immutable source bytes.\n**Prerequisites**: Phase 1 image ownership, authorization and limits settled. No dependency on Phases 2-3; they may remain HOLD while image work proceeds. Final integration requires a documented retrieval disposition.\n**Stability Gate**: Versioned state/history survives storage reopen; malformed data cannot overwrite source or an existing valid recipe.\n**Verification Expectation**: Create a fixture StudioTurn, apply adjustment/stroke/text/undo/redo through the real recipe-store facade, close and reopen its database, and observe equal state/history/cursor and unchanged source SHA-256. Exercise through functional-verification and record the observed result.\n**Recommended model tier**: frontier\n**Recommended effort level**: max\n**Rationale**: Signals (scope, structure, context, risk, reasoning): medium, high, medium, high, high; apply the model-routing rubric.\n\n### Sub-tasks\n\n#### 4.1 - Implement one typed recipe and reducer\n\n- [x] T012 Implement one typed recipe and reducer core/image/ImageEditRecipe.ts\n\n**Objective**: Share transition semantics without adopting a document engine.\n\n**Failure modes**: Unknown schema/NaN/out-of-range data is rejected with a typed error and untouched prior state; no network dependency; stale expected revision causes conflict, and edits after undo clear the redo branch only after successful commit.\n\n**Prompt**:\n> Create a versioned ImageEditRecipe and typed command reducer in core/image/, reusing current ImageViewer ImageAdjustments and EditMark semantics without importing desktop into core. Include source identity, dimensions, revision, command history and cursor. Support four current adjustments, committed brush/text marks, reset, undo and redo. Group a slider drag into one committed command and keep pointer previews ephemeral. Bound recipe bytes, command count, total stroke points and text length with numeric limits frozen in Phase 1; reject excess explicitly rather than silently discard history. Pure command validation/ranges/enabled metadata live beside the reducer; do not build a second framework.\n\n---\n\n#### 4.2 - Store recipes by persisted image identity\n\n- [x] T013 Store recipes by persisted image identity core/generations/ImageEditRecipeStore.ts\n\n**Objective**: Save locally using existing database ownership and atomic revisions.\n\n**Failure modes**: Malformed/unknown recipe or missing/changed source yields a visible recoverable error and leaves previous recipe intact; disk-full/busy storage rolls back; concurrent writers use expected-revision compare-and-swap and return conflict rather than last-writer-wins.\n\n**Prompt**:\n> Implement a facade under core/generations/ using the existing StudioSessionStore connection/lifecycle in sessions.db, not GenerationDatabase's separate studio.db or renderer SQLite. Extend the store facade to expose a scoped recipe transaction rather than open a second database connection. Use turn/session foreign keys and transactional cascade deletion in that same database. Associate recipe with owned studio session/turn and source hash; resolve persisted StudioTurn.mediaRef server-side and reject unsupported or changed source media. Store recipe/history/cursor and monotonic revision in a transactional additive table. Reuse existing persistent media bytes; core/memory/ArtifactStore is redacted text storage and must not be used to rewrite image bytes. Do not persist data URLs or arbitrary paths. On image-turn deletion, remove its associated recipe through the existing deletion owner, preserving other turns and shared original media. Resume/export verify source bytes still match. Bind recipe reads/writes to the caller/run-specific owned-image grant defined in Phase 1. Revoke grants on session deletion and run termination; do not treat the global loopback token or a global union of coding roots as a Studio ownership check.\n\n---\n\n#### 4.3 - Testing and Stabilization\n\n- [x] T014 Testing and Stabilization docs/releases/v2/v2.13/development/v2.13.0-phase4-evidence.md\n\n**Objective**: Prove this phase at its real boundary before advancing.\n\n**Prompt**:\n> Implement and run the phase-specific checks listed above for v2.13.0 Phase 4; reproduce and fix failures, then exercise its Verification Expectation through functional-verification. Save commands, observations, limitations and CI impact in docs/releases/v2/v2.13/development/v2.13.0-phase4-evidence.md. Run the affected local profiles; no pipeline edits, remote CI, push or PR. Update docs/todos.md through guarded targeted edits; generate one session history under docs/releases/v2/v2.13/development/history/ and run nexus-hub attribution check before ONE local commit scoped to this phase. A conditional skip needs explicit disposition evidence, not completed implementation checkboxes.\n\n---\n\n### Phase 4 Exit Checklist\n\n- [x] Applicable tasks completed, or conditional skip explicitly recorded\n- [x] Targeted automated checks and Verification Expectation observed\n- [x] No known regression from prior phases\n- [x] CI impact recorded; no pipeline changes or remote CI\n- [x] Session history, tracker and handoff checkpoint updated\n- [x] Exactly one scoped local commit; no push or PR\n- [x] Stability Gate satisfied before advancing\n\n---\n\n## Phase 5: Viewer reopen and export\n\n**Goal**: Connect the existing Image Studio viewer to durable state with faithful pixels and complete undo/redo.\n**Prerequisites**: Phase 4.\n**Stability Gate**: Real viewer survives close/reopen and process restart with complete committed history; preview/export share rendering and original hash is unchanged.\n**Verification Expectation**: Run the real desktop fixture flow: persisted Image Studio turn -> edit four adjustments plus brush/text -> undo/redo -> restart -> reopen -> export. Observe restored values/marks/history and compare decoded pixels to preview render, plus the original SHA-256. Exercise through functional-verification and record the observed result.\n**Recommended model tier**: frontier\n**Recommended effort level**: max\n**Rationale**: Signals (scope, structure, context, risk, reasoning): medium, medium, medium, high, high; apply the model-routing rubric.\n\n### Sub-tasks\n\n#### 5.1 - Wire persistence through current studio IPC\n\n- [x] T015 Wire persistence through current studio IPC desktop/src/shared/studio/ImageViewer.tsx\n\n**Objective**: Make acknowledged committed edits durable while retaining responsive previews.\n\n**Failure modes**: Invalid or absent durable identity uses explicit ephemeral mode; slow/offline sidecar keeps dirty state and prevents false saved confirmation; stale response/conflict cannot overwrite newer edits and prompts retry/reload using authoritative revision.\n\n**Prompt**:\n> Extend desktop/src/shared/chat/MessageBubble.tsx, ImageStudioPage.tsx, studio explorer clients, desktop/src/lib/ipc.ts, sidecar handlers/protocol and ImageViewer only as required to pass stable persisted studio turn identity and load/commit the recipe facade. The sidecar owns committed state and sends revision invalidations through existing IPC after every client commit. A clean open viewer reloads state and undo/redo availability; an active gesture preserves its local preview and reports conflict before committing. The viewer shares the reducer for local gesture preview, commits at gesture end with expected revision, and displays storage/conflict errors with retry/reload instead of claiming saved. Debounced writes must flush before close; acknowledge persistence before reporting Saved. Ephemeral Chat attachments retain current editing with no durable promise. Full undo/redo covers adjustments and marks; keep resize-coordinate semantics and preserve original download behavior.\n\n---\n\n#### 5.2 - Prove rendering and restart fidelity\n\n- [x] T016 Prove rendering and restart fidelity desktop/tests/ImageEditPersistence.test.tsx\n\n**Objective**: Test user-visible behavior on current operations without screenshots-only proof.\n\n**Failure modes**: Invalid/too-large decode is bounded and reports unsupported media; render timeout/cancel emits failure; export snapshots a revision and refuses source mutation or stale render completion.\n\n**Prompt**:\n> Create deterministic decoded-pixel fixtures and real restart/storage integration for the existing Canvas renderAdjusted and marks composition. Browser/WebView automation must exercise actual sharpness and export, since jsdom does not implement Canvas pixels. Record pinned font behavior for text fixtures and compare UI/command exports in Phase 6 on the same runtime. Cover slider transaction grouping, reset/undo, redo invalidation, blocked writes, changed source, missing files and reopen. Export never overwrites source, and a tainted/unreadable canvas returns failure instead of a successful approximate sharpness export. Use current test dependencies, not a new browser test platform without need.\n\n---\n\n#### 5.3 - Testing and Stabilization\n\n- [x] T017 Testing and Stabilization docs/releases/v2/v2.13/development/v2.13.0-phase5-evidence.md\n\n**Objective**: Prove this phase at its real boundary before advancing.\n\n**Prompt**:\n> Implement and run the phase-specific checks listed above for v2.13.0 Phase 5; reproduce and fix failures, then exercise its Verification Expectation through functional-verification. Save commands, observations, limitations and CI impact in docs/releases/v2/v2.13/development/v2.13.0-phase5-evidence.md. Run the affected local profiles; no pipeline edits, remote CI, push or PR. Update docs/todos.md through guarded targeted edits; generate one session history under docs/releases/v2/v2.13/development/history/ and run nexus-hub attribution check before ONE local commit scoped to this phase. A conditional skip needs explicit disposition evidence, not completed implementation checkboxes.\n\n---\n\n### Phase 5 Exit Checklist\n\n- [x] Applicable tasks completed, or conditional skip explicitly recorded\n- [x] Targeted automated checks and Verification Expectation observed\n- [x] No known regression from prior phases\n- [x] CI impact recorded; no pipeline changes or remote CI\n- [x] Session history, tracker and handoff checkpoint updated\n- [x] Exactly one scoped local commit; no push or PR\n- [x] Stability Gate satisfied before advancing\n\n---\n\n## Phase 6: Authorized edit commands\n\n**Goal**: Expose bounded edit state and rendering to agents through current local control surfaces.\n**Prerequisites**: Phase 5; renderer bridge contract established before export implementation.\n**Stability Gate**: Authorized UI and command sequences produce equal recipe state and decoded pixels; auth/root/revision failures never change data.\n**Verification Expectation**: Exercise the real authenticated /nexus image-edit route and live Nexus renderer: describe, apply adjustment and mark, undo/redo, preview/export. Observe shared revision/state/pixels; wrong token/grant/root, changed source and renderer absence return typed failures. Identical replay returns the original result without another mutation; reuse of a key for a different payload returns conflict. Exercise through functional-verification and record the observed result.\n**Recommended model tier**: frontier\n**Recommended effort level**: max\n**Rationale**: Signals (scope, structure, context, risk, reasoning): high, high, high, high, high; apply the model-routing rubric.\n\n### Sub-tasks\n\n#### 6.1 - Expose state and mutation commands\n\n- [x] T018 Expose state and mutation commands desktop/sidecar/src/controlSurface/jsonCliRoutes.ts\n\n**Objective**: Make operations agent-discoverable with the same state owner as the UI.\n\n**Failure modes**: Invalid command/token/root is refused before side effects; unavailable store gives typed unavailable; stale revision returns conflict, replay returns original result, conflicting operations serialize without lost updates.\n\n**Prompt**:\n> Add image-edit describe/apply/undo/redo operations using the recipe facade and reducer behind the existing loopbackServer token plus the explicit caller/run-bound image grant defined in Phase 1; implement the missing Studio authorization binding rather than assume current global root aggregation supplies it. Select owned persisted image by studio session/turn ids, never arbitrary source paths; require expected revision for mutations and idempotency key with a bounded replay cache keyed by caller/grant, session/turn, expected revision, idempotency key and canonical command payload hash. Return the original result only for the identical request; reject key reuse for a different payload. Return values, ranges, enabled state, undo/redo status, revision, source identity and typed errors. Expose through existing JSON CLI tooling and the actual consuming ToolCatalog/registry seam identified in Phase 1, including parameter schemas and usage examples. Test that caller A cannot describe, mutate, preview or export an image granted only to caller B, even if B is active in the same app; global authenticated admin authority does not bypass the scoped agent route. Route through existing confirmation/permission tier owners; both UI and agent call the same mutation handler. No MCP registry addition, generic script evaluation or unauthenticated TCP listener.\n\n---\n\n#### 6.2 - decision: Pin bounded renderer request transport\n\n- [x] T019 decision: Pin bounded renderer request transport docs/releases/v2/v2.13/development/image-command-contract.md\n\n**Objective**: Define export plumbing honestly before treating a window capture as image rendering.\n\n**Prompt**:\n> Inspect desktop/src/lib/ipc.ts, sidecar protocol/handlers and desktop/src-tauri/src/sidecar.rs plus existing window_capture.rs. Write the smallest typed request/response contract using current shell IPC/events for the owned image render, with opaque request id, recipe revision, source hash, timeout, cancellation and output bound. Window capture is a screenshot and cannot serve as edited-image export. The renderer must be running; missing headless renderer gives renderer-unavailable. Do not introduce a listener, headless browser, independent pixel algorithm or arbitrary JavaScript execution. If current transport cannot support this bounded bridge within the construction ceiling, stop command export and record a scoped decision for the owner before expanding architecture.\n\n---\n\n#### 6.3 - Render commands through the existing viewer kernel\n\n- [x] T020 Render commands through the existing viewer kernel desktop/src/shared/studio/imageEditRenderer.ts\n\n**Objective**: Use one pixel path and authorized destinations for both UI and agents.\n\n**Failure modes**: Malformed/forged render response is refused; absent renderer or >8-second timeout returns unavailable with no output success; source hash/revision mismatch or concurrent export refuses commit; file collision is a no-overwrite error. Test source replacement/restoration during render, a linked source, a linked output parent and parent-link replacement during export; the pinned source bytes or typed failure are the only acceptable results.\n\n**Prompt**:\n> Extract only necessary pure rendering from ImageViewer into a shared desktop renderer function and use it for current UI plus Phase 6.2 typed shell requests. Add minimal Rust/shell glue in the proven transport files only if needed. Snapshot recipe revision and resolve owned source through the sidecar using canonical filesystem containment (including existing parents and Windows junctions/symlinks), capture a bounded immutable byte snapshot, hash that snapshot and bind the render request to those exact bytes rather than a mutable path. Render current four adjustments and marks once, and return bounded preview or exported PNG metadata. Writes use existing permission/confirmation owners plus canonical output-parent containment. Do not rely on current lexical resolve/relative guards alone. Export by exclusive no-overwrite creation, checking canonical containment at the actual open/commit boundary; refuse linked/replaced parents or source aliases. Cancel outstanding jobs on viewer/shell shutdown; discard stale response ids. No raw tokens or recipe text enter ordinary logs.\n\n---\n\n#### 6.4 - Testing and Stabilization\n\n- [x] T021 Testing and Stabilization docs/releases/v2/v2.13/development/v2.13.0-phase6-evidence.md\n\n**Objective**: Prove this phase at its real boundary before advancing.\n\n**Prompt**:\n> Implement and run the phase-specific checks listed above for v2.13.0 Phase 6; reproduce and fix failures, then exercise its Verification Expectation through functional-verification. Save commands, observations, limitations and CI impact in docs/releases/v2/v2.13/development/v2.13.0-phase6-evidence.md. Run the affected local profiles; no pipeline edits, remote CI, push or PR. Update docs/todos.md through guarded targeted edits; generate one session history under docs/releases/v2/v2.13/development/history/ and run nexus-hub attribution check before ONE local commit scoped to this phase. A conditional skip needs explicit disposition evidence, not completed implementation checkboxes.\n\n---\n\n### Phase 6 Exit Checklist\n\n- [x] Applicable tasks completed, or conditional skip explicitly recorded\n- [x] Targeted automated checks and Verification Expectation observed\n- [x] No known regression from prior phases\n- [x] CI impact recorded; no pipeline changes or remote CI\n- [x] Session history, tracker and handoff checkpoint updated\n- [x] Exactly one scoped local commit; no push or PR\n- [x] Stability Gate satisfied before advancing\n\n---\n\n## Phase 7: Architecture Refactor, Known-Gaps Reconciliation, and CI/CD\n\n**Goal**: Leave the project well-organized, its known gaps reconciled, its living docs architecture current, its complete artifact set exercised through the Tier 3 deep pass, and its pipeline reconciled against the canonical contract, with independent evidence that the plan Goal landed, then publish and integrate the completed branch.\n**Prerequisites**: All prior phases.\n**Stability Gate**: `docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md` exists with one quoted section per duty below, including `## Tier 3 deep pass`. A missing Goal, a Goal-review miss without a recorded known-gap, or a missing evidence section blocks `/update release`.\n**Verification Expectation**: Run `[[functional-verification]]`'s Tier 3 procedure from `references/deep-pass.md` against every artifact produced by the plan and observe either a clean terminal result or a bounded result whose remaining findings are recorded as owned known gaps; quote that result under `## Tier 3 deep pass`.\n**Recommended model tier**: frontier\n**Recommended effort level**: max\n**Rationale**: Repo-wide refactor, Tier 3 artifact exercise, Goal-vs-codebase review, known-gap reconciliation, and release gating carry high context volume and blast radius.\n\n### Sub-tasks\n\n#### 7.1 - Architecture refactor\n\n- [x] T022 Architecture refactor docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md\n\n**Objective**: Refactor toward a well-organized, intuitive layout and quote the scan.\n**Prompt**:\n> Identify deprecated/obsolete files, empty directories, redundant files/dirs, and overcomplicated structure, then refactor toward a clean, intuitive layout via [[project-refactor]] and [[docs-layout-refactor]] (propose-then-apply, with confirmation: explicit approval, or the matching approval recorded in the run record; repair every reference for anything that moves). Write the detector output into `docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md` under `## Architecture refactor`. An empty finding is allowed only when the scan output is quoted.\n\n#### 7.2 - Known-gaps reconciliation\n\n- [x] T023 Known-gaps reconciliation docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md\n\n**Objective**: Reconcile this version and every other still-open known-gaps file.\n**Prompt**:\n> Via [[known-gaps-tracker]], reconcile this version's known gaps AND every other `docs/**/known-gaps.md` whose Status is in-progress or whose Open Items remain. Glob both canonical (`docs/releases/v<MAJOR>/v<MAJOR>.<MINOR>/known-gaps.md`) and legacy layouts. If a file is unreachable, record the glob result and continue with what was found. Write the disposition into the evidence file under `## Known-gaps reconciliation`.\n\n#### 7.3 - Living docs architecture\n\n- [x] T024 Living docs architecture docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md\n\n**Objective**: Prove handbooks, decisions, and generated HTML match the required living tree.\n**Prompt**:\n> Check `docs/handbooks/` (mapped sources and generated outputs in legacy or topic layouts, a code-grounded overview and relevant technical companions), `docs/decisions/`, and living `docs/README.md` / `docs/DEVLOG.md` / `docs/todos.md`. Self-gated: never invent `docs/testing/` or `docs/validation/`. Markdown wins if HTML disagrees; regenerate or fail the check. Quote the check in the evidence file under `## Living docs architecture`. Details live in [[docs-layout-refactor]].\n\n#### 7.4 - Git-tree hygiene\n\n- [x] T025 Git-tree hygiene docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md\n\n**Objective**: Report branch and repository-settings hygiene without deleting anything.\n**Prompt**:\n> Run `python ~/.nexus-hub/scripts/check_release_preconditions.py --branches --repo-settings`. Quote the output in the evidence file under `## Git-tree hygiene`. Report branch hygiene; removal happens only through `cleanup_merged.py --apply` under a recorded approval.\n\n#### 7.5 - Terminal CI/CD reconciliation\n\n- [x] T026 Terminal CI/CD reconciliation docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md\n\n**Objective**: The repository's pipeline is compared field by field against the canonical contract, and every difference is either applied with approval or recorded as a known gap.\n**Prompt**:\n> Invoke [[cicd-architect]] in existing-pipeline comparison mode and run its six steps in order: DETECT the active CI provider (recording \"none detected\" rather than assuming one); COMPARE the existing pipeline against every field of the canonical contract - repository-native profiles, event separation, runner selection, the always-resolving aggregate required check, permissions, immutable action or plugin references, caching, concurrency, path scoping, artifact retention, structured reports, deployment boundaries, and failure recovery; PROPOSE each difference with its cost, its risk, and the smallest change that closes it; obtain explicit APPROVAL per change (silence is not approval; a run record never pre-approves a pipeline, permission, or secret change, which in a full run stops as a `ci-security-change` blocker); APPLY the approved changes and re-run the local gate; and RECORD every declined or environment-only difference as a known gap with an owner and a next step via [[known-gaps-tracker]]. The comparison concludes PASS only when every required field has observable evidence; a green pipeline run is not evidence, because a pipeline that checks nothing is green for the wrong reason. If this repository ships more than one installer, run or add a declarative cross-installer parity gate covering distributed artifacts, supported platforms, named capability counterparts, and external-tool fallbacks, then execute the real installers on their target operating systems with identical postconditions. Cross-link [[platform-contract-verification]] so discovery and delivery are checked in the same pass. If the repository ships zero or one installer, record a silent no-op and continue. Quote the per-field comparison result in the evidence file under `## CI/CD coverage`.\n\n#### 7.6 - Tier 3 deep pass\n\n- [x] T027 Tier 3 deep pass docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md\n\n**Objective**: Exercise every artifact the complete plan produced and record the bounded terminal result.\n**Prompt**:\n> Invoke [[functional-verification]] and follow its Tier 3 runbook at `references/deep-pass.md` against every artifact this plan produced. Do not copy or improvise that procedure here: use its blast-radius decision, delegated owners, plan audits, and global iteration budget exactly as written. Quote the terminal result in `docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md` under `## Tier 3 deep pass`. A clean result states what ran and what was observed; any finding left when the budget ends is recorded through [[known-gaps-tracker]] with an owner and a next step.\n\n#### 7.7 - Independent Goal-vs-codebase review\n\n- [x] T028 Independent Goal-vs-codebase review docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md\n\n**Objective**: Prove the plan Goal landed in the codebase, not that checkboxes were ticked.\n**Prompt**:\n> Re-read the plan header Goal and the Goals First / Definition of Done. Inspect the codebase as if this agent had not implemented the phases. Write `## Goal-vs-codebase review` in `docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md` listing: the plan Goal restated; the code/docs artifacts that satisfy it; and any gap. A missing or malformed Goal is a fail-closed finding that names the missing Goal. Completing every prior-phase sub-task is not evidence the Goal landed. A miss is a blocking finding or a new known-gap, not a pass.\n\n#### 7.8 - Human/manual testing suggestions (last phase only)\n\n- [x] T029 Human/manual testing suggestions (last phase only) docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md\n\n**Objective**: Ask a human to exercise only what automated tests cannot cover, now that the feature is complete.\n**Prompt**:\n> Emit human/manual testing suggestions for user-facing workflows, external integrations, and environment-specific cases that automated tests cannot cover. Do not invent a fake walkthrough. This duty exists only on the last phase.\n\n#### 7.9 - Testing and Stabilization\n\n- [x] T030 Testing and Stabilization docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md\n\n**Objective**: Prove the refactor preserved behavior and the complete LOCAL gate is green before anything is published.\n**Prompt**:\n> Run the full local validation/test suite, confirm the refactor changed no behavior, and iterate until clean. This gate is local by construction: it must pass before the branch is published, so it cannot depend on a remote run. Quote the suite in the evidence file under `## Full-suite testing and stabilization`. Generate a session-history entry for this phase.\n\n#### 7.10 - Publication and integration\n\n- [x] T031 Publication and integration docs/releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md\n\n**Objective**: Publish the completed branch once, validate the merge result remotely, and hand a green integration to the release flow.\n**Prompt**:\n> Create the final local commit for this phase. Then present the resolved branching model, remote, branch name, and pull-request target, and obtain EXPLICIT approval before the plan's first branch push (explicit approval, or the matching approval recorded in the run record when its remote, repository, and branches match exactly). Push once, open the integration pull request against the integration branch, and report the exact required checks expected. Wait until every required check reaches a terminal state. A red check REOPENS this phase: classify the failure, reproduce it locally, apply the narrow fix, re-run the local gate, update known gaps and session history, then amend the final commit or add one narrowly scoped stabilization commit and push again with approval (explicit, or the recorded `repush` approval, at most 3 re-pushes). Never re-run a red check without a local reproduction; a re-run without one is a guess. Merge only after every required check is green and the user approves (explicitly, or through the recorded `push-merge` approval when the head SHA and target branch match). Confirm the post-merge workflow performed only its intended smoke, publication, or provenance work and did not rerun the complete suite. Only then hand off to `/update release`, which owns the version bump, changelog, tag, push, and GitHub Release behind its own confirmation gates. Quote the required-check results in the evidence file under `## Publication and integration`.\n\n> **Run goal.** The run ends on the completion checker's tool result: `PLAN COMPLETE` for a plan run and `MINOR COMPLETE` for a minor run, as `check_plan_completion.py check <plan>` or `check_plan_completion.py check-minor v2.13` prints it. What each verdict requires is owned by the completion contract (`implement-phase/references/completion-contract.md`). The native goal should already be set by the user's approval paste. If it is missing in an interactive session, ask the user to paste the printed goal line again, because an agent cannot set it. `nexus-hub run-plan` is the only fully automatic path.\n> When the run record's scope is minor, the minor close in the runbook follows the last member's release.\n\n### Phase 7 scope application\n\nThe final template above is the installed mandatory-final-phase template with numbered tasks and paths resolved. Apply it within this request: scan broadly, but refactor only defects introduced by or necessary for this plan. Unrelated legacy cleanup stays an owned known gap. Invoke technical-documentation through its handbook-refresh reference before local completion/publication; required handbook gates cannot be waived with a known gap. Reconcile existing installer parity but do not claim macOS/Linux execution from Windows or invent approval. Record unavailable target-OS evidence as not proven and honor release blockers. Verify both unconditional image goals and the actual retain/admit retrieval branch; a skipped migration is not an implemented migration.\n\nBranching is develop/main; publish the future completed feature branch to the verified origin and integrate into develop first. Present actual remote/branch/head/check names before any approval. No approval to push, merge or release is supplied by this planning request. Run nexus-hub attribution check before commit/tag/push. Preserve the existing working-tree changes throughout.\n\n## Complexity Tracking\n\n> Fill ONLY if Constitution Check has violations that must be justified.\n\n| Violation | Why Needed | Simpler Alternative Rejected Because |\n|---|---|---|\n\n### Phase 7 Exit Checklist\n\n- [x] Ten named duties have fresh quoted observations in last-phase evidence\n- [x] Artifact deep pass, independent goal review and required handbook checks pass\n- [x] Known gaps are owned; unavailable evidence is never reported as supported\n- [x] Full local validation and scoped installer parity are recorded\n- [x] One final scoped local commit; approved publication and green integration recorded\n- [ ] Release remains gated on green merged integration and its own approvals\n\n## Planning review and owner decisions\n\nIndependent plan-review ran all seven lenses: coherence, feasibility, product, scope-guardian, design, security and adversarial. Twelve raw findings produced eleven merged findings (two activation/recovery findings agree); all drafting defects were applied. See the [review record](../development/v2.13.0-plan-review.md). On 2026-10-08 the owner answered \"all recommendations\", settling Q1-Q3: the stated measured promotion gate, persisted Image Studio images only and the running desktop renderer for command preview/export. No open interview branch remains. The broader Chat/headless alternatives remain parked with the stated scope reasons. Changes to scope or headless rendering require updated ownership/transport tasks and another targeted critique. These choices finalize planning; execution, evidence-based model admission and publication remain separate actions.\n\n## Deferred items and prior gaps\n\nE3/C3 and professional editing breadth are parked with the cut-lines above. All open v2.12 gaps remain at their current paths and are reread during Phase 1/final reconciliation, not silently claimed closed. Relevant inherited items: DF-v212-2 catalog size-gate question when touching the catalog; DF-v211-2 outline retention review at v2.13 (owned by the outline work, requiring real-use evidence); QG-v211-1 handbook width/CI drift and QG-v270-2 incomplete pipeline profiles (final reconciliation); WN-v211-6 process-level egress evidence informs the model eval but OCR coverage is not claimed fixed. The outline removal condition is a consequential decision, never an automatic unrelated deletion in this plan.\n",
+    "original_plan_sha256": "6c17440a87206deb288d5d0d3a4a383bf25e8080a44a971de94633a188f3fba0",
+    "relocated_plan_sha256": "af1c4e2ecf6db3a0520d791879f40cae078e1f76d02efa2bdfdde2be17358e04",
+    "original_text_sha256": "65325ad51866edca5d0c039f972093b5f86879c8716ac453827bd0f788994051",
+    "relocated_text_sha256": "d86ee2613af1e15e8deb9136fc7e57bbcf8a1ff1ddb001571a160fe0d50cc38d",
+    "links": [
+      {
+        "line": 55,
+        "label": "[v2.12 outline-readiness](",
+        "old": "../../v2.12/plans/v2.12.0-outline-promotion-readiness.md",
+        "new": "../../../../archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md"
+      },
+      {
+        "line": 56,
+        "label": "[v2.12 Kolibri seed](",
+        "old": "../../v2.12/plans/v2.12.0-adoption-kolibri-1.md",
+        "new": "../../../../archives/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md"
+      }
+    ],
+    "map_sha256": "3a12510df6eb7418b3c0d05748c1b10b1980d07cf09a7995331d829fc4f1fee4"
+  },
+  "both_pages_exact_link_payload_match": true,
+  "source_ledger_problems": {
+    "v2.12": [],
+    "v2.13": []
+  },
+  "all_input_hashes_stable": true,
+  "input_sha256": {
+    "C:\\nx-close\\docs\\releases\\v2\\v2.12\\plans\\v2.12.0-outline-promotion-readiness.md": "450456bcb2ee521acb8a105cc26b8734a071f0c863feda7d4dd51bb453d3a7ee",
+    "C:\\nx-close\\docs\\releases\\v2\\v2.13\\plans\\v2.13.0-adoption-craft-editors-embeddinggemma-2.md": "466f76e383ed69a6e817ffea889272f3d6f4ea19818b0651cd85033b9b387f5d",
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.12-archive-approval-page.md": "afeefc58e76ab663da990d888cc0d52dccd18532ce2a8543b3491109336129fa",
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\development\\v2.13-archive-approval-page.md": "1780dee0a9e4990378009620ddacd2c3d6faaca37fbb000ddadc5349264c379c",
+    "C:\\nx-close\\docs\\archive\\v0\\v0.7\\known-gaps.md": "2c7218a3bb9dde4617476c121971d1c2e74d929c30fc45506922bcde8f29c550",
+    "C:\\nx-close\\docs\\archive\\v0\\v0.8\\known-gaps.md": "ed11b9940d36f218eb9eb752bb175d59e6818cea60aed4966753ba80ba87a7e8",
+    "C:\\nx-close\\docs\\archive\\v0\\v0.9\\known-gaps.md": "9aa9c34fc23883ba690260f60af4831fb267d22b76a62c4b6bdafe8e11b7f23b",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.0\\known-gaps.md": "5bf8784ffb39854561ca4fe344623764ec7d68bec8e8303778bbe4de9dd3c916",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.1\\known-gaps.md": "f3e08002ebd722fa2953a5dbd78f00cd9db5ed7a1c634796932d2108264fd29b",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.2\\known-gaps.md": "189f5c6c5ac3e44fd1bd118741e820756dc913b3bca3ebd6016586e3f9c9279f",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.3\\known-gaps.md": "f649cd01f93656571fd1ad36fc0e42c04263f0a6f8deab45a7d56c4655f972f1",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.4\\known-gaps.md": "a8f1e62758702b12c33185d2bb23c32a02356a02fd12dba12d3750e65d21152d",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.5\\known-gaps.md": "d10f8cb2088067d1d473a0259a69facb842551aadc3fc451c75c66dfdbcb3989",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.6\\known-gaps.md": "796470ec469a13215b0dda09d1f6f6d8c28ea09862eb290689304c1df5a2619c",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.7\\known-gaps.md": "f1584fc44ff34edf5920766ce464c7b34147e6d78a9fece8b04c7659023a64c2",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.8\\known-gaps.md": "ec417112764555ed4a5a37ba0d2186419c959229793172894054f6841992144d",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.9\\known-gaps.md": "0f35abf297f5edfef8fbdc213bab8ca0d40ec99a9b4efcfa0324c1f95612f85f",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.10\\known-gaps.md": "7d1fff727bd0a8aa8e9bb9073a6b49f7de6b10565af10647eb0018c82bea2d03",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.11\\known-gaps.md": "6fa2cedead6bf26ce5d6a93521c65995cfc076519c6d4397fd677abe7885d745",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.12\\known-gaps.md": "f0f4b796bd9cab2a0d00ef5c4363a6ccbb58bf45633934699129f5990c3e123f",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.13\\known-gaps.md": "01021139b60b872771c0c3d9056a5ad81aa8f86fc66a2e33feb6c75fc63ebe15",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.14\\known-gaps.md": "b9740c12a787a6c24480a6740009df73a10d62aeb67cf3a991a67bf79ff4a2b5",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.15\\known-gaps.md": "7ecf4eab7a4bb8b1469d3eeae1813edb2e5d2858986ee3d44535fba22ca5194b",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.16\\known-gaps.md": "9c8ae05b28875c13c6331c3bb054bcdd31cce016293f03fdc130325c9a70e9e1",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.17\\known-gaps.md": "34da80f6b94ddfad39b4159a800eb0240f1b83ebf16dc3e6b05bd6b9c37316a5",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.18\\known-gaps.md": "9dd8e87a0334a8208c304cd6b08236a8026e4eed3583807074b644cb65744057",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.19\\known-gaps.md": "914121a1056bc5db3c62a1e0c844607b78323159854b91c02bd4d9553a83666b",
+    "C:\\nx-close\\docs\\archive\\v1\\v1.20\\known-gaps.md": "db5fdf17814a4853793493f5772fbd6c6b4a94391d8bab3deb8a4f945f2af875",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.0\\known-gaps.md": "9e566ce355df06bdfed25d807c58249d14e0de85ee592d1e53aa58c4d12f7667",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.1\\known-gaps.md": "3686170a222d7e144e1527560d0b72b48674edc94172d96b192d529b699e5fbb",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.2\\known-gaps.md": "349b18c1710f7bbc444d05ba99a1f953ccfea849d537b0a28da23b41a82b2b18",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.3\\known-gaps.md": "c2238758fa57381f3b6ff17697f09d05e02ae2df511cc34bc8a8fed187151e5e",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.4\\known-gaps.md": "a891dc7147f8f2cc763b139ed9eb3d023ebfd27299af0ed3ab83bd95bab8196b",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.5\\known-gaps.md": "fdb5a4594bfbb4545ffd4eb4c043fd362cc56057315eba6fc4454a4bd75cf7b7",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.6\\known-gaps.md": "9bd9b6637e9f76b2bda315076b5a6b30580ac3f745a88d82072634aef3142fde",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.7\\known-gaps.md": "67e2ff5cbe2199f390b12153149ac1d98000d8423571b4a17984ac232e5ef494",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.8\\known-gaps.md": "f8cbe3dbe9439c5b091d0d66eba2a81cc6949bbfe26d5290f3ebaa3509c1186a",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.9\\known-gaps.md": "b321caadba46b1e7da23da43e7dddf2ffbf861d7284ceb52785a7f0e10fc361c",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.10\\known-gaps.md": "07b4c75ca97b35f22a37a54e874d6f68c9e5a5687d1362d379fa7fe827bd7463",
+    "C:\\nx-close\\docs\\archive\\v2\\v2.11\\known-gaps.md": "70846e0427c664ca70fa1911415ad90924f0a0e12c9920bdb658cc12b8c9d1bc",
+    "C:\\nx-close\\docs\\releases\\v2\\v2.12\\known-gaps.md": "c3c5ba04003fcc2b982f842292480d8120ca09f79bf49490499d1b9ba1985596",
+    "C:\\nx-close\\docs\\releases\\v2\\v2.13\\known-gaps.md": "442f1f0f4b1517f2cf711eccb15c11eacd419fd39c111b59b484f9f8fc348226",
+    "C:\\nx-close\\docs\\archives\\v2\\v2.14\\known-gaps.md": "a59e073a90eece13acb8b1a197672dd081e8dcfd19f04ccfd028b410872a0e69",
+    "C:\\nx-close\\docs\\releases\\v2\\v2.15\\known-gaps.md": "16ea673072b321cafcc05b7290f27821d75b40505047c44b41ee086be0d2ceb2",
+    "C:\\nx-close\\docs\\releases\\v2\\v2.16\\known-gaps.md": "6f1e510f4db483af29b5ad543442c026c938d2064143f0821c2fa290119affc3",
+    "C:\\nx-close\\docs\\releases\\v2\\v2.12\\plans\\v2.12.0-adoption-kolibri-1.md": "860568e224474e8d3b606f1fd26e0c68e3fe04a3b10d4688553afc5a4914466c"
+  },
+  "boundaries": "No render/create/capture, actual archive, cleanup, task-met claim or source writes. Owner must approve only first line; generated Goal text is not adopted; existing readiness/no archive/no cleanup goal persists."
+}
