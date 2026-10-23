@@ -1104,11 +1104,11 @@
   "overrides": {
     "qs": "^6.16.0",
     "hono": "^4.13.11",
-    "dompurify": "^3.4.13",
+    "dompurify": "^3.4.17",
     "undici": "^7.29.0",
     "@hono/node-server": "^1.19.15",
     "fast-uri": "^3.1.7",
-    "ip-address": "^10.3.1",
+    "ip-address": "^10.7.4",
     "react-router": "7.18.4"
   }
 }

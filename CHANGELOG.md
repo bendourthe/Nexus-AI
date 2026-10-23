@@ -3,6 +3,7 @@
 
 ### Bug Fixes
 
+* **deps:** patch DOMPurify to 3.4.17 and ip-address to 10.7.4 for current production advisories (manually reviewed supplement to the prepared v2.15.1 notes).
 * **closeout:** merge bounded archive-readiness work ([3998b20](https://github.com/bendourthe/Nexus-AI/commit/3998b202a5a4ba29bccc4984668a7305302a7b13))
 * **closeout:** qualify archive contract location and final gate ([9b4ffec](https://github.com/bendourthe/Nexus-AI/commit/9b4ffec6724b7bec5d8e235244543050843b38bd))
 * **closeout:** reconcile historical archive authority and evidence ([0cb4fc7](https://github.com/bendourthe/Nexus-AI/commit/0cb4fc776fefdb74650391741557b098293298e0))
