@@ -1,0 +1,357 @@
+{
+  "state": "ACTUAL_FIRST_PASS_COLLECTION_COMPLETE_NOT_ARCHIVE_READY",
+  "source_head": "ebeb1cfe9658cea894037debf81e3c2896715a99",
+  "source_tree": "6a9106116b924a539ee86047dacb2d3933cd0628",
+  "stage": "51-of-52-before-T419-tick",
+  "raw_private_receipt": "nexus-t419-actual-first-pass-jrb7nlob/receipt.json",
+  "raw_private_receipt_sha256": "a1910e8dd44837cb94b6b02bc207e2b5b206fd53da08c87f43af29e7456e0f32",
+  "collector_sha256": "388d95c2e363ccd4c2ae5ae847b678acf475bac278f86253b8ff4ef76b2226a1",
+  "source_unchanged": true,
+  "records_unchanged": true,
+  "native_and_qualified_tools_unchanged": true,
+  "commands": [
+    {
+      "label": "archive-v2.12",
+      "command": [
+        "C:\\Users\\bdour\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-B",
+        "-I",
+        "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-private-response-item-compat-0s_e7jd1\\Nexus-Hub\\scripts\\minor_close.py",
+        "archive",
+        "--minor",
+        "v2.12",
+        "--repo",
+        "C:\\nx-close",
+        "--session",
+        "01a15bc3-38c8-7cc0-ba5c-813feba8c119",
+        "--closing-branch",
+        "chore/close-v2.15",
+        "--link-checker",
+        "C:\\nh-checker\\catalog\\skills\\code-cleanup\\docs-layout-refactor\\scripts\\link-baseline.py",
+        "--dry-run",
+        "--plan",
+        "C:\\nx-close\\docs\\releases\\v2\\v2.12\\plans\\v2.12.0-outline-promotion-readiness.md"
+      ],
+      "exit_code": 3,
+      "started_utc": "2026-10-23T03:32:03.888640+00:00",
+      "finished_utc": "2026-10-23T03:32:06.728324+00:00",
+      "stdout_sha256": "05bfe22a0289df439935a53ba0bdd3ec3332c3810babf09bf36e67cc24b6e1f9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "archive-v2.13",
+      "command": [
+        "C:\\Users\\bdour\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-B",
+        "-I",
+        "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-private-response-item-compat-0s_e7jd1\\Nexus-Hub\\scripts\\minor_close.py",
+        "archive",
+        "--minor",
+        "v2.13",
+        "--repo",
+        "C:\\nx-close",
+        "--session",
+        "01a15bc3-38c8-7cc0-ba5c-813feba8c119",
+        "--closing-branch",
+        "chore/close-v2.15",
+        "--link-checker",
+        "C:\\nh-checker\\catalog\\skills\\code-cleanup\\docs-layout-refactor\\scripts\\link-baseline.py",
+        "--dry-run",
+        "--plan",
+        "C:\\nx-close\\docs\\releases\\v2\\v2.13\\plans\\v2.13.0-adoption-craft-editors-embeddinggemma-2.md"
+      ],
+      "exit_code": 3,
+      "started_utc": "2026-10-23T03:32:06.728324+00:00",
+      "finished_utc": "2026-10-23T03:32:18.498940+00:00",
+      "stdout_sha256": "0532210fe4cdf65ba90b97315d997dfdab2381e95d849c13d153dbecf459802f",
+      "stderr_sha256": "064b0830a898a1ea65c886d87d61a63adabb3f1038c3c7e3192a639f14966588"
+    },
+    {
+      "label": "archive-v2.15",
+      "command": [
+        "C:\\Users\\bdour\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-B",
+        "-I",
+        "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-private-response-item-compat-0s_e7jd1\\Nexus-Hub\\scripts\\minor_close.py",
+        "archive",
+        "--minor",
+        "v2.15",
+        "--repo",
+        "C:\\nx-close",
+        "--session",
+        "01a15bc3-38c8-7cc0-ba5c-813feba8c119",
+        "--closing-branch",
+        "chore/close-v2.15",
+        "--link-checker",
+        "C:\\nh-checker\\catalog\\skills\\code-cleanup\\docs-layout-refactor\\scripts\\link-baseline.py",
+        "--dry-run"
+      ],
+      "exit_code": 3,
+      "started_utc": "2026-10-23T03:32:18.498940+00:00",
+      "finished_utc": "2026-10-23T03:32:35.455460+00:00",
+      "stdout_sha256": "589798c85d6389565e29504717c160e1b3579b9905317e4d5e01457be39614af",
+      "stderr_sha256": "cad6f1b0c234090a75c2c68192b14eafd24498608b86d1662004594adcfb3bc9"
+    },
+    {
+      "label": "release-v2.15.1",
+      "command": [
+        "gh",
+        "api",
+        "repos/bendourthe/Nexus-AI/releases/tags/v2.15.1"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-23T03:32:35.455460+00:00",
+      "finished_utc": "2026-10-23T03:32:35.944179+00:00",
+      "stdout_sha256": "f4629764197d438778b242933e94a6e461f10053673331f0e79b1df142ba4d66",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "release-v2.12.1",
+      "command": [
+        "gh",
+        "api",
+        "repos/bendourthe/Nexus-AI/releases/tags/v2.12.1"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-23T03:32:35.944179+00:00",
+      "finished_utc": "2026-10-23T03:32:36.446841+00:00",
+      "stdout_sha256": "4b76355da7ef30d85bbff1c939aeceee5aa804e033c920980a6325d4323f2869",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "remote-main-develop",
+      "command": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main",
+        "refs/heads/develop"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-23T03:32:36.446841+00:00",
+      "finished_utc": "2026-10-23T03:32:36.963541+00:00",
+      "stdout_sha256": "0fa64b2dfe437e3d378166b5f8118cf801e0e8f62ebf55279991eb6ef9361dfb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "tag-main-ancestry",
+      "command": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "v2.15.1^{}",
+        "origin/main"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-23T03:32:36.963541+00:00",
+      "finished_utc": "2026-10-23T03:32:36.999589+00:00",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "handbooks",
+      "command": [
+        "C:\\Users\\bdour\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-B",
+        "-I",
+        "C:/nh-checker/catalog/skills/documentation/technical-documentation/scripts/check_handbooks.py",
+        "--root",
+        "C:\\nx-close"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-23T03:32:36.999589+00:00",
+      "finished_utc": "2026-10-23T03:32:37.364228+00:00",
+      "stdout_sha256": "17b9c3de03aff95ee465f38276ca547bd4fce40da548d53ff09d9b5f0b344098",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "migration-content",
+      "command": [
+        "C:\\Users\\bdour\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-B",
+        "C:/Users/bdour/AppData/Local/Temp/nexus-late-automation-two-gap-proposal-v2-x7oby3ah/verify-final-copies-qualified.py",
+        "--root",
+        "C:\\nx-close"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-23T03:32:37.364228+00:00",
+      "finished_utc": "2026-10-23T03:32:51.679154+00:00",
+      "stdout_sha256": "ba3b66221efd37991efa6f60dbce7d3c4ac41a54bab7f8c7df1b20136ad9a7cb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "links-baseline",
+      "command": [
+        "C:\\Users\\bdour\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-B",
+        "-I",
+        "C:\\nh-checker\\catalog\\skills\\code-cleanup\\docs-layout-refactor\\scripts\\link-baseline.py",
+        "baseline",
+        "--root",
+        "C:\\nx-close",
+        "--out",
+        "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-t419-actual-first-pass-jrb7nlob\\source-links.ndjson"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-23T03:32:51.679154+00:00",
+      "finished_utc": "2026-10-23T03:32:52.912336+00:00",
+      "stdout_sha256": "556a7a5499279fdbb0b147c5ad96f8359c76f5e648216da2431cb39c95a69890",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "links-diff",
+      "command": [
+        "C:\\Users\\bdour\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-B",
+        "-I",
+        "C:\\nh-checker\\catalog\\skills\\code-cleanup\\docs-layout-refactor\\scripts\\link-baseline.py",
+        "diff",
+        "--before",
+        "C:/Users/bdour/AppData/Local/Temp/nexus-v215-preclose-links-m0h4sty2/before.ndjson",
+        "--after",
+        "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-t419-actual-first-pass-jrb7nlob\\source-links.ndjson"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-23T03:32:52.912336+00:00",
+      "finished_utc": "2026-10-23T03:32:53.064753+00:00",
+      "stdout_sha256": "62e8d1dac3adc56c8bc0537ed945f4d431b14f72ef6e45bde57942f7d5d9a3f3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "archive_verdicts": [
+    {
+      "label": "archive-v2.12",
+      "exit_code": 3,
+      "stdout": "BLOCKED: no-progress\r\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "archive-v2.13",
+      "exit_code": 3,
+      "stdout": "REFUSED: link-relocation-not-proven (missing matching captured archive consent)\r\n",
+      "stderr_sha256": "064b0830a898a1ea65c886d87d61a63adabb3f1038c3c7e3192a639f14966588"
+    },
+    {
+      "label": "archive-v2.15",
+      "exit_code": 3,
+      "stdout": "REFUSED: unchecked-task (v2.15.1 docs/releases/v2/v2.15/plans/v2.15.1-batch4-installer-registry-closeout-triage.md)\r\nREFUSED: unchecked-task (v2.15.1)\r\n",
+      "stderr_sha256": "cad6f1b0c234090a75c2c68192b14eafd24498608b86d1662004594adcfb3bc9"
+    }
+  ],
+  "paired_consent_review": {
+    "independent_receipt_sha256": "ad3226065b1b857bce619a07c78d25df1ed6a812c668af8d92ee2ba7e47fe208",
+    "both_schema1_bindings_valid": true,
+    "paired_payload_sha256": "63b9dd15d87e1d8cbfb18dba2eec62244b800e432bb4ed204482299dcdc99de1",
+    "current_cause": "v2.12 forced BLOCKED: no-progress; matching captured consent is present",
+    "future_readiness_inferred": false
+  },
+  "release_observations": [
+    {
+      "tag": "v2.15.1",
+      "release_id": 421359864,
+      "draft": false,
+      "prerelease": false,
+      "assets": [
+        {
+          "name": "nexus-coding-2.15.1-darwin-arm64.vsix",
+          "size": 212116048,
+          "digest": "sha256:4d8e4b0a498bd197d0da560cfa2fadc5a6beccd802bb6501fa8296c808cc12e4"
+        },
+        {
+          "name": "nexus-coding-2.15.1-linux-x64.vsix",
+          "size": 74517858,
+          "digest": "sha256:e6c5e242708f821f2f1748c073413910e6d3343e66c63afbe52026d16ad5ccf1"
+        },
+        {
+          "name": "nexus-coding-2.15.1-win32-x64.vsix",
+          "size": 216246905,
+          "digest": "sha256:a7d9faea44a9e99a9ad33c113f1136d4c4e0b12b58c73ef061bfada1c6058742"
+        },
+        {
+          "name": "NexusSetup.exe",
+          "size": 310504815,
+          "digest": "sha256:320ee4e60be456086983a2b1a75e97c8fbc4b3ee2c264c555d120deacdd79b99"
+        },
+        {
+          "name": "SHA256SUMS.txt",
+          "size": 387,
+          "digest": "sha256:29387debd054c511203437ae4d9db666b52bbea8592eb98721b52a07f1bc56af"
+        }
+      ]
+    },
+    {
+      "tag": "v2.12.1",
+      "release_id": 415075933,
+      "draft": false,
+      "prerelease": false,
+      "assets": [
+        {
+          "name": "nexus-coding-2.12.1-darwin-arm64.vsix",
+          "size": 212095857,
+          "digest": "sha256:a45ffabbfe0e991547ca8e2ff16bb1ad11d319f4ad46257b9d838e6d3e7751cf"
+        },
+        {
+          "name": "nexus-coding-2.12.1-linux-x64.vsix",
+          "size": 443290160,
+          "digest": "sha256:d10f7f749de9dd50859ada6dff9d39df1957ef75674a87c70cdc47bc9db041ee"
+        },
+        {
+          "name": "nexus-coding-2.12.1-win32-x64.vsix",
+          "size": 216267730,
+          "digest": "sha256:c0057e5ef0f6922e49ea6e7ab732c839c689ffa0680092face67ed4d18985773"
+        },
+        {
+          "name": "NexusSetup.exe",
+          "size": 310365968,
+          "digest": "sha256:9cc62155235adbf21efa4574c1b6227ff945c3bde58747927b25d5c0c0c5b3e7"
+        },
+        {
+          "name": "SHA256SUMS.txt",
+          "size": 387,
+          "digest": "sha256:e1921b5be06352098aecd5c6e249cc86dc1f6b39e1262276e46334084a026172"
+        }
+      ]
+    }
+  ],
+  "handbooks": {
+    "status": "pass",
+    "verified": 6,
+    "errors": []
+  },
+  "migration_content": {
+    "receipt_sha256": "3ee85030cdf34c61affd8554681a53ef570eee440879b6af7b11c32576e39bce",
+    "qualified_original_copies": 245,
+    "all_open_destinations": 247,
+    "historical_v2_12": 44,
+    "historical_v2_13": 8,
+    "original_93_ambiguity_failures_preserved": true
+  },
+  "source_markdown_links": {
+    "after": 3774,
+    "before": 3774,
+    "fixed": 0,
+    "newly_broken": 0,
+    "unchanged": 3774
+  },
+  "private_projection": {
+    "source_head": "e795234bb5dee2e6fda14e3300ea651d8b8c6d1e",
+    "input_pin_sha256": "387109a8070d3ccf402e26a2129ac146aaa71d960542c522bb80c9cee76414bd",
+    "independent_review_sha256": "9b504a4fb1c38c6c42bd65fc9634f6c7914bf397fdee65c154ee93aac1f2f1dd",
+    "external_qualification_sha256": "0d223525c7cbb48d01dd73f03356fed0d18cbd3a3b21c09ad6d31e85fad5daa5",
+    "affected_tests_passed": 73,
+    "projected_links_new": 0,
+    "projected_existing_unresolved": 3569,
+    "nonmarkdown_files_classified": 97,
+    "code_occurrences_classified": 303,
+    "unclassified_operational_references": 0,
+    "reused_viewports": 36,
+    "reused_print_pages": 9,
+    "fresh_browser_execution": false,
+    "later_clerical_metadata_requires_final_data_binding": true
+  },
+  "scope": "Collection duty only. Refusals are preserved, not waived. Global completion, authority, actual archive and final readiness are separate.",
+  "archive_ready": false,
+  "actual_archive_executed": false,
+  "closing_pr_merged": false,
+  "final_strict_probe_passed": false
+}
