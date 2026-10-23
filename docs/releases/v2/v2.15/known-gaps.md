@@ -1,7 +1,7 @@
 # Known Gaps - v2.15
 
 **Project**: Nexus
-**Status**: in-progress
+**Status**: finalized
 **Last updated**: 2026-10-21
 **Open items**: 0
 

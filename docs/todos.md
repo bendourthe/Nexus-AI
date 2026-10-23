@@ -2,32 +2,31 @@
 
 ## Archive readiness (2026-10-22)
 
-**Active worktree**: `C:/nx-close`, branch `fix/v2.15-release-security`, base `63ba7453`. The owner's goal remains completion of the recorded v2.12, v2.13 and v2.15 plans until archive-ready. Earlier branch/version statements below are dated history. The original checkout's user edits are preserved.
+**Active worktree**: `C:/nx-close`, branch `chore/close-v2.15`, base develop e6e464f2. The goal remains archive readiness for the recorded v2.12/v2.13/v2.15 plans. Earlier branch/version statements below are dated history; original-checkout user edits are preserved.
 
-**Run status**: The genuine IN54MRGB, WNEVLC4G and TOYDWIVT approvals remain captured and verified. The master and four absorbed supports agree on 47 verified tasks of 52; T107, T211, T307, T418 and T419 remain open. All 262 original identities reconcile as 245 open carries, 14 evidenced closures and three prior resolutions. Historical archive previews pass, with v2.13 ordered after v2.12. No archive or deletion has occurred.
+**Run status**: Genuine original approvals and the separately approved one-push/two-item exception remain verified. Recorded plans are 52/52 with actual publication and first-pass evidence bindings. The collected native archive refusals remain open until final probes pass. All 262 original identities retain 245 open carries, 14 closures and three prior resolutions; two new OPEN automation entries make 247 owed v2.16 obligations. A separate v2.12 waiting blocker remains open. No actual archive or deletion has occurred.
 
 | Measure | Current | Required |
 | --- | --- | --- |
-| Recorded plans | 47/52 tasks verified; frozen task scope retained | Actual release qualification and final clean read-only readiness evidence |
-| Carry application | 245/245 exact qualified open destinations; 14 closures and three prior resolutions preserved | Retain every owed requirement; two newly observed automation items are proposed separately, not applied or marked fixed |
-| Integration | PR127 original source merged; PR128 source reached main; PR130 history sync and PR129 prepared metadata merged into develop63ba7453 | Hosted validation of the repaired candidate and final main promotion |
-| Local security correction | Root 6,479 passed/12 skipped, desktop 2,365 passed/one skipped on physically verified DOMPurify3.4.17 and ip-address10.7.4; builds/lint, unchanged production gate and six handbook receipts pass | One additional exact corrective push requires a fresh owner instruction; original three remain spent |
-| Production audit | Original merged63ba7453 failed; repaired local gate has zero blocking/allowlisted findings; raw audit exits1 with two unchanged low KaTeX/Mermaid records | Preserve the moderate threshold and visible low findings; actual hosted result pending |
-| Historical minors | v2.12/v2.13 actual shared v2.12.1 lineage, signatures and44/8 native copy proofs verified | Final clean current-source archive dry runs; v2.12 first |
-| Release | Prepared v2.15.1 metadata only; no verified v2.15.1 tag/assets | Actual tag/main ancestry, five assets/digests, tagged packaging observations and final back-merge |
+| Recorded plans | 52/52; frozen 52 acceptance blocks retained | Final metadata PR and strict read-only verdicts |
+| Carries | 245 exact migrations;14 closures;three prior resolutions;two new direct OPEN entries | Preserve all247 owed destinations |
+| Integration | PR131 security correction, PR132 main promotion and PR133 backmerge merged; actual develop e6 has27 successful jobs | Final bounded metadata PR and its current required checks |
+| Local qualification | Root 6,479 passed/12 skipped;desktop 2,365 passed/one skipped;builds/lint and unchanged production gate pass | Reuse only for identical source bytes |
+| Production audit | Zero blocking/allowlisted findings;raw audit retains two low KaTeX/Mermaid findings | Preserve the threshold and visible findings |
+| Release | Actual v2.15.1 annotated tag/main ancestry, eight packaging jobs, runtime probes and five assets verified | T419 archive decision remains separate |
+| Historical minors | Actual shared v2.12.1 lineage and44/8 copy chains retained | Genuine v2.12 waiting-block continuation, then fresh ordered dry runs |
 
-- [ ] Complete the v2.15.1 master and four absorbed triage supports under `docs/releases/v2/v2.15/plans/`.
-- [x] Audit all 199 frozen batch IDs and all 63 original active IDs against current source.
-- [x] Prove and resolve the installer disk fixture, handbook CRLF comparison and missing v2.13 migration-copy provenance.
-- [x] Complete the owner-selected outline removal and image approval checkpoint/retention policies; real-boundary evidence and independent review pass.
-- [x] Complete full local root/desktop coverage, retained installer tests, lint, builds and six dependency-aware handbook receipts; the security correction has fresh patched-runtime suites.
-- [x] Preserve the qualified checker source in a verified 22-file local snapshot; record its separate existing upstream attribution gate failure ([preservation](releases/v2/v2.15/development/v2.15-native-checker-preservation.md)).
-- [x] Apply and independently verify all 245 open destinations and 14 closures; preserve the three prior resolutions and complete execution history.
-- [x] Reconcile all 63 original v2.15 entries without treating carried obligations as implemented features.
-- [x] Prove historical implementation/release mapping and repair layout/provenance; keep actual archive-readiness decision open.
-- [ ] Publish and validate the [locally verified security correction](releases/v2/v2.15/development/v2.15.1-security-correction.md) after the separate bounded owner instruction.
-- [ ] Record the two new release automation defects as OPEN future items only after explicit placement exception; proposed BG-8/BG-9 are not approved migrations.
-- [ ] Complete actual release/assets/back-merge, final metadata and clean T419 probes; keep readiness false until those pass.
+- [x] Bind the four publication duties to the committed release evidence.
+- [x] Collect T419 evidence for the master and absorbed fourth support, preserving all native refusals.
+- [x] Audit all 199 frozen batch IDs and 63 original active IDs against current source.
+- [x] Resolve the installer fixture, handbook CRLF comparison and v2.13 copy-provenance defects with evidence.
+- [x] Complete the selected outline removal, approval-time recoverable checkpoint and shared-original retention policies.
+- [x] Complete local suites, builds, gates and six dependency-aware handbook receipts; retain exact tag identity.
+- [x] Preserve the historical 22-source-file checker snapshot and the separately reviewed sanitized compatibility copy; original pins remain unchanged.
+- [x] Apply and verify 245 migrations and14 closures; retain three prior resolutions and all owed requirements.
+- [x] Publish the independently qualified security correction under the one additional approved push; all original three and that additional push remain spent.
+- [x] Record the exact two new OPEN release-automation entries under the owner's placement exception.
+- [ ] Complete the final metadata PR and strict T419 probes; keep archive readiness unclaimed while any required blocker remains.
 
 **Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.14.2-adoption-voice-latency-lfm2.5-24b`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
 
