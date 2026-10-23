@@ -1,0 +1,155 @@
+{
+  "utc": "2026-10-23T02:31:27.202925+00:00",
+  "status": "PASS_ACTUAL_RELEASE_PUBLICATION",
+  "tag": "v2.15.1",
+  "tag_object": "0fde1391049f584b48fd27383bc6b8c993731536",
+  "tag_commit": "b43f62a58747347dd2f862e3d86b8de620dccfc6",
+  "qualified_source_ancestor": "8a3e22741ab575ed8080358b5b1f7944213cb8db",
+  "source_tree": "0b25c8cd2d324e62fefd907ab7bb7531d0315d09",
+  "release_id": 421359864,
+  "release_url": "https://github.com/bendourthe/Nexus-AI/releases/tag/v2.15.1",
+  "published_at": "2026-10-23T01:25:11Z",
+  "draft": false,
+  "prerelease": false,
+  "notes_sha256_normalized": "d97cd745d38e683cf214783d553c01e9678ec20a184e074bef5ed08b0cd75095",
+  "assets": [
+    {
+      "name": "nexus-coding-2.15.1-darwin-arm64.vsix",
+      "size": 212116048,
+      "sha256": "4d8e4b0a498bd197d0da560cfa2fadc5a6beccd802bb6501fa8296c808cc12e4",
+      "github_digest": "sha256:4d8e4b0a498bd197d0da560cfa2fadc5a6beccd802bb6501fa8296c808cc12e4",
+      "url": "https://github.com/bendourthe/Nexus-AI/releases/download/v2.15.1/nexus-coding-2.15.1-darwin-arm64.vsix",
+      "checksum_manifest_match": true,
+      "vsix_package_version": "2.15.1",
+      "vsix_target": "darwin-arm64",
+      "zip_integrity": "pass"
+    },
+    {
+      "name": "nexus-coding-2.15.1-linux-x64.vsix",
+      "size": 74517858,
+      "sha256": "e6c5e242708f821f2f1748c073413910e6d3343e66c63afbe52026d16ad5ccf1",
+      "github_digest": "sha256:e6c5e242708f821f2f1748c073413910e6d3343e66c63afbe52026d16ad5ccf1",
+      "url": "https://github.com/bendourthe/Nexus-AI/releases/download/v2.15.1/nexus-coding-2.15.1-linux-x64.vsix",
+      "checksum_manifest_match": true,
+      "vsix_package_version": "2.15.1",
+      "vsix_target": "linux-x64",
+      "zip_integrity": "pass"
+    },
+    {
+      "name": "nexus-coding-2.15.1-win32-x64.vsix",
+      "size": 216246905,
+      "sha256": "a7d9faea44a9e99a9ad33c113f1136d4c4e0b12b58c73ef061bfada1c6058742",
+      "github_digest": "sha256:a7d9faea44a9e99a9ad33c113f1136d4c4e0b12b58c73ef061bfada1c6058742",
+      "url": "https://github.com/bendourthe/Nexus-AI/releases/download/v2.15.1/nexus-coding-2.15.1-win32-x64.vsix",
+      "checksum_manifest_match": true,
+      "vsix_package_version": "2.15.1",
+      "vsix_target": "win32-x64",
+      "zip_integrity": "pass"
+    },
+    {
+      "name": "NexusSetup.exe",
+      "size": 310504815,
+      "sha256": "320ee4e60be456086983a2b1a75e97c8fbc4b3ee2c264c555d120deacdd79b99",
+      "github_digest": "sha256:320ee4e60be456086983a2b1a75e97c8fbc4b3ee2c264c555d120deacdd79b99",
+      "url": "https://github.com/bendourthe/Nexus-AI/releases/download/v2.15.1/NexusSetup.exe",
+      "checksum_manifest_match": true
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "size": 387,
+      "sha256": "29387debd054c511203437ae4d9db666b52bbea8592eb98721b52a07f1bc56af",
+      "github_digest": "sha256:29387debd054c511203437ae4d9db666b52bbea8592eb98721b52a07f1bc56af",
+      "url": "https://github.com/bendourthe/Nexus-AI/releases/download/v2.15.1/SHA256SUMS.txt",
+      "checksum_manifest_match": false
+    }
+  ],
+  "tagged_runner": {
+    "run": 39882715072,
+    "jobs_success": 8,
+    "frozen_exe_probes_exit_zero": [
+      "--version",
+      "--check-registry",
+      "--check-desktop-payload"
+    ],
+    "windows_vsix_runtime": "VS Code1.134.0/Electron42.8.1/ABI146"
+  },
+  "automatic_main_publisher": {
+    "run": 39879684659,
+    "result": "failure",
+    "cause": "GH006 protected-main prepare push",
+    "permanent_fix": "OPEN v2.16.0#BG-8"
+  },
+  "extractor": {
+    "initial_notes": "empty",
+    "manual_notes_repair_verified": true,
+    "tag_and_asset_identities_unchanged": true,
+    "permanent_fix": "OPEN v2.16.0#BG-9"
+  },
+  "backmerge": {
+    "pr": 133,
+    "merge": "e6e464f24d1292db88ea0beaad11176befe87379",
+    "source_files_changed": 0,
+    "current_pr_workflows_success": 7,
+    "current_pr_jobs": {
+      "success": 33,
+      "intended_skip": 1
+    },
+    "checklist_attempt1": "failure; retained",
+    "checklist_attempt2": "success; body-only correction and one targeted rerun",
+    "actual_merged_develop_workflows_success": 3,
+    "actual_merged_develop_jobs_success": 27
+  },
+  "original_partition": {
+    "open_carries": 245,
+    "closures": 14,
+    "prior_resolutions": 3
+  },
+  "additional_direct_open": 2,
+  "target_ledger_total_open": 247,
+  "qualified_historical_copy_chains": {
+    "v2.12": 44,
+    "v2.13": 8
+  },
+  "old_cli": {
+    "verified": 196,
+    "ambiguous_failures": 93,
+    "not_relabelled_pass": true
+  },
+  "retained_private_components": {
+    "downloaded_assets": {
+      "path_under_temp": "nexus-v215-actual-release-assets-d2zus0v5/verified-assets.json",
+      "sha256": "3748b4609dd5de09c8887422bf5b3709d654106f031f899f73cdbb8f435fa77c"
+    },
+    "tagged_runtime": {
+      "path_under_temp": "nexus-tag2151-independent-yell7x_w/independent-tagged-release-review.json",
+      "sha256": "8e61d768b3c6f16c1622193b5e8cc674a5a69e5e800260df964b892967a6e94a"
+    },
+    "main_quality_and_publisher": {
+      "path_under_temp": "nexus-mainb43-independent-12yqi191/independent-main-quality-publisher-review.json",
+      "sha256": "df66ec7d2eda46adde085a8745bda1f5edc4ed6a35124fa58544a803e725b382"
+    },
+    "backmerge_pr": {
+      "path_under_temp": "nexus-pr133-independent-gfcykbgr/independent-merge-prerequisites.json",
+      "sha256": "e5695d4517d407a11b4d3fe1a0a77b1b007566369e7c3d5751851b94cb22e457"
+    },
+    "backmerge_result": {
+      "path_under_temp": "nexus-develope6-independent-9ezloic0/independent-merged-develop-review.json",
+      "sha256": "bf87099862b6419fafabf8a6ee1582f5221f11566660a4b83c187e17e5e93620"
+    },
+    "qualified_copies": {
+      "path_under_temp": "nexus-qualified-final-copy-independent-jhlyqu88/copy-proof.json",
+      "sha256": "483eab873d45df24e6a15aeaebf29cef2795374f81480a9ff20753b6ff5b5f43"
+    },
+    "compatibility_review": {
+      "path_under_temp": "nexus-response-compat-independent-b58a6sme/independent-review.json",
+      "sha256": "9b78320f38f1c8b69976af9fd7a8b8b4fe23f2a4940e807ce5099f1861f16a64"
+    }
+  },
+  "authority": "Actual native commands verified existing signed approval; no new class, limit or owner capture inferred",
+  "archive_readiness": {
+    "determined_by_this_receipt": false,
+    "requires": "T419 and fresh final read-only native probes"
+  },
+  "actual_archive_or_deletion": false,
+  "global_minor_complete_claim": false
+}
