@@ -1,5 +1,5 @@
 {
-  "status": "Publication evidence is committed; T419 collection remains unchecked.",
+  "status": "All52 task duties have evidence bindings; final strict readiness probes remain mandatory.",
   "master": "docs/releases/v2/v2.15/plans/v2.15.1-archive-readiness.md",
   "source_base": "fadbf89b92cbc2124a6f4961b9ec439ce2c48060",
   "tasks": [
@@ -572,7 +572,7 @@
       "master_phase": 4,
       "description": "Collect read-only archive readiness receipts docs/releases/v2/v2.15/development/v2.15-closeout-reconciliation.md",
       "acceptance_sha256": "bee8d8120895f44889d1eb15cfb4d979e32615cc36f5d4a8a2280784c11f0e84",
-      "actual_commit": null,
+      "actual_commit": "f0917cfc5cc4640b8fa6338bf0a1d74860187ba0",
       "shared_release_record": "docs/releases/v2/v2.15/development/v2.15.1-release.md"
     }
   ],
