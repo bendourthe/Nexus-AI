@@ -2,8 +2,8 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-10-21
-**Open items**: 245
+**Last updated**: 2026-10-22
+**Open items**: 247
 
 ## v2.16.0
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | Not implemented (NI) | 2 | 0 |
 | Deferred (DF) | 150 | 0 |
-| Bugs / regressions (BG) | 7 | 0 |
+| Bugs / regressions (BG) | 9 | 0 |
 | Warnings (WN) | 21 | 0 |
 | Missing tests / coverage gaps (MT) | 46 | 0 |
 | Quality-gate gaps (QG) | 19 | 0 |
@@ -2610,6 +2610,24 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 
 - **Migrated from**: v2.15.0#QG-11 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#QG-11; still owed: Required checker/record-contract qualification before declaring minor completion.; next: Keep plan T014/A19. Adopt only tested checker revisions, preserve historical pins and signed scope, rerun actual verdicts, and retain unresolved release mapping/absorbed-seed/legacy-scope/approval/evidence blockers. No fake release, arbitrary cutoff or signed JSON edit.
+
+#### BG-8 - Automatic release preparation cannot push its version commit to protected main
+
+- **Source phase**: v2.15.1 Phase 4 (T418), publication recovery observed on 2026-10-22; this defect was discovered after the frozen 262-identity triage approval.
+- **Plan reference**: [Archive readiness, T418](../v2.15/plans/v2.15.1-archive-readiness.md#phase-4-integration-and-publication); [release recovery](../v2.15/development/v2.15.1-release-recovery.md).
+- **Reason**: Automatic Semantic Release run 39814892000 selected v2.15.1 and prepared CHANGELOG.md, package.json and package-lock.json, but @semantic-release/git could not push its new commit to protected main: GH006 required ci-required validation that the newly generated commit did not have. The configured release commit also contains a skip-ci marker. The bounded current-release recovery prepares metadata through validated PRs and plans a human-attributed native annotated tag from the canonical checkout only after the exact main commit passes the installed release preconditions. That recovery is not a permanent repair of the automatic pipeline; no branch-protection bypass, status fabrication or relaxed gate is authorized.
+- **Suggested next step**: Take the permanent release-architecture repair through separately reviewed workflow scope. Prove that prepared version commits receive the required protected-branch validation before an actual release/tag is created, reproduce the protected-main failure in an isolated fixture, and verify exactly one intended release with no direct-push or protection bypass. Preserve the existing CI events, permissions and required gates unless a separately authorized review changes them.
+- **Evidence**: [Failure and bounded recovery](../v2.15/development/v2.15.1-release-recovery.md#failure), release run 39814892000; retained release-recovery packet and independently qualified native annotated-tag fixture. [Late automation proposal](../v2.15/development/v2.15.1-late-automation-proposal.md) records the separate OPEN follow-up. No permanent-fix result is claimed.
+- **Placement basis**: Direct new future-version record subject to the separate owner-exception addendum. This is not an inherited or migrated member of the original 245-item disposition set.
+
+#### BG-9 - Release notes extraction ignores configured double-hash changelog headings
+
+- **Source phase**: v2.15.1 Phase 4 (T418), publication recovery observed on 2026-10-22; this defect was discovered after the frozen 262-identity triage approval.
+- **Plan reference**: [Archive readiness, T418](../v2.15/plans/v2.15.1-archive-readiness.md#phase-4-integration-and-publication); [release recovery](../v2.15/development/v2.15.1-release-recovery.md).
+- **Reason**: The tagged release workflow extracts notes only when a line begins with # [<version>], while the configured analyzer/notes/changelog preparation emitted ## [2.15.1](...) for the actual prepared patch. Running the existing AWK expression against that generated CHANGELOG emits no notes, even though the matching release section has content. The separately authorized current-release body repair must be verified against the actual semantic-release notes; it does not change or permanently fix the extractor. Prepared metadata and a repaired body do not by themselves prove tagged builds, assets or release readiness.
+- **Suggested next step**: Make a separately reviewed narrow workflow repair that selects exactly the requested version at the configured changelog heading levels and stops at the next release section. Exercise single-hash and double-hash linked headings, matching and nonmatching versions, missing or duplicate sections, and empty notes; verify the resulting actual GitHub release body matches the intended semantic-release notes without changing workflow events, permissions, jobs or required gates.
+- **Evidence**: [Extractor reproduction](../v2.15/development/v2.15.1-late-automation-proposal.md#extractor-reproduction) records the actual existing .github/workflows/release.yml expression producing no output from the prepared CHANGELOG.md v2.15.1 double-hash heading. Actual current-release body repair and its verification remain pending. No permanent-fix result is claimed.
+- **Placement basis**: Direct new future-version record subject to the separate owner-exception addendum. This is not an inherited or migrated member of the original 245-item disposition set.
 
 ### Resolved
 
