@@ -4,11 +4,11 @@
 
 **Active worktree**: `C:/nx-close`, branch `chore/close-v2.15`, base develop e6e464f2. The goal remains archive readiness for the recorded v2.12/v2.13/v2.15 plans. Earlier branch/version statements below are dated history; original-checkout user edits are preserved.
 
-**Run status**: Genuine original approvals and the separately approved one-push/two-item exception remain verified. Recorded plans remain 47/52 until the four publication rows and T419 are checked with their actual evidence commits. All 262 original identities retain 245 open carries, 14 closures and three prior resolutions; two new OPEN automation entries make 247 owed v2.16 obligations. A separate v2.12 waiting blocker remains open. No actual archive or deletion has occurred.
+**Run status**: Genuine original approvals and the separately approved one-push/two-item exception remain verified. Recorded plans are 51/52: the four publication duties cite committed release evidence; T419 remains unchecked until actual first-pass collection. All 262 original identities retain 245 open carries, 14 closures and three prior resolutions; two new OPEN automation entries make 247 owed v2.16 obligations. A separate v2.12 waiting blocker remains open. No actual archive or deletion has occurred.
 
 | Measure | Current | Required |
 | --- | --- | --- |
-| Recorded plans | 47/52; frozen 52 acceptance blocks retained | Publication binding, T419 collection and final read-only verdicts |
+| Recorded plans | 51/52; frozen 52 acceptance blocks retained | T419 collection and final read-only verdicts |
 | Carries | 245 exact migrations;14 closures;three prior resolutions;two new direct OPEN entries | Preserve all247 owed destinations |
 | Integration | PR131 security correction, PR132 main promotion and PR133 backmerge merged; actual develop e6 has27 successful jobs | Final bounded metadata PR and its current required checks |
 | Local qualification | Root 6,479 passed/12 skipped;desktop 2,365 passed/one skipped;builds/lint and unchanged production gate pass | Reuse only for identical source bytes |
@@ -16,7 +16,8 @@
 | Release | Actual v2.15.1 annotated tag/main ancestry, eight packaging jobs, runtime probes and five assets verified | T419 archive decision remains separate |
 | Historical minors | Actual shared v2.12.1 lineage and44/8 copy chains retained | Genuine v2.12 waiting-block continuation, then fresh ordered dry runs |
 
-- [ ] Complete final publication bindings and T419 for the master and four absorbed supports.
+- [x] Bind the four publication duties to the committed release evidence.
+- [ ] Collect T419 evidence for the master and absorbed fourth support.
 - [x] Audit all 199 frozen batch IDs and 63 original active IDs against current source.
 - [x] Resolve the installer fixture, handbook CRLF comparison and v2.13 copy-provenance defects with evidence.
 - [x] Complete the selected outline removal, approval-time recoverable checkpoint and shared-original retention policies.
