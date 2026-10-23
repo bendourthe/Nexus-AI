@@ -2,7 +2,7 @@
   "name": "nexus-coding",
   "displayName": "Nexus Code",
   "description": "Nexus Agentic AI Coding module. Local agentic coding assistant powered by Gemma 4 / Llama 3 and other open-source LLMs via Ollama. (Formerly Gemma Code. The package name, publisher, command IDs, and view container were renamed to `nexus-coding` / `nexus.coding.*` in v1.1.0; the legacy `gemma-code.*` command IDs continue to fire via the runtime compat shim until v1.2.0, and legacy settings keys remain resolvable via the v1.0.0 SettingsCompat shim.)",
-  "version": "2.15.0",
+  "version": "2.15.1",
   "publisher": "nexus-coding",
   "license": "MIT",
   "icon": "assets/icon.png",
@@ -1104,11 +1104,11 @@
   "overrides": {
     "qs": "^6.16.0",
     "hono": "^4.13.11",
-    "dompurify": "^3.4.13",
+    "dompurify": "^3.4.17",
     "undici": "^7.29.0",
     "@hono/node-server": "^1.19.15",
     "fast-uri": "^3.1.7",
-    "ip-address": "^10.3.1",
+    "ip-address": "^10.7.4",
     "react-router": "7.18.4"
   }
 }

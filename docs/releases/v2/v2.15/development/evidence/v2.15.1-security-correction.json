@@ -1,0 +1,149 @@
+{
+  "utc": "2026-10-22T19:21:30.614728+00:00",
+  "source_base": "63ba7453238e605ecd8bb8b211f3fe7be0a779ee",
+  "source_package_patch_sha256": "6abd8eb224c2a48af08c58d2623350418a57b003fbb6d432f2d5bafb06ddc84d",
+  "package_raw_sha256": {
+    "package.json": "7d546f6d40fc78d79b702ac70f17318027868182b088ea9623614bccddb79908",
+    "package-lock.json": "c381b87eb86562c353155501a51e12a46679bb758e0f3a8ce723f3ecf65733a9"
+  },
+  "runtime_versions": {
+    "dompurify": "3.4.17",
+    "ip-address": "10.7.4"
+  },
+  "full_suites": [
+    {
+      "name": "root",
+      "exit_code": 0,
+      "seconds": 144.75,
+      "log_sha256": "e4f9392c174bb373d30c2df514261435ffd1668510e14bea1e3c634b6ea5d821",
+      "success": true,
+      "numPassedTests": 6479,
+      "numPendingTests": 12,
+      "numFailedTests": 0,
+      "numPassedTestSuites": 2040,
+      "numFailedTestSuites": 0,
+      "numTotalTestSuites": 2040
+    },
+    {
+      "name": "desktop",
+      "exit_code": 0,
+      "seconds": 485.52,
+      "log_sha256": "3f09a061abb7f5528b752ba070ac70d08c2dc2864b009884d62267bb98475715",
+      "success": true,
+      "numPassedTests": 2365,
+      "numPendingTests": 1,
+      "numFailedTests": 0,
+      "numPassedTestSuites": 724,
+      "numFailedTestSuites": 0,
+      "numTotalTestSuites": 724
+    }
+  ],
+  "coverage": {
+    "root": {
+      "lines": {
+        "total": 26421,
+        "covered": 23062,
+        "skipped": 0,
+        "pct": 87.28
+      },
+      "statements": {
+        "total": 29665,
+        "covered": 25254,
+        "skipped": 0,
+        "pct": 85.13
+      },
+      "functions": {
+        "total": 4991,
+        "covered": 4355,
+        "skipped": 0,
+        "pct": 87.25
+      },
+      "branches": {
+        "total": 18991,
+        "covered": 14528,
+        "skipped": 0,
+        "pct": 76.49
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "desktop": {
+      "lines": {
+        "total": 17051,
+        "covered": 14235,
+        "skipped": 0,
+        "pct": 83.48
+      },
+      "statements": {
+        "total": 19086,
+        "covered": 15420,
+        "skipped": 0,
+        "pct": 80.79
+      },
+      "functions": {
+        "total": 4412,
+        "covered": 3584,
+        "skipped": 0,
+        "pct": 81.23
+      },
+      "branches": {
+        "total": 14503,
+        "covered": 10626,
+        "skipped": 0,
+        "pct": 73.26
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "raw_suite_artifacts": {
+    "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v215-security-full-suites-j3rsvj5_\\root.log": "e4f9392c174bb373d30c2df514261435ffd1668510e14bea1e3c634b6ea5d821",
+    "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v215-security-full-suites-j3rsvj5_\\desktop.log": "3f09a061abb7f5528b752ba070ac70d08c2dc2864b009884d62267bb98475715",
+    "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v215-security-full-suites-j3rsvj5_\\root-results.json": "749d0c1102aa65b6e5e410eb8707d2f65774c632ebf03356089a71d986d7b5e7",
+    "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v215-security-full-suites-j3rsvj5_\\desktop-results.json": "5705b59a8cda06d0cb28c5456a4d23b10fa8b74ce002f9e8527efe80f478f04e"
+  },
+  "raw_suite_logs_location": "Preserved privately at exact paths and hashes above; aggregate command receipts and coverage summaries are in the public packet.",
+  "independent_security_receipt_sha256": "8f451ace97841254de86f607519585a2b6e75b5ad3082cef037e7b92ea29f4fc",
+  "production_audit_after": {
+    "exit_code": 1,
+    "vulnerabilities": {
+      "info": 0,
+      "low": 2,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 2
+    },
+    "sha256": "e7b5089e26774b8b44b3e80547f48978042ad79371b843e7ee25e3560e8e0104",
+    "remaining_findings": [
+      "katex",
+      "mermaid"
+    ],
+    "remaining_findings_identical_before_and_after": true
+  },
+  "production_gate_after": {
+    "exit_code": 0,
+    "threshold": "moderate",
+    "allowlisted": 0,
+    "blocking": 0,
+    "sha256": "a94d104748e4a73c93c478ed0cb276cec2cbf711d2acfd37f145c5937ba32c3b"
+  },
+  "additional_corrective_push_authorized": false,
+  "corrective_code_pushes_already_used": 3,
+  "published": false,
+  "permanent_automation_defects_resolved": false,
+  "archive_readiness_claim": false,
+  "evidence_packet": {
+    "path": "docs/releases/v2/v2.15/development/evidence/v2.15.1-security-correction.zip",
+    "entries": 48,
+    "sha256": "99e61c4365becd0d4d88b28e9e6691e3accc5c7030d071fcfe3e8271d30a816f"
+  }
+}
