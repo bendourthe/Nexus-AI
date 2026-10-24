@@ -2,7 +2,7 @@
 
 **Project**: Nexus
 **Status**: finalized
-**Finalization**: 2026-10-19 by v2.15.0: every open item migrated to [the v2.15 ledger](../../../releases/v2/v2.15/known-gaps.md).
+**Finalization**: 2026-10-19 by v2.15.0: every open item migrated to [the v2.15 ledger](../v2.15/known-gaps.md).
 **Open items**: 0
 **Last updated**: 2026-10-15
 
@@ -74,7 +74,7 @@ The former carry-forward register is preserved below under `v2.12 Carry-forward 
 
 ## v2.12 Carry-forward register
 
-**Status**: finalized 2026-10-19 by v2.15.0. Every entry below is resolved, superseded or migrated; the remaining work lives in [the v2.15 ledger](../../../releases/v2/v2.15/known-gaps.md) and the [follow-up batch list](../../../releases/v2/v2.15/development/v2.15.0-followup-batches.md). Do not add entries here.
+**Status**: finalized 2026-10-19 by v2.15.0. Every entry below is resolved, superseded or migrated; the remaining work lives in [the v2.15 ledger](../v2.15/known-gaps.md) and the [follow-up batch list](../v2.15/development/v2.15.0-followup-batches.md). Do not add entries here.
 **Last updated**: 2026-10-09
 
 v2.11 moved to `docs/archive/v2/v2.11/`. v2.11.0 is published. The rows below were open when carried forward; subsequent resolutions are stated explicitly. The archived file for each row remains the detailed record. DF-11 stays open in `docs/archive/v2/v2.0/known-gaps.md`. New phase dispositions are recorded in the [canonical v2.12 ledger](known-gaps.md).

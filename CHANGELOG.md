@@ -17,8 +17,8 @@ Maintenance release: the project's record of known gaps is now one countable lis
 ## Known gaps
 
 - Every known-gaps file from v1.17 to v2.12, including the v2.12 carry-forward register, now reads cleanly in the release completion checker (204 unreadable rows before, 0 now), with no wording changed. Rows that only repeated an entry recorded elsewhere now point at it (`v2.4#BG-2`) instead of counting twice.
-- The 47 items still open in v2.12 were checked against the current code: 3 are resolved with evidence, and 44 moved into [the v2.15 known gaps](docs/releases/v2/v2.15/known-gaps.md) word for word, each with why it is still owed and a next step. The v2.12 register is finalized.
-- The 199 older items that are still open are listed once each in [four follow-up batches](docs/releases/v2/v2.15/development/v2.15.0-followup-batches.md), each sized for one plan (v2.15.1 to v2.15.4).
+- The 47 items still open in v2.12 were checked against the current code: 3 are resolved with evidence, and 44 moved into [the v2.15 known gaps](docs/archives/v2/v2.15/known-gaps.md) word for word, each with why it is still owed and a next step. The v2.12 register is finalized.
+- The 199 older items that are still open are listed once each in [four follow-up batches](docs/archives/v2/v2.15/development/v2.15.0-followup-batches.md), each sized for one plan (v2.15.1 to v2.15.4).
 - What is still owed: 62 items in v2.15 plus the 199 batched items, 261 in all, with none counted twice.
 
 ## Tooling
@@ -28,7 +28,7 @@ Maintenance release: the project's record of known gaps is now one countable lis
 ## Not changed
 
 - The app, the VS Code extension and the installers behave as in v2.14.2. The installers are rebuilt by the release workflow from the same product code.
-- Release completion is still blocked by conflicts in the external completion checker, recorded with a handoff for its maintainer ([v2.15 QG-11](docs/releases/v2/v2.15/known-gaps.md)).
+- Release completion is still blocked by conflicts in the external completion checker, recorded with a handoff for its maintainer ([v2.15 QG-11](docs/archives/v2/v2.15/known-gaps.md)).
 
 # [2.14.2](https://github.com/bendourthe/Nexus-AI/compare/v2.14.1...v2.14.2) (2026-10-18)
 
@@ -76,7 +76,7 @@ LFM2.5 24B-A2B (new opt-in model):
 - Skill tests no longer write folders into the source tree; the outline smoke report uses a private temp folder; handbook slugs strip nested tags.
 - The Video2X deadline tests no longer race the real clock under load.
 
-Known gaps carried forward: [v2.15 known gaps](docs/releases/v2/v2.15/known-gaps.md).
+Known gaps carried forward: [v2.15 known gaps](docs/archives/v2/v2.15/known-gaps.md).
 
 # [2.14.1](https://github.com/bendourthe/Nexus-AI/compare/v2.12.1...v2.14.1) (2026-10-17)
 
