@@ -118,19 +118,19 @@ Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" c
 | v2.4.1 | Field reliability, transcript reasoning, chat archives, unified models, and multi-root Agents workspaces | Tagged. Packaged Windows and live-GPU operator checks remain open in the archived gap log | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
 | v2.4.11 | Local splat viewer, optional CUDA generate, and the untagged 2.4.2-2.4.10 field work | Tagged from develop. Live NVIDIA generate and weight hashes remain open | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
 
-Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.11 live under `docs/archive/v2/`. v2.12 and later stay under `docs/v2/`. Deferred work that is still open is in [the v2.15 known gaps](docs/releases/v2/v2.15/known-gaps.md) and the [follow-up batch list](docs/releases/v2/v2.15/development/v2.15.0-followup-batches.md); the v2.12 register is finalized.
+Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.11 live under `docs/archive/v2/`. v2.12 and later stay under `docs/v2/`. Deferred work that is still open is in [the v2.15 known gaps](docs/archives/v2/v2.15/known-gaps.md) and the [follow-up batch list](docs/archives/v2/v2.15/development/v2.15.0-followup-batches.md); the v2.12 register is finalized.
 
 ### v2.15.0
 
 The project's known gaps are now one countable list: every gap file from v1.17 to v2.12 reads cleanly in the release checker, the 47 items left open in v2.12 were resolved (3) or moved into the v2.15 known gaps with a next step (44), and the 199 older open items are listed once in four follow-up batches. No app, extension or installer behavior changes.
 
-Evidence: [last-phase evidence](docs/releases/v2/v2.15/development/v2.15.0-last-phase-evidence.md), [gap triage](docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md), [follow-up batches](docs/releases/v2/v2.15/development/v2.15.0-followup-batches.md).
+Evidence: [last-phase evidence](docs/archives/v2/v2.15/development/v2.15.0-last-phase-evidence.md), [gap triage](docs/archives/v2/v2.15/development/v2.15.0-gap-triage.md), [follow-up batches](docs/archives/v2/v2.15/development/v2.15.0-followup-batches.md).
 
 ### v2.14.2
 
 Desktop Chat speaks a reply from its first sentence while the model is still writing: median time to first audio on the medium test fell from 38.6 s to about 3.9 s, speaking over a reply stops it, and code, links, secrets and hidden reasoning are never read aloud. Voice now runs on install. LFM2.5 24B-A2B joins the catalog as an opt-in 16 GB worker, with pulled weights checked against their pinned digest. Planned as v2.14.0 and released after v2.14.1. The 2.0 s target is not yet met (v2.15 DF-1).
 
-Evidence: [last-phase evidence](docs/archives/v2/v2.14/development/v2.14.2-last-phase-evidence.md), [voice latency results](docs/archives/v2/v2.14/development/voice-latency-results.md), [LFM A/B](docs/archives/v2/v2.14/development/lfm-ab-results.json), [open gaps](docs/releases/v2/v2.15/known-gaps.md).
+Evidence: [last-phase evidence](docs/archives/v2/v2.14/development/v2.14.2-last-phase-evidence.md), [voice latency results](docs/archives/v2/v2.14/development/voice-latency-results.md), [LFM A/B](docs/archives/v2/v2.14/development/lfm-ab-results.json), [open gaps](docs/archives/v2/v2.15/known-gaps.md).
 
 ### v2.14.1
 
@@ -147,7 +147,7 @@ This release carries the v2.12 and v2.13 plans. Its installers and VSIX packages
 - **Document output and tool history** - Document parsing is budgeted from current prompt usage, native tool calls keep their history, and both agent loops compact tool results. The experimental outline tools and their Settings controls were retired under the frozen evaluation fallback; generic OCR and `parse_document` remain available.
 - **EmbeddingGemma 2 is not admitted** - A bounded local evaluator exists, but Ollama 0.32.15 rejects the candidate, so the current embedder is retained (DF-1, DF-2). Kolibri-1 is declined and recorded in the declined-models index.
 
-Plans: [v2.13.0](docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md), [v2.12 gaps](docs/releases/v2/v2.12/known-gaps.md). Open items: [v2.14 carried gaps](docs/archives/v2/v2.14/known-gaps.md).
+Plans: [v2.13.0](docs/archives/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md), [v2.12 gaps](docs/archives/v2/v2.12/known-gaps.md). Open items: [v2.14 carried gaps](docs/archives/v2/v2.14/known-gaps.md).
 
 ### What's new in v2.10.0
 
@@ -181,7 +181,7 @@ Image Studio can open a local `.splat` or `.ply` beside a finished image, with t
 - **Source image stays** - A splat download is a different file from the PNG.
 - **Optional generate** - Set `NEXUS_SPLAT_NVIDIA=1` and `NEXUS_SPLAT_CUDA=1` only on a machine that actually has them, and place the MIT weights yourself. The fake benchmark is `node scripts/bench-gaussian-splat.mjs`.
 
-Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/releases/v2/v2.12/known-gaps.md).
+Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/archives/v2/v2.12/known-gaps.md).
 
 ### What's new in v2.4.1
 

@@ -108,7 +108,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-atlas.json",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/atlas.json",
       "presentation": true
     },
     {
@@ -172,7 +172,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-generation-recovery.json",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/generation-recovery.json",
       "presentation": true
     },
     {
@@ -222,7 +222,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-installer-runtime.json",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/installer-runtime.json",
       "presentation": true
     },
     {
@@ -280,7 +280,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-media-runtime.json",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/media-runtime.json",
       "presentation": true
     },
     {
@@ -342,7 +342,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-transcript-and-workspaces.json",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/transcript-and-workspaces.json",
       "presentation": true
     },
     {
@@ -370,7 +370,7 @@
         "desktop/src/pages/settings/SecuritySettings.tsx",
         "modules/coding/runtime/headlessTools.ts",
         "src/tools/handlers/parseDocument.ts",
-        "docs/releases/v2/v2.12/development/outline-eval.md",
+        "docs/archives/v2/v2.12/development/outline-eval.md",
         "docs/archive/v2/v2.11/development/outline-feasibility.md",
         "modules/coding/llm/OllamaClient.ts",
         "modules/coding/llm/LmStudioClient.ts",
@@ -424,7 +424,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.15/development/v2.15.1-security-handbook-document-outline.json",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/document-outline.json",
       "presentation": true
     }
   ],
