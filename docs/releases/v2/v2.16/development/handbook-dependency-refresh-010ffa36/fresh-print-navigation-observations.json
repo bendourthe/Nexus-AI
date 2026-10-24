@@ -1,0 +1,80 @@
+[
+  {
+    "id": "atlas",
+    "keyboardNext": "2 / 3",
+    "keyboardHome": "1 / 3",
+    "keyboardEnd": "3 / 3",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "reentryStartsAtFirstSlide": true,
+    "noJsReadingVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 2,
+    "printMissingHeadings": [],
+    "print_pdf_sha256": "f0c299fd436f9cd353d462ffee98a5c5b23b475aa7122f0ff4bbca355b300255"
+  },
+  {
+    "id": "generation-recovery",
+    "keyboardNext": "2 / 4",
+    "keyboardHome": "1 / 4",
+    "keyboardEnd": "4 / 4",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "reentryStartsAtFirstSlide": true,
+    "noJsReadingVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 2,
+    "printMissingHeadings": [],
+    "print_pdf_sha256": "74fc23f39746a822d56019368b81f694577813dc46e693c78757b3a73231d1b6"
+  },
+  {
+    "id": "installer-runtime",
+    "keyboardNext": "2 / 2",
+    "keyboardHome": "1 / 2",
+    "keyboardEnd": "2 / 2",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "reentryStartsAtFirstSlide": true,
+    "noJsReadingVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 1,
+    "printMissingHeadings": [],
+    "print_pdf_sha256": "73f2c9ba6ed26650a4c4c4e450baea30e7f3156fdeb8532cf3bcda4e93cb3615"
+  },
+  {
+    "id": "media-runtime",
+    "keyboardNext": "2 / 2",
+    "keyboardHome": "1 / 2",
+    "keyboardEnd": "2 / 2",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "reentryStartsAtFirstSlide": true,
+    "noJsReadingVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 1,
+    "printMissingHeadings": [],
+    "print_pdf_sha256": "a90a54ac70512304367493b74861f61cfa21b83bcb65f0992d23409a3080df96"
+  },
+  {
+    "id": "transcript-and-workspaces",
+    "keyboardNext": "2 / 2",
+    "keyboardHome": "1 / 2",
+    "keyboardEnd": "2 / 2",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "reentryStartsAtFirstSlide": true,
+    "noJsReadingVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 1,
+    "printMissingHeadings": [],
+    "print_pdf_sha256": "23c4ca5a5f921239e28bc834aecf34f2225bea0ccd8c4b8069f3251b92372add"
+  },
+  {
+    "id": "document-outline",
+    "keyboardNext": "2 / 4",
+    "keyboardHome": "1 / 4",
+    "keyboardEnd": "4 / 4",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "reentryStartsAtFirstSlide": true,
+    "noJsReadingVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 2,
+    "printMissingHeadings": [],
+    "print_pdf_sha256": "2c06e15723d42a2a3e9a911bf22594fd5d22c02fafd245b13def67298baf597a"
+  }
+]
