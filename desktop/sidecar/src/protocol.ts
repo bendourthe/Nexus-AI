@@ -935,7 +935,7 @@ const ChatMessageDto = z.object({
 // The tree is recursive; validate the leaf shapes and pass the nesting
 // through rather than fighting zod's recursive typing for an internal DTO.
 export const ChatExplorerTreeRequest = z.object({}).strict();
-export const ChatExplorerTreeResponse = z.object({ tree: z.unknown() });
+export const ChatExplorerTreeResponse = z.object({ tree: z.unknown().optional() });
 export const ChatExplorerCreateFolderRequest = z
   .object({ parentId: z.string().nullable(), name: z.string().min(1) })
   .strict();
@@ -1034,7 +1034,7 @@ const StudioPillarSchema = z.enum(["image", "video"]);
 export const StudioSessionTreeRequest = z
   .object({ pillar: StudioPillarSchema })
   .strict();
-export const StudioSessionTreeResponse = z.object({ tree: z.unknown() });
+export const StudioSessionTreeResponse = z.object({ tree: z.unknown().optional() });
 export const StudioSessionCreateFolderRequest = z
   .object({
     pillar: StudioPillarSchema,
@@ -1153,7 +1153,7 @@ export const StudioImageEditOpenResponse = StudioImageEditState.extend({
   png: z.string().min(1),
 }).strict();
 export const StudioImageEditCommitRequest = StudioImageGrantRequest.extend({
-  action: z.unknown(),
+  action: z.unknown().optional(),
   expectedRevision: z.number().int().nonnegative(),
 }).strict();
 export const StudioImageEditCommitResponse = StudioImageEditState.strict();
@@ -1738,8 +1738,8 @@ export const VideoEnhancementOutput = z
     provenanceRecordId: z.string().min(1).max(256),
     preProvenanceContainerSha256: z.string().regex(/^[a-f0-9]{64}$/),
     publishedContainerSha256: z.string().regex(/^[a-f0-9]{64}$/),
-    workflow: z.record(z.unknown()),
-    durableProvenance: z.record(z.unknown()),
+    workflow: z.record(z.string(), z.unknown()),
+    durableProvenance: z.record(z.string(), z.unknown()),
   })
   .strict();
 
@@ -2315,7 +2315,7 @@ export const SelectionSnapshotSchema = z
   .object({
     schemaVersion: z.literal(1),
     orderedIds: z.array(z.string()),
-    recommendedByTask: z.record(z.string()).optional(),
+    recommendedByTask: z.record(z.string(), z.string()).optional(),
     downloadedSinceInstall: z.array(z.string()).optional(),
   })
   .strict();
@@ -2821,7 +2821,7 @@ export const ParkedAskDto = z
     toolName: z.string().min(1),
     summary: z.string(),
     detail: z.string(),
-    args: z.record(z.unknown()),
+    args: z.record(z.string(), z.unknown()),
     risk: z.string().min(1),
     classificationReason: z.string(),
     parkedTier: z.number().int(),
@@ -2918,17 +2918,17 @@ export const SettingsGetRequest = z.object({ key: z.string().min(1) }).strict();
 export type SettingsGetRequestT = z.infer<typeof SettingsGetRequest>;
 
 export const SettingsGetResponse = z
-  .object({ key: z.string().min(1), value: z.unknown() })
+  .object({ key: z.string().min(1), value: z.unknown().optional() })
   .strict();
 export type SettingsGetResponseT = z.infer<typeof SettingsGetResponse>;
 
 export const SettingsSetRequest = z
-  .object({ key: z.string().min(1), value: z.unknown() })
+  .object({ key: z.string().min(1), value: z.unknown().optional() })
   .strict();
 export type SettingsSetRequestT = z.infer<typeof SettingsSetRequest>;
 
 export const SettingsSetResponse = z
-  .object({ key: z.string().min(1), value: z.unknown() })
+  .object({ key: z.string().min(1), value: z.unknown().optional() })
   .strict();
 export type SettingsSetResponseT = z.infer<typeof SettingsSetResponse>;
 

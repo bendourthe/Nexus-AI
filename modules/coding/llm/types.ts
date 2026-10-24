@@ -220,7 +220,7 @@ export const LLMStreamChunkSchema = z.object({
           id: z.string().optional(),
           function: z.object({
             name: z.string(),
-            arguments: z.record(z.unknown()),
+            arguments: z.record(z.string(), z.unknown()),
           }),
         }),
       )
