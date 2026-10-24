@@ -124,7 +124,7 @@
 
 
 - **Resolution in v2.15.1**: The owner selected retained shared originals with clear image-only deletion disclosure. Session/folder deletion removes owned history/recipes/checkpoints, while shared PNG bytes remain identical.
-- **Evidence**: docs/releases/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/releases/v2/v2.15/development/v2.15.4-image-checkpoint-evidence.md; docs/releases/v2/v2.15/development/v2.15-policy-implementation-review.md
+- **Evidence**: docs/archives/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/archives/v2/v2.15/development/v2.15.4-image-checkpoint-evidence.md; docs/archives/v2/v2.15/development/v2.15-policy-implementation-review.md
 - **Limits**: No reference-counted image deletion was selected or introduced; native packaged-window interaction is not asserted.
 #### DF-7 - An approved agent can replace the user's redo history - RESOLVED 2026-10-21
 
@@ -141,7 +141,7 @@
 
 
 - **Resolution in v2.15.1**: Actual trusted approval captures durable full recipe/cursor/redo-tail recovery before grant exposure; authorized viewer recovery uses source validation and current-revision CAS, preserving original bytes and revoking old agent authority.
-- **Evidence**: docs/releases/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/releases/v2/v2.15/development/v2.15.4-image-checkpoint-evidence.md; docs/releases/v2/v2.15/development/v2.15-policy-implementation-review.md
+- **Evidence**: docs/archives/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/archives/v2/v2.15/development/v2.15.4-image-checkpoint-evidence.md; docs/archives/v2/v2.15/development/v2.15-policy-implementation-review.md
 - **Limits**: SQLite and Ask JSON are separate durable stores; failure grants no access. Evidence includes real SQLite/PNG and separate-process reopen, not packaged native IPC.
 #### WN-6 - Residual image-access hardening items from the adversarial review - MIGRATED to v2.16.0
 
@@ -174,7 +174,7 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 #### DF-8 - Live rewrite quality remains unmeasured after pilot format HOLD - MIGRATED to v2.16.0
 
 - **Source phase**: v2.14.1 Phase 1, T002-T004.
-- **Plan reference**: [local rewrite evaluation](../../../archives/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), blocked-run continuation.
+- **Plan reference**: [local rewrite evaluation](../v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), blocked-run continuation.
 - **Reason**: The sole started pilot response completed but fenced its JSON. The frozen envelope rejects fences without repair or retry. Three pilot items and all sixteen held-out items are not run; no semantic, readability or language-quality verdict is available.
 - **Owner**: Maintainer.
 - **Suggested next step**: If another evaluation is wanted, separately preregister a revised experiment with retained ancestry and obtain qualified language review. Do not replay this experiment, infer a quality loss or admit Humanizer from this observation.
@@ -185,7 +185,7 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 #### DF-9 - Legacy history for OpenAI-compatible backends - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 3 - native tool history.
-- **Plan reference**: [outline-promotion-readiness](../../../archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-task 3.1.
+- **Plan reference**: [outline-promotion-readiness](../v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-task 3.1.
 - **Reason**: The LM Studio and headless OpenAI clients convert coding history to the existing assistant-text plus user-role envelope format. Native Ollama history is proven locally on qwen3.5:9b and gemma4:12b; native round trips through other backends are not proven here.
 - **Suggested next step**: Measure a live OpenAI-compatible native round trip and resume behavior before adding that backend's native message converter. Owner: the maintainer. Support tier: future for that native-history path.
 
@@ -197,9 +197,9 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 #### WN-8 - Historical evaluation diagnostic and timing limits - RESOLVED 2026-10-21
 
 - **Source phase**: Phase 6 - evaluation results, sub-task 6.3.
-- **Plan reference**: [outline-promotion-readiness](../../../archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-tasks 6.3 and 6.4.
+- **Plan reference**: [outline-promotion-readiness](../v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-tasks 6.3 and 6.4.
 - **Reason**: Both completed scored runs used a logger that omitted returned session errors. There are 51 error finishes with empty tails whose specific causes cannot be reconstructed; another 41 error-status rows finish at max-iterations. Only page caps 50 and 200 were prewarmed, so the original reports' claim that every question time excludes OCR is too broad. Counts, exact coverage and frozen scoring were validated; reporting was corrected after inference without modifying or rescoring the artifacts. Support tier: internal-compatible experimental path, candidate for promotion.
-- **Suggested next step**: Preserve these limits in Phase 7 and the v2.13 removal/narrowing review. Use the corrected error capture and qualified timings for any separately authorized future diagnostic run; do not infer the missing historical causes or schedule repeats after futility. Owner: the maintainer. [Results](../../../archives/v2/v2.12/development/outline-eval.md), [metadata](../../../archives/v2/v2.12/development/evidence/phase-6-evaluation.json).
+- **Suggested next step**: Preserve these limits in Phase 7 and the v2.13 removal/narrowing review. Use the corrected error capture and qualified timings for any separately authorized future diagnostic run; do not infer the missing historical causes or schedule repeats after futility. Owner: the maintainer. [Results](../v2.12/development/outline-eval.md), [metadata](../v2.12/development/evidence/phase-6-evaluation.json).
 
 - **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): Nothing can be done: the causes cannot be recovered, the logger is fixed, and the limits are written into outline-eval.md. It belongs with DF-v211-2's decision.
 - **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
@@ -208,12 +208,12 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 
 
 - **Resolution in v2.15.1**: The removal/narrowing review is completed by retirement and the living handbook preserves the frozen diagnostic/timing limits. The missing historical causes remain unknown and are not reconstructed.
-- **Evidence**: docs/releases/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/releases/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/releases/v2/v2.15/development/v2.15-policy-implementation-review.md
+- **Evidence**: docs/archives/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/archives/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/archives/v2/v2.15/development/v2.15-policy-implementation-review.md
 - **Limits**: Preserve the complete original entry and historical evidence. No inference rerun, M5 substitution, raw-evidence rewrite, generic OCR closure or broad egress qualification.
 #### WN-9 - Outline retention is not bounded by session or idle expiry - RESOLVED 2026-10-21
 
 - **Source phase**: Phase 7 - factual handbook review.
-- **Plan reference**: [outline-promotion-readiness](../../../archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), handbook refresh and final verification.
+- **Plan reference**: [outline-promotion-readiness](../v2.12/plans/v2.12.0-outline-promotion-readiness.md), handbook refresh and final verification.
 - **Reason**: The structure cache has a 50 MiB cap, but the summary store has no eviction cap. Text snapshots have lazy ten-minute idle expiry, while screened text persists for the tool instance's lifetime. Desktop and ACP reuse outline tools across sessions with identical workspace roots, including read authorization and call/output counters. Strict session isolation and ten-minute memory erasure are not implemented. The handbook now states these limits. Support tier: internal-compatible, experimental and off by default.
 - **Suggested next step**: Review cache bounds, tool-scope lifetime and session reset requirements alongside the planned removal/narrowing decision. Preserve these limits until changed behavior has real-boundary evidence. Owner: the maintainer. Sources: `core/documents/OutlineCache.ts`, `core/documents/OutlineSummaries.ts`, `modules/coding/documents/DocumentOutlineTools.ts`, `modules/coding/runtime/headlessTools.ts`, `desktop/sidecar/src/coding/headlessAgentRunner.ts`, and `desktop/sidecar/src/acp/AcpAgent.ts`.
 
@@ -224,12 +224,12 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 
 
 - **Resolution in v2.15.1**: Removal eliminates active shared outline state/summary-store exposure. Existing saved cache files are retained; byte caps, session erasure or cache cleanup are not claimed implemented.
-- **Evidence**: docs/releases/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/releases/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/releases/v2/v2.15/development/v2.15-policy-implementation-review.md
+- **Evidence**: docs/archives/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/archives/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/archives/v2/v2.15/development/v2.15-policy-implementation-review.md
 - **Limits**: Preserve the complete original entry and historical evidence. No inference rerun, M5 substitution, raw-evidence rewrite, generic OCR closure or broad egress qualification.
 #### WN-10 - Media smoke proof needs separate packaging and installation evidence - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7 - factual handbook review.
-- **Plan reference**: [outline-promotion-readiness](../../../archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), packaged installer qualification and final verification.
+- **Plan reference**: [outline-promotion-readiness](../v2.12/plans/v2.12.0-outline-promotion-readiness.md), packaged installer qualification and final verification.
 - **Reason**: The installed-media smoke harness records a supplied installer hash and exercises an installed sidecar; it does not install that candidate or establish installer-to-payload binding. Catalog-source reachability is a separate packaging check and is not invoked automatically by the Windows build. Generation-time artifact finalization checks are narrower than the smoke harness's decoded PNG and video probes. The corrected handbooks distinguish those evidence boundaries. Support tier: candidate for exact packaged installer/GPU qualification until the required operator evidence exists.
 - **Suggested next step**: Retain catalog reachability output, installation of the exact candidate, installer-to-payload binding, and decoded PNG/video results together during packaged qualification. Assess deterministic binding and packaging-check enforcement when that path is implemented; do not certify an arbitrary existing installation from a supplied hash alone. Owner: the maintainer. Sources: `scripts/installer/build/smoke-installed-media.ps1`, `scripts/installer/build/build-windows.ps1`, and `scripts/installer/build/check-hf-catalog.py`.
 
@@ -241,9 +241,9 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 #### QG-2 - Terminal CI reconciliation requires explicit migration decisions - MIGRATED to v2.16.0
 
 - **Source phase**: Phase 7 - terminal CI/CD comparison.
-- **Plan reference**: [outline-promotion-readiness](../../../archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-task 7.5 and T025.
-- **Reason**: The 23-field source/settings comparison has six PASS, eleven FAIL, three PARTIAL and three NOT PROVEN fields. Missing native report/release profiles, repeated feature-push/post-merge validation, incomplete pre-merge platform coverage, implicit permissions and inconsistent report publication are observable differences. On 2026-10-10 the maintainer approved, and Phase 7 applied, only the CI profile correctness patch and the action pin updates (four `actions/cache` references to v6.1.0 and the `scorecard.yml` `upload-sarif` commit pin); see the [pin evidence](../../../archives/v2/v2.12/development/evidence/phase-7-ci-action-pin-application.json). Those changes close none of the migration fields above. No permission, secret, required-check or settings change has been approved or applied. This is an incomplete gate, not an accepted bypass.
-- **Suggested next step**: Retain [the comparison](../../../archives/v2/v2.12/development/phase-7-ci-comparison.md) and [input hashes/settings](../../../archives/v2/v2.12/development/evidence/phase-7-ci-inputs.json), prove remaining source/security fields, prepare exact incremental profile/event/reporting changes, and obtain each consequential CI/permission/settings approval before applying it. Re-gate locally and observe the approved integration topology. Owner: the maintainer. Existing canonical-profile carry-forward gaps remain open.
+- **Plan reference**: [outline-promotion-readiness](../v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-task 7.5 and T025.
+- **Reason**: The 23-field source/settings comparison has six PASS, eleven FAIL, three PARTIAL and three NOT PROVEN fields. Missing native report/release profiles, repeated feature-push/post-merge validation, incomplete pre-merge platform coverage, implicit permissions and inconsistent report publication are observable differences. On 2026-10-10 the maintainer approved, and Phase 7 applied, only the CI profile correctness patch and the action pin updates (four `actions/cache` references to v6.1.0 and the `scorecard.yml` `upload-sarif` commit pin); see the [pin evidence](../v2.12/development/evidence/phase-7-ci-action-pin-application.json). Those changes close none of the migration fields above. No permission, secret, required-check or settings change has been approved or applied. This is an incomplete gate, not an accepted bypass.
+- **Suggested next step**: Retain [the comparison](../v2.12/development/phase-7-ci-comparison.md) and [input hashes/settings](../v2.12/development/evidence/phase-7-ci-inputs.json), prove remaining source/security fields, prepare exact incremental profile/event/reporting changes, and obtain each consequential CI/permission/settings approval before applying it. Re-gate locally and observe the approved integration topology. Owner: the maintainer. Existing canonical-profile carry-forward gaps remain open.
 
 - **Why still owed**: None of the eleven FAIL fields is fixed; each needs a workflow, permission or settings change with its own approval.
 - **Next step**: Draft an approval-ready proposal for field 15: explicit `permissions: contents: read` defaults for the 14 workflows, with job-level write grants listed.
@@ -517,7 +517,7 @@ Its README gives Apache-2.0 code and weights, two frozen Qwen3-8B encoders with 
 
 The v2.12 Phase 6 frozen rule yields futility: expanded C cross-section scores are Qwen 0/20 and Gemma 4/20. Recommend removal or narrowing at the v2.13.0 review, with no repeats. Owner: the maintainer. M5 still requires a session-history or DEVLOG entry citing a workspace document hash and the answer obtained; absent that entry, remove the tools and settings keys at review.
 
-- **Archived record**: [Measured result](../../../archives/v2/v2.12/development/outline-eval.md), original: `docs/archive/v2/v2.11/development/outline-eval.md`
+- **Archived record**: [Measured result](../v2.12/development/outline-eval.md), original: `docs/archive/v2/v2.11/development/outline-eval.md`
 
 - **Why still owed**: The frozen futility result calls for removing or narrowing the tools; no M5 entry exists and the owner decision due at v2.13 is not made.
 - **Next step**: Owner decides: add the M5 DEVLOG entry (document hash and answer obtained), or remove the outline tools and their settings keys.
@@ -526,7 +526,7 @@ The v2.12 Phase 6 frozen rule yields futility: expanded C cross-section scores a
 
 
 - **Resolution in v2.15.1**: The owner chose and implemented the frozen removal fallback: active outline tools/settings are retired across extension, desktop, shared headless and ACP. No M5 use or answer-quality win is invented.
-- **Evidence**: docs/releases/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/releases/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/releases/v2/v2.15/development/v2.15-policy-implementation-review.md
+- **Evidence**: docs/archives/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/archives/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/archives/v2/v2.15/development/v2.15-policy-implementation-review.md
 - **Limits**: Preserve the complete original entry and historical evidence. No inference rerun, M5 substitution, raw-evidence rewrite, generic OCR closure or broad egress qualification.
 #### DF-25 - CPU OCR (RapidOCR, the portable default) costs about 6.8 s per text-dense page on this host: a 60-page PDF takes about 7 minutes on the first `document_outline` call, the same cost `parse_document` already pays. The GPU engine was not measured. The runtime also caps at 200 pages and reports `pageCount: 200`, hiding truncation past that. - MIGRATED to v2.16.0
 
@@ -541,7 +541,7 @@ The v2.12 Phase 6 frozen rule yields futility: expanded C cross-section scores a
 
 Phase 6 observed those paths, but the anchor A errors/no-answer including timeouts are Qwen 13 versus nine previously (target at most four), Gemma 15 versus 16 (target at most eight). Answer quality is not solved. Owner: the maintainer. Retain the measured miss and diagnostic limits in the v2.13 removal/narrowing review; do not schedule repeats after the frozen futility result.
 
-- **Archived record**: [Measured result](../../../archives/v2/v2.12/development/outline-eval.md), [mechanism evidence](../../../archives/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md)
+- **Archived record**: [Measured result](../v2.12/development/outline-eval.md), [mechanism evidence](../v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md)
 
 - **Why still owed**: Proposed for closure at v2.15.0 triage, not accepted by the owner (T010): The mechanism half is built; the answer-quality half is the removal-or-narrowing decision DF-v211-2 owns, so nothing separate is owed. Superseded by docs/v2/v2.12/known-gaps.md DF-v211-2.
 - **Next step**: Accept or reject the proposed closure recorded in `docs/releases/v2/v2.15/development/v2.15.0-gap-triage.md`.
@@ -550,7 +550,7 @@ Phase 6 observed those paths, but the anchor A errors/no-answer including timeou
 
 
 - **Resolution in v2.15.1**: The unresolved answer-quality outcome decision is discharged by the selected retirement. Existing budget/history mechanisms are retained and tested; the measured miss and diagnostic limits remain historical evidence.
-- **Evidence**: docs/releases/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/releases/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/releases/v2/v2.15/development/v2.15-policy-implementation-review.md
+- **Evidence**: docs/archives/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/archives/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/archives/v2/v2.15/development/v2.15-policy-implementation-review.md
 - **Limits**: Preserve the complete original entry and historical evidence. No inference rerun, M5 substitution, raw-evidence rewrite, generic OCR closure or broad egress qualification.
 #### DF-27 - The outline tools refuse PPTX and XLSX, though the OCR runtime reads both (`runtimes/ocr/documents.py`). - RESOLVED 2026-10-21
 
@@ -565,7 +565,7 @@ Supporting them needs two new document kinds in the shared core and a determinis
 
 
 - **Resolution in v2.15.1**: The requested optional PPTX/XLSX outline extension is retired with the outline product surface. Generic document parsing remains available; no new cached kinds or determinism claim is made.
-- **Evidence**: docs/releases/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/releases/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/releases/v2/v2.15/development/v2.15-policy-implementation-review.md
+- **Evidence**: docs/archives/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/archives/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/archives/v2/v2.15/development/v2.15-policy-implementation-review.md
 - **Limits**: Preserve the complete original entry and historical evidence. No inference rerun, M5 substitution, raw-evidence rewrite, generic OCR closure or broad egress qualification.
 #### WN-13 - No egress from the OCR child process is proven at socket level. - MIGRATED to v2.16.0
 
@@ -591,7 +591,7 @@ The CPU default and DOCX return pages and are unaffected; the GPU engine was not
 
 
 - **Resolution in v2.15.1**: The active outline createExtractor/page-range consumer is retired. This closes that outline-only warning by removal; honest OCR page metadata for surviving parse_document remains explicitly carried under DF-25.
-- **Evidence**: docs/releases/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/releases/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/releases/v2/v2.15/development/v2.15-policy-implementation-review.md
+- **Evidence**: docs/archives/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/archives/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/archives/v2/v2.15/development/v2.15-policy-implementation-review.md
 - **Limits**: Preserve the complete original entry and historical evidence. No inference rerun, M5 substitution, raw-evidence rewrite, generic OCR closure or broad egress qualification.
 #### WN-15 - The OCR runtime's `parse` result carries no engine version, so the outline cache key uses the engine id, the device, and a fixed version label. - RESOLVED 2026-10-21
 
@@ -606,7 +606,7 @@ An engine upgrade does not invalidate cached outlines by itself; the per-node an
 
 
 - **Resolution in v2.15.1**: The active outline cache consumer is retired. No engine-version propagation or invalidation improvement is claimed; retained offline algorithm/cache data is not a shipped capability.
-- **Evidence**: docs/releases/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/releases/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/releases/v2/v2.15/development/v2.15-policy-implementation-review.md
+- **Evidence**: docs/archives/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/archives/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/archives/v2/v2.15/development/v2.15-policy-implementation-review.md
 - **Limits**: Preserve the complete original entry and historical evidence. No inference rerun, M5 substitution, raw-evidence rewrite, generic OCR closure or broad egress qualification.
 #### WN-16 - The ACP control-surface path builds the outline tools without a model client, so node summaries are off there. - RESOLVED 2026-10-21
 
@@ -621,7 +621,7 @@ The desktop coding runner and the VS Code extension have them.
 
 
 - **Resolution in v2.15.1**: ACP outline summaries are retired along with the other outline surfaces. No ACP summary-parity implementation or live ACP model run is claimed.
-- **Evidence**: docs/releases/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/releases/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/releases/v2/v2.15/development/v2.15-policy-implementation-review.md
+- **Evidence**: docs/archives/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/archives/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/archives/v2/v2.15/development/v2.15-policy-implementation-review.md
 - **Limits**: Preserve the complete original entry and historical evidence. No inference rerun, M5 substitution, raw-evidence rewrite, generic OCR closure or broad egress qualification.
 #### WN-17 - Both agent loops now send `tools` natively to every model whose catalog format is not `none` (the extension already did). - MIGRATED to v2.16.0
 
@@ -645,7 +645,7 @@ A model Ollama reports without the `tools` capability may reject such a request.
 
 
 - **Resolution in v2.15.1**: The active outline-summary request path is removed. This is retirement, not a general redirect/DNS hardening claim for other model transports.
-- **Evidence**: docs/releases/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/releases/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/releases/v2/v2.15/development/v2.15-policy-implementation-review.md
+- **Evidence**: docs/archives/v2/v2.15/development/v2.15-owner-closeout-decisions.md; docs/archives/v2/v2.15/development/v2.15.4-outline-retirement-evidence.md; docs/archives/v2/v2.15/development/v2.15-policy-implementation-review.md
 - **Limits**: Preserve the complete original entry and historical evidence. No inference rerun, M5 substitution, raw-evidence rewrite, generic OCR closure or broad egress qualification.
 #### DF-28 - Aleph Alpha's Kolibri-1 (released 2026-10-03, Apache-2.0, 78B total and 3.46B active parameters, about 78 GB in FP8) is not admitted, no catalog row. - MIGRATED to v2.16.0
 
@@ -660,7 +660,7 @@ The smallest community GGUF (Q3_K_S, about 3.47 bits per weight) is roughly 34 G
 
 #### DF-29 - No catalog-wide check that every entry's declared size fits its tier; the Kolibri-1 decision keeps a per-model guard instead (decided at the seed plan's grill). - MIGRATED to v2.16.0
 
-Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md`, parked gaps. Owner: the maintainer. Next step: a plan that already edits `core/registry/catalog.json` measures how many current entries such a check would flag before adopting it. Measured in v2.14.0 Phase 5 over 41 entries ([script](../../../archives/v2/v2.14/development/evidence/measure-catalog-size-check.mjs)): a tier-default check flags 1 (`qwen3.5:4b` is a cpu agentic default yet declares `requiredVramGB` 4); a field-consistency check flags 9 (six `hideBelowVramGB` values below the declared need, several apparently deliberate for offload builds; two embedding models with `vramGB` 1 over `requiredVramGB` 0; `triposplat` with no `sizeGB`). Adoption stays an owner decision.
+Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md`, parked gaps. Owner: the maintainer. Next step: a plan that already edits `core/registry/catalog.json` measures how many current entries such a check would flag before adopting it. Measured in v2.14.0 Phase 5 over 41 entries ([script](../v2.14/development/evidence/measure-catalog-size-check.mjs)): a tier-default check flags 1 (`qwen3.5:4b` is a cpu agentic default yet declares `requiredVramGB` 4); a field-consistency check flags 9 (six `hideBelowVramGB` values below the declared need, several apparently deliberate for offload builds; two embedding models with `vramGB` 1 over `requiredVramGB` 0; `triposplat` with no `sizeGB`). Adoption stays an owner decision.
 
 - **Archived record**: `docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md`
 

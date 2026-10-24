@@ -764,10 +764,10 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 
 ## Legacy known-gaps triage (queued v2.15.0)
 
-- [ ] Phase 1: pinned inventory and lossless converter ([plan](releases/v2/v2.15/plans/v2.15.0-legacy-known-gaps-triage.md)).
+- [ ] Phase 1: pinned inventory and lossless converter ([plan](archives/v2/v2.15/plans/v2.15.0-legacy-known-gaps-triage.md)).
 - [ ] Phase 2: convert ledgers v1.17 to v2.12 and the carry-forward register to the checker's format.
 - [ ] Phase 3: triage the register and v2.12 (about 48 items); batch about 182 archived-only items for follow-up plans.
-- [ ] Phase 4: apply dispositions, verify migrations, record the checker-contract gap ([Nexus-Hub handoff](releases/v2/v2.15/development/v2.15.0-nexus-hub-checker-handoff.md)).
+- [ ] Phase 4: apply dispositions, verify migrations, record the checker-contract gap ([Nexus-Hub handoff](archives/v2/v2.15/development/v2.15.0-nexus-hub-checker-handoff.md)).
 - [ ] Phase 5: final phase and publication.
 
 ## Voice latency and LFM2.5-24B trial (v2.14.2, planned as v2.14.0)

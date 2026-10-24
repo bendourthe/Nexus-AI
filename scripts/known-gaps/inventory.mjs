@@ -14,7 +14,7 @@
  *
  * --json      machine output instead of the Markdown report
  * --baseline  compare against the dated baseline block in <file>
- *             (default: docs/releases/v2/v2.15/development/v2.15.0-ledger-conversion.md)
+ *             (default: docs/archives/v2/v2.15/development/v2.15.0-ledger-conversion.md)
  * --snapshot  print a baseline block for today's state and exit
  * --triage <file>   check that the triage record lists every open register and
  *                   v2.12 release item once
@@ -57,7 +57,7 @@ const REGISTER_PATHS = new Set([
   ["docs", "archives", "v2", "v2.12", "known-gaps.md"].join("/"),
 ]);
 export const BATCH_LIMIT = 60;
-export const DEFAULT_BASELINE = "docs/releases/v2/v2.15/development/v2.15.0-ledger-conversion.md";
+export const DEFAULT_BASELINE = "docs/archives/v2/v2.15/development/v2.15.0-ledger-conversion.md";
 const BASELINE_RE = /<!-- inventory-baseline:start -->\s*```json\s*([\s\S]*?)```\s*<!-- inventory-baseline:end -->/;
 const RECORD_FIELD_RE = /^\s*[-*+]\s+\*\*Archived record\*\*\s*:\s*(.*)$/m;
 
