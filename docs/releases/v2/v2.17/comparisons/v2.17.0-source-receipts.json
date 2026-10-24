@@ -1,0 +1,376 @@
+{
+  "assessment_date": "2026-10-23",
+  "timezone": "America/Los_Angeles",
+  "adoption_target": "v2.17.0",
+  "owner_target_confirmed": true,
+  "baseline": {
+    "branch": "develop",
+    "commit": "efaa651dd447cc6c0efdad359bc5457118e5906a",
+    "package_version": "2.15.0",
+    "observed_host_node": "v24.13.0",
+    "observed_installed_typescript": "5.9.3",
+    "declared_node": ">=20.0.0",
+    "declared_typescript": "^5.4.0",
+    "installer_node": "22.11.0"
+  },
+  "initial_page_scans": [
+    {
+      "id": "hf",
+      "url": "https://huggingface.co/peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "status": 200,
+      "final_url": "https://huggingface.co/peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "bytes": 294594,
+      "sha256": "7abe1c2a879ea7560df1a1a913fd5402f7a221c33728ad5ca53f7a360a5fd9a7",
+      "findings": [],
+      "verdict": "CLEAR",
+      "scope": "heuristic scan of fetched page only; no execution or complete dependency audit"
+    },
+    {
+      "id": "recipe",
+      "url": "https://github.com/deepseek-ai/deepseek-recipe",
+      "status": 200,
+      "final_url": "https://github.com/deepseek-ai/deepseek-recipe",
+      "bytes": 339971,
+      "sha256": "10ba31c268015e029a636861820cb9dbdaa767b1bb68c662d1ae6a27d2c55724",
+      "findings": [],
+      "verdict": "CLEAR",
+      "scope": "heuristic scan of fetched page only; no execution or complete dependency audit"
+    },
+    {
+      "id": "evals",
+      "url": "https://hamel.dev/blog/posts/decision-model-evals/",
+      "status": 200,
+      "final_url": "https://hamel.dev/blog/posts/decision-model-evals/",
+      "bytes": 78649,
+      "sha256": "be314c3fda3928d002d7248fa976547fb3aeea64592629a4acb54f544211c0b8",
+      "findings": [],
+      "verdict": "CLEAR",
+      "scope": "heuristic scan of fetched page only; no execution or complete dependency audit"
+    },
+    {
+      "id": "reylo",
+      "url": "https://github.com/colinhacks/reylo",
+      "status": 200,
+      "final_url": "https://github.com/colinhacks/reylo",
+      "bytes": 337924,
+      "sha256": "bfa87d87ee4e3abc201828a13bca2b79709a206184b363659ce74bb8f585b0fc",
+      "findings": [],
+      "verdict": "CLEAR",
+      "scope": "heuristic scan of fetched page only; no execution or complete dependency audit"
+    }
+  ],
+  "repository_scans": [
+    {
+      "id": "recipe",
+      "repo": "deepseek-ai/deepseek-recipe",
+      "revision": "935817c66f5d6e64838f419692545f06787e485f",
+      "date": "2026-10-19T17:51:02Z",
+      "archive_sha256": "88b2d3b1483a538aa9b45de4f7d5f9c18b9026f4adf9e0c99ff1ced48e8ee55b",
+      "archive_bytes": 4101215,
+      "text_files_scanned": 136,
+      "skipped_binary_large_or_nonfile": 47,
+      "verdict": "CLEAR",
+      "scope": "text snapshot only; skipped files not assessed; no code executed",
+      "finding_count": 0,
+      "finding_types": [],
+      "representative_findings": []
+    },
+    {
+      "id": "reylo",
+      "repo": "colinhacks/reylo",
+      "revision": "c8eddb9bf0a89603b35b7b34b4bb3aeccf5bc4d2",
+      "date": "2026-10-24T02:47:46Z",
+      "archive_sha256": "c044c4dcaa9050ff5c035391f6336994fdc2522aabda553fa9c3b2c3c01e7b7b",
+      "archive_bytes": 6747771,
+      "text_files_scanned": 3480,
+      "skipped_binary_large_or_nonfile": 331,
+      "verdict": "PROCEED-WITH-CAUTION",
+      "scope": "text snapshot only; skipped files not assessed; no code executed",
+      "finding_count": 57,
+      "finding_types": [
+        "destructive",
+        "external_code"
+      ],
+      "representative_findings": [
+        {
+          "path": ".github/workflows/test.yml",
+          "type": "destructive",
+          "line": 250,
+          "excerpt": "gresql-18-postgis-3           sudo rm -rf ~/postgres-debs/partial ~/postgres-debs/lock           sudo chown -R \"$USER\" ~/postgres-debs       - "
+        },
+        {
+          "path": "README.md",
+          "type": "external_code",
+          "line": 92,
+          "excerpt": "}   ] } ```  Then type-check with `--runExternalCode`, which lets `tsc` run content mappers:  ```jsonc // package.json {   \"scripts\": {     \"typecheck\":"
+        },
+        {
+          "path": "README.md",
+          "type": "external_code",
+          "line": 98,
+          "excerpt": ": {     \"typecheck\": \"tsc --noEmit --runExternalCode\"   } } ```  Point Reylo at your dev database with `DATABASE_URL`, in your environment or in `.env`."
+        }
+      ]
+    },
+    {
+      "id": "deepinfer",
+      "repo": "deepseek-ai/DeepInfer",
+      "revision": "9bd9cf243fc53ef9afbf8f04d391d989117d6ab9",
+      "date": "2026-10-21T04:55:43Z",
+      "archive_sha256": "0a4a1e96d48594f1e63dd7c4bb276a12e80d6efe5cf9adcbd295788bcb693406",
+      "archive_bytes": 2329121,
+      "text_files_scanned": 336,
+      "skipped_binary_large_or_nonfile": 63,
+      "verdict": "CLEAR",
+      "scope": "text snapshot only; skipped files not assessed; no code executed",
+      "finding_count": 0,
+      "finding_types": [],
+      "representative_findings": []
+    }
+  ],
+  "selected_file_hashes": {
+    "recipe": [
+      {
+        "path": "README.md",
+        "sha256": "e3ea4bd6b3a3debd8431af23d81935b93858636883dfc651f7ecc3416e099a67"
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "ebb4f09972aee8608be255debaf78451a68e95c290f55c240dec2ecfa16ea6be"
+      },
+      {
+        "path": "Cargo.toml",
+        "sha256": "790d9820e34cfb0555aba0d64e753591cffb786ee66c73b6c7d2925972ba0510"
+      },
+      {
+        "path": "docs/streaming.md",
+        "sha256": "d5f6ab095c36ba165a3b89bff484b2c99f9216a2218d60f5a20bd151492b5b40"
+      },
+      {
+        "path": "docs/tokenizer.md",
+        "sha256": "3ac464425807e1251693a8813c3e586833d8a098732860f893ac4ce07b2454c4"
+      }
+    ],
+    "deepinfer": [
+      {
+        "path": "README.md",
+        "sha256": "b55624158ada4dc21b882d24ded06bf82f65350b44d170877b68395712cd670d"
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      },
+      {
+        "path": "pyproject.toml",
+        "sha256": "30de7579a8df8b3b4c4fe6efa957e5bdf3ac39a0a87ddfff3c76836f95f530d0"
+      },
+      {
+        "path": "requirements-nvidia.txt",
+        "sha256": "f76510c5b75dc9633669596d03534a537b9f14241718b8fc93fdff9e4b795162"
+      },
+      {
+        "path": "requirements-ascend.txt",
+        "sha256": "cba98a19c7bf0401d8b9c4f904e2eba953fe441f438ea11c794cb4ac49dd670e"
+      },
+      {
+        "path": "doc/inference_deployment_qa.md",
+        "sha256": "55d428d9958aa35ac863d7f5a2eb21528e683226784b1ac334e8068e21f2326f"
+      }
+    ],
+    "reylo": [
+      {
+        "path": "README.md",
+        "sha256": "f43931f3413b47dbec8d0ee24ff5af64a95234393f97f513a61d998248b4b4c8"
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "c4a29d986bb728a959358e18d51de924920ef876b7c91f471fe0efbf6ae76ad4"
+      },
+      {
+        "path": "package.json",
+        "sha256": "ecec8df6fb964f03f7c342b34ee4b13b92ac12289114eec044d7bd0065dd1dc9"
+      },
+      {
+        "path": "src/esbuild.ts",
+        "sha256": "8708a28317bd69d951ab6e755d7e2404f050bb6424683628141bd06b480f2ed7"
+      },
+      {
+        "path": "src/render.ts",
+        "sha256": "36507efa825358cdd0f44dc149a2d5b641b42786bc4d2f1128200a85ce793fb3"
+      },
+      {
+        "path": "engine/sqlite/csrc/reylo_sqlite.c",
+        "sha256": "221075ffef0611947fd0e7c9242e967c556433aaeb2484feeaca8e6423777b0f"
+      },
+      {
+        "path": "tests/sqlite-drivers.test.ts",
+        "sha256": "98f7f66962d9eef6ce264d74f8ce1f6c82525c02310edc82a7c3f8dcf13be7ff"
+      },
+      {
+        "path": ".github/workflows/test.yml",
+        "sha256": "00fe25fb3f21c3f95486328f08f6f858751f9da67d88872600babf9bb9496ae1"
+      }
+    ]
+  },
+  "supplemental_scans": [
+    {
+      "id": "hf-card",
+      "url": "https://huggingface.co/peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF/raw/d1fc01009f21e26157acb6858c315d0365483b72/README.md",
+      "bytes": 4690,
+      "sha256": "3e6df34f789b197cc0ad00777d0835d0a34fbd35cb3b32e38e5579ea72858635",
+      "scan": "CLEAR",
+      "findings": []
+    },
+    {
+      "id": "hf-files-s",
+      "url": "https://huggingface.co/api/models/peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF/tree/d1fc01009f21e26157acb6858c315d0365483b72/Maya-S",
+      "bytes": 2131,
+      "sha256": "689a6aa3c85247ff8c35fc1e3b9c086dd74989f32e4a349bd1a0157d17c90c76",
+      "scan": "CLEAR",
+      "findings": []
+    },
+    {
+      "id": "hf-files-xs",
+      "url": "https://huggingface.co/api/models/peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF/tree/d1fc01009f21e26157acb6858c315d0365483b72/Maya-XS",
+      "bytes": 1776,
+      "sha256": "62ed6fe8d1ef996ef9b6bc68dd2d043bb38ebb43a9f8526eecb0971debe87fa1",
+      "scan": "CLEAR",
+      "findings": []
+    },
+    {
+      "id": "maya-readme",
+      "url": "https://raw.githubusercontent.com/mw00/project-maya/main/README.md",
+      "bytes": 30250,
+      "sha256": "b38e1a162a70e43adf7de1be8da862cf09807f20c8844a0275442751838fc3b8",
+      "scan": "CLEAR",
+      "findings": []
+    }
+  ],
+  "hf_revision": "d1fc01009f21e26157acb6858c315d0365483b72",
+  "gguf_file_inventory": {
+    "hf-files-s": {
+      "file_count": 6,
+      "total_bytes": 339477953988,
+      "files": [
+        {
+          "path": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00001-of-00006.gguf",
+          "bytes": 47887697312,
+          "lfs_sha256": "1f3437f57042e69f94c141ffbcba0d5610dab63feb07244fb468be4940d6763f"
+        },
+        {
+          "path": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00002-of-00006.gguf",
+          "bytes": 47669578400,
+          "lfs_sha256": "66501fee8702ffd54e6f065323ab54bb3150d20b10b01922c589e7462c7b5ba6"
+        },
+        {
+          "path": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00003-of-00006.gguf",
+          "bytes": 47103347360,
+          "lfs_sha256": "3195b23f33337c46a07c48583946d99147c3635412bc4adc6acdc4cf42bf30ad"
+        },
+        {
+          "path": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00004-of-00006.gguf",
+          "bytes": 35532532032,
+          "lfs_sha256": "d60dba35fac9601cd5c6026439dd980c457a5bb1c009192ea539b220108ea0db"
+        },
+        {
+          "path": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00005-of-00006.gguf",
+          "bytes": 80641295472,
+          "lfs_sha256": "c98d46f96a25d17c4c54da5a60782c130255c364a22e621ea28d5c98a692ceb2"
+        },
+        {
+          "path": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00006-of-00006.gguf",
+          "bytes": 80643503412,
+          "lfs_sha256": "98d65ef4f36e0b193935d44c3586241ca09b1b47e90f118e85332cfdb5860263"
+        }
+      ]
+    },
+    "hf-files-xs": {
+      "file_count": 5,
+      "total_bytes": 276626308260,
+      "files": [
+        {
+          "path": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00001-of-00005.gguf",
+          "bytes": 47781530400,
+          "lfs_sha256": "a0cb7966afd68bc35c46f78018d1fa1d2e4bcbe3c3baf39f60cd1733ed9ad7e5"
+        },
+        {
+          "path": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00002-of-00005.gguf",
+          "bytes": 47775748128,
+          "lfs_sha256": "ba5afb43adfc667436ebcfbd82d25411fa2843ee7e1d877290611cd60f93cca1"
+        },
+        {
+          "path": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00003-of-00005.gguf",
+          "bytes": 19784230848,
+          "lfs_sha256": "1482443bb4957c8d2f005ded365445f98558ff05c50674f9ee9a96ddabc122a4"
+        },
+        {
+          "path": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00004-of-00005.gguf",
+          "bytes": 80641295472,
+          "lfs_sha256": "0d93315942c523d82f6dbc0a6e0e1751548e309f3963f96b82f92e8f9bc52e36"
+        },
+        {
+          "path": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00005-of-00005.gguf",
+          "bytes": 80643503412,
+          "lfs_sha256": "39bbc8cde8b17604fed9a7ba7fc6bc9c5e72e34733657943ac049b4b9ca2d340"
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Heuristic UTF-8 source-text scan only; not a malware or complete supply-chain audit.",
+    "Source archives: 32 MB compressed cap; text files above 2 MB, binaries and nonfiles skipped.",
+    "Submodule and installed dependency contents were not scanned.",
+    "Project Maya supplemental README is a moving-main snapshot, identified by SHA-256; no full Maya code scan.",
+    "No model weights downloaded; no external code, install scripts, upstream tests, model inference or packaged app flow executed.",
+    "Current repository paths were statically inspected; no supported integration is established."
+  ],
+  "verification": {
+    "documentation_checks": {
+      "local_link_occurrences": 30,
+      "unique_local_link_targets": 27,
+      "unique_external_links": 11,
+      "checked_source_file_hashes": 19,
+      "preserved_existing_files": 3,
+      "report_lines": 159,
+      "report_words": 3530,
+      "errors": [],
+      "docs_layout": "pass: node scripts/check-docs-layout.mjs",
+      "git_diff_check": "pass; pre-existing DEVLOG line-ending warning only",
+      "tracked_link_baseline_after": 3772,
+      "newly_broken_tracked_links": 0,
+      "new_report_links_checked_separately": true,
+      "new_report_ascii_and_whitespace": "pass",
+      "no_tests_or_builds_run": "documentation-only comparison; runtime claims unqualified",
+      "report_sha256": "948ca2362c525646627c07c3f19c67ef4f87d75fc768d5fb8bf2ee42f9118134",
+      "external_links": {
+        "checked": 11,
+        "http_200": 11,
+        "errors": []
+      },
+      "tracker_link_occurrences": 2,
+      "tracker_approved_additions_verified": true
+    },
+    "runtime_checks": "not run: documentation-only assessment",
+    "tracked_link_baseline_before": 3772,
+    "tracker": "approved append completed; one metric and two task rows; every pre-existing byte preserved",
+    "preserved_file_hashes": {
+      "docs/DEVLOG.md": "8e38b22c630f92ba0598ca3dbffc03bd1c2b1e8283af1fcb97348bebc74c0a25",
+      "package-lock.json": "684c54ed37db5878d474e4be8a75b0b317da8c8caa5e59c03401a748fc3c6eb9"
+    },
+    "approved_tracker_update": {
+      "approved": true,
+      "approval_date": "2026-10-23",
+      "guard_session": "nexus-compare-20261023",
+      "guard_accepts": [
+        "docs/todos.md"
+      ],
+      "before_sha256": "5524c07ad6fb60a67f15ddde2c0b537284784c3ad6d20ffafc88026aa27a8d8c",
+      "after_sha256": "cbe9d3f66aec6e2caf3f7d6590073ce2a5e423aa1c2cfba4efd5153f85b4f2f4",
+      "existing_bytes_preserved_after_removing_only_approved_additions": true,
+      "metric_row": "| Sources compared (DeepSeek, decision evals, Reylo; v2.17.0, 2026-10-23) | 4 / 4 | 4 | 0 |",
+      "completed_task_count": 1,
+      "open_planning_task_count": 1,
+      "implementation_authorized": false
+    }
+  }
+}
