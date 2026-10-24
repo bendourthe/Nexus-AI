@@ -84,13 +84,13 @@ Image Studio edits now have a versioned recipe (four adjustments, stroke and tex
 
 ## [2026-10-09] v2.12.0 Phase 6 - Completed evaluation
 
-Both scored runs completed within the approved ceiling, with exact coverage (expanded 152/152, anchor 96/96) and zero restarts. The unchanged preregistered rule yields futility: arm C cross-section scores are Qwen 0/20 and Gemma 4/20. Both arm A user-outcome targets were missed. The flag stays experimental and off; recommend removal or narrowing at the v2.13 review with no repeats. Post-run reporting corrections retain future returned errors and qualify uncached OCR timing. Fresh checks: 36 fixture/question tests, scoped strict TypeScript and lint, and the actual harness's controlled-adapter reporting exercise passed. Historical diagnostic limits remain WN-v212-5. [Results](releases/v2/v2.12/development/outline-eval.md), [history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [metadata](releases/v2/v2.12/development/evidence/phase-6-evaluation.json). One local results commit; no remote CI. Phase 7 remains open.
+Both scored runs completed within the approved ceiling, with exact coverage (expanded 152/152, anchor 96/96) and zero restarts. The unchanged preregistered rule yields futility: arm C cross-section scores are Qwen 0/20 and Gemma 4/20. Both arm A user-outcome targets were missed. The flag stays experimental and off; recommend removal or narrowing at the v2.13 review with no repeats. Post-run reporting corrections retain future returned errors and qualify uncached OCR timing. Fresh checks: 36 fixture/question tests, scoped strict TypeScript and lint, and the actual harness's controlled-adapter reporting exercise passed. Historical diagnostic limits remain WN-v212-5. [Results](archives/v2/v2.12/development/outline-eval.md), [history](archives/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [metadata](archives/v2/v2.12/development/evidence/phase-6-evaluation.json). One local results commit; no remote CI. Phase 7 remains open.
 
 ---
 
 ## [2026-10-09] v2.12.0 Phase 6 - Evaluation preregistration
 
-Prepared a deterministic 123-page manual and 38 expanded questions without changing the v2.11 anchor. The Phase 6 decision rule is frozen before inference. Shared deadline/cancellation and exclusive reports preserve the approved 14-hour bound and existing evidence. Fresh preparation checks: 36 tests, scoped strict lint and TypeScript pass. Results remain pending. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [preregistered rule](releases/v2/v2.12/development/outline-eval.md). Local preregistration only; no remote CI.
+Prepared a deterministic 123-page manual and 38 expanded questions without changing the v2.11 anchor. The Phase 6 decision rule is frozen before inference. Shared deadline/cancellation and exclusive reports preserve the approved 14-hour bound and existing evidence. Fresh preparation checks: 36 tests, scoped strict lint and TypeScript pass. Results remain pending. [History](archives/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-6.md), [preregistered rule](archives/v2/v2.12/development/outline-eval.md). Local preregistration only; no remote CI.
 
 ---
 
@@ -98,7 +98,7 @@ Prepared a deterministic 123-page manual and 38 expanded questions without chang
 
 Settings > Security now exposes experimental, off-by-default outline tools and optional summaries. Authoritative status disables uncertain writes; environment overrides keep their controls read-only and summaries-only changes preserve the saved outline preference. DF-v211-4 is resolved without answer-quality promotion.
 
-Verified: 2,245 desktop tests pass with one existing skip, focused regression first failed then passed, strict lint/typechecking, web and guarded sidecar builds pass. Real Chromium with the actual status/setter dispatcher verifies keyboard/toggle/reload and 320/768/1,200-pixel layout with zero runtime errors. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md), [evidence](releases/v2/v2.12/development/evidence/phase-5-settings/browser.json). One local commit; no remote CI.
+Verified: 2,245 desktop tests pass with one existing skip, focused regression first failed then passed, strict lint/typechecking, web and guarded sidecar builds pass. Real Chromium with the actual status/setter dispatcher verifies keyboard/toggle/reload and 320/768/1,200-pixel layout with zero runtime errors. [History](archives/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md), [evidence](archives/v2/v2.12/development/evidence/phase-5-settings/browser.json). One local commit; no remote CI.
 
 ---
 
@@ -106,13 +106,13 @@ Verified: 2,245 desktop tests pass with one existing skip, focused regression fi
 
 Both coding loops use caller-owned result elision while preserving system/task/newest result and native call metadata. The headless loop compacts at 60% toward 40%, rechecks real counts, and stops clearly when no safe elision remains. Desktop errors use the existing user-facing formatter; loaded-window probes remain bounded and cancellable through their response bodies. Legacy result markers survive fork/resume and remain excluded from human-turn protection.
 
-Verified: 672 expanded tests, 46 targeted desktop tests, strict lint, both typechecks, scratch production runtime/core builds, guarded sidecar build, and architecture checking with zero errors/18 existing warnings. The real 65-page PDF run completed nine reads and six compactions with task retained and final answer marker present; without-elision estimate 16,729 exceeds the 16,384-token window. This is context-management evidence, not answer-quality promotion. [History](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md), [evidence](releases/v2/v2.12/development/evidence/phase-4-compaction.json). One local phase commit; no remote CI.
+Verified: 672 expanded tests, 46 targeted desktop tests, strict lint, both typechecks, scratch production runtime/core builds, guarded sidecar build, and architecture checking with zero errors/18 existing warnings. The real 65-page PDF run completed nine reads and six compactions with task retained and final answer marker present; without-elision estimate 16,729 exceeds the 16,384-token window. This is context-management evidence, not answer-quality promotion. [History](archives/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md), [evidence](archives/v2/v2.12/development/evidence/phase-4-compaction.json). One local phase commit; no remote CI.
 
 ---
 
 ## [2026-10-09] v2.12.0 Phase 3 - Native tool history
 
-Index: [plan](releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md), [captured evidence](releases/v2/v2.12/development/evidence/phase-3-native-history.json).
+Index: [plan](archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](archives/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md), [captured evidence](archives/v2/v2.12/development/evidence/phase-3-native-history.json).
 
 Both coding loops retain native assistant calls and matching tool-role results for Ollama, including screened result bytes. Compaction and range compression preserve complete batches; guarded or interrupted calls get matching failure results. Persistence keeps user-role rows and rebuilds the legacy prompt on resume. OpenAI-compatible backends keep their current history format, recorded as DF-v212-4.
 
@@ -122,7 +122,7 @@ Verification: 1,674 coding tests and 2,227 desktop tests passed, with existing s
 
 ## [2026-10-09] v2.12.0 Phase 2 - Window-aware document output
 
-Index: [plan](releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md).
+Index: [plan](archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), [verified history](archives/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md).
 
 Both coding loops size each document-tool result from current prompt usage and results already added in the turn. Unknown counts retain fixed-share caps; rewritten histories invalidate stale usage. OpenAI-shaped streams retain late usage with a bounded terminal wait and preserve completed responses after a subsequent transport reset.
 
@@ -132,7 +132,7 @@ Verification: 6,162 root tests passed with 12 existing skips; lint/build and des
 
 ## [2026-10-08] v2.12.0 Phase 1 - Kolibri-1 decline and the declined-models index
 
-Index: [plan](releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), absorbed seed [kolibri-1](releases/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md), history [P1](releases/v2/v2.12/development/history/2026-10-08_v2.12.0-outline-promotion-readiness-phase-1.md).
+Index: [plan](archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), absorbed seed [kolibri-1](archives/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md), history [P1](archives/v2/v2.12/development/history/2026-10-08_v2.12.0-outline-promotion-readiness-phase-1.md).
 
 ### What Changed
 
