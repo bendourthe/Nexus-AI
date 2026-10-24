@@ -2,7 +2,7 @@
 
 **Project**: Nexus
 **Status**: finalized
-**Finalization**: 2026-10-19 by v2.15.0: every open item migrated to [the v2.15 ledger](../v2.15/known-gaps.md).
+**Finalization**: 2026-10-19 by v2.15.0: every open item migrated to [the v2.15 ledger](../../../releases/v2/v2.15/known-gaps.md).
 **Open items**: 0
 **Last updated**: 2026-10-15
 
@@ -74,7 +74,7 @@ The former carry-forward register is preserved below under `v2.12 Carry-forward 
 
 ## v2.12 Carry-forward register
 
-**Status**: finalized 2026-10-19 by v2.15.0. Every entry below is resolved, superseded or migrated; the remaining work lives in [the v2.15 ledger](../v2.15/known-gaps.md) and the [follow-up batch list](../v2.15/development/v2.15.0-followup-batches.md). Do not add entries here.
+**Status**: finalized 2026-10-19 by v2.15.0. Every entry below is resolved, superseded or migrated; the remaining work lives in [the v2.15 ledger](../../../releases/v2/v2.15/known-gaps.md) and the [follow-up batch list](../../../releases/v2/v2.15/development/v2.15.0-followup-batches.md). Do not add entries here.
 **Last updated**: 2026-10-09
 
 v2.11 moved to `docs/archive/v2/v2.11/`. v2.11.0 is published. The rows below were open when carried forward; subsequent resolutions are stated explicitly. The archived file for each row remains the detailed record. DF-11 stays open in `docs/archive/v2/v2.0/known-gaps.md`. New phase dispositions are recorded in the [canonical v2.12 ledger](known-gaps.md).
@@ -84,7 +84,7 @@ v2.11 moved to `docs/archive/v2/v2.11/`. v2.11.0 is published. The rows below we
 Native round trips through those backends are not proven here. Owner: the maintainer.
 
 - **Archived record**: [Canonical Phase 3 record](known-gaps.md)
-- **Superseded by**: docs/releases/v2/v2.12/known-gaps.md DF-v212-4
+- **Superseded by**: docs/archives/v2/v2.12/known-gaps.md DF-v212-4
 
 ### BG-2 - SANA ControlNet SHA-256 pins are still the all-zero placeholder. - MIGRATED to v2.15.0
 
@@ -299,7 +299,7 @@ The smallest community GGUF (Q3_K_S, about 3.47 bits per weight) is roughly 34 G
 
 ### DF-v212-2 - No catalog-wide check that every entry's declared size fits its tier; the Kolibri-1 decision keeps a per-model guard instead (decided at the seed plan's grill). - MIGRATED to v2.15.0
 
-Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md`, parked gaps. Owner: the maintainer. Next step: a plan that already edits `core/registry/catalog.json` measures how many current entries such a check would flag before adopting it. Measured in v2.14.0 Phase 5 over 41 entries ([script](../../../archives/v2/v2.14/development/evidence/measure-catalog-size-check.mjs)): a tier-default check flags 1 (`qwen3.5:4b` is a cpu agentic default yet declares `requiredVramGB` 4); a field-consistency check flags 9 (six `hideBelowVramGB` values below the declared need, several apparently deliberate for offload builds; two embedding models with `vramGB` 1 over `requiredVramGB` 0; `triposplat` with no `sizeGB`). Adoption stays an owner decision.
+Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md`, parked gaps. Owner: the maintainer. Next step: a plan that already edits `core/registry/catalog.json` measures how many current entries such a check would flag before adopting it. Measured in v2.14.0 Phase 5 over 41 entries ([script](../v2.14/development/evidence/measure-catalog-size-check.mjs)): a tier-default check flags 1 (`qwen3.5:4b` is a cpu agentic default yet declares `requiredVramGB` 4); a field-consistency check flags 9 (six `hideBelowVramGB` values below the declared need, several apparently deliberate for offload builds; two embedding models with `vramGB` 1 over `requiredVramGB` 0; `triposplat` with no `sizeGB`). Adoption stays an owner decision.
 
 - **Archived record**: `docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md`
 

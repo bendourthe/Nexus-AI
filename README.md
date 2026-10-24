@@ -147,7 +147,7 @@ This release carries the v2.12 and v2.13 plans. Its installers and VSIX packages
 - **Document output and tool history** - Document parsing is budgeted from current prompt usage, native tool calls keep their history, and both agent loops compact tool results. The experimental outline tools and their Settings controls were retired under the frozen evaluation fallback; generic OCR and `parse_document` remain available.
 - **EmbeddingGemma 2 is not admitted** - A bounded local evaluator exists, but Ollama 0.32.15 rejects the candidate, so the current embedder is retained (DF-1, DF-2). Kolibri-1 is declined and recorded in the declined-models index.
 
-Plans: [v2.13.0](docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md), [v2.12 gaps](docs/releases/v2/v2.12/known-gaps.md). Open items: [v2.14 carried gaps](docs/archives/v2/v2.14/known-gaps.md).
+Plans: [v2.13.0](docs/releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md), [v2.12 gaps](docs/archives/v2/v2.12/known-gaps.md). Open items: [v2.14 carried gaps](docs/archives/v2/v2.14/known-gaps.md).
 
 ### What's new in v2.10.0
 
@@ -181,7 +181,7 @@ Image Studio can open a local `.splat` or `.ply` beside a finished image, with t
 - **Source image stays** - A splat download is a different file from the PNG.
 - **Optional generate** - Set `NEXUS_SPLAT_NVIDIA=1` and `NEXUS_SPLAT_CUDA=1` only on a machine that actually has them, and place the MIT weights yourself. The fake benchmark is `node scripts/bench-gaussian-splat.mjs`.
 
-Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/releases/v2/v2.12/known-gaps.md).
+Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/archives/v2/v2.12/known-gaps.md).
 
 ### What's new in v2.4.1
 

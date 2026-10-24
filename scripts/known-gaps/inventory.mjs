@@ -49,7 +49,7 @@ import {
 
 export const REGISTER = "docs/v2/v2.12/known-gaps.md";
 export const SCOPE = { from: "v1.17", to: "v2.12", extra: ["v2.15"] };
-export const RELEASE_V212 = "docs/releases/v2/v2.12/known-gaps.md";
+export const RELEASE_V212 = "docs/archives/v2/v2.12/known-gaps.md";
 // Exact logical identities survive archiving without changing captured fixtures.
 const REGISTER_PATHS = new Set([
   REGISTER,
