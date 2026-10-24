@@ -1,0 +1,254 @@
+{
+  "status": "LOCALLY_VERIFIED_CANDIDATE_NOT_PUBLISHED",
+  "base": "506e8c5e1157aca0f846a6fd298dea0f1e3b946e",
+  "pr": "https://github.com/bendourthe/Nexus-AI/pull/135",
+  "failed_ci_runs": [
+    40051163155,
+    40051177368
+  ],
+  "dependency_changes": {
+    "body-parser": [
+      "2.3.0",
+      "2.4.0"
+    ],
+    "fast-uri": [
+      "3.1.8",
+      "3.1.9"
+    ],
+    "undici": [
+      "7.30.0",
+      "7.30.1"
+    ],
+    "zod": [
+      "3.25.76",
+      "4.6.7"
+    ]
+  },
+  "production_audit_before": {
+    "body-parser": {
+      "severity": "high",
+      "advisories": [
+        "https://github.com/advisories/GHSA-27r3-jxmh-p828"
+      ]
+    },
+    "fast-uri": {
+      "severity": "moderate",
+      "advisories": [
+        "https://github.com/advisories/GHSA-w74x-v6f9-j3xg",
+        "https://github.com/advisories/GHSA-xhq7-xmqj-769h",
+        "https://github.com/advisories/GHSA-wjr9-j795-jxcr",
+        "https://github.com/advisories/GHSA-333x-w4r6-6crp"
+      ]
+    },
+    "katex": {
+      "severity": "low",
+      "advisories": [
+        "https://github.com/advisories/GHSA-238p-pmpm-9mq7"
+      ]
+    },
+    "mermaid": {
+      "severity": "low",
+      "advisories": []
+    },
+    "undici": {
+      "severity": "high",
+      "advisories": [
+        "https://github.com/advisories/GHSA-4qv8-2p9j-2685",
+        "https://github.com/advisories/GHSA-f72v-6w45-q472",
+        "https://github.com/advisories/GHSA-xjj6-f33q-929c"
+      ]
+    },
+    "zod": {
+      "severity": "high",
+      "advisories": [
+        "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5"
+      ]
+    }
+  },
+  "production_audit_after": {
+    "info": 0,
+    "low": 2,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 2
+  },
+  "production_gate": {
+    "exit": 0,
+    "blocking": 0,
+    "allowlisted": 0,
+    "retained_low": [
+      "katex",
+      "mermaid"
+    ]
+  },
+  "root_tests": {
+    "numTotalTests": 6491,
+    "numPassedTests": 6479,
+    "numFailedTests": 0,
+    "numPendingTests": 12
+  },
+  "desktop_tests": {
+    "numTotalTests": 2374,
+    "numPassedTests": 2373,
+    "numFailedTests": 0,
+    "numPendingTests": 1
+  },
+  "initial_concurrent_tests": {
+    "root": {
+      "numTotalTests": 6491,
+      "numPassedTests": 6469,
+      "numFailedTests": 10,
+      "numPendingTests": 12
+    },
+    "desktop": {
+      "numTotalTests": 2366,
+      "numPassedTests": 2363,
+      "numFailedTests": 2,
+      "numPendingTests": 1
+    },
+    "disposition": "Retained; 57 initially failing root-file tests pass on both unchanged base and candidate; subsequent separate full runs have zero failures."
+  },
+  "protocol_regression": {
+    "red_failed": 6,
+    "red_passed": 2,
+    "green_passed": 8,
+    "actual_zod3_base_and_zod4_candidate_contracts_equal": true
+  },
+  "commands": {
+    "build-root-fixed": {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "build",
+        "--silent"
+      ],
+      "exit": 0,
+      "seconds": 5.4
+    },
+    "final-typecheck": {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "typecheck",
+        "--workspace",
+        "@nexus/desktop",
+        "--silent"
+      ],
+      "exit": 0,
+      "seconds": 15.93
+    },
+    "build-web": {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "build:web",
+        "--workspace",
+        "@nexus/desktop",
+        "--silent"
+      ],
+      "exit": 0,
+      "seconds": 20.77
+    },
+    "final-sidecar": {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "build:sidecar",
+        "--silent"
+      ],
+      "exit": 0,
+      "seconds": 2.78
+    },
+    "lint-root": {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "lint",
+        "--",
+        "--max-warnings=0"
+      ],
+      "exit": 0,
+      "seconds": 9.29
+    },
+    "lint-desktop": {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "lint",
+        "--workspace",
+        "@nexus/desktop"
+      ],
+      "exit": 0,
+      "seconds": 9.31
+    },
+    "audit-final": {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "check:audit-prod",
+        "--silent"
+      ],
+      "exit": 0,
+      "seconds": 13.38
+    },
+    "repository-check": {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "check",
+        "--silent"
+      ],
+      "exit": 0,
+      "seconds": 3.11
+    },
+    "tampering": {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "check:tampering",
+        "--silent"
+      ],
+      "exit": 0,
+      "seconds": 1.0
+    }
+  },
+  "packaged_sidecar_smoke": {
+    "node": "22.11.0",
+    "ready": true,
+    "valid_ping": true,
+    "invalid_params_rejected": true,
+    "valid_ping_after_rejection": true,
+    "malformed_json_code": -32700,
+    "clean_exit": 0,
+    "isolated_user_home": true
+  },
+  "preservation": {
+    "open_obligations": 247,
+    "future_ledger_blob": "4695d57979438f72455d01a02b570d4c1d79db0e",
+    "future_ledger_unchanged": true,
+    "native_v212_refusal_record_unchanged": true,
+    "archive_and_raw_evidence_changes": false,
+    "audit_allowlist_changes": false,
+    "ci_workflow_changes": false
+  },
+  "source_artifacts_sha256": {
+    "production-audit-before.json": "5943159655b67d3337a9a5755f8645d72a561afbbac7a8639ec8714b8b684dd4",
+    "production-audit-after.json": "b77e339afcb8ddc6d29becb67fe17a3ee657ccf9e2a046c1f5af61fd6b17697b",
+    "audit-candidate-tests-root-results.json": "3384df738a603d48d5fe6b227b4a3b7455c9752341874e8120bcd3b44be91e9f",
+    "audit-candidate-tests-desktop-results.json": "363b305f39a30b0fa87e0e4aa14be823c9674831ab25a58ac03d9df5c90ddb89",
+    "audit-candidate-tests-root-serial-results.json": "185d3c0d7f851223f1cb2f6f42bf3e33beabe8e16b40d82356434e875172d07a",
+    "audit-candidate-tests-desktop-serial-results.json": "2c47f201ad1d1bc28d4ae5df4ef6d69f51767f3c4b69326c2737e22fb4e5a5fe",
+    "audit-candidate-protocol-red-results.json": "8f2a675e706b0738feffb9435abcb12f010ec378a8e7008fa26f507134f3122e",
+    "audit-candidate-protocol-green-results.json": "920e621e0cff2b83e3cdd6decf4a760a84a1eafcfb0ba64ceb0e1cc15bd02196",
+    "audit-candidate-protocol-contract-comparison.json": "e2cd2b7f5b26672e55b64b291becff994c16c22df96fbc493de1f3d277c83650",
+    "audit-candidate-sidecar-smoke-final.json": "e5d94d26c47b0df24bd9611d3bbbd9847933fc6698e0e565547eeb0275e4163f",
+    "audit-failures-base-results.json": "571e44546cfe62a8106a566667009169f3c8e96acc3fafd351411d3ca1c9e7df",
+    "audit-failures-candidate-results.json": "4a7bfd65490197ec983c02b4cc93709f96a2ee0236bc105476022b9fbf22d3fb"
+  },
+  "reporting_limitations": [
+    "Initial comparison wrappers printed a Windows cp1252 error after successful 57/57 test results; raw JSON is retained.",
+    "The web-build wrapper printed a Windows cp1252 error after the build exited 0; final sidecar build and smoke were executed separately with UTF-8 output.",
+    "Candidate has no remote CI yet; PR135 remains blocked at the unchanged archive head."
+  ]
+}

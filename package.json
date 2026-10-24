@@ -1095,7 +1095,7 @@
     "tree-sitter-wasms": "^0.1.13",
     "typescript": "^5.4.0",
     "web-tree-sitter": "^0.25.10",
-    "zod": "^3.23.8"
+    "zod": "^4.6.6"
   },
   "optionalDependencies": {
     "@huggingface/transformers": "^4.3.0",
@@ -1105,10 +1105,11 @@
     "qs": "^6.16.0",
     "hono": "^4.13.11",
     "dompurify": "^3.4.17",
-    "undici": "^7.29.0",
+    "undici": "^7.30.1",
     "@hono/node-server": "^1.19.15",
-    "fast-uri": "^3.1.7",
+    "fast-uri": "^3.1.9",
     "ip-address": "^10.7.4",
-    "react-router": "7.18.4"
+    "react-router": "7.18.4",
+    "body-parser": "^2.4.0"
   }
 }
