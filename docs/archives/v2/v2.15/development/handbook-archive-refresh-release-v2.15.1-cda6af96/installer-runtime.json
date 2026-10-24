@@ -1,0 +1,62 @@
+{
+  "snapshot": {
+    "entry_sha256": "f10cc63d36e5b22fa917b706d88f52db163ee282e84f6f1b1e5c8de3eb311bad",
+    "inputs": {
+      "docs/handbooks/technical/installer-runtime.md": "1d45617a487f1ab7c44c3b6509e54253380748d74030e31be1f80a597b999b41",
+      "scripts/generate-handbooks.mjs": "e0d4eba3098ba99ce83eda35ce53b04b27d9fc2b7e2feb07ba29881f27dc02d8",
+      "scripts/handbook-renderer.mjs": "0850935742db242e576989c2ced66a5810a0bdfd0cad78791916cf5efb21566d",
+      "docs/handbooks/_sources/storyboards.json": "bdc1c561b3bf3980e6a140661ff6a4724009d1a140ab1a3fb259876d4045d651",
+      "docs/handbooks/_sources/handbook.css": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf",
+      "docs/handbooks/_sources/handbook-clones.js": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b",
+      "docs/handbooks/_sources/dual-view.css": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
+      "docs/handbooks/_sources/dual-view-runtime.js": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
+      "desktop/public/nexus-mark.png": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05",
+      "package.json": "793c481d5f05ba09098ccef1c9fa176f3f58dc7bf2b9120b0242d148c62458a4",
+      "package-lock.json": "e27a8c9aafbad0d33248f1d1eefdbcfd9d91fcf1cb20f8c70181f6689ef6d964",
+      "scripts/installer/src/nexus_installer/engine/diffusion_venv_provisioner.py": "f79a0bdba3b09b5600f877ff6bd78381fa528b838be09fc32099d1f4f922c661",
+      "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py": "6a5ad60fea06bd4c6e8e163cfdf8906455a6ab41a5873059455a45d3523f4c47",
+      "scripts/installer/src/nexus_installer/engine/hf_auth.py": "122dd264ed629aeedf1c95e09d4dd24dc5123a4b695e40d3e84423410feae52a",
+      "scripts/installer/src/nexus_installer/engine/gated_auth.py": "d8170932ed3f741876d63090ff85e208d184352223f19fa1d5b24f6ec9f45deb",
+      "runtimes/diffusion/repair.py": "52e702a84bbdf4cd7953b5315f9fdd2e5f29767ae3f2e1d265d39c646a736569",
+      "scripts/installer/src/nexus_installer/widgets/gated_auth_dialog.py": "4dcba881048c1f75f3dd6ce86eee60aa1a53071b9ebe3d4063752901d9bc3e49",
+      "scripts/installer/build/check-hf-catalog.py": "7f56ea7c14bdfd72e3ec93e8393dcaa67f1c97b62d57a81b61fbc4a555be4034"
+    },
+    "output_sha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05"
+  },
+  "checks": {
+    "content": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/archive-reference-review.md",
+      "evidence_sha256": "4c48fea77d04e9d2e044574aa0a315bf77b7c4c2baee79331b12ce6e117f17e3"
+    },
+    "build": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/archive-reference-review.md",
+      "evidence_sha256": "4c48fea77d04e9d2e044574aa0a315bf77b7c4c2baee79331b12ce6e117f17e3"
+    },
+    "rendered": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.15/development/evidence/archive-handbook-projection/iteration2/render-observations.json",
+      "evidence_sha256": "ba40ce776d377b85da592a9dded9c581492af5c2aa46b1b836c31c9c14ea6f63",
+      "browser": "Explicit reuse of reviewed archive rehearsal: six identical snapshots and HTML outputs, 36 viewports, nine print pages; no fresh browser execution",
+      "output_sha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05"
+    }
+  },
+  "render_evidence_reuse": {
+    "reason": "Only dependency override floors and two lockfile entries changed; exact HTML and presentation assets remain unchanged",
+    "previous_receipt_sha256": "d0dffd160ecac53a60075e023a991527856d87d6ccb345997651fc302d77c07c",
+    "previous_receipt": "docs/releases/v2/v2.15/development/v2.15.1-prepared-handbook-installer-runtime.json",
+    "published": false
+  },
+  "actual_archive_reference_update": {
+    "native_commits": {
+      "v2.12": "50bd7a79f7dd264acf835a57372d42b2f53b6df1",
+      "v2.13": "1b382186577814332b8e89b64c9804334267881f",
+      "v2.15": "293cbea25513057d93146447fb7dcd9a440b06b5"
+    },
+    "original_security_receipt": "docs/archives/v2/v2.15/development/v2.15.1-security-handbook-installer-runtime.json",
+    "original_security_receipt_raw_sha256": "1b319149add3dc04c1b45addcff9deeab23720ac3edce727a65d706c606c3bf7",
+    "qualified_rehearsal_receipt_raw_sha256": "5c61a09f82e9a8078829393150ef8420d14cbe6e9cd4e1e0b202b668e16359c4",
+    "fresh_browser_execution": false
+  }
+}

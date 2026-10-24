@@ -1,0 +1,79 @@
+{
+  "snapshot": {
+    "entry_sha256": "6b1bcc96427661dc64dd770388ac47953ba009275d614c9e48d2c053a1763ba5",
+    "inputs": {
+      "docs/handbooks/technical/document-outline.md": "a5d1611b8f03e98b29befea40d7da44914c0d7bff8ef042b7be1479586194987",
+      "scripts/generate-handbooks.mjs": "e0d4eba3098ba99ce83eda35ce53b04b27d9fc2b7e2feb07ba29881f27dc02d8",
+      "scripts/handbook-renderer.mjs": "0850935742db242e576989c2ced66a5810a0bdfd0cad78791916cf5efb21566d",
+      "docs/handbooks/_sources/storyboards.json": "bdc1c561b3bf3980e6a140661ff6a4724009d1a140ab1a3fb259876d4045d651",
+      "docs/handbooks/_sources/handbook.css": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf",
+      "docs/handbooks/_sources/handbook-clones.js": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b",
+      "docs/handbooks/_sources/dual-view.css": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
+      "docs/handbooks/_sources/dual-view-runtime.js": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
+      "desktop/public/nexus-mark.png": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05",
+      "package.json": "793c481d5f05ba09098ccef1c9fa176f3f58dc7bf2b9120b0242d148c62458a4",
+      "package-lock.json": "e27a8c9aafbad0d33248f1d1eefdbcfd9d91fcf1cb20f8c70181f6689ef6d964",
+      "modules/coding/runtime/outputBudget.ts": "d8b9f46f72afa5cebba37aba96db4a7504ca68edfd937dfa6a1ba607a288ff95",
+      "modules/coding/runtime/HeadlessAgentSession.ts": "1684dd6f3cd939b5d7ef8e106cd0238a851412a207f5c53d7c3def8631a2d157",
+      "modules/coding/llm/toolHistory.ts": "2802d6f767cf752ead32e36404ab4f39677ea78e7858460350db285afb308479",
+      "src/tools/AgentLoop.ts": "825e3d5b212487ad56589b23a90572be2c1934e43c859e16123ee3a1ab79ca77",
+      "modules/coding/guardrails/permissionTierMap.ts": "4cad2a7e2f697f98a8f184339bde820b25d17f6907869a18a1d149d60c0ad018",
+      "modules/coding/chat/ConversationManager.ts": "d075b92fcb4537656effc4075224368d2751af337d74f88d4fd5f188bd4aa6ac",
+      "modules/coding/chat/CompactionStrategy.ts": "d1187108bcc9863002a0317a0361afeff69e18c185f943bd13f1ed4ca9c40448",
+      "desktop/src/pages/settings/SecuritySettings.tsx": "26995bc46a3026e5d2ce8017eaf804a72eba30a227bdf8aec5dd60143ff700d2",
+      "modules/coding/runtime/headlessTools.ts": "f7aa1e83db362090cfbbc34d71ef49651376cd45560cdcba5434aff7cb9e4e91",
+      "src/tools/handlers/parseDocument.ts": "2c53492c912abf8979e006843558af3f1da8c98d8acb3c8cd8a7e30f36c452b3",
+      "docs/archives/v2/v2.12/development/outline-eval.md": "d4d7bcfa6eed910d869f73b9ffe0025e5f9392a63bedea6fd7b6feb70b9abc61",
+      "docs/archive/v2/v2.11/development/outline-feasibility.md": "0c6fb20d3dc58581eda16aae9a5b9e2e0d3abad88452c2469a6197ad96944c30",
+      "modules/coding/llm/OllamaClient.ts": "1ea7c5b8c861a897aacb792fb4861cf9687ebda8e2e158d698baf58631e77213",
+      "modules/coding/llm/LmStudioClient.ts": "8c18e2087fcc3044461098ac838f543db68100253d6825dee22e6fed65838e7e",
+      "modules/coding/llm/headlessOllamaClient.ts": "680fec95c79bce33a975f3052514e5198ee1bccd91cd5cea7943aaf7302fc207",
+      "modules/coding/llm/headlessOpenAiClient.ts": "0f44f0907c0dfc4cbeb428faf225d897b87fbbc6c17275b349b2a82655e13565",
+      "desktop/sidecar/src/coding/headlessAgentRunner.ts": "6c8becfbc1d6be26c334e85f526b548952a7072cf480807a59c210e595c2e2ed",
+      "desktop/sidecar/src/acp/AcpAgent.ts": "d24894b75c1a7024835c07b4b3e35264ca182586feab451406cd4f1d7aa0ffdf",
+      "desktop/sidecar/src/handlers.ts": "df177e3ff2d6acf1cdc78a6fa34da5b92d5bc5fa390cdab08e009be2951e58ba",
+      "desktop/sidecar/src/coding/scheduledHeadlessRunner.ts": "227290198a422377929c4cb1112f66e96c105a600970ac7859a111fdff912b01",
+      "desktop/sidecar/src/coding/sidecarHeadlessTools.ts": "1ded7794f0cd71409a2353bc80de800b6ab40130a2e6de614088465dab2c61df",
+      "src/tools/ToolRegistryBuilder.ts": "f6713f4e2a5f78a8bcb36fa49db57b882a248f93156b1200da005457d86e07b2",
+      "src/tools/ToolCatalog.ts": "0979620dc0b68aa10dd552e5da3eb0dc6840e101916af9108e53d694de0fbcdd",
+      "modules/coding/config/settings.ts": "8792b2d9dec1c3fab53ecf9dee2c5f0b5e0523a90cd6c73e46808f623d238223"
+    },
+    "output_sha256": "23bf3d2d5ca434c90d6c873c3e4e89915eced1ded86d68b24f9380a8e886a2e2"
+  },
+  "checks": {
+    "content": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/archive-reference-review.md",
+      "evidence_sha256": "4c48fea77d04e9d2e044574aa0a315bf77b7c4c2baee79331b12ce6e117f17e3"
+    },
+    "build": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/archive-reference-review.md",
+      "evidence_sha256": "4c48fea77d04e9d2e044574aa0a315bf77b7c4c2baee79331b12ce6e117f17e3"
+    },
+    "rendered": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.15/development/evidence/archive-handbook-projection/iteration2/render-observations.json",
+      "evidence_sha256": "ba40ce776d377b85da592a9dded9c581492af5c2aa46b1b836c31c9c14ea6f63",
+      "browser": "Explicit reuse of reviewed archive rehearsal: six identical snapshots and HTML outputs, 36 viewports, nine print pages; no fresh browser execution",
+      "output_sha256": "23bf3d2d5ca434c90d6c873c3e4e89915eced1ded86d68b24f9380a8e886a2e2"
+    }
+  },
+  "render_evidence_reuse": {
+    "reason": "Only dependency override floors and two lockfile entries changed; exact HTML and presentation assets remain unchanged",
+    "previous_receipt_sha256": "9f946b625c33e0b92524ad8dd0d90df79ee771baad4313409216eefc989d87a8",
+    "previous_receipt": "docs/releases/v2/v2.15/development/v2.15.1-prepared-handbook-document-outline.json",
+    "published": false
+  },
+  "actual_archive_reference_update": {
+    "native_commits": {
+      "v2.12": "50bd7a79f7dd264acf835a57372d42b2f53b6df1",
+      "v2.13": "1b382186577814332b8e89b64c9804334267881f",
+      "v2.15": "293cbea25513057d93146447fb7dcd9a440b06b5"
+    },
+    "original_security_receipt": "docs/archives/v2/v2.15/development/v2.15.1-security-handbook-document-outline.json",
+    "original_security_receipt_raw_sha256": "ab5d50822576b7f19c252bc6dae08c94cd75002ac06948662d89461977b832b7",
+    "qualified_rehearsal_receipt_raw_sha256": "9c3e741531015eb966c88c5da6414f80eb246a06da39b58e48560f0d282ff3a0",
+    "fresh_browser_execution": false
+  }
+}
