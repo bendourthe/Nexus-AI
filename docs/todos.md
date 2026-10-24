@@ -1,20 +1,21 @@
 # Nexus - Progress Dashboard
 
-## Archive readiness (2026-10-22)
+## Archive closeout (2026-10-23)
 
-**Active worktree**: `C:/nx-close`, branch `chore/close-v2.15`, base develop e6e464f2. The goal remains archive readiness for the recorded v2.12/v2.13/v2.15 plans. Earlier branch/version statements below are dated history; original-checkout user edits are preserved.
+**Active worktree**: `C:/nx-close`, branch `chore/close-v2.15`, archive base develop cda6af96. The recorded v2.12/v2.13/v2.15 archive-readiness goal is complete. The owner then continued into the ordered local archive procedure. Earlier branch/version statements below are dated history; original-checkout user edits are preserved.
 
-**Run status**: Genuine original approvals and the separately approved one-push/two-item exception remain verified. Recorded plans are 52/52 with actual publication and first-pass evidence bindings. The collected native archive refusals remain open until final probes pass. All 262 original identities retain 245 open carries, 14 closures and three prior resolutions; two new OPEN automation entries make 247 owed v2.16 obligations. A separate v2.12 waiting blocker remains open. No actual archive or deletion has occurred.
+**Run status**: Recorded plans are 52/52 with actual release and first-pass evidence bindings. PR134 merged and the final eleven readiness probes passed. Both v2.12 waiting blockers were answered through genuine native continuations. The native helper archived v2.12 at 50bd7a79, then v2.13 at 1b382186, then v2.15 at 293cbea2; each reported zero newly broken Markdown links. Whole-archive checks preserve all 4,330 originals, 103 fixtures, 612 evidence/JSON files, six original handbook receipts, 245 migrations and the 44/8 historical chains. All 73 affected tests and six full handbook checks pass; browser observations are explicitly reused after byte equality. The native post-archive v2.12 status still rejects stale destination bindings after the approved v2.15 move; its signature, plan and all 44 identities remain valid, and this limitation is recorded in the [archive report](archives/v2/v2.15/development/v2.15.1-archive-execution.md). Remote publication remains pending separate authority. All 262 original identities retain 245 open carries, 14 closures and three prior resolutions; two new OPEN automation entries make 247 owed v2.16 obligations. No branch or worktree was deleted, and no global MINOR COMPLETE claim is made.
 
 | Measure | Current | Required |
 | --- | --- | --- |
-| Recorded plans | 52/52; frozen 52 acceptance blocks retained | Final metadata PR and strict read-only verdicts |
+| Recorded plans | 52/52; frozen 52 acceptance blocks retained; PR134 and eleven final readiness probes complete | Preserve recorded dispositions through the archive |
 | Carries | 245 exact migrations;14 closures;three prior resolutions;two new direct OPEN entries | Preserve all247 owed destinations |
-| Integration | PR131 security correction, PR132 main promotion and PR133 backmerge merged; actual develop e6 has27 successful jobs | Final bounded metadata PR and its current required checks |
+| Integration | PR131 through PR134 merged; pre-archive develop cda has 27 successful jobs | Review and authorize the finished archive publication separately; all previous corrective pushes remain spent |
 | Local qualification | Root 6,479 passed/12 skipped;desktop 2,365 passed/one skipped;builds/lint and unchanged production gate pass | Reuse only for identical source bytes |
 | Production audit | Zero blocking/allowlisted findings;raw audit retains two low KaTeX/Mermaid findings | Preserve the threshold and visible findings |
-| Release | Actual v2.15.1 annotated tag/main ancestry, eight packaging jobs, runtime probes and five assets verified | T419 archive decision remains separate |
-| Historical minors | Actual shared v2.12.1 lineage and44/8 copy chains retained | Genuine v2.12 waiting-block continuation, then fresh ordered dry runs |
+| Release | Actual v2.15.1 annotated tag/main ancestry, eight packaging jobs, runtime probes and five assets verified | Preserve actual release identity; archive work creates no new release |
+| Historical minors | Actual shared v2.12.1 lineage; ordered archives and fresh 44/8 copy proofs verified | Retain the documented v2.12 stale-destination checker limitation without rewriting authority |
+| Local archives | Three native archive commits; 750 moved files; 73 affected tests and six full handbook checks pass; zero newly broken links | Finish the local metadata commit and review its additional publication scope |
 
 - [x] Bind the four publication duties to the committed release evidence.
 - [x] Collect T419 evidence for the master and absorbed fourth support, preserving all native refusals.
@@ -26,7 +27,10 @@
 - [x] Apply and verify 245 migrations and14 closures; retain three prior resolutions and all owed requirements.
 - [x] Publish the independently qualified security correction under the one additional approved push; all original three and that additional push remain spent.
 - [x] Record the exact two new OPEN release-automation entries under the owner's placement exception.
-- [ ] Complete the final metadata PR and strict T419 probes; keep archive readiness unclaimed while any required blocker remains.
+- [x] Complete PR134 and the eleven strict final readiness probes after the genuine v2.12 continuation.
+- [x] Execute the approved native archives in order, preserving all original evidence and 247 future OPEN obligations.
+- [x] Complete whole-archive reference, preservation and affected-test verification; retain the native v2.12 stale-binding refusal in the evidence.
+- [ ] Publish the reviewed archive commits only after additional publication authority is granted; do not reuse spent corrective pushes.
 
 **Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.14.2-adoption-voice-latency-lfm2.5-24b`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
 
