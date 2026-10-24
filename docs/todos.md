@@ -229,6 +229,7 @@ Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 des
 | Sources compared (Craft editors + EmbeddingGemma 2, 2026-10-07) | 2 / 2 | 2 / 2 | 0 |
 | v2.13 adoption plan implementation tasks (merged in PR #101, 2026-10-16; T008-T010 deferred under DF-2) | 28 / 28 | 28 | 0 |
 | v2.14.1 local rewrite evaluation implementation tasks (authorized, 2026-10-17) | 18 / 18 | 18 | 0 |
+| Sources compared (DeepSeek, decision evals, Reylo; v2.17.0, 2026-10-23) | 4 / 4 | 4 | 0 |
 
 ---
 
@@ -791,6 +792,11 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Record all sixteen held-out IDs as not-run/HOLD, retain missing-output counts, and assess exact-runtime Humanizer feasibility ([Phase 2 evidence](archives/v2/v2.14/development/v2.14.1-phase2-evidence.md)). Quality remains unmeasured under DF-5.
 - [x] Complete v2.14.1 implementation and merge PR #108 as 6673f0cf after required CI and CodeQL success; quality remains HOLD under DF-5. [Release assets and source CLI are verified](archives/v2/v2.14/development/v2.14.1-release-verification.json).
 - [x] Finish bounded HOLD continuation, Humanizer feasibility, final gates, approved integration and release; keep Humanizer installation, adapter/catalog changes and Handwired implementation outside this plan.
+
+## Decision-evaluation comparison (v2.17.0)
+
+- [x] Compare DeepSeek Maya, DeepInfer/recipe, the decision-eval cookbook and Reylo against Nexus ([comparison](releases/v2/v2.17/comparisons/v2.17.0-comparison-deepseek-decision-evals-reylo.md), 2026-10-23; adoption target confirmed; no implementation authorized).
+- [ ] Select bounded A1/A2 evaluation scope for a separate v2.17 plan from the comparison; retain conditional HOLD and deferred W1-W3.
 
 ## Recurring Obligations
 
