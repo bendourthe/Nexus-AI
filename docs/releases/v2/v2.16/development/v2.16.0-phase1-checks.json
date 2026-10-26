@@ -1,0 +1,27 @@
+{
+  "baseline": "69a39894",
+  "inheritedItemsPreserved": 247,
+  "openItems": 249,
+  "parserProblems": [],
+  "cpuTasks": 28,
+  "cpuSubset": [
+    "agent-friendly-dry-run-then-execute-03.yaml",
+    "agent-friendly-truncation-recovery-read-01.yaml",
+    "bugfix-import-path-04.yaml",
+    "bugfix-off-by-one-01.yaml",
+    "memory-hygiene-missed-fact-01.yaml",
+    "multi-file-api-endpoint-04.yaml",
+    "multi-file-rename-01.yaml",
+    "refactor-callback-to-async-03.yaml",
+    "refactor-deduplicate-04.yaml",
+    "refactor-rename-pattern-05.yaml",
+    "review-error-handling-03.yaml",
+    "review-security-vuln-01.yaml",
+    "testgen-error-handling-05.yaml",
+    "testgen-mock-dependency-03.yaml"
+  ],
+  "localLinksAndAnchorsVerified": 22,
+  "holderVramGB": 3,
+  "historicalLedgerLinks": "Excluded from new-reference check; before/after baseline retained",
+  "result": "PASS"
+}
