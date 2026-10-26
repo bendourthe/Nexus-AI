@@ -53,3 +53,7 @@ No source-page instructions were executed. The model card's installer commands a
 The E-5 budget and task-set choice have not been measured or assigned. Holder memory, candidate memory, tokens per second, task success, and latency have no new trial values.
 
 Reopen when an authorized reference runtime meets the declared 0.40.10 requirement, the exact official tag/digest is rechecked, and the five transcripts prove a Nexus path recovers the calls. Repeat the frozen fit and quality gates before moving either slot. T008's CPU runner option remains independently in scope; no installed-runtime upgrade is performed by this plan.
+
+## Phase 3 Disposition
+
+T009 and T010 were not run after E-3 HOLD. The [A/B record](bolt-e4b-ab-results.json) preserves empty run arrays and null measurements, budget, and CPU task selection. No empty failure set is reclassified as codec success. T008's CPU option passes a controlled CLI smoke on the installer's Node runtime; that scripted task is not candidate inference or quality evidence.

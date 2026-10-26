@@ -3,7 +3,7 @@
 **Project**: Nexus AI Studio
 **Status**: in-progress
 **Last updated**: 2026-10-25
-**Open items**: 249
+**Open items**: 250
 
 ## v2.16.0
 
@@ -14,7 +14,7 @@
 | Not implemented (NI) | 2 | 0 |
 | Deferred (DF) | 152 | 0 |
 | Bugs / regressions (BG) | 9 | 0 |
-| Warnings (WN) | 21 | 0 |
+| Warnings (WN) | 22 | 0 |
 | Missing tests / coverage gaps (MT) | 46 | 0 |
 | Quality-gate gaps (QG) | 19 | 0 |
 
@@ -2646,6 +2646,14 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Owner**: Maintainer.
 - **Suggested next step**: Close as not applicable if Phase 4 admits E4B and complete the required installer rebuild. On full decline, record that this delivery exception was applied; do not create a release merely to satisfy the generic completion checker.
 - **Scope disposition**: The plan's provisional DF-2 maps to DF-152 because inherited DF-2 already exists. Preserve every inherited item and the owner's no-tag rule.
+
+#### WN-22 - Node 24 golden CLI shutdown aborts on the reference Windows host
+
+- **Source phase**: Pre-existing CLI/runtime boundary, observed during v2.16.0 Phase 3 verification.
+- **Plan reference**: [v2.16.0 model trial](plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), T011; [Phase 3 evidence](development/v2.16.0-phase3-evidence.md).
+- **Reason**: The controlled real CLI completes its golden task and forwards the expected options under Node 24.13.0, but both unchanged baseline options and num_gpu: 0 then abort at shutdown with exit 3221226505 and the UV_HANDLE_CLOSING libuv assertion. This is not caused by the new sampler key. The same spawned CLI and all six option cases pass under the installer's pinned Node 22.11.0. No Node 24 process-exit success is claimed.
+- **Owner**: Maintainer, CLI/runtime compatibility.
+- **Suggested next step**: Reproduce the baseline on Node 24 Windows, qualify native shutdown and active HTTP handle cleanup, and fix or narrow the supported runtime contract in separately reviewed scope. Preserve the Node 22 passing proof and the original Node 24 observations; do not hide the failed process exit.
 
 ### Resolved
 

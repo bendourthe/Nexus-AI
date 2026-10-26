@@ -16,3 +16,5 @@ Scope: v2.16 model-trial artifacts and the reference/tracker paths changed by th
 No moves or deletions are proposed. No retired documentation wrapper directory is introduced. The repository docs-layout gate passes. The pre-change link baseline has 3,774 unresolved historical references; newly introduced Phase 1 references and anchors resolve. Historical link debt is not silently repaired by this audit.
 
 Phase 2 adds release-scoped registry/license observations and stable raw regression fixtures. The fixtures remain under tests so later archive moves cannot break test discovery. Raw bytes must not be reformatted. No model weights, scratch installers, new cache pattern, move, or deletion is introduced. The fixture test and public compatibility consumer pass; new links point to existing local records and primary source URLs.
+
+Phase 3 adds two CLI observation records, not-run evaluation data, and the CPU runner evidence/history. All remain release-scoped. Narrow raw-fixture attributes preserve hashes; no raw data is reformatted. No move, deletion, dependency installation in the repository, or unrelated shutdown refactor is proposed.
