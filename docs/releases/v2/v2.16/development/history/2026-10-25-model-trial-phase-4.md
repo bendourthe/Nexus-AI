@@ -16,3 +16,7 @@ Added one E4B decision row, linking the raw pull refusal and required runtime 0.
 ## Post-Phase Sequence
 
 Gitignore and test review need no change or redundant rerun. CI impact is no new command, dependency, variable, test path or workflow. The ledger retains the owner exceptions and the pre-existing host warning. Documentation audit proposes no moves/deletions; DEVLOG and tracker reflect the conditional result. One local ASCII commit closes the phase, with no publication or remote CI.
+
+## Stabilization
+
+# DEVIATION: The last table-placement assertion failed on a mixed CRLF/LF blank boundary, but the shell continued and saved the phase checkpoint before that failure was inspected. Phase 4 was reopened. The row is now contiguous with the existing model table; the complete preservation/link/table consumer exits 0 and writes v2.16.0-phase4-checks.json. A narrow additional local stabilization commit retains this correction without rewriting the earlier commit. No remote operation occurred and no failed check is presented as a pass.
