@@ -7,7 +7,7 @@
 | Implementation | Local duties verified on the HOLD/decline path, 25/26 tasks; T026 open | Five phases and 26 tasks, with conditional-path evidence |
 | Model admission | E-1/E-2 pass; E-3 environment HOLD, runtime 0.32.15 below required 0.40.10; zero inference | Per-slot fit/quality and both-channel proof before admission |
 | Ledger | 250 open; 247 inherited records preserved; DF-151/DF-152 and Node 24 warning WN-22 | Preserve and carry approved inherited obligations; resolve trial dispositions |
-| Publication | Local gate green; native controller-ownership-unavailable blocks push | Final local gate, green integration, admission-only release |
+| Publication | Local gate green; historical controller restored; native approval.remote met; integration pending | Final local gate, green integration, admission-only release |
 
 ## Archive closeout (2026-10-23)
 

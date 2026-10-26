@@ -21,3 +21,7 @@ Fresh fetch succeeded. Human attribution check verified Benjamin Dourthe's confi
 ## Preservation
 
 Original-controller user edits were never copied over or reset. Changelog changes were inspected with the official guard diff and preserved. Earlier isolated-worktree acceptances reconciled this agent's own requested edits after expired receipts, but lacked the native baseline-adoption receipt; this procedural deviation is recorded in final evidence. No fresh user agreement is invented. All final edits use immediate official checks and write records.
+
+## Controller Recovery
+
+Continued after the hook's incomplete verdict. The profiled native call identified a signed v2.15 record whose C:/nx-close controller directory no longer existed. All 16 stored JSON files were readable objects. Verified the original controller metadata with native HMAC validation and confirmed the target path was absent, then recreated a real clean detached worktree at 69a39894. No state or checker source was rewritten. Native approval.remote now reports met for the authenticated v2.16 member with a fresh budget. Late worker registration is unavailable because it requires a clean integrated base before implementation. Existing controller-only task projection therefore remains historical until merge. The recovery is reversible filesystem restoration within the same Git repository; it creates no new release or approval. A local documentation correction records the recovery before the first push.
