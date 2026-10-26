@@ -1,0 +1,50 @@
+{
+  "glob": "docs/**/known-gaps.md",
+  "discovered": 42,
+  "otherOpenLedgers": [
+    {
+      "path": "docs/archive/v1/v1.19/known-gaps.md",
+      "openItems": 0,
+      "parserProblems": [],
+      "status": "in-progress"
+    },
+    {
+      "path": "docs/archive/v1/v1.20/known-gaps.md",
+      "openItems": 0,
+      "parserProblems": [],
+      "status": "in-progress"
+    },
+    {
+      "path": "docs/archive/v1/v1.5/known-gaps.md",
+      "openItems": 0,
+      "parserProblems": [],
+      "status": "in-progress (Phase 6 closed 2026-06-14). v1.5.0 is the \"Local Agent Maturity\" cycle ([plans/adoption-ecosystem-2026-06.md](plans/adoption-ecosystem-2026-06.md), derived from [comparison-ecosystem-2026-06.md](comparison-ecosystem-2026-06.md)). Phase 1 (2026-06-10) ships the three Bucket 1 `local-only` foundations: the Gemma 4 12B-IT GGUF quant ladder (item 32), the OS-keychain credential vault (item 2), and the intelligence-per-watt energy estimator (item 18). Phase 2 (2026-06-10) ships the two `skill-native` adoptions (items 11, 21). Phase 3 (2026-06-10) ships the inbound prompt-injection classifier (item 3, warn-then-allow). Phase 4 (2026-06-12) ships the planner/critic/worker swarm orchestration (item 36, opt-in, default off) and closes three v1.4.0 deferrals it subsumes: live worktree wiring (`T018.P3.A`), the orchestration layer + read-tool worktree rooting (`T018.P3.B`), and the live PreCompact WIP hook (`T016.P3.A`). Phase 5 (2026-06-14) ships the Bucket 4 desktop / model-layer re-partials: multimodal (image) input via the Gemma 4 vision gate (item 33), the side-by-side preview pane (item 24), the vault-only credential-management surface (item 25), and cross-surface session resume over a persistent session store (item 26); the local cron scheduler (item 38) is deferred (no confirmed demand). Phase 6 (2026-06-14) lands the Tree-sitter packaging closure (v1.4.0 `T022.P3.A`): a bundled-wasm-dir override on the codegraph scanner, an esbuild sidecar copy of the 4 grammar `.wasm` + the web-tree-sitter runtime `.wasm` with a startup warm-up, and a VSIX grammar trim. The final Nexus-Hub sync + acceptance gate is Phase 7. This file is appended phase-by-phase; items move to `## 2. Resolved` when closed; the `## 3. Summary` is recomputed each pass."
+    },
+    {
+      "path": "docs/archive/v2/v2.0/known-gaps.md",
+      "openItems": 0,
+      "parserProblems": [],
+      "status": "in-progress"
+    },
+    {
+      "path": "docs/archive/v2/v2.3/known-gaps.md",
+      "openItems": 0,
+      "parserProblems": [],
+      "status": "in-progress"
+    },
+    {
+      "path": "docs/archive/v2/v2.4/known-gaps.md",
+      "openItems": 0,
+      "parserProblems": [],
+      "status": "in-progress"
+    },
+    {
+      "path": "docs/archive/v2/v2.5/known-gaps.md",
+      "openItems": 0,
+      "parserProblems": [],
+      "status": "in-progress"
+    }
+  ],
+  "unreachable": [],
+  "action": "Listed only; no other ledger edited"
+}

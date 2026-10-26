@@ -9,7 +9,7 @@
 import { readFileSync } from "node:fs";
 
 /** Sampler options the runner forwards; Ollama spells the penalty `repeat_penalty`. */
-export const ALLOWED_OPTIONS = Object.freeze(["temperature", "top_p", "top_k", "min_p", "repeat_penalty", "num_ctx"]);
+export const ALLOWED_OPTIONS = Object.freeze(["temperature", "top_p", "top_k", "min_p", "repeat_penalty", "num_ctx", "num_gpu"]);
 
 /** Read and validate an options file. Throws with a reason; never partially applies. */
 export function loadGoldenOptions(path) {
@@ -25,6 +25,7 @@ export function loadGoldenOptions(path) {
   for (const [key, value] of Object.entries(parsed)) {
     if (!ALLOWED_OPTIONS.includes(key)) throw new Error(`--options ${path}: unknown option "${key}"`);
     if (typeof value !== "number" || !Number.isFinite(value)) throw new Error(`--options ${path}: "${key}" must be a number`);
+    if (key === "num_gpu" && (!Number.isInteger(value) || value < 0)) throw new Error(`--options ${path}: "num_gpu" must be a non-negative integer`);
   }
   return parsed;
 }
