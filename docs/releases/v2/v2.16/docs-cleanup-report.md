@@ -18,3 +18,5 @@ No moves or deletions are proposed. No retired documentation wrapper directory i
 Phase 2 adds release-scoped registry/license observations and stable raw regression fixtures. The fixtures remain under tests so later archive moves cannot break test discovery. Raw bytes must not be reformatted. No model weights, scratch installers, new cache pattern, move, or deletion is introduced. The fixture test and public compatibility consumer pass; new links point to existing local records and primary source URLs.
 
 Phase 3 adds two CLI observation records, not-run evaluation data, and the CPU runner evidence/history. All remain release-scoped. Narrow raw-fixture attributes preserve hashes; no raw data is reformatted. No move, deletion, dependency installation in the repository, or unrelated shutdown refactor is proposed.
+
+Phase 4 adds a living E4B decision row and release-scoped non-admission evidence/history. Both slots retain their baseline holder and no distributed registry changes. No move, deletion, new dependency, runtime installation, or installer artifact is introduced. The active ledger continues to record inherited obligations and the observed Node 24 warning.

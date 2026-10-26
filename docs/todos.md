@@ -4,7 +4,7 @@
 
 | Measure | Current | Required |
 |---|---|---|
-| Implementation | Phases 1-3 verified on the HOLD path, 11/26 tasks | Five phases and 26 tasks, with conditional-path evidence |
+| Implementation | Phases 1-4 verified on the HOLD/decline path, 16/26 tasks | Five phases and 26 tasks, with conditional-path evidence |
 | Model admission | E-1/E-2 pass; E-3 environment HOLD, runtime 0.32.15 below required 0.40.10; zero inference | Per-slot fit/quality and both-channel proof before admission |
 | Ledger | 250 open; 247 inherited records preserved; DF-151/DF-152 and Node 24 warning WN-22 | Preserve and carry approved inherited obligations; resolve trial dispositions |
 | Publication | Local phase work only | Final local gate, green integration, admission-only release |
@@ -773,7 +773,7 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Phase 1: preregister E4B gates; record Super VL, DeepSeek and Humanizer decisions; defer Bolt 74B-A9B (no 24 GB host); [evidence](releases/v2/v2.16/development/v2.16.0-phase1-evidence.md).
 - [x] Phase 2: official E4B tag and license pass; real pull refused on the old runtime, E-3 HOLD with zero inference and no codec claim ([evidence](releases/v2/v2.16/development/v2.16.0-phase2-evidence.md)).
 - [x] Phase 3: runner CPU control verified through real CLI/HTTP/tool boundaries on pinned Node 22; E4B fit/A-B explicitly not run after E-3 HOLD ([evidence](releases/v2/v2.16/development/v2.16.0-phase3-evidence.md)).
-- [ ] Phase 4: admit E4B to each passing slot, or record the decline.
+- [x] Phase 4: both slots unadmitted at E-3 runtime HOLD; decline/reopen record saved and all registry/default inputs preserved ([evidence](releases/v2/v2.16/development/v2.16.0-phase4-evidence.md)).
 - [ ] Phase 5: final phase, recorded VS Code extension run, and publication.
 
 ## Legacy known-gaps triage (queued v2.15.0)

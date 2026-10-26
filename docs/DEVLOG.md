@@ -2,6 +2,8 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
+- 2026-10-25 v2.16.0 Phase 4: both E4B slots remain unadmitted at the runtime HOLD, with a linked decline/reopen record. Catalogs, bindings, defaults and job map remain unchanged; eight acceptance tests pass. No desktop/extension proof or new model capability is claimed. [Evidence](releases/v2/v2.16/development/v2.16.0-phase4-evidence.md).
+
 - 2026-10-25 v2.16.0 Phase 3: golden runner accepts and forwards non-negative integer num_gpu, with 22 focused tests, build and fast checks passing. A real scripted CLI task passes on installer-pinned Node 22; the identical Node 24 baseline shutdown failure is retained as WN-22. E4B fit and A/B remain not run after E-3 HOLD. [Evidence](releases/v2/v2.16/development/v2.16.0-phase3-evidence.md).
 
 - 2026-10-25 v2.16.0 Phase 2: official E4B availability and OpenMDW-1.1 pass; the actual pull is HOLD because its manifest requires Ollama 0.40.10 and this host runs 0.32.15 (upstream 412). No inference or fit/quality score is claimed. All 25 focused tests and the fast profile pass. [Probe](releases/v2/v2.16/development/bolt-e4b-probe.md), [evidence](releases/v2/v2.16/development/v2.16.0-phase2-evidence.md).
