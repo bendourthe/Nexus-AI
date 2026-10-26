@@ -2,7 +2,7 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
-- 2026-10-25 v2.16.0 final local gate: root 6490 passed/12 skipped and desktop 2373 passed/one skipped, both coverage gates met; lint/build/architecture, six handbook receipts and the independent review pass. Eleven-feature deep pass is clean within the conditional HOLD/decline scope. Native controller-ownership-unavailable blocks publication; T026 remains open. No tag or installer rebuild. [Final evidence](releases/v2/v2.16/development/v2.16.0-last-phase-evidence.md).
+- 2026-10-25 v2.16.0 final local gate: root 6490 passed/12 skipped and desktop 2373 passed/one skipped, both coverage gates met; lint/build/architecture, six handbook receipts and the independent review pass. Eleven-feature deep pass is clean within the conditional HOLD/decline scope. Historical controller checkout restored after native identity verification; approval.remote now met, with T026 integration still open. No tag or installer rebuild. [Final evidence](releases/v2/v2.16/development/v2.16.0-last-phase-evidence.md).
 
 - 2026-10-25 v2.16.0 Phase 4: both E4B slots remain unadmitted at the runtime HOLD, with a linked decline/reopen record. Catalogs, bindings, defaults and job map remain unchanged; eight acceptance tests pass. No desktop/extension proof or new model capability is claimed. [Evidence](releases/v2/v2.16/development/v2.16.0-phase4-evidence.md).
 
