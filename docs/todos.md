@@ -4,9 +4,9 @@
 
 | Measure | Current | Required |
 |---|---|---|
-| Implementation | Phases 1-2 verified on the HOLD path, 7/26 tasks | Five phases and 26 tasks, with conditional-path evidence |
+| Implementation | Phases 1-3 verified on the HOLD path, 11/26 tasks | Five phases and 26 tasks, with conditional-path evidence |
 | Model admission | E-1/E-2 pass; E-3 environment HOLD, runtime 0.32.15 below required 0.40.10; zero inference | Per-slot fit/quality and both-channel proof before admission |
-| Ledger | 249 open; 247 inherited records preserved; trial deferrals DF-151/DF-152 | Preserve and carry approved inherited obligations; resolve trial dispositions |
+| Ledger | 250 open; 247 inherited records preserved; DF-151/DF-152 and Node 24 warning WN-22 | Preserve and carry approved inherited obligations; resolve trial dispositions |
 | Publication | Local phase work only | Final local gate, green integration, admission-only release |
 
 ## Archive closeout (2026-10-23)
@@ -772,7 +772,7 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Plan the adoption: five phases, 26 tasks; six review lenses, 21 findings applied; four owner decisions recorded ([plan](releases/v2/v2.16/plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), 2026-10-21).
 - [x] Phase 1: preregister E4B gates; record Super VL, DeepSeek and Humanizer decisions; defer Bolt 74B-A9B (no 24 GB host); [evidence](releases/v2/v2.16/development/v2.16.0-phase1-evidence.md).
 - [x] Phase 2: official E4B tag and license pass; real pull refused on the old runtime, E-3 HOLD with zero inference and no codec claim ([evidence](releases/v2/v2.16/development/v2.16.0-phase2-evidence.md)).
-- [ ] Phase 3: golden runner `num_gpu`; E4B fit and golden-task A/B against `lfm2.5:2.6b` on the cpu and sub-6 GB slots.
+- [x] Phase 3: runner CPU control verified through real CLI/HTTP/tool boundaries on pinned Node 22; E4B fit/A-B explicitly not run after E-3 HOLD ([evidence](releases/v2/v2.16/development/v2.16.0-phase3-evidence.md)).
 - [ ] Phase 4: admit E4B to each passing slot, or record the decline.
 - [ ] Phase 5: final phase, recorded VS Code extension run, and publication.
 

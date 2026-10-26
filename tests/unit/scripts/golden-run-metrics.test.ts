@@ -41,11 +41,21 @@ describe("--options", () => {
     expect(ALLOWED_OPTIONS).toContain("repeat_penalty");
   });
 
+  it.each([0, 2])("accepts num_gpu %i without changing the other sampler options", (num_gpu) => {
+    const options = { temperature: 0.1, num_gpu };
+    expect(loadGoldenOptions(optionsFile(JSON.stringify(options)))).toEqual(options);
+    expect(ALLOWED_OPTIONS).toContain("num_gpu");
+  });
+
   it.each([
     ["not json", /not readable JSON/],
     ["[1]", /JSON object/],
     [JSON.stringify({ repetition_penalty: 1.05 }), /unknown option "repetition_penalty"/],
     [JSON.stringify({ temperature: "hot" }), /must be a number/],
+    [JSON.stringify({ num_gpu: -1 }), /non-negative integer/],
+    [JSON.stringify({ num_gpu: 0.5 }), /non-negative integer/],
+    [JSON.stringify({ num_gpu: "0" }), /must be a number/],
+    [JSON.stringify({ unknown_gpu_option: 0 }), /unknown option/],
   ])("rejects %s before any task runs", (body, error) => {
     expect(() => loadGoldenOptions(optionsFile(body))).toThrow(error);
   });
@@ -114,7 +124,7 @@ describe("metrics collector through a scripted live run", () => {
       llm: collector.wrapLlm(llm),
       model: "trial",
       tools: createHeadlessTools(),
-      llmOptions: { temperature: 0.1, top_k: 50, repeat_penalty: 1.05 },
+      llmOptions: loadGoldenOptions(optionsFile(JSON.stringify({ temperature: 0.1, top_k: 50, repeat_penalty: 1.05, num_gpu: 0 }))),
       toolFormat: "lfm-pythonic",
       onEvent: (e: HeadlessAgentEvent) => collector.onEvent(e),
     });
@@ -128,7 +138,7 @@ describe("metrics collector through a scripted live run", () => {
     expect(task.firstToolCallMs).toBeGreaterThan(0);
     expect(task.codecParseFailures).toBe(1);
     expect(task.memory).toMatchObject({ status: "measured", offloaded: true, peakRamBytes: 10 });
-    expect(requests[0]?.options).toEqual({ temperature: 0.1, top_k: 50, repeat_penalty: 1.05 });
+    expect(requests[0]?.options).toEqual({ temperature: 0.1, top_k: 50, repeat_penalty: 1.05, num_gpu: 0 });
     await fsp.rm(workdir, { recursive: true, force: true });
   });
 });
