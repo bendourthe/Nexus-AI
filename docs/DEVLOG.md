@@ -2,6 +2,8 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
+- 2026-10-25 v2.16.0 Phase 2: official E4B availability and OpenMDW-1.1 pass; the actual pull is HOLD because its manifest requires Ollama 0.40.10 and this host runs 0.32.15 (upstream 412). No inference or fit/quality score is claimed. All 25 focused tests and the fast profile pass. [Probe](releases/v2/v2.16/development/bolt-e4b-probe.md), [evidence](releases/v2/v2.16/development/v2.16.0-phase2-evidence.md).
+
 - 2026-10-25 v2.16.0 Phase 1: preregistered the Bolt E4B gates before inference, recorded Super VL/DeepSeek/Humanizer decisions, and appended DF-151/DF-152 while preserving all 247 inherited gap bodies. Bootstrap, 8 acceptance tests, fast profile, ledger/subset/link consumers and docs-layout checks pass. [Evidence](releases/v2/v2.16/development/v2.16.0-phase1-evidence.md), [history](releases/v2/v2.16/development/history/2026-10-25-model-trial-phase-1.md). No model admission, push or release.
 
 - 2026-10-22 v2.15.1 (published 2026-10-23 UTC): selected outline/image/video/folder repairs and bounded triage shipped; all five assets and tagged runtime probes verified. The 262 original identities retain 245 carries, 14 closures and three prior resolutions; two new automation gaps remain OPEN. [Release](archives/v2/v2.15/development/v2.15.1-release.md), [closing evidence](archives/v2/v2.15/development/v2.15-closeout-reconciliation.md). Archive readiness remains a separate final decision.
