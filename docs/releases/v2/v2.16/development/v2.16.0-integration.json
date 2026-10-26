@@ -1,0 +1,477 @@
+{
+  "pullRequest": {
+    "headRefOid": "d14215fbbed64cf5668d891d8e263b654054db53",
+    "mergeCommit": {
+      "oid": "b82b97473dd61aa72475b601577678c8e63668ec"
+    },
+    "mergedAt": "2026-10-26T04:48:26Z",
+    "state": "MERGED",
+    "url": "https://github.com/bendourthe/Nexus-AI/pull/138"
+  },
+  "checkCounts": {
+    "passed": 58,
+    "skipped": 1,
+    "pending": 0,
+    "failed": 0
+  },
+  "checks": [
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687258/job/121403189049",
+      "name": "installer-required",
+      "state": "SUCCESS",
+      "workflow": "Installer matrix"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121401377938",
+      "name": "ci-required",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121401322398",
+      "name": "Coverage gate (80%)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121400981053",
+      "name": "ci-required",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121400948296",
+      "name": "Coverage gate (80%)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687165/job/121400311720",
+      "name": "Submission Checklist gate",
+      "state": "SUCCESS",
+      "workflow": "PR Quality"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121400111939",
+      "name": "Package VSIX (smoke)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596926",
+      "name": "npm audit (dev + prod, non-blocking)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596916",
+      "name": "check-prompts",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596952",
+      "name": "init.sh (Linux)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/runs/121400016513",
+      "name": "CodeQL",
+      "state": "SUCCESS",
+      "workflow": ""
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596955",
+      "name": "pip-audit (installer venv)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596987",
+      "name": "check-command-parity",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596964",
+      "name": "Test TypeScript (Node 22.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596932",
+      "name": "npm audit (production deps)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596943",
+      "name": "check-architecture",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596997",
+      "name": "pip-audit (model runtimes)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399868756",
+      "name": "Package VSIX (smoke)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596928",
+      "name": "Lint TypeScript (Node 22.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596864",
+      "name": "Build TypeScript (Node 22.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596871",
+      "name": "Build TypeScript (Node 24.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596877",
+      "name": "nexus-check (repository)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596910",
+      "name": "pytest (runtimes/)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596821",
+      "name": "Test TypeScript (Node 24.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596853",
+      "name": "Lint TypeScript (Node 24.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687258/job/121399597607",
+      "name": "windows / Build NexusSetup.exe",
+      "state": "SUCCESS",
+      "workflow": "Installer matrix"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596860",
+      "name": "check-release-assets",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687185/job/121399596824",
+      "name": "diff-cover (80% on changed lines)",
+      "state": "SUCCESS",
+      "workflow": "Coverage Diff"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687199/job/121399596844",
+      "name": "gitleaks",
+      "state": "SUCCESS",
+      "workflow": "Secret scan"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687214/job/121399597166",
+      "name": "Analyze (python)",
+      "state": "SUCCESS",
+      "workflow": "CodeQL"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687214/job/121399596861",
+      "name": "Analyze (javascript-typescript)",
+      "state": "SUCCESS",
+      "workflow": "CodeQL"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687177/job/121399596672",
+      "name": "Lint commit messages",
+      "state": "SUCCESS",
+      "workflow": "Commitlint"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596791",
+      "name": "check-feature-drift",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687258/job/121399597688",
+      "name": "linux / Build manual Linux installer rehearsal",
+      "state": "SUCCESS",
+      "workflow": "Installer matrix"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687258/job/121399597753",
+      "name": "macos / Build manual macOS installer rehearsal",
+      "state": "SUCCESS",
+      "workflow": "Installer matrix"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583388",
+      "name": "init.ps1 (Windows)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596765",
+      "name": "fast-bench (rendering)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399596601",
+      "name": "docs/index.md sync check",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583495",
+      "name": "check-feature-drift",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583223",
+      "name": "Build TypeScript (Node 22.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269687158/job/121399597449",
+      "name": "init.ps1 (Windows)",
+      "state": "SKIPPED",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583420",
+      "name": "check-release-assets",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583476",
+      "name": "check-prompts",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583186",
+      "name": "pytest (runtimes/)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583457",
+      "name": "Lint TypeScript (Node 22.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583531",
+      "name": "npm audit (production deps)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583402",
+      "name": "check-command-parity",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583496",
+      "name": "npm audit (dev + prod, non-blocking)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583010",
+      "name": "nexus-check (repository)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583517",
+      "name": "pip-audit (installer venv)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583339",
+      "name": "Lint TypeScript (Node 24.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583456",
+      "name": "pip-audit (model runtimes)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583491",
+      "name": "check-architecture",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583235",
+      "name": "Build TypeScript (Node 24.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583379",
+      "name": "init.sh (Linux)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583350",
+      "name": "Test TypeScript (Node 24.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583191",
+      "name": "Test TypeScript (Node 22.x)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583216",
+      "name": "docs/index.md sync check",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/bendourthe/Nexus-AI/actions/runs/40269682521/job/121399583219",
+      "name": "fast-bench (rendering)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    }
+  ],
+  "postMerge": [
+    {
+      "conclusion": "success",
+      "databaseId": 40270949805,
+      "event": "push",
+      "status": "completed",
+      "workflowName": "Secret scan"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 40270949817,
+      "event": "push",
+      "status": "completed",
+      "workflowName": "CodeQL"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 40270949915,
+      "event": "push",
+      "status": "completed",
+      "workflowName": "CI"
+    }
+  ],
+  "correctiveBranchPushes": 0,
+  "metadataCorrection": {
+    "initial": "Submission Checklist missing; local exit 2",
+    "corrected": "All 10 checklist items pass locally; PR Quality retry successful",
+    "runId": 40269687165
+  },
+  "releaseDisposition": "Full decline: no v2.16.0 tag or release; existing current-version installer CI rehearsal completed",
+  "remoteTagObservation": {
+    "ref": "refs/tags/v2.16.0",
+    "exitCode": 0,
+    "stdout": ""
+  },
+  "nativeController": {
+    "origin": "C:/Users/bdour/Documents/Projects/Development/Nexus-AI",
+    "current": "C:/Users/bdour/Documents/Projects/Development/Nexus-AI-controller",
+    "generation": 1,
+    "operation": "native controller-handoff preview then apply"
+  },
+  "checkerHashes": {
+    "check_plan_completion.py": "3b65655afa41021b48f685799c49e75cd810842627239b80263069d1e7f6eb02",
+    "completion_minor.py": "618f7b8c3e2df38bb193cebf895a5e84dbebdd15b78ec9ea3456fcda0244ad74"
+  }
+}

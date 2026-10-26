@@ -3,7 +3,7 @@
 **Project**: Nexus AI Studio
 **Status**: in-progress
 **Last updated**: 2026-10-25
-**Open items**: 250
+**Open items**: 249
 
 ## v2.16.0
 
@@ -12,7 +12,7 @@
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 2 | 0 |
-| Deferred (DF) | 152 | 0 |
+| Deferred (DF) | 151 | 1 |
 | Bugs / regressions (BG) | 9 | 0 |
 | Warnings (WN) | 22 | 0 |
 | Missing tests / coverage gaps (MT) | 46 | 0 |
@@ -2638,7 +2638,7 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Suggested next step**: Run the v2.14-style A/B on a 24 GB host, recording RAM spill and the parser recovering tool calls. On a measured win, move the job and mark `nemotron-lightning:30b-a3b` a removal candidate.
 - **Scope disposition**: The owner-approved plan deliberately records this follow-on; the full-run approval carries it forward without pretending the missing hardware trial ran. The plan's provisional DF-1 maps to DF-151 because inherited DF-1 already exists.
 
-#### DF-152 - Full-decline delivery skips an installer rebuild
+#### DF-152 - Full-decline delivery skips an installer rebuild - RESOLVED 2026-10-25
 
 - **Source phase**: v2.16.0 Phase 1, T003 (conditional delivery disposition).
 - **Plan reference**: [v2.16.0 model trial](plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), T003, T013, T025, T026.
@@ -2646,6 +2646,8 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Owner**: Maintainer.
 - **Suggested next step**: Close as not applicable if Phase 4 admits E4B and complete the required installer rebuild. On full decline, record that this delivery exception was applied; do not create a release merely to satisfy the generic completion checker.
 - **Scope disposition**: The plan's provisional DF-2 maps to DF-152 because inherited DF-2 already exists. Preserve every inherited item and the owner's no-tag rule.
+
+- **Resolution**: Applied the approved full-decline delivery exception: PR138 merged at b82b9747 with all 58 checks and all three post-merge workflows passing. No v2.16.0 release tag or installer release was created. Existing CI performed a current-version installer rehearsal; it did not admit E4B or change any default. [Integration evidence](development/v2.16.0-integration.json).
 
 #### WN-22 - Node 24 golden CLI shutdown aborts on the reference Windows host
 
