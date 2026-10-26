@@ -8,6 +8,7 @@
 | Model admission | E-1/E-2 pass; E-3 environment HOLD, runtime 0.32.15 below required 0.40.10; zero inference | Per-slot fit/quality and both-channel proof before admission |
 | Ledger | 249 open; 247 inherited records preserved; DF-151 and WN-22 open, delivery exception DF-152 resolved | Preserve and carry approved inherited obligations; resolve trial dispositions |
 | Publication | PR138 merged b82b9747; 58 passing checks and three passing post-merge workflows; no release tag | Final local gate, green integration, admission-only release |
+| Cleanup | 28 merged/idle refs removed; native receipt met; current v2.16 refs/worktree kept by native rules | Preserve keep decisions until supported minor closure |
 
 ## Archive closeout (2026-10-23)
 
