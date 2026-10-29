@@ -4,11 +4,13 @@
 
 | Measure | Current | Required |
 |---|---|---|
-| Implementation | All 26/26 plan-local tasks verified on the HOLD/decline path; native minor closure blocked | Five phases and 26 tasks, with conditional-path evidence |
+| Implementation | All 26/26 tasks and the full-decline disposition accepted by native capture; minor closeout remains open | Five phases and 26 tasks, with conditional-path evidence |
 | Model admission | E-1/E-2 pass; E-3 environment HOLD, runtime 0.32.15 below required 0.40.10; zero inference | Per-slot fit/quality and both-channel proof before admission |
-| Ledger | 249 open; 247 inherited records preserved; DF-151 and WN-22 open, delivery exception DF-152 resolved | Preserve and carry approved inherited obligations; resolve trial dispositions |
+| Ledger | 247 inherited items migrated to v2.17 with 247 native copy proofs; DF-151 and WN-22 remain open; DF-152 resolved | Resolve remaining eligibility and runtime boundaries before archive |
 | Publication | PR138 merged b82b9747; 58 passing checks and three passing post-merge workflows; no release tag | Final local gate, green integration, admission-only release |
 | Cleanup | 28 merged/idle refs removed; native receipt met; current v2.16 refs/worktree kept by native rules | Preserve keep decisions until supported minor closure |
+
+The [2026-10-29 closeout evidence](releases/v2/v2.16/development/v2.16.0-native-closeout-progress.md) records the captured decline, inherited carries, remaining native barriers and an unapplied CLI shutdown proposal. Its 22 controlled cases pass with the revised cleanup patch; no production shutdown code, model default or release changed.
 
 ## Archive closeout (2026-10-23)
 

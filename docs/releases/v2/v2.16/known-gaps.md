@@ -2,8 +2,8 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-10-25
-**Open items**: 249
+**Last updated**: 2026-10-29
+**Open items**: 2
 
 ## v2.16.0
 
@@ -11,16 +11,16 @@
 
 | Category | Open | Resolved |
 |---|---|---|
-| Not implemented (NI) | 2 | 0 |
-| Deferred (DF) | 151 | 1 |
-| Bugs / regressions (BG) | 9 | 0 |
-| Warnings (WN) | 22 | 0 |
-| Missing tests / coverage gaps (MT) | 46 | 0 |
-| Quality-gate gaps (QG) | 19 | 0 |
+| Not implemented (NI) | 0 | 0 |
+| Deferred (DF) | 1 | 1 |
+| Bugs / regressions (BG) | 0 | 0 |
+| Warnings (WN) | 1 | 0 |
+| Missing tests / coverage gaps (MT) | 0 | 0 |
+| Quality-gate gaps (QG) | 0 | 0 |
 
 ### Open Items
 
-#### DF-1 - Tailwind v4 `@theme inline` is source-level, not compiled
+#### DF-1 - Tailwind v4 `@theme inline` is source-level, not compiled - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Motion Foundation (A4-foundation)
 - **Plan reference**: `docs/archive/v1/v1.17/plans/v1.17.0-adoption-ui-motion-identity.md` (sub-task 1.1)
@@ -30,7 +30,7 @@
 - **Migrated from**: v1.17.0#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.17.0#DF-1; still owed: Optional candidate/watch; next: Carry the compilation boundary. Establish an actual required utility consumer before adding Tailwind; do not call the source aliases compiled.
 
-#### DF-2 - Installer motion is not on the shared desktop hook
+#### DF-2 - Installer motion is not on the shared desktop hook - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Motion Foundation (A4-foundation)
 - **Plan reference**: `docs/archive/v1/v1.17/plans/v1.17.0-adoption-ui-motion-identity.md` (Overview: shell-only cycle)
@@ -40,7 +40,7 @@
 - **Migrated from**: v1.17.0#DF-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.17.0#DF-3; still owed: Optional candidate/watch; next: Carry pending V9 plus review of the separate floating-logo path. React-hook reuse across PyQt is not an acceptance requirement; document halt parity if proved.
 
-#### DF-3 - Chat pending is a batch wait, not live token streaming
+#### DF-3 - Chat pending is a batch wait, not live token streaming - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - Agent-state orbs (A1)
 - **Plan reference**: `docs/archive/v1/v1.17/plans/v1.17.0-adoption-ui-motion-identity.md` (sub-task 2.3: "where `isStreaming` is signalled")
@@ -50,7 +50,7 @@
 - **Migrated from**: v1.17.0#DF-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.17.0#DF-6; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-21, preserving true incremental token delivery, cancellation, pending state, and transcript persistence obligations. The original motion cycle allowed batch pending; the later typed transport obligation is kept accountable at its later exact identity, not retroactively claimed implemented here.
 
-#### DF-4 - On-device multi-effect GPU/battery cost is not proven here
+#### DF-4 - On-device multi-effect GPU/battery cost is not proven here - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - Motion coordination + polish (A4-completion)
 - **Plan reference**: `docs/archive/v1/v1.17/plans/v1.17.0-adoption-ui-motion-identity.md` (sub-task 5.2)
@@ -60,7 +60,7 @@
 - **Migrated from**: v1.17.0#DF-8 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.17.0#DF-8; still owed: Required qualification; next: Carry hardware observation. Run packaged multi-effect frame/battery QA; record host, effects, trace, and result.
 
-#### DF-5 - gigatoken remains a watch item (N5)
+#### DF-5 - gigatoken remains a watch item (N5) - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - Architecture refactor, known-gaps, CI/CD
 - **Plan reference**: `docs/archive/v1/v1.17/plans/v1.17.0-adoption-ui-motion-identity.md` (sub-task 6.2; comparison N5)
@@ -70,7 +70,7 @@
 - **Migrated from**: v1.17.0#DF-9 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.17.0#DF-9; still owed: Optional candidate/watch; next: Carry watch decision with those exact reopen conditions, or explicitly close the proposal as unnecessary; do not install a tokenizer to satisfy bookkeeping.
 
-#### DF-6 - Shared text-only ChatInput is not mounted by ChatPage
+#### DF-6 - Shared text-only ChatInput is not mounted by ChatPage - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - Architecture refactor, known-gaps, CI/CD
 - **Plan reference**: `docs/archive/v1/v1.17/plans/v1.17.0-adoption-ui-motion-identity.md` (sub-task 6.1)
@@ -80,7 +80,7 @@
 - **Migrated from**: v1.17.0#DF-10 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.17.0#DF-10; still owed: Owner decision; next: Prove resolved as a retained-component decision with V9; preserve text-only contract rather than deleting it as dead code.
 
-#### DF-7 - Live llama-server round-trip is not proven here
+#### DF-7 - Live llama-server round-trip is not proven here - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Skill-native adoptions + llama.cpp recipe (LG-A5)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 1.2)
@@ -90,7 +90,7 @@
 - **Migrated from**: v1.18.0#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.18.0#DF-1; still owed: Required implementation/qualification; next: Carry live-serving hold. Start a supported user-managed localhost server, register manifest, perform Nexus chat, and retain dated receipts.
 
-#### DF-8 - Hub catalog presence is not CI-gated
+#### DF-8 - Hub catalog presence is not CI-gated - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Skill-native adoptions (OW-B1, OI-A4-web)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 1.1)
@@ -100,7 +100,7 @@
 - **Migrated from**: v1.18.0#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.18.0#DF-2; still owed: Historical limitation; next: Carry operator presence check: sync/list the named skills in the installed catalog, record version/root, and retain builtin negative check. Do not vendor Hub skill copies.
 
-#### DF-9 - Deeper scaffold knobs remain off `HarnessProfile` (EM.P1.C remainder)
+#### DF-9 - Deeper scaffold knobs remain off `HarnessProfile` (EM.P1.C remainder) - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - Named per-family harness profiles (OI-A2)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 2.2); v1.12 EM.P1.C
@@ -110,7 +110,7 @@
 - **Migrated from**: v1.18.0#DF-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.18.0#DF-5; still owed: Optional candidate/watch; next: Carry conditional implementation until live weak-model A/B demonstrates useful knobs; then add named fields and behavioral tests.
 
-#### DF-10 - `gemma4:26b` MoE copy has no published active/total counts
+#### DF-10 - `gemma4:26b` MoE copy has no published active/total counts - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - Catalog schema (LG-A3)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 3.1)
@@ -120,7 +120,7 @@
 - **Migrated from**: v1.18.0#DF-7 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.18.0#DF-7; still owed: Optional candidate/watch; next: Carry external metadata hold. Add both fields only from a stable publisher figure with cited provenance.
 
-#### DF-11 - ACP is HTTP JSON-RPC on the shared listener, not a stdio subprocess
+#### DF-11 - ACP is HTTP JSON-RPC on the shared listener, not a stdio subprocess - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - ACP agent surface (OI-A3)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 5.1 / 5.2)
@@ -130,7 +130,7 @@
 - **Migrated from**: v1.18.0#DF-10 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.18.0#DF-10; still owed: Optional candidate/watch; next: Carry optional stdio-bridge proposal until a concrete consuming editor requires it; if implemented, bridge to the existing authenticated engine.
 
-#### DF-12 - Windows sandbox does not kernel-enforce filesystem or network
+#### DF-12 - Windows sandbox does not kernel-enforce filesystem or network - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - OS process sandbox (OI-A1)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 6.4)
@@ -140,7 +140,7 @@
 - **Migrated from**: v1.18.0#DF-11 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.18.0#DF-11; still owed: Historical limitation; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.4.1#DF-7, preserving both security dimensions and the requirement for coding-CLI-compatible OS enforcement before changing the support claim. Partial is the honest current support tier. Kernel enforcement is required before any confined claim, not proof that the original partial-support decision was invalid.
 
-#### DF-13 - Laguna-S-2.1 catalog entry stays gated (LG-A1)
+#### DF-13 - Laguna-S-2.1 catalog entry stays gated (LG-A1) - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7 - Known-gaps reconciliation (gated this cycle)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (Deferred and Gated Items)
@@ -150,7 +150,7 @@
 - **Migrated from**: v1.18.0#DF-12 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.18.0#DF-12; still owed: Optional candidate/watch; next: Carry model gate until the named low-bit/patient-tier gates and independent local benchmark are proven.
 
-#### DF-14 - 1M-context budget policy is not built (LG-A4)
+#### DF-14 - 1M-context budget policy is not built (LG-A4) - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7 - Known-gaps reconciliation (gated this cycle)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (Deferred and Gated Items)
@@ -160,7 +160,7 @@
 - **Migrated from**: v1.18.0#DF-13 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.18.0#DF-13; still owed: Optional candidate/watch; next: Carry dependent 1M-context policy proposal; name the model/runtime gate and prove usable budget behavior before advertising it.
 
-#### DF-15 - Native-app computer-use driver is not built (OI-A4-native)
+#### DF-15 - Native-app computer-use driver is not built (OI-A4-native) - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7 - Known-gaps reconciliation (gated this cycle)
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (Deferred and Gated Items)
@@ -170,7 +170,7 @@
 - **Migrated from**: v1.18.0#DF-14 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.18.0#DF-14; still owed: Optional candidate/watch; next: Implement through a dedicated bounded native-driver plan, or retain an explicit conditional product decision. Browser tooling does not prove native support.
 
-#### DF-16 - Harness selector shipped default stays off (EM.P1.B)
+#### DF-16 - Harness selector shipped default stays off (EM.P1.B) - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - Live harness activation; recorded in Phase 7
 - **Plan reference**: `docs/archive/v1/v1.18/plans/v1.18.0-adoption-agent-harness-and-governance.md` (sub-task 2.1); v1.12 EM.P1.B
@@ -180,7 +180,7 @@
 - **Migrated from**: v1.18.0#DF-15 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.18.0#DF-15; still owed: Optional candidate/watch; next: Carry live no-degradation hold. Run the live weak-model golden split before changing default; record pass rate, duration, model, and driver. Default-off is deliberate. A live A/B is a prerequisite for a future default-on decision; do not infer enabling is mandatory merely to close a watch item.
 
-#### DF-17 - LFM is pulled through Ollama's hf.co bridge, not the Hugging Face weights puller
+#### DF-17 - LFM is pulled through Ollama's hf.co bridge, not the Hugging Face weights puller - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Catalog entry (A1 sourcing)
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.0-adoption-liquid-lfm-agentic.md` (sub-task 1.1)
@@ -190,7 +190,7 @@
 - **Migrated from**: v1.19.0#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.0#DF-2; still owed: Owner decision; next: Carry accepted sourcing boundary, or explicitly close alternative-puller proposal. An HF weights download alone is not Ollama serving; preserve digest/source invariants.
 
-#### DF-18 - Catalog `origin` is the country `USA`, not the publisher name Liquid AI
+#### DF-18 - Catalog `origin` is the country `USA`, not the publisher name Liquid AI - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Catalog entry metadata
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.0-adoption-liquid-lfm-agentic.md` (sub-task 1.1)
@@ -200,7 +200,7 @@
 - **Migrated from**: v1.19.0#DF-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.0#DF-3; still owed: Historical limitation; next: Prove resolved as documented schema semantics using existing catalog/installer metadata tests; do not change origin to publisher text.
 
-#### DF-19 - LFM2.5-8B-A1B catalog row declined this cycle (win not demonstrated)
+#### DF-19 - LFM2.5-8B-A1B catalog row declined this cycle (win not demonstrated) - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - 8B-A1B bake-off (A2)
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.0-adoption-liquid-lfm-agentic.md` (sub-task 3.1)
@@ -210,7 +210,7 @@
 - **Migrated from**: v1.19.0#DF-7 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.0#DF-7; still owed: Owner decision; next: Carry explicit 8B-A1B decline/watch. Reopen only with its original dated same-split three-model quality/VRAM table.
 
-#### DF-20 - LFM2.5-VL (and other VL siblings) stay off the catalog
+#### DF-20 - LFM2.5-VL (and other VL siblings) stay off the catalog - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - P3 watchlist
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.0-adoption-liquid-lfm-agentic.md` (sub-task 3.2)
@@ -220,7 +220,7 @@
 - **Migrated from**: v1.19.0#DF-8 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.0#DF-8; still owed: Optional candidate/watch; next: Carry vision-catalog proposal with measured uncovered job requirement; no automatic catalog expansion.
 
-#### DF-21 - Liquid PII-extract Nano is not wired into redactSecrets
+#### DF-21 - Liquid PII-extract Nano is not wired into redactSecrets - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - P3 watchlist
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.0-adoption-liquid-lfm-agentic.md` (sub-task 3.2)
@@ -230,7 +230,7 @@
 - **Migrated from**: v1.19.0#DF-9 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.0#DF-9; still owed: Optional candidate/watch; next: Carry optional-model decision; evaluate false negatives and local runtime fit before integration.
 
-#### DF-22 - 128K context is GGUF metadata plus a short-prompt generate, not a full-length fill
+#### DF-22 - 128K context is GGUF metadata plus a short-prompt generate, not a full-length fill - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - context probe; recorded Phase 4
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.0-adoption-liquid-lfm-agentic.md` (sub-task 2.1)
@@ -240,7 +240,7 @@
 - **Migrated from**: v1.19.0#DF-10 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.0#DF-10; still owed: Historical limitation; next: Carry full-fill proof gap. Run a dated long-context fill on adequate hardware; do not claim short-prompt success proves 128K occupancy.
 
-#### DF-23 - Vendor LFM benchmarks must not appear in catalog copy until corroborated
+#### DF-23 - Vendor LFM benchmarks must not appear in catalog copy until corroborated - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - card copy; standing rule, recorded Phase 4
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.0-adoption-liquid-lfm-agentic.md` (Overview; Section 9)
@@ -250,7 +250,7 @@
 - **Migrated from**: v1.19.0#DF-11 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.0#DF-11; still owed: Historical limitation; next: Carry standing invariant or explicitly close as policy rather than unfinished implementation; preserve the invariant tests and evidence bar.
 
-#### DF-24 - Hub skill edits are authored but not yet merged or synced
+#### DF-24 - Hub skill edits are authored but not yet merged or synced - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Skill-native wins (1.1-1.3)
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.1-adoption-agent-loop-and-guardrail-hardening.md` (sub-tasks 1.1-1.3, 1.5)
@@ -260,7 +260,7 @@
 - **Migrated from**: v1.19.1#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.1#DF-2; still owed: Required implementation/qualification; next: Carry external verification: establish merge ancestry, released version, and installed catalog bodies without vendoring copies.
 
-#### DF-25 - Pass-state one-shot nudge means the no-action budget rarely trips in production
+#### DF-25 - Pass-state one-shot nudge means the no-action budget rarely trips in production - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - Unified loop guards (2.2)
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.1-adoption-agent-loop-and-guardrail-hardening.md` (sub-task 2.2)
@@ -270,7 +270,7 @@
 - **Migrated from**: v1.19.1#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.1#DF-4; still owed: Optional candidate/watch; next: Implement counting every applicable no-tool turn, or retain measured decision. Add a production-default multi-turn regression proving the actual budget can trip. Original rule is conditional on measured live thinking-loop waste. Proposed production guard change needs explicit implementation acceptance and a default-budget regression, not a silent change in this no-production-edit triage phase.
 
-#### DF-26 - Hermes harness A/B is fixture-only; no live Hermes generate this cycle
+#### DF-26 - Hermes harness A/B is fixture-only; no live Hermes generate this cycle - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Hermes harness profiles (1.5)
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.2-adoption-catalog-and-model-expansion.md` (sub-task 1.5)
@@ -280,7 +280,7 @@
 - **Migrated from**: v1.19.2#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.2#DF-1; still owed: Required implementation/qualification; next: Carry live Hermes golden-split measurement, recording actual local generates and timing rather than fixture scores.
 
-#### DF-27 - Inkling-Small GGUF is catalogued text-only; native multimodal is unverified at this quant
+#### DF-27 - Inkling-Small GGUF is catalogued text-only; native multimodal is unverified at this quant - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Inkling-Small patient-tier entry (1.6)
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.2-adoption-catalog-and-model-expansion.md` (sub-task 1.6)
@@ -290,7 +290,7 @@
 - **Migrated from**: v1.19.2#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.2#DF-2; still owed: Optional candidate/watch; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.0.0#DF-13, preserving image and audio local-load proof before enabling modalities.
 
-#### DF-28 - Patient-tier determinism assertion skips when no offload adapter is registered
+#### DF-28 - Patient-tier determinism assertion skips when no offload adapter is registered - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - RAM-budget presets + determinism (1.7)
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.2-adoption-catalog-and-model-expansion.md` (sub-task 1.7)
@@ -300,7 +300,7 @@
 - **Migrated from**: v1.19.2#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.19.2#DF-4; still owed: Required qualification; next: Carry adapter/hardware hold. Compare actual outputs at both budgets and retain dated identical/mismatch record.
 
-#### DF-29 - A4 Docling layout engine deferred; OCR on-device QA incomplete
+#### DF-29 - A4 Docling layout engine deferred; OCR on-device QA incomplete - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - Layout bake-off (4.1 / 4.2)
 - **Plan reference**: `docs/archive/v1/v1.20/plans/v1.20.0-adoption-docling.md` (Phase 4); note `docs/archive/v1/v1.20/development/ocr-layout-bakeoff-2026-08.md`
@@ -310,7 +310,7 @@
 - **Migrated from**: v1.20.0#DF-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.20.0#DF-5; still owed: Required qualification; optional candidate/watch for Docling; next: Carry installed-runtime and evidence prerequisites; prove real PDF/scan RapidOCR versus Unlimited-OCR, then explicitly decide optional Docling. Keep current OCR qualification and installable pinned weights as B-OCR-QUAL. Docling remains the separately deferred optional model/runtime decision, not automatically accepted by this proposal.
 
-#### DF-30 - `runtimes/ocr/` not renamed to `runtimes/documents/`
+#### DF-30 - `runtimes/ocr/` not renamed to `runtimes/documents/` - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - Architecture refactor (5.1)
 - **Plan reference**: `docs/archive/v1/v1.20/plans/v1.20.0-adoption-docling.md` (sub-task 5.1)
@@ -320,7 +320,7 @@
 - **Migrated from**: v1.20.0#DF-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v1.20.0#DF-6; still owed: Optional candidate/watch; next: Carry optional rename decision. If accepted, do an atomic runtime/test/CI/spawn/reference sweep; folder naming is not missing document parsing.
 
-#### DF-31 - Native audio-token reasoning is not wired
+#### DF-31 - Native audio-token reasoning is not wired - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Audio attachment + transcribe-then-chat (1.2)
 - **Plan reference**: `docs/archive/v2/v2.0/plans/v2.0.0-adoption-governed-autonomy-multimodal.md` (sub-task 1.2)
@@ -330,7 +330,7 @@
 - **Migrated from**: v2.0.0#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.0.0#DF-1; still owed: Optional candidate/watch; next: Carry model-dependent proposal. Prove model and serving audio input contract before routing native clips.
 
-#### DF-32 - Playwright is an optional local install, not a lockfile pin
+#### DF-32 - Playwright is an optional local install, not a lockfile pin - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - Browser tool family (2.2)
 - **Plan reference**: `docs/archive/v2/v2.0/plans/v2.0.0-adoption-governed-autonomy-multimodal.md` (sub-task 2.2)
@@ -340,7 +340,7 @@
 - **Migrated from**: v2.0.0#DF-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.0.0#DF-6; still owed: Optional candidate/watch; next: Carry optional local-browser install boundary. An actual nightly requirement must specify cached pinned browser and skip behavior before changing CI.
 
-#### DF-33 - LongCat Avatar DiT inference is not vendored
+#### DF-33 - LongCat Avatar DiT inference is not vendored - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - audio2video avatar mode (3.2)
 - **Plan reference**: `docs/archive/v2/v2.0/plans/v2.0.0-adoption-governed-autonomy-multimodal.md` (sub-task 3.2)
@@ -350,7 +350,7 @@
 - **Migrated from**: v2.0.0#DF-8 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.0.0#DF-8; still owed: Required implementation/qualification; next: Implement scanned local inference loader in a dedicated runtime task, then prove real talking-head bytes on eligible GPU; no stub-as-live claim.
 
-#### DF-34 - Continuation seam quality is unmeasured
+#### DF-34 - Continuation seam quality is unmeasured - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - video continuation (3.1)
 - **Plan reference**: `docs/archive/v2/v2.0/plans/v2.0.0-adoption-governed-autonomy-multimodal.md` (sub-task 3.1)
@@ -360,7 +360,7 @@
 - **Migrated from**: v2.0.0#DF-9 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.0.0#DF-9; still owed: Required qualification; next: Carry GPU quality hold. Generate three segments, retain outputs and measured/observed seam report.
 
-#### DF-35 - Code-as-action sandbox and Query DSL are not built
+#### DF-35 - Code-as-action sandbox and Query DSL are not built - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - Code-as-action sandbox + Query DSL (4.3)
 - **Plan reference**: `docs/archive/v2/v2.0/plans/v2.0.0-adoption-governed-autonomy-multimodal.md` (sub-task 4.3)
@@ -370,7 +370,7 @@
 - **Migrated from**: v2.0.0#DF-10 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.0.0#DF-10; still owed: Required implementation/qualification; next: Implement hardened isolate and Query DSL only through a security-scoped plan with permissions/confirmation and adversarial tests; kernel denial is not executable support.
 
-#### DF-36 - Fast small-model command router is not built
+#### DF-36 - Fast small-model command router is not built - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - Fast small-model command router (4.4)
 - **Plan reference**: `docs/archive/v2/v2.0/plans/v2.0.0-adoption-governed-autonomy-multimodal.md` (sub-task 4.4)
@@ -380,7 +380,7 @@
 - **Migrated from**: v2.0.0#DF-11 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.0.0#DF-11; still owed: Required implementation/qualification; next: Implement opt-in composition preserving abstain/escalation and normal confirmation; prove before/after latency plus same permission behavior.
 
-#### DF-37 - VRM Chat presence pane is not built
+#### DF-37 - VRM Chat presence pane is not built - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - VRM avatar presence layer (4.7)
 - **Plan reference**: `docs/archive/v2/v2.0/plans/v2.0.0-adoption-governed-autonomy-multimodal.md` (sub-task 4.7)
@@ -390,7 +390,7 @@
 - **Migrated from**: v2.0.0#DF-12 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.0.0#DF-12; still owed: Optional candidate/watch; next: Carry demand-gated proposal; do not build renderer merely to close inventory. If accepted, prove no disabled cost and local VRM-only behavior.
 
-#### DF-38 - Inkling-Small GGUF stays text-only (v1.19.2 DF-2)
+#### DF-38 - Inkling-Small GGUF stays text-only (v1.19.2 DF-2) - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - Known-gaps reconciliation (5.2); origin v1.19.2 task 1.6
 - **Plan reference**: `docs/archive/v1/v1.19/plans/v1.19.2-adoption-catalog-and-model-expansion.md` (sub-task 1.6)
@@ -400,7 +400,7 @@
 - **Migrated from**: v2.0.0#DF-13 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.0.0#DF-13; still owed: Optional candidate/watch; next: Carry accountable Inkling image/audio proof hold, incorporating v1.19.2#DF-2 obligations; both modalities need real local load before enabling.
 
-#### DF-39 - Kimi K3 is not a catalog LLM entry
+#### DF-39 - Kimi K3 is not a catalog LLM entry - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - Known-gaps reconciliation (5.2); origin kimi-k3-in-c K4
 - **Plan reference**: `docs/archive/v2/v2.0/comparisons/v2.0.6-comparison-kimi-k3-in-c.md` (K4)
@@ -410,7 +410,7 @@
 - **Migrated from**: v2.0.0#DF-14 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.0.0#DF-14; still owed: Optional candidate/watch; next: Carry model watch with serving/pin/job acceptance before any catalog row.
 
-#### DF-40 - DiffusionGemma is a watch item, not a catalog entry
+#### DF-40 - DiffusionGemma is a watch item, not a catalog entry - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Unsloth Dynamic quant references + capability flags + watch item (1.4 / A4b)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 1.4)
@@ -424,7 +424,7 @@
 - **Migrated from**: v2.1.0#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.1.0#DF-1; still owed: Optional candidate/watch; next: Carry both explicit external gates; record exact shipped serving version and artifact before reevaluation.
 
-#### DF-41 - Live golden-task re-verification of Muse Glimmer and Nemotron Lightning was not run
+#### DF-41 - Live golden-task re-verification of Muse Glimmer and Nemotron Lightning was not run - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Local benchmark re-verification (1.5)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 1.5)
@@ -434,7 +434,7 @@
 - **Migrated from**: v2.1.0#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.1.0#DF-2; still owed: Required qualification; next: Carry live model evaluation hold. Run catalog golden tasks on correct tier; do not infer routing quality from vendor fields.
 
-#### DF-42 - Live 20-job GPU restart soak is unproven
+#### DF-42 - Live 20-job GPU restart soak is unproven - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - Persistent generation job queue (3.2)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 3.2)
@@ -444,7 +444,7 @@
 - **Migrated from**: v2.1.0#DF-7 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.1.0#DF-7; still owed: Required qualification; next: Carry 20-job soak with restart, stable IDs, recovery counts, and final real artifacts.
 
-#### DF-43 - Muse Glimmer hf.co GGUF is gated vision:false
+#### DF-43 - Muse Glimmer hf.co GGUF is gated vision:false - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - Chat attachment ingestion + visual-token budgeting (4.1)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 4.1)
@@ -454,7 +454,7 @@
 - **Migrated from**: v2.1.0#DF-8 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.1.0#DF-8; still owed: Optional candidate/watch; next: Carry projector hold. Verify actual installed GGUF image inference before enabling vision and visual budget.
 
-#### DF-44 - Live Unsloth QLoRA was not run on GPU
+#### DF-44 - Live Unsloth QLoRA was not run on GPU - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - QLoRA orchestration (5.4 / 5.5)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 5.4)
@@ -464,7 +464,7 @@
 - **Migrated from**: v2.1.0#DF-13 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.1.0#DF-13; still owed: Required qualification; next: Carry live training hold. Provision supported host, run tiny real JSONL job, record time, VRAM, and artifacts.
 
-#### DF-45 - Live GPU layer-streaming OOM rescue is unproven
+#### DF-45 - Live GPU layer-streaming OOM rescue is unproven - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - Diffusion VRAM-budget knobs (6.3)
 - **Plan reference**: `docs/archive/v2/v2.1/plans/v2.1.0-adoption-open-local-ai-wave.md` (sub-task 6.3)
@@ -474,7 +474,7 @@
 - **Migrated from**: v2.1.0#DF-21 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.1.0#DF-21; still owed: Required qualification; next: Carry GPU hold. Reproduce below-minimum cap and actual completion with streaming/offload; retain typed failure if rescue fails.
 
-#### MT-1 - host_detect.py platform probes stay below 80% line coverage
+#### MT-1 - host_detect.py platform probes stay below 80% line coverage - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Honest host RAM and disk fields
 - **Plan reference**: `docs/archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md` (1.1, 1.4)
@@ -484,7 +484,7 @@
 - **Migrated from**: v2.3.1#MT-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.3.1#MT-1; still owed: Historical limitation; next: Carry measurement task. Run fresh focused coverage; add meaningful platform-probe tests for actual gaps rather than treating old percentage as current.
 
-#### DF-46 - Hydrated Video Lab sessions do not restore Enhance eligibility
+#### DF-46 - Hydrated Video Lab sessions do not restore Enhance eligibility - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - Video Lab Enhance Experience
 - **Plan reference**: `docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md` (T011, T013)
@@ -494,7 +494,7 @@
 - **Migrated from**: v2.3.0#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.3.0#DF-1; still owed: Required implementation/qualification; next: Implement durable identity persistence/recovery and remount regression; prove Enhance returns after hydration and still rejects invalid source.
 
-#### DF-47 - Nexus-Hub security-audit workflow is not released
+#### DF-47 - Nexus-Hub security-audit workflow is not released - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - Quality, Performance, and Packaging Evidence
 - **Plan reference**: `docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md` (T015); `docs/archive/v2/v2.3/development/nexus-hub-security-audit-handoff.md`
@@ -504,7 +504,7 @@
 - **Migrated from**: v2.3.0#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.3.0#DF-2; still owed: Required qualification; next: Carry external release proof hold. Verify receipts and exact consumed version before capability claim.
 
-#### DF-48 - Real Video2X, GPU, and packaged detection remain unmeasured
+#### DF-48 - Real Video2X, GPU, and packaged detection remain unmeasured - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - Quality, Performance, and Packaging Evidence
 - **Plan reference**: `docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md` (T014, T015)
@@ -514,7 +514,7 @@
 - **Migrated from**: v2.3.0#DF-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.3.0#DF-3; still owed: Required qualification; next: Carry real benchmark and packaged detection acceptance with version/path, resources, outputs, and source preservation.
 
-#### WN-1 - jsdom canvas and React act notices in Video Lab tests
+#### WN-1 - jsdom canvas and React act notices in Video Lab tests - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - Video Lab Enhance Experience
 - **Plan reference**: `docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md` (T013)
@@ -524,7 +524,7 @@
 - **Migrated from**: v2.3.0#WN-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.3.0#WN-1; still owed: Historical limitation; next: Carry explicit warning policy or implement dedicated harness cleanup after reproducing exact notices; do not silence arbitrary console errors.
 
-#### DF-49 - Release-preconditions helper script is absent
+#### DF-49 - Release-preconditions helper script is absent - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - Architecture Refactor, Known-Gaps Reconciliation, and CI/CD
 - **Plan reference**: `docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md` (T020)
@@ -534,7 +534,7 @@
 - **Migrated from**: v2.3.0#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.3.0#DF-4; still owed: Required implementation/qualification; next: Prove resolved with V5, retaining unavailable external checks as unavailable.
 
-#### QG-1 - Named repository-native CI profiles are not present
+#### QG-1 - Named repository-native CI profiles are not present - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - Architecture Refactor, Known-Gaps Reconciliation, and CI/CD
 - **Plan reference**: `docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md` (T021)
@@ -544,7 +544,7 @@
 - **Migrated from**: v2.3.0#QG-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.3.0#QG-1; still owed: Required implementation/qualification; next: Prove resolved with V4, citing actual five-profile CLI rather than implying all five npm aliases exist. Parent observed 16/16 profile/report tests passed and fast --list returned five commands on 2026-10-20. Proposed resolution is limited to the formerly absent five-profile CLI; this does not prove remote execution.
 
-#### QG-2 - CI workflow lacks least-privilege permissions and an aggregate required check
+#### QG-2 - CI workflow lacks least-privilege permissions and an aggregate required check - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - Architecture Refactor, Known-Gaps Reconciliation, and CI/CD
 - **Plan reference**: `docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md` (T021)
@@ -554,7 +554,7 @@
 - **Migrated from**: v2.3.0#QG-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.3.0#QG-2; still owed: Required implementation/qualification; next: Prove source defect resolved with workflow tests/profile verification; separately check actual branch-protection required context before claiming repository enforcement. Production workflow source now contains contents:read, PR develop and ci-required. Keep actual branch-protection enforcement separate and unverified; no permission or protection change is proposed.
 
-#### BG-1 (resolved) - Windows and macOS Shell Build desktop vitest failed after the v2.3.0 tag
+#### BG-1 (resolved) - Windows and macOS Shell Build desktop vitest failed after the v2.3.0 tag - MIGRATED to v2.17.0
 
 - **Source phase**: `/update release` (post-tag `main` Shell Build)
 - **Plan reference**: `docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md` (Phase 2-3 adapter/lifecycle); run [33235387928](https://github.com/bendourthe/Nexus-AI/actions/runs/33235387928)
@@ -564,7 +564,7 @@
 - **Migrated from**: v2.3.0#BG-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.3.0#BG-1; still owed: Required implementation/qualification; next: Prove resolved with V8 plus relevant Windows/macOS green regression evidence. Historical prose alone does not prove cross-platform pass.
 
-#### MT-2 - VideoLabPage function coverage is below 80% on the focused run
+#### MT-2 - VideoLabPage function coverage is below 80% on the focused run - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - Video Lab Enhance Experience
 - **Plan reference**: `docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md` (Phase 4 quality gate)
@@ -574,7 +574,7 @@
 - **Migrated from**: v2.3.0#MT-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.3.0#MT-1; still owed: Historical limitation; next: Carry focused coverage measurement and meaningful uncovered-helper review; do not call existing Enhance paths untested from an old aggregate percentage.
 
-#### DF-50 - Node SEA / externalBin bundling remains deferred
+#### DF-50 - Node SEA / externalBin bundling remains deferred - MIGRATED to v2.17.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Out of scope)
@@ -584,7 +584,7 @@
 - **Migrated from**: v2.2.3#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#DF-1; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.9#DF-38, preserving self-contained Node ABI, architecture-correct native addon, clean-host launch, and repair fallback obligations.
 
-#### DF-51 - Packaged clean-VM and Explorer-launch acceptance not executed
+#### DF-51 - Packaged clean-VM and Explorer-launch acceptance not executed - MIGRATED to v2.17.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Residual risks)
@@ -594,7 +594,7 @@
 - **Migrated from**: v2.2.3#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#DF-2; still owed: Required qualification; next: Carry packaged acceptance hold with actual installer/artifact identity and clean-host proof of each leg.
 
-#### DF-52 - Live-GPU image and video generation soaks not executed
+#### DF-52 - Live-GPU image and video generation soaks not executed - MIGRATED to v2.17.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Residual risks, DF-4)
@@ -604,7 +604,7 @@
 - **Migrated from**: v2.2.3#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#DF-4; still owed: Required qualification; next: Carry live smoke hold; retain successful bytes, elapsed time and packaged playback evidence with stubs disabled.
 
-#### DF-53 - CodingInput retains a separate composer implementation
+#### DF-53 - CodingInput retains a separate composer implementation - MIGRATED to v2.17.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 8.1)
@@ -614,7 +614,7 @@
 - **Migrated from**: v2.2.3#DF-14 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#DF-14; still owed: Owner decision; next: Carry deliberate composition boundary, or explicitly close broader unification proposal as unnecessary. Merge markup only when behavior converges.
 
-#### DF-54 - Native file dialogs remain unavailable
+#### DF-54 - Native file dialogs remain unavailable - MIGRATED to v2.17.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 6.1, Phase 8.2)
@@ -624,7 +624,7 @@
 - **Migrated from**: v2.2.3#DF-16 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#DF-16; still owed: Required implementation/qualification; next: Implement bounded data-transfer open/save dialog task with capability scope and cross-platform tests; correct any stale global no-dialog claim. Preserve B-IMPORT-APPLY and B-DATA-DIALOGS separately; imported files remaining in import-staging do not fulfill full restore.
 
-#### DF-55 - Settings tabs are not URL-addressable
+#### DF-55 - Settings tabs are not URL-addressable - MIGRATED to v2.17.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 8.2)
@@ -634,7 +634,7 @@
 - **Migrated from**: v2.2.3#DF-17 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#DF-17; still owed: Required implementation/qualification; next: Prove resolved with V1; query-param tabs satisfy deep-link behavior without requiring nested routes. Parent observed SettingsPage tests passing in the 30/30 focused desktop run on 2026-10-20. Propose resolving practical query-tab deep links; do not claim native packaged navigation was exercised.
 
-#### DF-56 - Packaged macOS and Linux sidecar native-addon paths are not proven
+#### DF-56 - Packaged macOS and Linux sidecar native-addon paths are not proven - MIGRATED to v2.17.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 8.2)
@@ -644,7 +644,7 @@
 - **Migrated from**: v2.2.3#DF-18 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#DF-18; still owed: Required implementation/qualification; next: Carry staging implementation and macOS/Linux healthcheck proof, including exact addon path and architecture.
 
-#### DF-57 - CREATE_NO_WINDOW parity is N/A on macOS and Linux
+#### DF-57 - CREATE_NO_WINDOW parity is N/A on macOS and Linux - MIGRATED to v2.17.0
 
 - **Source phase**: Carried into v2.2.3 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 8.4)
@@ -654,7 +654,7 @@
 - **Migrated from**: v2.2.3#DF-19 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#DF-19; still owed: Historical limitation; required qualification for Unix launch claim; next: Carry platform launch observation only, explicitly N/A for the Windows flag. Record no extra terminal on each packaged Unix launch.
 
-#### DF-58 - Local Chatbot reply transport remains batched
+#### DF-58 - Local Chatbot reply transport remains batched - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.3 Phase 4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 4)
@@ -664,7 +664,7 @@
 - **Migrated from**: v2.2.3#DF-21 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#DF-21; still owed: Required implementation/qualification; next: Implement typed incremental event delivery, cancellation and turn-identity contract, preserving durable terminal transcript and visible pending behavior.
 
-#### DF-59 - Workspace Hub hook scripts are not executed by the desktop sidecar
+#### DF-59 - Workspace Hub hook scripts are not executed by the desktop sidecar - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.3 Phase 8 reconciliation of Phase 6
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 6.3, Phase 8.2)
@@ -674,7 +674,7 @@
 - **Migrated from**: v2.2.3#DF-22 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#DF-22; still owed: Required implementation/qualification; next: Implement only after a concrete vscode-free discovery, permission, timeout, environment and result contract; test malicious/failing hooks.
 
-#### WN-2 - Pre-existing SIM117 in installer Complete test
+#### WN-2 - Pre-existing SIM117 in installer Complete test - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.3 Phase 7 verification
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (7.4)
@@ -684,7 +684,7 @@
 - **Migrated from**: v2.2.3#WN-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#WN-1; still owed: Required implementation/qualification; next: Prove resolved with V6; no unrelated broad lint cleanup required. Parent observed targeted Ruff SIM117 check passed on 2026-10-20. Propose resolving this exact lint occurrence, not the whole installer quality backlog.
 
-#### WN-3 - Desktop DOM suites emit known renderer-environment warnings
+#### WN-3 - Desktop DOM suites emit known renderer-environment warnings - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.3 Phase 8 verification
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` (Phase 8.5)
@@ -694,56 +694,56 @@
 - **Migrated from**: v2.2.3#WN-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.3#WN-2; still owed: Historical limitation; next: Carry harness census and explicit tolerated-warning decision; coordinate exact notices with v2.3.0#WN-1 without suppressing unrelated failures.
 
-#### DF-60 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead)
+#### DF-60 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead) - MIGRATED to v2.17.0
 
 Unchanged. Spawn now also sets `CREATE_NO_WINDOW` on Windows. The Node binary is still resolved from the installer chain, not a Tauri `externalBin`.
 
 - **Migrated from**: v2.2.2#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.2#DF-1; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-1, preserving its onward v2.2.9#DF-38 packaging obligations.
 
-#### DF-61 - Packaged-build acceptance legs not executed (clean-VM smoke)
+#### DF-61 - Packaged-build acceptance legs not executed (clean-VM smoke) - MIGRATED to v2.17.0
 
 A 2026-08-22 Complete-page healthcheck on this Windows host printed sidecar ok. That is not a clean-VM proof, and this coding session did not launch `nexus-shell.exe` from Explorer to confirm zero Node consoles after the flag change. Unit tests cover the flag helper.
 
 - **Migrated from**: v2.2.2#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.2#DF-2; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-2, preserving clean-VM, no-system-Node, launch, first-paint and playback proof.
 
-#### DF-62 - Live-GPU generation smoke written but not executed
+#### DF-62 - Live-GPU generation smoke written but not executed - MIGRATED to v2.17.0
 
 Unchanged. Out of scope for v2.2.2.
 
 - **Migrated from**: v2.2.2#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.2#DF-4; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-4, preserving actual successful image/video bytes and playback evidence.
 
-#### DF-63 - CodingInput still has its own composer implementation
+#### DF-63 - CodingInput still has its own composer implementation - MIGRATED to v2.17.0
 
 Unchanged as a shared primitive. v2.2.2 restyled CodingInput to the same in-field + / icon-send contract as MediaComposer (slash autocomplete stays). The duplicated surface style objects were not extracted.
 
 - **Migrated from**: v2.2.2#DF-14 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.2#DF-14; still owed: Owner decision; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-14, preserving deliberate shared-style boundary and any accepted convergence requirement.
 
-#### DF-64 remaining - no native file dialog for data transfer
+#### DF-64 remaining - no native file dialog for data transfer - MIGRATED to v2.17.0
 
 Unchanged. Settings > Data still takes a path string. Page padding now matches Models.
 
 - **Migrated from**: v2.2.2#DF-16 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.2#DF-16; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-16, preserving specific import/export native dialog acceptance. Preserve the carried full-restore import requirement from the v2.2.1 predecessor in addition to native file dialogs; the newer short copy does not waive it. Preserve B-IMPORT-APPLY and B-DATA-DIALOGS separately; imported files remaining in import-staging do not fulfill full restore.
 
-#### DF-65 - Settings tabs are not URL-addressable
+#### DF-65 - Settings tabs are not URL-addressable - MIGRATED to v2.17.0
 
 Unchanged. Out of scope.
 
 - **Migrated from**: v2.2.2#DF-17 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.2#DF-17; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-17 and run V1 before recording implementation closure.
 
-#### DF-66 - Sidecar cwd + native addon on macOS .app and Linux AppImage
+#### DF-66 - Sidecar cwd + native addon on macOS .app and Linux AppImage - MIGRATED to v2.17.0
 
 Unchanged. This session did not execute a macOS `.app` or Linux AppImage install (`not_observed != absent`).
 
 - **Migrated from**: v2.2.2#DF-18 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.2#DF-18; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-18, preserving both operating systems and packaged addon resolution.
 
-#### DF-67 - CREATE_NO_WINDOW / hidden Node console not applicable on macOS or Linux
+#### DF-67 - CREATE_NO_WINDOW / hidden Node console not applicable on macOS or Linux - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.2 Phase 1 / Phase 6.4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.2-ready-shell-and-studio-chrome.md` (1.1, 6.4)
@@ -753,42 +753,42 @@ Unchanged. This session did not execute a macOS `.app` or Linux AppImage install
 - **Migrated from**: v2.2.2#DF-19 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.2#DF-19; still owed: Historical limitation; required qualification for Unix launch claim; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-19; preserve actual no-extra-terminal observation separately from N/A.
 
-#### DF-68 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead)
+#### DF-68 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead) - MIGRATED to v2.17.0
 
 Unchanged. Spawn now sets cwd to the script directory and waits for liveness; the Node binary is still resolved from the installer chain, not a Tauri `externalBin`.
 
 - **Migrated from**: v2.2.1#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.1#DF-1; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-1 with complete self-contained runtime and ABI obligations.
 
-#### DF-69 - Packaged-build acceptance legs not executed (clean-VM smoke)
+#### DF-69 - Packaged-build acceptance legs not executed (clean-VM smoke) - MIGRATED to v2.17.0
 
 A 2026-08-22 rebuild of `nexus-shell.exe --healthcheck` on this Windows host printed `"sidecar":"ok"` with `catalogRows: 38` after two packaging fixes: copy `unsloth-pins.json` next to the bundle (import-time ENOENT), and fetch `better-sqlite3` for installer Node 22.11.0 (ABI 127) instead of the developer Node 24 (ABI 137). The Complete-page install of a freshly built `dist/NexusSetup.exe` is still the remaining live-install proof.
 
 - **Migrated from**: v2.2.1#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.1#DF-2; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-2 with all original acceptance legs retained.
 
-#### DF-70 - Live-GPU generation smoke written but not executed
+#### DF-70 - Live-GPU generation smoke written but not executed - MIGRATED to v2.17.0
 
 Unchanged. Out of scope for v2.2.1.
 
 - **Migrated from**: v2.2.1#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.1#DF-4; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-4 with real output and packaged playback proof retained.
 
-#### DF-71 remaining - no native file dialog for data transfer
+#### DF-71 remaining - no native file dialog for data transfer - MIGRATED to v2.17.0
 
 Unchanged. Settings > Data still takes a path string. Preview-and-stage import is not a full restore into final destinations.
 
 - **Migrated from**: v2.2.1#DF-16 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.1#DF-16; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-16; IPC implementation does not satisfy file picking. UNIQUE REQUIRED REMAINDER: this older body also says preview-and-stage import is not a full restore into final destinations. Current transferRuntime.ts:363-404 validates/writes under import-staging. Preserve B-IMPORT-APPLY in addition to B-DATA-DIALOGS; append the original obligation to any later accountable copy before superseding. Do not collapse solely as native-dialog work. Preserve B-IMPORT-APPLY and B-DATA-DIALOGS separately; imported files remaining in import-staging do not fulfill full restore.
 
-#### DF-72 - Settings tabs are not URL-addressable
+#### DF-72 - Settings tabs are not URL-addressable - MIGRATED to v2.17.0
 
 Unchanged. Out of scope.
 
 - **Migrated from**: v2.2.1#DF-17 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.1#DF-17; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-17 and verify V1.
 
-#### DF-73 - Sidecar cwd + native addon on macOS .app and Linux AppImage
+#### DF-73 - Sidecar cwd + native addon on macOS .app and Linux AppImage - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.1 Phase 1 / Phase 5.4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.1-field-repair-and-chrome-completion.md` (5.4)
@@ -798,7 +798,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.1#DF-18 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.1#DF-18; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-18, retaining both platforms and resolved addon-path receipt.
 
-#### DF-74 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead)
+#### DF-74 - Node SEA / externalBin bundling not implemented (resolution chain shipped instead) - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Sidecar Packaging and Runtime Wiring Repair (1.2)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 1.2)
@@ -808,7 +808,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-1; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-1, retaining onward v2.2.9#DF-38 standalone packaging acceptance.
 
-#### DF-75 - Packaged-build acceptance legs not executed (clean-VM smoke)
+#### DF-75 - Packaged-build acceptance legs not executed (clean-VM smoke) - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 (1.1 / 1.2 / 1.4 acceptance criteria)
 - **Plan reference**: sub-tasks 1.1, 1.2, 1.4
@@ -818,7 +818,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-2; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-2, preserving installer Complete health and no-system-Node proof.
 
-#### DF-76 - provisioner_dispatch chain remains dead code in the GUI flow
+#### DF-76 - provisioner_dispatch chain remains dead code in the GUI flow - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 (discovered during 1.3)
 - **Plan reference**: sub-task 1.3
@@ -828,7 +828,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-3; still owed: Owner decision; required qualification for ffmpeg/runtime delivery; next: Implement explicit dead-chain retention/removal decision and verify ffmpeg path. Later runtime provisioning supersedes old missing-venv symptom, not all dispatch-code obligations.
 
-#### DF-77 - Live-GPU generation smoke written but not executed
+#### DF-77 - Live-GPU generation smoke written but not executed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - Model Availability End to End (2.5)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 2.5)
@@ -838,7 +838,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-4; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-4, preserving gate-enabled real generation and actual bytes.
 
-#### DF-78 - GPU telemetry reports no queue depth or active model
+#### DF-78 - GPU telemetry reports no queue depth or active model - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 (2.4)
 - **Plan reference**: sub-task 2.4
@@ -848,7 +848,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-5; still owed: Required implementation/qualification; next: Implement scheduler-backed provider and test non-null active model/real queue depth. App's separate occupancy feed does not fix the widget sample.
 
-#### DF-79 - Ollama upgrade path reaches through to a private helper
+#### DF-79 - Ollama upgrade path reaches through to a private helper - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 (2.3)
 - **Plan reference**: sub-task 2.3
@@ -858,7 +858,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-6; still owed: Required implementation/qualification; next: Implement public accessor and update callers/tests, preserving API/CLI fallback behavior.
 
-#### DF-80 [RESOLVED 2026-08-22, Phase 8] - Bundled hub snapshot is not produced by the release build yet
+#### DF-80 [RESOLVED 2026-08-22, Phase 8] - Bundled hub snapshot is not produced by the release build yet - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - Nexus-Hub Harness Provisioning (3.1)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 3.1)
@@ -868,7 +868,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-7 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-7; still owed: Required implementation/qualification; next: Prove resolved for absent build call site with V7. Carry guaranteed offline-delivery claim separately until actual artifact contents and offline install are observed. Build-callsite absence is source-fixed, but the offline artifact guarantee is not established. B-OFFLINE-ARTIFACT survives until build contents and offline install evidence exist.
 
-#### DF-81 - Hub tar extraction uses a minimal in-house reader
+#### DF-81 - Hub tar extraction uses a minimal in-house reader - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 (3.1)
 - **Plan reference**: sub-task 3.1
@@ -878,7 +878,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-8 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-8; still owed: Required implementation/qualification; next: Implement compatible pack/extract contract, reject unsupported entries at build time or support them safely, and exercise real generated snapshots.
 
-#### DF-82 [RESOLVED 2026-08-22, Phase 8] - The switch policy is wired to one submit surface, not four
+#### DF-82 [RESOLVED 2026-08-22, Phase 8] - The switch policy is wired to one submit surface, not four - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - Smart Single-GPU Model Orchestration (4.3)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 4.3)
@@ -888,7 +888,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-9 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-9; still owed: Required implementation/qualification; next: Prove resolved with V3 and affected submit-flow behavioral verification; not only source-string matches. Parent observed occupancy tests within the 30/30 focused run. Propose resolving the four-submit wiring absence only; no real live concurrent-model switching was observed.
 
-#### DF-83 [RESOLVED 2026-08-22, Phase 8] - The policy is not fed live residency or scheduler state
+#### DF-83 [RESOLVED 2026-08-22, Phase 8] - The policy is not fed live residency or scheduler state - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 (4.1 / 4.3)
 - **Plan reference**: sub-tasks 4.1, 4.3
@@ -898,7 +898,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-10 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-10; still owed: Required implementation/qualification; next: Prove resolved with V3 and end-to-end incumbent confirmation. Keep unrelated telemetry widget DF-5 open until its own provider is wired. Parent observed occupancy tests within the 30/30 focused run. The separate telemetry provider defect remains B-GPU-TELEMETRY; do not close it as a side effect.
 
-#### DF-84 [RESOLVED 2026-08-22, Phase 8] - Cross-model orchestration is not wired to the real agent tools
+#### DF-84 [RESOLVED 2026-08-22, Phase 8] - Cross-model orchestration is not wired to the real agent tools - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 (4.2)
 - **Plan reference**: sub-task 4.2
@@ -908,7 +908,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-11 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-11; still owed: Required implementation/qualification; next: Implement actual tool composition and progress rendering or explicitly reconcile obsolete requirement. Do not close from prose/source-string tests. B-CROSSMODEL-COMPOSITION remains mandatory despite historical RESOLVED title: current production search has no runCrossModelRequest caller or CrossModelProgress renderer. Implement and exercise the production tool entrypoint plus progress renderer, or obtain an explicit change to that original contract; tests of the helper alone are insufficient.
 
-#### DF-85 [RESOLVED 2026-08-22, Phase 8] - The chat rail is not yet the chat-first session history (5.2)
+#### DF-85 [RESOLVED 2026-08-22, Phase 8] - The chat rail is not yet the chat-first session history (5.2) - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - Local Chatbot Rebuild (5.2)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 5.2)
@@ -918,7 +918,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-12 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-12; still owed: Required implementation/qualification; next: Prove resolved for folder prerequisite with V2 and actual first-send flow; reconcile optional full-rail specification explicitly rather than implying every structural request is proved. Parent observed chat-gaps/title tests within the 30/30 focused run. Propose resolving folder-required behavior only, with full rail design wording reconciled explicitly.
 
-#### DF-86 [RESOLVED 2026-08-22, Phase 8] - Auto-titling is implemented end to end but not called on first send
+#### DF-86 [RESOLVED 2026-08-22, Phase 8] - Auto-titling is implemented end to end but not called on first send - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 (5.3)
 - **Plan reference**: sub-task 5.3
@@ -928,7 +928,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-13 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-13; still owed: Required implementation/qualification; next: Prove resolved with V2, including user rename protection and title failure not failing send. Parent observed chat-gaps/title tests within the 30/30 focused run. Propose resolving missing first-send title call site; user rename and failure behavior require the cited covered cases.
 
-#### DF-87 - CodingInput still has its own composer implementation
+#### DF-87 - CodingInput still has its own composer implementation - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 (5.4)
 - **Plan reference**: sub-task 5.4 ("Update CodingInput to reuse the same base composer")
@@ -938,7 +938,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-14 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-14; still owed: Owner decision; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-14, retaining explicit renderer-convergence decision rather than forcing behavior changes.
 
-#### DF-88 - Token aliases added rather than call sites migrated
+#### DF-88 - Token aliases added rather than call sites migrated - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - Shell UI Modernization (6.4)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 6.4)
@@ -948,7 +948,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-15 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-15; still owed: Owner decision; next: Implement scoped mechanical call-site migration and delete aliases with token regression, or retain explicit canonical alias contract. Do not claim sweep happened.
 
-#### DF-89 [PARTIALLY RESOLVED 2026-08-22, Phase 8] - Data transfer has no IPC surface or file dialogs yet
+#### DF-89 [PARTIALLY RESOLVED 2026-08-22, Phase 8] - Data transfer has no IPC surface or file dialogs yet - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7 - Settings modernization and data transfer (7.4)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.0-runtime-repair-and-ux-overhaul.md` (sub-task 7.4)
@@ -959,7 +959,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-16 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-16; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-16, retaining specific native data-transfer dialog remainder without reopening delivered IPC. Original entry explicitly says import apply stages files rather than moving into place. Carry B-IMPORT-APPLY with full-restore destination, validation/backup, atomicity and recovery tests, alongside later native-dialog remainder. Preserve B-IMPORT-APPLY and B-DATA-DIALOGS separately; imported files remaining in import-staging do not fulfill full restore.
 
-#### DF-90 - Settings tabs are still not URL-addressable
+#### DF-90 - Settings tabs are still not URL-addressable - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7 (7.2)
 - **Plan reference**: sub-task 7.2
@@ -969,7 +969,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#DF-17 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#DF-17; still owed: Required implementation/qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede to v2.2.3#DF-17 and prove V1; distinguish optional nested routes from required user behavior.
 
-#### MT-3 - Studio backend-down banner not covered by a page-level test
+#### MT-3 - Studio backend-down banner not covered by a page-level test - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 (2.2)
 - **Plan reference**: sub-task 2.2
@@ -979,7 +979,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#MT-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#MT-3; still owed: Required implementation/qualification; next: Implement page-level backend-down/up tests through supported seam and verify banner versus no-model button branch.
 
-#### MT-4 - Sidecar boot wiring (main.ts) covered only indirectly
+#### MT-4 - Sidecar boot wiring (main.ts) covered only indirectly - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 (1.3)
 - **Plan reference**: sub-task 1.3
@@ -989,7 +989,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#MT-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#MT-1; still owed: Required implementation/qualification; next: Carry focused process integration task: spawn built sidecar against fixture runtime config/home, prove config applied before construction and expected log.
 
-#### MT-5 - Complete-page health detail line untested
+#### MT-5 - Complete-page health detail line untested - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 (1.4)
 - **Plan reference**: sub-task 1.4
@@ -999,7 +999,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.0#MT-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.0#MT-2; still owed: Required implementation/qualification; next: Implement injected desktop_health_detail QLabel assertion, including failed health text and no misleading success state.
 
-#### DF-91 - Packaged v2.2.9 chrome and catalog surfaces are unproven
+#### DF-91 - Packaged v2.2.9 chrome and catalog surfaces are unproven - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.9 Phases 1-6
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md` (Operator field checklist)
@@ -1009,7 +1009,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.9#DF-36 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.9#DF-36; still owed: Required qualification; next: Carry packaged qualification: run all seven checks from `docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md` on the current installer, binding captures to its digest.
 
-#### WN-4 - Root vitest run mutates the memory-tier benchmark fixture
+#### WN-4 - Root vitest run mutates the memory-tier benchmark fixture - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.9 Phases 1-6 verification
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md` (Phase 7.7); commit `f7120ae`
@@ -1019,7 +1019,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.9#WN-8 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.9#WN-8; still owed: Required implementation; next: Prove resolved candidate with command A below and a before/after tracked-fixture hash. Concurrent implementation must be committed before recording closure.
 
-#### WN-5 - Desktop suite 5000ms-timeout flakes under host load
+#### WN-5 - Desktop suite 5000ms-timeout flakes under host load - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.9 Phases 1-6 verification
 - **Plan reference**: WN-2 class (`docs/archive/v2/v2.2/plans/v2.2.3-glass-orbs-and-pillar-runtime.md` Phase 8.5)
@@ -1029,7 +1029,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.9#WN-9 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.9#WN-9; still owed: Required qualification; next: Carry test reliability: retain failing test names and timings from a loaded full-suite reproduction, then fix the identified waits/contention; verify a serial and normal full run. Avoid raising every timeout without a reproduction.
 
-#### MT-6 - Per-phase line coverage was not measured this cycle
+#### MT-6 - Per-phase line coverage was not measured this cycle - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.9 Phases 1-6
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md` (phase stability gates)
@@ -1039,7 +1039,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.9#MT-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.9#MT-4; still owed: Historical limit; next: Carry historical evidence limit with an owner decision: either reproduce each pinned phase commit with coverage in isolation, or accept the unrecoverable historical omission and require coverage receipts on future phase boundaries. Current aggregate coverage cannot resolve it retroactively.
 
-#### DF-92 - Typed diffusion error kinds are prose-only across the wire
+#### DF-92 - Typed diffusion error kinds are prose-only across the wire - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.9 Phase 7 (Goal-vs-codebase review finding on Phase 4)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md` (Phase 4.1)
@@ -1049,7 +1049,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.9#DF-37 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.9#DF-37; still owed: Optional candidate/watch; next: Implement if typed downstream classification is retained: add an error-kind field through runtime, sidecar, and result guard; prove with B. Otherwise record an explicit product decision that actionable prose is the complete contract.
 
-#### DF-93 - Raw Tauri desktop bundles are not self-contained release artifacts
+#### DF-93 - Raw Tauri desktop bundles are not self-contained release artifacts - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.9 release preparation
 - **Plan reference**: release packaging audit; carried architectural gap DF-1 from v2.2.0
@@ -1059,7 +1059,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.9#DF-38 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.9#DF-38; still owed: Owner decision; next: Implement pinned per-target runtime packaging with clean-host qualification, or retain installer-only desktop publication explicitly. Requires per-target ABI and native-addon proof, not only a successful Tauri build.
 
-#### MT-7 - Publisher map and Agentic-pill guard have no cross-language parity test
+#### MT-7 - Publisher map and Agentic-pill guard have no cross-language parity test - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.9 Phase 7 (Goal-vs-codebase review finding on Phase 5)
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md` (Phase 5.1, WN-7 discipline)
@@ -1069,7 +1069,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.9#MT-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.9#MT-5; still owed: Required implementation; next: Implement full-map and Agentic-predicate parity using real catalog shapes plus malformed/missing fields; prove with C. Existing six-family fixtures do not establish whole-map equivalence.
 
-#### DF-94 - Agents folders are a local overlay, not sidecar schema
+#### DF-94 - Agents folders are a local overlay, not sidecar schema - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.8 Phase 2
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.8-working-local-studio.md` (Phase 2.1, folders optional)
@@ -1079,7 +1079,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.8#DF-33 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.8#DF-33; still owed: Owner decision; next: Carry product decision: accept/document overlay-only semantics, or implement workspace-keyed durable folders and test deletion reparenting, restart, and storage export. Do not call existing local persistence a roaming store.
 
-#### DF-95 - Packaged Settings vs installer Models identity is unproven
+#### DF-95 - Packaged Settings vs installer Models identity is unproven - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.8 Phase 4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.8-working-local-studio.md` (Phase 4 Stability Gate)
@@ -1089,7 +1089,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.8#DF-34 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.8#DF-34; still owed: Required qualification; next: Carry packaged side-by-side qualification: current installer and Settings, same catalog/owned models/host, with tab order, collapse, over-budget partition, and Downloaded state recorded. Can share an execution with v2.2.9#DF-36 without dropping either identity.
 
-#### DF-96 - Packaged Settings and installer Context chips are unproven
+#### DF-96 - Packaged Settings and installer Context chips are unproven - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.7 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md` (Phase 1)
@@ -1099,7 +1099,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.7#DF-28 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.7#DF-28; still owed: Required qualification; next: Prove resolved marker candidate by verifying those historical references and narrowly marking the historical chip-render obligation. Preserve new-grammar qualification at v2.2.8#DF-34 and v2.2.9#DF-36.
 
-#### DF-97 - Live Ollama usage and thinking fields are unproven
+#### DF-97 - Live Ollama usage and thinking fields are unproven - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.7 Phase 2
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md` (Phase 2)
@@ -1109,7 +1109,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.7#DF-29 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.7#DF-29; still owed: Required qualification; next: Carry live provider qualification: capture a real final Ollama response and the resulting persisted assistant turn, compare counters and thinking text, and distinguish request-wide from message-attributed usage.
 
-#### DF-98 - Packaged four-tab Context meter and 80% CTA are unproven
+#### DF-98 - Packaged four-tab Context meter and 80% CTA are unproven - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.7 Phase 3
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md` (Phase 3)
@@ -1119,7 +1119,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.7#DF-30 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.7#DF-30; still owed: Required qualification; next: Carry packaged interaction qualification: cross 80%, start a new session while preserving the old one, inspect all four surfaces, and verify opening the picker does not load weights.
 
-#### DF-99 - Packaged transcript date, time, and token chrome is unproven
+#### DF-99 - Packaged transcript date, time, and token chrome is unproven - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.7 Phase 4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md` (Phase 4)
@@ -1129,7 +1129,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.7#DF-31 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.7#DF-31; still owed: Required qualification; next: Prove resolved marker candidate for the historical transcript format after validating that reference. New full-word metadata and its four-pillar rendering remain v2.2.9#DF-36.
 
-#### WN-6 - Context chip formatters are duplicated across TypeScript and Python
+#### WN-6 - Context chip formatters are duplicated across TypeScript and Python - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.7 Phase 1
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md` (T002)
@@ -1139,7 +1139,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.7#WN-7 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.7#WN-7; still owed: Optional candidate/watch; next: Prove the original drift-mitigation contract with C. If stronger generation/parity is required, supersede into v2.2.9#MT-5 with the context formatter cases explicitly retained; duplicated implementation alone is not a functional defect.
 
-#### DF-100 - Packaged Explorer launch is unproven
+#### DF-100 - Packaged Explorer launch is unproven - MIGRATED to v2.17.0
 
 - **Source phase**: carried from v2.2.5
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md` (Phase 6.2)
@@ -1149,7 +1149,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.6#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.6#DF-2; still owed: Required qualification; next: Prove resolved marker candidate by verifying `docs/archive/v2/v2.2/plans/v2.2.8-working-local-studio.md` Review verdict and matching release artifact.
 
-#### DF-101 - Live GPU image/video generate is unproven
+#### DF-101 - Live GPU image/video generate is unproven - MIGRATED to v2.17.0
 
 - **Source phase**: carried from v2.2.5
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md` (operator field checklist)
@@ -1159,7 +1159,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.6#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.6#DF-4; still owed: Required qualification; next: Carry remaining packaged UI qualification, retaining the historical artifact evidence as a partial. Observe image and video output, or the specific permitted typed failure in the current UI, without representing a failure as a successful generate.
 
-#### DF-102 - Packaged session persist (quit/reopen) is unproven
+#### DF-102 - Packaged session persist (quit/reopen) is unproven - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.6 Phases 1-5
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md` (Phase 6.2)
@@ -1169,7 +1169,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.6#DF-25 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.6#DF-25; still owed: Required qualification; next: Carry packaged persistence qualification: create a turn in each pillar, record IDs and outputs, quit the process, reopen, and compare hydrated sessions without test-injected stores.
 
-#### DF-103 - Video remount cannot restore `continueFrom`
+#### DF-103 - Video remount cannot restore `continueFrom` - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.6 Phase 3
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md` (Phase 3)
@@ -1179,7 +1179,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.6#DF-26 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.6#DF-26; still owed: Required implementation; next: Implement durable generation-job linkage and continuation restoration, including older rows and missing/deleted job cases; prove with D and a real runtime-boundary continuation flow.
 
-#### DF-104 - Agents resume does not restore tool-call cards
+#### DF-104 - Agents resume does not restore tool-call cards - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.6 Phase 4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md` (Phase 4)
@@ -1189,7 +1189,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.6#DF-27 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.6#DF-27; still owed: Required implementation; next: Implement durable bounded tool-card snapshots and hydrate them through IPC/rendering, or obtain an explicit text-only-resume product decision. Prove with E; do not persist secrets/raw unbounded tool results.
 
-#### DF-105 - Packaged Explorer launch is unproven
+#### DF-105 - Packaged Explorer launch is unproven - MIGRATED to v2.17.0
 
 - **Source phase**: carried from v2.2.4
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.5-first-successful-generation.md` (Phase 6.2)
@@ -1199,7 +1199,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.5#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.5#DF-2; still owed: Required qualification; next: Prove resolved marker candidate using the same v2.2.8 historical evidence; retain both distinct source identities in the disposition record.
 
-#### DF-106 - Live GPU image/video generate is unproven
+#### DF-106 - Live GPU image/video generate is unproven - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.5 Phase 2
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.5-first-successful-generation.md` (Phase 2 field gate)
@@ -1209,7 +1209,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.5#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.5#DF-4; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede into v2.2.6#DF-4 only with the SANA-specific or permitted typed-failure obligation preserved. Otherwise carry a SANA packaged observation.
 
-#### DF-107 - Packaged Hub Update against a live git clone is not executed
+#### DF-107 - Packaged Hub Update against a live git clone is not executed - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.4 Phase 6 / 7
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.4-chatbot-first-and-runtime-honesty.md` (Phase 6 residual, Phase 7.2)
@@ -1219,7 +1219,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.4#DF-23 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.4#DF-23; still owed: Required qualification; next: Carry packaged/network qualification: run Update against a real clone, capture completion and clone/sync logs, preserve quarantine behavior, and bind evidence to current artifact. Requires an authorized live sync; none ran in this audit.
 
-#### DF-108 - Unix installer complete-path snapshot write is not proven
+#### DF-108 - Unix installer complete-path snapshot write is not proven - MIGRATED to v2.17.0
 
 - **Source phase**: v2.2.4 Phase 7
 - **Plan reference**: `docs/archive/v2/v2.2/plans/v2.2.4-chatbot-first-and-runtime-honesty.md` (Phase 7.4)
@@ -1229,7 +1229,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.2.4#DF-24 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.2.4#DF-24; still owed: Optional candidate/watch; next: Carry macOS/Linux qualification: trace each shipping platform installer to this writer, add platform completion integration fixtures, and observe the resulting selected-models file on native hosts. Do not infer Unix parity from the Windows engine.
 
-#### MT-8 - Packaged transcript gutters and pill glow are not observed
+#### MT-8 - Packaged transcript gutters and pill glow are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Transcript Gutters and Thinking Pill
 - **Impact**: The gutter is proven as one `paddingInline` on the list with no downstream inset, and list, row, and pending are all overflow-visible. jsdom does not lay out a packaged transcript, so whether the glow is uncropped at 100% and 150% zoom is not observed here.
@@ -1239,7 +1239,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.4#MT-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.4#MT-1; still owed: Required qualification; next: Carry packaged visual qualification: measured list/row/pill bounds and captured glow at both zooms. This is the current explicit superseding identity for v2.4.3#MT-3.
 
-#### MT-9 - Packaged hairline centering and title inset are not observed
+#### MT-9 - Packaged hairline centering and title inset are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - History Hairline, Title Inset, and Bulk Actions
 - **Impact**: Tests pin one symmetric `marginBlock` on the rule, zero padding-top on the tree header, and a chat title as the first node after the selection rail. Pixel spacing in a packaged window is not observed here. Archive All and Delete All are proven against an in-memory client, including chats inside collapsed folders, but not against the real IPC store.
@@ -1249,7 +1249,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.4#MT-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.4#MT-2; still owed: Required qualification; next: Carry packaged/IPC qualification: measure hairline/title inset and exercise archive/delete-all including collapsed folders, with controlled disposable sessions. Preserve v2.4.3#MT-2's dialog-centering obligation when reconciling.
 
-#### MT-10 - Packaged NVIDIA restyle identity is not observed
+#### MT-10 - Packaged NVIDIA restyle identity is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - Image Restyle Identity on the GPU
 - **Impact**: Four contributors are fixed and each is pinned by a test: the parser accepts trailing punctuation, the send always resolves to img2img with the identity prompt or fails closed, strength 0 survives, the seed is forwarded, and a pipeline that echoes its source raises `unchanged-output`. Whether a real SANA/SDXL img2img at strength 0.85 produces black fur on this host is not observed here.
@@ -1259,7 +1259,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.4#MT-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.4#MT-3; still owed: Required qualification; next: Carry GPU visual qualification: capture input/output and request parameters, verify changed pixels and retained identity on a supported current pipeline, bound to model/runtime versions.
 
-#### MT-11 - Live SANA import on the 0.36.0 pin is not observed
+#### MT-11 - Live SANA import on the 0.36.0 pin is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - SANA Family Diffusers Pin
 - **Impact**: 0.36.0 was verified from published wheels to contain the SANA video pipeline modules and to export both class names, and to declare no torch or transformers upper bound. `from diffusers import SanaPipeline, SanaVideoPipeline` has not been executed in a provisioned venv, because Diffusers resolves pipelines lazily and the probe needs the full media runtime.
@@ -1269,7 +1269,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.4#MT-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.4#MT-4; still owed: Required qualification; next: Carry runtime qualification: execute both SanaPipeline and SanaVideoPipeline imports in the provisioned pinned environment. Preserve the older actual-clip-or-missing-file obligation separately when superseding v2.4.3#MT-7.
 
-#### MT-12 - Packaged generation liveness is not observed
+#### MT-12 - Packaged generation liveness is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - Generation Liveness and Studio Captions
 - **Impact**: The reader is proven to answer `health` while a job is inside its handler, heartbeats are proven to emit and stop, and a pending studio orb is proven unpaused. Whether the packaged freeze is fully explained by the blocked reader, or partly by GPU compositor starvation on a 16 GB laptop, is not established. No headroom value was changed, deliberately, because there is no evidence for choosing one.
@@ -1279,7 +1279,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.4#MT-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.4#MT-5; still owed: Required qualification; next: Carry live GPU/UI qualification: run a real job while interacting with the window and recording responsiveness/captions/terminal outcome; measure headroom before changing reserves.
 
-#### MT-13 - Packaged Settings density is not observed
+#### MT-13 - Packaged Settings density is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - Settings Models Density and Details
 - **Impact**: Tests pin search inside the tab row container, a centered horizontal action row, no card min-height, split pill label/value colours, and Best for as bullets. Real-viewport card height and wrap behaviour at the packaged Settings width are not observed here.
@@ -1289,7 +1289,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.4#MT-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.4#MT-6; still owed: Required qualification; next: Carry current packaged density qualification. Can supersede older Settings pixel rows into one later identity only if all surviving viewport/wrap/color/card obligations are enumerated there.
 
-#### QG-3 - Develop-targeted pull requests now run the full merge-result gate (resolved)
+#### QG-3 - Develop-targeted pull requests now run the full merge-result gate (resolved) - MIGRATED to v2.17.0
 
 - **Resolved**: 2026-08-31 in Phase 7, with explicit operator approval.
 - **Evidence**: Carried from v2.4.3 QG-5. Every substantive workflow filtered `pull_request` to `main`, so PR 58 (which targets `develop`) ran only commitlint: the push trigger tested the branch head, but the merge result was never tested. `develop` was added to the `pull_request.branches` filter of `ci.yml`, `shell-build.yml`, `installer-tests.yml`, `coverage-diff.yml`, and `pr-quality.yml`; no job logic changed. Confirmed by observation, not assertion: `gh pr checks 58` now reports 42 pass, 1 skipping (path-gated `init.ps1`), 0 fail on head `4b1771da`, against a pull request that previously ran one check.
@@ -1297,7 +1297,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.4#QG-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.4#QG-1; still owed: Required qualification; next: Prove resolved marker candidate for develop merge-result coverage, verifying historical check evidence. Preserve current CI topology/protection concerns at v2.4.9#QG-2 and #QG-3.
 
-#### MT-14 - Packaged installer two-column layout and Unsloth lock are not observed
+#### MT-14 - Packaged installer two-column layout and Unsloth lock are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Installer Two-Column Layout and Unsloth Lock
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](../../../archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md) T001 / 1.1
@@ -1307,7 +1307,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.3#MT-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.3#MT-1; still owed: Required qualification; next: Carry current packaged wizard qualification, recording which old layout requirements were superseded by the committed wizard redesign, and proving compatible/incompatible selection behavior without inferring geometry headlessly.
 
-#### MT-15 - Hairline pixels and delete-dialog centering are not proven in jsdom
+#### MT-15 - Hairline pixels and delete-dialog centering are not proven in jsdom - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - History Chrome, Selection, Titles, and Delete Overlay
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](../../../archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md) T007 / 2.1
@@ -1317,7 +1317,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.3#MT-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.3#MT-2; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede into v2.4.4#MT-2 only after attaching dialog-centering and new-session/title obligations to the destination; otherwise keep those as a specific remaining qualification.
 
-#### MT-16 - Thinking-pill glow pixel containment is not proven in jsdom
+#### MT-16 - Thinking-pill glow pixel containment is not proven in jsdom - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - Thinking Pill Geometry
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](../../../archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md) T013 / 3.1
@@ -1327,7 +1327,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.3#MT-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.3#MT-3; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede into v2.4.4#MT-1, retaining packaged glow containment at 100% and 150% as the owed proof. This is supersession, not a statement that pixels were observed.
 
-#### MT-17 - Packaged Settings compact-card nowrap and icon colors are not observed
+#### MT-17 - Packaged Settings compact-card nowrap and icon colors are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - Settings Models Compact Cards
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](../../../archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md) T016 / 4.1
@@ -1337,7 +1337,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.3#MT-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.3#MT-4; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede into v2.4.4#MT-6 with still-applicable color/wrap requirements carried explicitly; document any later deliberate grammar replacement.
 
-#### MT-18 - Packaged Agents picker order and empty-session default are not observed
+#### MT-18 - Packaged Agents picker order and empty-session default are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - Shared Picker Rank and Default
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](../../../archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md) T020 / 5.1
@@ -1347,7 +1347,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.3#MT-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.3#MT-5; still owed: Required qualification; next: Carry packaged picker qualification: fresh owned-model snapshot, empty Agents session, expected Gemma default and recommend order. Can share execution with v2.4.8#MT-5 without silently dropping this identity.
 
-#### MT-19 - Packaged NVIDIA restyle identity is not observed
+#### MT-19 - Packaged NVIDIA restyle identity is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - Image Restyle Identity
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](../../../archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md) T024 / 6.1
@@ -1357,7 +1357,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.3#MT-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.3#MT-6; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede into v2.4.4#MT-3, preserving before/after puppy identity and actual recoloring as the acceptance test.
 
-#### MT-20 - Packaged NVIDIA SANA-Video clip is not observed
+#### MT-20 - Packaged NVIDIA SANA-Video clip is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7 - SANA-Video Layout and Executor
 - **Plan reference**: [v2.4.3-field-density-identity-and-runtime.md](../../../archive/v2/v2.4/plans/v2.4.3-field-density-identity-and-runtime.md) T028 / 7.1
@@ -1367,7 +1367,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.3#MT-7 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.3#MT-7; still owed: Required qualification; next: Carry the output obligation, or supersede into v2.4.4#MT-4 only if that exact output condition is added. Do not discharge generation with an import.
 
-#### MT-21 - Thinking-pill pixel containment is not proven in jsdom layout
+#### MT-21 - Thinking-pill pixel containment is not proven in jsdom layout - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Sidebar History Host and Shared Chrome
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](../../../archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md) T005 / 1.5
@@ -1377,7 +1377,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.2#MT-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.2#MT-1; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede into v2.4.4#MT-1 with both zoom levels and actual measured/captured containment retained.
 
-#### MT-22 - Composer stick-to-bottom is proven on a mocked scroller, not a live pane
+#### MT-22 - Composer stick-to-bottom is proven on a mocked scroller, not a live pane - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - Transcript Honesty
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](../../../archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md) T009 / 2.1
@@ -1387,7 +1387,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.2#MT-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.2#MT-2; still owed: Required qualification; next: Carry real pane interaction qualification: send in all four pillars, observe latest turn when at bottom, and preserve position when deliberately scrolled up.
 
-#### MT-23 - Packaged img2img identity for "Make that puppy black" is not observed
+#### MT-23 - Packaged img2img identity for "Make that puppy black" is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - Image Follow-up Identity
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](../../../archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md) T016 / 3.1
@@ -1397,7 +1397,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.2#MT-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.2#MT-3; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede into v2.4.4#MT-3 with input/output identity and recoloring preserved. Do not claim the obsolete 0.45 path was field-proven.
 
-#### MT-24 - Packaged empty-video fail-closed is not observed
+#### MT-24 - Packaged empty-video fail-closed is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - Video Fail-Closed Output
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](../../../archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md) T020 / 4.1
@@ -1407,7 +1407,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.2#MT-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.2#MT-4; still owed: Required qualification; next: Carry packaged fail-closed qualification with a controlled missing-output case, then remount and verify written error remains; do not report an empty success bubble as success.
 
-#### MT-25 - Settings Models density is not proven on a real viewport
+#### MT-25 - Settings Models density is not proven on a real viewport - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - Settings Models Density
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](../../../archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md) T024 / 5.1
@@ -1417,7 +1417,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.2#MT-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.2#MT-5; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede into v2.4.4#MT-6 with actual viewport sizing and no unwanted wrapping/overflow preserved.
 
-#### MT-26 - Live installer VRAM / Unsloth / VS Code merge is not observed
+#### MT-26 - Live installer VRAM / Unsloth / VS Code merge is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - Installer VRAM, Unsloth, and VS Code Merge
 - **Plan reference**: [v2.4.2-field-ui-history-and-generation.md](../../../archive/v2/v2.4/plans/v2.4.2-field-ui-history-and-generation.md) T028 / 6.1
@@ -1427,7 +1427,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.2#MT-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.2#MT-6; still owed: Required qualification; next: Carry native packaged wizard qualification, preserving whole-GB GPU, compatibility badge, and extension option visibility even if their page placement was deliberately redesigned.
 
-#### DF-109 - Reasoning disclosure is not observed with a thinking-capable local model
+#### DF-109 - Reasoning disclosure is not observed with a thinking-capable local model - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 and Phase 8 human testing
 - **Plan reference**: Phase 8.7 operator item 6
@@ -1437,7 +1437,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.1#DF-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.1#DF-3; still owed: Required qualification; next: Carry live model/packaged qualification: use an installed reasoning-capable model and capture collapsed/expanded states without moving reasoning into answer text.
 
-#### DF-110 - Archive, delete, reset, and restore are not observed across all four pillars
+#### DF-110 - Archive, delete, reset, and restore are not observed across all four pillars - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 and Phase 8 human testing
 - **Plan reference**: Phase 8.7 operator item 7
@@ -1447,7 +1447,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.1#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.1#DF-4; still owed: Required qualification; next: Carry real-boundary session matrix with disposable sessions, IDs, cancellation/late-event checks, restart, and restore outcomes across all four pillars.
 
-#### DF-111 - Installer/Settings visual parity and live disk-meter change are not observed
+#### DF-111 - Installer/Settings visual parity and live disk-meter change are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 and Phase 8 human testing
 - **Plan reference**: Phase 8.7 operator item 8
@@ -1457,7 +1457,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.1#DF-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.1#DF-5; still owed: Required qualification; next: Carry packaged parity plus disk qualification; no model download/remove was authorized for this audit. Record current digest, same-model screenshots, free-space deltas, and cleanup.
 
-#### DF-112 - Native folder pickers outside Windows are not observed
+#### DF-112 - Native folder pickers outside Windows are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7
 - **Plan reference**: Phase 8.7 operator item 9
@@ -1467,7 +1467,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.1#DF-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.1#DF-6; still owed: Required qualification; next: Carry native OS qualification with workspace-chip and stale-result evidence on both platforms.
 
-#### DF-113 - Windows multi-root OS sandbox confinement remains partial
+#### DF-113 - Windows multi-root OS sandbox confinement remains partial - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 and Phase 8 human testing
 - **Plan reference**: Phase 8.7 operator item 9
@@ -1477,7 +1477,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.1#DF-7 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.1#DF-7; still owed: Optional candidate/watch; next: Carry security implementation: kernel filesystem/network boundary with adversarial outside-root/network tests, or explicit partial-support contract. Preserve the loud partial label meanwhile.
 
-#### QG-4 - Indexed skill catalog paths remain absent from this checkout
+#### QG-4 - Indexed skill catalog paths remain absent from this checkout - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 8 architecture, known-gaps, docs layout, and CI reconciliation; generation-recovery Phase 7
 - **Plan reference**: Phase 8.1-8.5 and generation-recovery T089-T093
@@ -1487,7 +1487,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.1#QG-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.1#QG-2; still owed: Required implementation; next: Implement portable discovery/mapping or correct plan templates to an installed-path resolver; verify all named skills resolve without falsely claiming a vendored bundle exists.
 
-#### QG-5 - Develop-targeted pull requests miss several merge-result workflows
+#### QG-5 - Develop-targeted pull requests miss several merge-result workflows - MIGRATED to v2.17.0
 
 - **Source phase**: Generation-recovery Phase 7 terminal CI comparison
 - **Plan reference**: T093
@@ -1497,7 +1497,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.1#QG-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.1#QG-5; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede into resolved v2.4.4#QG-1 for the branch-filter problem after historical evidence verification; keep aggregate/protection differences at v2.4.9#QG-2/#QG-3.
 
-#### QG-6 - Model-prompting freshness helper is absent
+#### QG-6 - Model-prompting freshness helper is absent - MIGRATED to v2.17.0
 
 - **Source phase**: Generation-recovery Phase 7 advisory governance check
 - **Plan reference**: implement-phase 9.0 duty 8
@@ -1507,7 +1507,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.1#QG-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.1#QG-6; still owed: Optional candidate/watch; next: Carry advisory tooling decision: add a local helper with explicit date/source contract and tests, or document the advisory no-op. No model guidance freshness was verified here.
 
-#### DF-114 - Packaged Windows clean and repair installer behavior is not observed
+#### DF-114 - Packaged Windows clean and repair installer behavior is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 and Phase 8 human testing
 - **Plan reference**: Phase 8.7 operator items 1-3
@@ -1517,7 +1517,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.1#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.1#DF-1; still owed: Required qualification; next: Carry packaged clean/repair qualification with screenshots and install log on an isolated clean host and existing installation.
 
-#### DF-115 - Wan and SDXL are not re-smoked on the new Diffusers pin
+#### DF-115 - Wan and SDXL are not re-smoked on the new Diffusers pin - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - SANA Family Diffusers Pin
 - **Impact**: The pin change touches every Image and Video model on the host, not only SANA. Nothing in the automated suites exercises a real pipeline load, so a regression in Wan or SDXL under 0.36.0 would not be caught locally.
@@ -1527,7 +1527,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.4#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.4#DF-1; still owed: Required qualification; next: Carry GPU regression qualification: load/run Wan and SDXL using the current provisioned Diffusers environment, capture valid artifacts and versions, and distinguish it from a SANA import.
 
-#### QG-7 - No end-to-end run against a real GPU job
+#### QG-7 - No end-to-end run against a real GPU job - MIGRATED to v2.17.0
 
 - **Source**: this cycle, all rounds
 - **Impact**: Every change is verified by typecheck, lint, build, unit tests and a rendered screenshot harness. NONE of it has been exercised against a live generation on the operator's hardware. Specifically, the capability caps have not been observed PREVENTING a real failure, only shown to produce the right option lists.
@@ -1537,7 +1537,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#QG-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#QG-1; still owed: Required qualification; next: Carry GPU/packaged qualification: selected Wan limits, actual clip and measured elapsed time, then actual image/viewer. Historical generic media generation does not prove these later controls.
 
-#### NI-1 - The two model registries are not tested against each other
+#### NI-1 - The two model registries are not tested against each other - MIGRATED to v2.17.0
 
 - **Source**: v2.4.9 Phase 1 (sub-task 1.1)
 - **Plan reference**: [v2.4.9 plan](../../../archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; recorded as OQ-1 to OQ-4 in [docs/reference/model-acceptance.md](../../../archive/reference/model-acceptance.md)
@@ -1550,7 +1550,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#NI-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#NI-1; still owed: Required implementation; next: Implement explicit supported binding/subset contract and cross-registry test. The old wrong-Gemma case changed in v2.14, but that is not full parity or an evidence-based Inkling codec decision. Prove with G and update `docs/reference/model-acceptance.md`.
 
-#### MT-27 - The standards judge was never dispatched through the agent registry
+#### MT-27 - The standards judge was never dispatched through the agent registry - MIGRATED to v2.17.0
 
 - **Source**: v2.4.9 Phase 1 (sub-task 1.4)
 - **Plan reference**: [v2.4.9 plan](../../../archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1 Verification Expectation
@@ -1562,7 +1562,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#MT-11 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#MT-11; still owed: Required qualification; next: Carry harness qualification: start a fresh supported harness session, invoke that exact registered agent against a pinned range, and retain tool scope and verdict. A generic agent adopting the prompt is insufficient.
 
-#### DF-116 - `prompt-*` budget checks still do not cover `.claude/`
+#### DF-116 - `prompt-*` budget checks still do not cover `.claude/` - MIGRATED to v2.17.0
 
 - **Source**: v2.4.9 Phase 1 (sub-task 1.2), confirming pre-existing gap 10.N.H
 - **Plan reference**: [v2.4.9 plan](../../../archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; required by AGENTS.md "## Claude Code addenda"
@@ -1575,7 +1575,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#DF-9 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#DF-9; still owed: Required implementation; next: Implement rule/path expansion plus negative/positive registration tests and run H. Cover every prompt-* rule whose appliesTo filter owns the same scope, not only oversized.
 
-#### BG-2 - 216 stale relative links in the living `docs/DEVLOG.md`
+#### BG-2 - 216 stale relative links in the living `docs/DEVLOG.md` - MIGRATED to v2.17.0
 
 - **Source**: v2.4.9 Phase 1 (sub-task 1.4 link verification)
 - **Plan reference**: [v2.4.9 plan](../../../archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 1; surfaced incidentally while verifying this phase's own links
@@ -1588,7 +1588,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#BG-16 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#BG-16; still owed: Required implementation; next: Carry link-policy decision and fresh link audit. Prefer historical commit links or reviewed canonical remaps per entry; preserve the user's edits and never silently replace the file. Add the chosen living-doc link checker and prove zero unresolved targets or exact documented exemptions.
 
-#### BG-3 - `npm audit (production deps)` is red, and `sharp` has no fix
+#### BG-3 - `npm audit (production deps)` is red, and `sharp` has no fix - MIGRATED to v2.17.0
 
 - **Source**: v2.4.9 Phase 2 (sub-task 2.5, while selecting required checks)
 - **Plan reference**: [v2.4.9 plan](../../../archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 2
@@ -1601,7 +1601,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#BG-19 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#BG-19; still owed: Owner decision; next: Carry dependency/security review: execute I, reconcile current advisories with pinned versions and dated risk decisions, then inspect the required checks. A permissive package-name allowlist alone does not satisfy the dated-review/protection exit condition.
 
-#### QG-8 - Two gating checks are not yet in the required-check set
+#### QG-8 - Two gating checks are not yet in the required-check set - MIGRATED to v2.17.0
 
 - **Source**: v2.4.9 Phase 2 (sub-task 2.5)
 - **Plan reference**: [v2.4.9 plan](../../../archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 2, D2
@@ -1613,7 +1613,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#QG-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#QG-2; still owed: Required implementation; next: Carry remote policy verification: green current runs plus required-context protection on both develop and main. Use J; do not change protection or call visibility enforcement without the result.
 
-#### QG-9 - Required checks are 17 individual contexts, not an aggregate gate
+#### QG-9 - Required checks are 17 individual contexts, not an aggregate gate - MIGRATED to v2.17.0
 
 - **Source**: v2.4.9 Phase 2 (sub-task 2.5)
 - **Plan reference**: [v2.4.9 plan](../../../archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 5.5 terminal CI/CD reconciliation
@@ -1626,7 +1626,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#QG-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#QG-3; still owed: Required implementation; next: Prove the source topology partial, then carry full-contract/protection verification. Inspect all required contexts and an unrelated-path PR; an aggregate that omits required external workflows does not establish complete coverage.
 
-#### DF-117 - The feature inventory covers two README regions, not the whole file
+#### DF-117 - The feature inventory covers two README regions, not the whole file - MIGRATED to v2.17.0
 
 - **Source**: v2.4.9 Phase 3 (sub-task 3.1, decision D3 part B)
 - **Plan reference**: [v2.4.9 plan](../../../archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 3; contract in [docs/reference/feature-inventory.md](../../../archive/reference/feature-inventory.md)
@@ -1639,7 +1639,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#DF-10 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#DF-10; still owed: Owner decision; next: Carry product/documentation decision: explicitly accept the two regions as the whole contract, or add a carefully parsed shipped-CLI region and entries/tests. Do not pull roadmap promises into implemented feature assertions.
 
-#### NI-2 - Crash classes were not derived from data, because there is no data
+#### NI-2 - Crash classes were not derived from data, because there is no data - MIGRATED to v2.17.0
 
 - **Source**: v2.4.9 Phase 4 (sub-task 4.2)
 - **Plan reference**: [v2.4.9 plan](../../../archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 4
@@ -1652,7 +1652,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#NI-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#NI-2; still owed: Optional candidate/watch; next: Carry data-dependent qualification: read current issue population, retain a real sample when threshold exists, and re-derive classes. If fewer than 20, record exact observed count and keep pending; never manufacture reports.
 
-#### DF-118 - The crash-class report is operator-run, not scheduled
+#### DF-118 - The crash-class report is operator-run, not scheduled - MIGRATED to v2.17.0
 
 - **Source**: v2.4.9 Phase 4 (sub-task 4.3)
 - **Plan reference**: [v2.4.9 plan](../../../archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 4
@@ -1665,7 +1665,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#DF-11 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#DF-11; still owed: Owner decision; next: Carry owner decision alongside v2.4.9#NI-2: record operator-run as deliberate, or add a scheduled consumer with minimal permissions once real trend data exists. Do not create unused CI solely to tick the row.
 
-#### BG-4 - `core/storage/StorageMigration.ts` outlived its own removal note
+#### BG-4 - `core/storage/StorageMigration.ts` outlived its own removal note - MIGRATED to v2.17.0
 
 - **Source**: v2.4.9 Phase 5 (sub-task 5.1, architecture refactor)
 - **Plan reference**: [v2.4.9 plan](../../../archive/v2/v2.4/plans/v2.4.9-adoption-voicestudio-field-discipline.md), Phase 5.1, which predicted this finding by name
@@ -1678,7 +1678,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#BG-20 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#BG-20; still owed: Owner decision; next: Implement truthful retention documentation, or owner-approved removal after supported-upgrade analysis. Header correction is the smallest sufficient option if retention is chosen; prove with K and reference inspection. Do not delete migration data paths opportunistically.
 
-#### MT-28 - `video2x-adapter.test.ts` is flaky under full-suite load
+#### MT-28 - `video2x-adapter.test.ts` is flaky under full-suite load - MIGRATED to v2.17.0
 
 - **Source**: this cycle, observed while re-establishing the test baseline
 - **Impact**: One case in `desktop/tests/video2x-adapter.test.ts` fails intermittently in a FULL `vitest run` (2 of 3 runs) and passes every time the file runs alone. It imports nothing changed this cycle (`node:crypto`, `fs`, `path`, `SettingsStore`, a temp-dir helper), was last touched in v2.3.0, and uses real filesystem temp directories with timing-sensitive waits - consistent with temp-dir or scheduling contention on Windows under parallel load. It is therefore a pre-existing test-quality defect, not a regression, but it means the "36-failure baseline" for this host is really "36 plus an intermittent 37th".
@@ -1688,7 +1688,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#MT-10 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#MT-10; still owed: Required qualification; next: Carry test reliability investigation, not an asserted current defect: capture failing case/timing under full-suite load, then remove uncontrolled waits or contention and verify full-load runs. Existing isolation invalidates blindly repeating the suggested temp-dir fix.
 
-#### BG-5 - Two catalog video entries declare an incoherent frame budget
+#### BG-5 - Two catalog video entries declare an incoherent frame budget - MIGRATED to v2.17.0
 
 - **Source**: this cycle, MT-8's new catalog assertion
 - **Impact**: `longcat-video-avatar-1.5` and `sana-video-2b-720p` both declare `maxVideoFrames: 8` with `maxVideoSeconds: 8` - one frame per second, which is not a video. The two Wan entries are coherent by contrast (121/5 is 24 fps, 81/5 is 16 fps), so the field is meaningful where it was filled in properly and a placeholder here. The capability map keeps conservative hand-set values for the two, and the test carries a named allowlist so a correction (or a new model with the same placeholder) fails loudly rather than passing.
@@ -1698,7 +1698,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#BG-14 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#BG-14; still owed: Required implementation; next: Implement accurate semantics after first-party/runtime evidence: distinguish visual-token sampling from generation-frame limit if conflated, correct the two catalog fields or consuming interpretation, remove allowlist, prove L. Do not guess hardware frame limits from a 24fps default.
 
-#### BG-6 - Three SANA ControlNet repos are gated, so they can be neither pinned nor downloaded
+#### BG-6 - Three SANA ControlNet repos are gated, so they can be neither pinned nor downloaded - MIGRATED to v2.17.0
 
 - **Source**: this cycle, BG-12's pin sweep
 - **Impact**: `Efficient-Large-Model/SANA-ControlNet-{Canny,Depth,Pose}` return HTTP 401 on the model-info endpoint itself, not 404, so the repos exist but require Hugging Face credentials. Their three weight files are the last unpinned entries (3 of 107). The wider consequence is not the pin: if a user ever enables one of these ControlNets, the DOWNLOAD will 401 too. They are `type: controlnet` with no `task`, so they do not appear in the model picker and no user has hit this yet.
@@ -1708,7 +1708,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#BG-15 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#BG-15; still owed: Owner decision; next: Carry catalog/security decision: remove unsupported auxiliaries with consumer checks, or explicitly credential-gate them under existing auth policy with real pins. Recheck vendor access before deciding; no network fetch or credential mutation was performed here.
 
-#### MT-29 - Packaged token label is not observed
+#### MT-29 - Packaged token label is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Token split
 - **Impact**: Tests pin the screenshot case (215 thinking bytes, 32 reply bytes, `eval_count: 72` -> 63 / 9) and the sum invariant. No packaged turn has been observed since.
@@ -1718,7 +1718,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#MT-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#MT-1; still owed: Required qualification; next: Carry current packaged token label qualification with the provenance contract, and record supersession of obsolete byte-proportional values. Match persisted request/message usage and tooltip to the observed turn.
 
-#### MT-30 - Packaged composer dismissal and Persona chrome are not observed
+#### MT-30 - Packaged composer dismissal and Persona chrome are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2
 - **Impact**: jsdom pointer and Escape events prove the hook; a real Tauri webview pointer has not.
@@ -1728,7 +1728,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#MT-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#MT-2; still owed: Required qualification; next: Carry packaged interaction qualification: open/dismiss with pointer and Escape, verify focus and Persona display/selection without losing draft text.
 
-#### MT-31 - Packaged Sessions title is not observed on all four pillars
+#### MT-31 - Packaged Sessions title is not observed on all four pillars - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3
 - **Impact**: Tests pin copy and tokens on FolderTree and both studio panes; the packaged Agents pane title is asserted only through CodingPage copy.
@@ -1738,7 +1738,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#MT-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#MT-3; still owed: Required qualification; next: Carry packaged four-route visual qualification and capture all titles in the same digest-bound run. Route presence alone cannot verify text rendering.
 
-#### MT-32 - Packaged Settings card is not compared against the packaged installer picker side by side
+#### MT-32 - Packaged Settings card is not compared against the packaged installer picker side by side - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4
 - **Impact**: Parity is asserted on values (tab order, colors, pill order) and on structure, not on rendered pixels. Font family differs by platform (Qt `FONT_PRIMARY` vs. the app's `--font-sans` stack) and is not asserted.
@@ -1748,7 +1748,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#MT-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#MT-4; still owed: Required qualification; next: Carry packaged side-by-side same-model comparison, including fonts, colors, pill order, and card layout on the actual host.
 
-#### MT-33 - Packaged picker order and default are not observed after a fresh snapshot
+#### MT-33 - Packaged picker order and default are not observed after a fresh snapshot - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5
 - **Impact**: The desktop rule is proven against the stale on-disk snapshot; the installer's corrected writer is proven in pytest. The two have not been observed together on the operator host.
@@ -1758,7 +1758,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#MT-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#MT-5; still owed: Required qualification; next: Carry fresh-snapshot qualification: inspect generated recommendedByTask, open Chat/Agents empty sessions, and record order/defaults without overwriting user's real selection merely for evidence.
 
-#### MT-34 - Packaged Phase 7 card cluster and collapsible groups are not observed
+#### MT-34 - Packaged Phase 7 card cluster and collapsible groups are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7 (added 2026-09-07)
 - **Impact**: Tests pin size-then-action in the title row, the absence of star / checkmark / action row, the three headings with counts, collapse per tab, and disabled incompatible cards. None of it has rendered in the packaged desktop.
@@ -1768,7 +1768,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#MT-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#MT-6; still owed: Required qualification; next: Carry packaged Settings qualification: group counts, per-tab collapse, disabled incompatible cards, size/action placement, and viewport behavior. Can absorb older density obligations only if explicitly carried.
 
-#### MT-35 - Packaged Phase 8 surfaces are not observed
+#### MT-35 - Packaged Phase 8 surfaces are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 8 (added 2026-09-07)
 - **Impact**: Tests pin the torch floor on three layers, the `loading` / `generating` stages, the `Loading model...` bubble state, the centered composer cluster, and the footer copy. No packaged install has yet reprovisioned the venv to torch 2.5.1 or generated a video on it.
@@ -1778,7 +1778,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#MT-7 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#MT-7; still owed: Required qualification; next: Carry runtime plus packaged qualification: actual repaired environment versions, real video outcome, captions/loader/composer/footer observations, and logs bound to installer digest.
 
-#### DF-119 - The stale torch 2.3.0 venv is repaired only by a reinstall or a Settings > Video Repair
+#### DF-119 - The stale torch 2.3.0 venv is repaired only by a reinstall or a Settings > Video Repair - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 8
 - **Impact**: The desktop now reports the stale venv as repairable and offers Repair; the runtime refuses to generate with a typed message. Nothing upgrades the venv automatically. The wheel download is about 2.4 GB on Windows.
@@ -1788,7 +1788,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#DF-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#DF-5; still owed: Owner decision; next: Carry owner/platform behavior decision: accept explicit repair with actionable UI, or design a consented upgrade flow. Do not silently launch a multi-gigabyte repair/download to satisfy this audit.
 
-#### DF-120 - Settings no longer offers a way to set or clear a favorite model
+#### DF-120 - Settings no longer offers a way to set or clear a favorite model - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7
 - **Impact**: The star was the only Settings control for a favorite. Pickers still write a favorite on every model change and `resolveDefaultId` still honors it, so a favorite once set cannot be cleared from the UI.
@@ -1798,7 +1798,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#DF-4; still owed: Owner decision; next: Implement a small visible clear/reset preference action or adopt deliberate last-used semantics and remove misleading favorite contract. Prove M and affected page interaction; do not silently discard existing user preferences.
 
-#### DF-121 - Uncommitted installer wizard-merge state rides in the rebuilt installer
+#### DF-121 - Uncommitted installer wizard-merge state rides in the rebuilt installer - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6
 - **Impact**: `develop` carries 30 modified and 6 untracked files (installer wizard merge rounds 1-3, recorded only in `docs/todos.md`). This plan neither staged nor reverted them; the rebuilt `NexusSetup.exe` includes them, as did the installer the operator already field-tested.
@@ -1808,7 +1808,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#DF-2; still owed: Historical limit; next: Prove resolved historical source-publication candidate by comparing original wizard rounds to the merged commits and release artifact provenance. A current tracked source alone cannot establish which dirty bytes were in the old published installer. Preserve that historical limitation if exact provenance is unavailable.
 
-#### DF-122 - Stale `recommendedByTask` on already-installed hosts is only masked, not rewritten
+#### DF-122 - Stale `recommendedByTask` on already-installed hosts is only masked, not rewritten - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5
 - **Impact**: The desktop rule keeps pickers and defaults correct against the stale snapshot; the file itself still says `chat: embeddinggemma` until the installer runs again. Settings downloads append to it without correcting it.
@@ -1818,7 +1818,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#DF-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#DF-3; still owed: Required implementation; next: Implement validation against current per-task tab eligibility, atomically repair only invalid recommendation keys, preserve ordered/owned IDs and valid preferences, and prove N with a stale embeddinggemma chat recommendation fixture.
 
-#### MT-36 - The reworked wizard is not observed in the packaged window
+#### MT-36 - The reworked wizard is not observed in the packaged window - MIGRATED to v2.17.0
 
 - **Source phase**: Phases 1-4
 - **Impact**: Tests pin selection-scoped sizing across four consumers, the derived component resolver, the overlaid Browse button, the column-scoped Ollama URL, the hidden VS Code paragraph, one-line storage in the facts column, and the counter row. None of it has rendered in the packaged wizard, and Qt geometry does not resolve headlessly.
@@ -1828,7 +1828,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.7#MT-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.7#MT-1; still owed: Required qualification; next: Carry current packaged wizard qualification and explicitly reconcile superseded page/layout requirements; retain selection-scoped sizing, derivation, Browse/URL behavior, and review summary obligations.
 
-#### DF-123 - Category labels are not coloured chips
+#### DF-123 - Category labels are not coloured chips - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - Review density and model summary
 - **Impact**: Screenshot 4's mockup colours each category label. The counter row delivers the visual separation the operator asked for; recolouring the labels is cosmetic and carries a palette decision with no correctness content.
@@ -1838,7 +1838,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.7#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.7#DF-2; still owed: Owner decision; next: Carry explicit design decision: accept neutral labels, or choose category tokens and verify contrast plus packaged appearance. There is no correctness reason to invent a palette solely for closure.
 
-#### MT-37 - Packaged payload fingerprint and maximized first show are not observed
+#### MT-37 - Packaged payload fingerprint and maximized first show are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Packaged delivery and installer window
 - **Impact**: Tests pin stale-bundle refusal, Settings fingerprint copy, and `present_installer_window` calling `showMaximized`. None of it has run in a frozen NexusSetup.exe on the operator host.
@@ -1848,7 +1848,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.6#MT-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.6#MT-1; still owed: Required qualification; next: Carry packaged provenance/window qualification: inspect installed payload digest and first-show state; test copied stale payload separately under v2.4.6#WN-1.
 
-#### MT-38 - Packaged Setup compactness is not observed
+#### MT-38 - Packaged Setup compactness is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - Installer Setup compactness
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 2.1-2.3)
@@ -1858,7 +1858,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.6#MT-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.6#MT-2; still owed: Required qualification; next: Carry packaged current Setup screenshot/geometry at supported widths with GPU one-liner, recheck behavior, worker replacement, and no unwanted trailing space.
 
-#### MT-39 - Packaged Configuration, Review groups, and VS Code 1.136 VSIX load are not observed
+#### MT-39 - Packaged Configuration, Review groups, and VS Code 1.136 VSIX load are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - Configuration, VS Code host, and Review groups
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 3.1-3.4)
@@ -1868,7 +1868,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.6#MT-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.6#MT-3; still owed: Required qualification; next: Carry host-compatibility qualification or explicitly supersede the obsolete host target with supported-version policy, preserving native-addon ABI/extension-load and packaged wizard obligations.
 
-#### MT-40 - Packaged VS Code owned-agentic picker is not observed
+#### MT-40 - Packaged VS Code owned-agentic picker is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 4 - VS Code Agentic Model Surface
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 4.1-4.4)
@@ -1878,7 +1878,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.6#MT-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.6#MT-4; still owed: Required qualification; next: Carry packaged VSIX qualification on a declared supported VS Code host with owned snapshot, leftover exclusion, default selection, model switch, tool dispatch, and ConfirmationGate.
 
-#### MT-41 - Packaged Sessions History chrome is not observed
+#### MT-41 - Packaged Sessions History chrome is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 5 - Sessions History chrome and Session nouns
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 5.1-5.4)
@@ -1888,7 +1888,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.6#MT-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.6#MT-5; still owed: Required qualification; next: Carry packaged empty and populated history qualification with centered hairline, left-aligned creation, and Session copy on all applicable surfaces.
 
-#### MT-42 - Packaged Settings compact cards are not observed
+#### MT-42 - Packaged Settings compact cards are not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 6 - Settings model cards
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 6.1-6.2)
@@ -1898,7 +1898,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.6#MT-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.6#MT-6; still owed: Required qualification; next: Keep this identity separately open; do not apply the proposed supersession without a complete unique-requirement comparison. Supersede into v2.4.8#MT-6 only after recording current accepted card grammar and carrying compact/no-Details/no-duplicated-copy/viewport obligations. No historical packaged proof is implied.
 
-#### MT-43 - Packaged four-tab runtime chrome is not observed
+#### MT-43 - Packaged four-tab runtime chrome is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7 - Four-tab runtime chrome
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-tasks 7.1-7.4)
@@ -1908,7 +1908,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.6#MT-7 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.6#MT-7; still owed: Required qualification; next: Carry packaged live-turn matrix. Shared route smoke only proves mounting; use an actual running request for Stop/GPU busy and distinguish media generation from fail-closed behavior.
 
-#### WN-7 - Mtime freshness cannot catch a freshly copied stale NSIS
+#### WN-7 - Mtime freshness cannot catch a freshly copied stale NSIS - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Packaged delivery and installer window
 - **Impact**: Staging compares desktop source mtimes to the bundle mtime. Last week's tauri output left in `desktop/src-tauri/target` fails as intended. An old NSIS copied onto disk *after* source last changed gets a new timestamp and can still freeze.
@@ -1918,7 +1918,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.6#WN-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.6#WN-1; still owed: Required implementation; next: Implement source-content provenance emitted by build:shell and validated before staging; add a freshly copied stale-bundle reproduction. Prove O; hashing the copied bundle alone does not connect it to current source.
 
-#### MT-44 - Packaged installer behavior is not observed
+#### MT-44 - Packaged installer behavior is not observed - MIGRATED to v2.17.0
 
 - **Source phase**: Phases 2-4
 - **Impact**: Tests pin the probe across both stores and every failure mode, the Downloaded pill, first-load auto-selection that defers to user edits, two-column Review with per-model marks, a pending-only estimate, and the guard passing the exact field reproduction while still blocking a 500 GB new selection. None of it has run in the packaged wizard.
@@ -1928,7 +1928,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.5#MT-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.5#MT-1; still owed: Required qualification; next: Carry current frozen installer qualification on owned/downloaded models, recording existing-state versus new downloads and preserving user selections.
 
-#### MT-45 - Ollama API detection path is not exercised against a live daemon
+#### MT-45 - Ollama API detection path is not exercised against a live daemon - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1 - Downloaded-model probe
 - **Impact**: The `/api/tags` branch is covered by an injected fake and the disk-manifest fallback by real fixture files. A live Ollama returning its real payload shape has not been probed. A response shape change would silently fall back to the manifest path, which is correct but slower and would log a `probe_errors` line.
@@ -1938,7 +1938,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.5#MT-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.5#MT-2; still owed: Required qualification; next: Carry live API qualification: read actual /api/tags and compare installer detection, then exercise fallback in an isolated controlled environment. Do not interrupt the user's daemon for a test without scope confirmation.
 
-#### WN-8 - Electron ABI for VS Code 1.136 is inferred from 1.134/1.135
+#### WN-8 - Electron ABI for VS Code 1.136 is inferred from 1.134/1.135 - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - Configuration, VS Code host, and Review groups
 - **Plan reference**: `docs/archive/v2/v2.4/plans/v2.4.6-field-delivery-density-and-session-identity.md` (sub-task 3.2)
@@ -1948,7 +1948,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.6#WN-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.6#WN-2; still owed: Required qualification; next: Carry native-host qualification: read the running extension host's Electron/modules versions, compare to rebuild pin, and load the native dependency. Do not substitute CLI Node process.versions.
 
-#### DF-124 - An already-installed Ollama still reads as "will be installed"
+#### DF-124 - An already-installed Ollama still reads as "will be installed" - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2 - Configuration scope
 - **Impact**: `state.ollama_installed` could mark the row satisfied rather than pending. The installer step is already idempotent, so this is imprecise wording rather than wrong behavior.
@@ -1958,7 +1958,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.7#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.7#DF-1; still owed: Required implementation; next: Prove superseded wording candidate with P and a current packaged Review check. If a pending mark still implies installation for satisfied Ollama, add explicit already-present state rather than declaring the wording fixed from absence alone.
 
-#### DF-125 - The inferred reasoning / output split is not flagged in the tooltip
+#### DF-125 - The inferred reasoning / output split is not flagged in the tooltip - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 1
 - **Impact**: When the provider gives only a total, the split is proportional and estimated while the total is exact. No protocol field carries "split inferred", so the tooltip states both numbers plainly.
@@ -1968,7 +1968,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.8#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.8#DF-1; still owed: Required implementation; next: Prove resolved candidate for the original unlabelled-estimate defect with Q and event/store-to-render tests. Confirm no path labels proportional inference exact; do not require obsolete reasoningSplit spelling when the new provenance contract carries the fact.
 
-#### WN-9 - jsdom cannot see CSS math functions, so width regressions are untestable in unit tests
+#### WN-9 - jsdom cannot see CSS math functions, so width regressions are untestable in unit tests - MIGRATED to v2.17.0
 
 - **Source**: this cycle, progress bar
 - **Impact**: jsdom's `cssstyle` silently drops `min()` / `clamp()` from inline styles, so a `width: min(22rem, 100%)` is invisible to a test assertion. This is why the SECOND width regression (a `fit-content` parent leaking caption length back into the bar) passed the whole unit suite and was caught only by rendering the component and looking at it. Mitigated in the touched files by using `width` + `max-width` pairs instead of `min()`, but the blind spot remains repo-wide.
@@ -1978,7 +1978,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.4.9#WN-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.4.9#WN-2; still owed: Required qualification; next: Carry browser geometry/visual verification: add a real-layout overflow/width regression assertion at supported viewports, retain failing fixture and before/after captures, and use packaged testing for packaged claims. Existing guard is a mitigation, not a full browser gate.
 
-#### DF-126 - Spoken replies start in 4 s, not the 2.0 s target
+#### DF-126 - Spoken replies start in 4 s, not the 2.0 s target - MIGRATED to v2.17.0
 
 - **Source phase**: v2.14.0 Phase 2 (2026-10-16).
 - **Plan reference**: v2.14.0 T010; gate V-1 in `docs/archives/v2/v2.14/development/gates.md`; results in `docs/archives/v2/v2.14/development/voice-latency-results.md`.
@@ -1988,7 +1988,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#DF-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-1; still owed: Required qualification; v2.14 gate V-1 and recorded streaming-retention exception.; next: Keep V-1 FAIL visible. H01 measures permitted latency improvements before another runtime is considered. The existing owner exception keeps streaming; it does not make 3,990 ms meet 2,000 ms or authorize a new passing claim.
 
-#### DF-127 - PersonaPlex full-duplex voice is a v2.15+ candidate
+#### DF-127 - PersonaPlex full-duplex voice is a v2.15+ candidate - MIGRATED to v2.17.0
 
 - **Source phase**: v2.14.0 Phase 2 (2026-10-16).
 - **Plan reference**: v2.14.0 T010 (V3 trigger FIRED); comparison `docs/archives/v2/v2.14/comparisons/v2.14.0-comparison-airllm-digup-mimic-personaplex.md`.
@@ -1998,7 +1998,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#DF-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-2; still owed: Optional candidate/watch; v2.14 V3 trigger explicitly built no PersonaPlex path.; next: Propose continued conditional watch after DF-1, preserving 24 GB-only trial, loopback, safe weight loading, license note and no-memory/tools conditions. No implementation of a fourth runtime is owed by this triage scope. Any carry still needs exact approved coverage.
 
-#### WN-10 - Hosts without an NVIDIA or Apple GPU still get no voice runtime
+#### WN-10 - Hosts without an NVIDIA or Apple GPU still get no voice runtime - MIGRATED to v2.17.0
 
 - **Source phase**: v2.14.0 Phase 1 (2026-10-16), as v2.14 WN-6.
 - **Plan reference**: v2.14.0 T001 provisioning delta.
@@ -2008,7 +2008,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#WN-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-1; still owed: Required implementation/qualification for voice on supported CPU-only tiers; a legacy CPU wheel list is not a provisioned target.; next: Keep A16 and H02. Add the exact CPU runtime target/interpreter path, prove isolated provisioning with GPU hidden, then exercise speech. New OS/platform expansion needs its own task.
 
-#### WN-11 - The OCR runtime is not provisioned, and its OpenCV needs numpy 2
+#### WN-11 - The OCR runtime is not provisioned, and its OpenCV needs numpy 2 - MIGRATED to v2.17.0
 
 - **Source phase**: v2.14.0 Phase 5 (2026-10-17), from the v2.14 WN-7 investigation.
 - **Plan reference**: v2.14.0 T019 known-gaps reconciliation.
@@ -2018,7 +2018,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#WN-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-2; still owed: Required clean-install OCR provisioning/interpreter integrity; installer owns runtime burden.; next: Keep A16. Freeze a compatible pinned OCR dependency set and route both hosts to the provisioned interpreter. Clean-runtime health/parse and media regressions must pass; avoid a global numpy upgrade.
 
-#### WN-12 - The pinned-digest check cannot read a remote or containerized Ollama
+#### WN-12 - The pinned-digest check cannot read a remote or containerized Ollama - MIGRATED to v2.17.0
 
 - **Source phase**: v2.14.0 Phase 5 (2026-10-17), Tier 3 adversarial pass (finding 9).
 - **Plan reference**: v2.14.0 T016; `core/registry/ollamaDigest.ts` `ollamaModelsDir`.
@@ -2028,7 +2028,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#WN-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-3; still owed: Required safe/accurate verification at install boundary plus an unresolved topology-support decision.; next: Keep A05's distinction between inaccessible identity and proven mismatch. Owner must define supported service/WSL/container/remote topologies before changing trust semantics. Never silently accept an unreadable pinned model or delete content merely because a local manifest cannot be read.
 
-#### WN-13 - A hung synthesis call keeps the voice runtime busy
+#### WN-13 - A hung synthesis call keeps the voice runtime busy - MIGRATED to v2.17.0
 
 - **Source phase**: v2.14.0 Phase 5 (2026-10-17), Tier 3 code-vs-plan convergence (item 3).
 - **Plan reference**: v2.14.0 T005, T006; `runtimes/audio/engines.py` `iter_speak_segments`, `core/audio/AudioRuntimeClient.ts` `armIdle`.
@@ -2038,7 +2038,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#WN-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-4; still owed: Required process recovery for shipped streamed voice; current timeout ends the request but can retain the blocked synthesis lane.; next: Keep A03 blocker. Terminate the owned hung child, settle all affected jobs once, and prove the next request runs in a fresh process. Lazy cancellation alone is not recovery.
 
-#### WN-14 - Two low-severity hardening residuals from the adversarial pass
+#### WN-14 - Two low-severity hardening residuals from the adversarial pass - MIGRATED to v2.17.0
 
 - **Source phase**: v2.14.0 Phase 5 (2026-10-17), Tier 3 adversarial pass (finding 10 and one suspicion).
 - **Plan reference**: v2.14.0 T007 (`core/chat/speakable.ts`) and the DF-5 fix (`core/registry/NexusModelRegistry.ts`).
@@ -2048,7 +2048,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#WN-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-5; still owed: Required bounded hardening in shipped reasoning display and weight-file installation; two independent residuals.; next: Keep A04 and A05 separately. Stray tag suppression must preserve prompt-open reasoning behavior; full nested-reasoning semantics remain explicit if ambiguous. Reject unsafe custom-spec file paths before filesystem/network effects. One fix cannot close both halves.
 
-#### DF-128 - The LFM2.5 24B-A2B admission rests on a reading of M-3 made after the results
+#### DF-128 - The LFM2.5 24B-A2B admission rests on a reading of M-3 made after the results - MIGRATED to v2.17.0
 
 - **Source phase**: v2.14.0 Phase 3 decision (2026-10-17), recorded by the Phase 5 Goal-vs-codebase review.
 - **Plan reference**: v2.14.0 T014, T016; gate M-3 in `docs/archives/v2/v2.14/development/gates.md`; `docs/archives/v2/v2.14/development/lfm-ab-results.json`.
@@ -2058,7 +2058,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#DF-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-3; still owed: Owner decision plus required qualification for the current LFM admission claim; v2.14 M-3 and post-result interpretation.; next: Keep the exception and literal frozen HOLD interpretation. Owner chooses a new preregistered A/B or genuine M5 two-cycle observation before treating admission as independently proved. Do not reinterpret or rescore the retained data.
 
-#### QG-10 - Spoken replies have no packaged-app evidence, and V-5 was never timed
+#### QG-10 - Spoken replies have no packaged-app evidence, and V-5 was never timed - MIGRATED to v2.17.0
 
 - **Source phase**: v2.14.0 Phase 5 (2026-10-17), Goal-vs-codebase review.
 - **Plan reference**: v2.14.0 "Delivery done" (packaged Windows behavioral evidence), T009, T010 Verification Expectation; gate V-5 (playback stops within 150 ms).
@@ -2068,7 +2068,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#QG-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#QG-1; still owed: Required packaged voice qualification and frozen V-5 timing.; next: Keep H01/H02 until installed microphone/playback behavior and barge-in-to-silence are measured against 150 ms. Code-path PASS is not timed speaker evidence.
 
-#### DF-129 - Candidate runtime compatibility blocks scoring
+#### DF-129 - Candidate runtime compatibility blocks scoring - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2.
 - **Plan reference**: T005; embedding-eval-results.json.
@@ -2084,7 +2084,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#DF-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-4; still owed: Optional candidate/watch with runtime hold; v2.13 Phase 3 HOLD/RETAIN disposition.; next: Retain candidate inference as unproven. A separately controlled compatible runtime/preflight can reopen evaluation; no global Ollama upgrade or overwritten attempt. This is not missing implementation of an already admitted embedder.
 
-#### DF-130 - Universal admission evidence is missing
+#### DF-130 - Universal admission evidence is missing - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 2.
 - **Plan reference**: T005 and conditional T007-T010; embedding-eval-results.json.
@@ -2100,7 +2100,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#DF-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-5; still owed: Optional candidate/watch with admission and migration hold; conditional T008-T010 were explicitly skipped, not implemented.; next: Retain all hardware, distribution, offline containment and reindex gates. Only an admitting plan restores migration design/identity/reversible-rebuild tasks. A watch disposition must preserve `skipIsNotImplementation`, not certify those features.
 
-#### WN-15 - Residual image-access hardening items from the adversarial review
+#### WN-15 - Residual image-access hardening items from the adversarial review - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7 Tier 3 deep pass (adversarial review).
 - **Plan reference**: T018-T020; `image-command-contract.md`.
@@ -2116,7 +2116,7 @@ Unchanged. Out of scope.
 - **Migrated from**: v2.15.0#WN-6 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-6; still owed: Owner screenshot/image-grant policy plus required image-export/request-boundary hardening.; next: Keep O07 for capture policy and A07 for ancestor links, preapproval metadata/error exposure and exact render-response correlation. Preserve all four original concerns until individually proved or explicitly accepted.
 
-#### WN-16 - The packaged desktop flows are not automated
+#### WN-16 - The packaged desktop flows are not automated - MIGRATED to v2.17.0
 
 - **Source phase**: Phases 5 and 6.
 - **Plan reference**: Phase 5 and Phase 6 Verification Expectations; T016, T020.
@@ -2134,7 +2134,7 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 - **Migrated from**: v2.15.0#WN-7 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-7; still owed: Required installed-window qualification for delivered viewer/agent image-edit behavior.; next: Keep H06. Generate/edit/export, quit/relaunch and agent-render through the exact installed Tauri shell; retain payload identity and output pixels. Headless Edge and store reopen tests alone do not close it.
 
-#### DF-131 - Live rewrite quality remains unmeasured after pilot format HOLD
+#### DF-131 - Live rewrite quality remains unmeasured after pilot format HOLD - MIGRATED to v2.17.0
 
 - **Source phase**: v2.14.1 Phase 1, T002-T004.
 - **Plan reference**: [local rewrite evaluation](../../../archives/v2/v2.14/plans/v2.14.1-adoption-humanizer-handwired.md), blocked-run continuation.
@@ -2148,7 +2148,7 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 - **Migrated from**: v2.15.0#DF-8 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-8; still owed: Optional candidate/watch with a frozen experimental limitation; v2.14.1 format HOLD.; next: Preserve the failed envelope and unrun items. Another experiment needs a new preregistration and qualified language review. Do not replay the old pilot or infer rewriting quality from its format failure.
 
-#### DF-132 - Legacy history for OpenAI-compatible backends
+#### DF-132 - Legacy history for OpenAI-compatible backends - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 3 - native tool history.
 - **Plan reference**: [outline-promotion-readiness](../../../archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-task 3.1.
@@ -2163,7 +2163,7 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 - **Migrated from**: v2.15.0#DF-9 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-9; still owed: Optional future compatibility enhancement; v2.12 explicitly retained legacy OpenAI-compatible history.; next: Keep native OpenAI history unproven. A13 may add provider-correct conversion only after retained LM Studio round-trip/resume evidence. Legacy compatibility must continue; no live backend is assumed available here.
 
-#### WN-17 - Media smoke proof needs separate packaging and installation evidence
+#### WN-17 - Media smoke proof needs separate packaging and installation evidence - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7 - factual handbook review.
 - **Plan reference**: [outline-promotion-readiness](../../../archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), packaged installer qualification and final verification.
@@ -2178,7 +2178,7 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 - **Migrated from**: v2.15.0#WN-10 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-10; still owed: Required exact-install/GPU packaging qualification; supplied installer hash alone does not bind installed payload.; next: Keep H07 and the deterministic binding/preflight implementation in A16. Retain catalog reachability, artifact hash, install/payload provenance and decoded output together.
 
-#### QG-11 - Terminal CI reconciliation requires explicit migration decisions
+#### QG-11 - Terminal CI reconciliation requires explicit migration decisions - MIGRATED to v2.17.0
 
 - **Source phase**: Phase 7 - terminal CI/CD comparison.
 - **Plan reference**: [outline-promotion-readiness](../../../archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md), sub-task 7.5 and T025.
@@ -2193,7 +2193,7 @@ Prior v2.12 and older registers remain authoritative. These new items resolve no
 - **Migrated from**: v2.15.0#QG-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#QG-2; still owed: Required CI contract reconciliation with specific consequential permission/settings decisions.; next: Keep A17. Recompute the 23 fields against current code/settings, propose exact changes and prove the approved topology. Do not reuse the stale old tally or treat broad migration approval as permission to change secrets/protection.
 
-#### BG-7 - SANA ControlNet SHA-256 pins are still the all-zero placeholder.
+#### BG-7 - SANA ControlNet SHA-256 pins are still the all-zero placeholder. - MIGRATED to v2.17.0
 
 The files were not fetched.
 
@@ -2207,7 +2207,7 @@ The files were not fetched.
 - **Migrated from**: v2.15.0#BG-1 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#BG-1; still owed: Required artifact integrity if three SANA ControlNet entries remain catalog-supported.; next: Keep A14 pinning blocker or an explicit owner decision to remove the entries. Preserve accepted artifact/license constraints. No fake digest, unrestricted exemption, or unannounced feature removal.
 
-#### DF-133 - MiniCPM tool tags are stripped by Ollama before Nexus can parse them.
+#### DF-133 - MiniCPM tool tags are stripped by Ollama before Nexus can parse them. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`
 
@@ -2219,7 +2219,7 @@ The files were not fetched.
 - **Migrated from**: v2.15.0#DF-10 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-10; still owed: Optional watch on an external runtime boundary; OQ-6 and the v2.4.10 raw-output evidence.; next: Preserve the exact MiniCPM re-probe trigger. Recheck actual returned tokens on a recorded runtime before proposing a parser; absent delimiters cannot be repaired by a parser test. Pair with WN-11.
 
-#### WN-18 - The bundled MiniCPM template has no tools section.
+#### WN-18 - The bundled MiniCPM template has no tools section. - MIGRATED to v2.17.0
 
 That template is outside this repo.
 
@@ -2233,7 +2233,7 @@ That template is outside this repo.
 - **Migrated from**: v2.15.0#WN-11 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-11; still owed: Optional external-template watch coupled to MiniCPM runtime hold.; next: Propose conditional carry only with DF-10's concrete runtime re-probe and existing approval coverage. Test the actual installed Ollama template/tools request; no repository-only template claim suffices.
 
-#### DF-134 - Live NVIDIA splat generate was not run.
+#### DF-134 - Live NVIDIA splat generate was not run. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`
 
@@ -2245,7 +2245,7 @@ That template is outside this repo.
 - **Migrated from**: v2.15.0#DF-11 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-11; still owed: Required qualification of the shipped optional splat generation route; v2.4 real NVIDIA benchmark.; next: Keep H03 hardware blocker open until verified TripoSplat bytes are installed and a real CUDA generation/output is retained. Optional user selection does not make a claim of functioning generation self-proving.
 
-#### DF-135 - TripoSplat weight file hashes were not downloaded.
+#### DF-135 - TripoSplat weight file hashes were not downloaded. - MIGRATED to v2.17.0
 
 `source.sha256` is the all-zero placeholder.
 
@@ -2259,7 +2259,7 @@ That template is outside this repo.
 - **Migrated from**: v2.15.0#DF-12 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-12; still owed: Required implementation/integrity for the retained TripoSplat catalog row.; next: Keep A14 blocker. Identify required files at the pinned revision, add the complete file list, pin authentic bytes and prove install verification. A source-directory URL and all-zero hash do not qualify.
 
-#### DF-136 - Older version gap logs still contain operator and hardware items that were not re-tested.
+#### DF-136 - Older version gap logs still contain operator and hardware items that were not re-tested. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v1/` and `docs/archive/v2/v2.0` through `v2.3`
 
@@ -2271,7 +2271,7 @@ That template is outside this repo.
 - **Migrated from**: v2.15.0#DF-13 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-13; still owed: Historical umbrella pointer; v2.15.0 inventory now enumerates the original children.; next: Propose owner-accepted supersession by the exact 199-item follow-up inventory. Preserve every child and its current disposition; closing the pointer closes none of the 199 underlying obligations.
 
-#### MT-46 - A real WebGL2 framebuffer was not captured.
+#### MT-46 - A real WebGL2 framebuffer was not captured. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.4/known-gaps.md`
 
@@ -2283,7 +2283,7 @@ That template is outside this repo.
 - **Migrated from**: v2.15.0#MT-2 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#MT-2; still owed: Required real-render qualification of the retained splat viewer claim.; next: Keep H04 until a real WebGL2 render/orbit produces inspected pixels and recorded renderer identity. Existing component fixtures are useful but not the missing framebuffer observation.
 
-#### QG-12 - The full local suite was not run on the Electron `better-sqlite3` ABI.
+#### QG-12 - The full local suite was not run on the Electron `better-sqlite3` ABI. - MIGRATED to v2.17.0
 
 CI Node 22 ran it on the merge.
 
@@ -2297,7 +2297,7 @@ CI Node 22 ran it on the merge.
 - **Migrated from**: v2.15.0#QG-3 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#QG-3; still owed: Historical host/ABI qualification limit; Node CI does not prove Electron ABI compatibility.; next: Owner decides the original plan's true exit bar: close the plan-scoped host limitation if explicitly allowed, or retain a named Electron ABI qualification task. Do not relabel a Node full-suite pass as an Electron full-suite pass.
 
-#### QG-13 - `develop` and `main` require only `ci-required`; `installer-required` is not a required context.
+#### QG-13 - `develop` and `main` require only `ci-required`; `installer-required` is not a required context. - MIGRATED to v2.17.0
 
 Narrowed in v2.11.0: the gate now accepts `success` only, so a skipped installer leg fails it. Still open: the maintainer adds `installer-required` to branch protection after the v2.11.0 merge (a repository setting, not a file).
 
@@ -2311,7 +2311,7 @@ Narrowed in v2.11.0: the gate now accepts `success` only, so a skipped installer
 - **Migrated from**: v2.15.0#QG-4 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#QG-4; still owed: Required enforcement of an accepted installer check plus owner repository-protection authority.; next: Keep A17 and setting blocker O08. Fresh reads still require only `ci-required` on both branches. Snapshot rollback/settings, then apply only the exact approved required-context change and verify enforcement.
 
-#### DF-137 - Chat search still matches titles only.
+#### DF-137 - Chat search still matches titles only. - MIGRATED to v2.17.0
 
 A hit is not labelled with the branch it belongs to.
 
@@ -2325,7 +2325,7 @@ A hit is not labelled with the branch it belongs to.
 - **Migrated from**: v2.15.0#DF-14 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-14; still owed: Required implementation of branch-aware search identity; v2.6 Chat surface contract and current search hit shape.; next: Keep A08 blocker. Return/display fork parent and branch identity, retain correct selection behavior and test parent deletion. Decide separately whether transcript-content search is an accepted requirement; title-search lineage alone does not implement content indexing.
 
-#### QG-14 - The packaged offline probe was not re-run after adding Mermaid.
+#### QG-14 - The packaged offline probe was not re-run after adding Mermaid. - MIGRATED to v2.17.0
 
 The v2.6.0 asset build is not that probe.
 
@@ -2339,7 +2339,7 @@ The v2.6.0 asset build is not that probe.
 - **Migrated from**: v2.15.0#QG-5 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#QG-5; still owed: Required packaged offline evidence covering Mermaid use after its addition.; next: Keep H09. Capture a current packaged report that actually renders Mermaid, then run the offline judge. A judge run on an unrelated report does not establish the missing feature/network observation.
 
-#### DF-138 - User compaction is not written back to `chat_chat_messages`, so a restart reloads the pre-compact transcript.
+#### DF-138 - User compaction is not written back to `chat_chat_messages`, so a restart reloads the pre-compact transcript. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
 
@@ -2351,7 +2351,7 @@ The v2.6.0 asset build is not that probe.
 - **Migrated from**: v2.15.0#DF-15 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-15; still owed: Required implementation of durable user compaction; v2.6 context-control behavior.; next: Keep A09 blocker. Persist snapshot and replacement transcript atomically through the store/sidecar, exercise restart and durable undo, and preserve branch/message ownership. In-memory `replaceTranscript` is insufficient.
 
-#### DF-139 - The Qwen3.8 guard matches `id` and `source.url` only.
+#### DF-139 - The Qwen3.8 guard matches `id` and `source.url` only. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
 
@@ -2363,7 +2363,7 @@ The v2.6.0 asset build is not that probe.
 - **Migrated from**: v2.15.0#DF-16 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-16; still owed: Required implementation of an accepted deny-by-default admission guard; v2.6 residual bypass list.; next: Keep A12 blocker. Match the documented identity/name/family/URL surfaces and separators while keeping ordinary Qwen3 8B legal. Real validator mutations must prove both refusals and allowed neighbors.
 
-#### DF-140 - Qwen3.8-27B is not admitted.
+#### DF-140 - Qwen3.8-27B is not admitted. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
 
@@ -2375,7 +2375,7 @@ The v2.6.0 asset build is not that probe.
 - **Migrated from**: v2.15.0#DF-17 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-17; still owed: Optional candidate/watch with an existing decline; acceptance-bar allowlist remains empty.; next: Propose owner acceptance of closing the old adoption request while preserving the live denial and reopen conditions. This records an active decision; it admits no Qwen3.8 model and supplies no fresh vendor qualification.
 
-#### DF-141 - No llama.cpp serving path.
+#### DF-141 - No llama.cpp serving path. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
 
@@ -2387,7 +2387,7 @@ The v2.6.0 asset build is not that probe.
 - **Migrated from**: v2.15.0#DF-18 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-18; still owed: Owner architecture decision about a new managed serving path; existing local adapter is narrower.; next: Keep O03 decision separate from required shipped bugs. Compare a catalog-managed llama.cpp job with existing adapters/Ollama; implement nothing merely to make the optional proposal disappear.
 
-#### DF-142 - The uncensored-LLM product question is unanswered.
+#### DF-142 - The uncensored-LLM product question is unanswered. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
 
@@ -2399,7 +2399,7 @@ The v2.6.0 asset build is not that probe.
 - **Migrated from**: v2.15.0#DF-19 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-19; still owed: Owner product decision; individual model declines do not settle general uncensored-LLM policy.; next: Keep O04. Record a concrete policy or explicit deferral under the same acceptance bar; do not infer a yes/no from this task or use a new model admission as a substitute.
 
-#### WN-19 - Release-scoped Qwen3.8 mentions under `docs/archive/` stay as written.
+#### WN-19 - Release-scoped Qwen3.8 mentions under `docs/archive/` stay as written. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.6/known-gaps.md`
 
@@ -2411,7 +2411,7 @@ The v2.6.0 asset build is not that probe.
 - **Migrated from**: v2.15.0#WN-12 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-12; still owed: Historical preservation policy; old release prose intentionally stays unchanged.; next: Propose owner acceptance of closing this no-action historical item. Preserve archived wording; living admission records remain the current policy. Do not rewrite archives to clear the warning.
 
-#### QG-15 - Narrowed in v2.11.0: `ci.yml` now defaults to `permissions: contents: read`, and `package.json` has `fast`, `full`, and `platform` profiles composed from existing commands. Still open: no `report` profile (it needs a summary writer that reads other profiles' output) and no `release` profile (publication belongs to semantic-release), and `ci.yml` still runs its own steps rather than calling the profiles. Owner: the maintainer.
+#### QG-15 - Narrowed in v2.11.0: `ci.yml` now defaults to `permissions: contents: read`, and `package.json` has `fast`, `full`, and `platform` profiles composed from existing commands. Still open: no `report` profile (it needs a summary writer that reads other profiles' output) and no `release` profile (publication belongs to semantic-release), and `ci.yml` still runs its own steps rather than calling the profiles. Owner: the maintainer. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.7/known-gaps.md`
 
@@ -2423,7 +2423,7 @@ The v2.6.0 asset build is not that probe.
 - **Migrated from**: v2.15.0#QG-7 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#QG-7; still owed: Required remaining canonical profile/wiring contract, with stale absence language.; next: Narrow against current report/release implementations, then retain A17's release-profile/wiring/report-input obligations. Do not create another report runner or close pipeline gaps from `--list` output.
 
-#### QG-16 - `docs/handbooks/html/atlas.html` scrolls sideways at 390 px (524 px wide) from a cause other than inline code, and CI does not run `npm run docs:handbooks:check`, which let `atlas.html` go stale until v2.11.0 regenerated it. Owner: the maintainer. Next step: find the wide element in the atlas, and add the handbook check to the `fast` profile and CI.
+#### QG-16 - `docs/handbooks/html/atlas.html` scrolls sideways at 390 px (524 px wide) from a cause other than inline code, and CI does not run `npm run docs:handbooks:check`, which let `atlas.html` go stale until v2.11.0 regenerated it. Owner: the maintainer. Next step: find the wide element in the atlas, and add the handbook check to the `fast` profile and CI. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.11/development/v2.11.0-last-phase-evidence.md`
 
@@ -2435,7 +2435,7 @@ The v2.6.0 asset build is not that probe.
 - **Migrated from**: v2.15.0#QG-8 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#QG-8; still owed: Required handbook narrow-screen fidelity/check integration; original overflow partly fixed.; next: Keep A18 and A17's reviewed CI portion. Retain a narrow atlas capture with sensible word wrapping; add actual handbook check to the selected local profile and prove it catches drift. Do not claim horizontal overflow still reproduces without measuring.
 
-#### QG-17 - The production audit allowlist gained `global-agent`, `roarr`, and `sprintf-js` (GHSA-hp3w-g68c-fv3c, no patched `sprintf-js` release).
+#### QG-17 - The production audit allowlist gained `global-agent`, `roarr`, and `sprintf-js` (GHSA-hp3w-g68c-fv3c, no patched `sprintf-js` release). - MIGRATED to v2.17.0
 
 All three load only from `onnxruntime-node/script/install.js`, its install-time binary download, never at runtime. Fixing them needs a semver-major `global-agent` under a parent that pins `^3.0.0`. Five other advisories in the same audit were fixed in range (`proxy-addr` 2.0.8, `undici` 7.30.0, `fast-uri` 3.1.8, `ip-address` 10.7.3, `source-map-js` 1.2.2). Owner: the maintainer. Next step: remove the three entries when `onnxruntime-node` moves to `global-agent` 4 or a patched `sprintf-js` ships.
 
@@ -2449,7 +2449,7 @@ All three load only from `onnxruntime-node/script/install.js`, its install-time 
 - **Migrated from**: v2.15.0#QG-9 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#QG-9; still owed: Required retirement of obsolete explicit production-audit bypasses.; next: Keep A18. Remove the three stale exceptions, then retain a fresh actual production-audit result against the current lock. No new exception or lower severity threshold.
 
-#### QG-18 - The three OS installers were not executed locally for the avatar plan.
+#### QG-18 - The three OS installers were not executed locally for the avatar plan. - MIGRATED to v2.17.0
 
 The installer matrix workflow already exists.
 
@@ -2463,7 +2463,7 @@ The installer matrix workflow already exists.
 - **Migrated from**: v2.15.0#QG-10 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#QG-10; still owed: Historical avatar-plan installer scope plus qualification already owned elsewhere.; next: Propose narrow owner-accepted supersession only if the original plan owed no local three-OS install. Preserve H07 exact installed-candidate proof and QG-4 enforcement; do not certify three platforms from workflow existence.
 
-#### DF-143 - The community Qwen-Image GGUF and Bespoke Nimble are not admitted.
+#### DF-143 - The community Qwen-Image GGUF and Bespoke Nimble are not admitted. - MIGRATED to v2.17.0
 
 No catalog row. The living-bar sentences waited.
 
@@ -2477,7 +2477,7 @@ No catalog row. The living-bar sentences waited.
 - **Migrated from**: v2.15.0#DF-20 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-20; still owed: Historical declined adoption plus optional reopen watch; v2.8 decline and current exclusion tests/index.; next: Propose owner acceptance of closed-decline disposition, preserving reasons and any agreed reopen trigger in the living index. Do not add the declined names to a bar section whose tests forbid them.
 
-#### DF-144 - CrisperWhisper 2.0 is not admitted.
+#### DF-144 - CrisperWhisper 2.0 is not admitted. - MIGRATED to v2.17.0
 
 The fetched page has no weights, license, or size. No catalog row.
 
@@ -2491,7 +2491,7 @@ The fetched page has no weights, license, or size. No catalog row.
 - **Migrated from**: v2.15.0#DF-21 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-21; still owed: Historical declined adoption plus publication watch; v2.9 record and current index/tests.; next: Propose owner acceptance of closure of the historical request, retaining its artifact/license/size trigger. No claim about today's external publication state is made without a new source check.
 
-#### DF-145 - Hosted Jev, Laya 0.3.20, and Kev 0.8B, 4B, 9B, and 27B are not admitted.
+#### DF-145 - Hosted Jev, Laya 0.3.20, and Kev 0.8B, 4B, 9B, and 27B are not admitted. - MIGRATED to v2.17.0
 
 No catalog row.
 
@@ -2505,7 +2505,7 @@ No catalog row.
 - **Migrated from**: v2.15.0#DF-22 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-22; still owed: Historical declined hosted integration; v2.10 record and exclusion guard.; next: Propose owner acceptance of closure against the indexed decision and guard. Hosted Jev/Laya/Kev implementation is not owed by a completed local-first decline.
 
-#### DF-146 - CLM-8B is not admitted, no catalog row.
+#### DF-146 - CLM-8B is not admitted, no catalog row. - MIGRATED to v2.17.0
 
 Its README gives Apache-2.0 code and weights, two frozen Qwen3-8B encoders with 20M-parameter heads, ranking over a closed candidate set, and a serve path of vLLM plus `clm-serve` with no Windows instructions. It does not close DF-11. The v2.10 hosted and license grounds no longer apply to it; the runtime, single-GPU, and job-map grounds still do. The PageIndex package and PageIndex Cloud are not adopted: default models are hosted, local mode asks for an OpenAI key, and OCR and MCP are cloud-only. The local equivalent is PI-1 in the v2.11.0 plan. AIRI was re-checked through 0.12.0-beta.5 with no new adoption.
 
@@ -2519,7 +2519,7 @@ Its README gives Apache-2.0 code and weights, two frozen Qwen3-8B encoders with 
 - **Migrated from**: v2.15.0#DF-23 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-23; still owed: Historical declined CLM/PageIndex adoption; v2.11 corrected grounds, index and guard.; next: Propose owner acceptance of closure while preserving corrected runtime/job-map grounds and original evidence. This is neither a CLM implementation nor an admission result.
 
-#### DF-147 - CPU OCR (RapidOCR, the portable default) costs about 6.8 s per text-dense page on this host: a 60-page PDF takes about 7 minutes on the first `document_outline` call, the same cost `parse_document` already pays. The GPU engine was not measured. The runtime also caps at 200 pages and reports `pageCount: 200`, hiding truncation past that.
+#### DF-147 - CPU OCR (RapidOCR, the portable default) costs about 6.8 s per text-dense page on this host: a 60-page PDF takes about 7 minutes on the first `document_outline` call, the same cost `parse_document` already pays. The GPU engine was not measured. The runtime also caps at 200 pages and reports `pageCount: 200`, hiding truncation past that. - MIGRATED to v2.17.0
 
 - **Archived record**: `docs/archive/v2/v2.11/development/outline-feasibility.md`
 
@@ -2531,7 +2531,7 @@ Its README gives Apache-2.0 code and weights, two frozen Qwen3-8B encoders with 
 - **Migrated from**: v2.15.0#DF-25 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-25; still owed: Required surviving generic OCR metadata and real-engine qualification; mixed historical outline timing.; next: Return trustworthy total and parsed page counts through runtimes/ocr and both surviving parse_document hosts; retain unknown granularity where page boundaries are unavailable. Prove capped/uncapped PDF behavior and qualify real GPU OCR throughput separately. Preserve old measurements; do not benchmark or restore retired document_outline.
 
-#### WN-20 - No egress from the OCR child process is proven at socket level.
+#### WN-20 - No egress from the OCR child process is proven at socket level. - MIGRATED to v2.17.0
 
 The test traps sockets in the Node process and scans first-party OCR sources for network imports; third-party OCR packages and first-run model downloads are not covered. Not proven here.
 
@@ -2545,7 +2545,7 @@ The test traps sockets in the Node process and scans first-party OCR sources for
 - **Migrated from**: v2.15.0#WN-13 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-13; still owed: Required process-level offline qualification of the retained OCR local-only claim.; next: Keep H08. A scoped OS containment run must show the real Python child can parse with installed weights and cannot open outbound sockets. Node mocks/source scans are insufficient.
 
-#### WN-21 - Both agent loops now send `tools` natively to every model whose catalog format is not `none` (the extension already did).
+#### WN-21 - Both agent loops now send `tools` natively to every model whose catalog format is not `none` (the extension already did). - MIGRATED to v2.17.0
 
 A model Ollama reports without the `tools` capability may reject such a request. Not proven here: every chat model installed on this host declares `tools`.
 
@@ -2559,7 +2559,7 @@ A model Ollama reports without the `tools` capability may reject such a request.
 - **Migrated from**: v2.15.0#WN-17 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#WN-17; still owed: Required robust native-tool request routing for supported installed models.; next: Keep A12. Read/corroborate actual model capability, define unknown/probe-failure fallback, and preserve functional tool access. A format binding alone is not a runtime capability assertion.
 
-#### DF-148 - Aleph Alpha's Kolibri-1 (released 2026-10-03, Apache-2.0, 78B total and 3.46B active parameters, about 78 GB in FP8) is not admitted, no catalog row.
+#### DF-148 - Aleph Alpha's Kolibri-1 (released 2026-10-03, Apache-2.0, 78B total and 3.46B active parameters, about 78 GB in FP8) is not admitted, no catalog row. - MIGRATED to v2.17.0
 
 The smallest community GGUF (Q3_K_S, about 3.47 bits per weight) is roughly 34 GB by arithmetic, above the 24 GB top tier. Stock Ollama, llama.cpp, and LM Studio cannot load it; the official path needs vLLM with the vendor `aleph-alpha-inference` package. The trained context is 262,144 tokens; 1M is an extrapolation. It fails gates 3, 4, and 5 of the v2.3.0 admission record. Reopen conditions: BOTH a runtime condition (an official `ollama.com/library` tag, or Kolibri support merged into a released upstream llama.cpp) AND a size condition (a first-party Kolibri variant whose quantized weights plus KV cache at the tier's context fit 24 GB, or a raised top tier in `core/registry/recommended.json`). Meeting both reopens the acceptance bar; neither admits the model. Owner: the maintainer.
 
@@ -2573,7 +2573,7 @@ The smallest community GGUF (Q3_K_S, about 3.47 bits per weight) is roughly 34 G
 - **Migrated from**: v2.15.0#DF-28 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-28; still owed: Historical declined Kolibri adoption plus combined size/runtime reopen watch; seed guard and index.; next: Propose owner acceptance of closed-decline disposition, preserving exact original entry text, evidence and combined trigger. The original accepted task is to record/enforce the decline, not implement the model.
 
-#### DF-149 - No catalog-wide check that every entry's declared size fits its tier; the Kolibri-1 decision keeps a per-model guard instead (decided at the seed plan's grill).
+#### DF-149 - No catalog-wide check that every entry's declared size fits its tier; the Kolibri-1 decision keeps a per-model guard instead (decided at the seed plan's grill). - MIGRATED to v2.17.0
 
 Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md`, parked gaps. Owner: the maintainer. Next step: a plan that already edits `core/registry/catalog.json` measures how many current entries such a check would flag before adopting it. Measured in v2.14.0 Phase 5 over 41 entries ([script](../../../archives/v2/v2.14/development/evidence/measure-catalog-size-check.mjs)): a tier-default check flags 1 (`qwen3.5:4b` is a cpu agentic default yet declares `requiredVramGB` 4); a field-consistency check flags 9 (six `hideBelowVramGB` values below the declared need, several apparently deliberate for offload builds; two embedding models with `vramGB` 1 over `requiredVramGB` 0; `triposplat` with no `sizeGB`). Adoption stays an owner decision.
 
@@ -2587,7 +2587,7 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Migrated from**: v2.15.0#DF-29 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-29; still owed: Owner adoption decision for a catalog-wide invariant; v2.14 measurement found real exceptions.; next: Keep O06. Choose/justify the proposed invariant against the measured CPU/offload cases before adopting it. Do not impose a naive VRAM rule that breaks deliberate offload/default semantics.
 
-#### DF-150 - No catalog field separates a vendor's trained context from its extrapolated maximum (comparison KOL-2).
+#### DF-150 - No catalog field separates a vendor's trained context from its extrapolated maximum (comparison KOL-2). - MIGRATED to v2.17.0
 
 Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adoption-kolibri-1.md`, parked gaps. Owner: the maintainer. Next step: reopen when a second model with an extrapolated context claim reaches review.
 
@@ -2601,7 +2601,7 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Migrated from**: v2.15.0#DF-30 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#DF-30; still owed: Optional metadata watch whose trigger needs a durable living owner; seed KOL-2 scope.; next: Implement A15's living open-question transfer, then propose closure of this tracking entry against that exact retained trigger. Do not add a trained-context schema field before the second relevant model reaches review.
 
-#### QG-19 - The completion checker's contract conflicts block every minor run here
+#### QG-19 - The completion checker's contract conflicts block every minor run here - MIGRATED to v2.17.0
 
 - **Source phase**: v2.15.0 Phase 4 (2026-10-19), from the v2.14 run and the v2.15 run.
 - **Plan reference**: v2.15.0 T015; [Nexus-Hub checker handoff](../../../archives/v2/v2.15/development/v2.15.0-nexus-hub-checker-handoff.md).
@@ -2611,7 +2611,7 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Migrated from**: v2.15.0#QG-11 on 2026-10-21 (reason: user-deferred)
 - **Migration evidence**: v2.15.1 recorded triage; source v2.15.0#QG-11; still owed: Required checker/record-contract qualification before declaring minor completion.; next: Keep plan T014/A19. Adopt only tested checker revisions, preserve historical pins and signed scope, rerun actual verdicts, and retain unresolved release mapping/absorbed-seed/legacy-scope/approval/evidence blockers. No fake release, arbitrary cutoff or signed JSON edit.
 
-#### BG-8 - Automatic release preparation cannot push its version commit to protected main
+#### BG-8 - Automatic release preparation cannot push its version commit to protected main - MIGRATED to v2.17.0
 
 - **Source phase**: v2.15.1 Phase 4 (T418), publication recovery observed on 2026-10-22; this defect was discovered after the frozen 262-identity triage approval.
 - **Plan reference**: [Archive readiness, T418](../../../archives/v2/v2.15/plans/v2.15.1-archive-readiness.md#phase-4-integration-and-publication); [release recovery](../../../archives/v2/v2.15/development/v2.15.1-release-recovery.md).
@@ -2620,7 +2620,7 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Evidence**: [Failure and bounded recovery](../../../archives/v2/v2.15/development/v2.15.1-release-recovery.md#failure), release run 39814892000; retained release-recovery packet and independently qualified native annotated-tag fixture. [Late automation proposal](../../../archives/v2/v2.15/development/v2.15.1-late-automation-proposal.md) records the separate OPEN follow-up. No permanent-fix result is claimed.
 - **Placement basis**: Direct new future-version record subject to the separate owner-exception addendum. This is not an inherited or migrated member of the original 245-item disposition set.
 
-#### BG-9 - Release notes extraction ignores configured double-hash changelog headings
+#### BG-9 - Release notes extraction ignores configured double-hash changelog headings - MIGRATED to v2.17.0
 
 - **Source phase**: v2.15.1 Phase 4 (T418), publication recovery observed on 2026-10-22; this defect was discovered after the frozen 262-identity triage approval.
 - **Plan reference**: [Archive readiness, T418](../../../archives/v2/v2.15/plans/v2.15.1-archive-readiness.md#phase-4-integration-and-publication); [release recovery](../../../archives/v2/v2.15/development/v2.15.1-release-recovery.md).

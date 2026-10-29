@@ -1,0 +1,81 @@
+{
+  "production_changed": false,
+  "model_inference": false,
+  "node_version": "v22.11.0",
+  "runs": [
+    {
+      "name": "unchanged",
+      "exit": 0,
+      "result": "PASS",
+      "cases": [
+        {
+          "case": "baseline",
+          "exit": 0,
+          "pass": true
+        },
+        {
+          "case": "cpu",
+          "exit": 0,
+          "pass": true
+        },
+        {
+          "case": "negative",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "fraction",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "string",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "unknown",
+          "exit": 2,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "exact-cli-patch",
+      "exit": 0,
+      "result": "PASS",
+      "cases": [
+        {
+          "case": "baseline",
+          "exit": 0,
+          "pass": true
+        },
+        {
+          "case": "cpu",
+          "exit": 0,
+          "pass": true
+        },
+        {
+          "case": "negative",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "fraction",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "string",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "unknown",
+          "exit": 2,
+          "pass": true
+        }
+      ]
+    }
+  ]
+}
