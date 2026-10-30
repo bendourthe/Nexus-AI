@@ -807,6 +807,14 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Compare DeepSeek Maya, DeepInfer/recipe, the decision-eval cookbook and Reylo against Nexus ([comparison](releases/v2/v2.17/comparisons/v2.17.0-comparison-deepseek-decision-evals-reylo.md), 2026-10-23; adoption target confirmed; no implementation authorized).
 - [ ] Select bounded A1/A2 evaluation scope for a separate v2.17 plan from the comparison; retain conditional HOLD and deferred W1-W3.
 
+## GPU unlock and on-device model comparison (2026-10-28)
+
+**Status**: Three of three supplied sources assessed; zero candidates locally qualified or admitted. The owner confirmed target v2.16.1 on 2026-10-28.
+
+- [x] Complete the [gpu-unlock, LFM3 and Ornith comparison](releases/v2/v2.16/comparisons/v2.16.1-comparison-gpu-unlock-lfm3-ornith.md) with source scans, pinned receipts, policy assessments and the upstream v2.16 completion impact.
+- [x] Confirm v2.16.1 and finalize the comparison for publication through develop's required pull request, excluding existing local work (owner confirmation, 2026-10-28).
+- [ ] If a bounded trial is requested, select its job and runtime scope before generating an implementation plan; retain current defaults and the LFM3 runtime HOLD.
+
 ## Recurring Obligations
 
 - [ ] Review AGENTS.md against current model behavior every 6 months -- next review due 2026-11-26. (Older prompt workarounds may now block beneficial new model behaviors; see the `## AGENTS.md review cadence` section in [AGENTS.md](../AGENTS.md). This date is the canonical source referenced by AGENTS.md. Added in v1.2.0 Phase 1.4.)
