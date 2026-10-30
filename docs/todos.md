@@ -6,11 +6,11 @@
 |---|---|---|
 | Implementation | All 26/26 tasks and the full-decline disposition accepted by native capture; minor closeout remains open | Five phases and 26 tasks, with conditional-path evidence |
 | Model admission | E-1/E-2 pass; E-3 environment HOLD, runtime 0.32.15 below required 0.40.10; zero inference | Per-slot fit/quality and both-channel proof before admission |
-| Ledger | 247 inherited items migrated to v2.17 with 247 native copy proofs; DF-151 and WN-22 remain open; DF-152 resolved | Resolve remaining eligibility and runtime boundaries before archive |
+| Ledger | 247 inherited items migrated to v2.17 with 247 native copy proofs; DF-151 remains open; WN-22 resolved in verified local source pending closing integration; DF-152 resolved | Resolve remaining eligibility and runtime boundaries before archive |
 | Publication | PR138 merged b82b9747; 58 passing checks and three passing post-merge workflows; no release tag | Final local gate, green integration, admission-only release |
 | Cleanup | 28 merged/idle refs removed; native receipt met; current v2.16 refs/worktree kept by native rules | Preserve keep decisions until supported minor closure |
 
-The [2026-10-29 closeout evidence](releases/v2/v2.16/development/v2.16.0-native-closeout-progress.md) records the captured decline, inherited carries, remaining native barriers and an unapplied CLI shutdown proposal. Its 22 controlled cases pass with the revised cleanup patch; no production shutdown code, model default or release changed.
+The [2026-10-29 closeout evidence](releases/v2/v2.16/development/v2.16.0-native-closeout-progress.md) records the captured decline, inherited carries, remaining native barriers and an unapplied CLI shutdown proposal. The separately approved [CLI shutdown repair](releases/v2/v2.16/development/v2.16.0-cli-shutdown-repair.md) is applied locally: 22 actual-file cases pass on Node 22/24, the root gate passes 6491 tests with 12 skips and coverage thresholds pass; closing integration remains pending. No model default or release changed.
 
 ## Archive closeout (2026-10-23)
 
@@ -778,7 +778,7 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Phase 3: runner CPU control verified through real CLI/HTTP/tool boundaries on pinned Node 22; E4B fit/A-B explicitly not run after E-3 HOLD ([evidence](releases/v2/v2.16/development/v2.16.0-phase3-evidence.md)).
 - [x] Phase 4: both slots unadmitted at E-3 runtime HOLD; decline/reopen record saved and all registry/default inputs preserved ([evidence](releases/v2/v2.16/development/v2.16.0-phase4-evidence.md)).
 - [x] Phase 5: full local gate, independent review and PR138 integration complete; all 58 checks and three post-merge workflows pass. Extension proof and a release are admission-only and were skipped after E-3 HOLD ([integration evidence](releases/v2/v2.16/development/v2.16.0-integration.json)).
-- [ ] Native minor/archive closure: retain the conditional-task and no-tag contract blocker, local closeout checkpoint and all open gaps until supported native closure ([handoff](releases/v2/v2.16/development/v2.16.0-completion-contract-handoff.md)).
+- [ ] Native minor/archive closure: complete the remaining DF-151 and checker-compatibility dispositions, archive, green closing integration and native cleanup; the conditional decline is already captured ([handoff](releases/v2/v2.16/development/v2.16.0-completion-contract-handoff.md)).
 
 ## Legacy known-gaps triage (queued v2.15.0)
 
