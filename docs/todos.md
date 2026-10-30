@@ -7,10 +7,12 @@
 | Implementation | All 26/26 tasks and the full-decline disposition accepted by native capture; minor closeout remains open | Five phases and 26 tasks, with conditional-path evidence |
 | Model admission | E-1/E-2 pass; E-3 environment HOLD, runtime 0.32.15 below required 0.40.10; zero inference | Per-slot fit/quality and both-channel proof before admission |
 | Ledger | 247 inherited items migrated to v2.17 with 247 native copy proofs; DF-151 remains open; WN-22 resolved in verified local source pending closing integration; DF-152 resolved | Resolve remaining eligibility and runtime boundaries before archive |
-| Publication | PR138 merged b82b9747; 58 passing checks and three passing post-merge workflows; no release tag | Final local gate, green integration, admission-only release |
+| Publication | PR138 merged b82b9747; PR139 dependency repair merged 41598a7 with required checks and four post-merge workflows green; no release tag | Final local gate, green integration, admission-only release |
 | Cleanup | 28 merged/idle refs removed; native receipt met; current v2.16 refs/worktree kept by native rules | Preserve keep decisions until supported minor closure |
 
-The [2026-10-29 closeout evidence](releases/v2/v2.16/development/v2.16.0-native-closeout-progress.md) records the captured decline, inherited carries, remaining native barriers and an unapplied CLI shutdown proposal. The separately approved [CLI shutdown repair](releases/v2/v2.16/development/v2.16.0-cli-shutdown-repair.md) is applied locally: 22 actual-file cases pass on Node 22/24, the root gate passes 6491 tests with 12 skips and coverage thresholds pass; closing integration remains pending. No model default or release changed.
+The [2026-10-29 closeout evidence](releases/v2/v2.16/development/v2.16.0-native-closeout-progress.md) records the captured decline, inherited carries, remaining native barriers and an unapplied CLI shutdown proposal. The separately approved [CLI shutdown repair](releases/v2/v2.16/development/v2.16.0-cli-shutdown-repair.md) is applied locally: 22 actual-file cases pass on Node 22/24, the refreshed integration checkout passes 6485 tests with 19 skips and unchanged coverage thresholds (86.90% lines, 76.30% branches, 87.01% functions); final closing publication remains pending. No model default or release changed.
+
+The [production audit repair](releases/v2/v2.16/development/v2.16.1-production-audit-remediation.md) changes only the two reviewed dependency entries. The actual SDK HTTP flow passes on Node 22/24, and the unchanged audit gate reports zero blocking findings. The combined four-worker local run had two timeouts; both affected files and the full one-worker rerun pass without changing timeouts or thresholds. Native archive remains blocked by historical proof and checker qualification.
 
 ## Archive closeout (2026-10-23)
 
@@ -810,6 +812,14 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 
 - [x] Compare DeepSeek Maya, DeepInfer/recipe, the decision-eval cookbook and Reylo against Nexus ([comparison](releases/v2/v2.17/comparisons/v2.17.0-comparison-deepseek-decision-evals-reylo.md), 2026-10-23; adoption target confirmed; no implementation authorized).
 - [ ] Select bounded A1/A2 evaluation scope for a separate v2.17 plan from the comparison; retain conditional HOLD and deferred W1-W3.
+
+## GPU unlock and on-device model comparison (2026-10-28)
+
+**Status**: Three of three supplied sources assessed; zero candidates locally qualified or admitted. The owner confirmed target v2.16.1 on 2026-10-28.
+
+- [x] Complete the [gpu-unlock, LFM3 and Ornith comparison](releases/v2/v2.16/comparisons/v2.16.1-comparison-gpu-unlock-lfm3-ornith.md) with source scans, pinned receipts, policy assessments and the upstream v2.16 completion impact.
+- [x] Confirm v2.16.1 and finalize the comparison for publication through develop's required pull request, excluding existing local work (owner confirmation, 2026-10-28).
+- [ ] If a bounded trial is requested, select its job and runtime scope before generating an implementation plan; retain current defaults and the LFM3 runtime HOLD.
 
 ## Recurring Obligations
 
