@@ -1,0 +1,524 @@
+{
+  "schema_version": 1,
+  "observed_at_utc": "2026-10-29T02:21:48.157993+00:00",
+  "adoption_target": "v2.16.1",
+  "target_status": "confirmed_by_owner",
+  "checkout_commit": "69a39894e828c44125e6846f57702ae122a76b6b",
+  "upstream_commit": "b82b97473dd61aa72475b601577678c8e63668ec",
+  "source_scan": {
+    "method": "Text-only download, bounded regex scan before semantic ingestion, then manual inspection; no external executable code run",
+    "patterns": [
+      "instruction override",
+      "agent-directed system prompt disclosure",
+      "credential variable references and shell exfiltration patterns",
+      "selected Unicode controls on primary snapshots"
+    ],
+    "limitations": [
+      "No tensor downloads or model-code execution",
+      "No audit of model executable Python, driver binaries or Windows port",
+      "GitHub codeload export only, not full Git object history",
+      "LiquidAI announcement HTML snapshot is truncated; coverage limited to downloaded prefix"
+    ],
+    "snapshot_retention": "Raw snapshots remain in a local temporary directory; this committed-format receipt records hashes and remote revision pins, not a durable raw-content archive"
+  },
+  "sources": [
+    {
+      "source": "Zagitta/gpu-unlock",
+      "revision": "7eb51bccae0a0b7e599e084d971170e9a1e82d0c",
+      "scan_verdict": "PROCEED-WITH-CAUTION",
+      "scan_findings": [],
+      "files": [
+        {
+          "path": "gpu-unlock/Makefile",
+          "bytes": 5762,
+          "sha256": "b81778501f2402f0109e19d3f4d12b2fd1e0b05df114d843585ab063e2fd3b89"
+        },
+        {
+          "path": "gpu-unlock/README.md",
+          "bytes": 13069,
+          "sha256": "21d93d8407321ef8e1bbe36b24d3a4364c86013bf05aa5be709729467ac0c047"
+        },
+        {
+          "path": "gpu-unlock/VERSION",
+          "bytes": 6,
+          "sha256": "c28fcca53637bc88e124af1725df13cb98c69dedefd62fb3cdbe1cdb6b760624"
+        },
+        {
+          "path": "gpu-unlock/debian/changelog",
+          "bytes": 301,
+          "sha256": "b8754246861ba119c99c88806d63c55c41bbdf272767da6033c5d27d45574bcf"
+        },
+        {
+          "path": "gpu-unlock/debian/clean",
+          "bytes": 25,
+          "sha256": "7c2a385b25a5f2035638ba090049df8b4c41e089a32c9cb3d0f95d3db3af7d90"
+        },
+        {
+          "path": "gpu-unlock/debian/control",
+          "bytes": 765,
+          "sha256": "bc0d6d0560c139fe2ee0db4c49300722e14ef82b08f2d6ff559d7cc37228f46b"
+        },
+        {
+          "path": "gpu-unlock/debian/copyright",
+          "bytes": 331,
+          "sha256": "c10e5d5a27a52bd7065865822befda294a2fc7c585a1887dc39b1b6f39aad762"
+        },
+        {
+          "path": "gpu-unlock/debian/gpu-unlock-dkms.dkms",
+          "bytes": 28,
+          "sha256": "5fe35f329518ffd1c7749bff0193bcd5794462c7d7e454a445e25bc36954ef49"
+        },
+        {
+          "path": "gpu-unlock/debian/gpu-unlock-dkms.install",
+          "bytes": 74,
+          "sha256": "2fe32f75d4e928dbd52521c6c97f2aae93b41b572e489db2a7662b89a7dbee49"
+        },
+        {
+          "path": "gpu-unlock/debian/gpu-unlock-dkms.postinst",
+          "bytes": 354,
+          "sha256": "007c4926a7348bfc9fb24f38d01958050c82efe90ae710199ffedf57dfe57a35"
+        },
+        {
+          "path": "gpu-unlock/debian/gpu-unlock-dkms.postrm",
+          "bytes": 234,
+          "sha256": "5da67c452a2b21b8e8799fe21c1c53c0c292c7f566d600edc933ca1442ac659f"
+        },
+        {
+          "path": "gpu-unlock/debian/gpu-unlock-firmware.install",
+          "bytes": 92,
+          "sha256": "bf1f41413fd633d199c5e10f7b131ee310d0edd45cb125f840c40b437ed2376e"
+        },
+        {
+          "path": "gpu-unlock/debian/gpu-unlock-firmware.lintian-overrides",
+          "bytes": 198,
+          "sha256": "cc6dbce60068347105f01d0a8396eb55ccc36ec4632e43299ac9ab7ca7ec0439"
+        },
+        {
+          "path": "gpu-unlock/debian/rules",
+          "bytes": 611,
+          "sha256": "d98ddc63b7be892e3aef8853c6ada3620bfa07687aace0e2b18993824b06c977"
+        },
+        {
+          "path": "gpu-unlock/debian/source/format",
+          "bytes": 13,
+          "sha256": "e8e18df40bcd69d6aa404282679186d9b8256ac63a5b4e80d7f081e8a0095a2e"
+        },
+        {
+          "path": "gpu-unlock/firmware/NOTICE.md",
+          "bytes": 2459,
+          "sha256": "5dbca141b120b3f7a631161e7612edfeb74733401515bbb02430148ad3b9587e"
+        },
+        {
+          "path": "gpu-unlock/firmware/README.md",
+          "bytes": 1038,
+          "sha256": "c8c7ac517aaa0aa14672e0532b50eb5c6dcce9de3b6b8d1e7d6057dfbca9a3c0"
+        },
+        {
+          "path": "gpu-unlock/firmware/extract_boot_assets.py",
+          "bytes": 8105,
+          "sha256": "d1d5ea73675ec376845aa5af9a87d026af0371af2a8dd10988d4426bd6dff321"
+        },
+        {
+          "path": "gpu-unlock/firmware/extract_gsp.py",
+          "bytes": 3618,
+          "sha256": "90a71a1ab373c10b6d6671c3a0483afa3508608fa4118a6466a43b3a6b897f3f"
+        },
+        {
+          "path": "gpu-unlock/firmware/fetch_artifacts.py",
+          "bytes": 2613,
+          "sha256": "7a1da102cef582c12f0cf766af091340a615b9dd1b8840ab32581db27bb05574"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/Kbuild",
+          "bytes": 192,
+          "sha256": "13e76b2da1e4cc9565fc7efab0eb8bb8a2013fbfc3b28ea6c8c4340db0bb1a47"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/Makefile",
+          "bytes": 250,
+          "sha256": "52d7675e5ced84ad17110b82e20afe89937cfb9c17de2cc3049478afe8946415"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/device.h",
+          "bytes": 418,
+          "sha256": "eeb2e2845a667baddfc4f8ae126603f20ec3d7e898a10603b8a69af81d060a44"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/diagnostic.h",
+          "bytes": 1133,
+          "sha256": "e76e23d7ad1690f01fe09523936e3fdc017523e43ec644e8b05e6efdda492e27"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/dkms.conf",
+          "bytes": 489,
+          "sha256": "029feadba4edd85c2e1a3d9de1bc98f49c6e9991b1bd67cf2d7823cc827ace16"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/falcon.c",
+          "bytes": 16034,
+          "sha256": "39324e8defaa64d5c3e0177ce807f533a83aae5f46f17f5b544488e797751c7e"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/falcon.h",
+          "bytes": 2817,
+          "sha256": "3d70058236285cbc9d3cacd632d4147ec1fc415f7c097d24088632c819e51fb3"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/firmware_610.c",
+          "bytes": 8244,
+          "sha256": "90e83ff478ef924dee0bec4c8e809e14cf0fe49f861936e0232c360164c98f41"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/firmware_610.h",
+          "bytes": 2287,
+          "sha256": "310f48db0a372a5ef5c939fcd37725bf730c22c2e8db3014fc08a69caefd25d8"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/gfw_eval.c",
+          "bytes": 935,
+          "sha256": "92c4d21b7fd93e96b3dea374604b4e11aec5db80aa12edda8232a0c88c84f0b1"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/gfw_eval.h",
+          "bytes": 1291,
+          "sha256": "ca0c375f5d72dfe87d91d77135e7dc63fad42a58840ff3f20d24aa6b4366191a"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/layout_610.c",
+          "bytes": 2807,
+          "sha256": "bde52cb4c22a16bb345fef9caaa1c6f15c19c674d6985fde98e9d4c518aca375"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/layout_610.h",
+          "bytes": 815,
+          "sha256": "afe45505f455f7af90a9d1920b416301bfb7e4ff1778f4f7e10186084618bb5e"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/main.c",
+          "bytes": 6155,
+          "sha256": "55b4ba93119f67caff90f0c05c88f79a3e766ea0fc9c5a0a939432224c0f63c8"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/payload.c",
+          "bytes": 1969,
+          "sha256": "7afafc3b311ca15dc2322dfff1f21ccb8b25a48374366af004b4cd92d815d742"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/payload.h",
+          "bytes": 2343,
+          "sha256": "e7e9008fa20f50555e25937ee18e5ccab6ebe17b44c24a8f3441ff634d9ef058"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/prep_610.c",
+          "bytes": 8404,
+          "sha256": "62c49cdc3fe0594e74e487dd7a5721277a468f0001f653dd674cfd4ffdfd1bbe"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/prep_610.h",
+          "bytes": 2237,
+          "sha256": "2f69f1e9f619983bba94e2aa583f77c40f5c09370cc56be3b4a42d2054f5e6e7"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/recipes.c",
+          "bytes": 16596,
+          "sha256": "bf24bdaadb410d3f3fc31920bda60f98321d66155aa88d27aeda292a857f6b8d"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/recipes.h",
+          "bytes": 2898,
+          "sha256": "1abad67e9b38bafbe4c46dffa157aaafa984db24edd3a867de06676ffb72faef"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/registers.h",
+          "bytes": 4711,
+          "sha256": "cb6911f77f740651c6cc45d634e0cfa15f7a7c757a9f08eb361ab882fcf323f7"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/unlock_610.c",
+          "bytes": 65418,
+          "sha256": "aaa745a94a4eb20fe42b08d5528a3219b60d701b2a1b8cde342e056ecb9ec57d"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/unlock_610.h",
+          "bytes": 994,
+          "sha256": "119c970e14862cc520dd091d8921b2019f112690661ba614aae59b2b9f5b1d53"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/vbios_610.c",
+          "bytes": 13353,
+          "sha256": "9470ba11bc3e190041a3e93eaacf69eec3dda3a5202760e01cecdf90cf07b50c"
+        },
+        {
+          "path": "gpu-unlock/kernel/gpu_unlock/vbios_610.h",
+          "bytes": 991,
+          "sha256": "2d5ee4493d311620cd7ee63b4a84ed5a43281fcbce1f7cf52ea7d70814324d72"
+        },
+        {
+          "path": "gpu-unlock/licenses/CMP40HX-MIT.txt",
+          "bytes": 1057,
+          "sha256": "75054b6a08e1008c86b6045ab99add2c8fa571987880951a9929f11ee56a7d64"
+        },
+        {
+          "path": "gpu-unlock/licenses/GPL-2.0.txt",
+          "bytes": 18092,
+          "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+        },
+        {
+          "path": "gpu-unlock/licenses/NVIDIA-MIT.txt",
+          "bytes": 1219,
+          "sha256": "fdeba0dc20cc705443771b5ca293292e3437abb2bb3021b6a0c65f0203b1db91"
+        },
+        {
+          "path": "gpu-unlock/packaging/arch/PKGBUILD",
+          "bytes": 2333,
+          "sha256": "e408c72c3b180de9508280000b2241f05ae1bb4ee714471c70573bf0c22dfe86"
+        },
+        {
+          "path": "gpu-unlock/packaging/arch/gpu-unlock.install",
+          "bytes": 422,
+          "sha256": "0950af10525bf5ba746c09382e48c37fa0b6c9037992ea1b3672b5c2e62a7129"
+        },
+        {
+          "path": "gpu-unlock/packaging/boot/dracut.conf",
+          "bytes": 200,
+          "sha256": "2dde68978bcc17977e6556264c222d52e7f53d7553726718febd9a4c7c0dd3d9"
+        },
+        {
+          "path": "gpu-unlock/packaging/boot/initramfs-tools-init-top",
+          "bytes": 343,
+          "sha256": "6238f6b7c393e51917780d102bae2c5639f3cf6c88f59990ecdf61d786f88c90"
+        },
+        {
+          "path": "gpu-unlock/packaging/boot/initramfs-tools.conf",
+          "bytes": 139,
+          "sha256": "ebcbcb2fefd9eafeb8130be60b6efdf362244c5c05fef7e9e9506b8660d14753"
+        },
+        {
+          "path": "gpu-unlock/packaging/boot/mkinitcpio.conf",
+          "bytes": 1113,
+          "sha256": "1a660be222c943f7a55c183e3310c6786dfcb62b780ec845a1a37084dcfd286f"
+        },
+        {
+          "path": "gpu-unlock/packaging/rpm/gpu-unlock.rpmlintrc",
+          "bytes": 439,
+          "sha256": "f2583095b845951acf2a92cdddc1d1f0d2c4d12e1c35d2f1a8f4b8de17d106d6"
+        },
+        {
+          "path": "gpu-unlock/packaging/rpm/gpu-unlock.spec",
+          "bytes": 4759,
+          "sha256": "91cb431b0ff8503e554d8eee1bc288e9bc27ed2c1a85fa16fc8d1be5fe05d6be"
+        },
+        {
+          "path": "gpu-unlock/packaging/snapshot.sh",
+          "bytes": 1130,
+          "sha256": "4182b3530ab4aaa44592e4fc6302c66aede09db84393232058f518f0e6afe917"
+        },
+        {
+          "path": "gpu-unlock/packaging/unraid/build.sh",
+          "bytes": 2759,
+          "sha256": "ae1ff8c1f415dc876c808a9d795a4023f7351ba7595b6de6ab65c906d0bf0a4f"
+        },
+        {
+          "path": "gpu-unlock/packaging/unraid/discover.sh",
+          "bytes": 750,
+          "sha256": "467b79b868d9216173e7ce9287f2cad194a00faae198ff57840d9575d72c5f28"
+        },
+        {
+          "path": "gpu-unlock/packaging/unraid/gpu-unlock-firmware",
+          "bytes": 1381,
+          "sha256": "d92c33a531b87afe518b01c2efac202c9b5316ba27f23f53b648c65b59cbc929"
+        },
+        {
+          "path": "gpu-unlock/packaging/unraid/gpu-unlock.plg",
+          "bytes": 2539,
+          "sha256": "264d27c81173323be1c9ef73f46cdb7a984456cac47f234ad65d7471feae4ea8"
+        }
+      ]
+    },
+    {
+      "source": "LiquidAI/LFM3-1.7B",
+      "revision": "ac2586a34f1a1c03329dbdcdefabd8b6478ddaa7",
+      "scan_verdict": "CLEAR",
+      "scan_findings": [],
+      "files": [
+        {
+          "path": "lfm3/api.json",
+          "bytes": 15559,
+          "sha256": "dd48d6b93b50f1033608830f96e0af8c6fe48f15b1fa7024471566c5db9133ca"
+        },
+        {
+          "path": "lfm3/README.md",
+          "bytes": 53353,
+          "sha256": "ca4ea3e8ddda8690b0479d0bbcdd4539f92d42e0092aa396a2bd29a75b6d59d8"
+        },
+        {
+          "path": "lfm3/config.json",
+          "bytes": 1454,
+          "sha256": "8c6ae8b8f6d88c87cfb98cf4b5e34e943d0ee07e24215c4121b3159a46e1399d"
+        },
+        {
+          "path": "lfm3/LICENSE",
+          "bytes": 10574,
+          "sha256": "4d28ca14dedc0b3d0fcc2b3339f0e79931faa33874f3d24f522183a8fc70068c"
+        }
+      ]
+    },
+    {
+      "source": "mradermacher/Ornith1.0-9B-3MPER0RR-abliterated-GGUF",
+      "revision": "2bb87c558bcbeaa0e1abb85523aa999d02689804",
+      "scan_verdict": "CLEAR",
+      "scan_findings": [],
+      "files": [
+        {
+          "path": "ornith/api.json",
+          "bytes": 9821,
+          "sha256": "dadd2545cce36ce1c41a4eec4784595459f229e72caade396ba593e8b0bdd4bb"
+        },
+        {
+          "path": "ornith/README.md",
+          "bytes": 4040,
+          "sha256": "9058fdaf6c919c38f40dcc7f58c2c1c4ccca83eed2c7f7bd5d3160c45a957d37"
+        }
+      ]
+    }
+  ],
+  "secondary_sources": [
+    {
+      "source": "https://www.liquid.ai/blog/lfm3",
+      "bytes": 3000000,
+      "sha256": "c72197c625e6e19e86b23551d4dc7ba05bbc8eeb5895936fcfaa079619d93832",
+      "scan_verdict": "CLEAR",
+      "flags": [],
+      "snapshot_name": "liquid-blog.txt",
+      "complete": false,
+      "limitation": "First 3000000 bytes only; complete HTML coverage not established"
+    },
+    {
+      "source": "https://huggingface.co/api/models/LiquidAI/LFM3-1.7B-GGUF",
+      "bytes": 14654,
+      "sha256": "1348aa6759f1a215080b04cbd8642a93ad1b858a7deb1d9ba4ae3dfae4131d0c",
+      "scan_verdict": "CLEAR",
+      "flags": [],
+      "revision": "bad5729bba61d076fff20d2548e62526665af215",
+      "snapshot_name": "liquid-gguf-api.txt",
+      "complete": true
+    },
+    {
+      "source": "https://huggingface.co/api/models/3MPER0RR/Ornith1.0-9B-3MPER0RR-abliterated",
+      "bytes": 9616,
+      "sha256": "4daca1f8c23db1936cc1b3bcce703be446d8fe344096f958cd9fd2525a945a4e",
+      "scan_verdict": "CLEAR",
+      "flags": [],
+      "revision": "684561499c11ac833956e267fbf43976b09a01ab",
+      "snapshot_name": "ornith-parent-api.txt",
+      "complete": true
+    },
+    {
+      "source": "https://ollama.com/library/lfm3",
+      "bytes": 79118,
+      "sha256": "01555a90fb8182f14f2bf8f44c1f530ac73a4f3933ae0dd2cb9f73b4ae26618b",
+      "scan_verdict": "CLEAR",
+      "flags": [],
+      "snapshot_name": "ollama-lfm3.txt",
+      "complete": true
+    },
+    {
+      "source": "https://huggingface.co/3MPER0RR/Ornith1.0-9B-3MPER0RR-abliterated/resolve/684561499c11ac833956e267fbf43976b09a01ab/README.md",
+      "bytes": 295,
+      "sha256": "383ad5fcf185bba155428ff2e1d7fa7c5c5f45d7b81cf8043a05ffe1506e63b1",
+      "scan_verdict": "CLEAR",
+      "flags": [],
+      "snapshot_name": "ornith-parent-readme.txt",
+      "complete": true
+    },
+    {
+      "source": "https://huggingface.co/api/models/ornith-ai/Ornith-1.0-9B",
+      "bytes": 10376,
+      "sha256": "40c13c566819a0fe35fc1f19f576ae407804868d96d0cd1833ec2c57cad101dc",
+      "scan_verdict": "CLEAR",
+      "flags": [],
+      "snapshot_name": "ornith-original-api.txt",
+      "complete": true
+    },
+    {
+      "source": "https://ollama.com/library/lfm3/tags",
+      "bytes": 51440,
+      "sha256": "7964aa47428a65727a222277e6f0f36a57fd6187ca3f6ee5b976f44173296b30",
+      "scan_verdict": "CLEAR",
+      "flags": [],
+      "snapshot_name": "ollama-lfm3-tags.txt",
+      "complete": true
+    },
+    {
+      "source": "https://registry.ollama.ai/v2/library/lfm3/manifests/1.7b-q4_K_M",
+      "bytes": 776,
+      "sha256": "b36a103fe2f8fbe9df2ceec88b9cfdf842dc04aaabe2b4677d1acf8e16570b5d",
+      "scan_verdict": "CLEAR",
+      "snapshot_name": "lfm3-ollama-manifest.json",
+      "complete": true
+    },
+    {
+      "source": "https://registry.ollama.ai/v2/library/lfm3/blobs/sha256:81e72b4beedcbf1665fc3dd660672e525481406973298d5452d394d863bbed11",
+      "bytes": 217,
+      "sha256": "81e72b4beedcbf1665fc3dd660672e525481406973298d5452d394d863bbed11",
+      "scan_verdict": "CLEAR",
+      "snapshot_name": "lfm3-ollama-config.json",
+      "complete": true
+    }
+  ],
+  "local_observations": {
+    "ollama_version": "0.32.15",
+    "candidate_models_installed": false,
+    "gpu": "NVIDIA GeForce RTX 3080 Ti Laptop GPU",
+    "vram_mib": 16384,
+    "driver": "610.60",
+    "candidate_inference_attempted": false,
+    "lfm3_registry_requires": "0.40.13",
+    "lfm3_q4_k_m_manifest_sha256": "b36a103fe2f8fbe9df2ceec88b9cfdf842dc04aaabe2b4677d1acf8e16570b5d",
+    "lfm3_q4_k_m_weight_bytes": 1099627808
+  },
+  "queue": {
+    "helper": "C:/Users/bdour/.nexus-hub/src/scripts/enumerate_plan_queue.py",
+    "args": [
+      "--root",
+      ".",
+      "--json"
+    ],
+    "exit_code": 0,
+    "local_plans": [
+      {
+        "version": "v2.16.0",
+        "status": "proposed",
+        "open_tasks": 26,
+        "done_tasks": 0
+      }
+    ],
+    "upstream_finding": "PR 138 merged conditional E4B HOLD records and CPU-only golden-run options; plan status remains proposed",
+    "reserved_comparison": "v2.17.0",
+    "placement_confirmed": true
+  },
+  "validation": {
+    "source_hashes": "All retained source snapshot hashes rechecked while producing this receipt",
+    "scope": "Documentation only; no product behavior or model performance qualification",
+    "local_links_checked": 14,
+    "required_sections_checked": 9,
+    "ascii_report_check": "PASS",
+    "json_parse": "PASS",
+    "preexisting_tracker_additions": "PRESERVED; tracker minus comparison section equals original HEAD plus the original cleanup section",
+    "docs_layout": {
+      "command": "node scripts/check-docs-layout.mjs",
+      "exit_code": 0
+    },
+    "diff_whitespace": {
+      "command": "git diff --check",
+      "exit_code": 0
+    },
+    "application_tests": "Not run; documentation-only assessment; no changed runnable behavior",
+    "publication": "Finalized for the required pull request to develop; implementation not authorized"
+  },
+  "target_confirmation": {
+    "date": "2026-10-28",
+    "timezone": "America/Los_Angeles",
+    "answer": "Use v2.16.1 (recommended)"
+  }
+}
