@@ -1,0 +1,1 @@
+export async function load(url, context, nextLoad) { const r = await nextLoad(url, context);if (url.endsWith("/GoldenTaskRunner.js")) return {...r, source:"exports.runGoldenTask = async () => { throw new Error(\"controlled golden criteria failure\"); };"};return r; }

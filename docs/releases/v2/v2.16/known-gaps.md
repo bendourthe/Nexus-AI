@@ -3,7 +3,7 @@
 **Project**: Nexus AI Studio
 **Status**: in-progress
 **Last updated**: 2026-10-29
-**Open items**: 2
+**Open items**: 1
 
 ## v2.16.0
 
@@ -14,7 +14,7 @@
 | Not implemented (NI) | 0 | 0 |
 | Deferred (DF) | 1 | 1 |
 | Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 1 | 0 |
+| Warnings (WN) | 0 | 1 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 0 | 0 |
 
@@ -2649,7 +2649,12 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 
 - **Resolution**: Applied the approved full-decline delivery exception: PR138 merged at b82b9747 with all 58 checks and all three post-merge workflows passing. No v2.16.0 release tag or installer release was created. Existing CI performed a current-version installer rehearsal; it did not admit E4B or change any default. [Integration evidence](development/v2.16.0-integration.json).
 
-#### WN-22 - Node 24 golden CLI shutdown aborts on the reference Windows host
+### Resolved
+
+| ID | Title | Resolved in | Notes |
+|---|---|---|---|
+
+#### WN-22 - Node 24 golden CLI shutdown aborts on the reference Windows host - RESOLVED 2026-10-29
 
 - **Source phase**: Pre-existing CLI/runtime boundary, observed during v2.16.0 Phase 3 verification.
 - **Plan reference**: [v2.16.0 model trial](plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), T011; [Phase 3 evidence](development/v2.16.0-phase3-evidence.md).
@@ -2657,7 +2662,4 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Owner**: Maintainer, CLI/runtime compatibility.
 - **Suggested next step**: Reproduce the baseline on Node 24 Windows, qualify native shutdown and active HTTP handle cleanup, and fix or narrow the supported runtime contract in separately reviewed scope. Preserve the Node 22 passing proof and the original Node 24 observations; do not hide the failed process exit.
 
-### Resolved
-
-| ID | Title | Resolved in | Notes |
-|---|---|---|---|
+- **Resolution**: The separately owner-approved natural-shutdown and metrics-finally repair passed twelve actual-file option cases and ten failure/drain cases on Node 22.11.0 and Node 24.13.0, plus a meaningful child-process regression and the fresh root coverage gate (6491 pass, 12 skip). Original failures remain preserved. Resolved in verified local source; closing integration is still pending. [Repair evidence](development/v2.16.0-cli-shutdown-repair.md).

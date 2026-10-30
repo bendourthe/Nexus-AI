@@ -1,0 +1,2 @@
+FAIL bugfix-off-by-one-01 -- loop bound corrected (file_contains src/process.ts): pattern "i < arr.length" in process.ts
+nexus golden run: 0/1 passed (live mode)

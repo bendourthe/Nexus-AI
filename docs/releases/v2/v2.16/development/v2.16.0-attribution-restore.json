@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "minor": "v2.16",
+  "native_blocker_answered": 2,
+  "answer": "Approve",
+  "answered": "2026-10-30T01:36:20+00:00",
+  "accepted_file": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI\\.git\\config",
+  "reviewed_baseline_sha256": "31cb38cff5c0a06a276cb1008af1bffae5c4af85fd5fa16eebf3229caa4c038a",
+  "accept_authority": "genuine user agreement captured by native record answer",
+  "preserved": "all current remote, identity and branch settings, including five newer branch-tracking sections",
+  "installer": "python C:/Users/bdour/.nexus-hub/scripts/nexus_git_attribution.py install --workspace",
+  "installer_exit": 0,
+  "existing_hooks_chained": true,
+  "all_other_git_settings_equal": true,
+  "owned_files_official_guard_recorded": true,
+  "attribution_check": "verified user identity and active hooks",
+  "additional_guard_accepts_this_step": 1,
+  "scope_limits_unchanged": true
+}
