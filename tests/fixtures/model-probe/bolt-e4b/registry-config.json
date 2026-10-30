@@ -1,0 +1,1 @@
+{"model_format":"gguf","model_family":"gemma4","model_families":["gemma4"],"model_type":"7.5B","file_type":"Q4_K_M","renderer":"gemma4-nemotron","parser":"gemma4","requires":"0.40.10","draft":{"model_format":"gguf","architecture":"dflash"}}

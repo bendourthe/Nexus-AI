@@ -1,5 +1,14 @@
 # Nexus - Progress Dashboard
 
+## v2.16 Model Trial
+
+| Measure | Current | Required |
+|---|---|---|
+| Implementation | Local duties verified on the HOLD/decline path, 25/26 tasks; T026 open | Five phases and 26 tasks, with conditional-path evidence |
+| Model admission | E-1/E-2 pass; E-3 environment HOLD, runtime 0.32.15 below required 0.40.10; zero inference | Per-slot fit/quality and both-channel proof before admission |
+| Ledger | 250 open; 247 inherited records preserved; DF-151/DF-152 and Node 24 warning WN-22 | Preserve and carry approved inherited obligations; resolve trial dispositions |
+| Publication | Local gate green; historical controller restored; native approval.remote met; integration pending | Final local gate, green integration, admission-only release |
+
 ## Archive closeout (2026-10-23)
 
 **Active worktree**: `C:/nx-close`, branch `chore/refresh-archive-handbook-receipts`, merged archive base develop 010ffa36. The recorded v2.12/v2.13/v2.15 archive-readiness goal is complete. The owner then continued into the ordered local archive procedure. Earlier branch/version statements below are dated history; original-checkout user edits are preserved.
@@ -761,10 +770,10 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 
 - [x] Compare Humanizer, Handwired, Nemotron 3.5 (Super VL, Bolt 74B-A9B, Bolt E4B) and DeepSeek V4.1-Flash-1017 against Nexus ([comparison](releases/v2/v2.16/comparisons/v2.16.0-comparison-humanizer-handwired-nemotron-deepseek.md), 2026-10-20; corrected 2026-10-21 for the v2.14.1 Humanizer and Handwired record).
 - [x] Plan the adoption: five phases, 26 tasks; six review lenses, 21 findings applied; four owner decisions recorded ([plan](releases/v2/v2.16/plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), 2026-10-21).
-- [ ] Phase 1: preregister E4B gates; record Super VL, DeepSeek and Humanizer decisions; defer Bolt 74B-A9B (no 24 GB host).
-- [ ] Phase 2: E4B tag, license and tool-call probe (from 2026-10-23; tag window closes 2026-11-06).
-- [ ] Phase 3: golden runner `num_gpu`; E4B fit and golden-task A/B against `lfm2.5:2.6b` on the cpu and sub-6 GB slots.
-- [ ] Phase 4: admit E4B to each passing slot, or record the decline.
+- [x] Phase 1: preregister E4B gates; record Super VL, DeepSeek and Humanizer decisions; defer Bolt 74B-A9B (no 24 GB host); [evidence](releases/v2/v2.16/development/v2.16.0-phase1-evidence.md).
+- [x] Phase 2: official E4B tag and license pass; real pull refused on the old runtime, E-3 HOLD with zero inference and no codec claim ([evidence](releases/v2/v2.16/development/v2.16.0-phase2-evidence.md)).
+- [x] Phase 3: runner CPU control verified through real CLI/HTTP/tool boundaries on pinned Node 22; E4B fit/A-B explicitly not run after E-3 HOLD ([evidence](releases/v2/v2.16/development/v2.16.0-phase3-evidence.md)).
+- [x] Phase 4: both slots unadmitted at E-3 runtime HOLD; decline/reopen record saved and all registry/default inputs preserved ([evidence](releases/v2/v2.16/development/v2.16.0-phase4-evidence.md)).
 - [ ] Phase 5: final phase, recorded VS Code extension run, and publication.
 
 ## Legacy known-gaps triage (queued v2.15.0)

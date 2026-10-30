@@ -29,3 +29,7 @@ tests/fixtures/known-gaps/** text eol=lf
 docs/releases/v2/v2.13/development/embedding-eval-contract.json text eol=lf
 docs/archives/v2/v2.13/development/embedding-eval-contract.json text eol=lf
 tests/fixtures/embedding-eval/*.json text eol=lf
+
+# Preserve captured registry and protocol bytes used by model-probe hash checks.
+tests/fixtures/model-probe/bolt-e4b/* -text
+docs/**/v2.16/development/evidence/bolt-e4b/* -text
