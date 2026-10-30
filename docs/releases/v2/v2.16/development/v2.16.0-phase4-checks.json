@@ -1,0 +1,19 @@
+{
+  "result": "PASS",
+  "protectedInputs": [
+    "core/registry/ModelCatalog.ts",
+    "core/registry/catalog.json",
+    "core/registry/models.json",
+    "core/registry/recommended.json",
+    "docs/reference/model-acceptance.md",
+    "scripts/installer/src/nexus_installer/tier_defaults.py"
+  ],
+  "changedProtectedInputs": [],
+  "E-3": "HOLD",
+  "slotsUnadmitted": [
+    "cpu",
+    "gpu-fallback"
+  ],
+  "decisionRowInTable": true,
+  "firstConsumerCheck": "Failed on mixed-line-ending blank table boundary; corrected before final validation"
+}

@@ -2,8 +2,8 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-10-22
-**Open items**: 247
+**Last updated**: 2026-10-25
+**Open items**: 250
 
 ## v2.16.0
 
@@ -12,9 +12,9 @@
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 2 | 0 |
-| Deferred (DF) | 150 | 0 |
+| Deferred (DF) | 152 | 0 |
 | Bugs / regressions (BG) | 9 | 0 |
-| Warnings (WN) | 21 | 0 |
+| Warnings (WN) | 22 | 0 |
 | Missing tests / coverage gaps (MT) | 46 | 0 |
 | Quality-gate gaps (QG) | 19 | 0 |
 
@@ -2628,6 +2628,32 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Suggested next step**: Make a separately reviewed narrow workflow repair that selects exactly the requested version at the configured changelog heading levels and stops at the next release section. Exercise single-hash and double-hash linked headings, matching and nonmatching versions, missing or duplicate sections, and empty notes; verify the resulting actual GitHub release body matches the intended semantic-release notes without changing workflow events, permissions, jobs or required gates.
 - **Evidence**: [Extractor reproduction](../../../archives/v2/v2.15/development/v2.15.1-late-automation-proposal.md#extractor-reproduction) records the actual existing .github/workflows/release.yml expression producing no output from the prepared CHANGELOG.md v2.15.1 double-hash heading. Actual current-release body repair and its verification remain pending. No permanent-fix result is claimed.
 - **Placement basis**: Direct new future-version record subject to the separate owner-exception addendum. This is not an inherited or migrated member of the original 245-item disposition set.
+
+#### DF-151 - Bolt 74B-A9B not measured for the 24 GB MoE worker job
+
+- **Source phase**: v2.16.0 Phase 1, T003 (planned follow-on record, not an implementation of the 24 GB trial).
+- **Plan reference**: [v2.16.0 model trial](plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), T003.
+- **Reason**: The seeding comparison records the official `nemotron-3.5-bolt:74b-a9b` artifact at 25 GB with vision, tools, and thinking. Its candidate seat is the 24 GB MoE worker job held by `nemotron-lightning:30b-a3b`. The reference host has 16 GB VRAM, so the required paired golden-task A/B cannot be measured here. No model admission or capability claim is made.
+- **Owner**: Maintainer with a 24 GB host.
+- **Suggested next step**: Run the v2.14-style A/B on a 24 GB host, recording RAM spill and the parser recovering tool calls. On a measured win, move the job and mark `nemotron-lightning:30b-a3b` a removal candidate.
+- **Scope disposition**: The owner-approved plan deliberately records this follow-on; the full-run approval carries it forward without pretending the missing hardware trial ran. The plan's provisional DF-1 maps to DF-151 because inherited DF-1 already exists.
+
+#### DF-152 - Full-decline delivery skips an installer rebuild
+
+- **Source phase**: v2.16.0 Phase 1, T003 (conditional delivery disposition).
+- **Plan reference**: [v2.16.0 model trial](plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), T003, T013, T025, T026.
+- **Reason**: The owner's 2026-10-21 decision requires no tag and no installer rebuild when all E4B slots are declined; the records ride the next code release. T008 still lands the tested CPU runner option, so the decline branch includes evaluation tooling, not only documentation. This is an explicit conditional delivery rule, not evidence that an installer was rebuilt.
+- **Owner**: Maintainer.
+- **Suggested next step**: Close as not applicable if Phase 4 admits E4B and complete the required installer rebuild. On full decline, record that this delivery exception was applied; do not create a release merely to satisfy the generic completion checker.
+- **Scope disposition**: The plan's provisional DF-2 maps to DF-152 because inherited DF-2 already exists. Preserve every inherited item and the owner's no-tag rule.
+
+#### WN-22 - Node 24 golden CLI shutdown aborts on the reference Windows host
+
+- **Source phase**: Pre-existing CLI/runtime boundary, observed during v2.16.0 Phase 3 verification.
+- **Plan reference**: [v2.16.0 model trial](plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), T011; [Phase 3 evidence](development/v2.16.0-phase3-evidence.md).
+- **Reason**: The controlled real CLI completes its golden task and forwards the expected options under Node 24.13.0, but both unchanged baseline options and num_gpu: 0 then abort at shutdown with exit 3221226505 and the UV_HANDLE_CLOSING libuv assertion. This is not caused by the new sampler key. The same spawned CLI and all six option cases pass under the installer's pinned Node 22.11.0. No Node 24 process-exit success is claimed.
+- **Owner**: Maintainer, CLI/runtime compatibility.
+- **Suggested next step**: Reproduce the baseline on Node 24 Windows, qualify native shutdown and active HTTP handle cleanup, and fix or narrow the supported runtime contract in separately reviewed scope. Preserve the Node 22 passing proof and the original Node 24 observations; do not hide the failed process exit.
 
 ### Resolved
 

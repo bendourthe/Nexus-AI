@@ -1,0 +1,102 @@
+{
+  "revision": "a01740ad824071617f50881b17c267974db73bd4",
+  "sourceCompleteBeforeSuites": true,
+  "workingTree": "uncommitted final prose/evidence",
+  "commands": [
+    {
+      "name": "root",
+      "command": "npm run --silent test -- --coverage --reporter=dot --maxWorkers=4",
+      "exitCode": 0,
+      "localLog": "C:/Users/bdour/AppData/Local/Temp/nexus-v216-final-root.log",
+      "sha256": "69c0b956ea2449b0f63930ce472d09ed8b30e5edbb6b7a27ee1970dbc74a84b0"
+    },
+    {
+      "name": "desktop",
+      "command": "npm run --silent test:shell:coverage -- --reporter=dot --maxWorkers=1",
+      "exitCode": 0,
+      "localLog": "C:/Users/bdour/AppData/Local/Temp/nexus-v216-final-desktop.log",
+      "sha256": "6df8023136850ae92cbcac58f98b75300b70e6b2ce545e61a70ff75bc75eb1bb"
+    },
+    {
+      "name": "fast",
+      "command": "node scripts/ci-profile.mjs --profile fast --json",
+      "exitCode": 0,
+      "localLog": "C:/Users/bdour/AppData/Local/Temp/nexus-v216-final-fast.log",
+      "sha256": "fcd73b76914d741c02fbfab960245a86e0240d29caca490f1d3913b898a013e5"
+    },
+    {
+      "name": "shell-lint",
+      "command": "npm run --silent lint:shell",
+      "exitCode": 0,
+      "localLog": "C:/Users/bdour/AppData/Local/Temp/nexus-v216-final-shell-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "shell-type",
+      "command": "npm run --silent typecheck --workspace @nexus/desktop",
+      "exitCode": 0,
+      "localLog": "C:/Users/bdour/AppData/Local/Temp/nexus-v216-final-shell-type.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "architecture",
+      "command": "npm run --silent check-architecture",
+      "exitCode": 0,
+      "localLog": "C:/Users/bdour/AppData/Local/Temp/nexus-v216-final-architecture.log",
+      "sha256": "931bb912222a23d4fddced74ef7fd48a960f67747ef43f3b00d7d351af98c8f0"
+    },
+    {
+      "name": "build",
+      "command": "npm run --silent build",
+      "exitCode": 0,
+      "localLog": "C:/Users/bdour/AppData/Local/Temp/nexus-v216-final-build.log",
+      "sha256": "fcc86db61c8d77950091e55bc758439f456d892804047b70f0e3667da34b0e5a"
+    }
+  ],
+  "root": {
+    "passed": 6490,
+    "skipped": 12,
+    "coverage": [
+      85.11,
+      76.49,
+      87.23,
+      87.27
+    ]
+  },
+  "desktop": {
+    "passed": 2373,
+    "skipped": 1,
+    "coverage": [
+      80.79,
+      73.26,
+      81.23,
+      83.48
+    ]
+  },
+  "coverageOrder": [
+    "statements",
+    "branches",
+    "functions",
+    "lines"
+  ],
+  "handbooks": {
+    "scope": "full",
+    "verified": 6,
+    "candidate": {
+      "revision": "a01740ad824071617f50881b17c267974db73bd4",
+      "working_tree": "uncommitted"
+    },
+    "receiptReuse": true
+  },
+  "nativeVerdict": "BLOCKED: controller-ownership-unavailable",
+  "nativeExitCode": 3,
+  "nativeCheckRepo": "C:/Users/bdour/Documents/Projects/Development/Nexus-AI",
+  "directGitCommonProbe": {
+    "exitCode": 0,
+    "output": ".git",
+    "contextSeconds": 0.156,
+    "totalSeconds": 0.187
+  },
+  "publication": "not started",
+  "release": "not applicable on full decline"
+}
