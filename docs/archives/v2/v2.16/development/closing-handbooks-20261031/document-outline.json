@@ -1,0 +1,66 @@
+{
+  "snapshot": {
+    "entry_sha256": "269c0846e3df62b88976ad1ef19672730d065976753cbf76b423941888c7469b",
+    "inputs": {
+      "docs/handbooks/technical/document-outline.md": "a5d1611b8f03e98b29befea40d7da44914c0d7bff8ef042b7be1479586194987",
+      "scripts/generate-handbooks.mjs": "e0d4eba3098ba99ce83eda35ce53b04b27d9fc2b7e2feb07ba29881f27dc02d8",
+      "scripts/handbook-renderer.mjs": "0850935742db242e576989c2ced66a5810a0bdfd0cad78791916cf5efb21566d",
+      "docs/handbooks/_sources/storyboards.json": "bdc1c561b3bf3980e6a140661ff6a4724009d1a140ab1a3fb259876d4045d651",
+      "docs/handbooks/_sources/handbook.css": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf",
+      "docs/handbooks/_sources/handbook-clones.js": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b",
+      "docs/handbooks/_sources/dual-view.css": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
+      "docs/handbooks/_sources/dual-view-runtime.js": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
+      "desktop/public/nexus-mark.png": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05",
+      "package.json": "b764099e5a8070eb9e3ad326dd7bec1d64e8acb2b436ae7ce265709760feb8d5",
+      "package-lock.json": "327c3ed4b426195d9a08ad755e0d2cbecaf5f0bed2f1afade6c896ba72ea600a",
+      "modules/coding/runtime/outputBudget.ts": "d8b9f46f72afa5cebba37aba96db4a7504ca68edfd937dfa6a1ba607a288ff95",
+      "modules/coding/runtime/HeadlessAgentSession.ts": "1684dd6f3cd939b5d7ef8e106cd0238a851412a207f5c53d7c3def8631a2d157",
+      "modules/coding/llm/toolHistory.ts": "2802d6f767cf752ead32e36404ab4f39677ea78e7858460350db285afb308479",
+      "src/tools/AgentLoop.ts": "825e3d5b212487ad56589b23a90572be2c1934e43c859e16123ee3a1ab79ca77",
+      "modules/coding/guardrails/permissionTierMap.ts": "4cad2a7e2f697f98a8f184339bde820b25d17f6907869a18a1d149d60c0ad018",
+      "modules/coding/chat/ConversationManager.ts": "d075b92fcb4537656effc4075224368d2751af337d74f88d4fd5f188bd4aa6ac",
+      "modules/coding/chat/CompactionStrategy.ts": "d1187108bcc9863002a0317a0361afeff69e18c185f943bd13f1ed4ca9c40448",
+      "desktop/src/pages/settings/SecuritySettings.tsx": "26995bc46a3026e5d2ce8017eaf804a72eba30a227bdf8aec5dd60143ff700d2",
+      "modules/coding/runtime/headlessTools.ts": "f7aa1e83db362090cfbbc34d71ef49651376cd45560cdcba5434aff7cb9e4e91",
+      "src/tools/handlers/parseDocument.ts": "2c53492c912abf8979e006843558af3f1da8c98d8acb3c8cd8a7e30f36c452b3",
+      "docs/archives/v2/v2.12/development/outline-eval.md": "d4d7bcfa6eed910d869f73b9ffe0025e5f9392a63bedea6fd7b6feb70b9abc61",
+      "docs/archive/v2/v2.11/development/outline-feasibility.md": "0c6fb20d3dc58581eda16aae9a5b9e2e0d3abad88452c2469a6197ad96944c30",
+      "modules/coding/llm/OllamaClient.ts": "1ea7c5b8c861a897aacb792fb4861cf9687ebda8e2e158d698baf58631e77213",
+      "modules/coding/llm/LmStudioClient.ts": "8c18e2087fcc3044461098ac838f543db68100253d6825dee22e6fed65838e7e",
+      "modules/coding/llm/headlessOllamaClient.ts": "680fec95c79bce33a975f3052514e5198ee1bccd91cd5cea7943aaf7302fc207",
+      "modules/coding/llm/headlessOpenAiClient.ts": "0f44f0907c0dfc4cbeb428faf225d897b87fbbc6c17275b349b2a82655e13565",
+      "desktop/sidecar/src/coding/headlessAgentRunner.ts": "6c8becfbc1d6be26c334e85f526b548952a7072cf480807a59c210e595c2e2ed",
+      "desktop/sidecar/src/acp/AcpAgent.ts": "d24894b75c1a7024835c07b4b3e35264ca182586feab451406cd4f1d7aa0ffdf",
+      "desktop/sidecar/src/handlers.ts": "df177e3ff2d6acf1cdc78a6fa34da5b92d5bc5fa390cdab08e009be2951e58ba",
+      "desktop/sidecar/src/coding/scheduledHeadlessRunner.ts": "227290198a422377929c4cb1112f66e96c105a600970ac7859a111fdff912b01",
+      "desktop/sidecar/src/coding/sidecarHeadlessTools.ts": "1ded7794f0cd71409a2353bc80de800b6ab40130a2e6de614088465dab2c61df",
+      "src/tools/ToolRegistryBuilder.ts": "f6713f4e2a5f78a8bcb36fa49db57b882a248f93156b1200da005457d86e07b2",
+      "src/tools/ToolCatalog.ts": "0979620dc0b68aa10dd552e5da3eb0dc6840e101916af9108e53d694de0fbcdd",
+      "modules/coding/config/settings.ts": "8792b2d9dec1c3fab53ecf9dee2c5f0b5e0523a90cd6c73e46808f623d238223"
+    },
+    "output_sha256": "23bf3d2d5ca434c90d6c873c3e4e89915eced1ded86d68b24f9380a8e886a2e2"
+  },
+  "candidate": {
+    "revision": "f0d7220373f60098286546cb83482e899d651b14",
+    "working_tree": "uncommitted"
+  },
+  "checks": {
+    "content": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.16/development/closing-handbooks-20261031/review.md",
+      "evidence_sha256": "fb80d0163d7f08e9a22628d020ae64084afa230a73f4f8905e42742af268c284"
+    },
+    "build": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.16/development/closing-handbooks-20261031/build-evidence.json",
+      "evidence_sha256": "3246b67f630dcaf24bb0db09107522bc809254d3cecd1dcc53e1a5e5bc2a9374"
+    },
+    "rendered": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.16/development/closing-handbooks-20261031/rendered-observations.json",
+      "evidence_sha256": "1c440a302ac1e93311780ace0c9bf029d8775934a0247e225b72eb3b2ba336fc",
+      "browser": "Desktop in-app browser; fresh six-book review, 36 viewports; native PDF conversion and script-free fallback",
+      "output_sha256": "23bf3d2d5ca434c90d6c873c3e4e89915eced1ded86d68b24f9380a8e886a2e2"
+    }
+  }
+}

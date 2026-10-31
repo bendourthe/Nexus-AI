@@ -1089,7 +1089,7 @@
     "highlight.js": "^11.12.0",
     "isomorphic-dompurify": "^3.9.0",
     "marked": "^12.0.0",
-    "minimatch": "^10.2.6",
+    "minimatch": "^11.0.3",
     "node-html-parser": "^6.1.13",
     "tiktoken": "^1.0.17",
     "tree-sitter-wasms": "^0.1.13",
