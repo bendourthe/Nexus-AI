@@ -1,0 +1,81 @@
+{
+  "production_changed": false,
+  "model_inference": false,
+  "node_version": "v24.13.0",
+  "runs": [
+    {
+      "name": "unchanged",
+      "exit": 1,
+      "result": "FAIL",
+      "cases": [
+        {
+          "case": "baseline",
+          "exit": 2,
+          "pass": false
+        },
+        {
+          "case": "cpu",
+          "exit": 2,
+          "pass": false
+        },
+        {
+          "case": "negative",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "fraction",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "string",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "unknown",
+          "exit": 2,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "natural-exit",
+      "exit": 1,
+      "result": "FAIL",
+      "cases": [
+        {
+          "case": "baseline",
+          "exit": 2,
+          "pass": false
+        },
+        {
+          "case": "cpu",
+          "exit": 2,
+          "pass": false
+        },
+        {
+          "case": "negative",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "fraction",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "string",
+          "exit": 2,
+          "pass": true
+        },
+        {
+          "case": "unknown",
+          "exit": 2,
+          "pass": true
+        }
+      ]
+    }
+  ]
+}
