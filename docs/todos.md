@@ -4,15 +4,17 @@
 
 | Measure | Current | Required |
 |---|---|---|
-| Implementation | All 26/26 tasks and the full-decline disposition accepted by native capture; minor closeout remains open | Five phases and 26 tasks, with conditional-path evidence |
+| Implementation | All 26/26 task dispositions accepted; historical condition resolved by a fresh native probe; archive and final integration remain pending | Five phases and 26 tasks, with conditional-path evidence |
 | Model admission | E-1/E-2 pass; E-3 environment HOLD, runtime 0.32.15 below required 0.40.10; zero inference | Per-slot fit/quality and both-channel proof before admission |
-| Ledger | 247 inherited items migrated to v2.17 with 247 native copy proofs; DF-151 remains open; WN-22 resolved in verified local source pending closing integration; DF-152 resolved | Resolve remaining eligibility and runtime boundaries before archive |
+| Ledger | 248 current items migrated, 2 resolved, zero current OPEN; 136 additional historical carries verified; v2.17 retains 384 OPEN obligations | Resolve remaining eligibility and runtime boundaries before archive |
 | Publication | PR138 merged b82b9747; PR139 dependency repair merged 41598a7 with required checks and four post-merge workflows green; no release tag | Final local gate, green integration, admission-only release |
-| Cleanup | 28 merged/idle refs removed; native receipt met; current v2.16 refs/worktree kept by native rules | Preserve keep decisions until supported minor closure |
+| Cleanup | Earlier cleanup retained; final post-closing receipt and approved study worktree/branch cleanup remain pending | Preserve keep decisions until supported minor closure |
 
 The [2026-10-29 closeout evidence](releases/v2/v2.16/development/v2.16.0-native-closeout-progress.md) records the captured decline, inherited carries, remaining native barriers and an unapplied CLI shutdown proposal. The separately approved [CLI shutdown repair](releases/v2/v2.16/development/v2.16.0-cli-shutdown-repair.md) is applied locally: 22 actual-file cases pass on Node 22/24, the refreshed integration checkout passes 6485 tests with 19 skips and unchanged coverage thresholds (86.90% lines, 76.30% branches, 87.01% functions); final closing publication remains pending. No model default or release changed.
 
-The [production audit repair](releases/v2/v2.16/development/v2.16.1-production-audit-remediation.md) changes only the two reviewed dependency entries. The actual SDK HTTP flow passes on Node 22/24, and the unchanged audit gate reports zero blocking findings. The combined four-worker local run had two timeouts; both affected files and the full one-worker rerun pass without changing timeouts or thresholds. Native archive remains blocked by historical proof and checker qualification.
+The [production audit repair](releases/v2/v2.16/development/v2.16.1-production-audit-remediation.md) changes only the two reviewed dependency entries. The actual SDK HTTP flow passes on Node 22/24, and the unchanged audit gate reports zero blocking findings. The combined four-worker local run had two timeouts; both affected files and the full one-worker rerun pass without changing timeouts or thresholds. Historical proof and checker qualification are complete; the approved archive, closing integration and final cleanup remain pending.
+
+The [2026-10-31 native carry evidence](releases/v2/v2.16/development/v2.16.0-final-native-closeout.md) records the genuine supplemental decision, preservation of older unfinished plans, all 137 final native carries and the successful bound condition probe. The full-decline outcome and existing model defaults remain unchanged.
 
 ## Archive closeout (2026-10-23)
 
