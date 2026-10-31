@@ -1,0 +1,17 @@
+{
+  "actual_cli_sha256_lf": "510b35ae208db45c10daa408f64ea9de7ac2e94a00127c91a9c2940655dfa91b",
+  "controlled_loopback": true,
+  "model_inference": false,
+  "runtimes": [
+    {
+      "runtime": "v24.13.0",
+      "exit": 0,
+      "result": "PASS"
+    },
+    {
+      "runtime": "v22.11.0",
+      "exit": 0,
+      "result": "PASS"
+    }
+  ]
+}

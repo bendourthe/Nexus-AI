@@ -26,7 +26,7 @@ node bin/nexus.mjs golden run --mode live --task bugfix-off-by-one-01 --model lf
 
 The options reach every model turn. The metrics file records the effective options and per-task timings; live memory is marked unmeasured when no usable sample exists. This command runs real local inference, so completion time and model quality depend on the selected model. Unknown or malformed options exit 2.
 
-Support: CPU-option validation and forwarding are verified through the spawned CLI on Windows with the installer-pinned Node 22.11.0 runtime. The reference host's Node 24 shutdown issue is tracked as `WN-22` in [v2.16 known gaps](../../releases/v2/v2.16/known-gaps.md); a successful task message is not a successful process exit on that host.
+Support: CPU-option validation and forwarding are verified through the spawned CLI on Windows with the installer-pinned Node 22.11.0 runtime. The reference host's Node 24 shutdown issue is tracked as `WN-22` in [v2.16 known gaps](../../archives/v2/v2.16/known-gaps.md); a successful task message is not a successful process exit on that host.
 
 ## JSON shape
 

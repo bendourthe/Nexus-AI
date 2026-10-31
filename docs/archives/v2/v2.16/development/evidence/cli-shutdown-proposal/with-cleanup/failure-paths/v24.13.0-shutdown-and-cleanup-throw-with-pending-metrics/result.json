@@ -1,0 +1,13 @@
+{
+  "runtime": "v24.13.0",
+  "flavor": "shutdown-and-cleanup",
+  "case": "throw-with-pending-metrics",
+  "exit": 2,
+  "expected_exit": 2,
+  "timed_out": false,
+  "elapsed_seconds": 2.005,
+  "ps_requests": 1,
+  "model_requests": 0,
+  "stdout_bytes": 0,
+  "pass": true
+}
