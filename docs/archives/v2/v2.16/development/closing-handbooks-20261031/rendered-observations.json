@@ -1,0 +1,216 @@
+{
+  "date": "2026-10-31",
+  "browser": "Desktop in-app browser, local HTTP server",
+  "session": "01a17157-9c84-75c2-87d1-2ec1c72e0cf4",
+  "scope": "Six maintained handbooks; unchanged output bytes; fresh review of corrected dependency candidate",
+  "viewports": [
+    {
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "width": 768,
+      "height": 720
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "reading_and_presentation_views": 36,
+  "screenshots_inspected": 12,
+  "slide_count": 17,
+  "chapter_entries": 13,
+  "books": [
+    {
+      "id": "atlas",
+      "output": "docs/handbooks/html/atlas.html",
+      "output_sha256": "03d07b44167ba2db91533928cb2068bcbb36e3986a3dfbde0f977e1f6705d78d",
+      "views": 6,
+      "document_overflow": false,
+      "pending_images": 0,
+      "broken_images": 0,
+      "active_slide_text_lengths": [
+        102,
+        911,
+        733
+      ],
+      "active_slide_overflow": false,
+      "menu_and_title_reset_to_first": true,
+      "chapter_target_slides": [
+        1,
+        3
+      ]
+    },
+    {
+      "id": "generation-recovery",
+      "output": "docs/handbooks/html/generation-recovery.html",
+      "output_sha256": "43ed4692dc0d5fdb0d782d952eee7d97ac5c87f59aa1cda72ba5982e77d36cae",
+      "views": 6,
+      "document_overflow": false,
+      "pending_images": 0,
+      "broken_images": 0,
+      "active_slide_text_lengths": [
+        906,
+        439,
+        757,
+        610
+      ],
+      "active_slide_overflow": false,
+      "menu_and_title_reset_to_first": true,
+      "chapter_target_slides": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": "installer-runtime",
+      "output": "docs/handbooks/html/technical/installer-runtime.html",
+      "output_sha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05",
+      "views": 6,
+      "document_overflow": false,
+      "pending_images": 0,
+      "broken_images": 0,
+      "active_slide_text_lengths": [
+        332,
+        756
+      ],
+      "active_slide_overflow": false,
+      "menu_and_title_reset_to_first": true,
+      "chapter_target_slides": [
+        1
+      ]
+    },
+    {
+      "id": "media-runtime",
+      "output": "docs/handbooks/html/technical/media-runtime.html",
+      "output_sha256": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51",
+      "views": 6,
+      "document_overflow": false,
+      "pending_images": 0,
+      "broken_images": 0,
+      "active_slide_text_lengths": [
+        271,
+        757
+      ],
+      "active_slide_overflow": false,
+      "menu_and_title_reset_to_first": true,
+      "chapter_target_slides": [
+        1
+      ]
+    },
+    {
+      "id": "transcript-and-workspaces",
+      "output": "docs/handbooks/html/technical/transcript-and-workspaces.html",
+      "output_sha256": "908aa4ffccf6e2bf186cbbbf4426423ccdaa3694d3390d5a725e6c95365b7bfe",
+      "views": 6,
+      "document_overflow": false,
+      "pending_images": 0,
+      "broken_images": 0,
+      "active_slide_text_lengths": [
+        679,
+        784
+      ],
+      "active_slide_overflow": false,
+      "menu_and_title_reset_to_first": true,
+      "chapter_target_slides": [
+        1
+      ]
+    },
+    {
+      "id": "document-outline",
+      "output": "docs/handbooks/html/technical/document-outline.html",
+      "output_sha256": "23bf3d2d5ca434c90d6c873c3e4e89915eced1ded86d68b24f9380a8e886a2e2",
+      "views": 6,
+      "document_overflow": false,
+      "pending_images": 0,
+      "broken_images": 0,
+      "active_slide_text_lengths": [
+        360,
+        777,
+        656,
+        795
+      ],
+      "active_slide_overflow": false,
+      "menu_and_title_reset_to_first": true,
+      "chapter_target_slides": [
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  ],
+  "printed_pages": 9,
+  "print_review": "All nine rasterized pages visually inspected; readable text, retained content, no control overlays or clipped text",
+  "print_artifacts": [
+    {
+      "id": "atlas",
+      "pages": 2,
+      "pixel_sha256": [
+        "4bdc3d66c19403176d477c70b2d8f81f36de607a3fde08c74363f47bb2c89ab7",
+        "5307964e97bfb5b53fe7cf1839592100286d1976fe07a612b2a72540a8ff4005"
+      ],
+      "scripted_pdf_sha256": "d27aac350c79e3f872b79a3a1523583ea856ebf8652edbdd153d44348f497efc",
+      "script_free_pdf_sha256": "02e000fc3da3d9ed7345d7a9af3e5adc88e1800a10e3ca8874994e3ad25f525f",
+      "script_free_pixels_identical": true
+    },
+    {
+      "id": "generation-recovery",
+      "pages": 2,
+      "pixel_sha256": [
+        "cb3d2290ecb660680a2890357cbc61b70e12c912cf84c8222e78c36788ea1d29",
+        "9ba9fe19977f886b414035072629e986e54e44cbf9a8cf0a58a5a8a210d047d6"
+      ],
+      "scripted_pdf_sha256": "6212c7082c654562f74083d2833d78b404aa88f3b7f906de29600ce37f1822df",
+      "script_free_pdf_sha256": "ec4479ea978a33ada29c738c2ddc249efc808390cb4ce820da38e5c75f09f908",
+      "script_free_pixels_identical": true
+    },
+    {
+      "id": "installer-runtime",
+      "pages": 1,
+      "pixel_sha256": [
+        "b566723be191326f85c5421f1f29c24d803c7b24166db8523277e19504f7a0ac"
+      ],
+      "scripted_pdf_sha256": "30a5160f59387a5ae33e4638e568ff3d1d1be1647db06e18e196f75d6f2706db",
+      "script_free_pdf_sha256": "84d1e3f6f9eca03b14c66b0d9ff79108fed4a5c1c5c3544385182c7d84d66e8e",
+      "script_free_pixels_identical": true
+    },
+    {
+      "id": "media-runtime",
+      "pages": 1,
+      "pixel_sha256": [
+        "0074c94573446aa476e37aacc21be7f7d6e469a20fd1b6fffca910da3ad9203a"
+      ],
+      "scripted_pdf_sha256": "ee0e78ce28ed82a7b4c69bf64263f525c308d49df64504495c83621baa915baa",
+      "script_free_pdf_sha256": "92eb04e74159027738b07e60c77ffcedabd7b21698990a4724b9429ce424b8ed",
+      "script_free_pixels_identical": true
+    },
+    {
+      "id": "transcript-and-workspaces",
+      "pages": 1,
+      "pixel_sha256": [
+        "fe8355f4e52abfdb0a1761addfcffebdf0c8ab1c71d18bedb55c7417587e9921"
+      ],
+      "scripted_pdf_sha256": "2014df74452d968061673ff4b5d9e3578f511397a2f95441fe879fb30a8a12c3",
+      "script_free_pdf_sha256": "ce6edeca921a26d2be95181450129ead54f0028033dc28df220051ff742e7dc8",
+      "script_free_pixels_identical": true
+    },
+    {
+      "id": "document-outline",
+      "pages": 2,
+      "pixel_sha256": [
+        "94e9e075d40aa044a87620c3cc6e4dbd03975349c8137f9495d234f54f7c1785",
+        "b97dc216ed37b32c433d75c2db06ee70203c7f70239b25c30b8fea945445d26d"
+      ],
+      "scripted_pdf_sha256": "a20278076fccb6938ca71c3e27994f60f60a8180c61248d272f57e1585ad20dc",
+      "script_free_pdf_sha256": "68edb810a25df383c98676aebc3a5ae390ab6efcf234c0e95008a3a45a93eee3",
+      "script_free_pixels_identical": true
+    }
+  ],
+  "script_free_fallback": "Two script elements removed per deterministic local copy, with asset base retained. All nine fallback pages have identical extracted text and rendered pixels to the scripted prints. Native Edge global JavaScript-disable flag returned no PDF and is not claimed as a passing browser-setting test.",
+  "viewport_override_reset": true,
+  "temporary_browser_tabs_closed": true
+}

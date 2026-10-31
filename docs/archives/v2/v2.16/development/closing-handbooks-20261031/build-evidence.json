@@ -1,0 +1,89 @@
+{
+  "runs": [
+    {
+      "command": [
+        "node",
+        "scripts/generate-handbooks.mjs",
+        "--output-root",
+        "C:\\Users\\bdour\\.nexus-hub\\requests\\v2.16.0-condition-audit-20261031T023432Z\\minimatch-correction\\handbook-build-1"
+      ],
+      "exit": 0,
+      "stdout": "generate-handbooks: 6 source(s) generated\n"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/generate-handbooks.mjs",
+        "--output-root",
+        "C:\\Users\\bdour\\.nexus-hub\\requests\\v2.16.0-condition-audit-20261031T023432Z\\minimatch-correction\\handbook-build-2"
+      ],
+      "exit": 0,
+      "stdout": "generate-handbooks: 6 source(s) generated\n"
+    }
+  ],
+  "outputs": 6,
+  "repeated_builds_byte_identical": true,
+  "matches_installed_canonical_text": true,
+  "installed_html_raw_unchanged": true,
+  "print_pages": 9,
+  "fallback_pixels_identical": true,
+  "candidate": {
+    "revision": "f0d7220373f60098286546cb83482e899d651b14",
+    "working_tree": "uncommitted"
+  },
+  "fresh_root_tests": {
+    "exit": 0,
+    "seconds": 756.891,
+    "command": [
+      "node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "configs/vitest.config.ts",
+      "--coverage",
+      "--maxWorkers=1",
+      "--reporter=json",
+      "--outputFile=C:\\Users\\bdour\\.nexus-hub\\requests\\v2.16.0-condition-audit-20261031T023432Z\\minimatch-correction\\full-root-report.json"
+    ],
+    "numPassedTests": 6485,
+    "numFailedTests": 0,
+    "numPendingTests": 19,
+    "numPassedTestSuites": 2044,
+    "success": true,
+    "failures": []
+  },
+  "dependency_checks": [
+    {
+      "name": "lint",
+      "exit": 0,
+      "seconds": 10.344,
+      "tail": ""
+    },
+    {
+      "name": "build",
+      "exit": 0,
+      "seconds": 7.656,
+      "tail": "[generate-golden-tasks] wrote 28 ids to C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-controller\\modules\\coding\\evaluation\\goldenTasksYaml.generated.ts\n"
+    },
+    {
+      "name": "production-audit",
+      "exit": 0,
+      "seconds": 5.016,
+      "tail": "[check-prod-audit] OK: 0 allowlisted, 0 blocking.\n"
+    }
+  ],
+  "compiled_guard": [
+    {
+      "binary": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v216-node22\\node.exe",
+      "exit": 0,
+      "stdout": "{\"node\":\"v22.11.0\",\"platform\":\"win32\",\"cases\":41,\"passed\":41}\n",
+      "stderr": ""
+    },
+    {
+      "binary": "node",
+      "exit": 0,
+      "stdout": "{\"node\":\"v24.13.0\",\"platform\":\"win32\",\"cases\":41,\"passed\":41}\n",
+      "stderr": ""
+    }
+  ]
+}
