@@ -1,9 +1,9 @@
 # Known Gaps - v2.16
 
 **Project**: Nexus AI Studio
-**Status**: in-progress
-**Last updated**: 2026-10-29
-**Open items**: 1
+**Status**: finalized
+**Last updated**: 2026-10-31
+**Open items**: 0
 
 ## v2.16.0
 
@@ -12,7 +12,7 @@
 | Category | Open | Resolved |
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
-| Deferred (DF) | 1 | 1 |
+| Deferred (DF) | 0 | 1 |
 | Bugs / regressions (BG) | 0 | 0 |
 | Warnings (WN) | 0 | 1 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
@@ -2629,7 +2629,7 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 - **Evidence**: [Extractor reproduction](../../../archives/v2/v2.15/development/v2.15.1-late-automation-proposal.md#extractor-reproduction) records the actual existing .github/workflows/release.yml expression producing no output from the prepared CHANGELOG.md v2.15.1 double-hash heading. Actual current-release body repair and its verification remain pending. No permanent-fix result is claimed.
 - **Placement basis**: Direct new future-version record subject to the separate owner-exception addendum. This is not an inherited or migrated member of the original 245-item disposition set.
 
-#### DF-151 - Bolt 74B-A9B not measured for the 24 GB MoE worker job
+#### DF-151 - Bolt 74B-A9B not measured for the 24 GB MoE worker job - MIGRATED to v2.17.0
 
 - **Source phase**: v2.16.0 Phase 1, T003 (planned follow-on record, not an implementation of the 24 GB trial).
 - **Plan reference**: [v2.16.0 model trial](plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), T003.
