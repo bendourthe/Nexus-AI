@@ -14,7 +14,7 @@ dependencies = [
     # constraint with PEP 508 markers. Both pip and uv honour markers in
     # pyproject.toml dependency strings, so each platform resolves to a
     # version that actually has a compatible wheel.
-    "PyQt5-Qt5==5.15.2 ; sys_platform != 'darwin'",
+    "PyQt5-Qt5==5.15.19 ; sys_platform != 'darwin'",
     "PyQt5-Qt5>=5.15.11,<5.16 ; sys_platform == 'darwin'",
     "httpx>=0.27.0",
     "huggingface-hub>=1.29,<2",
