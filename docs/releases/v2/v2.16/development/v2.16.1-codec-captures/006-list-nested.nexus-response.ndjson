@@ -1,0 +1,82 @@
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.2990037Z","message":{"role":"assistant","content":"","thinking":"The"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.3318554Z","message":{"role":"assistant","content":"","thinking":" user"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.3318554Z","message":{"role":"assistant","content":"","thinking":" requested"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.3621382Z","message":{"role":"assistant","content":"","thinking":" to"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.3621382Z","message":{"role":"assistant","content":"","thinking":" use"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.3621382Z","message":{"role":"assistant","content":"","thinking":" `"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.3946815Z","message":{"role":"assistant","content":"","thinking":"list"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.3946815Z","message":{"role":"assistant","content":"","thinking":"_"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.3946815Z","message":{"role":"assistant","content":"","thinking":"directory"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.3946815Z","message":{"role":"assistant","content":"","thinking":"`"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.3946815Z","message":{"role":"assistant","content":"","thinking":" with"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.3946815Z","message":{"role":"assistant","content":"","thinking":" path"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.4278683Z","message":{"role":"assistant","content":"","thinking":" exactly"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.4278683Z","message":{"role":"assistant","content":"","thinking":" \""},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.4278683Z","message":{"role":"assistant","content":"","thinking":"nested"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.4278683Z","message":{"role":"assistant","content":"","thinking":"\""},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.428378Z","message":{"role":"assistant","content":"","thinking":" and"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.428378Z","message":{"role":"assistant","content":"","thinking":" then"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.428378Z","message":{"role":"assistant","content":"","thinking":" report"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.428378Z","message":{"role":"assistant","content":"","thinking":" the"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.4619774Z","message":{"role":"assistant","content":"","thinking":" filenames"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.4619774Z","message":{"role":"assistant","content":"","thinking":" found"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.4619774Z","message":{"role":"assistant","content":"","thinking":" there"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.4619774Z","message":{"role":"assistant","content":"","thinking":","},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.4947245Z","message":{"role":"assistant","content":"","thinking":" without"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.4947245Z","message":{"role":"assistant","content":"","thinking":" guessing"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.4947245Z","message":{"role":"assistant","content":"","thinking":"."},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.5254761Z","message":{"role":"assistant","content":"","thinking":"\nI"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.5564253Z","message":{"role":"assistant","content":"","thinking":" have"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.5564253Z","message":{"role":"assistant","content":"","thinking":" executed"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.5869396Z","message":{"role":"assistant","content":"","thinking":" `"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.5882264Z","message":{"role":"assistant","content":"","thinking":"list"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.5882264Z","message":{"role":"assistant","content":"","thinking":"_"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.5882264Z","message":{"role":"assistant","content":"","thinking":"directory"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.5882264Z","message":{"role":"assistant","content":"","thinking":"{"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.6189942Z","message":{"role":"assistant","content":"","thinking":"path"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.6189942Z","message":{"role":"assistant","content":"","thinking":":"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.6189942Z","message":{"role":"assistant","content":"","thinking":" \""},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.6519081Z","message":{"role":"assistant","content":"","thinking":"nested"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.6519081Z","message":{"role":"assistant","content":"","thinking":"\""},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.6519081Z","message":{"role":"assistant","content":"","thinking":"}`"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.6519081Z","message":{"role":"assistant","content":"","thinking":"."},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.6830332Z","message":{"role":"assistant","content":"","thinking":"\nThe"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.6830332Z","message":{"role":"assistant","content":"","thinking":" output"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.7144671Z","message":{"role":"assistant","content":"","thinking":" is"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.7144671Z","message":{"role":"assistant","content":"","thinking":":"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.7462369Z","message":{"role":"assistant","content":"","thinking":"\n```"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.7462369Z","message":{"role":"assistant","content":"","thinking":"\n-"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.778357Z","message":{"role":"assistant","content":"","thinking":" config"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.778357Z","message":{"role":"assistant","content":"","thinking":"."},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.778357Z","message":{"role":"assistant","content":"","thinking":"json"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8115839Z","message":{"role":"assistant","content":"","thinking":"\n-"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8115839Z","message":{"role":"assistant","content":"","thinking":" notes"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8115839Z","message":{"role":"assistant","content":"","thinking":"."},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8115839Z","message":{"role":"assistant","content":"","thinking":"txt"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8115839Z","message":{"role":"assistant","content":"","thinking":"\n```"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8115839Z","message":{"role":"assistant","content":"","thinking":"\nI"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8452081Z","message":{"role":"assistant","content":"","thinking":" need"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8452081Z","message":{"role":"assistant","content":"","thinking":" to"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8452081Z","message":{"role":"assistant","content":"","thinking":" report"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8452081Z","message":{"role":"assistant","content":"","thinking":" these"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8452081Z","message":{"role":"assistant","content":"","thinking":" filenames"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8452081Z","message":{"role":"assistant","content":"","thinking":"."},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8452081Z","message":{"role":"assistant","content":"The"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8768109Z","message":{"role":"assistant","content":" filenames"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8768109Z","message":{"role":"assistant","content":" found"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.8768109Z","message":{"role":"assistant","content":" in"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9088545Z","message":{"role":"assistant","content":" the"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9088545Z","message":{"role":"assistant","content":" \""},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9088545Z","message":{"role":"assistant","content":"nested"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9088545Z","message":{"role":"assistant","content":"\""},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9395731Z","message":{"role":"assistant","content":" directory"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9395731Z","message":{"role":"assistant","content":" are"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9395731Z","message":{"role":"assistant","content":" config"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9739531Z","message":{"role":"assistant","content":"."},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9739531Z","message":{"role":"assistant","content":"json"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9739531Z","message":{"role":"assistant","content":" and"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9739531Z","message":{"role":"assistant","content":" notes"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9739531Z","message":{"role":"assistant","content":"."},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9739531Z","message":{"role":"assistant","content":"txt"},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9739531Z","message":{"role":"assistant","content":"."},"done":false}
+{"model":"nemotron-3.5-bolt:e4b-q4_K_M","created_at":"2026-11-02T05:11:01.9739531Z","message":{"role":"assistant","content":""},"done":true,"done_reason":"stop","total_duration":793344700,"load_duration":17107900,"prompt_eval_count":791,"prompt_eval_cached_count":693,"prompt_eval_duration":94276000,"eval_count":90,"eval_duration":675091000}

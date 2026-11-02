@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "cpu": {
+    "verdict": "HOLD",
+    "runsCompleted": 0
+  },
+  "gpuFallback": {
+    "verdict": "HOLD",
+    "runsCompleted": 0
+  },
+  "reason": "E-4 remains HOLD because API resident-memory values contradict main/draft runtime allocation logs. No slot qualifies to run E-5.",
+  "preregistration": "v2.16.1-quality-preregistration.json",
+  "budgetCanIncreaseAfterResults": false,
+  "defaultChanges": false
+}

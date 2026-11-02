@@ -1,0 +1,81 @@
+{
+  "model": "nemotron-3.5-bolt:e4b-q4_K_M",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are Nexus, a local coding agent operating headlessly on a working copy of a project. Use the declared tools to inspect and modify files and run commands. Call a tool with `<|tool_call>call:TOOL_NAME{key:<|\"|>text value<|\"|>,count:3}<tool_call|>`: wrap every string value in <|\"|> markers and write numbers and booleans bare. For example: <|tool_call>call:read_file{path:<|\"|>src/index.ts<|\"|>}<tool_call|> Make one focused change at a time, verify with a tool when useful, and when the task is fully complete reply with a short summary and NO tool call.\n\n<|tool>\n{\n  \"name\": \"read_file\",\n  \"description\": \"Read the contents of a file relative to the working directory.\",\n  \"parameters\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"path\": {\n        \"type\": \"string\",\n        \"description\": \"File path.\"\n      }\n    },\n    \"required\": [\n      \"path\"\n    ]\n  }\n}\n<tool|>\n\n<|tool>\n{\n  \"name\": \"list_directory\",\n  \"description\": \"List entries in a directory relative to the working directory.\",\n  \"parameters\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"path\": {\n        \"type\": \"string\",\n        \"description\": \"Directory path (defaults to the root).\"\n      }\n    }\n  }\n}\n<tool|>\n\n<|tool>\n{\n  \"name\": \"grep_codebase\",\n  \"description\": \"Search files under the working directory for a literal substring.\",\n  \"parameters\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"pattern\": {\n        \"type\": \"string\",\n        \"description\": \"Literal substring to search for.\"\n      },\n      \"path\": {\n        \"type\": \"string\",\n        \"description\": \"Sub-directory to search (defaults to root).\"\n      }\n    },\n    \"required\": [\n      \"pattern\"\n    ]\n  }\n}\n<tool|>"
+    },
+    {
+      "role": "user",
+      "content": "Use grep_codebase with pattern exactly \"NEEDLE_216\" and path exactly \".\", then report the matching filename. Do not guess the match."
+    }
+  ],
+  "stream": true,
+  "options": {
+    "temperature": 0,
+    "top_p": 1,
+    "seed": 216,
+    "num_predict": 1024,
+    "num_ctx": 4096
+  },
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "read_file",
+        "description": "Read the contents of a file relative to the working directory.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path."
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "list_directory",
+        "description": "List entries in a directory relative to the working directory.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Directory path (defaults to the root)."
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "grep_codebase",
+        "description": "Search files under the working directory for a literal substring.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "pattern": {
+              "type": "string",
+              "description": "Literal substring to search for."
+            },
+            "path": {
+              "type": "string",
+              "description": "Sub-directory to search (defaults to root)."
+            }
+          },
+          "required": [
+            "pattern"
+          ]
+        }
+      }
+    }
+  ]
+}

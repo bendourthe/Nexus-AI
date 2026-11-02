@@ -1,0 +1,626 @@
+{
+  "model": "nemotron-3.5-bolt:e4b-q4_K_M",
+  "format": "gemma4-xml",
+  "E-3": "PASS",
+  "transcriptsCompleted": 5,
+  "rows": [
+    {
+      "id": "read-alpha",
+      "result": {
+        "finishReason": "done",
+        "iterations": 2,
+        "toolCalls": 1,
+        "llmCalls": 2,
+        "finalText": "The alpha code from alpha.txt is ALPHA_216."
+      },
+      "events": [
+        {
+          "kind": "toolCall",
+          "name": "read_file",
+          "args": {
+            "path": "alpha.txt"
+          }
+        },
+        {
+          "kind": "toolResult",
+          "name": "read_file",
+          "success": true,
+          "output": "Alpha code: ALPHA_216.\n"
+        },
+        {
+          "kind": "token",
+          "text": "The"
+        },
+        {
+          "kind": "token",
+          "text": " alpha"
+        },
+        {
+          "kind": "token",
+          "text": " code"
+        },
+        {
+          "kind": "token",
+          "text": " from"
+        },
+        {
+          "kind": "token",
+          "text": " alpha"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "token",
+          "text": "txt"
+        },
+        {
+          "kind": "token",
+          "text": " is"
+        },
+        {
+          "kind": "token",
+          "text": " ALPHA"
+        },
+        {
+          "kind": "token",
+          "text": "_"
+        },
+        {
+          "kind": "token",
+          "text": "2"
+        },
+        {
+          "kind": "token",
+          "text": "1"
+        },
+        {
+          "kind": "token",
+          "text": "6"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "done",
+          "finishReason": "done"
+        }
+      ],
+      "requests": [
+        {
+          "id": 1,
+          "status": 200,
+          "error": null
+        },
+        {
+          "id": 2,
+          "status": 200,
+          "error": null
+        }
+      ],
+      "replayCalls": [
+        {
+          "tool": "read_file",
+          "args": {
+            "path": "alpha.txt"
+          }
+        }
+      ],
+      "replayParseFailures": 0,
+      "nexusParseFailures": 0,
+      "nexusExpectedRecovered": true,
+      "replayExpectedRecovered": true,
+      "outcome": "PASS"
+    },
+    {
+      "id": "read-config",
+      "result": {
+        "finishReason": "done",
+        "iterations": 2,
+        "toolCalls": 1,
+        "llmCalls": 2,
+        "finalText": "The contextBudget value is 4096."
+      },
+      "events": [
+        {
+          "kind": "toolCall",
+          "name": "read_file",
+          "args": {
+            "path": "nested/config.json"
+          }
+        },
+        {
+          "kind": "toolResult",
+          "name": "read_file",
+          "success": true,
+          "output": "{\"contextBudget\":4096,\"marker\":\"NEEDLE_216\"}\n"
+        },
+        {
+          "kind": "token",
+          "text": "The"
+        },
+        {
+          "kind": "token",
+          "text": " context"
+        },
+        {
+          "kind": "token",
+          "text": "Budget"
+        },
+        {
+          "kind": "token",
+          "text": " value"
+        },
+        {
+          "kind": "token",
+          "text": " is"
+        },
+        {
+          "kind": "token",
+          "text": " "
+        },
+        {
+          "kind": "token",
+          "text": "4"
+        },
+        {
+          "kind": "token",
+          "text": "0"
+        },
+        {
+          "kind": "token",
+          "text": "9"
+        },
+        {
+          "kind": "token",
+          "text": "6"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "done",
+          "finishReason": "done"
+        }
+      ],
+      "requests": [
+        {
+          "id": 3,
+          "status": 200,
+          "error": null
+        },
+        {
+          "id": 4,
+          "status": 200,
+          "error": null
+        }
+      ],
+      "replayCalls": [
+        {
+          "tool": "read_file",
+          "args": {
+            "path": "nested/config.json"
+          }
+        }
+      ],
+      "replayParseFailures": 0,
+      "nexusParseFailures": 0,
+      "nexusExpectedRecovered": true,
+      "replayExpectedRecovered": true,
+      "outcome": "PASS"
+    },
+    {
+      "id": "list-nested",
+      "result": {
+        "finishReason": "done",
+        "iterations": 2,
+        "toolCalls": 1,
+        "llmCalls": 2,
+        "finalText": "The filenames found in the \"nested\" directory are config.json and notes.txt."
+      },
+      "events": [
+        {
+          "kind": "toolCall",
+          "name": "list_directory",
+          "args": {
+            "path": "nested"
+          }
+        },
+        {
+          "kind": "toolResult",
+          "name": "list_directory",
+          "success": true,
+          "output": "- config.json\n- notes.txt"
+        },
+        {
+          "kind": "token",
+          "text": "The"
+        },
+        {
+          "kind": "token",
+          "text": " filenames"
+        },
+        {
+          "kind": "token",
+          "text": " found"
+        },
+        {
+          "kind": "token",
+          "text": " in"
+        },
+        {
+          "kind": "token",
+          "text": " the"
+        },
+        {
+          "kind": "token",
+          "text": " \""
+        },
+        {
+          "kind": "token",
+          "text": "nested"
+        },
+        {
+          "kind": "token",
+          "text": "\""
+        },
+        {
+          "kind": "token",
+          "text": " directory"
+        },
+        {
+          "kind": "token",
+          "text": " are"
+        },
+        {
+          "kind": "token",
+          "text": " config"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "token",
+          "text": "json"
+        },
+        {
+          "kind": "token",
+          "text": " and"
+        },
+        {
+          "kind": "token",
+          "text": " notes"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "token",
+          "text": "txt"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "done",
+          "finishReason": "done"
+        }
+      ],
+      "requests": [
+        {
+          "id": 5,
+          "status": 200,
+          "error": null
+        },
+        {
+          "id": 6,
+          "status": 200,
+          "error": null
+        }
+      ],
+      "replayCalls": [
+        {
+          "tool": "list_directory",
+          "args": {
+            "path": "nested"
+          }
+        }
+      ],
+      "replayParseFailures": 0,
+      "nexusParseFailures": 0,
+      "nexusExpectedRecovered": true,
+      "replayExpectedRecovered": true,
+      "outcome": "PASS"
+    },
+    {
+      "id": "search-marker",
+      "result": {
+        "finishReason": "done",
+        "iterations": 2,
+        "toolCalls": 1,
+        "llmCalls": 2,
+        "finalText": "The matching filename is nested/config.json."
+      },
+      "events": [
+        {
+          "kind": "toolCall",
+          "name": "grep_codebase",
+          "args": {
+            "path": ".",
+            "pattern": "NEEDLE_216"
+          }
+        },
+        {
+          "kind": "toolResult",
+          "name": "grep_codebase",
+          "success": true,
+          "output": "nested/config.json:1: {\"contextBudget\":4096,\"marker\":\"NEEDLE_216\"}"
+        },
+        {
+          "kind": "token",
+          "text": "The"
+        },
+        {
+          "kind": "token",
+          "text": " matching"
+        },
+        {
+          "kind": "token",
+          "text": " filename"
+        },
+        {
+          "kind": "token",
+          "text": " is"
+        },
+        {
+          "kind": "token",
+          "text": " nested"
+        },
+        {
+          "kind": "token",
+          "text": "/"
+        },
+        {
+          "kind": "token",
+          "text": "config"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "token",
+          "text": "json"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "done",
+          "finishReason": "done"
+        }
+      ],
+      "requests": [
+        {
+          "id": 7,
+          "status": 200,
+          "error": null
+        },
+        {
+          "id": 8,
+          "status": 200,
+          "error": null
+        }
+      ],
+      "replayCalls": [
+        {
+          "tool": "grep_codebase",
+          "args": {
+            "path": ".",
+            "pattern": "NEEDLE_216"
+          }
+        }
+      ],
+      "replayParseFailures": 0,
+      "nexusParseFailures": 0,
+      "nexusExpectedRecovered": true,
+      "replayExpectedRecovered": true,
+      "outcome": "PASS"
+    },
+    {
+      "id": "two-reads",
+      "result": {
+        "finishReason": "done",
+        "iterations": 2,
+        "toolCalls": 2,
+        "llmCalls": 2,
+        "finalText": "The code from alpha.txt is ALPHA_216.\nThe code from beta.txt is BETA_216."
+      },
+      "events": [
+        {
+          "kind": "toolCall",
+          "name": "read_file",
+          "args": {
+            "path": "alpha.txt"
+          }
+        },
+        {
+          "kind": "toolResult",
+          "name": "read_file",
+          "success": true,
+          "output": "Alpha code: ALPHA_216.\n"
+        },
+        {
+          "kind": "toolCall",
+          "name": "read_file",
+          "args": {
+            "path": "beta.txt"
+          }
+        },
+        {
+          "kind": "toolResult",
+          "name": "read_file",
+          "success": true,
+          "output": "Beta code: BETA_216.\n"
+        },
+        {
+          "kind": "token",
+          "text": "The"
+        },
+        {
+          "kind": "token",
+          "text": " code"
+        },
+        {
+          "kind": "token",
+          "text": " from"
+        },
+        {
+          "kind": "token",
+          "text": " alpha"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "token",
+          "text": "txt"
+        },
+        {
+          "kind": "token",
+          "text": " is"
+        },
+        {
+          "kind": "token",
+          "text": " ALPHA"
+        },
+        {
+          "kind": "token",
+          "text": "_"
+        },
+        {
+          "kind": "token",
+          "text": "2"
+        },
+        {
+          "kind": "token",
+          "text": "1"
+        },
+        {
+          "kind": "token",
+          "text": "6"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "token",
+          "text": "\n"
+        },
+        {
+          "kind": "token",
+          "text": "The"
+        },
+        {
+          "kind": "token",
+          "text": " code"
+        },
+        {
+          "kind": "token",
+          "text": " from"
+        },
+        {
+          "kind": "token",
+          "text": " beta"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "token",
+          "text": "txt"
+        },
+        {
+          "kind": "token",
+          "text": " is"
+        },
+        {
+          "kind": "token",
+          "text": " BETA"
+        },
+        {
+          "kind": "token",
+          "text": "_"
+        },
+        {
+          "kind": "token",
+          "text": "2"
+        },
+        {
+          "kind": "token",
+          "text": "1"
+        },
+        {
+          "kind": "token",
+          "text": "6"
+        },
+        {
+          "kind": "token",
+          "text": "."
+        },
+        {
+          "kind": "done",
+          "finishReason": "done"
+        }
+      ],
+      "requests": [
+        {
+          "id": 9,
+          "status": 200,
+          "error": null
+        },
+        {
+          "id": 10,
+          "status": 200,
+          "error": null
+        }
+      ],
+      "replayCalls": [
+        {
+          "tool": "read_file",
+          "args": {
+            "path": "alpha.txt"
+          }
+        },
+        {
+          "tool": "read_file",
+          "args": {
+            "path": "beta.txt"
+          }
+        }
+      ],
+      "replayParseFailures": 0,
+      "nexusParseFailures": 0,
+      "nexusExpectedRecovered": true,
+      "replayExpectedRecovered": true,
+      "outcome": "PASS"
+    }
+  ],
+  "sourceHashes": {
+    "modules/coding/runtime/HeadlessAgentSession.ts": "db75f47549501f4d266a898d53649bd1814d10d068856254a282c055593e484e",
+    "modules/coding/runtime/headlessTools.ts": "312deefb5f15d4ad9bc4142bc29974dcfe6d38180211dca1ff0d4d172858a159",
+    "modules/coding/llm/headlessOllamaClient.ts": "5fb86ad50cc28e140f15f592d61ae6f4464dc35fd0c09d6b84442650a819caba",
+    "modules/coding/llm/parseAgentToolCalls.ts": "f022088f07692a651c690cb9d6951e2403b1b59bf0dbef1cb1d1dee69c894314",
+    "modules/coding/llm/ToolCallFormat.ts": "f9ecdd0cdf84cc0c45e77963107fa080e9c13a79ecbcfb02d0868c96c06aa1d6"
+  }
+}
