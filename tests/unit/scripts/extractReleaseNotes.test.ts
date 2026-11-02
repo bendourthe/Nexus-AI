@@ -32,6 +32,40 @@ describe("exact-version release notes", () => {
     expect(extractReleaseNotes(text, "2.16.1")).not.toContain("Older.");
   });
 
+  it("preserves notes after a release-looking heading in an HTML comment", () => {
+    const body = "First change.\n<!-- archived example:\n## [2.15.9]\n-->\nSecond change.\n";
+    expect(extractReleaseNotes(`## [2.16.1]\n${body}## [2.15.1]\nOlder.\n`, "2.16.1")).toBe(body);
+  });
+
+  it("ignores hidden duplicate releases and fences without hiding real sections", () => {
+    const text = "<!--\n## [2.16.1]\n```\n-->\n## [2.16.1] <!-- release date -->\nCurrent.\n## [2.15.1]\nOlder.\n";
+    expect(extractReleaseNotes(text, "2.16.1")).toBe("Current.\n");
+  });
+
+  it("keeps HTML-comment examples inside fences literal", () => {
+    const body = "```html\n<!--\n```\nCurrent.\n";
+    expect(extractReleaseNotes(`## [2.16.1]\n${body}## [2.15.1]\nOlder.\n`, "2.16.1")).toBe(body);
+  });
+
+  it.each(["`<!--`", "`` `<!--` ``", "`<!--\nliteral`", "`first\nhere <!--\nlast`"])("keeps the literal comment marker %s in inline code", (example) => {
+    const body = `Use ${example} to demonstrate the marker.\nSecond.\n`;
+    expect(extractReleaseNotes(`## [2.16.1]\n${body}## [2.15.1]\nOlder.\n`, "2.16.1")).toBe(body);
+  });
+
+  it("does not match inline backticks across a real release heading", () => {
+    const text = "## [2.16.1]\nUnmatched ` opener.\n## [2.15.1]\nOlder ` closer.\n";
+    expect(extractReleaseNotes(text, "2.16.1")).toBe("Unmatched ` opener.\n");
+  });
+
+  it.each(["\n\n", "\n## Details\n"])("keeps a comment after a paragraph boundary %j separate from inline code", (boundary) => {
+    const body = `Unmatched \` opener.${boundary}<!--\n## [2.15.9]\n-->\nSecond \` closer.\n`;
+    expect(extractReleaseNotes(`## [2.16.1]\n${body}## [2.15.1]\nOlder.\n`, "2.16.1")).toBe(body);
+  });
+
+  it("rejects unfinished HTML comments that could swallow older release notes", () => {
+    expect(() => extractReleaseNotes("## [2.16.1]\nCurrent.\n<!--\n## [2.15.1]\nOlder.\n", "2.16.1")).toThrow(/unclosed.*comment/i);
+  });
+
   it("does not treat prose containing a bracketed version as a release heading", () => {
     expect(() => extractReleaseNotes("## Changes for [2.16.1]\nNot a version section.\n", "2.16.1")).toThrow(/missing/i);
   });

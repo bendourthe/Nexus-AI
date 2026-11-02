@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "e92370dce909f15d895f44c8a28543b04ffb21a6",
+  "integrationBase": "42a4406dbef75142e0eb34a451e767f7643d597c",
+  "status": "local-validation-passed; independent-goal-review-and-integration-pending",
+  "root": {
+    "passed": 6517,
+    "skipped": 12,
+    "filesPassed": 598,
+    "filesSkipped": 3,
+    "coverage": {
+      "lines": {
+        "total": 26421,
+        "covered": 23059,
+        "skipped": 0,
+        "pct": 87.27
+      },
+      "statements": {
+        "total": 29665,
+        "covered": 25250,
+        "skipped": 0,
+        "pct": 85.11
+      },
+      "functions": {
+        "total": 4991,
+        "covered": 4354,
+        "skipped": 0,
+        "pct": 87.23
+      },
+      "branches": {
+        "total": 18991,
+        "covered": 14527,
+        "skipped": 0,
+        "pct": 76.49
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "desktop": {
+    "passed": 2373,
+    "skipped": 1,
+    "filesPassed": 261,
+    "coverage": {
+      "lines": {
+        "total": 17051,
+        "covered": 14235,
+        "skipped": 0,
+        "pct": 83.48
+      },
+      "statements": {
+        "total": 19086,
+        "covered": 15420,
+        "skipped": 0,
+        "pct": 80.79
+      },
+      "functions": {
+        "total": 4412,
+        "covered": 3584,
+        "skipped": 0,
+        "pct": 81.23
+      },
+      "branches": {
+        "total": 14503,
+        "covered": 10626,
+        "skipped": 0,
+        "pct": 73.26
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "package": {
+    "path": ".nexus-hub/work/v216-v217-release/packages/nexus-coding-2.15.1-win32-x64.vsix",
+    "sha256": "5a4966d05b082d0a55866333d183fbddb0f6fa149e5b265f953bb9d5f7bc7e06",
+    "bytes": 216418476,
+    "version": "2.15.1",
+    "reason": "Pre-release candidate retains current version until green integration and reviewed release preparation.",
+    "target": "win32-x64",
+    "activationPassed": true,
+    "vscode": "1.134.0",
+    "electron": "42.8.1",
+    "abi": "146",
+    "isolation": [
+      "separate editor user-data",
+      "separate extension install",
+      "temporary workspace",
+      "process-only USERPROFILE, APPDATA, LOCALAPPDATA, NEXUS_HOME, NEXUS_AI_HOME, USERNAME"
+    ],
+    "observed": [
+      "CLI-installed VSIX identity",
+      "real packaged SQLite query returned 42",
+      "extension activated",
+      "newChat command registered",
+      "forbidden activation log patterns absent"
+    ]
+  },
+  "requirementsInventory": {
+    "count": 384,
+    "allUnassessed": true,
+    "sourceHashAndEveryLineReferenceVerified": true
+  },
+  "privateLogReceipts": [
+    {
+      "path": ".nexus-hub/work/v216-v217-release/root-full-coverage.log",
+      "sha256": "a9a0176f1843dd2473064a8f08b70619491e8dfc78427d117751ddb620e7bac4"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/desktop-full-coverage.log",
+      "sha256": "67c59c45ac9781b18bb9df8f13bde44b5648511b3b55cd995fdb01cc7480a245"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/fast-profile.log",
+      "sha256": "afe34a111d8cd9a673dee06180d7fb7247baa4c9d0beacced189c6e6f7acc9cb"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/root-build.log",
+      "sha256": "429b47cd9511614652a64afe1875034bd91947125a753bb3a4a06063db9e36cc"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/sidecar-build.log",
+      "sha256": "ccc60f5fa5bb67b4de9d4d010138e07fe47d6597c6d7a3442a1ff793680ff680"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/web-build.log",
+      "sha256": "01fd337c70f746919647eed62b3f6fc52284d4ea2c651befca178f4c23af43ea"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/desktop-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/desktop-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/architecture-check.log",
+      "sha256": "874c7096231cfd818b66d11631348fb5316465434da5fc0cb08e3582b3b72b74"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/production-audit.log",
+      "sha256": "03a74e61e9d0ba56f056a8e15d75aacd111939b23f967c3e93df61520ac618b9"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/full-handbook-check.log",
+      "sha256": "f3a006b416ac11d2ba44514c0fb73e5f8566bf52dd05dfea2ffac8655bc0012a"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/installer-focused-with-src.log",
+      "sha256": "d5c6fbf7085851d1acbaf72b3aeef616c4106645cc8424f27e6a9e3605e59489"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/release-parser-final.log",
+      "sha256": "06f460c072b1999edbdc5f18322bbbda7bc04920cf8776482a96a521a7234d08"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/release-git-guards.log",
+      "sha256": "074db4e6a8241d5c37ddbb5624eed38073428bf1b531566be66047a88270ac95"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/vsix-candidate-build.log",
+      "sha256": "4e2c222e93d9b04afb5893db1a2454d54d3919ce4b29dc8464220f84439f63b6"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/vsce-retry.log",
+      "sha256": "67e05da3236957b44bb13740343dc5a905ee1faa3d03e06139c7e2b85829e8b0"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/vsix-runtime-smoke.log",
+      "sha256": "1dff73cc8669515fd625262f39210da4c9f11b6833f7821468314fd3a2461ee5"
+    },
+    {
+      "path": ".nexus-hub/work/v216-v217-release/root-final-coverage.log",
+      "sha256": "b519e81cacdd4393fcd6e8c14ad2cb384661f3ead2fea198bcfca7f2d69d01f0"
+    }
+  ],
+  "notProven": [
+    "remote merge-result checks",
+    "integration merge",
+    "v2.16.1 version preparation",
+    "v2.16.1 published assets and download checksums",
+    "Windows installer acceptance",
+    "Linux/macOS package validation",
+    "model admission",
+    "v2.17 implementation/release",
+    "final full codebase review"
+  ],
+  "correctedSourceRoot": {
+    "baseRevision": "e92370dce909f15d895f44c8a28543b04ffb21a6",
+    "sourceSha256": {
+      "scripts/extract-release-notes.mjs": "a6e98d4eae2990bfd7ede62f71f4f12e78c0a9434112d7ecdf06ad891e85eb2d",
+      "tests/unit/scripts/extractReleaseNotes.test.ts": "aa5609bbdf3b67bf3c4b6006da9c2fbe84142ffc3cc8453cf5f7a327f4f4d8be",
+      ".github/workflows/release.yml": "b48637d90bb4c3fdd7bd2c276290848c099ede50f4c00d111bc9e188d25ea232",
+      ".github/workflows/semantic-release.yml": "be9e03a9871665835cab0c2d95466346c7ff0370b214259c93566967ddbce231",
+      ".releaserc.json": "9ad8a1453638bdacd24565d01297267f2664687952487c23ef39b6af24365781",
+      "tests/unit/scripts/releaseWorkflowContract.test.ts": "492af0c4166bf66203eb3ff0e87b8095789fcdedf0fc6026a2249fcb41c9e67d",
+      "tests/integration/releaseSourceGuards.test.ts": "b129cc9ea21c4d86c070abe6c37feb86857fb1f127ad1b415256276b11370ff7"
+    },
+    "passed": 6528,
+    "skipped": 12,
+    "filesPassed": 598,
+    "filesSkipped": 3,
+    "durationSeconds": 787.84,
+    "exitCode": 0,
+    "coverage": {
+      "lines": {
+        "total": 26421,
+        "covered": 23059,
+        "skipped": 0,
+        "pct": 87.27
+      },
+      "statements": {
+        "total": 29665,
+        "covered": 25250,
+        "skipped": 0,
+        "pct": 85.11
+      },
+      "functions": {
+        "total": 4991,
+        "covered": 4354,
+        "skipped": 0,
+        "pct": 87.23
+      },
+      "branches": {
+        "total": 18991,
+        "covered": 14529,
+        "skipped": 0,
+        "pct": 76.5
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "independentCliCasesPassed": 26,
+    "focusedTestsPassed": 32,
+    "logSha256": "b519e81cacdd4393fcd6e8c14ad2cb384661f3ead2fea198bcfca7f2d69d01f0",
+    "recordedAt": "2026-11-02T17:36:19.383114+00:00"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "observedAt": "2026-11-02T17:37:36.385131+00:00",
+  "mode": "read-only; no move/delete/cleanup applied",
+  "nonDocsFileScope": "Git tracked plus unignored files; excludes docs (separate canonical layout gate), ignored trees, symlinks and explicit build/cache directories from physical directory scan",
+  "nonDocsFiles": 2660,
+  "missingTrackedOrUnignoredFiles": [],
+  "symlinksNotFollowed": [],
+  "duplicateGroups": 8,
+  "newSourceFiles": [
+    "scripts/extract-release-notes.mjs",
+    "tests/integration/releaseSourceGuards.test.ts",
+    "tests/unit/scripts/extractReleaseNotes.test.ts",
+    "tests/unit/scripts/releaseWorkflowContract.test.ts"
+  ],
+  "introducedDuplicateGroups": [],
+  "emptyDirectories": [
+    "tests/fixtures/known-gaps/expected",
+    "tests/fixtures/known-gaps/repo"
+  ],
+  "extractorReferences": [
+    ".github/workflows/release.yml",
+    ".github/workflows/semantic-release.yml",
+    "docs/releases/v2/v2.16/development/v2.16.1-local-validation-receipt.json",
+    "docs/releases/v2/v2.16/development/v2.16.1-release-automation-evidence.md",
+    "docs/releases/v2/v2.16/plans/v2.16.1-release-completion.md",
+    "docs/runbooks/releases.md",
+    "tests/unit/scripts/extractReleaseNotes.test.ts",
+    "tests/unit/scripts/releaseWorkflowContract.test.ts"
+  ],
+  "rootAddedFiles": [],
+  "newSourceDeepPaths": [],
+  "disposition": "No newly introduced duplicate, root clutter, unexplained deep source path or orphan extractor. Existing duplicate/empty candidates remain untouched; no historical fixture or dynamic source is inferred disposable.",
+  "docsLayout": "Actual scripts/check-docs-layout.mjs gate passed; no moves performed, so move-reference repair is not applicable."
+}
