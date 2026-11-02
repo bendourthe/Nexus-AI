@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "model": "cpu-forwarding-fixture",
+  "mode": "live",
+  "options": {
+    "num_gpu": 0,
+    "temperature": 0.1
+  },
+  "toolFormat": "lfm-pythonic",
+  "passed": 0,
+  "total": 1,
+  "tasks": [
+    {
+      "id": "bugfix-off-by-one-01",
+      "firstToolCallMs": null,
+      "codecParseFailures": 0,
+      "turns": [
+        {
+          "turnMs": 310,
+          "firstChunkMs": null
+        }
+      ],
+      "passed": false,
+      "failures": [
+        "agent: Ollama chat request failed: Internal Server Error",
+        "loop bound corrected (file_contains src/process.ts): pattern \"i < arr.length\" in process.ts"
+      ],
+      "taskMs": 345,
+      "memory": {
+        "status": "not_measured"
+      }
+    }
+  ]
+}

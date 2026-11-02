@@ -1,0 +1,505 @@
+{
+  "observedAt": "2026-10-24T03:36:09.341076+00:00",
+  "browser": "Playwright bundled Chromium 153.0.8010.12",
+  "fresh_browser_execution": true,
+  "source_revision": "010ffa364aa56a4bf68039fbd38d8097b75d8162",
+  "working_tree": "authorized local handbook receipt refresh",
+  "documents": [
+    {
+      "id": "atlas",
+      "output": "docs/handbooks/html/atlas.html",
+      "output_sha256": "03d07b44167ba2db91533928cb2068bcbb36e3986a3dfbde0f977e1f6705d78d",
+      "viewports": [
+        {
+          "width": 2560,
+          "height": 1300,
+          "reading": {
+            "width": 2560,
+            "documentWidth": 2560,
+            "headings": [
+              "Nexus Architecture Atlas",
+              "End-to-end path"
+            ],
+            "rootFont": "24.64px",
+            "screenshot_sha256": "d3d28bf69e90e2c02f0c75a4ef5c6bf4eff872de6b0196556f832455b524066d"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 3",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 2560,
+            "documentWidth": 2560,
+            "heading": "Nexus Architecture Atlas",
+            "screenshot_sha256": "0e969cd29111234a05febf45425242cfa4a9940f9aa1ddf5c65395fbadc767b7"
+          }
+        },
+        {
+          "width": 1440,
+          "height": 1000,
+          "reading": {
+            "width": 1440,
+            "documentWidth": 1440,
+            "headings": [
+              "Nexus Architecture Atlas",
+              "End-to-end path"
+            ],
+            "rootFont": "17.36px",
+            "screenshot_sha256": "0b41dbdfd7d8a19afc697e96e0628f0d64aca65537c64a7ef6f907d93a07c6ef"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 3",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 1440,
+            "documentWidth": 1440,
+            "heading": "Nexus Architecture Atlas",
+            "screenshot_sha256": "cc04ee75269284ae1651ea35c8bac8448739d9368e8926819debfc0a68cbd628"
+          }
+        },
+        {
+          "width": 390,
+          "height": 844,
+          "reading": {
+            "width": 390,
+            "documentWidth": 390,
+            "headings": [
+              "Nexus Architecture Atlas",
+              "End-to-end path"
+            ],
+            "rootFont": "16px",
+            "screenshot_sha256": "a0394ac31a23d7184a9c730303d00e299ab8d786f5b3d819fe20d51cca8ed5dc"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 3",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 390,
+            "documentWidth": 390,
+            "heading": "Nexus Architecture Atlas",
+            "screenshot_sha256": "19dfda59419fdaec2a1c5771ce84ecf0330a068a1cec33ee97be13737f5e57ed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "generation-recovery",
+      "output": "docs/handbooks/html/generation-recovery.html",
+      "output_sha256": "43ed4692dc0d5fdb0d782d952eee7d97ac5c87f59aa1cda72ba5982e77d36cae",
+      "viewports": [
+        {
+          "width": 2560,
+          "height": 1300,
+          "reading": {
+            "width": 2560,
+            "documentWidth": 2560,
+            "headings": [
+              "Generation Recovery and Validation",
+              "Recover the runtime",
+              "Validate image and video generation",
+              "Interpret failures"
+            ],
+            "rootFont": "24.64px",
+            "screenshot_sha256": "02564b6115bf19b54fe28a38cdaac0142ea141db411292ae865f404515ea8924"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 4",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 2560,
+            "documentWidth": 2560,
+            "heading": "Generation Recovery and Validation",
+            "screenshot_sha256": "f0d24218dcef503e3444015432579bc626417111b74763aded091d57749ccddc"
+          }
+        },
+        {
+          "width": 1440,
+          "height": 1000,
+          "reading": {
+            "width": 1440,
+            "documentWidth": 1440,
+            "headings": [
+              "Generation Recovery and Validation",
+              "Recover the runtime",
+              "Validate image and video generation",
+              "Interpret failures"
+            ],
+            "rootFont": "17.36px",
+            "screenshot_sha256": "b800340739422161bc45f320ef0c946ed1b773f30cede7c3d0072469bcc895e5"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 4",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 1440,
+            "documentWidth": 1440,
+            "heading": "Generation Recovery and Validation",
+            "screenshot_sha256": "86f236f134696ccf8ca8d8abbf46514a1a0bb66fbe2c48691d1fe19ba8bdb787"
+          }
+        },
+        {
+          "width": 390,
+          "height": 844,
+          "reading": {
+            "width": 390,
+            "documentWidth": 390,
+            "headings": [
+              "Generation Recovery and Validation",
+              "Recover the runtime",
+              "Validate image and video generation",
+              "Interpret failures"
+            ],
+            "rootFont": "16px",
+            "screenshot_sha256": "e46daab363e3ee09c5112eaba8559f136dca3fa3a93da335fbc4d5aca391214a"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 4",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 390,
+            "documentWidth": 390,
+            "heading": "Generation Recovery and Validation",
+            "screenshot_sha256": "71c8dbd9b029cc8f3072d1ed4016508e95790d0dfaa6b7c71bb4c573a27612ab"
+          }
+        }
+      ]
+    },
+    {
+      "id": "installer-runtime",
+      "output": "docs/handbooks/html/technical/installer-runtime.html",
+      "output_sha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05",
+      "viewports": [
+        {
+          "width": 2560,
+          "height": 1300,
+          "reading": {
+            "width": 2560,
+            "documentWidth": 2560,
+            "headings": [
+              "Installer Repair and Runtime State"
+            ],
+            "rootFont": "24.64px",
+            "screenshot_sha256": "6e5ec6af9fb007bf408b6ec4afb2478ceeccadf60de5f0f690df9e02be8762c6"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 2",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 2560,
+            "documentWidth": 2560,
+            "heading": "Installer Repair and Runtime State",
+            "screenshot_sha256": "7a07fcdc63fd0f9966627ebc2b2d437691c2a33fe19c3dc05916718b58104a2e"
+          }
+        },
+        {
+          "width": 1440,
+          "height": 1000,
+          "reading": {
+            "width": 1440,
+            "documentWidth": 1440,
+            "headings": [
+              "Installer Repair and Runtime State"
+            ],
+            "rootFont": "17.36px",
+            "screenshot_sha256": "0564be332e188045cffc3b2050ad1b96f8327ffb8c1511b85cb3f75dc0a83f19"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 2",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 1440,
+            "documentWidth": 1440,
+            "heading": "Installer Repair and Runtime State",
+            "screenshot_sha256": "ecfd728098f2392e274742022ccffd6773d9694c8135f85f92dad5ea6dfe931f"
+          }
+        },
+        {
+          "width": 390,
+          "height": 844,
+          "reading": {
+            "width": 390,
+            "documentWidth": 390,
+            "headings": [
+              "Installer Repair and Runtime State"
+            ],
+            "rootFont": "16px",
+            "screenshot_sha256": "42c2f8ab0575a2a13fc30fa050b0a6b1953f7b5af98bedbf70648fb974187bc3"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 2",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 390,
+            "documentWidth": 390,
+            "heading": "Installer Repair and Runtime State",
+            "screenshot_sha256": "9d5e21fcc674106adcc9dd3488af638a4b67a6c9152a46c745455a345249869b"
+          }
+        }
+      ]
+    },
+    {
+      "id": "media-runtime",
+      "output": "docs/handbooks/html/technical/media-runtime.html",
+      "output_sha256": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51",
+      "viewports": [
+        {
+          "width": 2560,
+          "height": 1300,
+          "reading": {
+            "width": 2560,
+            "documentWidth": 2560,
+            "headings": [
+              "Local Media Runtime"
+            ],
+            "rootFont": "24.64px",
+            "screenshot_sha256": "d0af70f5b37753b8aadd5180b754bd4c226db504c6441d6899a9bb538913c73f"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 2",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 2560,
+            "documentWidth": 2560,
+            "heading": "Local Media Runtime",
+            "screenshot_sha256": "d7501da35613d4011036b5068ca40aa58febbf413059e65ea3e464790f12cf88"
+          }
+        },
+        {
+          "width": 1440,
+          "height": 1000,
+          "reading": {
+            "width": 1440,
+            "documentWidth": 1440,
+            "headings": [
+              "Local Media Runtime"
+            ],
+            "rootFont": "17.36px",
+            "screenshot_sha256": "ee8db09e936cabfc4d7539e975db0ac22f323978a32ca8a978bd2eeb54a98eb1"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 2",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 1440,
+            "documentWidth": 1440,
+            "heading": "Local Media Runtime",
+            "screenshot_sha256": "5ea86bd2db61f01e5a36a26a0ddafe33c6be12026e0fe1902d41a5a2d9045d91"
+          }
+        },
+        {
+          "width": 390,
+          "height": 844,
+          "reading": {
+            "width": 390,
+            "documentWidth": 390,
+            "headings": [
+              "Local Media Runtime"
+            ],
+            "rootFont": "16px",
+            "screenshot_sha256": "776ff3d334bd75a391733900b632db05601ebd3d1f9b79f88c2b96ddfcdf4c60"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 2",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 390,
+            "documentWidth": 390,
+            "heading": "Local Media Runtime",
+            "screenshot_sha256": "9873f8f088bc537a898ef1a591c49925bdd1e082d4836ed62a00078d5de72375"
+          }
+        }
+      ]
+    },
+    {
+      "id": "transcript-and-workspaces",
+      "output": "docs/handbooks/html/technical/transcript-and-workspaces.html",
+      "output_sha256": "908aa4ffccf6e2bf186cbbbf4426423ccdaa3694d3390d5a725e6c95365b7bfe",
+      "viewports": [
+        {
+          "width": 2560,
+          "height": 1300,
+          "reading": {
+            "width": 2560,
+            "documentWidth": 2560,
+            "headings": [
+              "Transcript and Agents Workspace"
+            ],
+            "rootFont": "24.64px",
+            "screenshot_sha256": "a264d13b918f0738605422b6ad3d1e6e4ff7d3b0d1e31326a689386ba9f2900b"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 2",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 2560,
+            "documentWidth": 2560,
+            "heading": "Transcript and Agents Workspace",
+            "screenshot_sha256": "cfcf5b315e756680d97e7d31f49d99aab833d6f9822bbace393b74209c83cbad"
+          }
+        },
+        {
+          "width": 1440,
+          "height": 1000,
+          "reading": {
+            "width": 1440,
+            "documentWidth": 1440,
+            "headings": [
+              "Transcript and Agents Workspace"
+            ],
+            "rootFont": "17.36px",
+            "screenshot_sha256": "140f16bcaf161c30b4f544a070a35f0837fc1a78a49604a9973ecded2628c74d"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 2",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 1440,
+            "documentWidth": 1440,
+            "heading": "Transcript and Agents Workspace",
+            "screenshot_sha256": "4918918ef684cd8dbb444a8cb1c0440614cb320435c6ff443f3152b9f824f44d"
+          }
+        },
+        {
+          "width": 390,
+          "height": 844,
+          "reading": {
+            "width": 390,
+            "documentWidth": 390,
+            "headings": [
+              "Transcript and Agents Workspace"
+            ],
+            "rootFont": "16px",
+            "screenshot_sha256": "15f6d64ca4ef1b5ae5cec43297cfff931e5b0fd8982c5a76addc24559c5c80c3"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 2",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 390,
+            "documentWidth": 390,
+            "heading": "Transcript and Agents Workspace",
+            "screenshot_sha256": "1c5d181135919c91dccf7e4f27b0ccc23e4704691c29bbbfdb4952026d54ac6c"
+          }
+        }
+      ]
+    },
+    {
+      "id": "document-outline",
+      "output": "docs/handbooks/html/technical/document-outline.html",
+      "output_sha256": "23bf3d2d5ca434c90d6c873c3e4e89915eced1ded86d68b24f9380a8e886a2e2",
+      "viewports": [
+        {
+          "width": 2560,
+          "height": 1300,
+          "reading": {
+            "width": 2560,
+            "documentWidth": 2560,
+            "headings": [
+              "Document Output",
+              "Document Parsing",
+              "Conversation Space",
+              "Retained Evidence"
+            ],
+            "rootFont": "24.64px",
+            "screenshot_sha256": "9f20da29c1cd4515f2697bacc97ce2929499e7fe89a622a8cdc54944fc28fedf"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 4",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 2560,
+            "documentWidth": 2560,
+            "heading": "Document Output",
+            "screenshot_sha256": "a178b2fab41da90e2d968d4dbbd6861ff5a3e2c8a06351522132b8a54cbe0fe8"
+          }
+        },
+        {
+          "width": 1440,
+          "height": 1000,
+          "reading": {
+            "width": 1440,
+            "documentWidth": 1440,
+            "headings": [
+              "Document Output",
+              "Document Parsing",
+              "Conversation Space",
+              "Retained Evidence"
+            ],
+            "rootFont": "17.36px",
+            "screenshot_sha256": "9670e096b4245e80f3fb55d677fccf05b4f0c70a11706cababa4c73f781ec457"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 4",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 1440,
+            "documentWidth": 1440,
+            "heading": "Document Output",
+            "screenshot_sha256": "ffc3a0d23e89324a82054e014a90008acd12fbaad9e34a189efce5f32000b246"
+          }
+        },
+        {
+          "width": 390,
+          "height": 844,
+          "reading": {
+            "width": 390,
+            "documentWidth": 390,
+            "headings": [
+              "Document Output",
+              "Document Parsing",
+              "Conversation Space",
+              "Retained Evidence"
+            ],
+            "rootFont": "16px",
+            "screenshot_sha256": "1349661f05a13f4a8444746b2c0b5d128f68b8388e16295e0c928194f954d265"
+          },
+          "presentation": {
+            "active": true,
+            "index": 0,
+            "count": "1 / 4",
+            "animations": 0,
+            "fullscreen": false,
+            "width": 390,
+            "documentWidth": 390,
+            "heading": "Document Output",
+            "screenshot_sha256": "96ee2f805234a741d7f82cbd5c00c3fde84ea27486a4a38fad3c5abe198f741e"
+          }
+        }
+      ]
+    }
+  ],
+  "page_errors": []
+}

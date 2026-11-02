@@ -1,0 +1,34 @@
+{
+  "base": "69a39894",
+  "revision": "a01740ad824071617f50881b17c267974db73bd4",
+  "scope": "Approved member changes only; earlier archive/maintenance integrations excluded",
+  "changedFiles": 41,
+  "emptyChangedFiles": [],
+  "obsoleteChangedArtifacts": [],
+  "duplicateGroups": [
+    [
+      "docs/releases/v2/v2.16/development/evidence/bolt-e4b/ollama-version.json",
+      "tests/fixtures/model-probe/bolt-e4b/ollama-version.json"
+    ],
+    [
+      "docs/releases/v2/v2.16/development/evidence/bolt-e4b/pull-observation.json",
+      "tests/fixtures/model-probe/bolt-e4b/pull-observation.json"
+    ],
+    [
+      "docs/releases/v2/v2.16/development/evidence/bolt-e4b/pull-response.json",
+      "tests/fixtures/model-probe/bolt-e4b/pull-response.json"
+    ],
+    [
+      "docs/releases/v2/v2.16/development/evidence/bolt-e4b/registry-config.json",
+      "tests/fixtures/model-probe/bolt-e4b/registry-config.json"
+    ],
+    [
+      "docs/releases/v2/v2.16/development/evidence/bolt-e4b/registry-manifest.json",
+      "tests/fixtures/model-probe/bolt-e4b/registry-manifest.json"
+    ]
+  ],
+  "duplicateDisposition": "Five exact registry/protocol copies intentionally serve stable tests and release-scoped provenance; keep both lifespans",
+  "productionBoundaryChanges": [],
+  "movesOrDeletionsProposed": [],
+  "result": "PASS"
+}

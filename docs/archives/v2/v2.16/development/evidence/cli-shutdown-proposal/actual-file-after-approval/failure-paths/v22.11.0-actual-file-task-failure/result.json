@@ -1,0 +1,13 @@
+{
+  "runtime": "v22.11.0",
+  "flavor": "actual-file",
+  "case": "task-failure",
+  "exit": 1,
+  "expected_exit": 1,
+  "timed_out": false,
+  "elapsed_seconds": 1.702,
+  "ps_requests": 2,
+  "model_requests": 1,
+  "stdout_bytes": 162,
+  "pass": true
+}

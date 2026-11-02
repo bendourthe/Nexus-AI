@@ -1,0 +1,104 @@
+{
+  "status": "LOCALLY_ARCHIVED_WITH_NATIVE_V212_STATUS_LIMITATION",
+  "date": "2026-10-23",
+  "base_commit": "cda6af96b91a2baf7b1f16e98f2ff52ec2be221c",
+  "native_commits": [
+    {
+      "minor": "v2.12",
+      "commit": "50bd7a79f7dd264acf835a57372d42b2f53b6df1",
+      "exit": 0,
+      "clean_after_native_commit": true
+    },
+    {
+      "minor": "v2.13",
+      "commit": "1b382186577814332b8e89b64c9804334267881f",
+      "exit": 0,
+      "clean_after_native_commit": true
+    },
+    {
+      "minor": "v2.15",
+      "commit": "293cbea25513057d93146447fb7dcd9a440b06b5",
+      "exit": 0,
+      "clean_after_native_commit": true
+    }
+  ],
+  "original_files_accounted": 4330,
+  "moved_files": 750,
+  "raw_preserved": {
+    "fixtures": 103,
+    "moved_evidence_and_json": 612,
+    "selected_current_receipts": 6
+  },
+  "original_migrations_verified": 245,
+  "future_open": 247,
+  "historical_chains": {
+    "v2.12": 44,
+    "v2.13": 8
+  },
+  "legacy_parse_problems_unwaived": 142,
+  "affected_tests": {
+    "numTotalTests": 73,
+    "numPassedTests": 73,
+    "numFailedTests": 0,
+    "numPendingTests": 0,
+    "success": true
+  },
+  "feature_inventory_entries_verified": 29,
+  "full_handbooks_verified": 6,
+  "browser_reuse": {
+    "fresh_execution": false,
+    "viewports_reused": 36,
+    "print_pages_reused": 9,
+    "all_six_inputs_and_outputs_equal_reviewed_rehearsal": true
+  },
+  "whole_archive_links": {
+    "raw_before_unresolved": 3774,
+    "raw_after_unresolved": 3774,
+    "projected_identity_totals": {
+      "after": 3569,
+      "before": 3569,
+      "fixed": 0,
+      "newly_broken": 0,
+      "unchanged": 3569
+    }
+  },
+  "postarchive_native": {
+    "v2.12": {
+      "exit": 3,
+      "verdict": "BLOCKED: record-tampered"
+    },
+    "v2.13": {
+      "exit": 0,
+      "verdict": "ALREADY ARCHIVED v2.13 docs/archives/v2/v2.13"
+    },
+    "v2.15": {
+      "exit": 0,
+      "verdict": "ALREADY ARCHIVED v2.15 docs/archives/v2/v2.15"
+    }
+  },
+  "v212_stale_binding_diagnostic": {
+    "status": "READ_ONLY_POST_ARCHIVE_BINDING_DIAGNOSTIC",
+    "record_raw_sha256": "fedc622bbbd7a5734deb4d1e7de770c81b365d3a8894261866b76bde4a4d8b34",
+    "signature_valid": true,
+    "plan_binding_valid": true,
+    "link_relocation_payload_valid": true,
+    "all_blockers_closed": true,
+    "migration_ids_equal": true,
+    "frozen_migrations": 44,
+    "current_migrations": 44,
+    "changed_migration_fields": {
+      "destination_body_sha256": 13,
+      "destination_path": 44
+    },
+    "other_changed_evidence_fields": [],
+    "native_evidence_match": false,
+    "record_unmodified": true,
+    "record_or_source_writes": false
+  },
+  "historical_coarse_copy_failures_unwaived": 93,
+  "actual_remote_publication_performed": false,
+  "new_release_or_tag_created": false,
+  "branch_or_worktree_deleted": false,
+  "signed_record_manually_modified": false,
+  "global_minor_complete_claimed": false
+}

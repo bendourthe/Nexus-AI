@@ -1,0 +1,1 @@
+{"error":"pull model manifest: 412: \nThe model you are attempting to pull requires a newer version of Ollama.\n\nPlease download the latest version at:\n\n\thttps://ollama.com/download\n"}

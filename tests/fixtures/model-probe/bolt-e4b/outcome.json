@@ -1,0 +1,13 @@
+{
+  "tag": "nemotron-3.5-bolt:e4b-q4_K_M",
+  "manifestDigest": "sha256:69f2be39b309ade35ef04ee02507915f4cd839f6631e14425146cb6c9df3bd39",
+  "E-1": "PASS",
+  "E-2": "PASS",
+  "E-3": "HOLD",
+  "reason": "runtime-minimum",
+  "requiredRuntime": "0.40.10",
+  "observedRuntime": "0.32.15",
+  "inferenceTranscriptCount": 0,
+  "E-4": "not run",
+  "E-5": "not run"
+}

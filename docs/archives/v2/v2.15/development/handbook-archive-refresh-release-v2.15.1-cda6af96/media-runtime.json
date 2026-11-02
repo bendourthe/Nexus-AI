@@ -1,0 +1,66 @@
+{
+  "snapshot": {
+    "entry_sha256": "c5f2c83e27af14f30641b5e871074fb63bcb4ddf0296fc70cbe2fe313d4efdff",
+    "inputs": {
+      "docs/handbooks/technical/media-runtime.md": "54bc8e07b5a6d777de76f4baa2dbcc09af2db9cb381e731897875d4ad5564190",
+      "scripts/generate-handbooks.mjs": "e0d4eba3098ba99ce83eda35ce53b04b27d9fc2b7e2feb07ba29881f27dc02d8",
+      "scripts/handbook-renderer.mjs": "0850935742db242e576989c2ced66a5810a0bdfd0cad78791916cf5efb21566d",
+      "docs/handbooks/_sources/storyboards.json": "bdc1c561b3bf3980e6a140661ff6a4724009d1a140ab1a3fb259876d4045d651",
+      "docs/handbooks/_sources/handbook.css": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf",
+      "docs/handbooks/_sources/handbook-clones.js": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b",
+      "docs/handbooks/_sources/dual-view.css": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
+      "docs/handbooks/_sources/dual-view-runtime.js": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
+      "desktop/public/nexus-mark.png": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05",
+      "package.json": "793c481d5f05ba09098ccef1c9fa176f3f58dc7bf2b9120b0242d148c62458a4",
+      "package-lock.json": "e27a8c9aafbad0d33248f1d1eefdbcfd9d91fcf1cb20f8c70181f6689ef6d964",
+      "desktop/sidecar/src/diffusion/runtimeFactory.ts": "de804bcdd5ebef82b3cab1f17ca6e566b6e0f8eb6de6d47db2fb6633e6880373",
+      "runtimes/diffusion/pipelines/real_execute.py": "f9b94af7d0d3e2750ecccedf3d328fdfb32e0452c6003d81dcef77f7aad035f2",
+      "runtimes/diffusion/pipelines/video_base.py": "4a15660bdfe275fb02bd819a9e5b5abf24b62309e97b00773bb6fbfe66c93279",
+      "desktop/sidecar/src/diffusion/resultGuard.ts": "3e792fc65a090b9644689cad5f24f7829335665d3815110da1685716effd780c",
+      "desktop/src/shared/studio/usablePayload.ts": "8ce0edc62cac7ae15b5815cf6fb132326776738d65d5a5584ab7ee83846b7f73",
+      "desktop/src/shared/studio/mediaRuntimeClient.ts": "e75accd75149ae25a793f8e573731e0487c9cd53028e57a1021558821f69a7f3",
+      "scripts/installer/build/smoke-installed-media.ps1": "46fa1f928121d9ffb28a8df3dd90ecde3bbd51d24d92beccb3b764732168f341",
+      "runtimes/diffusion/pipelines/base.py": "2c00525a6da852c0aa97bf539d7b09e183b3e53af059bf8f9a7d9af32f7decc4",
+      "desktop/sidecar/src/main.ts": "89c1f562a35666e9eded3ac0b657709f42a11f95e528aac402565e5c6e9197a9",
+      "desktop/src/modules/image/ImageStudioPage.tsx": "a4eca1345edaf1fc2535c5fb3811146403756aedb1cdfdf6b3edb576bd180ec0",
+      "desktop/src/modules/video/VideoLabPage.tsx": "7f9d15dee314faa6e49549063dd378bc8a680bdf5657e44754289e76796bde97"
+    },
+    "output_sha256": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51"
+  },
+  "checks": {
+    "content": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/archive-reference-review.md",
+      "evidence_sha256": "4c48fea77d04e9d2e044574aa0a315bf77b7c4c2baee79331b12ce6e117f17e3"
+    },
+    "build": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/archive-reference-review.md",
+      "evidence_sha256": "4c48fea77d04e9d2e044574aa0a315bf77b7c4c2baee79331b12ce6e117f17e3"
+    },
+    "rendered": {
+      "status": "pass",
+      "evidence": "docs/archives/v2/v2.15/development/evidence/archive-handbook-projection/iteration2/render-observations.json",
+      "evidence_sha256": "ba40ce776d377b85da592a9dded9c581492af5c2aa46b1b836c31c9c14ea6f63",
+      "browser": "Explicit reuse of reviewed archive rehearsal: six identical snapshots and HTML outputs, 36 viewports, nine print pages; no fresh browser execution",
+      "output_sha256": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51"
+    }
+  },
+  "render_evidence_reuse": {
+    "reason": "Only dependency override floors and two lockfile entries changed; exact HTML and presentation assets remain unchanged",
+    "previous_receipt_sha256": "e443ad58f18288a51f34cab117362efac520df3af15fcf741bfa54a2029f6f1a",
+    "previous_receipt": "docs/releases/v2/v2.15/development/v2.15.1-prepared-handbook-media-runtime.json",
+    "published": false
+  },
+  "actual_archive_reference_update": {
+    "native_commits": {
+      "v2.12": "50bd7a79f7dd264acf835a57372d42b2f53b6df1",
+      "v2.13": "1b382186577814332b8e89b64c9804334267881f",
+      "v2.15": "293cbea25513057d93146447fb7dcd9a440b06b5"
+    },
+    "original_security_receipt": "docs/archives/v2/v2.15/development/v2.15.1-security-handbook-media-runtime.json",
+    "original_security_receipt_raw_sha256": "19c1788d99310545176edc0d531d8a54cb3361451da9440a2d4089f90d8a6006",
+    "qualified_rehearsal_receipt_raw_sha256": "19dc420151a825280af630233e906f0e2d4e81e548dbe30c92d6987df4389990",
+    "fresh_browser_execution": false
+  }
+}

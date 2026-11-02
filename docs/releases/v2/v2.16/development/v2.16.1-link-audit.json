@@ -1,0 +1,123 @@
+{
+  "integrationBase": "42a4406dbef75142e0eb34a451e767f7643d597c",
+  "scope": [
+    "docs/reference/feature-inventory.md",
+    "docs/releases/v2/v2.16/development/history/2026-11-02-release-verification.md",
+    "docs/releases/v2/v2.16/development/v2.16.1-admission-evidence.md",
+    "docs/releases/v2/v2.16/development/v2.16.1-adversarial-report.md",
+    "docs/releases/v2/v2.16/development/v2.16.1-final-validation.md",
+    "docs/releases/v2/v2.16/development/v2.16.1-last-phase-evidence.md",
+    "docs/releases/v2/v2.16/development/v2.16.1-plan-review.md",
+    "docs/releases/v2/v2.16/development/v2.16.1-release-automation-evidence.md",
+    "docs/releases/v2/v2.16/known-gaps.md",
+    "docs/releases/v2/v2.16/plans/v2.16.1-release-completion.md",
+    "docs/runbooks/releases.md",
+    "docs/todos.md"
+  ],
+  "localLinkOccurrencesChecked": 346,
+  "preExistingBrokenUnique": 25,
+  "newlyBroken": [],
+  "preExistingBrokenLinks": [
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/build/nsis/nexus-setup.nsi"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/build/build-linux.sh"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/build/build-macos.sh"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/build/build-windows.ps1"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/build/nexus-installer.spec"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/build/smoke-windows-exe.ps1"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/constants.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/engine/desktop_provisioner.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/engine/hf_weights_puller.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/engine/model_router.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/installer_state.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/pages/installing.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/pages/typed_catalog.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/pages/welcome.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/registry_paths.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/theme.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/tier_defaults.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/widgets/background.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/widgets/constellation.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/widgets/float_logo.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/widgets/header.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/widgets/phase_group.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/widgets/step_indicator.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "../scripts/installer/pyqt/src/nexus_installer/widgets/title_bar.py"
+    },
+    {
+      "source": "docs/todos.md",
+      "target": "archive/v0/v0.4/implementation-plan.md"
+    }
+  ],
+  "disposition": "No introduced broken local file/directory links. Existing historical tracker links remain for v2.17 living-document reconciliation alongside BG-2; no old entry rewritten or declared resolved."
+}

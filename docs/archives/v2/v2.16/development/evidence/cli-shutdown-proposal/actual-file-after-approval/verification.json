@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "base_head": "a2d51e95f20e52f8f0cce978cb9f4d8e9e0a3d46",
+  "source_sha256_lf": "510b35ae208db45c10daa408f64ea9de7ac2e94a00127c91a9c2940655dfa91b",
+  "regression_sha256_lf": "b7f0477d4dc37a3aceabee03e6c02512402145c87c762a8bcf0fd57f2169b8b1",
+  "approval": {
+    "minor": "v2.16",
+    "blocker": 1,
+    "native_answer": "Approve",
+    "answered": "2026-10-29T20:43:32+00:00",
+    "scope": {
+      "baseline_sha256_lf": "1da0b316a5e164e80012b1de414e0bfc5917b60aa1966a245b1a78f9aa6dea4d",
+      "limits": "Keep original destination, spend and publication limits. Preserve the full-decline outcome; no model admission or release. DF-151 and legacy checker barriers remain separate.",
+      "operation": "Apply the reviewed natural-shutdown and finally-based metrics cleanup patch, add a focused actual-process regression test, and run applicable local gates before publication. Update existing closeout documentation and resolve WN-22 only after fresh actual-file proof.",
+      "patch": "docs/releases/v2/v2.16/development/evidence/cli-shutdown-proposal/with-cleanup/proposed-cli-shutdown-with-cleanup.patch",
+      "patch_sha256": "68b60a34d19a982a5481552fcfff52c41f23c0d66aa0b0d79d2c9581e37b0d93",
+      "paths": [
+        "bin/nexus.mjs",
+        "tests/integration/cli/nexus-cli-shutdown.test.ts"
+      ]
+    }
+  },
+  "focused": {
+    "node24_tests_passed": 18,
+    "node22_regression_passed": 1,
+    "node22_harness_flag": "--experimental-require-module",
+    "original_source_regression": "failed: forced exit produced zero metrics requests instead of one"
+  },
+  "actual_option_cases": 12,
+  "actual_failure_or_drain_cases": 10,
+  "build_exit": 0,
+  "lint_exit": 0,
+  "architecture_exit": 0,
+  "handbooks": "6 source(s) match",
+  "root_coverage": {
+    "command": [
+      "node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "configs/vitest.config.ts",
+      "--coverage",
+      "--maxWorkers=4",
+      "--reporter=json",
+      "--outputFile=C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-v216-cli-repair-local-gates\\root-coverage-bounded.json"
+    ],
+    "exit": 0,
+    "seconds": 243.11,
+    "hooks_unchanged": true,
+    "thresholds_unchanged": true,
+    "tests": {
+      "numTotalTests": 6503,
+      "numPassedTests": 6491,
+      "numFailedTests": 0,
+      "numPendingTests": 12,
+      "success": true
+    }
+  },
+  "coverage_total": {
+    "lines": {
+      "total": 26421,
+      "covered": 23059,
+      "skipped": 0,
+      "pct": 87.27
+    },
+    "statements": {
+      "total": 29665,
+      "covered": 25250,
+      "skipped": 0,
+      "pct": 85.11
+    },
+    "functions": {
+      "total": 4991,
+      "covered": 4354,
+      "skipped": 0,
+      "pct": 87.23
+    },
+    "branches": {
+      "total": 18991,
+      "covered": 14529,
+      "skipped": 0,
+      "pct": 76.5
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "earlier_failures": {
+    "encoding_capture": "Initial cp1252 output capture failed; no passing claim is made for it. Binary capture corrected the harness.",
+    "unbounded_run_exit": 1,
+    "timeouts": [
+      {
+        "test": "tests/integration/agents/swarm-orchestration.test.ts > integration: swarm orchestration dispatches write-capable nodes in worktrees (T010) > dispatches a write-capable node into an isolated worktree, leaving the shared workspace untouched",
+        "timeout_ms": 30000
+      },
+      {
+        "test": "tests/integration/agents/swarm-orchestration.test.ts > integration: swarm orchestration dispatches write-capable nodes in worktrees (T010) > removes the isolation worktree when the dispatched node leaves it unchanged",
+        "timeout_ms": 30000
+      },
+      {
+        "test": "tests/integration/agents/worktree-isolation.test.ts > integration: worktree-isolated parallel sub-agent execution (A10) > creates a detached worktree from HEAD and removes it when left unchanged",
+        "timeout_ms": 30000
+      },
+      {
+        "test": "tests/integration/agents/worktree-isolation.test.ts > integration: worktree-isolated parallel sub-agent execution (A10) > retains a worktree the sub-agent modified",
+        "timeout_ms": 30000
+      },
+      {
+        "test": "tests/integration/agents/worktree-isolation.test.ts > integration: worktree-isolated parallel sub-agent execution (A10) > two parallel write-capable run_terminal executions in separate worktrees do not collide",
+        "timeout_ms": 30000
+      },
+      {
+        "test": "tests/integration/agents/worktree-read-rooting.test.ts > integration: write-then-read parity inside an isolated worktree (T012) > a worktree-isolated sub-agent reads back its own run_terminal write",
+        "timeout_ms": 30000
+      }
+    ],
+    "isolated_worktree_rerun": "11 tests passed with unchanged source, hooks and timeouts",
+    "node22_harness_startup": "Default launch failed ERR_REQUIRE_ESM; one regression passed with the Node22 compatibility flag. Actual CLI cases use no compatibility flag."
+  },
+  "private_full_run_artifacts": {
+    "root-coverage-bounded.json": "f963fdc34984851a1d60620f910253029a3e6e33ddbdca3ee4af1b792878bbe5",
+    "root-coverage-bounded.log": "cf1403c73b7959c2508bc9568eafc6d11d39ba190fb894326aaaf196aaf118b0",
+    "root-coverage-utf8.log": "0a0df06790cc7050cf8b3122f09f500cc4fd3311b2b0a562e69b86eb2734ba21",
+    "worktree-timeout-reproduction.log": "133bab34f8546779596553e1b1dced37c7ef6d4adbb47297e6ddc39fd74d3fe0"
+  },
+  "model_inference": false,
+  "publication": "local repair; closing integration pending",
+  "independent_review": "GO; exact patch match, meaningful process regression, no code findings",
+  "guard_accepts": 0
+}

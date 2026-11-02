@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "kind": "proposal; production unchanged",
+  "date": "2026-10-29",
+  "source_head": "2568c29e98a0da19af176bd4a42d5d88fd730917",
+  "path": "bin/nexus.mjs",
+  "current_file_sha256_lf": "1da0b316a5e164e80012b1de414e0bfc5917b60aa1966a245b1a78f9aa6dea4d",
+  "proposed_file_sha256_lf": "e4e8d6ad385f6d0e4d6915af308e81dd7234d3108d10efdf6af19e5a7d1aa1b3",
+  "patch_sha256": "e01afc8cc02230a19b9de3c642dfe0db8e52a955155b3f9eb6ae64039de3e9f4",
+  "engines": {
+    "vscode": "^1.134.0",
+    "node": ">=20.0.0"
+  },
+  "model_inference": false,
+  "evidence": {
+    "proposed-cli-shutdown.patch": "e01afc8cc02230a19b9de3c642dfe0db8e52a955155b3f9eb6ae64039de3e9f4",
+    "node22/comparison.json": "24d5bf6512d0cf0721f62e249662ad106264f853f9930dd665530ef5b5385db4",
+    "node22/exact-cli-patch.json": "8895eee598ffe254e7d1d85306fca7652cfaf331c481ed091ab48b80c2532e8b",
+    "node22/exact-cli-patch.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "node22/exact-cli-patch.stdout": "12bb509e178727eae5fc23547cd3a9ee9572580ececad08b9308a7230e09b06c",
+    "node22/unchanged.json": "dbd330f46053b27372cbf5d3d0085d3241a1c7c34982ab6d4d7689634a255ee8",
+    "node22/unchanged.stderr": "bc1c70567ebb5b3287bc9910193af12f97b3a71a1993c18383528aed7e695bc9",
+    "node22/unchanged.stdout": "43175fa0f62711df9c2f11bee1bd9dac5036e030f881fe9d84b065f6506d56b4",
+    "node24/comparison.json": "7fa47984a3d1077cb0a31e3426692e7f1b96170eb0e8c3cc69490cd169b1266b",
+    "node24/exact-cli-patch.json": "520b3eeda3a0e774544615d2928b90b3ea728c089e1d7c7854d9ab2f576b48a1",
+    "node24/exact-cli-patch.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "node24/exact-cli-patch.stdout": "c16eac9ee24537fdd4c8550ab505e6ce0a1868452c19f6804fc070ea11ec4bbe",
+    "node24/unchanged.json": "ea2e7c3fd18d97068248b80b6587609ebc53fd5c796e93088e90d7018dec3625",
+    "node24/unchanged.stderr": "b95d2a5b671fbfad715ce424cdceadd816492b028017eedfbf08f6d94d7811fc",
+    "node24/unchanged.stdout": "96a684766277d687e1052ab1e910752a38e06f681b4371abd33e3a1516201fa3",
+    "setup-failure/comparison.json": "ff5d7fff592cca5786979401931ccce494e669001b34743976cbfaeaad884774",
+    "setup-failure/natural-exit.json": "0e06579fa4462b90dd2affc862e2b4334031e5caa941eb2757cde4caa549b2f7",
+    "setup-failure/unchanged.json": "ae7884b4041fdd3c94be1b419f1131ad4df177faf8e6140d0546e812316b3cb7",
+    "setup-failure/unchanged.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "setup-failure/unchanged.stdout": "7f59fbecde45cac8e1541428aa6580931c75ee8830ff190fc1b1181035b8b5ef"
+  }
+}

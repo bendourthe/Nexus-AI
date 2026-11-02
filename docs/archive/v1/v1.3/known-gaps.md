@@ -3,7 +3,8 @@
 **Status**: open. v1.3.0 opens with the skill-cleaner adoption track ([plans/adoption-skill-cleaner.md](plans/adoption-skill-cleaner.md), derived from [comparison-skill-cleaner.md](comparison-skill-cleaner.md)). Phase 1 (2026-05-28) ships the one skill-native item: the `skill-description-authoring` Nexus-Hub skill encoding the trigger-noun preservation rule (product / tool / action / object) plus single-line / ASCII-sanitized description discipline. No code surface in `core/` or `modules/` is touched in Phase 1; the deliverable lives entirely in the sibling Nexus-Hub repo. Phases 2-7 land the code-shaped items (foundational utilities, the `nexus skills audit` command, similarity + usage detection, render-budget enforcement, upstream hygiene, and stabilization). The known-gaps file is appended phase-by-phase; items move to `## 2. Resolved` when closed in a later phase; the `## 3. Summary` at the bottom is recomputed each pass.
 
 **Audience**: v1.3.0 phase authors, code reviewer, future-cycle planners
-**Last updated**: 2026-05-29 (Phase 7 -- adoption-skill-cleaner track complete)
+**Last updated**: 2026-10-31
+**Open items**: 0
 **Sibling reviews**: [docs/versions/v1/v1.2.0/known-gaps.md](../v1.2/known-gaps.md) (the upstream cycle gap log; carryforward open items remain in force during v1.3.0); [docs/versions/v1/v1.3.0/plans/adoption-skill-cleaner.md](plans/adoption-skill-cleaner.md) (the active adoption plan); [docs/versions/v1/v1.3.0/comparison-skill-cleaner.md](comparison-skill-cleaner.md) (the single-source comparison this track adopts).
 
 **Cycle context**: This file is created in Phase 1 (rather than deferred to T022 / Phase 7 as the plan text anticipated) because the implement-phase post-phase sequence appends gaps every phase. T022 in Phase 7 will append the full per-sub-task adoption ledger to this same file; the seeded sections below are forward-compatible with that pass.
@@ -62,7 +63,7 @@ This is the per-sub-task closure ledger for the skill-cleaner adoption plan. T02
 
 ## 1. Open Items
 
-### T002.P2.A -- Nexus-Hub validate_skills.py reports 7 pre-existing false-positive secret matches (WN, P2)
+### T002.P2.A -- Nexus-Hub validate_skills.py reports 7 pre-existing false-positive secret matches (WN, P2) - MIGRATED to v2.17.0
 
 - **Source phase**: adoption-skill-cleaner Phase 1 (T002)
 - **Plan reference**: [plans/adoption-skill-cleaner.md](plans/adoption-skill-cleaner.md) Phase 6 sub-task T017
@@ -70,14 +71,14 @@ This is the per-sub-task closure ledger for the skill-cleaner adoption plan. T02
 - **Suggested next step**: Phase 6 / T017 introduced the `--allow-existing` allowlist (`scripts/validate_skills.allowlist.json`), but it is scoped to the new single-line `name` / `description` violations only -- it does not yet demote these 7 secret-scan false positives, which still surface as ERROR-level findings on an unflagged full run. Remaining work: either extend the allowlist semantics to also grandfather known secret-scan false positives, or refine the `Generic secret assignment` regex to skip fenced code-block examples. Track as a Nexus-Hub-side issue.
 - **Phase 6 update (2026-05-29)**: the `--allow-existing` mechanism now exists (format-rule-scoped); this item stays open for the secret-scan grandfathering only.
 
-### T012.P2.C -- Usage scan covers only the primary skill root (DF, P2)
+### T012.P2.C -- Usage scan covers only the primary skill root (DF, P2) - MIGRATED to v2.17.0
 
 - **Source phase**: adoption-skill-cleaner Phase 4 (T012 / T013)
 - **Plan reference**: [plans/adoption-skill-cleaner.md](plans/adoption-skill-cleaner.md) Phase 4 sub-task T012
 - **Reason**: `scanUsage` takes a single `skillsRoot` (the plan-fixed signature), and the CLI passes only the primary root (`skillRootsFor(flags)[0]` -- the `--skills-root` override when given, otherwise the bundled built-in catalog). On a host with active `user` and `devai-hub` roots, the Unused report enumerates only the primary root's skills; skills that live exclusively in the other two roots are not surfaced as unused candidates. The audit's other four sections (Budget / Descriptions / name-Duplicates / Roots) already span all roots via the injected catalog, so this gap is scoped to the Unused section only.
 - **Suggested next step**: Either widen `scanUsage` to accept multiple roots (and have the auditor pass every loaded catalog root), or have the auditor derive the usage universe from its own injected catalog rather than re-walking a single disk root. Natural to fold into Phase 6 (T018 `--by-root`) since both touch the same root-resolution surface.
 
-### T013.P3.D -- Content-similarity detection is O(N^2); MinHash/LSH deferred (DF, P3)
+### T013.P3.D -- Content-similarity detection is O(N^2); MinHash/LSH deferred (DF, P3) - MIGRATED to v2.17.0
 
 - **Source phase**: adoption-skill-cleaner Phase 4 (T011 / T013)
 - **Plan reference**: [plans/adoption-skill-cleaner.md](plans/adoption-skill-cleaner.md) Phase 4 sub-task T011 (implementation note)
@@ -85,7 +86,7 @@ This is the per-sub-task closure ledger for the skill-cleaner adoption plan. T02
 - **Suggested next step**: Capture the similarity-detection runtime separately in the Phase 7 benchmark (T020); if it becomes the cost driver as the catalog grows, add a MinHash band pre-filter before the exact Jaccard pass.
 - **Phase 7 update (2026-05-29)**: T020 captured the isolated similarity runtime in [benchmarks/skills-audit-2026-05-28.md](benchmarks/skills-audit-2026-05-28.md) (4.4ms median over 120 comparisons on the 16-skill builtin catalog). The suggested measurement is now done; the item **stays open** because the MinHash/LSH pre-filter itself is not implemented (deferred until the catalog roughly doubles past the ~213-skill scale). A future cycle reruns the benchmark on the full catalog and decides.
 
-### T017.P3.E -- Nexus-Hub allowlist drain: 137 over-long descriptions grandfathered (DF, P3)
+### T017.P3.E -- Nexus-Hub allowlist drain: 137 over-long descriptions grandfathered (DF, P3) - MIGRATED to v2.17.0
 
 - **Source phase**: adoption-skill-cleaner Phase 6 (T017)
 - **Plan reference**: [plans/adoption-skill-cleaner.md](plans/adoption-skill-cleaner.md) Phase 6 sub-task T017

@@ -16,6 +16,6 @@ Both agent loops retain tool-result compaction and native tool-history behavior.
 
 ## Retained Evidence
 
-The frozen expanded evaluation found cross-section accuracy below the promotion threshold: Qwen 3.5 9B scored 0/20 and Gemma 4 12B scored 4/20. The owner selected removal, so no repeat of the futile benchmark is authorized by this change. Historical plans, raw measurements, fixtures and reports remain evidence of that result; they do not describe an enabled current feature. See the [evaluation record](../../releases/v2/v2.12/development/outline-eval.md).
+The frozen expanded evaluation found cross-section accuracy below the promotion threshold: Qwen 3.5 9B scored 0/20 and Gemma 4 12B scored 4/20. The owner selected removal, so no repeat of the futile benchmark is authorized by this change. Historical plans, raw measurements, fixtures and reports remain evidence of that result; they do not describe an enabled current feature. See the [evaluation record](../../archives/v2/v2.12/development/outline-eval.md).
 
 Existing `~/.nexus/outline-cache` files and saved user preference keys are retained. Retirement neither reads those keys to enable tools nor deletes cached data. Restarting the app ends any old in-memory tool instances; the new composition cannot create outline tools. Standalone algorithm and historical fixture support may remain in source without a product registration.

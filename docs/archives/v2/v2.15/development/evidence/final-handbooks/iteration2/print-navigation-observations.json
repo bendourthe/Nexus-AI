@@ -1,0 +1,111 @@
+[
+  {
+    "id": "atlas",
+    "missingFileLinks": [],
+    "normalMotionInvisible": 0,
+    "keyboardNext": "2 / 3",
+    "keyboardHome": "1 / 3",
+    "keyboardEnd": "3 / 3",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "fallbackDeckVisible": true,
+    "noJsHeadings": [
+      "Nexus Architecture Atlas",
+      "End-to-end path"
+    ],
+    "noJsPageVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 2,
+    "printMissingHeadings": []
+  },
+  {
+    "id": "generation-recovery",
+    "missingFileLinks": [],
+    "normalMotionInvisible": 0,
+    "keyboardNext": "2 / 4",
+    "keyboardHome": "1 / 4",
+    "keyboardEnd": "4 / 4",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "fallbackDeckVisible": true,
+    "noJsHeadings": [
+      "Generation Recovery and Validation",
+      "Recover the runtime",
+      "Validate image and video generation",
+      "Interpret failures"
+    ],
+    "noJsPageVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 2,
+    "printMissingHeadings": []
+  },
+  {
+    "id": "installer-runtime",
+    "missingFileLinks": [],
+    "normalMotionInvisible": 0,
+    "keyboardNext": "2 / 2",
+    "keyboardHome": "1 / 2",
+    "keyboardEnd": "2 / 2",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "fallbackDeckVisible": true,
+    "noJsHeadings": [
+      "Installer Repair and Runtime State"
+    ],
+    "noJsPageVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 1,
+    "printMissingHeadings": []
+  },
+  {
+    "id": "media-runtime",
+    "missingFileLinks": [],
+    "normalMotionInvisible": 0,
+    "keyboardNext": "2 / 2",
+    "keyboardHome": "1 / 2",
+    "keyboardEnd": "2 / 2",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "fallbackDeckVisible": true,
+    "noJsHeadings": [
+      "Local Media Runtime"
+    ],
+    "noJsPageVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 1,
+    "printMissingHeadings": []
+  },
+  {
+    "id": "transcript-and-workspaces",
+    "missingFileLinks": [],
+    "normalMotionInvisible": 0,
+    "keyboardNext": "2 / 2",
+    "keyboardHome": "1 / 2",
+    "keyboardEnd": "2 / 2",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "fallbackDeckVisible": true,
+    "noJsHeadings": [
+      "Transcript and Agents Workspace"
+    ],
+    "noJsPageVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 1,
+    "printMissingHeadings": []
+  },
+  {
+    "id": "document-outline",
+    "missingFileLinks": [],
+    "normalMotionInvisible": 0,
+    "keyboardNext": "2 / 4",
+    "keyboardHome": "1 / 4",
+    "keyboardEnd": "4 / 4",
+    "fullscreenFailureFallback": "Fullscreen unavailable. Presentation remains available in this window.",
+    "fallbackDeckVisible": true,
+    "noJsHeadings": [
+      "Document Output",
+      "Document Parsing",
+      "Conversation Space",
+      "Retained Evidence"
+    ],
+    "noJsPageVisible": true,
+    "noJsDeckHidden": true,
+    "printPages": 2,
+    "printMissingHeadings": []
+  }
+]

@@ -1,0 +1,83 @@
+{
+  "snapshot": {
+    "entry_sha256": "c2bbaf2daecc2c1c7474f99043dd119bc3eb25b379c1270230c77685445df8c7",
+    "inputs": {
+      "docs/handbooks/technical/transcript-and-workspaces.md": "ae74a63589d2061eab1f97803ef387294122e7fb26a4047a6b099d0bac442706",
+      "scripts/generate-handbooks.mjs": "e0d4eba3098ba99ce83eda35ce53b04b27d9fc2b7e2feb07ba29881f27dc02d8",
+      "scripts/handbook-renderer.mjs": "0850935742db242e576989c2ced66a5810a0bdfd0cad78791916cf5efb21566d",
+      "docs/handbooks/_sources/storyboards.json": "bdc1c561b3bf3980e6a140661ff6a4724009d1a140ab1a3fb259876d4045d651",
+      "docs/handbooks/_sources/handbook.css": "4d70a337a48ad579bc9212383ecfd7c6d5d5117070ca4766a4765fedf7e916cf",
+      "docs/handbooks/_sources/handbook-clones.js": "b39bb2be3fb5adff764fa56814ce20bbe380789e07b32fc1ab5fbb907dbf4e5b",
+      "docs/handbooks/_sources/dual-view.css": "e60e94cd26d4ba622ede429d9c7862a82dea491ac1b174bd86023ac5e5245c35",
+      "docs/handbooks/_sources/dual-view-runtime.js": "a1f3476c13edbe91212ec2996b3781811efd8a0e66ae06ff1c0ead3003a2e10c",
+      "desktop/public/nexus-mark.png": "92b4cd5ee2315c3b8d32e24e82f478a3a9012409a4536f9a59a488581c32cc05",
+      "package.json": "95d7c37acb00a99683cf40c7f8538390905de3a503d8c581d07c810230103d39",
+      "package-lock.json": "a5582b9fa6a9dc539dae5b10bd0e9253eee5c279e8cd9b277f9b34f5362e1806",
+      "core/chat/tokenUsage.ts": "501b2f411f37d1300a3cbdbef5f93c787125f688c3fd282bda7cefefb37cd645",
+      "desktop/src/shared/chat/MessageBubble.tsx": "40d858daf20d99c0557c62a70825a4b5be706b2b8cae39fb56e76e7b505ed6e3",
+      "desktop/src/shared/chat/transcriptChrome.ts": "00c5ef429245477b9a2adad6c7a58fe6d0bcd376e8b2594a48e434d967ccdb91",
+      "desktop/src/shared/chat/ReasoningDisclosure.tsx": "58c7762acb37519fc3111d57e3552b13d102d91b14ff9c8000d107d0f7d8c168",
+      "desktop/src/modules/coding/CodingPage.tsx": "5b1418eab5df76c310165cfb8e7835f7be040840abf20ea145da5c2d2eb25f72",
+      "desktop/src/modules/coding/WorkspaceSelector.tsx": "863ea2c89561962d43113d4e862a9e3957b089213d0cd2ff42a894345339942d",
+      "modules/coding/runtime/headlessTools.ts": "f7aa1e83db362090cfbbc34d71ef49651376cd45560cdcba5434aff7cb9e4e91",
+      "desktop/src/shared/chat/MessageList.tsx": "ad9259d27a71378370d5a41eddb349811139abf363705cf479c47fc9efe8ae23",
+      "desktop/src/shared/models/selectionPolicy.ts": "fcd3d3662b79cbe231736b5f903ec43588f9c948e7786af34c6b3308ee2e9b3b",
+      "modules/chat/storage/ChatExplorerStore.ts": "2d5c86f80dc4ba2f381df9f681542262796e0c5cdd7edead188fdde4e0a8cdff",
+      "desktop/sidecar/src/chat/explorerRuntime.ts": "3ad0f62d9f9a3c504673db5d0dea7d21545ace08793393989bc563c45faa8c1f",
+      "desktop/src/modules/chat/ipcChatExplorerClient.ts": "07225b2497b087c2c6a4df2714c3caba9a3cb262957c3b47be9fe7fdbed691bd",
+      "desktop/src/modules/chat/FolderTree.tsx": "37043985bc57621a43650d59ed26b32343777274264db1c794e1e7f03a4027a8"
+    },
+    "output_sha256": "908aa4ffccf6e2bf186cbbbf4426423ccdaa3694d3390d5a725e6c95365b7bfe"
+  },
+  "checks": {
+    "content": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.16/development/handbook-dependency-refresh-010ffa36/review.md",
+      "evidence_sha256": "e8989f61e0b33b166bb7db62188f2350cbf0b5d530390df1be1592c11e0bfe63"
+    },
+    "build": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.16/development/handbook-dependency-refresh-010ffa36/review.md",
+      "evidence_sha256": "e8989f61e0b33b166bb7db62188f2350cbf0b5d530390df1be1592c11e0bfe63"
+    },
+    "rendered": {
+      "status": "pass",
+      "evidence": "docs/releases/v2/v2.16/development/handbook-dependency-refresh-010ffa36/fresh-render-observations.json",
+      "evidence_sha256": "895c0eaa557e6f646dc7f85b751d7c7a4e869b1ccc7a2154b597635fdc0bf231",
+      "browser": "Playwright bundled Chromium 153.0.8010.12; fresh six-book review, 36 viewports and nine print pages",
+      "output_sha256": "908aa4ffccf6e2bf186cbbbf4426423ccdaa3694d3390d5a725e6c95365b7bfe"
+    }
+  },
+  "render_evidence_reuse": {
+    "reason": "Only dependency override floors and two lockfile entries changed; exact HTML and presentation assets remain unchanged",
+    "previous_receipt_sha256": "be346300e7d471f7d337530a06dfd9703110cd7e0882fa63fcbb2ebccf60fc00",
+    "previous_receipt": "docs/releases/v2/v2.15/development/v2.15.1-prepared-handbook-transcript-and-workspaces.json",
+    "published": false
+  },
+  "actual_archive_reference_update": {
+    "native_commits": {
+      "v2.12": "50bd7a79f7dd264acf835a57372d42b2f53b6df1",
+      "v2.13": "1b382186577814332b8e89b64c9804334267881f",
+      "v2.15": "293cbea25513057d93146447fb7dcd9a440b06b5"
+    },
+    "original_security_receipt": "docs/archives/v2/v2.15/development/v2.15.1-security-handbook-transcript-and-workspaces.json",
+    "original_security_receipt_raw_sha256": "04bfe6f2a8ce6e3a4e8b72b5c6440baefe4e4446b07100bc4af01b4895db7ee8",
+    "qualified_rehearsal_receipt_raw_sha256": "420ceaac418fdcf969e07b6acebdc087ae101eda64793bc92390ea987efe89ec",
+    "fresh_browser_execution": false
+  },
+  "dependency_receipt_refresh": {
+    "described_source_revision": "010ffa364aa56a4bf68039fbd38d8097b75d8162",
+    "candidate_state": "metadata-only local refresh on the merged source",
+    "original_receipt": "docs/archives/v2/v2.15/development/handbook-archive-refresh-release-v2.15.1-cda6af96/transcript-and-workspaces.json",
+    "original_receipt_raw_sha256": "07a26cbd1705991ec9ba006cb9bc4c70766a1a2782bfe20572b566fc96a0ca7a",
+    "changed_inputs": [
+      "package-lock.json",
+      "package.json"
+    ],
+    "all_code_inputs_unchanged": true,
+    "html_raw_bytes_unchanged": true,
+    "fresh_browser_execution": true,
+    "print_navigation_evidence": "docs/releases/v2/v2.16/development/handbook-dependency-refresh-010ffa36/fresh-print-navigation-observations.json",
+    "print_navigation_sha256": "e79c542ea6327e5e7a98b317bfff73f4202d205b83f03e5f3912f00da813264b"
+  }
+}

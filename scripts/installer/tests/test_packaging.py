@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 from pathlib import Path
 
 INSTALLER_ROOT = Path(__file__).parent.parent
@@ -326,23 +327,42 @@ class TestWorkflows:
         assert final_check in content
         assert "git ls-remote --tags origin" in content
         assert "has no peeled commit on origin" in content
-        assert "$2 == tag {print $1; exit}" in content
+        assert 'git cat-file -t "refs/tags/${RELEASE_TAG}"' in content
+        assert 'git merge-base --is-ancestor "$TAG_SHA" FETCH_HEAD' in content
+        assert '"refs/tags/${RELEASE_TAG}^{}"' in content
+        assert r"awk '$2 ~ /\^\{\}$/ {print $1; exit}'" in content
         assert '"$TAG_SHA" != "$EXPECTED_SHA"' in content
         assert "target_commitish: ${{ github.sha }}" in content
         assert content.index(final_check) < content.index(create_release)
 
-    def test_release_notes_extraction_keeps_markdown_subsections(self) -> None:
+    def test_release_notes_extraction_keeps_markdown_subsections(
+        self, tmp_path: Path
+    ) -> None:
         content = (WORKFLOWS / "release.yml").read_text()
-        assert 'index($0, "# [" version "]") == 1' in content
-        assert "flag && /^# / { exit }" in content
-        assert "^#+ /{flag=0}" not in content
-        changelog = (REPO_ROOT / "CHANGELOG.md").read_text()
-        release_block = changelog.split("# [2.3.1]", maxsplit=1)[1].split(
-            "# [2.3.0]", maxsplit=1
-        )[0]
+        assert (
+            'run: node scripts/extract-release-notes.mjs "$RELEASE_VERSION" '
+            "CHANGELOG.md release-notes.md"
+        ) in content
+        assert "body_path: release-notes.md" in content
+        output = tmp_path / "release-notes.md"
+        subprocess.run(
+            [
+                "node",
+                str(REPO_ROOT / "scripts" / "extract-release-notes.mjs"),
+                "2.3.1",
+                str(REPO_ROOT / "CHANGELOG.md"),
+                str(output),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        release_block = output.read_text(encoding="utf-8")
         assert "### Features" in release_block
         assert "### Bug Fixes" in release_block
         assert "**Packaging:**" in release_block
+        assert not re.search(r"(?m)^#{1,2} \[2\.3\.0\]", release_block)
 
     def test_release_workflow_stages_only_the_current_windows_desktop_payload(
         self,

@@ -7,7 +7,7 @@ import { spawnSync, execFileSync } from "node:child_process";
 // @ts-expect-error The standalone evaluation helper has no emitted declaration.
 import { loadEvaluation, validateVector, p95, pairedInterval, compareArms, ownedPath } from "../../../lib/embedding-eval.mjs";
 
-const contractPath = "docs/releases/v2/v2.13/development/embedding-eval-contract.json";
+const contractPath = "docs/archives/v2/v2.13/development/embedding-eval-contract.json";
 const checkout = resolve(__dirname, "../../..");
 const temporary: string[] = [];
 let pinnedSources: Map<string, Buffer> | undefined;

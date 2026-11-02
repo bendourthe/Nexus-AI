@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "date": "2026-10-29",
+  "kind": "scoped metadata verification; not minor completion",
+  "native_copy_proofs": 247,
+  "exact_staged_artifact_hashes": 85,
+  "new_report_and_proposal_unresolved_links": 0,
+  "repository_wide_unresolved_link_rows": 3776,
+  "migrated_target_unresolved_refs": 2,
+  "migrated_target_new_missing_identities": 0,
+  "staged_whitespace_exit": 0,
+  "production_cli_unchanged": true,
+  "application_full_suite": "unchanged implementation inputs retain the earlier full-suite proof; proposed CLI code is not applied",
+  "raw_capture_policy": "preserve bytes; CRLF allowed and patch context whitespace treated as patch data in the exact evidence subtree"
+}

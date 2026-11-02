@@ -25,4 +25,4 @@ The package has fast/full/platform script names, but their contents do not imple
 3. If not reproduced, retain the failure and investigate the environment, dependency or runtime-floor difference. Do not rerun blindly until green.
 4. A post-merge smoke failure is an integration incident and holds release work. A release failure also stops tag/publication work until the candidate is reconciled through integration.
 
-Workflow, permission, secret and protection changes each require a concrete separate approval. See [the terminal v2.12 comparison](../releases/v2/v2.12/development/phase-7-ci-comparison.md).
+Workflow, permission, secret and protection changes each require a concrete separate approval. See [the terminal v2.12 comparison](../archives/v2/v2.12/development/phase-7-ci-comparison.md).

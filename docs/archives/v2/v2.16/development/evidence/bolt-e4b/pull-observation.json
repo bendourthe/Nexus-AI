@@ -1,0 +1,10 @@
+{
+  "url": "http://127.0.0.1:11434/api/pull",
+  "request": {
+    "model": "nemotron-3.5-bolt:e4b-q4_K_M",
+    "stream": false
+  },
+  "status": 500,
+  "sha256": "3f9250f9350340848939807eb42d1ba3909c5898fb138fee862255ea02ae652a",
+  "observedUtc": "2026-10-26T03:10:54.026981+00:00"
+}
