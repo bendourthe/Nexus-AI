@@ -27,3 +27,7 @@ Every edited existing source, test, plan, tracker and evidence file passed the o
 ## Current disposition
 
 T008 is complete, giving 8/11 checked plan tasks. Independent Goal review found supporting local evidence and no additional executable blocker; required final records now exist. T009-T011 remain pending publication, green integration, reviewed release-source preparation and actual published/downloaded package acceptance. No new release exists at this checkpoint. v2.17 implementation/release and the requested final full review remain required.
+
+## Hosted correction
+
+PR148 was opened on initial head daacbae4. Installer CI failed on two assertions tied to removed inline awk implementation; both failures reproduced locally. Updating their expected contract retains annotation/main/peeled-remote identity and executes the real note CLI. All 50 packaging cases and the full Windows installer suite pass (1,528 passed, three skipped); lint and changed-file format pass. Optional formatter output on the untouched catalog file is retained. The omitted PR checklist is corrected with ten verified items on the current body. This TEST/metadata correction is part of the hosted troubleshooting loop, with no fourth adversarial implementation correction, no runtime change and no waived gate. Current corrective-head hosted checks and merge remain required.
