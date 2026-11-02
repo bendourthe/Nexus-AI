@@ -35,6 +35,14 @@
 * Authority: readiness has read-only repository access and does not authorize publication or bypass required checks. Artifact publication separately requires the exact reviewed annotated tag on main.
 * Docs: [Release-source and operating evidence](docs/releases/v2/v2.16/development/v2.16.1-release-source-evidence.md) and [release procedure](docs/runbooks/releases.md).
 
+### Frozen Installer Acceptance
+
+* Activation: the release and Windows rehearsal jobs invoke `pwsh -NonInteractive -File scripts/installer/build/smoke-windows-exe.ps1 -InstallDesktop` on a clean hosted Windows runner. The switch refuses local execution and pre-existing application/runtime destinations.
+* Validation: download the specific run's receipt with `gh run download <run-id> --repo bendourthe/Nexus-AI --name installer-windows-acceptance --dir <evidence-dir>`. Require status `pass`, version `2.16.1`, the reviewed source SHA, and an installer SHA-256 matching the downloaded published binary. The receipt must include real sidecar health, a nonempty catalog and the provisioned Node version/hash.
+* Rollback: omit `-InstallDesktop` for local boot-only probes. Hosted test installations are discarded with the disposable job. A failed install blocks publication and creates no passing receipt.
+* Authority: this selects zero models and proves installer/runtime/backend boundaries; it does not qualify GPU image/video output, admit a model or replace the full application review. The environment check prevents accidental local execution; it is not a security sandbox.
+* Docs: [Release-source and operating evidence](docs/releases/v2/v2.16/development/v2.16.1-release-source-evidence.md).
+
 ## [2.15.1](https://github.com/bendourthe/Nexus-AI/compare/v2.15.0...v2.15.1) (2026-10-22)
 
 
