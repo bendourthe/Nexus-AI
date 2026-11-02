@@ -18,6 +18,8 @@ export function extractReleaseNotes(changelog, version) {
   const lines = changelog.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n").split("\n");
   const sections = [];
   let fence = null;
+  let comment = null;
+  let inlineCodeRemaining = 0;
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
     const marker = /^ {0,3}(`{3,}|~{3,})(.*)$/.exec(line);
@@ -25,11 +27,49 @@ export function extractReleaseNotes(changelog, version) {
       if (marker && marker[1][0] === fence.character && marker[1].length >= fence.length && marker[2].trim() === "") fence = null;
       continue;
     }
-    if (marker) {
+    if (marker && !comment && inlineCodeRemaining === 0) {
       fence = { character: marker[1][0], length: marker[1].length, index };
       continue;
     }
-    const heading = /^ {0,3}#{1,2}[ \t]+(?:\[([^\]\r\n]+)\](?:\([^\r\n)]*\))?|([^ \t]+))(?:[ \t].*)?$/.exec(line);
+    let cursor = Math.min(inlineCodeRemaining, line.length);
+    let visibleLine = " ".repeat(cursor);
+    inlineCodeRemaining = Math.max(0, inlineCodeRemaining - line.length - 1);
+    while (cursor < line.length) {
+      if (comment) {
+        const end = line.indexOf("-->", cursor);
+        const nextCursor = end < 0 ? line.length : end + 3;
+        visibleLine += " ".repeat(nextCursor - cursor);
+        cursor = nextCursor;
+        if (end >= 0) comment = null;
+      } else {
+        const start = line.indexOf("<!--", cursor);
+        let codeSpan = null;
+        if (line.slice(cursor).includes("`")) {
+          const paragraph = [line.slice(cursor)];
+          // Inline code can span soft line breaks, but never a new Markdown block.
+          for (let following = index + 1; following < lines.length; following += 1) {
+            if (/^\s*$|^ {0,3}(?:#{1,6}(?:[ \t]|$)|`{3,}|~{3,}|>|<!--|(?:[-+*]|\d+[.)])[ \t])/.test(lines[following])) break;
+            paragraph.push(lines[following]);
+          }
+          codeSpan = /(?<!`)(`+)(?!`)[\s\S]*?(?<!`)\1(?!`)/.exec(paragraph.join("\n"));
+        }
+        if (codeSpan && codeSpan.index < line.length - cursor && (start < 0 || cursor + codeSpan.index < start)) {
+          const end = cursor + codeSpan.index + codeSpan[0].length;
+          visibleLine += line.slice(cursor, cursor + codeSpan.index) + " ".repeat(Math.min(codeSpan[0].length, line.length - cursor - codeSpan.index));
+          inlineCodeRemaining = Math.max(0, end - line.length - 1);
+          cursor = Math.min(end, line.length);
+          continue;
+        }
+        if (start < 0) {
+          visibleLine += line.slice(cursor);
+          break;
+        }
+        visibleLine += `${line.slice(cursor, start)}    `;
+        cursor = start + 4;
+        comment = { index };
+      }
+    }
+    const heading = /^ {0,3}#{1,2}[ \t]+(?:\[([^\]\r\n]+)\](?:\([^\r\n)]*\))?|([^ \t]+))(?:[ \t].*)?$/.exec(visibleLine);
     if (!heading) continue;
     try {
       sections.push({ version: normalizeVersion(heading[1] ?? heading[2]), index });
@@ -44,6 +84,9 @@ export function extractReleaseNotes(changelog, version) {
   const next = sections[sections.indexOf(section) + 1];
   if (fence && fence.index > section.index && (!next || fence.index < next.index)) {
     throw new Error(`Unclosed fenced block in CHANGELOG section for ${wanted}`);
+  }
+  if (comment && comment.index >= section.index && (!next || comment.index < next.index)) {
+    throw new Error(`Unclosed HTML comment in CHANGELOG section for ${wanted}`);
   }
   const body = lines.slice(section.index + 1, next?.index ?? lines.length);
   while (body.length && body[0].trim() === "") body.shift();

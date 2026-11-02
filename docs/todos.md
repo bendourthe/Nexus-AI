@@ -4,7 +4,7 @@
 
 | Goal | Verified current state | Required outcome |
 |---|---|---|
-| v2.16 release | No published release; model admission HOLD retained; exact-note extraction and reviewed-source release path locally verified | Complete full validation, green integration, package acceptance and actual publication |
+| v2.16 release | No published release; 8/11 plan tasks checked; model HOLD retained; Windows package activation passed; corrected-source root 6,528 passed, 12 skipped | Complete full validation, green integration, package acceptance and actual publication |
 | v2.17 release | 384 OPEN records preserved in the requirements matrix; implementation and evidence reconciliation pending | Complete the actual requirements and publish verified artifacts |
 | Final review | Not started | Full codebase, local-agent, UI and behavioral review after both releases |
 
@@ -13,9 +13,13 @@
 - [x] Pass five actual E4B tool-call transcripts and identical-request HTTP replays with zero codec failures.
 - [x] Repair exact-version notes, protected-main release preparation and tag/source guards; pass focused tests and real local Git boundary checks.
 - [ ] Fix and prove production instruction/context budgeting; the measured enriched project turn refuses before inference at 4K and cold 8K windows.
-- [ ] Complete v2.16 model requalification and release-pipeline repair.
+- [x] Record model qualification HOLD and locally verify release-pipeline repairs, with zero admissions and unchanged defaults.
+- [x] Build and activate the Windows extension candidate in isolated editor/application storage and verify its packaged SQLite boundary.
+- [x] Pass corrected-source root validation with existing coverage thresholds.
+- [ ] Complete the final v2.16 local review gate and green integration.
 - [ ] Publish the verified v2.16 release.
 - [ ] Reconcile every v2.17 obligation against current code and required acceptance evidence.
+- [ ] Review the link audit during v2.17 BG-2 living-document reconciliation (25 existing broken tracker links; zero newly broken links).
 - [ ] Implement and qualify the remaining v2.17 functionality.
 - [ ] Publish the verified v2.17 release.
 - [ ] Run the requested full review of local-agent functionality, context, memory, history, security and UI behavior.
