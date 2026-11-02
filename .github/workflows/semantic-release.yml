@@ -1,53 +1,45 @@
-name: Semantic Release
+name: Release Readiness
 
-# Runs on every push to main. Analyzes conventional commits and, when a new
-# release is warranted, updates CHANGELOG.md, bumps package.json, commits
-# with `[skip ci]`, tags `vX.Y.Z`, and creates a GitHub release. The tag
-# push triggers the existing release.yml which builds the VSIX and the
-# Windows/macOS installers.
-#
-# The plugin chain in `.releaserc.json` is changelog -> git -> github. We
-# deliberately do NOT include `@semantic-release/npm` because Gemma Code
-# ships as a VSIX, not as an npm package.
+# Release source is prepared through reviewed develop/main pull requests.
+# This manual check only validates that source; release.yml alone packages
+# and publishes an existing, verified tag. It never creates commits or tags.
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Reviewed source ref to check before tagging"
+        required: true
+        default: develop
+        type: string
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+  contents: read
 
 concurrency:
-  group: semantic-release-${{ github.ref }}
+  group: release-readiness-${{ github.event.inputs.source_ref }}
   cancel-in-progress: false
 
 jobs:
-  release:
-    name: Release
+  readiness:
+    name: Check release source
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           fetch-depth: 0
+          ref: ${{ github.event.inputs.source_ref }}
           persist-credentials: false
 
-      # semantic-release v25 requires Node >= 22.14.0 || >= 24.10.0. The rest
-      # of the project still targets Node 18 (engines.node), but this
-      # workflow is the only consumer of semantic-release, so it pins a
-      # newer Node here in isolation.
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: "22"
-          cache: "npm"
-
-      - run: npm ci --prefer-offline --no-audit
 
       - name: Release artifact matrix parity
         run: node scripts/check-release-assets.mjs
 
-      - name: Run semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+      - name: Validate the exact version's release notes
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('./package.json').version")
+          node scripts/extract-release-notes.mjs "$VERSION" CHANGELOG.md release-readiness-notes.md

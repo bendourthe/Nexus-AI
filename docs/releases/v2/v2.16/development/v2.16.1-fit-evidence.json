@@ -1,0 +1,311 @@
+{
+  "schemaVersion": 1,
+  "runtime": "Ollama 0.40.13",
+  "gpu": "RTX 3080 Ti Laptop, 16 GB",
+  "taskSelection": "bugfix-off-by-one-01, preregistered before probes",
+  "observations": [
+    {
+      "id": "holder-cpu",
+      "model": "lfm2.5:2.6b",
+      "options": {
+        "temperature": 0.3,
+        "top_p": 0.9,
+        "top_k": 50,
+        "num_ctx": 128000,
+        "num_gpu": 0
+      },
+      "task": "bugfix-off-by-one-01",
+      "passedTask": true,
+      "failures": [],
+      "taskMs": 65231,
+      "reportedMemory": {
+        "status": "measured",
+        "peakResidentBytes": 4636729670,
+        "peakVramBytes": 0,
+        "peakRamBytes": 4636729670,
+        "offloaded": true,
+        "samples": 300
+      },
+      "codecParseFailures": 0,
+      "observedContextLengths": [
+        128000
+      ],
+      "completeResponseCounters": [
+        {
+          "prompt_eval_count": 2118,
+          "prompt_eval_duration": 16700868999,
+          "eval_count": 112,
+          "eval_duration": 5286852000
+        },
+        {
+          "prompt_eval_count": 2277,
+          "prompt_eval_duration": 1449475000,
+          "eval_count": 125,
+          "eval_duration": 6957800000
+        },
+        {
+          "prompt_eval_count": 2391,
+          "prompt_eval_duration": 1259754000,
+          "eval_count": 56,
+          "eval_duration": 2686422000
+        },
+        {
+          "prompt_eval_count": 2504,
+          "prompt_eval_duration": 1165194000,
+          "eval_count": 71,
+          "eval_duration": 4329412000
+        },
+        {
+          "prompt_eval_count": 2682,
+          "prompt_eval_duration": 1887336000,
+          "eval_count": 107,
+          "eval_duration": 6016959000
+        },
+        {
+          "prompt_eval_count": 2897,
+          "prompt_eval_duration": 2307127000,
+          "eval_count": 96,
+          "eval_duration": 5527090000
+        }
+      ],
+      "completeResponseOutputTokens": 567,
+      "completeResponseEvalNs": 30804535000,
+      "tokensPerSecond": 18.406380748808576,
+      "timingScope": "completed responses only; CPU candidate task timed out, so these are not whole-task token statistics"
+    },
+    {
+      "id": "candidate-cpu",
+      "model": "nemotron-3.5-bolt:e4b-q4_K_M",
+      "options": {
+        "top_k": 64,
+        "top_p": 0.95,
+        "temperature": 1,
+        "num_gpu": 0
+      },
+      "task": "bugfix-off-by-one-01",
+      "passedTask": false,
+      "failures": [
+        "agent: task timed out after 120000ms",
+        "loop bound corrected (file_contains src/process.ts): pattern \"i < arr.length\" in process.ts"
+      ],
+      "taskMs": 120102,
+      "reportedMemory": {
+        "status": "measured",
+        "peakResidentBytes": 3884428819,
+        "peakVramBytes": 0,
+        "peakRamBytes": 3884428819,
+        "offloaded": true,
+        "samples": 519
+      },
+      "codecParseFailures": 0,
+      "observedContextLengths": [
+        4096
+      ],
+      "completeResponseCounters": [
+        {
+          "prompt_eval_count": 2203,
+          "prompt_eval_duration": 34506793000,
+          "eval_count": 116,
+          "eval_duration": 10840850000
+        },
+        {
+          "prompt_eval_count": 2398,
+          "prompt_eval_duration": 3430310000,
+          "eval_count": 167,
+          "eval_duration": 14929974000
+        },
+        {
+          "prompt_eval_count": 2529,
+          "prompt_eval_duration": 2362147000,
+          "eval_count": 292,
+          "eval_duration": 23973558000
+        },
+        {
+          "prompt_eval_count": 2660,
+          "prompt_eval_duration": 2634908000,
+          "eval_count": 101,
+          "eval_duration": 11998964000
+        }
+      ],
+      "completeResponseOutputTokens": 676,
+      "completeResponseEvalNs": 61743346000,
+      "tokensPerSecond": 10.948548204692372,
+      "timingScope": "completed responses only; CPU candidate task timed out, so these are not whole-task token statistics"
+    },
+    {
+      "id": "holder-gpu",
+      "model": "lfm2.5:2.6b",
+      "options": {
+        "temperature": 0.3,
+        "top_p": 0.9,
+        "top_k": 50,
+        "num_ctx": 32768
+      },
+      "task": "bugfix-off-by-one-01",
+      "passedTask": false,
+      "failures": [
+        "agent: Identical-call veto: tool \"read_file\" was invoked 5 times in a row with the same arguments. Terminating this turn. The session is still open."
+      ],
+      "taskMs": 25782,
+      "reportedMemory": {
+        "status": "measured",
+        "peakResidentBytes": 2436261477,
+        "peakVramBytes": 2436261477,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 83
+      },
+      "codecParseFailures": 0,
+      "observedContextLengths": [
+        32768
+      ],
+      "completeResponseCounters": [
+        {
+          "prompt_eval_count": 2118,
+          "prompt_eval_duration": 607134000,
+          "eval_count": 102,
+          "eval_duration": 735926000
+        },
+        {
+          "prompt_eval_count": 2277,
+          "prompt_eval_duration": 37138000,
+          "eval_count": 190,
+          "eval_duration": 1421432000
+        },
+        {
+          "prompt_eval_count": 2467,
+          "prompt_eval_duration": 45101000,
+          "eval_count": 431,
+          "eval_duration": 3182832000
+        },
+        {
+          "prompt_eval_count": 2585,
+          "prompt_eval_duration": 36618000,
+          "eval_count": 60,
+          "eval_duration": 450905000
+        },
+        {
+          "prompt_eval_count": 2698,
+          "prompt_eval_duration": 373171000,
+          "eval_count": 116,
+          "eval_duration": 785693000
+        },
+        {
+          "prompt_eval_count": 2915,
+          "prompt_eval_duration": 44147000,
+          "eval_count": 110,
+          "eval_duration": 789184000
+        },
+        {
+          "prompt_eval_count": 3127,
+          "prompt_eval_duration": 46157000,
+          "eval_count": 104,
+          "eval_duration": 767616000
+        },
+        {
+          "prompt_eval_count": 3346,
+          "prompt_eval_duration": 45450000,
+          "eval_count": 119,
+          "eval_duration": 861447000
+        },
+        {
+          "prompt_eval_count": 3563,
+          "prompt_eval_duration": 48560000,
+          "eval_count": 118,
+          "eval_duration": 842401000
+        }
+      ],
+      "completeResponseOutputTokens": 1350,
+      "completeResponseEvalNs": 9837436000,
+      "tokensPerSecond": 137.23088007891488,
+      "timingScope": "completed responses only; CPU candidate task timed out, so these are not whole-task token statistics"
+    },
+    {
+      "id": "candidate-gpu",
+      "model": "nemotron-3.5-bolt:e4b-q4_K_M",
+      "options": {
+        "top_k": 64,
+        "top_p": 0.95,
+        "temperature": 1,
+        "num_ctx": 32768
+      },
+      "task": "bugfix-off-by-one-01",
+      "passedTask": true,
+      "failures": [],
+      "taskMs": 38814,
+      "reportedMemory": {
+        "status": "measured",
+        "peakResidentBytes": 1205715598,
+        "peakVramBytes": 1205715598,
+        "peakRamBytes": 0,
+        "offloaded": false,
+        "samples": 133
+      },
+      "codecParseFailures": 0,
+      "observedContextLengths": [
+        32768
+      ],
+      "completeResponseCounters": [
+        {
+          "prompt_eval_count": 2203,
+          "prompt_eval_duration": 1138498000,
+          "eval_count": 151,
+          "eval_duration": 1193759000
+        },
+        {
+          "prompt_eval_count": 2398,
+          "prompt_eval_duration": 146787000,
+          "eval_count": 162,
+          "eval_duration": 1373484000
+        },
+        {
+          "prompt_eval_count": 2529,
+          "prompt_eval_duration": 124744000,
+          "eval_count": 264,
+          "eval_duration": 2633259000
+        },
+        {
+          "prompt_eval_count": 2721,
+          "prompt_eval_duration": 156425000,
+          "eval_count": 324,
+          "eval_duration": 2760532000
+        },
+        {
+          "prompt_eval_count": 2863,
+          "prompt_eval_duration": 137368000,
+          "eval_count": 247,
+          "eval_duration": 2205343000
+        },
+        {
+          "prompt_eval_count": 2970,
+          "prompt_eval_duration": 104400000,
+          "eval_count": 413,
+          "eval_duration": 4132840000
+        },
+        {
+          "prompt_eval_count": 3091,
+          "prompt_eval_duration": 402513000,
+          "eval_count": 324,
+          "eval_duration": 2926833000
+        }
+      ],
+      "completeResponseOutputTokens": 1885,
+      "completeResponseEvalNs": 17226050000,
+      "tokensPerSecond": 109.42729180514395,
+      "timingScope": "completed responses only; CPU candidate task timed out, so these are not whole-task token statistics"
+    }
+  ],
+  "cpuFit": "HOLD",
+  "gpuFallbackFit": "HOLD",
+  "reason": "Candidate /api/ps memory contradicts the runtime allocation log. CPU reports peak 3,884,428,819 bytes despite main model buffers 4,723.88 + 1,835.16 MiB and draft buffers 687.62 MiB. GPU reports 1,205,715,598 bytes despite main CUDA model 3,023.05 MiB, CUDA draft model 687.62 MiB, additional KV buffers, and CUDA_Host model buffers 3,536.00 MiB. Preserve the frozen measurement rule; do not infer fit or silently replace its units/source.",
+  "reopenCondition": "Obtain reliable complete resident-memory readings reconciled with the actual main/draft/host allocations, then repeat the same fit task under the frozen per-slot rules.",
+  "qualityStatus": "not run: fit measurement remains HOLD",
+  "defaultChanges": false,
+  "sourceHashes": {
+    ".nexus-hub/work/v216-v217-release/e4-real/preregistered.json": "b46740a8394506a41c0422dceb03282fd9235b39375e010e4b23ed90b8ce2735",
+    ".nexus-hub/work/v216-v217-release/e4-real/result.json": "cc2ffd6bd0d02f527080958d5ce496787341651866dd044dcc1769dc5f216be6",
+    ".nexus-hub/work/v216-v217-release/ollama-server.log": "9ffca382fb30f34dc0a0d15d58f42bd5087f15d66ac874f1a82d65881738f78d",
+    ".nexus-hub/work/v216-v217-release/holder-pull-result.json": "1c296d0d1317d3590ac91c08af02b644f429b254a06c69a0ea9cdd0c9b8f3421",
+    ".nexus-hub/work/v216-v217-release/e4b-pull-result.json": "122c61678db8f3233f4607f8c25f4d07756090d578a4ab79309ad9117b97184b"
+  }
+}

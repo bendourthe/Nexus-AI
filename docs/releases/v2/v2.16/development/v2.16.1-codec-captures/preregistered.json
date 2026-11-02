@@ -1,0 +1,95 @@
+{
+  "model": "nemotron-3.5-bolt:e4b-q4_K_M",
+  "options": {
+    "temperature": 0,
+    "top_p": 1,
+    "seed": 216,
+    "num_predict": 1024,
+    "num_ctx": 4096
+  },
+  "maxIterations": 3,
+  "timeoutMs": 180000,
+  "allowedTools": [
+    "read_file",
+    "list_directory",
+    "grep_codebase"
+  ],
+  "cases": [
+    {
+      "id": "read-alpha",
+      "task": "Use read_file with path exactly \"alpha.txt\", then report the alpha code from that file. Do not guess the content.",
+      "expected": [
+        {
+          "tool": "read_file",
+          "args": {
+            "path": "alpha.txt"
+          }
+        }
+      ]
+    },
+    {
+      "id": "read-config",
+      "task": "Use read_file with path exactly \"nested/config.json\", then report the contextBudget value. Do not guess the content.",
+      "expected": [
+        {
+          "tool": "read_file",
+          "args": {
+            "path": "nested/config.json"
+          }
+        }
+      ]
+    },
+    {
+      "id": "list-nested",
+      "task": "Use list_directory with path exactly \"nested\", then report the filenames found there. Do not guess the filenames.",
+      "expected": [
+        {
+          "tool": "list_directory",
+          "args": {
+            "path": "nested"
+          }
+        }
+      ]
+    },
+    {
+      "id": "search-marker",
+      "task": "Use grep_codebase with pattern exactly \"NEEDLE_216\" and path exactly \".\", then report the matching filename. Do not guess the match.",
+      "expected": [
+        {
+          "tool": "grep_codebase",
+          "args": {
+            "pattern": "NEEDLE_216",
+            "path": "."
+          }
+        }
+      ]
+    },
+    {
+      "id": "two-reads",
+      "task": "Read both alpha.txt and beta.txt with read_file, using those exact relative paths, then report both codes. The reads are independent and can be requested together. Do not guess either code.",
+      "expected": [
+        {
+          "tool": "read_file",
+          "args": {
+            "path": "alpha.txt"
+          }
+        },
+        {
+          "tool": "read_file",
+          "args": {
+            "path": "beta.txt"
+          }
+        }
+      ]
+    }
+  ],
+  "sourceHashes": {
+    "modules/coding/runtime/HeadlessAgentSession.ts": "db75f47549501f4d266a898d53649bd1814d10d068856254a282c055593e484e",
+    "modules/coding/runtime/headlessTools.ts": "312deefb5f15d4ad9bc4142bc29974dcfe6d38180211dca1ff0d4d172858a159",
+    "modules/coding/llm/headlessOllamaClient.ts": "5fb86ad50cc28e140f15f592d61ae6f4464dc35fd0c09d6b84442650a819caba",
+    "modules/coding/llm/parseAgentToolCalls.ts": "f022088f07692a651c690cb9d6951e2403b1b59bf0dbef1cb1d1dee69c894314",
+    "modules/coding/llm/ToolCallFormat.ts": "f9ecdd0cdf84cc0c45e77963107fa080e9c13a79ecbcfb02d0868c96c06aa1d6"
+  },
+  "inference": "owned loopback-only Ollama 0.40.13, real production session/client/tools",
+  "purpose": "E-3 codec evidence only; not E-4 fit or E-5 task-quality evidence"
+}
