@@ -53,14 +53,28 @@ jobs:
             exit 1
           fi
           git fetch --force --tags origin
+          if [ "$(git cat-file -t "refs/tags/${RELEASE_TAG}")" != "tag" ]; then
+            echo "Release tag $RELEASE_TAG must be annotated" >&2
+            exit 1
+          fi
           TAG_SHA=$(git rev-parse "refs/tags/${RELEASE_TAG}^{commit}")
           CURRENT_SHA=$(git rev-parse HEAD)
           if [ "$TAG_SHA" != "$CURRENT_SHA" ] || [ "$TAG_SHA" != "$GITHUB_SHA" ]; then
             echo "Release tag $RELEASE_TAG does not resolve to the checked-out workflow commit" >&2
             exit 1
           fi
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor "$TAG_SHA" FETCH_HEAD; then
+            echo "Release tag $RELEASE_TAG is not on the reviewed main history" >&2
+            exit 1
+          fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag_name=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Validate release notes before packaging
+        env:
+          RELEASE_VERSION: ${{ steps.metadata.outputs.version }}
+        run: node scripts/extract-release-notes.mjs "$RELEASE_VERSION" CHANGELOG.md release-notes.md
 
   # -- Re-run the release gate on the tagged commit ---------------------------
 
@@ -350,17 +364,9 @@ jobs:
           cat SHA256SUMS.txt
 
       - name: Extract release notes from CHANGELOG
-        id: changelog
-        run: |
-          VERSION="${{ needs.release-metadata.outputs.version }}"
-          NOTES=$(awk -v version="$VERSION" '
-            index($0, "# [" version "]") == 1 { flag=1; next }
-            flag && /^# / { exit }
-            flag { print }
-          ' CHANGELOG.md)
-          echo "notes<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$NOTES" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+        env:
+          RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
+        run: node scripts/extract-release-notes.mjs "$RELEASE_VERSION" CHANGELOG.md release-notes.md
 
       - name: Revalidate annotated tag immediately before publication
         env:
@@ -370,9 +376,6 @@ jobs:
           set -euo pipefail
           REMOTE_TAGS=$(git ls-remote --tags origin "refs/tags/${RELEASE_TAG}" "refs/tags/${RELEASE_TAG}^{}")
           TAG_SHA=$(printf '%s\n' "$REMOTE_TAGS" | awk '$2 ~ /\^\{\}$/ {print $1; exit}')
-          if [ -z "$TAG_SHA" ]; then
-            TAG_SHA=$(printf '%s\n' "$REMOTE_TAGS" | awk -v tag="refs/tags/${RELEASE_TAG}" '$2 == tag {print $1; exit}')
-          fi
           if [ -z "$TAG_SHA" ]; then
             echo "Annotated release tag ${RELEASE_TAG} is missing or has no peeled commit on origin" >&2
             exit 1
@@ -388,7 +391,7 @@ jobs:
           tag_name: ${{ needs.release-metadata.outputs.tag_name }}
           target_commitish: ${{ github.sha }}
           name: "Nexus v${{ needs.release-metadata.outputs.version }}"
-          body: ${{ steps.changelog.outputs.notes }}
+          body_path: release-notes.md
           draft: false
           prerelease: ${{ contains(needs.release-metadata.outputs.tag_name, '-') }}
           fail_on_unmatched_files: true
