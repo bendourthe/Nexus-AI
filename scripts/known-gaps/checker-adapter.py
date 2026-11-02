@@ -4,7 +4,7 @@
 This is the one place in the repository that imports the checker. It verifies
 the sha256 of the checker and of every sibling module it imports against the pins
 below (the checker's pin is recorded in
-docs/releases/v2/v2.15/development/v2.15.0-ledger-conversion-decisions.md), so a
+docs/archives/v2/v2.15/development/v2.15.0-ledger-conversion-decisions.md), so a
 checker change is never absorbed unnoticed: on a mismatch it prints both hashes
 and exits 3. Each module is compiled from the bytes that were hashed, never from
 a cached .pyc, and the checker's directory is never put on sys.path, so an

@@ -1,0 +1,89 @@
+{
+  "observedAt": "2026-11-02T06:57:09.702Z",
+  "source": ".github/workflows/ci.yml",
+  "sourceSha256": "194453c42817b60f4454ae3f6b0bf23ccfd9589f35c936eac137cdddbf065137",
+  "tokenPermissions": {
+    "contents": "read"
+  },
+  "requiredAggregate": "ci-required",
+  "needsAndDeclaredResultsMatch": true,
+  "dependencies": [
+    "lint-ts",
+    "test-ts",
+    "build-ts",
+    "catalog-sync",
+    "coverage-gate",
+    "nexus-check",
+    "fast-bench",
+    "check-prompts",
+    "package-vsix",
+    "check-feature-drift",
+    "check-command-parity",
+    "check-release-assets",
+    "check-architecture",
+    "init-check-posix",
+    "init-check-windows",
+    "test-python-runtimes",
+    "audit-ts",
+    "audit-ts-dev",
+    "audit-py",
+    "audit-runtimes"
+  ],
+  "cases": [
+    {
+      "name": "all-success",
+      "status": 0,
+      "expected": 0,
+      "output": ""
+    },
+    {
+      "name": "one-skipped",
+      "status": 0,
+      "expected": 0,
+      "output": ""
+    },
+    {
+      "name": "one-failed",
+      "status": 1,
+      "expected": 1,
+      "output": "FAIL: lint_ts=failure"
+    },
+    {
+      "name": "one-cancelled",
+      "status": 1,
+      "expected": 1,
+      "output": "FAIL: lint_ts=cancelled"
+    },
+    {
+      "name": "one-empty",
+      "status": 1,
+      "expected": 1,
+      "output": "FAIL: lint_ts=<empty>"
+    },
+    {
+      "name": "one-unknown",
+      "status": 1,
+      "expected": 1,
+      "output": "FAIL: lint_ts=unexpected-state"
+    }
+  ],
+  "protectedBranches": {
+    "develop": {
+      "approving_reviews": null,
+      "contexts": [
+        "ci-required"
+      ],
+      "enforce_admins": false,
+      "strict": false
+    },
+    "main": {
+      "approving_reviews": null,
+      "contexts": [
+        "ci-required"
+      ],
+      "enforce_admins": false,
+      "strict": false
+    }
+  },
+  "limitations": "Local command and live setting evidence only. Does not prove a new PR merge result is green. Duplicate push/PR validation, post-merge platform gating and incomplete profile coverage remain separate reconciliation items. No branch setting was changed and no backlog entry closed."
+}

@@ -1,0 +1,2247 @@
+{
+  "schema": 1,
+  "kind": "native approved inherited carries",
+  "source_head": "2568c29e98a0da19af176bd4a42d5d88fd730917",
+  "authority_sha256": "de13b890c9a856d61a9a75e5860b6894e42164b0a17cd573f91b50b5276df021",
+  "authority_unchanged": true,
+  "migrations": [
+    {
+      "id": "v2.16#DF-1",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-2",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-3",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-4",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-5",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-6",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-7",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-8",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-9",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-10",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-11",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-12",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-13",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-14",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-15",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-16",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-17",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-18",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-19",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-20",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-21",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-22",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-23",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-24",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-25",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-26",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-27",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-28",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-29",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-30",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-31",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-32",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-33",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-34",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-35",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-36",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-37",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-38",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-39",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-40",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-41",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-42",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-43",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-44",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-45",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#MT-1",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-46",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-47",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-48",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#WN-1",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-49",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#QG-1",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#QG-2",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#BG-1",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#MT-2",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-50",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-51",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-52",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-53",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-54",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-55",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-56",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-57",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-58",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-59",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#WN-2",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#WN-3",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-60",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-61",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-62",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-63",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-64",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-65",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-66",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-67",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-68",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-69",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-70",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-71",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-72",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-73",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-74",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-75",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-76",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-77",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-78",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-79",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-80",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-81",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-82",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-83",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-84",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-85",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-86",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-87",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-88",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-89",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-90",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#MT-3",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#MT-4",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#MT-5",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#DF-91",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#WN-4",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#WN-5",
+      "already_migrated": true
+    },
+    {
+      "id": "v2.16#MT-6",
+      "target": "v2.17#MT-6"
+    },
+    {
+      "id": "v2.16#DF-92",
+      "target": "v2.17#DF-92"
+    },
+    {
+      "id": "v2.16#DF-93",
+      "target": "v2.17#DF-93"
+    },
+    {
+      "id": "v2.16#MT-7",
+      "target": "v2.17#MT-7"
+    },
+    {
+      "id": "v2.16#DF-94",
+      "target": "v2.17#DF-94"
+    },
+    {
+      "id": "v2.16#DF-95",
+      "target": "v2.17#DF-95"
+    },
+    {
+      "id": "v2.16#DF-96",
+      "target": "v2.17#DF-96"
+    },
+    {
+      "id": "v2.16#DF-97",
+      "target": "v2.17#DF-97"
+    },
+    {
+      "id": "v2.16#DF-98",
+      "target": "v2.17#DF-98"
+    },
+    {
+      "id": "v2.16#DF-99",
+      "target": "v2.17#DF-99"
+    },
+    {
+      "id": "v2.16#WN-6",
+      "target": "v2.17#WN-6"
+    },
+    {
+      "id": "v2.16#DF-100",
+      "target": "v2.17#DF-100"
+    },
+    {
+      "id": "v2.16#DF-101",
+      "target": "v2.17#DF-101"
+    },
+    {
+      "id": "v2.16#DF-102",
+      "target": "v2.17#DF-102"
+    },
+    {
+      "id": "v2.16#DF-103",
+      "target": "v2.17#DF-103"
+    },
+    {
+      "id": "v2.16#DF-104",
+      "target": "v2.17#DF-104"
+    },
+    {
+      "id": "v2.16#DF-105",
+      "target": "v2.17#DF-105"
+    },
+    {
+      "id": "v2.16#DF-106",
+      "target": "v2.17#DF-106"
+    },
+    {
+      "id": "v2.16#DF-107",
+      "target": "v2.17#DF-107"
+    },
+    {
+      "id": "v2.16#DF-108",
+      "target": "v2.17#DF-108"
+    },
+    {
+      "id": "v2.16#MT-8",
+      "target": "v2.17#MT-8"
+    },
+    {
+      "id": "v2.16#MT-9",
+      "target": "v2.17#MT-9"
+    },
+    {
+      "id": "v2.16#MT-10",
+      "target": "v2.17#MT-10"
+    },
+    {
+      "id": "v2.16#MT-11",
+      "target": "v2.17#MT-11"
+    },
+    {
+      "id": "v2.16#MT-12",
+      "target": "v2.17#MT-12"
+    },
+    {
+      "id": "v2.16#MT-13",
+      "target": "v2.17#MT-13"
+    },
+    {
+      "id": "v2.16#QG-3",
+      "target": "v2.17#QG-3"
+    },
+    {
+      "id": "v2.16#MT-14",
+      "target": "v2.17#MT-14"
+    },
+    {
+      "id": "v2.16#MT-15",
+      "target": "v2.17#MT-15"
+    },
+    {
+      "id": "v2.16#MT-16",
+      "target": "v2.17#MT-16"
+    },
+    {
+      "id": "v2.16#MT-17",
+      "target": "v2.17#MT-17"
+    },
+    {
+      "id": "v2.16#MT-18",
+      "target": "v2.17#MT-18"
+    },
+    {
+      "id": "v2.16#MT-19",
+      "target": "v2.17#MT-19"
+    },
+    {
+      "id": "v2.16#MT-20",
+      "target": "v2.17#MT-20"
+    },
+    {
+      "id": "v2.16#MT-21",
+      "target": "v2.17#MT-21"
+    },
+    {
+      "id": "v2.16#MT-22",
+      "target": "v2.17#MT-22"
+    },
+    {
+      "id": "v2.16#MT-23",
+      "target": "v2.17#MT-23"
+    },
+    {
+      "id": "v2.16#MT-24",
+      "target": "v2.17#MT-24"
+    },
+    {
+      "id": "v2.16#MT-25",
+      "target": "v2.17#MT-25"
+    },
+    {
+      "id": "v2.16#MT-26",
+      "target": "v2.17#MT-26"
+    },
+    {
+      "id": "v2.16#DF-109",
+      "target": "v2.17#DF-109"
+    },
+    {
+      "id": "v2.16#DF-110",
+      "target": "v2.17#DF-110"
+    },
+    {
+      "id": "v2.16#DF-111",
+      "target": "v2.17#DF-111"
+    },
+    {
+      "id": "v2.16#DF-112",
+      "target": "v2.17#DF-112"
+    },
+    {
+      "id": "v2.16#DF-113",
+      "target": "v2.17#DF-113"
+    },
+    {
+      "id": "v2.16#QG-4",
+      "target": "v2.17#QG-4"
+    },
+    {
+      "id": "v2.16#QG-5",
+      "target": "v2.17#QG-5"
+    },
+    {
+      "id": "v2.16#QG-6",
+      "target": "v2.17#QG-6"
+    },
+    {
+      "id": "v2.16#DF-114",
+      "target": "v2.17#DF-114"
+    },
+    {
+      "id": "v2.16#DF-115",
+      "target": "v2.17#DF-115"
+    },
+    {
+      "id": "v2.16#QG-7",
+      "target": "v2.17#QG-7"
+    },
+    {
+      "id": "v2.16#NI-1",
+      "target": "v2.17#NI-1"
+    },
+    {
+      "id": "v2.16#MT-27",
+      "target": "v2.17#MT-27"
+    },
+    {
+      "id": "v2.16#DF-116",
+      "target": "v2.17#DF-116"
+    },
+    {
+      "id": "v2.16#BG-2",
+      "target": "v2.17#BG-2"
+    },
+    {
+      "id": "v2.16#BG-3",
+      "target": "v2.17#BG-3"
+    },
+    {
+      "id": "v2.16#QG-8",
+      "target": "v2.17#QG-8"
+    },
+    {
+      "id": "v2.16#QG-9",
+      "target": "v2.17#QG-9"
+    },
+    {
+      "id": "v2.16#DF-117",
+      "target": "v2.17#DF-117"
+    },
+    {
+      "id": "v2.16#NI-2",
+      "target": "v2.17#NI-2"
+    },
+    {
+      "id": "v2.16#DF-118",
+      "target": "v2.17#DF-118"
+    },
+    {
+      "id": "v2.16#BG-4",
+      "target": "v2.17#BG-4"
+    },
+    {
+      "id": "v2.16#MT-28",
+      "target": "v2.17#MT-28"
+    },
+    {
+      "id": "v2.16#BG-5",
+      "target": "v2.17#BG-5"
+    },
+    {
+      "id": "v2.16#BG-6",
+      "target": "v2.17#BG-6"
+    },
+    {
+      "id": "v2.16#MT-29",
+      "target": "v2.17#MT-29"
+    },
+    {
+      "id": "v2.16#MT-30",
+      "target": "v2.17#MT-30"
+    },
+    {
+      "id": "v2.16#MT-31",
+      "target": "v2.17#MT-31"
+    },
+    {
+      "id": "v2.16#MT-32",
+      "target": "v2.17#MT-32"
+    },
+    {
+      "id": "v2.16#MT-33",
+      "target": "v2.17#MT-33"
+    },
+    {
+      "id": "v2.16#MT-34",
+      "target": "v2.17#MT-34"
+    },
+    {
+      "id": "v2.16#MT-35",
+      "target": "v2.17#MT-35"
+    },
+    {
+      "id": "v2.16#DF-119",
+      "target": "v2.17#DF-119"
+    },
+    {
+      "id": "v2.16#DF-120",
+      "target": "v2.17#DF-120"
+    },
+    {
+      "id": "v2.16#DF-121",
+      "target": "v2.17#DF-121"
+    },
+    {
+      "id": "v2.16#DF-122",
+      "target": "v2.17#DF-122"
+    },
+    {
+      "id": "v2.16#MT-36",
+      "target": "v2.17#MT-36"
+    },
+    {
+      "id": "v2.16#DF-123",
+      "target": "v2.17#DF-123"
+    },
+    {
+      "id": "v2.16#MT-37",
+      "target": "v2.17#MT-37"
+    },
+    {
+      "id": "v2.16#MT-38",
+      "target": "v2.17#MT-38"
+    },
+    {
+      "id": "v2.16#MT-39",
+      "target": "v2.17#MT-39"
+    },
+    {
+      "id": "v2.16#MT-40",
+      "target": "v2.17#MT-40"
+    },
+    {
+      "id": "v2.16#MT-41",
+      "target": "v2.17#MT-41"
+    },
+    {
+      "id": "v2.16#MT-42",
+      "target": "v2.17#MT-42"
+    },
+    {
+      "id": "v2.16#MT-43",
+      "target": "v2.17#MT-43"
+    },
+    {
+      "id": "v2.16#WN-7",
+      "target": "v2.17#WN-7"
+    },
+    {
+      "id": "v2.16#MT-44",
+      "target": "v2.17#MT-44"
+    },
+    {
+      "id": "v2.16#MT-45",
+      "target": "v2.17#MT-45"
+    },
+    {
+      "id": "v2.16#WN-8",
+      "target": "v2.17#WN-8"
+    },
+    {
+      "id": "v2.16#DF-124",
+      "target": "v2.17#DF-124"
+    },
+    {
+      "id": "v2.16#DF-125",
+      "target": "v2.17#DF-125"
+    },
+    {
+      "id": "v2.16#WN-9",
+      "target": "v2.17#WN-9"
+    },
+    {
+      "id": "v2.16#DF-126",
+      "target": "v2.17#DF-126"
+    },
+    {
+      "id": "v2.16#DF-127",
+      "target": "v2.17#DF-127"
+    },
+    {
+      "id": "v2.16#WN-10",
+      "target": "v2.17#WN-10"
+    },
+    {
+      "id": "v2.16#WN-11",
+      "target": "v2.17#WN-11"
+    },
+    {
+      "id": "v2.16#WN-12",
+      "target": "v2.17#WN-12"
+    },
+    {
+      "id": "v2.16#WN-13",
+      "target": "v2.17#WN-13"
+    },
+    {
+      "id": "v2.16#WN-14",
+      "target": "v2.17#WN-14"
+    },
+    {
+      "id": "v2.16#DF-128",
+      "target": "v2.17#DF-128"
+    },
+    {
+      "id": "v2.16#QG-10",
+      "target": "v2.17#QG-10"
+    },
+    {
+      "id": "v2.16#DF-129",
+      "target": "v2.17#DF-129"
+    },
+    {
+      "id": "v2.16#DF-130",
+      "target": "v2.17#DF-130"
+    },
+    {
+      "id": "v2.16#WN-15",
+      "target": "v2.17#WN-15"
+    },
+    {
+      "id": "v2.16#WN-16",
+      "target": "v2.17#WN-16"
+    },
+    {
+      "id": "v2.16#DF-131",
+      "target": "v2.17#DF-131"
+    },
+    {
+      "id": "v2.16#DF-132",
+      "target": "v2.17#DF-132"
+    },
+    {
+      "id": "v2.16#WN-17",
+      "target": "v2.17#WN-17"
+    },
+    {
+      "id": "v2.16#QG-11",
+      "target": "v2.17#QG-11"
+    },
+    {
+      "id": "v2.16#BG-7",
+      "target": "v2.17#BG-7"
+    },
+    {
+      "id": "v2.16#DF-133",
+      "target": "v2.17#DF-133"
+    },
+    {
+      "id": "v2.16#WN-18",
+      "target": "v2.17#WN-18"
+    },
+    {
+      "id": "v2.16#DF-134",
+      "target": "v2.17#DF-134"
+    },
+    {
+      "id": "v2.16#DF-135",
+      "target": "v2.17#DF-135"
+    },
+    {
+      "id": "v2.16#DF-136",
+      "target": "v2.17#DF-136"
+    },
+    {
+      "id": "v2.16#MT-46",
+      "target": "v2.17#MT-46"
+    },
+    {
+      "id": "v2.16#QG-12",
+      "target": "v2.17#QG-12"
+    },
+    {
+      "id": "v2.16#QG-13",
+      "target": "v2.17#QG-13"
+    },
+    {
+      "id": "v2.16#DF-137",
+      "target": "v2.17#DF-137"
+    },
+    {
+      "id": "v2.16#QG-14",
+      "target": "v2.17#QG-14"
+    },
+    {
+      "id": "v2.16#DF-138",
+      "target": "v2.17#DF-138"
+    },
+    {
+      "id": "v2.16#DF-139",
+      "target": "v2.17#DF-139"
+    },
+    {
+      "id": "v2.16#DF-140",
+      "target": "v2.17#DF-140"
+    },
+    {
+      "id": "v2.16#DF-141",
+      "target": "v2.17#DF-141"
+    },
+    {
+      "id": "v2.16#DF-142",
+      "target": "v2.17#DF-142"
+    },
+    {
+      "id": "v2.16#WN-19",
+      "target": "v2.17#WN-19"
+    },
+    {
+      "id": "v2.16#QG-15",
+      "target": "v2.17#QG-15"
+    },
+    {
+      "id": "v2.16#QG-16",
+      "target": "v2.17#QG-16"
+    },
+    {
+      "id": "v2.16#QG-17",
+      "target": "v2.17#QG-17"
+    },
+    {
+      "id": "v2.16#QG-18",
+      "target": "v2.17#QG-18"
+    },
+    {
+      "id": "v2.16#DF-143",
+      "target": "v2.17#DF-143"
+    },
+    {
+      "id": "v2.16#DF-144",
+      "target": "v2.17#DF-144"
+    },
+    {
+      "id": "v2.16#DF-145",
+      "target": "v2.17#DF-145"
+    },
+    {
+      "id": "v2.16#DF-146",
+      "target": "v2.17#DF-146"
+    },
+    {
+      "id": "v2.16#DF-147",
+      "target": "v2.17#DF-147"
+    },
+    {
+      "id": "v2.16#WN-20",
+      "target": "v2.17#WN-20"
+    },
+    {
+      "id": "v2.16#WN-21",
+      "target": "v2.17#WN-21"
+    },
+    {
+      "id": "v2.16#DF-148",
+      "target": "v2.17#DF-148"
+    },
+    {
+      "id": "v2.16#DF-149",
+      "target": "v2.17#DF-149"
+    },
+    {
+      "id": "v2.16#DF-150",
+      "target": "v2.17#DF-150"
+    },
+    {
+      "id": "v2.16#QG-19",
+      "target": "v2.17#QG-19"
+    },
+    {
+      "id": "v2.16#BG-8",
+      "target": "v2.17#BG-8"
+    },
+    {
+      "id": "v2.16#BG-9",
+      "target": "v2.17#BG-9"
+    }
+  ],
+  "native_verification": [
+    {
+      "id": "DF-1",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-2",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-3",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-4",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-5",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-6",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-7",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-8",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-9",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-10",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-11",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-12",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-13",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-14",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-15",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-16",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-17",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-18",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-19",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-20",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-21",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-22",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-23",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-24",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-25",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-26",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-27",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-28",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-29",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-30",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-31",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-32",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-33",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-34",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-35",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-36",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-37",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-38",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-39",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-40",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-41",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-42",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-43",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-44",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-45",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-1",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-46",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-47",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-48",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-1",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-49",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-1",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-2",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "BG-1",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-2",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-50",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-51",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-52",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-53",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-54",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-55",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-56",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-57",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-58",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-59",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-2",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-3",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-60",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-61",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-62",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-63",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-64",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-65",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-66",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-67",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-68",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-69",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-70",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-71",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-72",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-73",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-74",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-75",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-76",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-77",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-78",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-79",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-80",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-81",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-82",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-83",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-84",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-85",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-86",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-87",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-88",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-89",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-90",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-3",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-4",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-5",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-91",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-4",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-5",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-6",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-92",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-93",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-7",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-94",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-95",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-96",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-97",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-98",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-99",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-6",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-100",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-101",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-102",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-103",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-104",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-105",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-106",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-107",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-108",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-8",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-9",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-10",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-11",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-12",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-13",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-3",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-14",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-15",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-16",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-17",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-18",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-19",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-20",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-21",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-22",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-23",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-24",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-25",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-26",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-109",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-110",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-111",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-112",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-113",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-4",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-5",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-6",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-114",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-115",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-7",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "NI-1",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-27",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-116",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "BG-2",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "BG-3",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-8",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-9",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-117",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "NI-2",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-118",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "BG-4",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-28",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "BG-5",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "BG-6",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-29",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-30",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-31",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-32",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-33",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-34",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-35",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-119",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-120",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-121",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-122",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-36",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-123",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-37",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-38",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-39",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-40",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-41",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-42",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-43",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-7",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-44",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-45",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-8",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-124",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-125",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-9",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-126",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-127",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-10",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-11",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-12",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-13",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-14",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-128",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-10",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-129",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-130",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-15",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-16",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-131",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-132",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-17",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-11",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "BG-7",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-133",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-18",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-134",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-135",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-136",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "MT-46",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-12",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-13",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-137",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-14",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-138",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-139",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-140",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-141",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-142",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-19",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-15",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-16",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-17",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-18",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-143",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-144",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-145",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-146",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-147",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-20",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "WN-21",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-148",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-149",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "DF-150",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "QG-19",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "BG-8",
+      "state": "met",
+      "reason": "approved-migration"
+    },
+    {
+      "id": "BG-9",
+      "state": "met",
+      "reason": "approved-migration"
+    }
+  ],
+  "remaining_open": [
+    "DF-151",
+    "WN-22"
+  ],
+  "source_sha256": "35cca9e2eaf67ad97bb393add644e5b69d38c8e42dda5bc22afae8fa3959b35c",
+  "target_sha256": "0b5410765e6170634c59be711f307a63f1d326b77e77ed857b2cc883d1dd2d55",
+  "backup_name": "v216-carries-20261029T191529",
+  "guard_accepts": 0,
+  "normalized_ledger_hashes": {
+    "source_sha256_lf": "a695133acaaf7fb631c50835b51f1e51326275fd06aab1485e42f74e44ac5bb6",
+    "target_sha256_lf": "46591ec920f281a0af236b9b8ada2a66d7b82747a6190c316d707bcc05204e73"
+  },
+  "normalized_hash_note": "Supplemental portable text hashes; original raw host hashes and native copy results retained."
+}

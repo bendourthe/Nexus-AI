@@ -1,33 +1,80 @@
 # Nexus - Progress Dashboard
 
-## Archive readiness (2026-10-22)
+## v2.16 and v2.17 Full Release [IN PROGRESS]
 
-**Active worktree**: `C:/nx-close`, branch `fix/v2.15-release-security`, base `63ba7453`. The owner's goal remains completion of the recorded v2.12, v2.13 and v2.15 plans until archive-ready. Earlier branch/version statements below are dated history. The original checkout's user edits are preserved.
+| Goal | Verified current state | Required outcome |
+|---|---|---|
+| v2.16 release | No published release; 9/11 plan tasks checked; PR148 and post-merge validation green; PR149 source preparation under review; frozen installer acceptance supplement pending hosted proof; model HOLD retained | Complete full validation, green integration, package acceptance and actual publication |
+| v2.17 release | 384 OPEN records preserved in the requirements matrix; implementation and evidence reconciliation pending | Complete the actual requirements and publish verified artifacts |
+| Final review | Not started | Full codebase, local-agent, UI and behavioral review after both releases |
 
-**Run status**: The genuine IN54MRGB, WNEVLC4G and TOYDWIVT approvals remain captured and verified. The master and four absorbed supports agree on 47 verified tasks of 52; T107, T211, T307, T418 and T419 remain open. All 262 original identities reconcile as 245 open carries, 14 evidenced closures and three prior resolutions. Historical archive previews pass, with v2.13 ordered after v2.12. No archive or deletion has occurred.
+- [x] Create the clean release worktree and verify Git attribution.
+- [x] Pass lifecycle bootstrap and verify the official portable runtime checksum.
+- [x] Pass five actual E4B tool-call transcripts and identical-request HTTP replays with zero codec failures.
+- [x] Repair exact-version notes, protected-main release preparation and tag/source guards; pass focused tests and real local Git boundary checks.
+- [ ] Fix and prove production instruction/context budgeting; the measured enriched project turn refuses before inference at 4K and cold 8K windows.
+- [x] Record model qualification HOLD and locally verify release-pipeline repairs, with zero admissions and unchanged defaults.
+- [x] Build and activate the Windows extension candidate in isolated editor/application storage and verify its packaged SQLite boundary.
+- [x] Pass corrected-source root validation with existing coverage thresholds.
+- [x] Pass the final local review and the complete installer suite after reproducing stale workflow-contract assertions (1,528 passed, three skipped).
+- [x] Merge PR148 after 63 successful checks and verify all 28 post-merge checks on fede2197.
+- [ ] Integrate reviewed v2.16.1 versions and notes through develop/main, then verify published artifacts.
+- [ ] Prove the exact frozen Windows installer performs desktop/runtime installation and real backend health on a clean hosted runner.
+- [ ] Publish the verified v2.16 release.
+- [ ] Reconcile every v2.17 obligation against current code and required acceptance evidence.
+- [ ] Review the link audit during v2.17 BG-2 living-document reconciliation (25 existing broken tracker links; zero newly broken links).
+- [ ] Implement and qualify the remaining v2.17 functionality.
+- [ ] Publish the verified v2.17 release.
+- [ ] Run the requested full review of local-agent functionality, context, memory, history, security and UI behavior.
+
+
+## v2.16 Model Trial
+
+| Measure | Current | Required |
+|---|---|---|
+| Implementation | All 26/26 task dispositions accepted; historical condition resolved by a fresh native probe; archive complete at 1d31132a with zero newly broken links; final integration remains pending | Five phases and 26 tasks, with conditional-path evidence |
+| Model admission | E-1/E-2 pass; E-3 environment HOLD, runtime 0.32.15 below required 0.40.10; zero inference | Per-slot fit/quality and both-channel proof before admission |
+| Ledger | 248 current items migrated, 2 resolved, zero current OPEN; 136 additional historical carries verified; v2.17 retains 384 OPEN obligations | Preserve exact carry identities through final integration |
+| Publication | PR138/PR139 integrated; PR140 open. Closing CI dependency correction passes fresh root tests, compiled guard and six handbook freshness checks; no release tag | Final local gate, green integration, admission-only release |
+| Cleanup | Earlier cleanup retained; final post-closing receipt and approved study worktree/branch cleanup remain pending | Preserve keep decisions until supported minor closure |
+
+The [2026-10-29 closeout evidence](archives/v2/v2.16/development/v2.16.0-native-closeout-progress.md) records the captured decline, inherited carries, remaining native barriers and an unapplied CLI shutdown proposal. The separately approved [CLI shutdown repair](archives/v2/v2.16/development/v2.16.0-cli-shutdown-repair.md) is applied locally: 22 actual-file cases pass on Node 22/24, the refreshed integration checkout passes 6485 tests with 19 skips and unchanged coverage thresholds (86.90% lines, 76.30% branches, 87.01% functions); PR140 closing integration remains pending. No model default or release changed.
+
+The [production audit repair](archives/v2/v2.16/development/v2.16.1-production-audit-remediation.md) changes only the two reviewed dependency entries. The actual SDK HTTP flow passes on Node 22/24, and the unchanged audit gate reports zero blocking findings. The combined four-worker local run had two timeouts; both affected files and the full one-worker rerun pass without changing timeouts or thresholds. Historical proof and checker qualification are complete. The native archive moved all 205 files with zero newly broken links; all 179 non-Markdown files remain byte-exact. Closing integration and final cleanup remain pending.
+
+The [2026-10-31 native carry evidence](archives/v2/v2.16/development/v2.16.0-final-native-closeout.md) records the genuine supplemental decision, preservation of older unfinished plans, all 137 final native carries and the successful bound condition probe. The full-decline outcome and existing model defaults remain unchanged.
+
+## Archive closeout (2026-10-23)
+
+**Active worktree**: `C:/nx-close`, branch `chore/refresh-archive-handbook-receipts`, merged archive base develop 010ffa36. The recorded v2.12/v2.13/v2.15 archive-readiness goal is complete. The owner then continued into the ordered local archive procedure. Earlier branch/version statements below are dated history; original-checkout user edits are preserved.
+
+**Run status**: Recorded plans are 52/52 with actual release and first-pass evidence bindings. PR134 merged and the final eleven readiness probes passed. Both v2.12 waiting blockers were answered through genuine native continuations. The native helper archived v2.12 at 50bd7a79, then v2.13 at 1b382186, then v2.15 at 293cbea2; each reported zero newly broken Markdown links. Whole-archive checks preserve all 4,330 originals, 103 fixtures, 612 evidence/JSON files, six original handbook receipts, 245 migrations and the 44/8 historical chains. All 73 affected tests and six full handbook checks pass; browser observations are explicitly reused after byte equality. The native post-archive v2.12 status still rejects stale destination bindings after the approved v2.15 move; its signature, plan and all 44 identities remain valid, and this limitation is recorded in the [archive report](archives/v2/v2.15/development/v2.15.1-archive-execution.md). PR135 merged as 010ffa36 after the approved archive and dependency-correction pushes. All eleven pre-merge and five integration workflows passed. The final handbook gate identified stale dependency hashes in six receipts; a fresh metadata-only review now covers 36 browser viewports and nine print pages. See the [dependency correction](archives/v2/v2.16/development/2026-10-23-archive-audit-correction.md) and [receipt refresh](archives/v2/v2.16/development/handbook-dependency-refresh-010ffa36/review.md). Separate receipt-publication authority remains pending; all previous pushes remain spent. All 262 original identities retain 245 open carries, 14 closures and three prior resolutions; two new OPEN automation entries make 247 owed v2.16 obligations. No branch or worktree was deleted, and no global MINOR COMPLETE claim is made.
 
 | Measure | Current | Required |
 | --- | --- | --- |
-| Recorded plans | 47/52 tasks verified; frozen task scope retained | Actual release qualification and final clean read-only readiness evidence |
-| Carry application | 245/245 exact qualified open destinations; 14 closures and three prior resolutions preserved | Retain every owed requirement; two newly observed automation items are proposed separately, not applied or marked fixed |
-| Integration | PR127 original source merged; PR128 source reached main; PR130 history sync and PR129 prepared metadata merged into develop63ba7453 | Hosted validation of the repaired candidate and final main promotion |
-| Local security correction | Root 6,479 passed/12 skipped, desktop 2,365 passed/one skipped on physically verified DOMPurify3.4.17 and ip-address10.7.4; builds/lint, unchanged production gate and six handbook receipts pass | One additional exact corrective push requires a fresh owner instruction; original three remain spent |
-| Production audit | Original merged63ba7453 failed; repaired local gate has zero blocking/allowlisted findings; raw audit exits1 with two unchanged low KaTeX/Mermaid records | Preserve the moderate threshold and visible low findings; actual hosted result pending |
-| Historical minors | v2.12/v2.13 actual shared v2.12.1 lineage, signatures and44/8 native copy proofs verified | Final clean current-source archive dry runs; v2.12 first |
-| Release | Prepared v2.15.1 metadata only; no verified v2.15.1 tag/assets | Actual tag/main ancestry, five assets/digests, tagged packaging observations and final back-merge |
+| Recorded plans | 52/52; frozen 52 acceptance blocks retained; PR134 and eleven final readiness probes complete | Preserve recorded dispositions through the archive |
+| Carries | 245 exact migrations;14 closures;three prior resolutions;two new direct OPEN entries | Preserve all247 owed destinations |
+| Integration | PR135 merged as 010ffa36; all eleven pre-merge and five integration workflows passed | Review the metadata-only receipt publication separately; merge only after required checks pass; all previous pushes remain spent |
+| Local qualification | Published correction: root 6,479 passed/12 skipped; desktop 2,373 passed/one skipped; builds/lint, sidecar smoke and remote CI pass; fresh six-book review covers 36 viewports/nine print pages | Retain initial timing failures and the stale-receipt observation; current metadata-only publication is not yet authorized |
+| Production audit | Merged correction has zero blocking/allowlisted findings and retains two low KaTeX/Mermaid findings | Preserve the threshold and visible findings |
+| Release | Actual v2.15.1 annotated tag/main ancestry, eight packaging jobs, runtime probes and five assets verified | Preserve actual release identity; archive work creates no new release |
+| Historical minors | Actual shared v2.12.1 lineage; ordered archives and fresh 44/8 copy proofs verified | Retain the documented v2.12 stale-destination checker limitation without rewriting authority |
+| Local archives | Three native archive commits and metadata merged through PR135; 750 moved files, 73 affected tests and zero newly broken links; six dependency-fresh handbook receipts prepared | Preserve archive proofs and original evidence through the separate receipt-only publication |
 
-- [ ] Complete the v2.15.1 master and four absorbed triage supports under `docs/releases/v2/v2.15/plans/`.
-- [x] Audit all 199 frozen batch IDs and all 63 original active IDs against current source.
-- [x] Prove and resolve the installer disk fixture, handbook CRLF comparison and missing v2.13 migration-copy provenance.
-- [x] Complete the owner-selected outline removal and image approval checkpoint/retention policies; real-boundary evidence and independent review pass.
-- [x] Complete full local root/desktop coverage, retained installer tests, lint, builds and six dependency-aware handbook receipts; the security correction has fresh patched-runtime suites.
-- [x] Preserve the qualified checker source in a verified 22-file local snapshot; record its separate existing upstream attribution gate failure ([preservation](releases/v2/v2.15/development/v2.15-native-checker-preservation.md)).
-- [x] Apply and independently verify all 245 open destinations and 14 closures; preserve the three prior resolutions and complete execution history.
-- [x] Reconcile all 63 original v2.15 entries without treating carried obligations as implemented features.
-- [x] Prove historical implementation/release mapping and repair layout/provenance; keep actual archive-readiness decision open.
-- [ ] Publish and validate the [locally verified security correction](releases/v2/v2.15/development/v2.15.1-security-correction.md) after the separate bounded owner instruction.
-- [ ] Record the two new release automation defects as OPEN future items only after explicit placement exception; proposed BG-8/BG-9 are not approved migrations.
-- [ ] Complete actual release/assets/back-merge, final metadata and clean T419 probes; keep readiness false until those pass.
+- [x] Bind the four publication duties to the committed release evidence.
+- [x] Collect T419 evidence for the master and absorbed fourth support, preserving all native refusals.
+- [x] Audit all 199 frozen batch IDs and 63 original active IDs against current source.
+- [x] Resolve the installer fixture, handbook CRLF comparison and v2.13 copy-provenance defects with evidence.
+- [x] Complete the selected outline removal, approval-time recoverable checkpoint and shared-original retention policies.
+- [x] Complete local suites, builds, gates and six dependency-aware handbook receipts; retain exact tag identity.
+- [x] Preserve the historical 22-source-file checker snapshot and the separately reviewed sanitized compatibility copy; original pins remain unchanged.
+- [x] Apply and verify 245 migrations and14 closures; retain three prior resolutions and all owed requirements.
+- [x] Publish the independently qualified security correction under the one additional approved push; all original three and that additional push remain spent.
+- [x] Record the exact two new OPEN release-automation entries under the owner's placement exception.
+- [x] Complete PR134 and the eleven strict final readiness probes after the genuine v2.12 continuation.
+- [x] Execute the approved native archives in order, preserving all original evidence and 247 future OPEN obligations.
+- [x] Complete whole-archive reference, preservation and affected-test verification; retain the native v2.12 stale-binding refusal in the evidence.
+- [ ] Publish the reviewed archive commits only after additional publication authority is granted; do not reuse spent corrective pushes.
 
 **Project:** Nexus (renamed from Gemma Code at v1.0.0). **Release branch:** `main`. **Active branch:** `feat/v2.14.2-adoption-voice-latency-lfm2.5-24b`. Product version remains **2.11.0** until `/update release`; dependency repair merged through PR #96 at `092ce3c2`.
 
@@ -45,11 +92,11 @@
 | Approval gate | Superseded 2026-10-10: owner replied "All approved" for the exact prepared changes, which are now applied (earlier unanswered-approval records kept as history) | Branch push still needs its own explicit approval |
 | Publication | PR #97 merged into develop at `f24eac41` (60 checks passed, post-merge develop green); #42/#43 closed as superseded; `NexusSetup.exe` SHA-256 `BCE6C301...D536` built from `f24eac41`, smoke passed | Maintainer field testing and the M5 DEVLOG entry; release only after field testing passes |
 
-Evidence: [Phase 7 record](releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md).
+Evidence: [Phase 7 record](archives/v2/v2.12/development/v2.12.0-last-phase-evidence.md).
 
 ## Dependency PR reconciliation (2026-10-08)
 
-Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 desktop tests / one skipped, including both unchanged coverage gates. Every relocated case remains, and 20 meaningful cases were added. Fast/platform/web, production audit, dependency/catalog/permission/test-integrity, feature-drift and docs-layout checks pass; actual MCP stdio and VSIX contents checks pass. The full development audit remains 27 findings (three low, two moderate, 22 high, zero critical); production has zero advisories. The historical pre-publication check had five dependency PRs open after closing obsolete #44/#45; the fresh 2026-10-09 query has only #42 and #43 open. Visual and native VS Code qualification remain unobserved. Dependency tracker: seven of nine tasks complete. Evidence: [dependency PR reconciliation](releases/v2/v2.12/development/dependency-pr-reconciliation.md), [independent repair review](releases/v2/v2.12/development/dependency-repair-review.md).
+Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 desktop tests / one skipped, including both unchanged coverage gates. Every relocated case remains, and 20 meaningful cases were added. Fast/platform/web, production audit, dependency/catalog/permission/test-integrity, feature-drift and docs-layout checks pass; actual MCP stdio and VSIX contents checks pass. The full development audit remains 27 findings (three low, two moderate, 22 high, zero critical); production has zero advisories. The historical pre-publication check had five dependency PRs open after closing obsolete #44/#45; the fresh 2026-10-09 query has only #42 and #43 open. Visual and native VS Code qualification remain unobserved. Dependency tracker: seven of nine tasks complete. Evidence: [dependency PR reconciliation](archives/v2/v2.12/development/dependency-pr-reconciliation.md), [independent repair review](archives/v2/v2.12/development/dependency-repair-review.md).
 
 - [x] Pair Stryker core and its Vitest runner at 9.6.1 and verify real mutation execution.
 - [x] Upgrade MCP SDK to patched 1.31.0 and verify the compiled server over stdio.
@@ -226,6 +273,7 @@ Final dependency repair gates passed 6,080 root tests / 12 skipped and 2,269 des
 | Sources compared (Craft editors + EmbeddingGemma 2, 2026-10-07) | 2 / 2 | 2 / 2 | 0 |
 | v2.13 adoption plan implementation tasks (merged in PR #101, 2026-10-16; T008-T010 deferred under DF-2) | 28 / 28 | 28 | 0 |
 | v2.14.1 local rewrite evaluation implementation tasks (authorized, 2026-10-17) | 18 / 18 | 18 | 0 |
+| Sources compared (DeepSeek, decision evals, Reylo; v2.17.0, 2026-10-23) | 4 / 4 | 4 | 0 |
 
 ---
 
@@ -714,61 +762,62 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 | Phase 7 handbook candidates | Six final sources and HTML candidates passed; 200 slide states, eight widths, 248 contrast/brand checks | Approved original-output replacement and current-output receipts |
 | Phase 7 layout/link scan | 135 paths classified; no proposed moves/deletions; zero new broken links, 3,770 existing unresolved | Preserve approved legacy evaluation paths |
 | Phase 7 CI comparison | 23 fields assessed: six PASS, eleven FAIL, three PARTIAL, three NOT PROVEN | Exact migration decisions and complete reconciliation before publication |
-| Phase 7 CI profile repair | Verified proposal: five real fast validators, 16 focused tests, 26 CLI observations; original source unchanged | Approve [exact patch](releases/v2/v2.12/development/phase-7-ci-profile-correctness-proposal.md), apply and verify in the continuation worktree |
+| Phase 7 CI profile repair | Verified proposal: five real fast validators, 16 focused tests, 26 CLI observations; original source unchanged | Approve [exact patch](archives/v2/v2.12/development/phase-7-ci-profile-correctness-proposal.md), apply and verify in the continuation worktree |
 | Phase 7 canonical gaps | Five open and two resolved, counts derived from ledger | Do not treat incomplete CI or answer-quality targets as accepted bypasses |
 | Phase 7 deep-pass cycle | 31-row inventory; cycle 1 resolves candidate accessibility and PDF sampling; controlled headless native protocol passes | Root/actual-output/CI/installed/integration gates remain open |
 | Phase 7 PDF consumer | 92 headings and all 48 exact table rows pass over full sections; both frozen PDF hashes preserved | No inference repeat, rescore or visual PDF certification |
-| Phase 7 prepared root candidate | 579 files, 6,215 passed, 12 skipped; lines 87.29%, branches 76.48%, functions 87.30%; four workers | Approve/apply prepared changes, then verify the original tree ([evidence](releases/v2/v2.12/development/phase-7-root-prepared-candidate.md)) |
+| Phase 7 prepared root candidate | 579 files, 6,215 passed, 12 skipped; lines 87.29%, branches 76.48%, functions 87.30%; four workers | Approve/apply prepared changes, then verify the original tree ([evidence](archives/v2/v2.12/development/phase-7-root-prepared-candidate.md)) |
 
 - [x] Record the Kolibri-1 decline and index, with its failing-then-passing guard (Phase 1, `59e16c82`).
 - [x] Reconcile the failed package update PRs through dependency repair PR #96, merged at `092ce3c2` after 60 passing checks; close superseded #48, #59, and #72.
-- [x] Verify Phase 2 document budgets with real OCR/Ollama, passing root coverage, focused tests, lint/build and desktop typecheck; save one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md)).
-- [x] Verify Phase 3 native Ollama history, pair-safe compaction and real SQLite resume in the extension host; record the OpenAI compatibility gap and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md)).
+- [x] Verify Phase 2 document budgets with real OCR/Ollama, passing root coverage, focused tests, lint/build and desktop typecheck; save one local commit ([history](archives/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-2.md)).
+- [x] Verify Phase 3 native Ollama history, pair-safe compaction and real SQLite resume in the extension host; record the OpenAI compatibility gap and one local commit ([history](archives/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-3.md)).
 - [x] Reconcile the guarded agent-authored 14,000 -> 14,500 test count: kept 14,500 and applied the approved context line (2026-10-10). Excluded generated benchmark changes stay preserved until cleanup is agreed.
-- [x] Apply the [verified CI profile correctness patch](releases/v2/v2.12/development/phase-7-ci-profile-correctness-proposal.md) after exact approval (applied 2026-10-10); remaining CI contract differences stay open under QG-v212-1.
-- [x] Resolve the [remaining CI action updates](releases/v2/v2.12/development/phase-7-ci-action-update-proposal.md): pins merged in #97 with green post-merge develop; #42 and #43 closed as superseded after source comparison.
-- [x] Verify shared tool-result compaction in both loops, fork-resume ownership, cancellation and visible errors; complete nine live PDF section reads and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md)).
-- [x] Verify desktop outline Settings, including environment-preference preservation, real dispatcher/browser behavior, handbook update and one local commit ([history](releases/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md)).
-- [x] After both frozen full runs finished, retain returned errors in future smoke results and qualify OCR timing prose; verify the actual patched harness with controlled adapters, preserve scored artifacts and record WN-v212-5 ([results](releases/v2/v2.12/development/outline-eval.md)).
-- [x] Complete evaluation and final integration in the approved [v2.12 plan](releases/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md): PR #97 merged into develop at `f24eac41`; field-testing installer handed over ([evidence](releases/v2/v2.12/development/v2.12.0-last-phase-evidence.md)).
+- [x] Apply the [verified CI profile correctness patch](archives/v2/v2.12/development/phase-7-ci-profile-correctness-proposal.md) after exact approval (applied 2026-10-10); remaining CI contract differences stay open under QG-v212-1.
+- [x] Resolve the [remaining CI action updates](archives/v2/v2.12/development/phase-7-ci-action-update-proposal.md): pins merged in #97 with green post-merge develop; #42 and #43 closed as superseded after source comparison.
+- [x] Verify shared tool-result compaction in both loops, fork-resume ownership, cancellation and visible errors; complete nine live PDF section reads and one local commit ([history](archives/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-4.md)).
+- [x] Verify desktop outline Settings, including environment-preference preservation, real dispatcher/browser behavior, handbook update and one local commit ([history](archives/v2/v2.12/development/history/2026-10-09_outline-promotion-readiness-phase-5.md)).
+- [x] After both frozen full runs finished, retain returned errors in future smoke results and qualify OCR timing prose; verify the actual patched harness with controlled adapters, preserve scored artifacts and record WN-v212-5 ([results](archives/v2/v2.12/development/outline-eval.md)).
+- [x] Complete evaluation and final integration in the approved [v2.12 plan](archives/v2/v2.12/plans/v2.12.0-outline-promotion-readiness.md): PR #97 merged into develop at `f24eac41`; field-testing installer handed over ([evidence](archives/v2/v2.12/development/v2.12.0-last-phase-evidence.md)).
 - [ ] Field-test the v2.12 installer and record the M5 real-use DEVLOG entry (maintainer), then begin v2.13.
 
 ## Craft editors and EmbeddingGemma 2 evaluation (planned v2.13.0)
 
 **Progress**: 28/28 tasks complete (T008-T010 moved to DF-2); merged into `develop` through PR #101 and released as v2.12.0. Model admission is HOLD.
 
-- [x] Freeze the post-v2.12 baseline, 100-query evaluation contract and image ownership/limits; fast/platform and real disposable Ollama/SQLite probe pass ([Phase 1 evidence](releases/v2/v2.13/development/v2.13.0-phase1-evidence.md)).
-- [x] Build and verify the isolated evaluator and explicit retain/HOLD report: Ollama 0.32.15 rejects the candidate with HTTP 412; no quality score, default change or user-index mutation is claimed ([Phase 2 evidence](releases/v2/v2.13/development/v2.13.0-phase2-evidence.md)).
-- [x] Persist versioned Image Studio edit recipes with undo/redo history in `sessions.db`, unchanged source bytes, and a two-process reopen smoke ([Phase 4 evidence](releases/v2/v2.13/development/v2.13.0-phase4-evidence.md), 2026-10-15).
-- [x] Save generated Image Studio PNGs and connect the viewer to durable edits: acknowledged saves, retry/reload, restart reopen, and preview/export pixel equality in the WebView engine ([Phase 5 evidence](releases/v2/v2.13/development/v2.13.0-phase5-evidence.md), 2026-10-15).
-- [x] Expose Image Studio edits to agents through `nexus image-edit` and `/nexus/image-edit/*`: Ask-inbox-approved per-image grants, idempotent apply, render through the running window, safe owned exports ([Phase 6 evidence](releases/v2/v2.13/development/v2.13.0-phase6-evidence.md), 2026-10-15).
-- [x] Run the final gate: handbooks rebuilt with receipts, CI comparison rechecked, Tier 3 deep pass with real-sidecar driver 24/24 and an adversarial review whose fixes landed, both full suites green; open gaps carried to v2.14 ([last-phase evidence](releases/v2/v2.13/development/v2.13.0-last-phase-evidence.md), 2026-10-16).
+- [x] Freeze the post-v2.12 baseline, 100-query evaluation contract and image ownership/limits; fast/platform and real disposable Ollama/SQLite probe pass ([Phase 1 evidence](archives/v2/v2.13/development/v2.13.0-phase1-evidence.md)).
+- [x] Build and verify the isolated evaluator and explicit retain/HOLD report: Ollama 0.32.15 rejects the candidate with HTTP 412; no quality score, default change or user-index mutation is claimed ([Phase 2 evidence](archives/v2/v2.13/development/v2.13.0-phase2-evidence.md)).
+- [x] Persist versioned Image Studio edit recipes with undo/redo history in `sessions.db`, unchanged source bytes, and a two-process reopen smoke ([Phase 4 evidence](archives/v2/v2.13/development/v2.13.0-phase4-evidence.md), 2026-10-15).
+- [x] Save generated Image Studio PNGs and connect the viewer to durable edits: acknowledged saves, retry/reload, restart reopen, and preview/export pixel equality in the WebView engine ([Phase 5 evidence](archives/v2/v2.13/development/v2.13.0-phase5-evidence.md), 2026-10-15).
+- [x] Expose Image Studio edits to agents through `nexus image-edit` and `/nexus/image-edit/*`: Ask-inbox-approved per-image grants, idempotent apply, render through the running window, safe owned exports ([Phase 6 evidence](archives/v2/v2.13/development/v2.13.0-phase6-evidence.md), 2026-10-15).
+- [x] Run the final gate: handbooks rebuilt with receipts, CI comparison rechecked, Tier 3 deep pass with real-sidecar driver 24/24 and an adversarial review whose fixes landed, both full suites green; open gaps carried to v2.14 ([last-phase evidence](archives/v2/v2.13/development/v2.13.0-last-phase-evidence.md), 2026-10-16).
 - [ ] Decide whether saved Image Studio PNGs are removed with their session (DF-3), whether agents may replace redo history (DF-4) and the residual image-access items (WN-3), and drive the packaged desktop restart and agent render flows by hand (WN-1); all now in `docs/archives/v2/v2.14/known-gaps.md`.
-- [x] Record Phase 3 conditional retain/HOLD, verify ten unchanged production paths, and explicitly skip T008-T010 without claiming migration ([disposition](releases/v2/v2.13/development/embedding-migration-disposition.json)).
+- [x] Record Phase 3 conditional retain/HOLD, verify ten unchanged production paths, and explicitly skip T008-T010 without claiming migration ([disposition](archives/v2/v2.13/development/embedding-migration-disposition.json)).
 
 
-- [x] Compare the four named Craft editor repositories and Google's EmbeddingGemma 2 announcement against Nexus; record source scans, code evidence, queue impact and prioritized recommendations in the [comparison](releases/v2/v2.13/comparisons/v2.13.0-comparison-craft-editors-embeddinggemma-2.md) (2026-10-07).
-- [x] Finalize the comparison's [v2.13.0 adoption plan](releases/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md): seven phases, 31 tasks, conditional model admission and independent image-edit work; all seven review lenses ran and drafting defects were corrected ([review](releases/v2/v2.13/development/v2.13.0-plan-review.md), 2026-10-08). The owner accepted all three recommendations on 2026-10-08; planning is complete and no implementation began.
+- [x] Compare the four named Craft editor repositories and Google's EmbeddingGemma 2 announcement against Nexus; record source scans, code evidence, queue impact and prioritized recommendations in the [comparison](archives/v2/v2.13/comparisons/v2.13.0-comparison-craft-editors-embeddinggemma-2.md) (2026-10-07).
+- [x] Finalize the comparison's [v2.13.0 adoption plan](archives/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md): seven phases, 31 tasks, conditional model admission and independent image-edit work; all seven review lenses ran and drafting defects were corrected ([review](archives/v2/v2.13/development/v2.13.0-plan-review.md), 2026-10-08). The owner accepted all three recommendations on 2026-10-08; planning is complete and no implementation began.
 - [x] Select the v2.13.0 planning scope after v2.12 outline-readiness: accepted measured promotion gate, persisted Image Studio-only recipes and running-desktop-renderer export (owner: "all recommendations", 2026-10-08). Media search and video editing remain deferred.
 - [ ] Evaluate EmbeddingGemma 2 text/code retrieval through the existing local adapter, resolve its context/terms discrepancies and measure the comparison's proposed gate before changing the model job map or defaults (E1/E2).
 - [ ] Implement and verify the planned durable recipe and shared commands for existing ImageViewer edits, including restart/reopen and UI-versus-command export equivalence, before adding broader creative-editor features (C1/C2).
 
-## Nemotron Bolt E4B trial and model-proposal records (queued v2.16.0)
+## Nemotron Bolt E4B trial and model-proposal records (integrated v2.16.0, conditional decline)
 
-- [x] Compare Humanizer, Handwired, Nemotron 3.5 (Super VL, Bolt 74B-A9B, Bolt E4B) and DeepSeek V4.1-Flash-1017 against Nexus ([comparison](releases/v2/v2.16/comparisons/v2.16.0-comparison-humanizer-handwired-nemotron-deepseek.md), 2026-10-20; corrected 2026-10-21 for the v2.14.1 Humanizer and Handwired record).
-- [x] Plan the adoption: five phases, 26 tasks; six review lenses, 21 findings applied; four owner decisions recorded ([plan](releases/v2/v2.16/plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), 2026-10-21).
-- [ ] Phase 1: preregister E4B gates; record Super VL, DeepSeek and Humanizer decisions; defer Bolt 74B-A9B (no 24 GB host).
-- [ ] Phase 2: E4B tag, license and tool-call probe (from 2026-10-23; tag window closes 2026-11-06).
-- [ ] Phase 3: golden runner `num_gpu`; E4B fit and golden-task A/B against `lfm2.5:2.6b` on the cpu and sub-6 GB slots.
-- [ ] Phase 4: admit E4B to each passing slot, or record the decline.
-- [ ] Phase 5: final phase, recorded VS Code extension run, and publication.
+- [x] Compare Humanizer, Handwired, Nemotron 3.5 (Super VL, Bolt 74B-A9B, Bolt E4B) and DeepSeek V4.1-Flash-1017 against Nexus ([comparison](archives/v2/v2.16/comparisons/v2.16.0-comparison-humanizer-handwired-nemotron-deepseek.md), 2026-10-20; corrected 2026-10-21 for the v2.14.1 Humanizer and Handwired record).
+- [x] Plan the adoption: five phases, 26 tasks; six review lenses, 21 findings applied; four owner decisions recorded ([plan](archives/v2/v2.16/plans/v2.16.0-adoption-humanizer-handwired-nemotron-deepseek.md), 2026-10-21).
+- [x] Phase 1: preregister E4B gates; record Super VL, DeepSeek and Humanizer decisions; defer Bolt 74B-A9B (no 24 GB host); [evidence](archives/v2/v2.16/development/v2.16.0-phase1-evidence.md).
+- [x] Phase 2: official E4B tag and license pass; real pull refused on the old runtime, E-3 HOLD with zero inference and no codec claim ([evidence](archives/v2/v2.16/development/v2.16.0-phase2-evidence.md)).
+- [x] Phase 3: runner CPU control verified through real CLI/HTTP/tool boundaries on pinned Node 22; E4B fit/A-B explicitly not run after E-3 HOLD ([evidence](archives/v2/v2.16/development/v2.16.0-phase3-evidence.md)).
+- [x] Phase 4: both slots unadmitted at E-3 runtime HOLD; decline/reopen record saved and all registry/default inputs preserved ([evidence](archives/v2/v2.16/development/v2.16.0-phase4-evidence.md)).
+- [x] Phase 5: full local gate, independent review and PR138 integration complete; all 58 checks and three post-merge workflows pass. Extension proof and a release are admission-only and were skipped after E-3 HOLD ([integration evidence](archives/v2/v2.16/development/v2.16.0-integration.json)).
+- [ ] Native minor/archive closure: complete the remaining DF-151 and checker-compatibility dispositions, archive, green closing integration and native cleanup; the conditional decline is already captured ([handoff](archives/v2/v2.16/development/v2.16.0-completion-contract-handoff.md)).
 
 ## Legacy known-gaps triage (queued v2.15.0)
 
-- [ ] Phase 1: pinned inventory and lossless converter ([plan](releases/v2/v2.15/plans/v2.15.0-legacy-known-gaps-triage.md)).
+- [ ] Phase 1: pinned inventory and lossless converter ([plan](archives/v2/v2.15/plans/v2.15.0-legacy-known-gaps-triage.md)).
 - [ ] Phase 2: convert ledgers v1.17 to v2.12 and the carry-forward register to the checker's format.
 - [ ] Phase 3: triage the register and v2.12 (about 48 items); batch about 182 archived-only items for follow-up plans.
-- [ ] Phase 4: apply dispositions, verify migrations, record the checker-contract gap ([Nexus-Hub handoff](releases/v2/v2.15/development/v2.15.0-nexus-hub-checker-handoff.md)).
+- [ ] Phase 4: apply dispositions, verify migrations, record the checker-contract gap ([Nexus-Hub handoff](archives/v2/v2.15/development/v2.15.0-nexus-hub-checker-handoff.md)).
 - [ ] Phase 5: final phase and publication.
 
 ## Voice latency and LFM2.5-24B trial (v2.14.2, planned as v2.14.0)
@@ -788,6 +837,19 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Record all sixteen held-out IDs as not-run/HOLD, retain missing-output counts, and assess exact-runtime Humanizer feasibility ([Phase 2 evidence](archives/v2/v2.14/development/v2.14.1-phase2-evidence.md)). Quality remains unmeasured under DF-5.
 - [x] Complete v2.14.1 implementation and merge PR #108 as 6673f0cf after required CI and CodeQL success; quality remains HOLD under DF-5. [Release assets and source CLI are verified](archives/v2/v2.14/development/v2.14.1-release-verification.json).
 - [x] Finish bounded HOLD continuation, Humanizer feasibility, final gates, approved integration and release; keep Humanizer installation, adapter/catalog changes and Handwired implementation outside this plan.
+
+## Decision-evaluation comparison (v2.17.0)
+
+- [x] Compare DeepSeek Maya, DeepInfer/recipe, the decision-eval cookbook and Reylo against Nexus ([comparison](releases/v2/v2.17/comparisons/v2.17.0-comparison-deepseek-decision-evals-reylo.md), 2026-10-23; adoption target confirmed; no implementation authorized).
+- [ ] Select bounded A1/A2 evaluation scope for a separate v2.17 plan from the comparison; retain conditional HOLD and deferred W1-W3.
+
+## GPU unlock and on-device model comparison (2026-10-28)
+
+**Status**: Three of three supplied sources assessed; zero candidates locally qualified or admitted. The owner confirmed target v2.16.1 on 2026-10-28.
+
+- [x] Complete the [gpu-unlock, LFM3 and Ornith comparison](archives/v2/v2.16/comparisons/v2.16.1-comparison-gpu-unlock-lfm3-ornith.md) with source scans, pinned receipts, policy assessments and the upstream v2.16 completion impact.
+- [x] Confirm v2.16.1 and finalize the comparison for publication through develop's required pull request, excluding existing local work (owner confirmation, 2026-10-28).
+- [ ] If a bounded trial is requested, select its job and runtime scope before generating an implementation plan; retain current defaults and the LFM3 runtime HOLD.
 
 ## Recurring Obligations
 

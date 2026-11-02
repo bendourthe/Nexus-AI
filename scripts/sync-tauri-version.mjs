@@ -2,7 +2,7 @@
  * sync-tauri-version.mjs -- v1.8.0 Phase 1 (T101).
  *
  * Syncs the desktop shell's Tauri config version from the root package.json,
- * the single semantic-release-owned version source. `tauri build` stamps
+ * the single application version source. `tauri build` stamps
  * `bundle.version` (and therefore every bundle filename, e.g.
  * `Nexus_<version>_x64-setup.exe`) from `desktop/src-tauri/tauri.conf.json`,
  * which otherwise goes stale between releases (it sat at 1.5.0 while the

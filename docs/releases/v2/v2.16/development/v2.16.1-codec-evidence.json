@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 1,
+  "model": "nemotron-3.5-bolt:e4b-q4_K_M",
+  "runtime": "Ollama 0.40.13",
+  "codecVerdict": "PASS",
+  "transcriptsCompleted": 5,
+  "toolCallsRecovered": 6,
+  "nativeAndReplayParseFailures": 0,
+  "sourceHashes": {
+    "modules/coding/runtime/HeadlessAgentSession.ts": "db75f47549501f4d266a898d53649bd1814d10d068856254a282c055593e484e",
+    "modules/coding/runtime/headlessTools.ts": "312deefb5f15d4ad9bc4142bc29974dcfe6d38180211dca1ff0d4d172858a159",
+    "modules/coding/llm/headlessOllamaClient.ts": "5fb86ad50cc28e140f15f592d61ae6f4464dc35fd0c09d6b84442650a819caba",
+    "modules/coding/llm/parseAgentToolCalls.ts": "f022088f07692a651c690cb9d6951e2403b1b59bf0dbef1cb1d1dee69c894314",
+    "modules/coding/llm/ToolCallFormat.ts": "f9ecdd0cdf84cc0c45e77963107fa080e9c13a79ecbcfb02d0868c96c06aa1d6"
+  },
+  "capturePolicy": "Complete captured request/response objects retained in a separately labeled public copy. Original private bytes remain unchanged. Only absolute qualification-workspace paths are replaced with <QUALIFICATION_WORKSPACE>; JSON whitespace is normalized. Both original and public hashes are recorded. This copy is not claimed byte-identical to raw HTTP.",
+  "inferenceBoundary": "Real HeadlessAgentSession and headlessOllamaClient, actual read_file/list_directory/grep_codebase handlers, identical-request plain HTTP replay; no scripted model or replacement parser.",
+  "limits": "Codec evidence only. Does not prove full production enrichment, memory/history integration, fit, comparative quality or delivery-channel admission.",
+  "captures": [
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/001-read-alpha.nexus-response.ndjson",
+      "privateOriginalSha256": "0ab38ce45682125b9a8b5847eb4650ba59589ebefb7ba7b1f57a4dbe8544cd77",
+      "publicCopySha256": "0ab38ce45682125b9a8b5847eb4650ba59589ebefb7ba7b1f57a4dbe8544cd77",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/001-read-alpha.plain-replay.ndjson",
+      "privateOriginalSha256": "f58a7818df9390c7382a694994b6bd8bac868b92c85a977e97a79cc33e370313",
+      "publicCopySha256": "f58a7818df9390c7382a694994b6bd8bac868b92c85a977e97a79cc33e370313",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/001-read-alpha.request.json",
+      "privateOriginalSha256": "16a340be71eec7bb357eed1be780921e0e4230c2a3b1eb873c0330c1044c2bc8",
+      "publicCopySha256": "8f7199f2d8c999ce132544a09ed4083cf5727fa436d2766eb56529ff6f076eb4",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/002-read-alpha.nexus-response.ndjson",
+      "privateOriginalSha256": "dc26d37273291cb28e928e6760a503ecdbb7ad9330f48059a6a858fb2b112a13",
+      "publicCopySha256": "dc26d37273291cb28e928e6760a503ecdbb7ad9330f48059a6a858fb2b112a13",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/002-read-alpha.plain-replay.ndjson",
+      "privateOriginalSha256": "59736f0e07a7b2f7b82a65b3bed780b3002766ce4b27898436dd1ae3c790073d",
+      "publicCopySha256": "59736f0e07a7b2f7b82a65b3bed780b3002766ce4b27898436dd1ae3c790073d",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/002-read-alpha.request.json",
+      "privateOriginalSha256": "d6d0241516058bece2ae818a6baef7ed1f11c62985c18cb7f43aad4d970479ea",
+      "publicCopySha256": "14c8ca24ccb5937fc01c6a88e527a22e71342c8c0441b7945e6c7f04f78941c6",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/003-read-config.nexus-response.ndjson",
+      "privateOriginalSha256": "16ec256399b6a311cba205879089ed9b001b64f3f5e9fd76f3266d7b6554f27d",
+      "publicCopySha256": "16ec256399b6a311cba205879089ed9b001b64f3f5e9fd76f3266d7b6554f27d",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/003-read-config.plain-replay.ndjson",
+      "privateOriginalSha256": "e2b51a50c648b0c3e7642777efb03bb046c3991dd5388f3cb21da5cf33d1fe6b",
+      "publicCopySha256": "e2b51a50c648b0c3e7642777efb03bb046c3991dd5388f3cb21da5cf33d1fe6b",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/003-read-config.request.json",
+      "privateOriginalSha256": "d92d893b632f854a769385bd3c6ab97615d4cef59e166849eed397f1f88debe9",
+      "publicCopySha256": "d3b96eccee97044caafcd5c5fc4bc33c7b8f3c9a89c17b56032d46e338c463ff",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/004-read-config.nexus-response.ndjson",
+      "privateOriginalSha256": "214615988aa06a5429fe71a32f867955bcc340c53c0eecddfac931bcd4038fcf",
+      "publicCopySha256": "214615988aa06a5429fe71a32f867955bcc340c53c0eecddfac931bcd4038fcf",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/004-read-config.plain-replay.ndjson",
+      "privateOriginalSha256": "8b31d483b769d860813e6eb514395b392ea442790c65062c080b00eaad33ef0a",
+      "publicCopySha256": "8b31d483b769d860813e6eb514395b392ea442790c65062c080b00eaad33ef0a",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/004-read-config.request.json",
+      "privateOriginalSha256": "0d0e3e55d24cfc93aa077021b3202e984fc4dcd50c088356a939d0798221bba8",
+      "publicCopySha256": "51cd538abb288191902615544ac246e8b531d6f91b8fd41232ab001b3dd7d61a",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/005-list-nested.nexus-response.ndjson",
+      "privateOriginalSha256": "fbf2b1db3fd7e9d58a8a0ccf4bc8f313b54d6c28fe1d8ff00ab3cbc4b851299c",
+      "publicCopySha256": "fbf2b1db3fd7e9d58a8a0ccf4bc8f313b54d6c28fe1d8ff00ab3cbc4b851299c",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/005-list-nested.plain-replay.ndjson",
+      "privateOriginalSha256": "9b822a4790818aa9af651514815713a44e9a9a4a0b8b9a507921e64b405a7247",
+      "publicCopySha256": "9b822a4790818aa9af651514815713a44e9a9a4a0b8b9a507921e64b405a7247",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/005-list-nested.request.json",
+      "privateOriginalSha256": "b129e81f7c808b21bd3566f77cdf89efb0626b71d34ed863aa409520a1175b46",
+      "publicCopySha256": "56dba191347bc4285932599bd83b91dfe2ad2df65952f7ba08a4749ca386d430",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/006-list-nested.nexus-response.ndjson",
+      "privateOriginalSha256": "918ff0d3a4ae4dfa97ca3604dd102f3a013d83025ba78a465382dea1f8f184c0",
+      "publicCopySha256": "918ff0d3a4ae4dfa97ca3604dd102f3a013d83025ba78a465382dea1f8f184c0",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/006-list-nested.plain-replay.ndjson",
+      "privateOriginalSha256": "04b6541ff2addf64d58823e2b9770338b36c4614e97ff7a434fa3f8490230ff6",
+      "publicCopySha256": "04b6541ff2addf64d58823e2b9770338b36c4614e97ff7a434fa3f8490230ff6",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/006-list-nested.request.json",
+      "privateOriginalSha256": "3190698c25ff13a9826d04b26e7f5bd1a15c4fc832b4c8331a8b21032c7c8157",
+      "publicCopySha256": "e1a1bbee5b7cca40aa4c6523004c77d1b34cf4c6de78a53de4a2b8427060a080",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/007-search-marker.nexus-response.ndjson",
+      "privateOriginalSha256": "79d532886118e03ef8de42aeef3b25034499eff700848cb09df0538605d78f05",
+      "publicCopySha256": "79d532886118e03ef8de42aeef3b25034499eff700848cb09df0538605d78f05",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/007-search-marker.plain-replay.ndjson",
+      "privateOriginalSha256": "4783517566f28cc6532623eba690424e498d98c64530d0cea60f14e761a0e2f2",
+      "publicCopySha256": "4783517566f28cc6532623eba690424e498d98c64530d0cea60f14e761a0e2f2",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/007-search-marker.request.json",
+      "privateOriginalSha256": "6bb9005db3bf11c40415746d77a301b61c114500df9ca4dc61677fc146644ce9",
+      "publicCopySha256": "2e84b8250ddd1e4866dedc810ab769573423da54f5c95bf8869c3ed3978aed82",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/008-search-marker.nexus-response.ndjson",
+      "privateOriginalSha256": "26036b1568d91b9fbd5b106fed7076dbca13187dab8f595db90fd6f910e2249c",
+      "publicCopySha256": "26036b1568d91b9fbd5b106fed7076dbca13187dab8f595db90fd6f910e2249c",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/008-search-marker.plain-replay.ndjson",
+      "privateOriginalSha256": "f4b53967ff5e8f65aa2b8cda4db82c22cb37108fda7617d25edf6570be7c2b2a",
+      "publicCopySha256": "f4b53967ff5e8f65aa2b8cda4db82c22cb37108fda7617d25edf6570be7c2b2a",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/008-search-marker.request.json",
+      "privateOriginalSha256": "5b0695e52c4d5d772439b645fef5c02ae0fe18aa3c7ef1a6a3c0a54f13b5d29d",
+      "publicCopySha256": "23c775df51843987c6de5795cca4fcdbaedc8abc75e5ceaa1457268c4b850a8f",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/009-two-reads.nexus-response.ndjson",
+      "privateOriginalSha256": "55790175486d71edd56a2b618f89c9cf744658735321dab81e8f203def685c66",
+      "publicCopySha256": "55790175486d71edd56a2b618f89c9cf744658735321dab81e8f203def685c66",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/009-two-reads.plain-replay.ndjson",
+      "privateOriginalSha256": "747120412d75a4927c6b7b1275410d8857e18119ece2a36dd3587af87e074b0c",
+      "publicCopySha256": "747120412d75a4927c6b7b1275410d8857e18119ece2a36dd3587af87e074b0c",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/009-two-reads.request.json",
+      "privateOriginalSha256": "a3295f077f5e8e6e3a1c31571d4685d7d747bddc5d70d5db708236c2b841734b",
+      "publicCopySha256": "5df8529aee77aa39f1c02039e0813d57ddd6faab3e4b79b9a4c755fc4272ae82",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/010-two-reads.nexus-response.ndjson",
+      "privateOriginalSha256": "579de890b6d7b920bad203b4e0a5283a14f862a9b860e45efbc3ed95ad9afb70",
+      "publicCopySha256": "579de890b6d7b920bad203b4e0a5283a14f862a9b860e45efbc3ed95ad9afb70",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/010-two-reads.plain-replay.ndjson",
+      "privateOriginalSha256": "cda0e78170612f13abfcac6067e6e762a00593b083259e2b0d0e7e8be50b1638",
+      "publicCopySha256": "cda0e78170612f13abfcac6067e6e762a00593b083259e2b0d0e7e8be50b1638",
+      "changedBytes": false
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/010-two-reads.request.json",
+      "privateOriginalSha256": "2c430a8fb18e4440612e31b62a38261490981c98f22a31e7afb832037046381d",
+      "publicCopySha256": "dca37fb5cb547dbda2c441eddbef7f68f651361cfd2f76ef127ee6d658e48ec1",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/ollama-show.json",
+      "privateOriginalSha256": "925374d35f3d7a7487a1bfb2e0c8560be2145438b68dcd5db44cec1e743d2374",
+      "publicCopySha256": "abd5b7e1556ff26903c967f7e740420d5e00b724c0903ff0acb12dd037171953",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/preregistered.json",
+      "privateOriginalSha256": "4ea06500da4451e6949cac2ca5e333f46272b18b193b1047e3550a3516287bf1",
+      "publicCopySha256": "7a096eb2e74bfdf2f3ffae00d6258fd4454cf1cffe931fbda58f2904b56de27f",
+      "changedBytes": true
+    },
+    {
+      "file": "docs/releases/v2/v2.16/development/v2.16.1-codec-captures/result.json",
+      "privateOriginalSha256": "b8a047849cff71e536b3093fa814854c2f4208275264320f1173b3f79c17902e",
+      "publicCopySha256": "bda7971427c03c84b0b4a338e49035b76229fb83ff0e6b95272e39fbf3afbb6c",
+      "changedBytes": true
+    }
+  ]
+}

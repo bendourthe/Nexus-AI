@@ -1,0 +1,129 @@
+{
+  "observedAt": "2026-11-02T19:23:57.518342+00:00",
+  "browser": "Codex desktop in-app browser, local HTTP server on 127.0.0.1:8767",
+  "candidateHead": "fede219760629b1fa483deb98da5668f44063ab7",
+  "dirtyCandidate": true,
+  "viewports": [
+    {
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "width": 768,
+      "height": 720
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "readingAndPresentationViews": 36,
+  "activeSlideMeasurements": 51,
+  "freshScreenshotsVisuallyInspected": 12,
+  "consoleWarningsAndErrors": [],
+  "viewportOverrideReset": true,
+  "tabClosed": true,
+  "printEvidenceReuse": {
+    "evidence": "docs/archives/v2/v2.16/development/closing-handbooks-20261031/rendered-observations.json",
+    "evidence_sha256": "1c440a302ac1e93311780ace0c9bf029d8775934a0247e225b72eb3b2ba336fc",
+    "reason": "All six output, renderer, stylesheet and runtime content hashes unchanged; no fresh print export claimed."
+  },
+  "books": [
+    {
+      "id": "atlas",
+      "output": "docs/handbooks/html/atlas.html",
+      "output_sha256": "03d07b44167ba2db91533928cb2068bcbb36e3986a3dfbde0f977e1f6705d78d",
+      "readingMeasurements": 3,
+      "activeSlideMeasurements": 9,
+      "slides": 3,
+      "documentHorizontalOverflow": false,
+      "slideContentOverflow": false,
+      "allImagesDecoded": true,
+      "chapterTargetsMatched": 2,
+      "globalEntryResetToFirst": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "generation-recovery",
+      "output": "docs/handbooks/html/generation-recovery.html",
+      "output_sha256": "43ed4692dc0d5fdb0d782d952eee7d97ac5c87f59aa1cda72ba5982e77d36cae",
+      "readingMeasurements": 3,
+      "activeSlideMeasurements": 12,
+      "slides": 4,
+      "documentHorizontalOverflow": false,
+      "slideContentOverflow": false,
+      "allImagesDecoded": true,
+      "chapterTargetsMatched": 4,
+      "globalEntryResetToFirst": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "installer-runtime",
+      "output": "docs/handbooks/html/technical/installer-runtime.html",
+      "output_sha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05",
+      "readingMeasurements": 3,
+      "activeSlideMeasurements": 6,
+      "slides": 2,
+      "documentHorizontalOverflow": false,
+      "slideContentOverflow": false,
+      "allImagesDecoded": true,
+      "chapterTargetsMatched": 1,
+      "globalEntryResetToFirst": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "media-runtime",
+      "output": "docs/handbooks/html/technical/media-runtime.html",
+      "output_sha256": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51",
+      "readingMeasurements": 3,
+      "activeSlideMeasurements": 6,
+      "slides": 2,
+      "documentHorizontalOverflow": false,
+      "slideContentOverflow": false,
+      "allImagesDecoded": true,
+      "chapterTargetsMatched": 1,
+      "globalEntryResetToFirst": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "transcript-and-workspaces",
+      "output": "docs/handbooks/html/technical/transcript-and-workspaces.html",
+      "output_sha256": "908aa4ffccf6e2bf186cbbbf4426423ccdaa3694d3390d5a725e6c95365b7bfe",
+      "readingMeasurements": 3,
+      "activeSlideMeasurements": 6,
+      "slides": 2,
+      "documentHorizontalOverflow": false,
+      "slideContentOverflow": false,
+      "allImagesDecoded": true,
+      "chapterTargetsMatched": 1,
+      "globalEntryResetToFirst": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "document-outline",
+      "output": "docs/handbooks/html/technical/document-outline.html",
+      "output_sha256": "23bf3d2d5ca434c90d6c873c3e4e89915eced1ded86d68b24f9380a8e886a2e2",
+      "readingMeasurements": 3,
+      "activeSlideMeasurements": 12,
+      "slides": 4,
+      "documentHorizontalOverflow": false,
+      "slideContentOverflow": false,
+      "allImagesDecoded": true,
+      "chapterTargetsMatched": 4,
+      "globalEntryResetToFirst": [
+        true,
+        true
+      ]
+    }
+  ]
+}

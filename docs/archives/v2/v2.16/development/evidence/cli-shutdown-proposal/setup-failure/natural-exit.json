@@ -1,0 +1,62 @@
+{
+  "controlledLoopback": true,
+  "productionInference": false,
+  "task": "bugfix-off-by-one-01",
+  "cases": [
+    {
+      "case": "baseline",
+      "exit": 2,
+      "requests": 0,
+      "stdout": "",
+      "stderr": "nexus: ToolCallFormat build artifact missing. Run `npm run build` before invoking `nexus trace export` from source.",
+      "forwardedOptions": [],
+      "forwardingMatches": false,
+      "taskPassed": false,
+      "pass": false
+    },
+    {
+      "case": "cpu",
+      "exit": 2,
+      "requests": 0,
+      "stdout": "",
+      "stderr": "nexus: ToolCallFormat build artifact missing. Run `npm run build` before invoking `nexus trace export` from source.",
+      "forwardedOptions": [],
+      "forwardingMatches": false,
+      "taskPassed": false,
+      "pass": false
+    },
+    {
+      "case": "negative",
+      "exit": 2,
+      "requests": 0,
+      "stdout": "",
+      "stderr": "nexus golden run: --options C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-num-gpu-smoke-ksmurq1k\\options.json: \"num_gpu\" must be a non-negative integer",
+      "pass": true
+    },
+    {
+      "case": "fraction",
+      "exit": 2,
+      "requests": 0,
+      "stdout": "",
+      "stderr": "nexus golden run: --options C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-num-gpu-smoke-ksmurq1k\\options.json: \"num_gpu\" must be a non-negative integer",
+      "pass": true
+    },
+    {
+      "case": "string",
+      "exit": 2,
+      "requests": 0,
+      "stdout": "",
+      "stderr": "nexus golden run: --options C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-num-gpu-smoke-ksmurq1k\\options.json: \"num_gpu\" must be a number",
+      "pass": true
+    },
+    {
+      "case": "unknown",
+      "exit": 2,
+      "requests": 0,
+      "stdout": "",
+      "stderr": "nexus golden run: --options C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-num-gpu-smoke-ksmurq1k\\options.json: unknown option \"unknown_gpu_option\"",
+      "pass": true
+    }
+  ],
+  "result": "FAIL"
+}

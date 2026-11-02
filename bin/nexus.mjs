@@ -970,8 +970,12 @@ export async function runGoldenRun(flags, stdout = process.stdout, stderr = proc
   const rows = [];
   for (const spec of tasks) {
     metrics?.beginTask(spec.id);
-    const result = await runnerMod.runGoldenTask(spec, options);
-    metrics?.endTask(result);
+    let result;
+    try {
+      result = await runnerMod.runGoldenTask(spec, options);
+    } finally {
+      metrics?.endTask(result ?? { passed: false, failures: ["Golden task aborted before a result"] });
+    }
     if (result.passed) passed += 1;
     rows.push({ id: spec.id, passed: result.passed, failures: result.failures });
     if (!wantsJsonOutput(flags)) {
@@ -1837,10 +1841,10 @@ export async function main(argv) {
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   main(process.argv.slice(2))
-    .then((code) => process.exit(code))
+    .then((code) => { process.exitCode = code; })
     .catch((err) => {
       process.stderr.write(`nexus: ${err instanceof Error ? err.message : String(err)}\n`);
-      process.exit(2);
+      process.exitCode = 2;
     });
 }
 

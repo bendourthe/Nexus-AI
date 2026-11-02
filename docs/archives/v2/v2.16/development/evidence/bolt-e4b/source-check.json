@@ -1,0 +1,49 @@
+{
+  "checkedLocalDate": "2026-10-25",
+  "checkedUtc": "2026-10-26T03:09:13.301693+00:00",
+  "tag": "nemotron-3.5-bolt:e4b-q4_K_M",
+  "manifestUrl": "https://registry.ollama.ai/v2/library/nemotron-3.5-bolt/manifests/e4b-q4_K_M",
+  "manifestDigest": "sha256:69f2be39b309ade35ef04ee02507915f4cd839f6631e14425146cb6c9df3bd39",
+  "layerBytes": 7908812809,
+  "config": {
+    "model_format": "gguf",
+    "model_family": "gemma4",
+    "model_families": [
+      "gemma4"
+    ],
+    "model_type": "7.5B",
+    "file_type": "Q4_K_M",
+    "renderer": "gemma4-nemotron",
+    "parser": "gemma4",
+    "requires": "0.40.10",
+    "draft": {
+      "model_format": "gguf",
+      "architecture": "dflash"
+    }
+  },
+  "cardUrl": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB/raw/1db54d5b12533ff1bcaa8e42cf4c667988a1f1be/README.md",
+  "cardSha256": "8a06cc67a204a173512f631b7eb8325c220236c543ee5007ecbecddeec272b20",
+  "cardCommit": "1db54d5b12533ff1bcaa8e42cf4c667988a1f1be",
+  "licenseName": "openmdw-1.1",
+  "licenseUrl": "https://openmdw.ai/license/1-1/",
+  "licenseDigest": "sha256:bf6afc09321cbabba412015fa925ab9480d04859607f233b278334544937ea34",
+  "capabilitiesSource": "https://ollama.com/library/nemotron-3.5-bolt:e4b-q4_K_M",
+  "capabilitiesListed": [
+    "vision",
+    "tools",
+    "thinking",
+    "audio"
+  ],
+  "minimumOllamaVersion": "0.40.10",
+  "E-1": "PASS",
+  "E-2": "PASS",
+  "runtimeObserved": "0.32.15",
+  "gpu": "NVIDIA GeForce RTX 3080 Ti Laptop GPU, 16384 MiB",
+  "residentModelsBeforePull": [],
+  "instructionsExecutedFromSources": false,
+  "E-3": "HOLD",
+  "E-3Reason": "Installed Ollama 0.32.15 is older than registry requires 0.40.10; actual pull refused with upstream 412",
+  "E-4": "not run",
+  "E-5": "not run",
+  "inferenceTranscriptCount": 0
+}
