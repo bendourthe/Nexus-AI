@@ -1,3 +1,48 @@
+## [2.16.1](https://github.com/bendourthe/Nexus-AI/compare/v2.15.1...v2.16.1) (2026-11-02)
+
+### Added
+
+* Golden runs accept a validated non-negative integer `num_gpu` option, including `0` for CPU-only local qualification.
+
+### Fixed
+
+* Let the headless CLI exit naturally after pending work drains, and stop per-task metrics when a golden task fails or aborts.
+* Update production dependency overrides and preserve MCP HTTP transport compatibility and optional desktop protocol values through the Zod 4 migration.
+* Extract exact-version release notes from H1/H2 changelog history while preserving subsections, hidden headings and literal code examples. Reject missing, duplicate, empty or unfinished selected sections before replacing the notes output.
+* Prepare releases through reviewed develop/main changes. Require an annotated tag matching the checked-out source and reviewed main history, then recheck its remote peeled commit immediately before artifact publication. Manual readiness remains read-only.
+
+### Qualification
+
+* Record five real candidate codec transcripts and four measured fit attempts. Memory-reporting contradictions retain fit HOLD; comparative quality remains unrun. No candidate slot is admitted and model defaults are unchanged.
+
+### Internal
+
+* Preserve archive provenance, frozen fixtures and all 384 individually tracked v2.17 obligations. Retain the original v2.16.0 no-tag outcome alongside this subsequent tooling and release-automation delivery.
+
+### CPU Golden Options
+
+* Activation: create an options JSON file containing `{"num_gpu":0}` and pass it to `node bin/nexus.mjs golden run --mode live --options <file.json>` with the intended local model and task. Non-negative integers are accepted; zero requests CPU-only execution.
+* Validation: from the repository root, run `node --input-type=module -e "import {loadGoldenOptions} from './bin/goldenRunMetrics.mjs'; console.log(JSON.stringify(loadGoldenOptions(process.argv[1])))" <file.json>` and confirm `{"num_gpu":0}`. This validates the input without inference; actual placement still needs runtime observation.
+* Rollback: remove `num_gpu` from the options file or omit `--options`. Existing metrics and task snapshots remain on disk.
+* Authority: sampler options grant no additional tool or filesystem permissions, do not admit a model, and do not change installed defaults.
+* Docs: [Release-source and operating evidence](docs/releases/v2/v2.16/development/v2.16.1-release-source-evidence.md).
+
+### Manual Release Readiness
+
+* Activation: after the reviewed source reaches main, run `git fetch origin main`, record `git rev-parse origin/main`, then dispatch the pinned full commit with `gh workflow run semantic-release.yml --repo bendourthe/Nexus-AI --ref main -f "source_ref=$(git rev-parse origin/main)"`. Retain the dispatch run ID.
+* Validation: use that specific run ID in `gh run view <run-id> --repo bendourthe/Nexus-AI --json status,conclusion` and `gh run view <run-id> --repo bendourthe/Nexus-AI --log`. Require a successful conclusion and the recorded full source SHA in the checkout log. The workflow revision in `headSha` does not prove the checked-out input; do not substitute the newest unrelated run. A queued or running result is incomplete.
+* Rollback: stop dispatching the optional check; an unfinished run can be canceled by its run ID. The workflow creates no commits, tags or releases to undo.
+* Authority: readiness has read-only repository access and does not authorize publication or bypass required checks. Artifact publication separately requires the exact reviewed annotated tag on main.
+* Docs: [Release-source and operating evidence](docs/releases/v2/v2.16/development/v2.16.1-release-source-evidence.md) and [release procedure](docs/runbooks/releases.md).
+
+### Frozen Installer Acceptance
+
+* Activation: the release and Windows rehearsal jobs invoke `pwsh -NonInteractive -File scripts/installer/build/smoke-windows-exe.ps1 -InstallDesktop` on a clean hosted Windows runner. The switch refuses local execution and pre-existing application/runtime destinations.
+* Validation: download the specific run's receipt with `gh run download <run-id> --repo bendourthe/Nexus-AI --name installer-windows-acceptance --dir <evidence-dir>`. Require status `pass`, version `2.16.1`, the reviewed source SHA, and an installer SHA-256 matching the downloaded published binary. The receipt must include real sidecar health, a nonempty catalog and the provisioned Node version/hash.
+* Rollback: omit `-InstallDesktop` for local boot-only probes. Hosted test installations are discarded with the disposable job. A failed install blocks publication and creates no passing receipt.
+* Authority: this selects zero models and proves installer/runtime/backend boundaries; it does not qualify GPU image/video output, admit a model or replace the full application review. The environment check prevents accidental local execution; it is not a security sandbox.
+* Docs: [Release-source and operating evidence](docs/releases/v2/v2.16/development/v2.16.1-release-source-evidence.md).
+
 ## [2.15.1](https://github.com/bendourthe/Nexus-AI/compare/v2.15.0...v2.15.1) (2026-10-22)
 
 

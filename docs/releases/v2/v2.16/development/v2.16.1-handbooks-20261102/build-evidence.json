@@ -1,0 +1,88 @@
+{
+  "buildCommand": "node scripts/generate-handbooks.mjs --output-root <private output folder>",
+  "buildCount": 2,
+  "bothBuildsRawByteIdentical": true,
+  "trackedOutputsMatchAfterDocumentedLineEndingNormalization": true,
+  "handbooks": [
+    {
+      "id": "atlas",
+      "changedInputs": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "trackedRawSha256": "e7b8caf8ec61854027b4040f6621737202df94c718a246120758cbe84fbc55fc",
+      "buildASha256": "03d07b44167ba2db91533928cb2068bcbb36e3986a3dfbde0f977e1f6705d78d",
+      "buildBSha256": "03d07b44167ba2db91533928cb2068bcbb36e3986a3dfbde0f977e1f6705d78d",
+      "canonicalSha256": "03d07b44167ba2db91533928cb2068bcbb36e3986a3dfbde0f977e1f6705d78d",
+      "priorCanonicalSha256": "03d07b44167ba2db91533928cb2068bcbb36e3986a3dfbde0f977e1f6705d78d"
+    },
+    {
+      "id": "generation-recovery",
+      "changedInputs": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "trackedRawSha256": "a7f69e7c7ad048a4697e492e276d2de048ec9a8891d9d1a30f71bd0164b7f195",
+      "buildASha256": "43ed4692dc0d5fdb0d782d952eee7d97ac5c87f59aa1cda72ba5982e77d36cae",
+      "buildBSha256": "43ed4692dc0d5fdb0d782d952eee7d97ac5c87f59aa1cda72ba5982e77d36cae",
+      "canonicalSha256": "43ed4692dc0d5fdb0d782d952eee7d97ac5c87f59aa1cda72ba5982e77d36cae",
+      "priorCanonicalSha256": "43ed4692dc0d5fdb0d782d952eee7d97ac5c87f59aa1cda72ba5982e77d36cae"
+    },
+    {
+      "id": "installer-runtime",
+      "changedInputs": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "trackedRawSha256": "5b740f830f8b3eb6396a8f6a662ba3d4651252f9c3a26de4811c3873652f8c45",
+      "buildASha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05",
+      "buildBSha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05",
+      "canonicalSha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05",
+      "priorCanonicalSha256": "d44d7115e86d4c66f74635d8b50d9eccb878d510ef141393c467699f6b2d0b05"
+    },
+    {
+      "id": "media-runtime",
+      "changedInputs": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "trackedRawSha256": "aa8e7178ca5d265d3ee93d37acd9d777535a72a9748e5a0559df7a8fe7ac3ed2",
+      "buildASha256": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51",
+      "buildBSha256": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51",
+      "canonicalSha256": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51",
+      "priorCanonicalSha256": "5aba512f585b6c19769568e5139947eb89a8e684f905247cb9cfd595833bef51"
+    },
+    {
+      "id": "transcript-and-workspaces",
+      "changedInputs": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "trackedRawSha256": "7b033c7e4d5a8504d6e95dfad68b417e5c90f6ac41fbaa3238cdd1ec5d0e6709",
+      "buildASha256": "908aa4ffccf6e2bf186cbbbf4426423ccdaa3694d3390d5a725e6c95365b7bfe",
+      "buildBSha256": "908aa4ffccf6e2bf186cbbbf4426423ccdaa3694d3390d5a725e6c95365b7bfe",
+      "canonicalSha256": "908aa4ffccf6e2bf186cbbbf4426423ccdaa3694d3390d5a725e6c95365b7bfe",
+      "priorCanonicalSha256": "908aa4ffccf6e2bf186cbbbf4426423ccdaa3694d3390d5a725e6c95365b7bfe"
+    },
+    {
+      "id": "document-outline",
+      "changedInputs": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "trackedRawSha256": "6676eb3e4670ed4a23a24dd6cbd3b424944d423ea7e13cdee0e175ed3fb9a16d",
+      "buildASha256": "23bf3d2d5ca434c90d6c873c3e4e89915eced1ded86d68b24f9380a8e886a2e2",
+      "buildBSha256": "23bf3d2d5ca434c90d6c873c3e4e89915eced1ded86d68b24f9380a8e886a2e2",
+      "canonicalSha256": "23bf3d2d5ca434c90d6c873c3e4e89915eced1ded86d68b24f9380a8e886a2e2",
+      "priorCanonicalSha256": "23bf3d2d5ca434c90d6c873c3e4e89915eced1ded86d68b24f9380a8e886a2e2"
+    }
+  ],
+  "observedAt": "2026-11-02T19:23:57.518342+00:00",
+  "candidateHead": "fede219760629b1fa483deb98da5668f44063ab7",
+  "dirtyCandidate": true,
+  "nativeCheck": {
+    "command": "node scripts/generate-handbooks.mjs --check",
+    "exitCode": 0,
+    "summary": "generate-handbooks: 6 source(s) match"
+  }
+}

@@ -108,7 +108,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/archives/v2/v2.16/development/closing-handbooks-20261031/atlas.json",
+      "evidence": "docs/releases/v2/v2.16/development/v2.16.1-handbooks-20261102/atlas.json",
       "presentation": true
     },
     {
@@ -172,7 +172,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/archives/v2/v2.16/development/closing-handbooks-20261031/generation-recovery.json",
+      "evidence": "docs/releases/v2/v2.16/development/v2.16.1-handbooks-20261102/generation-recovery.json",
       "presentation": true
     },
     {
@@ -222,7 +222,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/archives/v2/v2.16/development/closing-handbooks-20261031/installer-runtime.json",
+      "evidence": "docs/releases/v2/v2.16/development/v2.16.1-handbooks-20261102/installer-runtime.json",
       "presentation": true
     },
     {
@@ -280,7 +280,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/archives/v2/v2.16/development/closing-handbooks-20261031/media-runtime.json",
+      "evidence": "docs/releases/v2/v2.16/development/v2.16.1-handbooks-20261102/media-runtime.json",
       "presentation": true
     },
     {
@@ -342,7 +342,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/archives/v2/v2.16/development/closing-handbooks-20261031/transcript-and-workspaces.json",
+      "evidence": "docs/releases/v2/v2.16/development/v2.16.1-handbooks-20261102/transcript-and-workspaces.json",
       "presentation": true
     },
     {
@@ -424,7 +424,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/archives/v2/v2.16/development/closing-handbooks-20261031/document-outline.json",
+      "evidence": "docs/releases/v2/v2.16/development/v2.16.1-handbooks-20261102/document-outline.json",
       "presentation": true
     }
   ],
