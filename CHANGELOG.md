@@ -1,3 +1,40 @@
+## [2.16.1](https://github.com/bendourthe/Nexus-AI/compare/v2.15.1...v2.16.1) (2026-11-02)
+
+### Added
+
+* Golden runs accept a validated non-negative integer `num_gpu` option, including `0` for CPU-only local qualification.
+
+### Fixed
+
+* Let the headless CLI exit naturally after pending work drains, and stop per-task metrics when a golden task fails or aborts.
+* Update production dependency overrides and preserve MCP HTTP transport compatibility and optional desktop protocol values through the Zod 4 migration.
+* Extract exact-version release notes from H1/H2 changelog history while preserving subsections, hidden headings and literal code examples. Reject missing, duplicate, empty or unfinished selected sections before replacing the notes output.
+* Prepare releases through reviewed develop/main changes. Require an annotated tag matching the checked-out source and reviewed main history, then recheck its remote peeled commit immediately before artifact publication. Manual readiness remains read-only.
+
+### Qualification
+
+* Record five real candidate codec transcripts and four measured fit attempts. Memory-reporting contradictions retain fit HOLD; comparative quality remains unrun. No candidate slot is admitted and model defaults are unchanged.
+
+### Internal
+
+* Preserve archive provenance, frozen fixtures and all 384 individually tracked v2.17 obligations. Retain the original v2.16.0 no-tag outcome alongside this subsequent tooling and release-automation delivery.
+
+### CPU Golden Options
+
+* Activation: create an options JSON file containing `{"num_gpu":0}` and pass it to `node bin/nexus.mjs golden run --mode live --options <file.json>` with the intended local model and task. Non-negative integers are accepted; zero requests CPU-only execution.
+* Validation: from the repository root, run `node --input-type=module -e "import {loadGoldenOptions} from './bin/goldenRunMetrics.mjs'; console.log(JSON.stringify(loadGoldenOptions(process.argv[1])))" <file.json>` and confirm `{"num_gpu":0}`. This validates the input without inference; actual placement still needs runtime observation.
+* Rollback: remove `num_gpu` from the options file or omit `--options`. Existing metrics and task snapshots remain on disk.
+* Authority: sampler options grant no additional tool or filesystem permissions, do not admit a model, and do not change installed defaults.
+* Docs: [Release-source and operating evidence](docs/releases/v2/v2.16/development/v2.16.1-release-source-evidence.md).
+
+### Manual Release Readiness
+
+* Activation: after the reviewed source reaches main, run `gh workflow run semantic-release.yml --repo bendourthe/Nexus-AI --ref main -f source_ref=main`.
+* Validation: run `gh run list --repo bendourthe/Nexus-AI --workflow semantic-release.yml --limit 1 --json status,conclusion,headSha` and require the intended main revision with a successful conclusion. A queued or running result is incomplete.
+* Rollback: stop dispatching the optional check; an unfinished run can be canceled by its run ID. The workflow creates no commits, tags or releases to undo.
+* Authority: readiness has read-only repository access and does not authorize publication or bypass required checks. Artifact publication separately requires the exact reviewed annotated tag on main.
+* Docs: [Release-source and operating evidence](docs/releases/v2/v2.16/development/v2.16.1-release-source-evidence.md) and [release procedure](docs/runbooks/releases.md).
+
 ## [2.15.1](https://github.com/bendourthe/Nexus-AI/compare/v2.15.0...v2.15.1) (2026-10-22)
 
 
