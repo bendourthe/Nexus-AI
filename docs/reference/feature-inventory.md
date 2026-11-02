@@ -64,7 +64,7 @@ The file declared `v0.8.0`. Three options existed:
 2. Keep the field and make it advisory. Rejected: it goes stale again on the first release, and a stale field in a document whose whole purpose is being true is an odd thing to ship.
 3. Have the release flow rewrite it. Rejected: it couples the release flow to this file, and a release that forgets the step fails in the place hardest to fix.
 
-The decisive argument is a failure mode, not a preference. `semantic-release` computes and bumps the version on `main` without touching `feature_list.json`. A **gating** version assertion would therefore go red on the first release after it landed, and it would be unfixable from inside the release commit that broke it. Any consumer needing the version reads `package.json`.
+At that point, `semantic-release` computed and bumped the version on `main` without touching `feature_list.json`. A gating version assertion would have failed on the following release. Release preparation now runs through reviewed integration branches, but the inventory still does not duplicate the version: any consumer needing it reads `package.json`.
 
 ## Rebuilding or extending the inventory
 
