@@ -1,0 +1,111 @@
+{
+  "portable-runtime": {
+    "url": "https://github.com/ollama/ollama/releases/download/v0.40.13/ollama-windows-amd64.zip",
+    "bytes": 1601969847,
+    "sha256": "7afa38624fa62ee5d8293422d0ab084c1bb4603134c7f4dafce11a033b57cc19",
+    "executable": "<QUALIFICATION_WORKSPACE>\\.nexus-hub\\runtime\\ollama-v0.40.13\\ollama.exe",
+    "version_stdout": "Warning: could not connect to a running Ollama instance\nWarning: client version is 0.40.13\n",
+    "version_stderr": "",
+    "uncompressed_bytes": 2249796111
+  },
+  "e4b-current-source-receipt": {
+    "manifest": {
+      "url": "https://registry.ollama.ai/v2/library/nemotron-3.5-bolt/manifests/e4b-q4_K_M",
+      "status": 200,
+      "sha256": "69f2be39b309ade35ef04ee02507915f4cd839f6631e14425146cb6c9df3bd39",
+      "headers": {
+        "Date": "Mon, 02 Nov 2026 04:45:24 GMT",
+        "Content-Type": "application/vnd.docker.distribution.manifest.v2+json",
+        "Content-Length": "1353",
+        "Connection": "close",
+        "vary": "Accept, User-Agent",
+        "via": "1.1 google",
+        "cf-cache-status": "DYNAMIC",
+        "Server": "cloudflare",
+        "CF-RAY": "a5407d54b8cb5cfb-SJC"
+      }
+    },
+    "config": {
+      "url": "https://registry.ollama.ai/v2/library/nemotron-3.5-bolt/blobs/sha256:525c80a224306e11b61ceda354e5018ef758f6d39cb8626d5def305f25d2d2de",
+      "status": 200,
+      "sha256": "525c80a224306e11b61ceda354e5018ef758f6d39cb8626d5def305f25d2d2de",
+      "headers": {
+        "Date": "Mon, 02 Nov 2026 04:45:25 GMT",
+        "Content-Type": "application/octet-stream",
+        "Content-Length": "241",
+        "Connection": "close",
+        "Accept-Ranges": "bytes",
+        "ETag": "\"716e209dfee2771f0a0fc8a493c668b2\"",
+        "Last-Modified": "Fri, 23 Oct 2026 00:57:01 GMT",
+        "Server": "cloudflare",
+        "CF-RAY": "a5407d575e6d9ac2-SJC"
+      }
+    },
+    "license": {
+      "url": "https://registry.ollama.ai/v2/library/nemotron-3.5-bolt/blobs/sha256:bf6afc09321cbabba412015fa925ab9480d04859607f233b278334544937ea34",
+      "status": 200,
+      "sha256": "bf6afc09321cbabba412015fa925ab9480d04859607f233b278334544937ea34",
+      "headers": {
+        "Date": "Mon, 02 Nov 2026 04:45:25 GMT",
+        "Content-Type": "application/octet-stream",
+        "Content-Length": "2620",
+        "Connection": "close",
+        "Accept-Ranges": "bytes",
+        "ETag": "\"2c4c537716f2b093bda5787303f8bf23\"",
+        "Last-Modified": "Wed, 01 Jul 2026 22:23:40 GMT",
+        "Server": "cloudflare",
+        "CF-RAY": "a5407d59782c8531-SJC"
+      }
+    },
+    "model_bytes": 7908812809,
+    "model_config": {
+      "model_format": "gguf",
+      "model_family": "gemma4",
+      "model_families": [
+        "gemma4"
+      ],
+      "model_type": "7.5B",
+      "file_type": "Q4_K_M",
+      "renderer": "gemma4-nemotron",
+      "parser": "gemma4",
+      "requires": "0.40.10",
+      "draft": {
+        "model_format": "gguf",
+        "architecture": "dflash"
+      }
+    }
+  },
+  "holder-pull-result": {
+    "completed_at": "2026-11-02T05:32:29.721413+00:00",
+    "source": "hf.co/LiquidAI/LFM2.5-2.6B-GGUF:Q4_K_M",
+    "alias": "lfm2.5:2.6b",
+    "weights_sha256": "02a8b7e17487d326e46d68ce0ba24211e1b80a14c4cd0597fa73c1cd697f52ed",
+    "seconds": 91.67200000002049,
+    "model": {
+      "name": "lfm2.5:2.6b",
+      "model": "lfm2.5:2.6b",
+      "modified_at": "2026-11-01T21:32:29.5672457-08:00",
+      "size": 1674466581,
+      "digest": "26d07caa2ddb76ed45e54f71deb656b7ff5b9c8978feabfa84407d69022c9198",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "lfm2",
+        "families": [
+          "lfm2"
+        ],
+        "parameter_size": "2.7B",
+        "quantization_level": "Q4_K_M",
+        "context_length": 131072,
+        "embedding_length": 2048,
+        "runner": "ggml"
+      },
+      "capabilities": [
+        "tools",
+        "thinking",
+        "completion"
+      ]
+    },
+    "raw_sha256": "6f38297b34573e41ab31030c5e4ecdb3a48a7a76543a83ef6240228b07d3edae"
+  }
+}
