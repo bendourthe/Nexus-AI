@@ -1,5 +1,25 @@
 # Nexus - Progress Dashboard
 
+## v2.16 and v2.17 Full Release [IN PROGRESS]
+
+| Goal | Verified current state | Required outcome |
+|---|---|---|
+| v2.16 release | No published release; five real E-3 codec transcripts pass; four fit probes retained, fit HOLD pending contradictory runtime memory reporting | Complete fit and quality qualification, repair release blockers and publish verified artifacts |
+| v2.17 release | 384 OPEN records preserved in the requirements matrix; implementation and evidence reconciliation pending | Complete the actual requirements and publish verified artifacts |
+| Final review | Not started | Full codebase, local-agent, UI and behavioral review after both releases |
+
+- [x] Create the clean release worktree and verify Git attribution.
+- [x] Pass lifecycle bootstrap and verify the official portable runtime checksum.
+- [x] Pass five actual E4B tool-call transcripts and identical-request HTTP replays with zero codec failures.
+- [ ] Fix and prove production instruction/context budgeting; the measured enriched project turn refuses before inference at 4K and cold 8K windows.
+- [ ] Complete v2.16 model requalification and release-pipeline repair.
+- [ ] Publish the verified v2.16 release.
+- [ ] Reconcile every v2.17 obligation against current code and required acceptance evidence.
+- [ ] Implement and qualify the remaining v2.17 functionality.
+- [ ] Publish the verified v2.17 release.
+- [ ] Run the requested full review of local-agent functionality, context, memory, history, security and UI behavior.
+
+
 ## v2.16 Model Trial
 
 | Measure | Current | Required |
