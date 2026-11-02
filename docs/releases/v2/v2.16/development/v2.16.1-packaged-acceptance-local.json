@@ -1,0 +1,38 @@
+{
+  "scope": "local acceptance-gate mechanism; positive frozen provisioning not yet observed",
+  "workflowRegression": {
+    "red": "missing -InstallDesktop invocation",
+    "green": {
+      "files": 3,
+      "passed": 37,
+      "seconds": 55.95,
+      "exitCode": 0
+    }
+  },
+  "pythonPackaging": {
+    "passed": 50,
+    "exitCode": 0
+  },
+  "parserErrors": 0,
+  "localGuard": {
+    "controlProcessLaunched": true,
+    "blockedProcessLaunched": false,
+    "refusalExitCode": 1,
+    "message": "InstallDesktop requires a clean hosted Windows runner; no installer was launched.",
+    "realInstallerInvokedLocally": false
+  },
+  "retainedOutputProbe": {
+    "hypothesisReproduced": false,
+    "originalMilliseconds": 466,
+    "finalFastParentMilliseconds": 488
+  },
+  "liveParentTimeout": {
+    "budgetSeconds": 1,
+    "observedMilliseconds": 1482,
+    "failedClosed": true,
+    "descendantConfirmedGone": true
+  },
+  "realInstallerInvokedLocally": false,
+  "positiveHostedInstallation": "pending",
+  "review": "approach and implementation approved; speculative timeout finding withdrawn after actual observation"
+}

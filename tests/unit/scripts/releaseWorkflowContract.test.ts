@@ -64,3 +64,18 @@ describe("exact-tag artifact publication", () => {
     expect(steps[publish].with?.files).toContain("artifacts/SHA256SUMS.txt");
   });
 });
+
+
+describe("frozen Windows installer acceptance", () => {
+  it("requires real installation before publishing the installer and retains its receipt", () => {
+    for (const [workflow, jobName] of [[release, "build-installer-windows"], [parse(read(".github/workflows/installer-build.yml")) as Workflow, "build-windows-installer"]] as const) {
+      const steps = workflow.jobs[jobName].steps;
+      const smoke = steps.findIndex((step) => step.run?.includes("smoke-windows-exe.ps1"));
+      expect(smoke).toBeGreaterThan(-1);
+      expect(steps[smoke].run).toContain("-InstallDesktop");
+      const binary = steps.findIndex((step) => step.uses?.startsWith("actions/upload-artifact@") && step.with?.path === "dist/NexusSetup.exe");
+      expect(binary).toBeGreaterThan(smoke);
+      expect(steps.some((step) => step.uses?.startsWith("actions/upload-artifact@") && String(step.with?.path).includes("packaged-install-"))).toBe(true);
+    }
+  });
+});
