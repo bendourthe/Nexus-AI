@@ -29,8 +29,8 @@
 
 ### Manual Release Readiness
 
-* Activation: after the reviewed source reaches main, run `gh workflow run semantic-release.yml --repo bendourthe/Nexus-AI --ref main -f source_ref=main`.
-* Validation: run `gh run list --repo bendourthe/Nexus-AI --workflow semantic-release.yml --limit 1 --json status,conclusion,headSha` and require the intended main revision with a successful conclusion. A queued or running result is incomplete.
+* Activation: after the reviewed source reaches main, run `git fetch origin main`, record `git rev-parse origin/main`, then dispatch the pinned full commit with `gh workflow run semantic-release.yml --repo bendourthe/Nexus-AI --ref main -f "source_ref=$(git rev-parse origin/main)"`. Retain the dispatch run ID.
+* Validation: use that specific run ID in `gh run view <run-id> --repo bendourthe/Nexus-AI --json status,conclusion` and `gh run view <run-id> --repo bendourthe/Nexus-AI --log`. Require a successful conclusion and the recorded full source SHA in the checkout log. The workflow revision in `headSha` does not prove the checked-out input; do not substitute the newest unrelated run. A queued or running result is incomplete.
 * Rollback: stop dispatching the optional check; an unfinished run can be canceled by its run ID. The workflow creates no commits, tags or releases to undo.
 * Authority: readiness has read-only repository access and does not authorize publication or bypass required checks. Artifact publication separately requires the exact reviewed annotated tag on main.
 * Docs: [Release-source and operating evidence](docs/releases/v2/v2.16/development/v2.16.1-release-source-evidence.md) and [release procedure](docs/runbooks/releases.md).
