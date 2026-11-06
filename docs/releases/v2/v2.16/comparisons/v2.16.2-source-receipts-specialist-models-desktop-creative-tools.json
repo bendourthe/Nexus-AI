@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-04",
+  "timezone": "America/Los_Angeles",
+  "adoptionTarget": "v2.16.2",
+  "targetStatus": "owner-confirmed",
+  "localBaseline": "7d9c1006faca6ce88dfe535d0614f3a7ef8e4e8f",
+  "remoteBaseline": "b4916f840fa8c7d619d373602077217e03bf478e",
+  "sourceTypes": [
+    "local-pdf",
+    "git-repository",
+    "git-repository",
+    "git-repository"
+  ],
+  "sources": [
+    {
+      "id": "agent-desktop",
+      "url": "https://github.com/vercel-labs/agent-desktop",
+      "commit": "53e072dc6e2024e29d80b31b58065aa36be1900f",
+      "verdict": "PROCEED-WITH-CAUTION",
+      "trackedFiles": 3713,
+      "scannedTextFiles": 3701,
+      "excludedBinaryOrLargeFiles": 12,
+      "skippedPaths": [],
+      "detectorMatchCounts": {
+        "instruction_override": 0,
+        "destructive": 49,
+        "execution": 251,
+        "credentials": 259,
+        "hidden": 27
+      }
+    },
+    {
+      "id": "scenario-skills",
+      "url": "https://github.com/scenario-labs/skills",
+      "commit": "4c921ea31b3143e303a9299d9773218c600baebc",
+      "verdict": "PROCEED-WITH-CAUTION",
+      "trackedFiles": 1863,
+      "scannedTextFiles": 1779,
+      "excludedBinaryOrLargeFiles": 83,
+      "skippedPaths": [
+        "tests/scenario-admin-analytics/evidence/example/report.pdf"
+      ],
+      "detectorMatchCounts": {
+        "instruction_override": 0,
+        "destructive": 4,
+        "execution": 377,
+        "credentials": 182,
+        "hidden": 0
+      }
+    },
+    {
+      "id": "nanoui",
+      "url": "https://github.com/justrach/nanoui",
+      "commit": "09d674e0f7a37efc6f82e886e6ea2031a322dfbe",
+      "verdict": "PROCEED-WITH-CAUTION",
+      "trackedFiles": 804,
+      "scannedTextFiles": 775,
+      "excludedBinaryOrLargeFiles": 22,
+      "skippedPaths": [
+        "apps/nanofly",
+        "apps/nanolight",
+        "apps/nanomail",
+        "apps/nanomon",
+        "apps/nanostudio",
+        "apps/nanoterm",
+        "site"
+      ],
+      "detectorMatchCounts": {
+        "instruction_override": 0,
+        "destructive": 14,
+        "execution": 7,
+        "credentials": 12,
+        "hidden": 1
+      }
+    },
+    {
+      "id": "foundation-model-pdf",
+      "path": "Downloads/Why the future AI stack needs more than one foundation model.pdf",
+      "sha256": "9b2d35fac514618269843413078cce262e296acf36e25da6762040fcfc99531b",
+      "pages": 6,
+      "extractedCharacters": 6670,
+      "verdict": "CLEAR",
+      "matchedSelectedActiveFeatures": [],
+      "textPatternMatches": 0
+    },
+    {
+      "id": "timestral-primary-verification",
+      "url": "https://mistral.ai/news/timestral/",
+      "sha256": "3a6dc6c24be4d06182f3d47fda1239e38fdaa40c6fa3e8ad7eda1756583fdeb6",
+      "verdict": "CLEAR",
+      "scope": "read-only HTML; no embedded scripts or demos executed"
+    }
+  ],
+  "sourceCodeExecuted": false,
+  "dependenciesInstalled": false,
+  "upstreamSkillsInstalled": false,
+  "scan": {
+    "purpose": "pre-ingest triage, not installation approval or exhaustive security audit",
+    "scannerSha256": "6cf2e24883d7eb17cce1f82d201a4014a79ca827d31c696dc1136cf9b0dd85ab",
+    "patterns": {
+      "instruction_override": "ignore/disregard previous or system instructions; reveal/send system prompt or conversation history",
+      "destructive": "recursive deletion, destructive Git operations",
+      "execution": "piped shell downloads, install hooks, eval, subprocess",
+      "credentials": "environment/Scenario key/credential-directory references",
+      "hidden": "selected zero-width, bidi and BOM code points"
+    },
+    "limitations": [
+      "117 binary/large repository files excluded",
+      "One Scenario PDF not decoded as UTF-8",
+      "Seven NanoUI submodules not fetched",
+      "No dependency-CVE, executable-binary or install approval",
+      "Selected PDF active-action keys only; not a recursive PDF security audit"
+    ]
+  },
+  "queue": {
+    "helper": "C:/Users/bdour/.nexus-hub/src/scripts/enumerate_plan_queue.py",
+    "localExitCode": 0,
+    "remoteProjectionExitCode": 0,
+    "local": [
+      {
+        "version": "v2.16.0",
+        "status": "proposed",
+        "done": 0,
+        "open": 26
+      }
+    ],
+    "remote": [
+      {
+        "version": "v2.16.1",
+        "status": "in-progress; model admission HOLD",
+        "done": 9,
+        "open": 2
+      }
+    ],
+    "reserved": "v2.17.0 comparison plus 384 OPEN/unassessed requirements; no active implementation plan enumerated",
+    "placement": "Owner-confirmed v2.16.2 after existing v2.16.1 release work and before reserved v2.17.0; provisional v2.17.1 draft superseded; no existing plan moved"
+  },
+  "publication": {
+    "state": "blocked-before-commit",
+    "attributionCheck": "Attribution guard version differs. Reinstall the guard.",
+    "workspaceInstall": "Hook configuration changed since installation; uninstall the old guard before reinstalling.",
+    "guardBypassed": false,
+    "guardUninstalled": false,
+    "commitCreated": false,
+    "pushed": false
+  },
+  "verification": {
+    "applicationSurface": "documentation only",
+    "upstreamTestsRun": false,
+    "modelInferenceRun": false,
+    "liveDesktopFlowRun": false,
+    "documentationChecks": {
+      "relativeReportLinks": 28,
+      "definedNamedReferences": 16,
+      "targetAgreement": true,
+      "styleAndTables": "passed",
+      "docsLayoutExitCode": 0,
+      "gitDiffCheckExitCode": 0
+    },
+    "placementMove": {
+      "confirmedTarget": "v2.16.2",
+      "newlyBrokenLinks": 0,
+      "linkBaselineDiffExitCode": 0,
+      "relativeReportLinks": 28,
+      "oldFilesAbsent": true,
+      "trackerReferencesUpdated": true,
+      "docsLayoutExitCode": 0,
+      "gitDiffCheckExitCode": 0
+    }
+  },
+  "targetConfirmation": {
+    "date": "2026-11-04",
+    "source": "owner reply to adoption-target question",
+    "selection": "v2.16.2 (Recommended)",
+    "scope": "comparison placement only; no implementation authorization"
+  }
+}
