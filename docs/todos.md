@@ -851,6 +851,19 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 - [x] Confirm v2.16.1 and finalize the comparison for publication through develop's required pull request, excluding existing local work (owner confirmation, 2026-10-28).
 - [ ] If a bounded trial is requested, select its job and runtime scope before generating an implementation plan; retain current defaults and the LFM3 runtime HOLD.
 
+## Specialist models and desktop/creative tools (approved v2.16.2)
+
+| Measure | Current | Next gate |
+| --- | --- | --- |
+| Comparison | 4/4 supplied sources assessed; target confirmed 2026-11-04 | Retain source and policy limitations |
+| Adoption | Approved 2026-11-05; 4 phases, 21 tasks, 0 implemented; seven review lenses complete | Refresh implementation admission; A3/A4 remain parked |
+| Publication | Owner requested merge into develop; attribution check passes | Required pull-request checks and merge |
+
+- [x] Complete the [comparison](releases/v2/v2.16/comparisons/v2.16.2-comparison-specialist-models-desktop-creative-tools.md) and source receipts (2026-11-04).
+- [x] Draft and critique the [A1/A2 plan](releases/v2/v2.16/plans/v2.16.2-adoption-specialist-models-desktop-creative-tools.md): four phases, 21 tasks, seven lenses and four findings corrected/rechecked; both-channel skill delivery and disposable-VM installer proof/HOLD confirmed.
+- [x] Obtain owner approval of the plan and its merge into develop ([approval and publication note](releases/v2/v2.16/development/v2.16.2-plan-approval-publication.md), 2026-11-05).
+- [ ] Start implementation only through its refreshed admission and preflight; preserve the approved boundaries and all predecessor obligations. No implementation has started.
+
 ## Recurring Obligations
 
 - [ ] Review AGENTS.md against current model behavior every 6 months -- next review due 2026-11-26. (Older prompt workarounds may now block beneficial new model behaviors; see the `## AGENTS.md review cadence` section in [AGENTS.md](../AGENTS.md). This date is the canonical source referenced by AGENTS.md. Added in v1.2.0 Phase 1.4.)
