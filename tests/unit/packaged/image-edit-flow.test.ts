@@ -131,3 +131,77 @@ describe("real-profile preservation snapshot", () => {
     expect(compareSnapshots(before, snapshot([file, absent, dir])).sort()).toEqual([absent, dir, file].sort());
   });
 });
+
+describe("render comparison and exit codes", async () => {
+  const { deflateSync } = await import("node:zlib");
+  const { compareBrightnessRender, decodePng, exitCodeFor } = await import(
+    "../../../desktop/tests/packaged/image-edit-flow.mjs"
+  );
+  function crc32(buf: Buffer): number {
+    let c = ~0;
+    for (const byte of buf) {
+      c ^= byte;
+      for (let k = 0; k < 8; k += 1) c = c & 1 ? (c >>> 1) ^ 0xedb88320 : c >>> 1;
+    }
+    return ~c >>> 0;
+  }
+  function chunk(type: string, data: Buffer): Buffer {
+    const len = Buffer.alloc(4);
+    len.writeUInt32BE(data.length);
+    const crc = Buffer.alloc(4);
+    crc.writeUInt32BE(crc32(Buffer.concat([Buffer.from(type), data])));
+    return Buffer.concat([len, Buffer.from(type), data, crc]);
+  }
+  /** RGBA PNG; `filter` 1 (Sub) exercises row unfiltering. */
+  function png(w: number, h: number, pixel: (x: number, y: number) => number[], filter = 0): Buffer {
+    const rows: Buffer[] = [];
+    for (let y = 0; y < h; y += 1) {
+      const row = Buffer.alloc(w * 4);
+      for (let x = 0; x < w; x += 1) row.set(pixel(x, y), x * 4);
+      if (filter === 1) {
+        const out = Buffer.alloc(w * 4);
+        for (let i = 0; i < out.length; i += 1) out[i] = (row[i] - (i >= 4 ? row[i - 4] : 0)) & 0xff;
+        rows.push(Buffer.concat([Buffer.from([1]), out]));
+      } else {
+        rows.push(Buffer.concat([Buffer.from([0]), row]));
+      }
+    }
+    const ihdr = Buffer.alloc(13);
+    ihdr.writeUInt32BE(w, 0);
+    ihdr.writeUInt32BE(h, 4);
+    ihdr.set([8, 6, 0, 0, 0], 8);
+    return Buffer.concat([
+      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+      chunk("IHDR", ihdr),
+      chunk("IDAT", deflateSync(Buffer.concat(rows))),
+      chunk("IEND", Buffer.alloc(0)),
+    ]);
+  }
+  const base = (x: number, y: number) => [x * 20, y * 20, 240, 255];
+  const brighter = (x: number, y: number) => base(x, y).map((v, i) => (i === 3 ? 255 : Math.min(255, Math.round((v * 110) / 100))));
+
+  it("decodes filtered rows to the original pixels", () => {
+    const decoded = decodePng(png(4, 3, base, 1));
+    expect(decoded.width).toBe(4);
+    expect([...decoded.pixels.slice(4, 8)]).toEqual(base(1, 0));
+  });
+
+  it("accepts the expected brightness render and rejects an unchanged or wrong one", () => {
+    const original = png(4, 3, base);
+    expect(compareBrightnessRender(original, png(4, 3, brighter, 1), 110).ok).toBe(true);
+    const unchanged = compareBrightnessRender(original, original, 110);
+    expect(unchanged.ok).toBe(false);
+    const wrong = compareBrightnessRender(original, png(4, 3, (x, y) => base(x, y).map((v, i) => (i === 3 ? 255 : Math.min(255, v + 40)))), 110);
+    expect(wrong.mismatchedPixels).toBeGreaterThan(0);
+    expect(compareBrightnessRender(original, png(2, 2, base), 110).ok).toBe(false);
+  });
+
+  it("maps prerequisite failures to 2 and observation failures to 1", () => {
+    expect(exitCodeFor("fixture-missing: x")).toBe(2);
+    expect(exitCodeFor("native-abi-unavailable: x")).toBe(2);
+    expect(exitCodeFor("executable-identity-mismatch: x")).toBe(2);
+    expect(exitCodeFor("persisted-edit-lost: brightness 100")).toBe(1);
+    expect(exitCodeFor("stage-timeout: save-acknowledged exceeded 30000 ms")).toBe(1);
+    expect(exitCodeFor("source-changed: x")).toBe(1);
+  });
+});
