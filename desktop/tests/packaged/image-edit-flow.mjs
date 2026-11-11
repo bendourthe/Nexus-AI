@@ -53,7 +53,6 @@ import { BEHAVIORAL_SCHEMA, evaluateBehavioralReport } from "./smoke.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_PNG = path.join(HERE, "fixtures", "edit-source.png");
-const SESSION_TITLE = "v2.16.2 packaged edit fixture";
 
 /** Action timeouts, registered before any behavioral run (launch timeouts live in launch-probe). */
 export const ACTION_TIMEOUTS_MS = Object.freeze({ route: 30_000, open: 30_000, save: 30_000, download: 30_000 });
@@ -428,7 +427,7 @@ async function seedAndProve({ exe, sha256, nodeExe, png }, report) {
 // Ordinary UI driving (edit mode)
 // ---------------------------------------------------------------------------
 
-const VIEWER = '[role="dialog"][aria-label="Image viewer"]';
+// Page expressions name the viewer dialog literally: [role="dialog"][aria-label="Image viewer"].
 
 async function waitFor(evalJs, expression, stage, ms) {
   return withStage(
@@ -463,7 +462,7 @@ async function openViewer(evalJs) {
   );
   await waitFor(
     evalJs,
-    `(() => { const row = [...document.querySelectorAll('[role="treeitem"]')].find((el) => (el.textContent || "").includes(${JSON.stringify(SESSION_TITLE)})); if (!row) return false; row.click(); return true; })()`,
+    `(() => { const row = [...document.querySelectorAll('[role="treeitem"]')].find((el) => (el.textContent || "").includes("v2.16.2 packaged edit fixture")); if (!row) return false; row.click(); return true; })()`,
     "open-session",
     ACTION_TIMEOUTS_MS.route,
   );
@@ -478,7 +477,7 @@ async function openViewer(evalJs) {
     await waitFor(
       evalJs,
       `(() => {
-        const viewer = document.querySelector(${JSON.stringify(VIEWER)});
+        const viewer = document.querySelector('[role="dialog"][aria-label="Image viewer"]');
         const slider = viewer && viewer.querySelector('input[aria-label="Brightness"]');
         const status = viewer && viewer.querySelector('[role="status"]');
         const text = status ? status.textContent || "" : "";
@@ -496,17 +495,17 @@ async function openViewer(evalJs) {
 }
 
 async function viewerStatus(evalJs) {
-  return evalJs(`(() => { const s = document.querySelector(${JSON.stringify(VIEWER)} + ' [role="status"]'); return s ? s.textContent || "" : ""; })()`);
+  return evalJs(`(() => { const s = document.querySelector('[role="dialog"][aria-label="Image viewer"] [role="status"]'); return s ? s.textContent || "" : ""; })()`);
 }
 
 /** Raise Brightness with arrow keys and wait for the persisted acknowledgment. */
 async function editBrightness(evalJs, send, expected) {
-  await evalJs(`document.querySelector(${JSON.stringify(VIEWER)} + ' input[aria-label="Brightness"]').focus()`);
+  await evalJs(`document.querySelector('[role="dialog"][aria-label="Image viewer"] input[aria-label="Brightness"]').focus()`);
   await pressKey(send, "ArrowRight", 39, BRIGHTNESS_STEPS);
   await waitFor(
     evalJs,
     `(() => {
-      const viewer = document.querySelector(${JSON.stringify(VIEWER)});
+      const viewer = document.querySelector('[role="dialog"][aria-label="Image viewer"]');
       const slider = viewer && viewer.querySelector('input[aria-label="Brightness"]');
       const status = viewer && viewer.querySelector('[role="status"]');
       return slider && Number(slider.value) === ${expected} && status && (status.textContent || "").includes("Edits saved");
@@ -536,7 +535,7 @@ async function saveEdited(evalJs, send, downloadDir) {
       throw new Error(`download-pin-unavailable: ${browserError.message}; ${pageError.message}`);
     }
   }
-  await evalJs(`document.querySelector(${JSON.stringify(VIEWER)} + ' button[aria-label="Save image"]').click()`);
+  await evalJs(`document.querySelector('[role="dialog"][aria-label="Image viewer"] button[aria-label="Save image"]').click()`);
   await waitFor(
     evalJs,
     `(() => { const choice = document.querySelector('[role="dialog"][aria-label="Save which version"] [data-testid$="-choice-edited"]'); if (!choice) return false; choice.click(); return true; })()`,
