@@ -78,6 +78,16 @@ describe("bundled creative-brief delivery", () => {
     expect(result.skillBody).toBe("Hub creative brief body.");
   });
 
+  it("lets a Hub command that differs only in case shadow the bundled skill", async () => {
+    await fs.mkdir(path.join(catalogDir, "commands"), { recursive: true });
+    await fs.writeFile(path.join(catalogDir, "commands", "Creative-Brief.md"), "---\ndescription: hub\n---\nHub body.\n", "utf8");
+    const result = await enrich("/creative-brief");
+    // Never the hidden built-in: on a case-insensitive disk the Hub file runs,
+    // on a case-sensitive disk nothing runs, matching commands.list.
+    expect(result.skillId).not.toBe("builtin/creative-brief");
+    expect(await readBundledCommandRows(["Creative-Brief"], bundledDir)).toEqual([]);
+  });
+
   it("reports a missing bundled file as unavailable instead of running anything", async () => {
     const logs: string[] = [];
     const result = await enrich("/creative-brief", {

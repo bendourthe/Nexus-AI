@@ -170,7 +170,9 @@ export async function connectDevtools(page, { timeoutMs = 10000 } = {}) {
       pending.set(msgId, (data) => {
         clearTimeout(timer);
         pending.delete(msgId);
-        resolve(data);
+        // A protocol error is a failure, never a silent success.
+        if (data.error) reject(new Error(`devtools ${method} failed: ${data.error.message ?? JSON.stringify(data.error)}`));
+        else resolve(data);
       });
       ws.send(JSON.stringify({ id: msgId, method, params }));
     });
@@ -269,10 +271,12 @@ export function pickFreePort(host = "127.0.0.1") {
 export function listenerPid(port, run = spawnSync) {
   const out = run("netstat", ["-ano", "-p", "TCP"], { encoding: "utf8", windowsHide: true }).stdout || "";
   for (const line of out.split(/\r?\n/)) {
+    // Columns: proto, local, remote, state (localized), pid. Only the LOCAL
+    // address identifies the serving socket, so the state word is not read.
     const cols = line.trim().split(/\s+/);
-    if (cols.length < 5 || !["LISTENING", "ESTABLISHED"].includes(cols[3])) continue;
+    if (cols.length < 5 || cols[0] !== "TCP" || !/^\d+$/.test(cols[cols.length - 1])) continue;
     if (!/^(127\.0\.0\.1|0\.0\.0\.0):\d+$/.test(cols[1])) continue;
-    if (Number(cols[1].split(":").pop()) === port) return Number(cols[4]);
+    if (Number(cols[1].split(":").pop()) === port) return Number(cols[cols.length - 1]);
   }
   return 0;
 }
