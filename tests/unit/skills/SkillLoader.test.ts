@@ -378,4 +378,16 @@ describe("v0.8.0 SKILL.md schema extension", () => {
     expect(commit?.metadata.tags.length).toBeGreaterThan(0);
     expect(loader.getSkill("training-recipe")?.name).toBe("training-recipe");
   });
+
+  it("loads the bundled creative-brief skill through the real catalog", () => {
+    const loader = new SkillLoader(REAL_CATALOG_DIR, NO_USER_SKILLS_DIR);
+    loader.load();
+    const brief = loader.getSkill("creative-brief");
+    expect(brief?.platforms).toEqual(["linux", "macos", "windows"]);
+    expect(brief?.argumentHint).toContain("[brief path] [what to make]");
+    // The body must reach the agent with its argument placeholder and its
+    // refusal rule for changed references intact.
+    expect(brief?.prompt).toContain("$ARGUMENTS");
+    expect(brief?.prompt).toContain("Missing file or changed hash: stop.");
+  });
 });

@@ -11,6 +11,7 @@ import {
   type HubLayoutKey,
 } from "../../../../core/storage/paths.js";
 import { resolveHubLayout } from "../../../../core/storage/hubVersionManifest.js";
+import { readBundledSkill } from "../skills/bundledSkills.js";
 import type {
   HeadlessAgentEvent,
   HeadlessAgentSession,
@@ -52,6 +53,8 @@ export interface HeadlessRunEnrichmentOptions {
   readonly message: string;
   readonly baseSystemInstructions?: string;
   readonly catalogDir?: string;
+  /** Bundled built-in skills folder; defaults to the packaged sidecar copy. */
+  readonly bundledSkillsDir?: string;
   readonly scanner?: PromptInjectionScanner;
   readonly log?: (message: string) => void;
 }
@@ -119,7 +122,8 @@ async function resolveCommandBody(
   }
   const commandPath = path.join(commandsDir, `${commandName}.md`);
   const content = await readOptionalFile(commandPath);
-  if (content === null) return null;
+  // A Hub command keeps precedence; a bundled built-in skill is the fallback.
+  if (content === null) return resolveBundledSkillBody(options, commandName);
   const body = commandBody(content);
   if (!body) return null;
 
@@ -134,6 +138,28 @@ async function resolveCommandBody(
     return null;
   }
   return { body, skillId: `nexus-hub/${commandName}` };
+}
+
+async function resolveBundledSkillBody(
+  options: HeadlessRunEnrichmentOptions,
+  commandName: string,
+): Promise<{ body: string; skillId: string } | null> {
+  const result = await readBundledSkill(commandName, options.bundledSkillsDir);
+  if (result.kind === "not-bundled") return null;
+  if (result.kind === "unavailable") {
+    logFailure(options, `bundled skill /${commandName} unavailable: ${result.reason}`);
+    return null;
+  }
+  const scanner = options.scanner ?? new PromptInjectionScanner();
+  const scan = scanner.scanText(result.skill.body, result.skill.path);
+  if (scan.decision === "block") {
+    logFailure(
+      options,
+      `skipped blocked bundled skill /${commandName} (${scan.findings.length} scanner finding(s))`,
+    );
+    return null;
+  }
+  return { body: result.skill.body, skillId: `builtin/${commandName}` };
 }
 
 export async function buildHeadlessRunEnrichment(
@@ -241,7 +267,7 @@ export async function runEnrichedHeadlessSession(
       kind: "lifecycle.skill.entry",
       sessionId: options.sessionId,
       skillId: enrichment.skillId,
-      namespace: "nexus-hub",
+      namespace: enrichment.skillId.startsWith("builtin/") ? "builtin" : "nexus-hub",
     }, options.log);
   }
 

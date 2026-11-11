@@ -8,6 +8,7 @@ This is the living entry point for Nexus documentation. Active release plans and
 - [Architecture decisions](decisions/README.md)
 - [Generated module catalog](index.md)
 - [Reference material](reference/)
+- [Guides](guides/creative-briefs.md): creative briefs
 - [Development log](DEVLOG.md)
 - [Progress tracker](todos.md)
 

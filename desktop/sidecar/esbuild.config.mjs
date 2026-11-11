@@ -183,6 +183,20 @@ if (!existsSync(unslothPinsSrc)) {
 }
 cpSync(unslothPinsSrc, path.join(distDir, "unsloth-pins.json"));
 
+// v2.16.2 Phase 1 (T003, D1): ship the reviewed built-in skills next to the
+// bundle so `/creative-brief` works in a packaged app without a Nexus-Hub
+// install. Keep this list equal to BUNDLED_SKILL_NAMES in
+// sidecar/src/skills/bundledSkills.ts; a missing source file fails the build.
+for (const skill of ["creative-brief"]) {
+  const src = path.join(here, "..", "..", "modules", "coding", "skills", "catalog", skill, "SKILL.md");
+  if (!existsSync(src)) {
+    throw new Error(`[build:sidecar] bundled skill ${skill} missing at ${src}`);
+  }
+  const dest = path.join(distDir, "skills", skill);
+  mkdirSync(dest, { recursive: true });
+  cpSync(src, path.join(dest, "SKILL.md"));
+}
+
 mkdirSync(distWasm, { recursive: true });
 
 // web-tree-sitter runtime wasm (loaded via Parser.init locateFile). The package
