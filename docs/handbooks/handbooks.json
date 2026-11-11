@@ -52,7 +52,11 @@
         "modules/chat/storage/ChatExplorerStore.ts",
         "desktop/sidecar/src/chat/explorerRuntime.ts",
         "desktop/src/modules/chat/ipcChatExplorerClient.ts",
-        "desktop/src/modules/chat/FolderTree.tsx"
+        "desktop/src/modules/chat/FolderTree.tsx",
+        "modules/coding/skills/catalog/creative-brief/SKILL.md",
+        "desktop/sidecar/src/skills/bundledSkills.ts",
+        "desktop/tests/packaged/image-edit-flow.mjs",
+        "docs/reference/packaged-image-edit-check.md"
       ],
       "code_inputs": [
         "scripts/installer/src/nexus_installer/engine/runtime_provisioner.py",
@@ -91,7 +95,11 @@
         "modules/chat/storage/ChatExplorerStore.ts",
         "desktop/sidecar/src/chat/explorerRuntime.ts",
         "desktop/src/modules/chat/ipcChatExplorerClient.ts",
-        "desktop/src/modules/chat/FolderTree.tsx"
+        "desktop/src/modules/chat/FolderTree.tsx",
+        "modules/coding/skills/catalog/creative-brief/SKILL.md",
+        "desktop/sidecar/src/skills/bundledSkills.ts",
+        "desktop/tests/packaged/image-edit-flow.mjs",
+        "docs/reference/packaged-image-edit-check.md"
       ],
       "builder": {
         "identity": "node scripts/generate-handbooks.mjs",
@@ -108,7 +116,7 @@
           "package-lock.json"
         ]
       },
-      "evidence": "docs/releases/v2/v2.16/development/v2.16.1-handbooks-20261102/atlas.json",
+      "evidence": "docs/releases/v2/v2.16/development/v2.16.2-handbooks-20261110/atlas.json",
       "presentation": true
     },
     {

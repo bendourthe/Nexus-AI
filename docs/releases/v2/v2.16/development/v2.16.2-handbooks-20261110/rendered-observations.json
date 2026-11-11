@@ -1,0 +1,51 @@
+{
+  "browser": "Microsoft Edge headless (Chromium), file URL, 1400x1000 viewport",
+  "output": "docs/handbooks/html/atlas.html",
+  "output_sha256": "d30358e47e3e09e671788b52e63f6a2bac10d765ed31b666d95f9d3185791ed5",
+  "observed": {
+    "title": "Nexus Architecture Atlas",
+    "rowCount": 18,
+    "links": [
+      {
+        "text": "packaged edit, restart and render check",
+        "href": "../../reference/packaged-image-edit-check.md"
+      },
+      {
+        "text": "Built-in skill",
+        "href": "../../../modules/coding/skills/catalog/creative-brief/SKILL.md"
+      },
+      {
+        "text": "bundled skills",
+        "href": "../../../desktop/sidecar/src/skills/bundledSkills.ts"
+      },
+      {
+        "text": "packaged edit, restart and render check",
+        "href": "../../reference/packaged-image-edit-check.md"
+      },
+      {
+        "text": "Built-in skill",
+        "href": "../../../modules/coding/skills/catalog/creative-brief/SKILL.md"
+      },
+      {
+        "text": "bundled skills",
+        "href": "../../../desktop/sidecar/src/skills/bundledSkills.ts"
+      }
+    ],
+    "tableRect": {
+      "x": 69.984375,
+      "y": 401.765625,
+      "w": 1219.03125,
+      "h": 596.65625
+    },
+    "bodyScrollWidth": 1359,
+    "viewport": 1374,
+    "rowsFound": [
+      "Create a creative brief",
+      "Edit or recover an image (packaged check link)"
+    ],
+    "views": "each new link appears twice, once per dual-view mode"
+  },
+  "screenshot": "docs/releases/v2/v2.16/development/v2.16.2-handbooks-20261110/atlas-table.png",
+  "screenshot_sha256": "618b7236a8eab6ead020a8760438e7db8ee4b8ab73e1544e3c212b27a0062940",
+  "visualReview": "Table region inspected: new row and link render in place, no clipping, no horizontal page overflow (scrollWidth 1359 within 1374 viewport)."
+}
