@@ -197,9 +197,11 @@ export interface HubCommandDescriptor {
 export function toSlashCommandFromHub(descriptor: HubCommandDescriptor): SlashCommand {
   return {
     name: descriptor.name,
-    description: descriptor.description || `Nexus-Hub command: ${descriptor.name}`,
+    description:
+      descriptor.description ||
+      `${descriptor.source === "builtin" ? "Built-in skill" : "Nexus-Hub command"}: ${descriptor.name}`,
     template: `/${descriptor.name} `,
-    namespace: "nexus-hub",
+    namespace: descriptor.source === "builtin" ? "builtin" : "nexus-hub",
   };
 }
 

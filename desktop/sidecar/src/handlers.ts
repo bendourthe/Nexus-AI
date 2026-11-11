@@ -279,6 +279,7 @@ import {
 } from "./models/modelsService.js";
 import { sampleGpu } from "./telemetry/gpuRuntime.js";
 import { readHubCatalog, readHubCommands } from "./skills/hubSkillReader.js";
+import { readBundledCommandRows } from "./skills/bundledSkills.js";
 import { generateChatTitle } from "./chat/titleGenerator.js";
 import type { ChatExplorerOps } from "./chat/explorerRuntime.js";
 import type { StudioSessionOps } from "./studio/sessionRuntime.js";
@@ -1720,8 +1721,12 @@ export const handlers: Record<Method, HandlerFn> = {
       commandsDir = null;
     }
     const present = commandsDir !== null && existsSync(commandsDir);
+    const hubCommands = present ? await readHubCommands(root) : [];
+    // v2.16.2 D1: bundled built-in skills are offered too; a Hub command of
+    // the same name shadows them, matching the run-time precedence.
+    const bundled = await readBundledCommandRows(hubCommands.map((c) => c.name));
     return {
-      commands: present ? await readHubCommands(root) : [],
+      commands: [...hubCommands, ...bundled],
       catalogPresent: present,
     };
   },
