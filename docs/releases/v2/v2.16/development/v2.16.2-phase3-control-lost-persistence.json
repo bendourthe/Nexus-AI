@@ -1,0 +1,261 @@
+{
+  "schemaVersion": "nexus.packaged-image-edit/v1",
+  "mode": "edit",
+  "control": "lost-persistence",
+  "runId": "0a93497b-1c42-47b7-a07b-061ff6cb005f",
+  "startedAt": "2026-11-11T05:56:25.784Z",
+  "executable": {
+    "path": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-v2.16.2\\desktop\\src-tauri\\target\\release\\nexus-shell.exe",
+    "sha256": "3854d2a772aa2788f1380f179d5e90f6f1f963e352bebefe101c3b517aeb7b98"
+  },
+  "phases": {
+    "refusals": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:25.787Z"
+    },
+    "seed": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:26.622Z"
+    },
+    "launch": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:49.633Z"
+    },
+    "open": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:50.606Z"
+    },
+    "edit": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:53.424Z"
+    },
+    "export": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:53.732Z",
+      "file": "nexus-ff458e93-5de5-4a2c-8f50-6a4ae993356f-edited.png"
+    },
+    "stop": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:56.136Z"
+    },
+    "relaunch": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:58.369Z"
+    }
+  },
+  "launches": [
+    {
+      "label": "edit",
+      "at": "2026-11-11T05:56:49.633Z",
+      "appPid": 11628,
+      "ownerPid": 11068,
+      "port": 58689,
+      "listenerPid": 26500,
+      "jobPids": [
+        11628,
+        26500,
+        28688,
+        13556,
+        16448,
+        20988,
+        18988,
+        31568,
+        2796,
+        14724,
+        6740,
+        23112,
+        33264,
+        31016
+      ],
+      "processNames": {
+        "2796": "msedgewebview2.exe",
+        "6740": "node.exe",
+        "11628": "nexus-shell.exe",
+        "13556": "conhost.exe",
+        "14724": "msedgewebview2.exe",
+        "16448": "unknown",
+        "18988": "msedgewebview2.exe",
+        "20988": "conhost.exe",
+        "23112": "unknown",
+        "26500": "msedgewebview2.exe",
+        "28688": "msedgewebview2.exe",
+        "31016": "git.exe",
+        "31568": "msedgewebview2.exe",
+        "33264": "nvidia-smi.exe"
+      },
+      "sidecarPids": [
+        6740
+      ],
+      "webviewPids": [
+        26500,
+        28688,
+        18988,
+        31568,
+        2796,
+        14724
+      ],
+      "seededSessionVisible": true
+    },
+    {
+      "label": "restart",
+      "at": "2026-11-11T05:56:58.369Z",
+      "appPid": 29072,
+      "ownerPid": 15728,
+      "port": 51150,
+      "listenerPid": 7944,
+      "jobPids": [
+        29072,
+        7944,
+        35100,
+        35268,
+        26108,
+        21000,
+        30516,
+        10616,
+        29960,
+        31884,
+        32368
+      ],
+      "processNames": {
+        "7944": "msedgewebview2.exe",
+        "10616": "msedgewebview2.exe",
+        "21000": "msedgewebview2.exe",
+        "26108": "conhost.exe",
+        "29072": "nexus-shell.exe",
+        "29960": "msedgewebview2.exe",
+        "30516": "msedgewebview2.exe",
+        "31884": "node.exe",
+        "32368": "powershell.exe",
+        "35100": "msedgewebview2.exe",
+        "35268": "conhost.exe"
+      },
+      "sidecarPids": [
+        31884
+      ],
+      "webviewPids": [
+        7944,
+        35100,
+        21000,
+        30516,
+        10616,
+        29960
+      ],
+      "seededSessionVisible": true
+    }
+  ],
+  "stops": [
+    {
+      "label": "edit",
+      "at": "2026-11-11T05:56:56.136Z",
+      "stoppedPids": [
+        11628,
+        26500,
+        28688,
+        13556,
+        18988,
+        31568,
+        2796,
+        14724,
+        6740,
+        9992
+      ],
+      "remaining": [],
+      "stillAlive": [],
+      "portClosed": true
+    }
+  ],
+  "recipe": {
+    "expected": {
+      "brightness": 110
+    },
+    "observed": {
+      "beforeEdit": {
+        "brightness": 100
+      },
+      "afterSave": {
+        "brightness": 110,
+        "status": "Edits saved"
+      },
+      "afterRestart": {
+        "brightness": 100
+      }
+    }
+  },
+  "refusals": {
+    "occupiedRoot": "owned-root-occupied: C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-occupied-m2BDLF already exists",
+    "escapingPath": "owned-path-escape: sessionsDb escapes the owned root: C:\\Users\\bdour\\.nexus\\generations\\sessions.db"
+  },
+  "seed": {
+    "root": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3",
+    "identity": {
+      "sourceCommit": "64686107c3566a8b6d34895cd423eeb90e851a0e",
+      "sourceClean": true,
+      "exeSha256": "3854d2a772aa2788f1380f179d5e90f6f1f963e352bebefe101c3b517aeb7b98",
+      "sidecarMainSha256": "cf7f1a5cdffad92a97867284b5054cad669da8ff88d6ae97b1086b7d0249d09e",
+      "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d",
+      "nativeModulesDir": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-v2.16.2\\desktop\\src-tauri\\target\\release\\sidecar\\dist\\node_modules"
+    },
+    "paths": {
+      "osHomedir": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\home",
+      "nexusHome": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\home\\.nexus",
+      "nexusAiHome": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\home\\.nexus-ai",
+      "hubCatalog": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\home\\.nexus-ai\\catalog",
+      "sessionsDb": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\home\\.nexus\\generations\\sessions.db",
+      "generatedImages": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\home\\.nexus\\generations\\images"
+    },
+    "fixture": {
+      "path": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-v2.16.2\\desktop\\tests\\packaged\\fixtures\\edit-source.png",
+      "sha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+      "seededPath": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\home\\.nexus\\generations\\images\\49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6.png"
+    },
+    "sessionId": "2285b39b-1634-4d61-9187-68009f0ce539",
+    "turnId": "ff458e93-5de5-4a2c-8f50-6a4ae993356f",
+    "seederSha256": "5802c2612a72b7d008c486bce9eeaad6446c89189f95728ee4ee609a5566105a"
+  },
+  "ownedRoot": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3",
+  "ownedEnvironment": {
+    "USERPROFILE": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\home",
+    "HOME": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\home",
+    "APPDATA": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\home\\AppData\\Roaming",
+    "LOCALAPPDATA": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\home\\AppData\\Local",
+    "TEMP": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\tmp",
+    "WEBVIEW2_USER_DATA_FOLDER": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\webview2",
+    "NEXUS_NODE_PATH": "C:\\Users\\bdour\\AppData\\Local\\Nexus\\runtime\\node\\node.exe"
+  },
+  "candidate": {
+    "commit": "64686107c3566a8b6d34895cd423eeb90e851a0e",
+    "sourceClean": true,
+    "sidecarMainSha256": "cf7f1a5cdffad92a97867284b5054cad669da8ff88d6ae97b1086b7d0249d09e",
+    "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+  },
+  "ownedProfile": {
+    "root": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3",
+    "ownerRunId": "94425a3f-8acb-4c04-953f-458a47f2f5ed"
+  },
+  "fixture": {
+    "sha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+    "sessionId": "2285b39b-1634-4d61-9187-68009f0ce539",
+    "turnId": "ff458e93-5de5-4a2c-8f50-6a4ae993356f"
+  },
+  "exportPath": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-qvEGP3\\downloads\\nexus-ff458e93-5de5-4a2c-8f50-6a4ae993356f-edited.png",
+  "finishedAt": "2026-11-11T05:56:59.551Z",
+  "error": "persisted-edit-lost: brightness 100 after restart, expected 110",
+  "judge": {
+    "ok": false,
+    "findings": [
+      "controlled defect run (lost-persistence) can never pass",
+      "run error: persisted-edit-lost: brightness 100 after restart, expected 110",
+      "phase readBack: unobserved",
+      "phase render: unobserved",
+      "phase sourcePreservation: unobserved",
+      "phase realProfile: unobserved",
+      "recipe: persisted value after restart differs",
+      "render: rendered pixels do not match the expected edit",
+      "source: original image bytes changed or unobserved",
+      "real profile: changed or unobserved"
+    ]
+  },
+  "ok": false,
+  "verdict": "FAIL",
+  "exitCode": 1
+}
