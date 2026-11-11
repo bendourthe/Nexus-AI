@@ -1,0 +1,29 @@
+{
+  "report": "v2.17.0-comparison-november-model-wave.md",
+  "inspectedAt": "2026-11-10",
+  "baseline": {
+    "branch": "develop",
+    "commit": "7eb21dfc588495124404ce78ef2a0d6d6ac5df6e",
+    "packageVersion": "2.16.1"
+  },
+  "method": "Each source page was fetched once and summarized with an extraction prompt that also asked for agent-directed, hidden, obfuscated, curl-pipe-shell and destructive content. Revisions were read from the GitHub commits API and the Hugging Face models API on the same day. No repository was cloned, no installer, build script, notebook or model loader ran, and no weights were downloaded. Verdicts are bounded static observations of the rendered page, not a security certification of the code or tensors behind it.",
+  "sources": [
+    { "id": "S1", "name": "gpu-unlock", "url": "https://github.com/Zagitta/gpu-unlock", "revision": "7eb51bccae0a0b7e599e084d971170e9a1e82d0c", "revisionDate": "2026-10-28T22:31:16Z", "license": "GPL-2.0-only (module); NVIDIA firmware under NVIDIA terms", "verdict": "PROCEED-WITH-CAUTION", "verdictReason": "Privileged kernel module and boot-configuration changes with sudo installs; no injection found. Same revision the v2.16.1 report pinned." },
+    { "id": "S2", "name": "EmbeddingGemma 2 paper", "url": "https://arxiv.org/abs/2610.37364", "revision": "arXiv v2, 2026-11-09", "license": "Paper CC BY 4.0", "verdict": "CLEAR" },
+    { "id": "S2a", "name": "google/embeddinggemma-2", "url": "https://huggingface.co/google/embeddinggemma-2", "revision": "f9972ac22e696a105c482202646979e33e4b5a1e", "revisionDate": "2026-10-28T07:19:46Z", "license": "apache-2.0 (card metadata)", "verdict": "CLEAR", "note": "Metadata only; card body not separately fetched." },
+    { "id": "S2b", "name": "Ollama library embeddinggemma-2", "url": "https://ollama.com/library/embeddinggemma-2", "revision": "page as of 2026-11-10", "license": "not stated on page", "verdict": "CLEAR" },
+    { "id": "S3", "name": "DeepSeek-V4.1-Flash-1017 GSQ-RCO Coder GGUF", "url": "https://huggingface.co/ISTA-DASLab/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-GGUF", "revision": "54229d38d588a66d1c6cff08af7b281b9326c656", "revisionDate": "2026-11-02T15:21:16Z", "license": "mit", "verdict": "CLEAR" },
+    { "id": "S4", "name": "phonon", "url": "https://github.com/Infatoshi/phonon", "revision": "d31cb85dd97e84d076f795f45298ce527c263d8b", "revisionDate": "2026-11-10T23:51:53Z", "license": "GPL-3.0", "verdict": "CLEAR", "note": "Daily GitHub update check, off-switch documented; first launch downloads about 4.9 GB of models." },
+    { "id": "S4a", "name": "phonon-refiner-1.7b", "url": "https://huggingface.co/Infatoshi/phonon-refiner-1.7b", "revision": "33da4bcbb0f990f58960e11862a7f9c0f0119564", "revisionDate": "2026-11-10T08:17:28Z", "license": "LFM Open License v1.0 (USD 10M revenue cap)", "verdict": "CLEAR" },
+    { "id": "S5", "name": "Flint-abliterated GGUF", "url": "https://huggingface.co/orcarouter/Flint-abliterated-GGUF", "revision": "4d618d1cb1d7782d4b08762fb664487bf5e4d3c4", "revisionDate": "2026-11-04T06:53:46Z", "license": "apache-2.0", "gated": "auto", "verdict": "CLEAR", "note": "Gated repository; promotional copy for the publisher's other products treated as data." },
+    { "id": "S6", "name": "TwIL-8B", "url": "https://huggingface.co/webAI-Official/TwIL-8B", "revision": "9563ba7dfb70eeca4a26654b195011cbf818e7d9", "revisionDate": "2026-11-08T09:57:35Z", "license": "webAI Non-Commercial License 1.0", "verdict": "CLEAR" },
+    { "id": "S7", "name": "Sakutto", "url": "https://github.com/jammaru/sakutto", "revision": "a4efe0e0603436ad1eb3f2fa0651cb3d48a4a9d8", "revisionDate": "2026-11-10T17:16:07Z", "license": "MIT (code); PLaMo Community License (model)", "verdict": "CLEAR" },
+    { "id": "S8", "name": "txtai", "url": "https://github.com/neuml/txtai", "revision": "6d5b774e785ba892b44274910fc5227ab6b0eff0", "revisionDate": "2026-11-10T13:02:14Z", "license": "Apache-2.0", "verdict": "CLEAR" },
+    { "id": "S9", "name": "json-render", "url": "https://github.com/vercel-labs/json-render", "revision": "18194121c8f087afacd9a8ef65fbda18374ee039", "revisionDate": "2026-11-04T21:24:52Z", "license": "Apache-2.0", "verdict": "CLEAR", "note": "Repository lists AGENTS.md, .claude and .cursor; their contents were not read." },
+    { "id": "S10", "name": "Inkling 2 Small announcement", "url": "https://thinkingmachines.ai/news/inkling-2-small/", "revision": "post dated 2026-11-05", "license": "closed weights at publication; Apache-2.0 release stated as intended", "verdict": "CLEAR" },
+    { "id": "S11", "name": "Arete-27B announcement", "url": "https://nousresearch.com/arete", "revision": "page as of 2026-11-10", "license": "not stated in article", "verdict": "CLEAR" },
+    { "id": "S11a", "name": "NousResearch/Arete-27B", "url": "https://huggingface.co/NousResearch/Arete-27B", "revision": "108f0afbdcfaa1ceeda4a635004304dfff6d4da2", "revisionDate": "2026-11-06T21:04:27Z", "license": "apache-2.0 (card metadata)", "verdict": "CLEAR", "note": "Metadata only." },
+    { "id": "S12", "name": "Bark", "url": "https://github.com/suno-ai/bark", "revision": "f4f32d4cd480dfec1c245d258174bc9bde3c2148", "revisionDate": "2024-04-05T13:14:16Z", "license": "MIT", "verdict": "CLEAR" },
+    { "id": "S13", "name": "Qwen3.8-27B DSpine b16 GGUF", "url": "https://huggingface.co/aj9o9/Qwen3.8-27B-DSpine-b16-GGUF", "revision": "e27cc7dfe121a0c9327eb36a7cce82a0dfa9e3e6", "revisionDate": "2026-11-09T12:19:35Z", "license": "apache-2.0", "verdict": "CLEAR", "note": "Requires a llama.cpp fork branch; fork code not inspected." }
+  ]
+}
