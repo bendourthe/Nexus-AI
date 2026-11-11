@@ -168,7 +168,8 @@ export async function buildSeeder(outDir) {
 export function candidateIdentity(exe) {
   const git = (...args) =>
     spawnSync("git", ["-C", REPO_ROOT, ...args], { encoding: "utf8", windowsHide: true }).stdout.trim();
-  const dirty = git("status", "--porcelain", "--", "core", "desktop/sidecar/src", "desktop/src", "desktop/src-tauri/src");
+  // `modules` is bundled into the sidecar too (for example the built-in skills).
+  const dirty = git("status", "--porcelain", "--", "core", "modules", "desktop/sidecar/src", "desktop/src", "desktop/src-tauri/src");
   const exeDir = path.dirname(exe);
   const sidecarMain = path.join(exeDir, "sidecar", "dist", "main.js");
   const nativeModule = path.join(exeDir, "sidecar", "dist", "node_modules", "better-sqlite3", "build", "Release", "better_sqlite3.node");

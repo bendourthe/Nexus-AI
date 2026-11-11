@@ -33,7 +33,7 @@
  * <out>/report.json. The owned root is kept on failure and removed on a pass.
  */
 import { spawn, spawnSync } from "node:child_process";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -75,6 +75,8 @@ const PREREQUISITE_ERRORS = [
   "owned-launch-failed",
   "job-owner-exited",
   "port-collision",
+  "download-pin-unavailable",
+  "target-unowned: nothing is listening",
 ];
 
 /** 2 for a missing or malformed prerequisite, 1 for any other failed observation. */
@@ -106,12 +108,33 @@ export function snapshot(paths) {
       const stat = fs.statSync(target);
       out[target] = stat.isFile()
         ? { kind: "file", size: stat.size, mtimeMs: stat.mtimeMs, sha256: sha256File(target) }
-        : { kind: "dir", mtimeMs: stat.mtimeMs, entries: fs.readdirSync(target).length };
+        : { kind: "dir", manifest: directoryManifest(target) };
     } catch {
       out[target] = { kind: "absent" };
     }
   }
   return out;
+}
+
+/**
+ * Digest of every entry under `dir` (relative path, size, mtime), so an
+ * in-place overwrite deep in a sentinel folder is detected, not only a change
+ * to the folder itself. Links are listed, never followed.
+ */
+export function directoryManifest(dir, limit = 50_000) {
+  const rows = [];
+  const walk = (current) => {
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      if (rows.length >= limit) throw new Error(`sentinel-too-large: ${dir} has more than ${limit} entries`);
+      const full = path.join(current, entry.name);
+      const stat = fs.lstatSync(full);
+      rows.push(`${path.relative(dir, full)}|${stat.isDirectory() ? "d" : stat.size}|${Math.trunc(stat.mtimeMs)}`);
+      if (entry.isDirectory() && !entry.isSymbolicLink()) walk(full);
+    }
+  };
+  walk(dir);
+  rows.sort();
+  return { entries: rows.length, sha256: createHash("sha256").update(rows.join("\n")).digest("hex") };
 }
 
 export function compareSnapshots(before, after) {
@@ -131,11 +154,16 @@ export function decodePng(bytes) {
   let height = 0;
   let colorType = -1;
   const idat = [];
-  while (offset < bytes.length) {
+  let first = true;
+  while (offset + 8 <= bytes.length) {
     const length = bytes.readUInt32BE(offset);
     const type = bytes.toString("ascii", offset + 4, offset + 8);
+    if (offset + 12 + length > bytes.length) throw new Error(`png-invalid: truncated ${type} chunk`);
     const data = bytes.subarray(offset + 8, offset + 8 + length);
+    if (first && type !== "IHDR") throw new Error("png-invalid: IHDR must come first");
+    first = false;
     if (type === "IHDR") {
+      if (length !== 13) throw new Error(`png-invalid: IHDR length ${length}`);
       width = data.readUInt32BE(0);
       height = data.readUInt32BE(4);
       const depth = data[8];
@@ -152,7 +180,11 @@ export function decodePng(bytes) {
   }
   const channels = colorType === 6 ? 4 : 3;
   const stride = width * channels;
+  if (width === 0 || height === 0) throw new Error("png-invalid: missing or empty IHDR");
   const raw = inflateSync(Buffer.concat(idat));
+  if (raw.length !== height * (stride + 1)) {
+    throw new Error(`png-invalid: ${raw.length} decoded bytes, expected ${height * (stride + 1)}`);
+  }
   const pixels = new Uint8Array(width * height * 4);
   let previous = new Uint8Array(stride);
   for (let y = 0; y < height; y += 1) {
@@ -496,8 +528,13 @@ async function saveEdited(evalJs, send, downloadDir) {
   // not follow USERPROFILE; pin them inside the owned root for this page.
   try {
     await send("Browser.setDownloadBehavior", { behavior: "allow", downloadPath: downloadDir });
-  } catch {
-    await send("Page.setDownloadBehavior", { behavior: "allow", downloadPath: downloadDir });
+  } catch (browserError) {
+    try {
+      await send("Page.setDownloadBehavior", { behavior: "allow", downloadPath: downloadDir });
+    } catch (pageError) {
+      // Without a pin the download would go to the real Downloads folder.
+      throw new Error(`download-pin-unavailable: ${browserError.message}; ${pageError.message}`);
+    }
   }
   await evalJs(`document.querySelector(${JSON.stringify(VIEWER)} + ' button[aria-label="Save image"]').click()`);
   await waitFor(
@@ -554,11 +591,12 @@ export async function runEdit({ exe, sha256, out, nodeExe, png, control = null }
   let manifest;
   let launched;
   let errorMessage = null;
+  const sentinels = realProfileSentinels();
+  let before = null;
   try {
     refusalControls(report);
     phase(report, "refusals", "pass");
-    const sentinels = realProfileSentinels();
-    const before = snapshot(sentinels);
+    before = snapshot(sentinels);
 
     manifest = await seedAndProve({ exe, sha256, nodeExe, png }, report);
     report.candidate = {
@@ -579,6 +617,11 @@ export async function runEdit({ exe, sha256, out, nodeExe, png, control = null }
     const workDir = path.join(manifest.root, "launcher");
     launched = await launchOwned({ exe, expectedSha256: sha256, env: manifest.env, workDir });
     await observeLaunch("edit", launched, manifest, report);
+    // WebView2 must be writing into the owned folder, not the real profile.
+    const ownedWebView = manifest.env.WEBVIEW2_USER_DATA_FOLDER;
+    if (!fs.existsSync(ownedWebView) || fs.readdirSync(ownedWebView).length === 0) {
+      throw new Error(`owned-path-escape: WebView2 wrote nothing under ${ownedWebView}`);
+    }
     phase(report, "launch", "pass");
     {
       const { ws, evalJs, send } = await connectDevtools(launched.page);
@@ -646,6 +689,13 @@ export async function runEdit({ exe, sha256, out, nodeExe, png, control = null }
     errorMessage = error instanceof Error ? error.message : String(error);
   } finally {
     if (launched) await launched.handle.stop().catch(() => launched.handle.killOwner());
+  }
+  // A failed run still reports whether it touched the real profile.
+  if (before && report.realProfileChanged === undefined) {
+    report.realProfileChanged = compareSnapshots(before, snapshot(sentinels));
+    if (report.realProfileChanged.length) {
+      errorMessage = `real-profile-changed: ${report.realProfileChanged.join(", ")} (after: ${errorMessage})`;
+    }
   }
   report.finishedAt = new Date().toISOString();
   report.error = errorMessage;

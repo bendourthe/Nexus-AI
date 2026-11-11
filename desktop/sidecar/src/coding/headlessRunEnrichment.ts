@@ -123,7 +123,12 @@ async function resolveCommandBody(
   const commandPath = path.join(commandsDir, `${commandName}.md`);
   const content = await readOptionalFile(commandPath);
   // A Hub command keeps precedence; a bundled built-in skill is the fallback.
-  if (content === null) return resolveBundledSkillBody(options, commandName);
+  // A Hub file that differs only in case also shadows it, the same rule
+  // `commands.list` applies, so a hidden built-in never runs.
+  if (content === null) {
+    if (await hubNameShadows(commandsDir, commandName)) return null;
+    return resolveBundledSkillBody(options, commandName);
+  }
   const body = commandBody(content);
   if (!body) return null;
 
@@ -138,6 +143,15 @@ async function resolveCommandBody(
     return null;
   }
   return { body, skillId: `nexus-hub/${commandName}` };
+}
+
+async function hubNameShadows(commandsDir: string, commandName: string): Promise<boolean> {
+  try {
+    const wanted = `${commandName}.md`.toLowerCase();
+    return (await fs.readdir(commandsDir)).some((entry) => entry.toLowerCase() === wanted);
+  } catch {
+    return false;
+  }
 }
 
 async function resolveBundledSkillBody(

@@ -196,6 +196,31 @@ describe("render comparison and exit codes", async () => {
     expect(compareBrightnessRender(original, png(2, 2, base), 110).ok).toBe(false);
   });
 
+  it("rejects truncated, misordered and short PNG data", () => {
+    const good = png(4, 3, base);
+    expect(() => decodePng(good.subarray(0, good.length - 20))).toThrow(/png-invalid/);
+    const idatFirst = Buffer.concat([good.subarray(0, 8), good.subarray(33)]);
+    expect(() => decodePng(idatFirst)).toThrow(/IHDR must come first/);
+    const short = png(4, 3, base);
+    const ihdr = Buffer.from(short.subarray(8, 33));
+    ihdr.writeUInt32BE(6, 12);
+    expect(() => decodePng(Buffer.concat([short.subarray(0, 8), ihdr, short.subarray(33)]))).toThrow(/png-invalid/);
+  });
+
+  it("detects an in-place overwrite deep inside a sentinel folder", async () => {
+    const { directoryManifest } = await import("../../../desktop/tests/packaged/image-edit-flow.mjs");
+    const dir = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "manifest-"));
+    try {
+      fs.mkdirSync(path.join(dir, "a", "b"), { recursive: true });
+      fs.writeFileSync(path.join(dir, "a", "b", "x.bin"), "one");
+      const before = directoryManifest(dir);
+      fs.writeFileSync(path.join(dir, "a", "b", "x.bin"), "two!");
+      expect(directoryManifest(dir).sha256).not.toBe(before.sha256);
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   it("maps prerequisite failures to 2 and observation failures to 1", () => {
     expect(exitCodeFor("fixture-missing: x")).toBe(2);
     expect(exitCodeFor("native-abi-unavailable: x")).toBe(2);
@@ -203,5 +228,6 @@ describe("render comparison and exit codes", async () => {
     expect(exitCodeFor("persisted-edit-lost: brightness 100")).toBe(1);
     expect(exitCodeFor("stage-timeout: save-acknowledged exceeded 30000 ms")).toBe(1);
     expect(exitCodeFor("source-changed: x")).toBe(1);
+    expect(exitCodeFor("download-pin-unavailable: x")).toBe(2);
   });
 });
