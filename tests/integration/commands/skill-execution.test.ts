@@ -40,7 +40,7 @@ describe("Built-in skill catalog integration", () => {
     expect(expanded).not.toContain("$ARGUMENTS");
   });
 
-  it("lists all eighteen built-in skills", () => {
+  it("lists every built-in skill", () => {
     const loader = new SkillLoader(CATALOG_DIR, NO_USER_SKILLS_DIR);
     loader.load();
 
@@ -69,6 +69,8 @@ describe("Built-in skill catalog integration", () => {
       // v2.1.0 Phase 1 A4 training-recipe presets
       "training-recipe",
       "nexus",
+      // v2.16.2 Phase 1 A1 local creative briefs
+      "creative-brief",
     ];
 
     for (const name of expected) {

@@ -1,0 +1,17 @@
+{
+  "baseline": "Flat illustrated poster for a small coffee stand, palette #1F5EA8 #F4EBDD #2B2B2B, rounded sans serif headline \"LANTERN COFFEE\", clean layout with space reserved for the logo, no people, no other brand names",
+  "delta": "Night market setting lit by string lights",
+  "fixed_text": [
+    "LANTERN COFFEE"
+  ],
+  "references": [
+    {
+      "role": "logo",
+      "path": "assets/logo.png",
+      "sha256": "c9756fb4a6cb460d6d93dc0174067d86eec10839c134495255c7b5425809cfea"
+    }
+  ],
+  "limits": [
+    "lettering and logos are not reproduced reliably; place the confirmed logo and text afterwards"
+  ]
+}

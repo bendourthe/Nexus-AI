@@ -137,3 +137,66 @@ describe("release artifacts", () => {
     expect(hashed.ok).toBe(true);
   });
 });
+
+describe("packaged behavioral judgment", async () => {
+  const { BEHAVIORAL_PHASES, BEHAVIORAL_SCHEMA, evaluateBehavioralReport } = await import(
+    "../../../desktop/tests/packaged/smoke.mjs"
+  );
+  const exeSha256 = "a".repeat(64);
+  const runId = "run-1";
+  const now = Date.parse("2026-11-11T06:00:00Z");
+  function passing(): Record<string, any> {
+    return {
+      schemaVersion: BEHAVIORAL_SCHEMA,
+      mode: "edit",
+      control: null,
+      runId,
+      startedAt: "2026-11-11T05:50:00Z",
+      finishedAt: "2026-11-11T05:55:00Z",
+      error: null,
+      executable: { sha256: exeSha256 },
+      candidate: { commit: "c".repeat(40) },
+      ownedProfile: { root: "C:/tmp/owned", ownerRunId: "owner" },
+      phases: Object.fromEntries(BEHAVIORAL_PHASES.map((name: string) => [name, { status: "pass" }])),
+      recipe: { expected: { brightness: 110 }, observed: { afterSave: { brightness: 110 }, afterRestart: { brightness: 110 } } },
+      launches: [
+        { appPid: 1, seededSessionVisible: true },
+        { appPid: 2, seededSessionVisible: true },
+      ],
+      render: { ok: true, mismatchedPixels: 0, changedChannels: 10 },
+      sourcePreservation: { expectedSha256: "f", fixtureSha256: "f", seededSha256: "f" },
+      realProfileChanged: [],
+    };
+  }
+  const judge = (report: unknown) => evaluateBehavioralReport(report, { exeSha256, runId, now });
+
+  it("accepts a complete report bound to this run and executable", () => {
+    expect(judge(passing())).toEqual({ ok: true, findings: [] });
+  });
+
+  it("never accepts a route-only report or a synthetic body without observations", () => {
+    expect(judge(full).findings).toEqual(["route-only report: not a behavioral report"]);
+    expect(judge({ schemaVersion: BEHAVIORAL_SCHEMA, mode: "edit", control: null, runId }).ok).toBe(false);
+    expect(judge(null).ok).toBe(false);
+  });
+
+  it.each([
+    ["missing fixture", (r: any) => ({ ...r, error: "fixture-missing: x", phases: { ...r.phases, seed: { status: "fail" } } })],
+    ["denied save", (r: any) => ({ ...r, phases: { ...r.phases, edit: { status: "fail" } }, recipe: { ...r.recipe, observed: { afterRestart: { brightness: 110 } } } })],
+    ["lost persistence", (r: any) => ({ ...r, recipe: { ...r.recipe, observed: { ...r.recipe.observed, afterRestart: { brightness: 100 } } } })],
+    ["source mutation", (r: any) => ({ ...r, sourcePreservation: { expectedSha256: "f", fixtureSha256: "f", seededSha256: "0" } })],
+    ["wrong executable", (r: any) => ({ ...r, executable: { sha256: "b".repeat(64) } })],
+    ["wrong run", (r: any) => ({ ...r, runId: "run-2" })],
+    ["wrong profile", (r: any) => ({ ...r, ownedProfile: { root: "C:/tmp/owned" } })],
+    ["stale artifact", (r: any) => ({ ...r, startedAt: "2026-11-10T01:00:00Z", finishedAt: "2026-11-10T01:05:00Z" })],
+    ["timeout", (r: any) => ({ ...r, error: "stage-timeout: save-acknowledged exceeded 30000 ms", phases: { ...r.phases, edit: { status: "fail" } } })],
+    ["controlled defect", (r: any) => ({ ...r, control: "lost-persistence" })],
+    ["render mismatch", (r: any) => ({ ...r, render: { ok: false, mismatchedPixels: 3, changedChannels: 10 } })],
+    ["real profile changed", (r: any) => ({ ...r, realProfileChanged: ["C:/Users/x/.nexus/settings.json"] })],
+    ["single launch", (r: any) => ({ ...r, launches: [r.launches[0], r.launches[0]] })],
+  ])("rejects %s", (_name, mutate) => {
+    const result = judge(mutate(passing()));
+    expect(result.ok).toBe(false);
+    expect(result.findings.length).toBeGreaterThan(0);
+  });
+});

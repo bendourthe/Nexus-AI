@@ -13,6 +13,9 @@ on:
     paths:
       - .github/workflows/packaged-window-smoke.yml
       - desktop/tests/packaged/launch-probe.mjs
+      - desktop/tests/packaged/image-edit-flow.mjs
+      - desktop/tests/packaged/seed-image.mjs
+      - desktop/tests/packaged/smoke.mjs
       - desktop/src-tauri/src/lib.rs
       - desktop/src-tauri/tauri.conf.json
 
@@ -51,3 +54,23 @@ jobs:
 
       - name: Probe the launched window
         run: node tests/packaged/launch-probe.mjs src-tauri/target/release/nexus-shell.exe
+
+      # v2.16.2 (T016): the behavioral check edits a synthetic fixture image in an
+      # owned throwaway profile, restarts the app and verifies the saved edit,
+      # its pixels and the unchanged source. Node 22 here matches the sidecar ABI.
+      - name: Packaged image edit, restart and render
+        shell: pwsh
+        run: |
+          $exe = "src-tauri/target/release/nexus-shell.exe"
+          $sha = (Get-FileHash -Algorithm SHA256 $exe).Hash.ToLower()
+          $node = (Get-Command node).Source
+          node tests/packaged/image-edit-flow.mjs --exe $exe --sha256 $sha --node $node --out "$env:RUNNER_TEMP/image-edit-check"
+
+      - name: Upload image edit report
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: packaged-image-edit-report
+          path: ${{ runner.temp }}/image-edit-check/report.json
+          if-no-files-found: warn
+          retention-days: 14
