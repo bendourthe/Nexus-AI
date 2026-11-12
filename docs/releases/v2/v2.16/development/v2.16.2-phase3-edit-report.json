@@ -1,0 +1,304 @@
+{
+  "schemaVersion": "nexus.packaged-image-edit/v1",
+  "mode": "edit",
+  "control": null,
+  "runId": "0424d533-0093-40b6-8c2b-d91379ecdfbe",
+  "startedAt": "2026-11-11T05:55:32.564Z",
+  "executable": {
+    "path": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-v2.16.2\\desktop\\src-tauri\\target\\release\\nexus-shell.exe",
+    "sha256": "3854d2a772aa2788f1380f179d5e90f6f1f963e352bebefe101c3b517aeb7b98"
+  },
+  "phases": {
+    "refusals": {
+      "status": "pass",
+      "at": "2026-11-11T05:55:32.567Z"
+    },
+    "seed": {
+      "status": "pass",
+      "at": "2026-11-11T05:55:33.407Z"
+    },
+    "launch": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:00.019Z"
+    },
+    "open": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:00.980Z"
+    },
+    "edit": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:03.824Z"
+    },
+    "export": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:04.133Z",
+      "file": "nexus-69677504-b7b2-4c6b-ab4f-d6d176c2083e-edited.png"
+    },
+    "stop": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:06.571Z"
+    },
+    "relaunch": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:08.857Z"
+    },
+    "readBack": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:09.807Z"
+    },
+    "render": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:12.398Z"
+    },
+    "sourcePreservation": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:12.398Z"
+    },
+    "realProfile": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:12.402Z"
+    }
+  },
+  "launches": [
+    {
+      "label": "edit",
+      "at": "2026-11-11T05:56:00.019Z",
+      "appPid": 31472,
+      "ownerPid": 35712,
+      "port": 49700,
+      "listenerPid": 35328,
+      "jobPids": [
+        31472,
+        35328,
+        16660,
+        6980,
+        30256,
+        34712,
+        8636,
+        33948,
+        7748,
+        23352,
+        23344,
+        36616,
+        19312,
+        21056
+      ],
+      "processNames": {
+        "6980": "conhost.exe",
+        "7748": "msedgewebview2.exe",
+        "8636": "msedgewebview2.exe",
+        "16660": "msedgewebview2.exe",
+        "19312": "nvidia-smi.exe",
+        "21056": "unknown",
+        "23344": "node.exe",
+        "23352": "msedgewebview2.exe",
+        "30256": "unknown",
+        "31472": "nexus-shell.exe",
+        "33948": "msedgewebview2.exe",
+        "34712": "conhost.exe",
+        "35328": "msedgewebview2.exe",
+        "36616": "unknown"
+      },
+      "sidecarPids": [
+        23344
+      ],
+      "webviewPids": [
+        35328,
+        16660,
+        8636,
+        33948,
+        7748,
+        23352
+      ],
+      "seededSessionVisible": true
+    },
+    {
+      "label": "restart",
+      "at": "2026-11-11T05:56:08.857Z",
+      "appPid": 11800,
+      "ownerPid": 32084,
+      "port": 57273,
+      "listenerPid": 34032,
+      "jobPids": [
+        11800,
+        34032,
+        33336,
+        27356,
+        4676,
+        2916,
+        18448,
+        8968,
+        27464,
+        33152,
+        22728
+      ],
+      "processNames": {
+        "2916": "msedgewebview2.exe",
+        "4676": "conhost.exe",
+        "8968": "msedgewebview2.exe",
+        "11800": "nexus-shell.exe",
+        "18448": "msedgewebview2.exe",
+        "22728": "powershell.exe",
+        "27356": "conhost.exe",
+        "27464": "msedgewebview2.exe",
+        "33152": "node.exe",
+        "33336": "msedgewebview2.exe",
+        "34032": "msedgewebview2.exe"
+      },
+      "sidecarPids": [
+        33152
+      ],
+      "webviewPids": [
+        34032,
+        33336,
+        2916,
+        18448,
+        8968,
+        27464
+      ],
+      "seededSessionVisible": true
+    }
+  ],
+  "stops": [
+    {
+      "label": "edit",
+      "at": "2026-11-11T05:56:06.571Z",
+      "stoppedPids": [
+        31472,
+        35328,
+        16660,
+        6980,
+        8636,
+        33948,
+        7748,
+        23352,
+        23344,
+        28392
+      ],
+      "remaining": [],
+      "stillAlive": [],
+      "portClosed": true
+    },
+    {
+      "label": "restart",
+      "at": "2026-11-11T05:56:12.202Z",
+      "stoppedPids": [
+        11800,
+        34032,
+        33336,
+        27356,
+        30724,
+        2916,
+        18448,
+        8968,
+        27464,
+        33152,
+        6804
+      ],
+      "remaining": [],
+      "stillAlive": [],
+      "portClosed": true
+    }
+  ],
+  "recipe": {
+    "expected": {
+      "brightness": 110
+    },
+    "observed": {
+      "beforeEdit": {
+        "brightness": 100
+      },
+      "afterSave": {
+        "brightness": 110,
+        "status": "Edits saved"
+      },
+      "afterRestart": {
+        "brightness": 110
+      }
+    }
+  },
+  "refusals": {
+    "occupiedRoot": "owned-root-occupied: C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-occupied-7TX5Jm already exists",
+    "escapingPath": "owned-path-escape: sessionsDb escapes the owned root: C:\\Users\\bdour\\.nexus\\generations\\sessions.db"
+  },
+  "seed": {
+    "root": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn",
+    "identity": {
+      "sourceCommit": "64686107c3566a8b6d34895cd423eeb90e851a0e",
+      "sourceClean": true,
+      "exeSha256": "3854d2a772aa2788f1380f179d5e90f6f1f963e352bebefe101c3b517aeb7b98",
+      "sidecarMainSha256": "cf7f1a5cdffad92a97867284b5054cad669da8ff88d6ae97b1086b7d0249d09e",
+      "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d",
+      "nativeModulesDir": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-v2.16.2\\desktop\\src-tauri\\target\\release\\sidecar\\dist\\node_modules"
+    },
+    "paths": {
+      "osHomedir": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\home",
+      "nexusHome": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\home\\.nexus",
+      "nexusAiHome": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\home\\.nexus-ai",
+      "hubCatalog": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\home\\.nexus-ai\\catalog",
+      "sessionsDb": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\home\\.nexus\\generations\\sessions.db",
+      "generatedImages": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\home\\.nexus\\generations\\images"
+    },
+    "fixture": {
+      "path": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-v2.16.2\\desktop\\tests\\packaged\\fixtures\\edit-source.png",
+      "sha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+      "seededPath": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\home\\.nexus\\generations\\images\\49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6.png"
+    },
+    "sessionId": "25cfab75-5807-4cda-a856-d6e4ddd2254f",
+    "turnId": "69677504-b7b2-4c6b-ab4f-d6d176c2083e",
+    "seederSha256": "5802c2612a72b7d008c486bce9eeaad6446c89189f95728ee4ee609a5566105a"
+  },
+  "ownedRoot": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn",
+  "ownedEnvironment": {
+    "USERPROFILE": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\home",
+    "HOME": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\home",
+    "APPDATA": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\home\\AppData\\Roaming",
+    "LOCALAPPDATA": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\home\\AppData\\Local",
+    "TEMP": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\tmp",
+    "WEBVIEW2_USER_DATA_FOLDER": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\webview2",
+    "NEXUS_NODE_PATH": "C:\\Users\\bdour\\AppData\\Local\\Nexus\\runtime\\node\\node.exe"
+  },
+  "candidate": {
+    "commit": "64686107c3566a8b6d34895cd423eeb90e851a0e",
+    "sourceClean": true,
+    "sidecarMainSha256": "cf7f1a5cdffad92a97867284b5054cad669da8ff88d6ae97b1086b7d0249d09e",
+    "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+  },
+  "ownedProfile": {
+    "root": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn",
+    "ownerRunId": "352b954c-6111-40c7-981d-433303e6d2de"
+  },
+  "fixture": {
+    "sha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+    "sessionId": "25cfab75-5807-4cda-a856-d6e4ddd2254f",
+    "turnId": "69677504-b7b2-4c6b-ab4f-d6d176c2083e"
+  },
+  "exportPath": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-Jl1Irn\\downloads\\nexus-69677504-b7b2-4c6b-ab4f-d6d176c2083e-edited.png",
+  "render": {
+    "ok": true,
+    "width": 64,
+    "height": 64,
+    "brightness": 110,
+    "tolerance": 2,
+    "maxDelta": 1,
+    "mismatchedPixels": 0,
+    "changedChannels": 11904,
+    "exportSha256": "4dde0cf20baa0e79514d26a3127ed48ea0bb6db9c0efc9cd0d00ff2f63e0e92c"
+  },
+  "sourcePreservation": {
+    "fixtureSha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+    "seededSha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+    "expectedSha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6"
+  },
+  "realProfileChanged": [],
+  "finishedAt": "2026-11-11T05:56:12.402Z",
+  "error": null,
+  "judge": {
+    "ok": true,
+    "findings": []
+  },
+  "ok": true,
+  "verdict": "PASS",
+  "exitCode": 0,
+  "ownedRootRemoved": true
+}

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="source-sha256" content="ac2b800380bcf20d078d0f12e2741f9ecf00677397002d81701f0c6ff947b5ac"><title>Nexus Architecture Atlas</title><style>/* Namespaced mechanics; project authors retain composition and brand tokens. */
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="source-sha256" content="2b7524e289cc513a7435a081cf83a208ebb90972320d4e66a2f2ef8bfb1937d7"><title>Nexus Architecture Atlas</title><style>/* Namespaced mechanics; project authors retain composition and brand tokens. */
 [data-dv-deck][hidden], [data-dv-slide][hidden] { display: none !important; }
 [data-dv-open], [data-dv-chapter] { display: none; }
 [data-dv-ready] [data-dv-open], [data-dv-ready] [data-dv-chapter] { display: inline-flex; }
@@ -120,13 +120,19 @@ ol,ul{padding-left:1.4em}li{margin-bottom:.45em}li p{margin-block:.3em}
 <td>Edit or recover an image</td>
 <td><a href="../../../desktop/sidecar/src/studio/imageEditRuntime.ts">Image edit runtime</a> and viewer</td>
 <td>Revisioned recipes; approval recovery; retained originals</td>
-<td>Retry, restart, restore and grant tests</td>
+<td>Retry, restart, restore and grant tests; <a href="../../reference/packaged-image-edit-check.md">packaged edit, restart and render check</a></td>
 </tr>
 <tr>
 <td>Generate a video</td>
 <td><a href="../../../desktop/sidecar/src/diffusion/videoDispatcher.ts">Video dispatcher</a> and Python pipelines</td>
 <td>Shared readiness API</td>
 <td>Probed video artifact</td>
+</tr>
+<tr>
+<td>Create a creative brief</td>
+<td><a href="../../../modules/coding/skills/catalog/creative-brief/SKILL.md">Built-in skill</a>, bundled for the desktop by <a href="../../../desktop/sidecar/src/skills/bundledSkills.ts">bundled skills</a></td>
+<td>Workspace Markdown brief; reference SHA-256 checks; existing generate queue</td>
+<td>Loader, delivery and fixture rehearsal tests</td>
 </tr>
 <tr>
 <td>Browse and install models</td>
