@@ -66,3 +66,19 @@ Ubiquitous language only. Architecture lives in `AGENTS.md` and `ARCHITECTURE.md
 **Avoid**: archive exclusion, ignore list
 
 **Relationships**: A Nexus-Hub checker setting requested in the v2.15.0 handoff. Never used to hide an item a parseable ledger still owes.
+
+## Side-by-side runtime
+
+**Definition**: A second, version-pinned Ollama started from an official release archive on its own loopback port with its own model directory, used for one bounded evaluation and then stopped and deleted, while the host's default Ollama on port 11434 is neither upgraded nor touched.
+
+**Avoid**: Ollama upgrade, second install, sandbox Ollama, test server
+
+**Relationships**: Introduced by the v2.17.0 November model wave plan to unblock DF-129. Not the same as the user's runtime, which only the owner upgrades. Not the same as the OS process sandbox in `modules/coding/sandbox/`.
+
+## Measured gates
+
+**Definition**: The evaluation gates the frozen v2.13 embedding evaluator actually computes from a run (quality, latency, rejection), as opposed to the admission gates it hard-codes to HOLD.
+
+**Avoid**: evaluator PASS, overall disposition, admission result
+
+**Relationships**: Narrower than the evaluator's overall disposition, which can only be FAIL or HOLD. Admission gates (tiers, coexistence, offline, terms, context) are tracked as DF-130. A measured-gates win yields a migration proposal, never an admission.
