@@ -53,12 +53,19 @@ jobs:
       - name: Install diff-cover (pinned)
         run: python -m pip install --quiet "diff-cover==9.2.0"
 
+      # Compare against the PR's own base (main or develop). The fetch must
+      # not pass --depth: on this full-history checkout a shallow fetch
+      # grafts the base and diff-cover then fails with "no merge base".
       - name: Fetch base branch for diff
-        run: git fetch origin main --depth=1
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: git fetch --no-tags origin "$BASE_REF"
 
       - name: Run diff-cover on changed lines
         id: diff-cover
         continue-on-error: true # nexus-check-allow: no-disabled-ci-check -- diff-cover is advisory; the coverage comment is posted regardless and a later step gates
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
           set -euo pipefail
           if [ ! -f coverage/lcov.info ]; then
@@ -66,7 +73,7 @@ jobs:
             exit 1
           fi
           diff-cover coverage/lcov.info \
-            --compare-branch=origin/main \
+            --compare-branch="origin/$BASE_REF" \
             --fail-under=80 \
             --markdown-report=diff-coverage.md \
             --html-report=diff-coverage.html
