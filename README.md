@@ -1,532 +1,305 @@
-<p align="center"><a href="https://github.com/bendourthe/Nexus-AI"><img src="assets/nexus-ai-banner.png" alt="Nexus" width="640" /></a></p>
+<p align="center"><a href="https://github.com/bendourthe/Nexus-AI"><img src="assets/nexus-ai-banner.png" alt="Nexus AI" width="640" /></a></p>
 
 <p align="center"><em>Your Local AI Studio. Four Pillars, One Desktop, Zero Tokens Billed.</em></p>
 
-# Nexus
+# Nexus AI
 
-Nexus is a local-first, native desktop AI Studio that bundles four generative AI pillars behind one cohesive UI: agentic coding, organized local chat, image generation and editing, and short-form video synthesis. Everything runs on the host machine against optimized open-source models (Gemma 4, Llama 3, Qwen 2.5 Coder, SDXL / SANA-class diffusion, video-synthesis architectures), with real-time GPU / VRAM telemetry built into the dashboard. No API keys, no data leaving your machine, no per-token billing.
+Nexus AI Studio is a local-first desktop app for generative AI. It brings agentic coding, organized chat, image generation and editing, and short video synthesis into one window. Every model runs on your own machine through open-source runtimes, so there are no API keys, no per-token bills, and no data leaving the computer unless you turn on a feature that needs it.
 
-> **Renamed from Gemma Code at v1.0.0** to reflect the four-pillar pivot. The v0.1.0 - v0.22.x line shipped as a single-purpose local agentic coding VS Code extension; v1.0.0 folded that engine into the "Agentic AI Coding" pillar of a wider desktop app. The VS Code surface is preserved as an optional thin adapter that proxies to the desktop daemon. Historical Gemma Code docs remain under `docs/archive/versions/v0/v0.1.0/` - `docs/archive/versions/v0/v0.9.0/`; v1 milestones live under `docs/archive/v1/v1.<MINOR>/`, v2.1.0 lives under `docs/archive/v2/v2.1/`, v2.2.9 lives under `docs/archive/v2/v2.2/`, and current **v2.16.1** release work is tracked in [docs/releases/v2/v2.16/](docs/releases/v2/v2.16/). See [Project Status](#project-status-august-2026).
+**Platforms:** a one-file Windows installer for the full desktop app, plus an optional VS Code extension for Windows, macOS (Apple Silicon), and Linux.
 
----
+[Download the latest release](https://github.com/bendourthe/Nexus-AI/releases/latest) | [Installation guide](docs/install.md) | [Interactive guide](guides/interactive-guide/nexus-ai-guide.html) | [Architecture](ARCHITECTURE.md) | [Release history](docs/reference/release-history.md)
 
-## How Nexus fits with Nexus-Hub
+> Nexus AI was called **Gemma Code** from v0.1.0 to v0.22.x, when it was a single-purpose coding extension for VS Code. At v1.0.0 that engine became the Agentic AI Coding pillar of the desktop app. The extension is still available as an optional surface.
 
-<p align="center">
-<a href="https://github.com/bendourthe/Nexus-AI"><img src="assets/nexus-ai-banner.png" alt="Nexus" width="360" align="middle" /></a>
-&nbsp;&nbsp;&nbsp;<strong style="font-size: 28px;">&harr;</strong>&nbsp;&nbsp;&nbsp;
-<a href="https://github.com/bendourthe/Nexus-Hub"><img src="https://raw.githubusercontent.com/bendourthe/Nexus-Hub/main/assets/nexus_hub_banner.png" alt="Nexus-Hub" width="360" align="middle" /></a>
-</p>
+## What's New in v2.16.1
 
-Nexus and [Nexus-Hub](https://github.com/bendourthe/Nexus-Hub) are two halves of the same idea, split along a deliberate seam.
+- **CPU-only golden runs:** `nexus golden run` accepts a `num_gpu` option, and `0` qualifies a local model on the CPU alone. Model defaults do not change.
+- **Cleaner command line:** the headless CLI exits on its own once pending work finishes, and production dependencies moved to Zod 4 without breaking MCP HTTP transport.
+- **Safer releases:** a release is published only from a reviewed, annotated tag on `main`, and each Windows installer must pass a clean-machine install check before it ships.
 
-- **Nexus (this repo)** is the runtime: a native desktop AI Studio with four pillars (Coding, Chat, Image, Video), four-layer local memory, hybrid retrieval (BM25 + dense + graph via RRF), session replay, GPU scheduling, hardware-aware model selection, a Windows provisioning installer, and platform-qualified optional VS Code extensions. It runs against local open-source models via Ollama; no outbound runtime calls without explicit user opt-in.
-- **Nexus-Hub** is the catalog: a large curated set of skills, commands, hooks, agents, and language rule families, plus a handful of local-only internal MCP servers (see the [Nexus-Hub repo](https://github.com/bendourthe/Nexus-Hub) for the live counts). It is content-only, platform-agnostic, and installs into every supported AI assistant's per-platform config locations. Nexus consumes the same catalog as its upstream skill feed via the `nexus skills sync` CLI.
+[Release details](CHANGELOG.md#2161-2026-11-02) | [Earlier releases](docs/reference/release-history.md)
 
-The two projects are designed to be useful independently: you can install Nexus-Hub into Claude Code / Codex / Gemini / Cursor without touching Nexus, and Nexus can run with or without the upstream catalog wired in. The combination is what gives a single curated skill set to every agent surface a developer touches: terminal, IDE, and now a dedicated desktop app.
+## Installation
 
----
+All downloads are on the [latest release](https://github.com/bendourthe/Nexus-AI/releases/latest) page, with a `SHA256SUMS.txt` file to verify them.
+
+| Platform | Download | What you get |
+| --- | --- | --- |
+| Windows 10/11 (x64) | `NexusSetup.exe` | The full desktop app, its runtimes, your chosen models, and the optional VS Code extension |
+| Windows 10/11 (x64) | `nexus-coding-<version>-win32-x64.vsix` | The VS Code extension only |
+| macOS 15+ (Apple Silicon) | `nexus-coding-<version>-darwin-arm64.vsix` | The VS Code extension only |
+| Linux x86_64 (glibc 2.35+) | `nexus-coding-<version>-linux-x64.vsix` | The VS Code extension only |
+
+**Windows desktop app**
+
+1. Download `NexusSetup.exe`.
+2. Run it. Windows shows a SmartScreen warning because the installer is not code-signed yet: select **More info**, then **Run anyway**.
+3. Follow the wizard: hardware detection, install location, model selection (chat, coding, image, video), and the optional VS Code extension.
+4. The wizard checks every download against a pinned SHA-256 checksum, installs the desktop app, and launches it. Run `NexusSetup.exe` again later to add models or repair components.
+
+Plan for 5 to 60 GB of downloads, depending on the models you select. No administrator rights are needed, and user data lives in `~/.nexus`.
+
+**VS Code extension (any platform)**
+
+The extension requires Microsoft stable VS Code 1.134 through 1.137. Insiders, Cursor, and Windsurf are not supported. In VS Code, run **Extensions: Install from VSIX...** and select the file for your platform.
+
+**Verify a download (Windows PowerShell)**
+
+```powershell
+(Get-FileHash .\NexusSetup.exe -Algorithm SHA256).Hash
+```
+
+The printed hash must match the `NexusSetup.exe` line in `SHA256SUMS.txt`. Headless installs, macOS and Linux details, and what the installer provisions are in the [installation guide](docs/install.md).
 
 ## The Four Pillars
 
 ### 1. Agentic AI Coding
 
-Autonomous code-generation and terminal environment. Reads local repositories, executes code in isolated environments, debugs, and implements complex features across files. Inherits everything Gemma Code shipped (tool registry, plan mode, four-layer memory, MCP support, skill catalog, sub-agent dispatch) and selects among installer-or-Settings-owned agentic models (not leftover Ollama tags). Available as a desktop pillar and as an optional VS Code extension (`nexus-coding`) that proxies to the desktop daemon when available and falls back to a legacy in-process engine when not. Later cycles added a local skill self-optimization loop (`nexus skills optimize`, v1.7.0 / v1.12.0) and a per-model harness selector that tunes the agent scaffold profile to each local model (v1.12.0; live in the prompt path behind `nexus.coding.harnessSelector.enabled` as of v1.18.0 Phase 2, still opt-in).
+An autonomous coding agent that reads local repositories, runs code in isolated environments, debugs, and implements features across many files.
+
+- Inherits the full Gemma Code engine: tool registry, plan mode, four-layer memory, MCP support, skill catalog, and sub-agent dispatch.
+- Picks only from agentic models that this install owns (selected in the installer or Settings), never leftover Ollama tags.
+- Runs in the desktop app or in the optional `nexus-coding` VS Code extension, which proxies to the desktop daemon and falls back to an in-process engine.
+- Optional, off by default: a local skill self-optimization loop (`nexus skills optimize`) and a per-model harness selector (`nexus.coding.harnessSelector.enabled`) that tunes the agent scaffold to each local model.
 
 ### 2. Local Chatbot Explorer
 
-Conversational interface with a filesystem-style organizer: chats live in nested folders and subfolders, contexts can be compartmentalized per project, and the four-layer memory system (working / episodic / semantic / graph) keeps long-running threads coherent. Hybrid retrieval (BM25 + dense + graph via Reciprocal Rank Fusion, `k=60`) replaced the v0.x substring path in v1.1.0 Phase 5; the local `all-MiniLM-L6-v2` embedder is bundled by the installer so production hosts never hit the Hugging Face Hub. Chat and Agents model pickers list installer ticks union Settings installs, in recommend order, not leftover Ollama tags.
+A chat interface organized like a file system. Chats live in nested folders, each project can keep its own context, and four memory layers (working, episodic, semantic, graph) keep long threads coherent.
+
+- Hybrid retrieval combines BM25, dense vectors, and the memory graph through Reciprocal Rank Fusion (`k=60`).
+- The `all-MiniLM-L6-v2` embedder is bundled by the installer, so retrieval never calls the Hugging Face Hub.
+- Model pickers list only the models this install owns, in recommended order.
 
 ### 3. Image Studio
 
-Text-to-image, image-to-image, inpainting, and outpainting against local diffusion pipelines. Tuned for laptop-class single-GPU hardware. v1.1.0 Phase 12 makes SANA-1.6B the new default 1024px model (~2x faster than SDXL Turbo, Apache-2.0 weights), adds Sana-Sprint as the "Fast Preview" speed tier (~0.3 s on RTX 4090), gates SANA 2K / 4K behind a `DiffusionTier` policy, and ships SANA-ControlNet plus the Flow-DPM-Solver sampler. The generator picker uses the same this-install allowlist; on a 16 GB snapshot it defaults to RealVisXL V5 (`realvisxl-v5`) when that id is owned.
+Text-to-image, image-to-image, inpainting, and outpainting on local diffusion pipelines tuned for one laptop GPU.
+
+- SANA-1.6B is the default 1024 px model (about 2x faster than SDXL Turbo, Apache-2.0 weights), with Sana-Sprint as the "Fast Preview" tier.
+- SANA 2K and 4K sit behind a `DiffusionTier` policy, alongside SANA-ControlNet and the Flow-DPM-Solver sampler.
+- Edits are saved as a versioned recipe with undo and redo; the original image bytes never change.
 
 ### 4. Video Lab
 
-Short-form video synthesis via text prompts or static reference images, with a timeline previewer and granular generation controls. v1.1.0 Phase 13 adds SANA-Video 2B as the "Fast 720p" tier between LTX-Video and CogVideoX. Targets local video-synthesis architectures sized for a single consumer GPU. Optional local enhancement can upscale or interpolate a completed clip through a user-installed Video2X 6.4.0 executable (`NEXUS_VIDEO2X_PATH` or Settings > Video). Nexus does not download or bundle Video2X. The clip picker uses the same this-install allowlist as Chat and Image. Real GPU and packaged support remain candidate until measured; see [docs/archive/v2/v2.3/benchmarks/video-enhancement-baseline.md](docs/archive/v2/v2.3/benchmarks/video-enhancement-baseline.md).
+Short video synthesis from a text prompt or a reference image, with a timeline preview and detailed generation controls.
+
+- SANA-Video 2B is the "Fast 720p" tier between LTX-Video and CogVideoX.
+- Optional enhancement can upscale or interpolate a finished clip through a Video2X 6.4.0 executable you install yourself (`NEXUS_VIDEO2X_PATH` or Settings > Video). Nexus never downloads or bundles Video2X.
+- Real GPU and packaged-app support for enhancement is still a candidate until it is measured ([baseline](docs/archive/v2/v2.3/benchmarks/video-enhancement-baseline.md)).
 
 ### Document parsing (OCR)
 
-Attach a PDF, image, Word, PowerPoint, or Excel file in Local Chatbot or Agentic AI Coding and Nexus reads it into text on your machine. PDFs and images use **RapidOCR PP-OCRv4** (Apache-2.0, ~20 MB, CPU, every OS) or optionally **Unlimited-OCR 3B** (MIT, NVIDIA, layout-preserving markdown). `.docx` / `.pptx` / `.xlsx` parse with native libraries and do not need those OCR models or Docling. OCR models are optional, never auto-installed, and pinned to a specific revision. Extracted text is never sent to a model on its own - you decide what to do with it. OCR added in v1.16.0 Phase 3; native Office ingest in v1.20.0 Phase 2; Coding attach in v1.20.0 Phase 3.
+Attach a PDF, image, Word, PowerPoint, or Excel file in Chat or Coding, and Nexus turns it into text on your machine.
+
+- PDFs and images use **RapidOCR PP-OCRv4** (Apache-2.0, about 20 MB, CPU, every OS) or the optional **Unlimited-OCR 3B** (MIT, NVIDIA, layout-preserving Markdown).
+- `.docx`, `.pptx`, and `.xlsx` files parse with native libraries and need no OCR model.
+- OCR models are optional, never installed automatically, and pinned to a specific revision. Extracted text is shown to you and never sent to a model on its own.
 
 ### Local API server (opt-in)
 
-Nexus can also *serve* the local models it has installed. Enable **Settings > Local API server** and Nexus exposes a loopback OpenAI- and Anthropic-compatible HTTP API (`GET /v1/models`, `POST /v1/chat/completions`, `POST /v1/messages`, buffered or streamed), so Claude Code, Codex, Cursor, and any OpenAI/Anthropic SDK client can drive the models you already downloaded - extending "Zero Tokens Billed" to your whole toolchain. Off by default and local by construction: with both the API server and the ACP agent off, no port is bound. The server refuses to start on any non-loopback address, and every request needs a locally-generated bearer token. Inference routes serve model output only - never files, terminal, or tools. Added in v1.16.0 Phase 1.
+Nexus can serve its installed models to other tools on the same computer. Turn on **Settings > Local API server** to get a loopback HTTP API compatible with OpenAI and Anthropic clients (`GET /v1/models`, `POST /v1/chat/completions`, `POST /v1/messages`, buffered or streamed). Claude Code, Codex, Cursor, and SDK clients can then use the models you already downloaded.
 
-A second toggle on the same Settings section enables the **ACP agent** (`nexus.acp.enabled`, default off) on that shared loopback listener and token (`POST /acp`, JSON-RPC 2.0). Enabling ACP does not turn on the OpenAI/Anthropic routes, and the reverse is also true. Unattended CONFIRM and DANGEROUS tool calls park in the **Ask inbox** (Admin sidebar, dashboard bell). Approve replays the permission gate; deny and expiry refuse cleanly. Without an inbox the call fail-closes (it never auto-approves). Added in v1.18.0 Phase 5 (park path in Phase 4).
+- Off by default. With both this server and the ACP agent off, no port is bound.
+- Refuses any non-loopback address, and every request needs a locally generated bearer token.
+- Serves model output only: never files, the terminal, or tools.
+- A second toggle enables the **ACP agent** (`nexus.acp.enabled`, `POST /acp`, JSON-RPC 2.0) on the same listener and token. Each toggle is independent.
 
 ### Ask inbox and scheduled runs (opt-in)
 
-Headless and scheduled agent runs no longer die on the 60s confirmation timeout. Consequential tools park until you approve or deny them in **Ask inbox**. A local scheduler can fire recurring runs (the built-in morning brief is **off by default**). Every wake still goes through the same permission tiers and Git checkpoint as an interactive run; there is no auto-approve path. Added in v1.18.0 Phase 4.
+Headless and scheduled agent runs no longer fail on the 60-second confirmation timeout. Consequential tool calls wait in the **Ask inbox** until you approve or deny them, and approval replays the normal permission gate.
+
+- A local scheduler can start recurring runs. The built-in morning brief is off by default.
+- Every run goes through the same permission tiers and Git checkpoint as an interactive run. There is no auto-approve path, and without an inbox a call fails closed.
 
 ### MLX on Apple Silicon (via local adapters)
 
-Nexus does not bundle an MLX runtime. Apple Silicon users who already run an OpenAI-compatible MLX server (mlx-vlm, LM Studio in MLX mode, or nativ) can register it as a loopback `nexus.llm.localAdapters` manifest and select it with `nexus.llm.backend`. The how-to is [docs/archive/v1/v1.16/guides/mlx-via-local-adapters.md](docs/archive/v1/v1.16/guides/mlx-via-local-adapters.md); the on-device smoke checklist is [docs/archive/v1/v1.16/testing/macos-mlx-smoke.md](docs/archive/v1/v1.16/testing/macos-mlx-smoke.md). Added in v1.16.0 Phase 5.
+Nexus does not bundle an MLX runtime. If you already run an OpenAI-compatible MLX server (mlx-vlm, LM Studio in MLX mode, or nativ), register it as a loopback `nexus.llm.localAdapters` manifest and select it with `nexus.llm.backend`. See the [MLX how-to](docs/archive/v1/v1.16/guides/mlx-via-local-adapters.md).
 
 ### llama.cpp on loopback (via local adapters)
 
-Nexus does not bundle llama.cpp. If you already run `llama-server` on loopback (including large-MoE CPU-expert or mmap offload), register it as a `nexus.llm.localAdapters` manifest with `protocol: "openai"` and select it with `nexus.llm.backend`. The recipe is [docs/reference/llamacpp-loopback-adapter.md](docs/reference/llamacpp-loopback-adapter.md). This does not open the patient-tier gate ([EM.P4.A](docs/archive/v1/v1.12/known-gaps.md)). Added in v1.18.0 Phase 1.
+Nexus does not bundle llama.cpp. If you already run `llama-server` on loopback (including large-MoE CPU-expert or mmap offload), register it as a `nexus.llm.localAdapters` manifest with `protocol: "openai"`. See the [llama.cpp recipe](docs/reference/llamacpp-loopback-adapter.md). This does not open the patient-tier gate.
 
 ### Always-on telemetry
 
-A persistent `Local Model Status` panel reports the active model architecture, parameter size, live GPU utilization, and free VRAM - so dense computational passes do not silently OOM. The same telemetry feeds the GPU scheduler (Phase 3) that prioritizes Coding token generation over background diffusion work when both pillars compete for the same GPU.
-
----
-
-## Project Status (August 2026)
-
-Nexus uses a single, convergent version line: git tags and `package.json` carry the same numbers as the milestone docs (`docs/archive/v1/v1.<MINOR>/` through v1.20.0, then `docs/archive/v2/v2.0/` for v2.0.0, `docs/archive/v2/v2.1/` for v2.1.0, `docs/archive/v2/v2.2/` for v2.2.9, and `docs/archive/v2/v2.3/` for **v2.3.1**).
-
-Historical note: between 2026-06-18 and 2026-07-20 a decoupled "release track" cut five semantic-release versions numbered ahead of the milestones. Those tags were renumbered onto the milestone line on 2026-08-05: the old `v2.0.0` tag became `v1.6.0`, `v2.1.0` -> `v1.7.0`, `v2.2.0` -> `v1.12.0`, `v2.3.0` -> `v1.13.0`, and `v2.4.0` -> `v1.14.0`. This **v2.0.0** cut is the reserved convergence release (v1.18 plan + v1.19.x subplans + this adoption plan).
-
-### Milestone ledger
-
-| Milestone | Theme | Status | Docs |
-|---|---|---|---|
-| v1.0.0 | Four-pillar pivot: Gemma Code -> Nexus desktop AI Studio (Tauri shell + Node sidecar) | Landed | [docs/archive/v1/v1.0/](docs/archive/v1/v1.0/) |
-| v1.1.0 | Stabilization + expansion: hybrid retrieval, session replay, SANA image / video tiers | Landed | [docs/archive/v1/v1.1/](docs/archive/v1/v1.1/) |
-| v1.2.0 | 2026-05 ecosystem adoption: code-graph MCP, LEANN-derived pruned dense index, command-output compression | Landed | [docs/archive/v1/v1.2/](docs/archive/v1/v1.2/) |
-| v1.3.0 | skill-cleaner adoption: `nexus skills audit` token-budget report | Landed | [docs/archive/v1/v1.3/](docs/archive/v1/v1.3/) |
-| v1.4.0 | claude-code-harness adoption (A1-A12) + `src/` -> `modules/coding/` move + carryforward closure | Landed | [docs/archive/v1/v1.4/](docs/archive/v1/v1.4/) |
-| v1.5.0 | Local Agent Maturity: Gemma 4 quant ladder, credential vault, energy telemetry, planner / critic / worker DAG | Landed | [docs/archive/v1/v1.5/](docs/archive/v1/v1.5/) |
-| v1.6.0 | aisuite harness + the offline Nexus-AI interactive guide + opt-in local panel / judge fusion | Landed | [docs/archive/v1/v1.6/](docs/archive/v1/v1.6/) |
-| v1.7.0 | Local skill self-optimization loop (golden-task runner, bounded-edit optimizer, Pareto frontier) | Landed | [docs/archive/v1/v1.7/](docs/archive/v1/v1.7/) |
-| v1.8.0 | One-shot end-user installer: desktop bundles, Hugging Face weights puller, per-VRAM catalog curation | Landed | [docs/archive/v1/v1.8/](docs/archive/v1/v1.8/) |
-| v1.9.0 | Installer + Nexus AI Studio experience overhaul (single-artifact branded wizard + full UI / UX rework) | Landed | [docs/archive/v1/v1.9/](docs/archive/v1/v1.9/) |
-| v1.10.0 | Nexus-Hub consumption re-architecture: single-home `~/.nexus-ai/catalog/` + live first-launch fetch | Landed | [docs/archive/v1/v1.10/](docs/archive/v1/v1.10/) |
-| v1.11.0 | Installer overhaul: one-shot reliability, clean-machine harness, embedded desktop bundle, background continuation | Landed | [docs/archive/v1/v1.11/](docs/archive/v1/v1.11/) |
-| v1.12.0 | Local model-execution scaling (per-model harness, extreme-low-bit + disk-offload tiers) + surface the skill optimizer + exec-sandbox audit | Landed | [docs/archive/v1/v1.12/](docs/archive/v1/v1.12/) |
-| v1.13.0 | Installer reliability + UX polish: fix the fresh-install model failures (registry routing + Ollama pin + pull/load preflight), gradient "AI Studio" wordmark, and the mockup-matched installing UI | Landed | [docs/archive/v1/v1.13/](docs/archive/v1/v1.13/) |
-| v1.14.0 | Installer catalog curation + install reliability: best-of-family model collapse with release-date pills, gated-model auth flow (token discovery + guided license step), live reachability, and installing-page polish (uniform dependency bars, footer Cancel) | Landed | [docs/archive/v1/v1.14/](docs/archive/v1/v1.14/) |
-| v1.15.0 | Post-reinstall fixes + chat-style studios: window controls / open maximized, installer relaunch starts at Welcome, catalog invariant guard + gated-token UX + post-install retry, real `models.*` registry reconciled with Ollama and the installer's weights tree, Image Studio and Video Lab rebuilt as chat, and a crash-proof "Nexus Code" VS Code extension | Landed | [docs/archive/v1/v1.15/](docs/archive/v1/v1.15/) |
-| v1.16.0 | Local serving gateway + document OCR: opt-in loopback OpenAI/Anthropic API in front of installed models, per-model tokens/sec and TTFT on Traces, RapidOCR (CPU) + Unlimited-OCR (NVIDIA) in the catalog, a governed `parse_document` tool, MLX-via-adapters how-to, and a searchable Models page with Chat/Coding quick switcher | Landed | [docs/archive/v1/v1.16/](docs/archive/v1/v1.16/) |
-| v1.17.0 | Agent-state motion identity: internal orbs, surface-liveness beam, and hero-action metal ring (no new npm packages), one primary motion per surface, recede-when-active ambient glow, halt-not-slow reduced-motion | Landed | [docs/archive/v1/v1.17/](docs/archive/v1/v1.17/) |
-| v1.18.0 | Agent harness and governance: skill-native mappings, llama.cpp loopback recipe, live harness selector, catalog/registry governance, ask inbox + scheduler, ACP surface, OS process sandbox | Landed | [docs/archive/v1/v1.18/](docs/archive/v1/v1.18/) |
-| v1.19.0 | Low-VRAM Agentic catalog: LFM2.5-2.6B CPU / sub-4 GB tool-calling pick, LFM Open License v1.0 use-restriction label, harness profile, 8B-A1B bake-off declined | Landed | [docs/archive/v1/v1.19/](docs/archive/v1/v1.19/) |
-| v1.19.1 | Agent-loop and guardrail hardening: Hub skill-native wins, hard denials, LoopGuards, security-posture dial, provenance screening, DNS-pinned fetches | Landed | [docs/archive/v1/v1.19/](docs/archive/v1/v1.19/) |
-| v1.19.2 | Catalog and model expansion: modalities + audioConditioning, official-only weight variants, Hermes 3 family, Inkling-Small patient-tier GGUF, calibrated patient-tier copy | Landed | [docs/archive/v1/v1.19/](docs/archive/v1/v1.19/) |
-| v1.20.0 | Document ingest: wire `parse_document`, magic-byte Office routing, Chat and Coding attach, Docling layout engine deferred | Landed | [docs/archive/v1/v1.20/](docs/archive/v1/v1.20/) |
-| v2.0.0 | Convergence: multimodal Chat + local voice loop, DANGEROUS isolated-profile browser tools, Video Lab continuation + gated avatar, ProjectScope stretch | Landed | [docs/archive/v2/v2.0/](docs/archive/v2/v2.0/) |
-| v2.1.0 | Open local-AI wave: Muse Glimmer + Nemotron Lightning catalog/harness, adaptive routing, Image Studio depth, multimodal chat + SAM2, local fine-tuning, hardening | Landed | [docs/archive/v2/v2.1/](docs/archive/v2/v2.1/) |
-| v2.2.5 | First successful generation: alias-fold chat ids, fail-closed diffusion bytes, Settings Models installer parity, chat explorer chrome, Hub latest (not 3.12.0) | Landed | [docs/archive/v2/v2.2/](docs/archive/v2/v2.2/) |
-| v2.2.6 | Session memory: named Image/Video history, last-output follow-up, Agents resume hydrate, Chatbot remount proof | Landed | [docs/archive/v2/v2.2/](docs/archive/v2/v2.2/) |
-| v2.2.7 | Context meter and transcript chrome: catalog `<val>k` chips, composer Context pill plus picker, date/time/token bubbles | Landed | [docs/archive/v2/v2.2/](docs/archive/v2/v2.2/) |
-| v2.2.8 | Working local studio: minutes-class chat/generate RPCs, shared FolderTree, installer Models sort, Hub latest with quarantine | Landed | [docs/archive/v2/v2.2/](docs/archive/v2/v2.2/) |
-| v2.2.9 | Field chrome and catalog identity: finished Chatbot/studio chrome, typed diffusion readiness errors, installer/Settings model parity, truthful Hub sync | Landed at automated-test tier; packaged field QA remains DF-36 | [docs/archive/v2/v2.2/](docs/archive/v2/v2.2/) |
-| v2.3.0 | Optional local video enhancement, Qwen3.8 stays out, Hub security-audit handoff | Landed at automated/internal-compatible evidence; real Video2X/GPU/packaged measurement remains DF-3 | [docs/archive/v2/v2.3/](docs/archive/v2/v2.3/) |
-| v2.3.1 | Windows installer field repair: honest RAM, crash containment, card chrome, VS Code 1.135, Unsloth on Configuration | Landed at automated evidence; packaged wizard screenshots remain human QA; host_detect coverage remains MT-1 | [docs/archive/v2/v2.3/](docs/archive/v2/v2.3/) |
-| v2.4.1 | Field reliability, transcript reasoning, chat archives, unified models, and multi-root Agents workspaces | Tagged. Packaged Windows and live-GPU operator checks remain open in the archived gap log | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
-| v2.4.11 | Local splat viewer, optional CUDA generate, and the untagged 2.4.2-2.4.10 field work | Tagged from develop. Live NVIDIA generate and weight hashes remain open | [docs/archive/v2/v2.4/](docs/archive/v2/v2.4/) |
-
-Each v1 cycle's plan lives under `docs/archive/v1/v1.<MINOR>/plans/`. v2 plans through v2.11 live under `docs/archive/v2/`. v2.12 and later stay under `docs/v2/`. Deferred work that is still open is in [the v2.15 known gaps](docs/archives/v2/v2.15/known-gaps.md) and the [follow-up batch list](docs/archives/v2/v2.15/development/v2.15.0-followup-batches.md); the v2.12 register is finalized.
-
-### v2.15.0
-
-The project's known gaps are now one countable list: every gap file from v1.17 to v2.12 reads cleanly in the release checker, the 47 items left open in v2.12 were resolved (3) or moved into the v2.15 known gaps with a next step (44), and the 199 older open items are listed once in four follow-up batches. No app, extension or installer behavior changes.
-
-Evidence: [last-phase evidence](docs/archives/v2/v2.15/development/v2.15.0-last-phase-evidence.md), [gap triage](docs/archives/v2/v2.15/development/v2.15.0-gap-triage.md), [follow-up batches](docs/archives/v2/v2.15/development/v2.15.0-followup-batches.md).
-
-### v2.14.2
-
-Desktop Chat speaks a reply from its first sentence while the model is still writing: median time to first audio on the medium test fell from 38.6 s to about 3.9 s, speaking over a reply stops it, and code, links, secrets and hidden reasoning are never read aloud. Voice now runs on install. LFM2.5 24B-A2B joins the catalog as an opt-in 16 GB worker, with pulled weights checked against their pinned digest. Planned as v2.14.0 and released after v2.14.1. The 2.0 s target is not yet met (v2.15 DF-1).
-
-Evidence: [last-phase evidence](docs/archives/v2/v2.14/development/v2.14.2-last-phase-evidence.md), [voice latency results](docs/archives/v2/v2.14/development/voice-latency-results.md), [LFM A/B](docs/archives/v2/v2.14/development/lfm-ab-results.json), [open gaps](docs/archives/v2/v2.15/known-gaps.md).
-
-### v2.14.1
-
-This release adds an internal-compatible development evaluator for a text-only editing adaptation on frozen synthetic English and Chinese drafts. The single pilot failed the response-format contract, so all sixteen held-out drafts remain not-run/HOLD. Factual preservation and readability improvement are unmeasured; Humanizer is not admitted or installed.
-
-Evidence: [baseline](docs/archives/v2/v2.14/development/v2.14.1-rewrite-baseline.md), [Humanizer feasibility](docs/archives/v2/v2.14/development/v2.14.1-humanizer-feasibility.md), [remaining quality goal DF-5](docs/archives/v2/v2.14/known-gaps.md). The separate v2.14.0 plan is not part of this release.
-
-### What's new in v2.12.0
-
-This release carries the v2.12 and v2.13 plans. Its installers and VSIX packages ship as **v2.12.1**: the `v2.12.0` tag exists but its release build failed before publishing (WN-5).
-
-- **Durable Image Studio edits** - Edits to a generated image are saved as a versioned recipe with undo and redo, survive a restart, and never change the original bytes. Generated images are now kept under `~/.nexus/generations/images/` so their turns can be reopened. Preview and export render through one pixel path.
-- **Approved agent edits** - `nexus image-edit` and `/nexus/image-edit/*` let an agent describe, apply, render and export edits to one image only after you approve its request in the Ask inbox. The grant is bound to that agent's caller id, run and image, and lasts one hour. Exports go only to `~/.nexus/generations/exports`.
-- **Document output and tool history** - Document parsing is budgeted from current prompt usage, native tool calls keep their history, and both agent loops compact tool results. The experimental outline tools and their Settings controls were retired under the frozen evaluation fallback; generic OCR and `parse_document` remain available.
-- **EmbeddingGemma 2 is not admitted** - A bounded local evaluator exists, but Ollama 0.32.15 rejects the candidate, so the current embedder is retained (DF-1, DF-2). Kolibri-1 is declined and recorded in the declined-models index.
-
-Plans: [v2.13.0](docs/archives/v2/v2.13/plans/v2.13.0-adoption-craft-editors-embeddinggemma-2.md), [v2.12 gaps](docs/archives/v2/v2.12/known-gaps.md). Open items: [v2.14 carried gaps](docs/archives/v2/v2.14/known-gaps.md).
-
-### What's new in v2.10.0
-
-Hosted Jev, Laya 0.3.20, and the Kev family (0.8B, 4B, 9B, and 27B) are not admitted. The record is one known-gap row, DF-v210-1. None of them is a catalog id, a runtime, an API client, or a download. The Nimble refusal stays in the v2.8.0 plan.
-
-Plan: [System One exclusion](docs/archive/v2/v2.10/plans/v2.10.0-adoption-system-one-models.md).
-
-### What's new in v2.9.0
-
-CrisperWhisper 2.0 is not admitted. The acceptance bar has no v2.8.0 exclusion sentences, so the record is one known-gap row, DF-v290-1. It is not a catalog id, a runtime fork, or a download. Word timestamps stay a Faster-Whisper gap.
-
-Plan: [CrisperWhisper exclusion](docs/archive/v2/v2.9/plans/v2.9.0-adoption-crisperwhisper.md).
-
-### What's new in v2.8.0
-
-The community Qwen-Image-2.1 GGUF and Bespoke Nimble are not admitted. The acceptance bar has no v2.7.0 exclusion subsection, so the record is one known-gap row, DF-v280-1. Neither name is a catalog id, a runtime, or a download. DF-11 stays open.
-
-Plan: [Qwen-Image and Nimble exclusion](docs/archive/v2/v2.8/plans/v2.8.0-adoption-qwen-image-nimble.md).
-
-### What's new in v2.7.0
-
-Video Lab offers a talking-head only when the official LongCat Avatar 1.5 weights are installed. A diffusion-pro machine without those weights can still attach a photo and audio, and is told to install `longcat-video-avatar-1.5` instead of starting an image-to-video job. The Empero Qwen3.8-35B-A3B distill is recorded as not admitted. A confirmed submit still does not sample a clip while DF-8 is open.
-
-Plan: [avatar install gate](docs/archive/v2/v2.7/plans/v2.7.0-adoption-avatar-install-gate.md).
-
-### What's new in v2.4.11
-
-Image Studio can open a local `.splat` or `.ply` beside a finished image, with the honesty sentence that unseen sides are invented. Optional generate is a queued child job that fails closed without NVIDIA CUDA. TripoSplat is not pre-ticked and is not downloaded by the installer.
-
-- **Local viewer** - WebGL2 orbit, zoom, and pan, with a still frame when WebGL2 is missing. Remote URLs are rejected.
-- **Source image stays** - A splat download is a different file from the PNG.
-- **Optional generate** - Set `NEXUS_SPLAT_NVIDIA=1` and `NEXUS_SPLAT_CUDA=1` only on a machine that actually has them, and place the MIT weights yourself. The fake benchmark is `node scripts/bench-gaussian-splat.mjs`.
-
-Support details: [splat benchmark](docs/archive/v2/v2.4/benchmarks/gaussian-splat-baseline.md). Open items: [carried gaps](docs/archives/v2/v2.12/known-gaps.md).
-
-### What's new in v2.4.1
-
-The complete v2.4.1 implementation is locally code-complete. Automated and internal-compatible evidence covers every requested behavior; packaged Windows visuals and live NVIDIA generation remain explicit operator work rather than silent passes.
-
-- **Installer hierarchy and recovery** - A larger overall bar shows a monotonic percentage and reduced-motion-safe gradient animation. Optional Unsloth and diffusion inputs are frozen with the installer, and failures stay inside the wizard with repair-aware state.
-- **Image runtime readiness** - The selected diffusion environment is staged atomically and reports ready only when required weights and CUDA-capable torch are verified.
-- **Transcript clarity** - Generating motion is not a bubble. Completed answers use a subtly distinct assistant bubble, time and total tokens sit on opposite sides, detailed token counts are hover/focus accessible, and separate reasoning is collapsed above the answer.
-- **Archive and delete** - All four pillars confirm destructive or reversible removal, reset an active view, ignore late events, and expose archived chats in Settings by pillar for restore.
-- **Model library** - Installer and Settings share order and display policy. Cards use restrained downloaded color, always-visible summaries, size pills, VRAM beside compatibility, honest external entries, and a live disk-use meter.
-- **Multi-root Agents** - Agents defaults to the OS home directory, supports a primary folder plus additions, snapshots roots per session, enforces every selected root, and groups history by durable workspace. The top tabs are Chat, Memory, and Activity.
-
-Support details: [release notes](docs/archive/v2/v2.4/release-notes.md). Open field evidence: [known gaps](docs/archive/v2/v2.4/known-gaps.md). Operator steps: [v2.4.1 checklist](docs/archive/v2/v2.4/development/v2.4.1-operator-checklist.md).
-
-### What's new in v2.3.1
-
-The Windows wizard stays alive through model downloads, reports real system RAM, paints catalog and progress on card surfaces, and treats VS Code as an optional tickable extension install (replace if present) with Unsloth Core on Configuration. Nomic stays the required embedder. EmbeddingGemma 300M stays opt-in.
-
-- **Honest RAM** - Patient-tier cards read host RAM, not install-path free disk. Inkling-Small can be Compatible on a normal RAM host.
-- **Crash containment** - An install-thread exception fails in-window with a log path instead of closing the process.
-- **Card chrome** - Catalog headers and installing lists inherit card fill instead of black window-color bars.
-- **VS Code 1.134 or 1.135** - The checkbox is always visible. It is enabled on those minors (same Electron 42.8.1). 1.136+ stays visible and disabled. Replace uses `--force` only when the extension is already installed.
-- **Embedder** - Nomic remains required. EmbeddingGemma copy says 300M, not 300B.
-
-Activation: Optional VS Code extension: tick the wizard checkbox when Microsoft stable `code` 1.134 or 1.135 is on PATH. Unsloth Core: enable Configuration > Unsloth Core (off by default; NVIDIA 16 GB+ VRAM). EmbeddingGemma 300M: select it on Models; it is not required.
-Validation: VS Code: `code --version` is 1.134.x or 1.135.0 and the checkbox is enabled; after install, `code --list-extensions` includes `nexus-coding.nexus-coding`. Unsloth: the toggle is on Configuration, not the VS Code page. Embedder: Nomic stays Required; EmbeddingGemma copy says 300M.
-Rollback: Untick the VS Code checkbox or uninstall the extension. Turn Unsloth off on Configuration. Leave EmbeddingGemma unselected; Nomic remains the required embedder. None of these uninstall VS Code, CUDA, or existing models.
-Authority: The VS Code checkbox does not install VS Code, does not enable 1.136+, and does not change the desktop app. Unsloth does not grant network training or Hub writes. Selecting EmbeddingGemma does not reindex existing memory.
-Docs: [docs/install.md](docs/install.md), [vscode-host-policy.md](docs/archive/v2/v2.3/development/vscode-host-policy.md), [embedder-default-decision.md](docs/archive/v2/v2.3/development/embedder-default-decision.md).
-
-The packaged desktop application remains Windows-only; raw Tauri bundles stay withheld (DF-38).
-
-Known gaps: [docs/archive/v2/v2.3/known-gaps.md](docs/archive/v2/v2.3/known-gaps.md). Plan: [docs/archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md](docs/archive/v2/v2.3/plans/v2.3.1-installer-field-repair.md).
-
-### What's new in v2.3.0
-
-Video Lab can enhance a completed local clip without replacing the original. Qwen3.8-Flash-Next stays out of catalogs. OpenWorker is a Nexus-Hub handoff only. Automated and internal-compatible evidence is supported; real Video2X 6.4.0, GPU/VRAM, packaged detection, and perceptual review are not proven here (DF-3). Hydrated sessions do not restore Enhance (DF-1). Hub security-audit is still unreleased upstream (DF-2).
-
-- **Enhance** - A completed identity-backed clip can upscale, interpolate, or both as a cancellable `video_enhancement` child job. The original download stays; the enhanced file is separate and provenance-linked.
-- **Honest backend** - The first adapter may call a user-installed Video2X 6.4.0 executable. Nexus does not download, bundle, or search PATH for it. Missing configuration and unsupported hosts fail closed with shared copy.
-- **Settings and installer** - Settings > Video stores an absolute `video.video2xPath`. `NEXUS_VIDEO2X_PATH` wins over the setting. The installer shows a note, not an install toggle.
-- **Evidence** - Fake-backend fixtures prove geometry and source preservation. Peak CPU/GPU/VRAM and packaged field detection remain not proven here.
-- **Admission** - Qwen3.8 is absent from `core/registry/catalog.json`. OpenWorker is specified in the Hub handoff document; this release does not edit the sibling repository.
-
-Activation: Install Video2X 6.4.0 yourself, then set `NEXUS_VIDEO2X_PATH` or Settings > Video > Video2X executable to the absolute executable path.
-Validation: In Video Lab, Recheck capability; Enhance is enabled only when capability is ready. Contract check: `node scripts/bench-video-enhancement.mjs --backend fake`.
-Rollback: Clear Settings > Video > Video2X executable and unset `NEXUS_VIDEO2X_PATH`. That does not uninstall Video2X. Original clips remain.
-Authority: Configuring a path does not install or download Video2X, does not search PATH, does not replace originals, does not grant network or Hub writes, and does not add Qwen3.8.
-Docs: [video-enhancement-baseline.md](docs/archive/v2/v2.3/benchmarks/video-enhancement-baseline.md).
-
-The optional VS Code extension still requires VS Code 1.134.0 exactly. The packaged desktop application remains Windows-only; raw Tauri bundles stay withheld (DF-38).
-
-Known gaps: [docs/archive/v2/v2.3/known-gaps.md](docs/archive/v2/v2.3/known-gaps.md). Plan: [docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md](docs/archive/v2/v2.3/plans/v2.3.0-adoption-qwen-video2x-openworker.md).
-
-### What's new in v2.2.9
-
-Finished Chatbot and studio field chrome, made local generation failures truthful, aligned installer and Settings model identity, and clarified Hub sync and quarantine. Automated and internal compatibility evidence is supported; packaged Windows field QA and live GPU generation are not proven here and remain DF-36 and DF-4.
-
-- **Chat finish** - The composer drops leftover Mic/Persona chrome, gives Context the wide control, and keeps the model picker short. Message clocks and full-word token counts sit above bubbles, the active rail row stays selected, and the first generated title persists.
-- **Composing state** - Thinking, Searching, Working, and Solving captions rotate beside the internal orb and halt under reduced motion.
-- **Studio history and context** - Image and Video history use Chatbot copy and selection behavior, and their Context pills fill against visual-token budgets.
-- **Honest generate** - CUDA, weights, and GPU readiness failures remain distinct through the UI. Stub images are pytest-only.
-- **Catalog identity** - Embeddings is first in the installer and Settings, both share name-row pills including Inkling-Small, and Settings moves downloaded models first.
-- **Hub sync** - Leading `v` tags compare correctly, Sync now reports staged progress, and Quarantined explains scanner findings while the scanner stays on.
-
-This release changes no opt-in capability or installer flag. The optional VS Code extension requires VS Code 1.134.0 exactly because its bundled `better-sqlite3` 12.11.1 native module targets that host's Electron 42.8.1 runtime; other VS Code versions are not supported by this release artifact.
-
-Known gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md). Plan: [docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md](docs/archive/v2/v2.2/plans/v2.2.9-field-chrome-catalog-and-generate.md).
-
-### What's new in v2.2.8
-
-Minutes-class local inference, one history chrome on all four tabs, installer-identical Models sort, and Hub latest apply with the scanner on. Packaged Chatbot `Hi`, live GPU generate, and packaged Hub Active=latest remain unproven (DF-32, DF-4, DF-35). Packaged Explorer launch is observed (DF-2 closed).
-
-- **Inference that finishes** - `chat.send` / generate RPCs use a minutes-class timeout. `ping` stays 15s. A slow local turn shows Composing or a typed Ollama/runtime error, not `(chat unavailable) sidecar response timeout`. Ollama tag `gemma4:12b` lists as Downloaded for catalog `gemma-4-12b-it-gguf`.
-- **Shared history** - Chatbot, Agents, Images, and Videos use FolderTree at 280px, collapsing to a 56px icon rail. Confirm-delete is rounded and quiet. Agents folders are a local overlay (DF-33).
-- **Chrome** - The module rail has a small top inset. Chat/Agents pending orbs are 48px and centered. Image/Video pending stays hero. The `thinking-orbs` package is not a dependency.
-- **Models identity** - Settings Models and the installer Models tab share collapse/sort (family collapse, hideBelowVram, over-budget last). Compact cards, highlighted Downloaded, picker order from that list.
-- **Hub latest** - High-severity skills quarantine; clean skills apply; Active moves to the fetched tag. `PromptInjectionScanner` stays on. Pack-time snapshots still refuse a stale 3.12.0 catalog.
-
-Known gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md). Plan: [docs/archive/v2/v2.2/plans/v2.2.8-working-local-studio.md](docs/archive/v2/v2.2/plans/v2.2.8-working-local-studio.md).
-
-### What's new in v2.2.7
-
-Catalog context on both Models tabs, a shared composer Context meter with an 80% new-session suggestion, and messenger-style date, time, and token chrome on all four transcripts. Packaged Explorer soak, live GPU generate, and live Ollama usage remain unproven (DF-2, DF-4, DF-28 through DF-31).
-
-- **Context chips** - Settings Models and the installer Models tab show catalog `contextWindow` as `128k` (or `32k / 8k` when split). Null windows omit the chip. Neither surface invents 128k or appends `in`.
-- **Composer meter** - Chatbot, Agents, Images, and Videos place a pill Context bar under the typing area with the model picker to its right. Image/video rows use `visualTokenBudget` when there is no LLM window, and hide the bar if neither exists. At 80% the UI suggests a new session and must not wipe the current transcript.
-- **Header cleanup** - Chatbot no longer shows a lone `/` breadcrumb or a unicode gear. Persona stays as a labeled footer control.
-- **Transcript chrome** - One date heading per local day, a discrete clock on each bubble, user `N in`, assistant think+out (or an em dash when unknown). Missing timestamps skip the clock rather than showing Unix epoch.
-
-Known gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md). Plan: [docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md](docs/archive/v2/v2.2/plans/v2.2.7-context-meter-and-transcript-chrome.md).
-
-### What's new in v2.2.6
-
-Named sessions and last-output memory for the studio pillars, plus Agents transcript restore. Packaged quit/reopen persist, live GPU generate, and packaged Explorer soak remain unproven (DF-25, DF-4, DF-2).
-
-- **Image and Video history** - Images and Videos reuse the Chatbot folder tree against `studio.session.*` and `~/.nexus/generations/sessions.db`. Turns store paths, never PNG/MP4 blobs. Chatbot stays on `chat.explorer.*`.
-- **Last-output follow-up** - An empty-attachment Image follow-up img2imgs the last PNG. An in-session Video follow-up sets existing `continueFrom`. After remount, Video cannot restore `continueFrom` (no `priorJobId` on the session row). Missing files show typed error text, not a blank complete.
-- **Agents resume** - Opening a previous session hydrates user and assistant token text. Sessions list can rename and delete. Tool-call cards are not restored.
-- **Chatbot remount** - Append-then-remount shows both bubbles and attachment `src`. A failed append keeps the bubble visible and says it was not saved.
-
-Known gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md). Plan: [docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md](docs/archive/v2/v2.2/plans/v2.2.6-session-memory-and-studio-history.md).
-
-### What's new in v2.2.5
-
-Field follow-on after v2.2.4 honesty: generation and catalog parity on a machine that already installed models. Live GPU generate and packaged Explorer soak remain unproven (DF-4, DF-2).
-
-- **One model-id space** - catalog id, Ollama tag, and coding LLM id fold through `core/registry/modelAliases.ts`. Chat send of `gemma-4-12b-it-gguf` starts `gemma4:12b`. Unknown ids do not fall back to `gemma4:e4b`.
-- **Diffusion fail-closed** - empty, 1x1, and `ok: false` payloads never look like a successful generate. SANA catalog ids call the registered Python methods. No GPU or weights returns a typed not-ready error.
-- **Settings Models installer parity** - the list scrolls. Over-budget cards show Needs N GB VRAM, never Compatible. Cards show origin, release date, and Censored/Uncensored. Qwen 3.5 4B is Downloaded only when the tag is present; snapshot-selected missing tags show Retry.
-- **Chat explorer chrome** - rename and delete icons on chat rows, reclick-to-rename, chats-pane collapse pill (24px expand target). Right-click stays.
-- **Hub latest** - pack-time snapshot refuses a frozen 3.12.0 catalog when GitHub latest differs. Tests inject `NEXUS_HUB_LATEST_TAG`. Scanner allowlist reviewed against Hub v3.19.2; `PromptInjectionScanner` stays on.
-
-Known gaps: [docs/archive/v2/v2.2/known-gaps.md](docs/archive/v2/v2.2/known-gaps.md). Plan: [docs/archive/v2/v2.2/plans/v2.2.5-first-successful-generation.md](docs/archive/v2/v2.2/plans/v2.2.5-first-successful-generation.md).
-
-### What's new in v2.1.0
-
-Open local-AI wave. Local-only. No new outbound destination. Vendor scores do not become default routes.
-
-- **Muse Glimmer 30B** - Apache-2.0 Meta GGUF via Ollama `hf.co` (`muse-glimmer:30b` at 24 GB, Dynamic at 32 GB). Hidden below 16 GB VRAM and on Ollama older than 0.32.7. Harness profile `muse-glimmer` (detailed, thinking on, llama3-json).
-- **Nemotron 3.5 Lightning 30B-A3B** - OpenMDW-1.1 worker (`nemotron-lightning:30b-a3b` native 24 GB, expert-offload at 16 GB). Pulls the Ollama library tag `nemotron-3.5-lightning:30b`. Hidden below 16 GB and on Ollama older than 0.32.9. Harness profile `lightning-worker` (concise, thinking off, qwen-json). Tagged `role: worker-candidate` for cheap-first routing.
-- **Catalog flags** - `diffusion` (default false) and `codingEligible` (default true). `localEval` blocks are `not_run` this cycle; `recommended.json` is unchanged.
-- **Adaptive routing** - cheap-first workers on Lightning, escalate to Muse on tool-error / identical-action / progress-free signals, GPU swap deferral when VRAM or diffusion would OOM, routing lane on the Traces tab.
-- **Studio provenance and queue** - PNG `iTXt` plus `tEXt` alias and a content-hash index; Use Prompt / Use Seed / Use All / Remix; SQLite queue at `~/.nexus/generations/studio.db` with seed/prompt batches, restart recovery, and coding-over-diffusion pump.
-- **Multimodal chat** - catalog `vision` plus a per-model visual-token budget. Gemma 4 12B accepts one image (or ffmpeg-sampled video frames). Chat indexes redacted multimodal surrogates and STT transcripts. Muse Glimmer is gated `vision: false` until its hf.co GGUF is proven to ship a projector.
-- **Replace-the-X** - SAM2 Hiera Tiny (`sam2:hiera-tiny`, Apache-2.0 utility, hidden from the generator picker). "replace the car with a truck" segments then inpaints. Missing weights leave the original and ask you to install or paint a mask.
-- **Fine-tuning** - Settings > Fine-tuning. Opt-in Unsloth Core (`unsloth` Apache-2.0 + `unsloth-zoo` LGPL). Dataset builder redacts secrets and can extract PDFs through the OCR spine. QLoRA jobs queue on the GPU scheduler. Studio/CLI extras are never installed. Live GPU train is local-only (`NEXUS_TUNING_LIVE=1`).
-- **Audit log** - append-only SQLite at `~/.nexus/audit/audit.db`, Ed25519 per actor, Settings > Security viewer. Local-only. Tampered rows stay visible and untrusted. A notice appears when the OS keychain is unavailable.
-- **JSON CLI** - `nexus session|models|generate` over `/nexus/*` on the sidecar loopback listener, same bearer token. The listener binds for JSON CLI even when Local API `/v1` is off. Schema errors exit 2 before any HTTP call. See [docs/archive/v2/v2.1/development/json-cli.md](docs/archive/v2/v2.1/development/json-cli.md).
-- **Diffusion VRAM knobs** - Image Studio and Video Lab Advanced: cache VRAM/RAM caps, working reserve, layer streaming. Caps below the model minimum are rejected unless streaming is on.
-- **DiffusionGemma** - watch item only (needs llama.cpp PR #24423 in a shipped Ollama release and sub-16 GB quants).
-
-v2.0.0 already shipped the convergence cut. Known gaps: [docs/archive/v2/v2.1/known-gaps.md](docs/archive/v2/v2.1/known-gaps.md).
-
-### What's new in v2.0.0
-
-Convergence of the v1.18-v2.0 plan family. Local-only. No new outbound destination. Image, audio, and browser page bytes stay on the machine.
-
-- **Chat vision and STT** - image attach follows catalog `modalities` including `image`. Audio files and the mic transcribe on-device via catalog `faster-whisper-large-v3`. Transcripts are labelled and secret-scrubbed.
-- **Voice loop** - off by default (Local Chatbot **Voice loop** checkbox). Push-to-talk and button VAD. Spoken replies use catalog `kokoro-82m`. See CHANGELOG for activation, validation, rollback, and authority.
-- **Coding browser tools** - `browser_navigate` / `browser_click` / `browser_type` / `browser_aria_snapshot` / `browser_close` at DANGEROUS over an isolated `~/.nexus/browser-profiles/` tree. Playwright is a local install, not a lockfile pin. Snapshots are provenance-labelled and injection-scanned.
-- **Video Lab** - requested length longer than the tier clip chains segments. Talking-head (`audio2video`) is `diffusion-pro` only, official `longcat-video-avatar-1.5` INT8, explicit local-generation confirm. DiT inference is not vendored yet (DF-8).
-- **Stretch** - `ProjectScope` (tightening-only), durable untrusted sandbox root, lesson/procedure memory kinds. Code-as-action, command router, and VRM pane transferred (DF-10-12).
-
-v1.20.0 already shipped document ingest. Known gaps: [docs/archive/v2/v2.0/known-gaps.md](docs/archive/v2/v2.0/known-gaps.md).
-
-### What's new in v1.20.0
-
-Local document ingest on the existing OCR spine. No Docling. No new outbound destination. Parsed text is shown to you; it does not auto-enter a model prompt.
-
-- **`parse_document` is live** - the existing agent tool is registered on sidecar, ACP, scheduler, and VS Code hosts when `nexus.coding.parseDocument.enabled` is on (sidecar: `NEXUS_PARSE_DOCUMENT=1` or the same key in `~/.nexus/settings.json`). Flag off keeps the tool absent. CONFIRM, redaction, and the inbound classifier still wrap it.
-- **Office files parse natively** - `.docx` / `.pptx` / `.xlsx` use python-docx, python-pptx, and openpyxl. Magic bytes win over filename. Encrypted zip and OLE fail closed. Unsupported types return `unsupported-media` instead of being treated as one image.
-- **Chat and Coding attach** - both composers accept PDF, images, and those Office types (`DOCUMENT_ACCEPT`). First attachment only (DF-4). Image Studio stays `image/*`.
-- **Docling stays off the attach path** - Phase 4 bake-off is DEFER. RapidOCR library smoke ran on synthetic fixtures; catalog RapidOCR install and Unlimited-OCR remain DF-5. `runtimes/ocr/requirements.txt` still has no `docling` and no torch.
-
-v1.19.2 already shipped catalog expansion. Known gaps stay in-progress.
-
-### What's new in v1.19.2
-
-Catalog and model plumbing for the v2.0.0 consumers. Local-only. No new outbound surfaces. sha256 pinning is unchanged. Unofficial community quants are rejected.
-
-- **Modalities** - every catalog row declares input `modalities` (`text` / `image` / `audio`). Chat attachment gating in v2.0.0 reads this field. Video rows also declare `audioConditioning` (disabled until avatar models land).
-- **Weight variants** - a catalog entry can list official fp16 / int8 / fp8 / GGUF lines, each with its own file list and sha256. The installer puller selects one (VRAM default or `NEXUS_WEIGHTS_VARIANT`). Community re-quants fail closed.
-- **Hermes 3** - `hermes3:8b` and `hermes3:70b` in the Agentic catalog (Ollama library, Llama 3.1 Community License). Harness profile `hermes-agentic` uses llama3-json. The live coding loop still parses Gemma XML (v1.19.2 DF-3). `hermes3:70b` is not a recommended default.
-- **Inkling-Small** - opt-in patient-tier GGUF (74.8 GB, Apache-2.0). Visible only when the patient tier is on. Shipped `modalities: ["text"]` because GGUF multimodal is unverified. Never a `recommended.json` default.
-- **Patient-tier honesty** - warning floor is ~0.03 tok/s (~32 s/token laptop). RAM-budget presets (`laptop` / `workstation` / `max`) are copy only. Nexus does not bundle the offload runtime.
-
-v1.19.1 already shipped loop hardening. Known gaps stay in-progress.
-
-### What's new in v1.19.1
-
-Agent-loop and guardrail hardening. Local-only. No new outbound surfaces. The coding agent cannot run away on a long auto-mode job, and Unattended is not a no-floor mode.
-
-- **Skill-native wins** - Hub `deep-research-compilation` verifies quotes against fetched text. `prompt-engineering` / `creative-generation` carry persona-card, avatar-prep, and transcript-reasoning guidance. Mapping note: [skill-native-adoptions-v1.19.1.md](docs/reference/skill-native-adoptions-v1.19.1.md).
-- **Hard denials** - recursive deletes, git history rewrites, and DROP/TRUNCATE SQL are blocked in every posture before confirmation.
-- **LoopGuards** - identical-call veto, no-action budget, error-burst, bounded queue, 60-iteration ceiling. Shared with the existing LoopDetector.
-- **Security posture** - Strict / Standard / Unattended (`nexus.coding.securityPosture`, default Standard). Unattended skips CONFIRM prompts only. DANGEROUS tools still confirm. Hard-denied commands never run.
-- **Provenance and recovery** - tool results carry an origin label; web / MCP origins are always screened. Spill files are secret-scrubbed. Already-applied edits report success-noop. Empty grep returns near-miss probes.
-- **DNS pin** - SSRF fetches connect to the first validated public address, not a re-resolved name.
-- **watch_path / hash_file** - read-only workspace tools. Tool prompt docs are generated from the live registry.
-
-v1.19.0 already shipped LFM2.5-2.6B as the low-VRAM Agentic pick. Known gaps stay in-progress.
-
----
-
-## Design Principles
-
-1. **Local-first.** Inference, embeddings, image and video synthesis, and memory storage all live on the host machine. No outbound calls without explicit user opt-in.
-2. **Originality over wrappers.** When an external service or heavy framework can be reverse-engineered into a lean local module, we do that. The codebase follows this rule explicitly (see [AGENTS.md](AGENTS.md) "MCP Registry Policy" and the comparison matrices at [docs/archive/v1/v1.1/comparison-agentmemory.md](docs/archive/v1/v1.1/comparison-agentmemory.md) and [docs/archive/v1/v1.1/comparison-sana.md](docs/archive/v1/v1.1/comparison-sana.md)). The only external project we deliberately link to is [bendourthe/Nexus-Hub](https://github.com/bendourthe/Nexus-Hub), the author's own skill / hook / command catalog and the upstream feed for Nexus's skill harness.
-3. **Single-GPU ceiling.** Every pillar must run on a laptop with a single consumer GPU (e.g. RTX 3070 - 4090 class). Hardware tiers are auto-detected at install and context budgets, batch sizes, and pipeline depths adapt accordingly.
-4. **Installer carries the burden where supported.** The Windows one-file installer provisions the runtime, models, optional exact-host VSIX, and desktop app. v2.3.1 withholds raw Tauri desktop bundles because they do not embed the pinned Node 22.11.0 runtime and runtime manifest required by the sidecar; DF-1 tracks self-contained Node bundling. DF-24 separately tracks the missing Unix selected-model snapshot write. Video2X is not an installer payload.
-5. **Privacy by construction.** Memory writes pass through the [`redactSecrets`](core/observability/redactSecrets.ts) pre-index filter (AWS keys, classic + fine-grained GitHub PATs, Slack tokens, JWTs, PEM blocks, env-style assignments). Telemetry, traces, and logs are local-only by default and redact secret patterns before any opt-in export.
-6. **Qualified OS support (updated in v2.3.1).** The packaged desktop application target is Windows x64. The optional exact-host VSIX targets Windows x64, macOS Apple Silicon, and Linux x86_64; Intel macOS is not a v2.3.1 artifact target.
-
----
-
-## Quick Start (developer workflow)
-
-End users: grab the Windows one-file installer from the [releases page](https://github.com/bendourthe/Nexus-AI/releases) and follow the [installation guide](docs/install.md) (including the unsigned-binary warning). macOS and Linux receive only the optional platform VSIX in v2.3.1. The extension requires Microsoft stable VS Code 1.134 through 1.137 (Electron 42); the Windows desktop application is not subject to this VS Code pin. Developers work against the source tree:
-
-```bash
-# Prereqs: Node 20+, Rust + Cargo (for Tauri core), Ollama for inference.
-git clone https://github.com/bendourthe/Nexus-AI.git
-cd Nexus-AI
-npm ci                       # install root + desktop workspace dependencies
-npm run build                # compile shared core + Coding module
-npm run test                 # full vitest suite (4,800+ tests)
-
-# Working on the desktop shell:
-npm run dev:shell            # opens the Tauri window in dev mode (Vite HMR + sidecar)
-npm run build:shell          # produces a platform-native bundle
-npm run build:sidecar        # bundles the Node sidecar via esbuild
-npm run lint:shell           # eslint --max-warnings=0 on desktop/
-npm run test:shell           # vitest run for the desktop workspace
-npm run test:shell:coverage  # 80% lines / 80% functions gate
+A persistent **Local Model Status** panel shows the active model, its parameter size, live GPU use, and free VRAM, so heavy passes do not fail silently with out-of-memory errors. The same data feeds the GPU scheduler, which puts coding token generation ahead of background diffusion work when both need the GPU.
+
+## How It Works
+
+```mermaid
+flowchart LR
+  UI["Desktop shell<br/>Tauri 2 + React 19"] --> Rust["Rust core<br/>sidecar lifecycle"]
+  Rust -- "JSON-RPC 2.0 over stdio" --> Sidecar["Node sidecar"]
+  VSC["VS Code extension<br/>(optional)"] -. "proxies to the daemon" .-> Sidecar
+  Sidecar --> Core["Shared core<br/>memory, registry, skills,<br/>code graph, scheduler"]
+  Core --> Ollama["Ollama<br/>chat and coding models"]
+  Core --> Py["Local Python runtimes<br/>diffusion and OCR"]
+  Hub["Nexus Hub catalog"] -. "nexus skills sync" .-> Core
+  Clients["Other local tools<br/>and SDK clients"] -. "opt-in loopback API" .-> Sidecar
 ```
 
-The cross-platform CI gate is `.github/workflows/shell-build.yml` (windows-latest / macos-latest / ubuntu-latest).
-
-### CLI tools (already shipped)
-
-```bash
-# Sync the Nexus-Hub skill catalog (single-home ~/.nexus-ai/catalog/ since v1.10.0):
-nexus skills sync [--tag <tag>] [--apply]
-nexus skills list [--namespace <ns>]
-nexus skills install <namespace>/<name> --from <url>   # v1.1.0 Phase 8.3
-nexus skills remove <namespace>/<name>                 # v1.1.0 Phase 8.3
-nexus skills audit [--deep-logs] [--by-root]           # v1.3.0 five-section token-budget report
-nexus skills optimize                                  # v1.12.0 surface of the v1.7 self-optimizer (held-out gate + approval)
-nexus skills frontier                                  # v1.12.0 Pareto candidate frontier
-
-# Skill / agent evaluation:
-nexus golden run                                       # v1.7.0 golden-task live runner over the headless agent
-
-# Memory introspection + maintenance:
-nexus memory audit [--since <ISO>] [--tier <t>] [--scope <id>] [--session <id>]
-nexus memory export --out <file>                       # JSONL, base64 vectors
-nexus memory import --in <file>
-nexus memory decay --now                               # manual Ebbinghaus sweep
-
-# Deterministic source-code checks (lint + hook + skill validation):
-nexus check ...
-
-# Read-only stale-state inventory (legacy state, caches, dup skills, symlinks, memory):
-nexus doctor [--migration-report] [--json]             # v1.4.0 Phase 5; never mutates disk
-```
-
----
+The desktop shell never talks to a model directly: the Node sidecar owns inference, memory, and tools, and the shared `core/` packages are reused by both the sidecar and the VS Code extension. Module boundaries are enforced in CI by [dependency-cruiser](configs/dependency-cruiser.cjs). Full detail is in [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Featured Capabilities
 
-| Capability | Surface |
-|---|---|
-| **Plan mode** | `/plan` slash command produces a Markdown plan; the agent then walks each step. |
-| **Auto mode** | End-to-end tool-using sessions with verification gates and git checkpoints. |
-| **Four-layer memory** | Working / episodic / semantic / graph layers with per-tier Ebbinghaus half-lives (24h / 7d / 30d / 365d) and a scope-aware retriever. |
-| **Hybrid retrieval** | BM25 + dense + graph via Reciprocal Rank Fusion (`k=60`); local `all-MiniLM-L6-v2` embedder bundled. |
-| **Session replay** | Timeline scrubber + compare-two-sessions diff view in the Trace dashboard. |
-| **Skill harness** | Nexus-Hub catalog synced via `nexus skills sync` into a single-home `~/.nexus-ai/catalog/`; hot-reload via fs.watch on the ACTIVE pointer; weekly auto-sync worker; allowlist + prompt-injection scanner on every install. |
-| **Skill self-optimization** | Local golden-task-graded, held-out-validated, human-approved bounded edits to skills (`nexus skills optimize` / `frontier`, plus a desktop approval panel); opt-in and default-off. |
-| **Per-model harness selection** | Auto-tunes the agent scaffold profile per local model with a golden A/B; opt-in (`nexus.coding.harnessSelector.enabled`). |
-| **MLX via local adapters** | Apple Silicon: register an mlx-vlm / LM Studio MLX / nativ loopback server as `nexus.llm.localAdapters` ([how-to](docs/archive/v1/v1.16/guides/mlx-via-local-adapters.md)). No bundled MLX runtime. |
-| **llama.cpp via local adapters** | User-started `llama-server` on loopback as `nexus.llm.localAdapters` ([recipe](docs/reference/llamacpp-loopback-adapter.md)). No bundled runtime. Does not open the patient-tier gate. |
-| **Local API server** | Opt-in loopback OpenAI/Anthropic gateway (`nexus.serving.enabled`, default off) so other tools on this machine reuse installed models. ACP (`nexus.acp.enabled`) mounts `POST /acp` on the same listener and token. Unattended ACP confirms park in the ask inbox. |
-| **Ask inbox + scheduler** | Persistent local approval queue for headless/scheduled runs (`~/.nexus/ask-inbox.json`). Desktop `/inbox` panel, pending badge. Local cron-style scheduler; morning brief off by default; no auto-approve. |
-| **Document parsing** | Optional RapidOCR (CPU, every OS) and Unlimited-OCR (NVIDIA) for PDF/image; native DOCX/PPTX/XLSX without those models. Chat attachments parse locally. Docling is not required. |
-| **Motion identity** | Internal orbs / beam / metal on the desktop shell (v1.17.0). One winner per surface. Honors OS reduced-motion (halt, not slow). |
-| **Slash commands** | `/recall`, `/remember`, `/forget`, `/curate`, `/trace`, `/memory`, `/plan`, plus the full skill-backed catalog with `preferUpstream` ordering. |
-| **GPU scheduler** | Prioritizes Coding token generation over background diffusion work when both compete for the same GPU; tier-aware (`diffusion-low` / `mid` / `high`). |
-| **MCP support** | Stdio MCP servers integrate via the per-project registry; reverse-engineering-first policy bans search / embeddings / scraping / generation as a service. Per-tool deny (v1.18.0 Phase 3) only tightens that default. |
-| **Trace dashboard** | Tool spans, hook filter, session list side-rail, replay scrubber, side-by-side compare. |
-| **Operation log** | Opt-in append-only Markdown line per tool call; secret-path denylist redacts paths before write. |
+Agent loop
 
----
+| Capability | What it does |
+| --- | --- |
+| **Plan mode** | The `/plan` slash command writes a Markdown plan, then the agent works through each step. |
+| **Auto mode** | End-to-end tool-using sessions with verification gates and Git checkpoints. |
+| **Slash commands** | `/recall`, `/remember`, `/forget`, `/curate`, `/trace`, `/memory`, `/plan`, plus the skill-backed catalog with `preferUpstream` ordering. |
+| **MCP support** | Stdio MCP servers join through the per-project registry. Search, embeddings, scraping, and generation as a service are banned, and per-tool deny rules only tighten that default. |
+| **Per-model harness selection** | Tunes the agent scaffold for each local model with a golden A/B test. Opt-in (`nexus.coding.harnessSelector.enabled`). |
+| **Ask inbox + scheduler** | A persistent local approval queue for headless and scheduled runs (`~/.nexus/ask-inbox.json`), with a desktop `/inbox` panel and pending badge. No auto-approve. |
+
+Memory and skills
+
+| Capability | What it does |
+| --- | --- |
+| **Four-layer memory** | Working, episodic, semantic, and graph layers with per-tier forgetting curves (24 h, 7 d, 30 d, 365 d) and a scope-aware retriever. |
+| **Hybrid retrieval** | BM25, dense, and graph results merged by Reciprocal Rank Fusion (`k=60`), with a bundled local embedder. |
+| **Skill harness** | The Nexus Hub catalog syncs into `~/.nexus-ai/catalog/` with `nexus skills sync`, hot-reloads on change, auto-syncs weekly, and passes an allowlist and prompt-injection scanner on every install. |
+| **Skill self-optimization** | Local, human-approved edits to skills, graded on golden tasks and validated on held-out tasks (`nexus skills optimize` and `frontier`). Opt-in and off by default. |
+| **Document parsing** | Optional RapidOCR (CPU) and Unlimited-OCR (NVIDIA) for PDFs and images; native DOCX, PPTX, and XLSX parsing without those models. |
+
+Runtime and operations
+
+| Capability | What it does |
+| --- | --- |
+| **GPU scheduler** | Puts coding token generation ahead of background diffusion work on a shared GPU; tier-aware (`diffusion-low`, `mid`, `high`). |
+| **Local API server** | Opt-in loopback OpenAI- and Anthropic-compatible gateway (`nexus.serving.enabled`, off by default). ACP (`nexus.acp.enabled`) mounts `POST /acp` on the same listener and token. |
+| **MLX via local adapters** | Register an mlx-vlm, LM Studio MLX, or nativ server on loopback as `nexus.llm.localAdapters` ([how-to](docs/archive/v1/v1.16/guides/mlx-via-local-adapters.md)). No bundled MLX runtime. |
+| **llama.cpp via local adapters** | Register a user-started `llama-server` on loopback as `nexus.llm.localAdapters` ([recipe](docs/reference/llamacpp-loopback-adapter.md)). No bundled runtime. |
+| **Session replay** | A timeline scrubber and a side-by-side compare view for two sessions in the trace dashboard. |
+| **Trace dashboard** | Tool spans, hook filter, session list, replay scrubber, and side-by-side compare. |
+| **Operation log** | An opt-in, append-only Markdown line per tool call; secret paths are redacted before writing. |
+| **Motion identity** | Internal orbs, beam, and metal ring on the desktop shell, one primary motion per surface, and full respect for the OS reduced-motion setting. |
+
+## Nexus AI and Nexus Hub
+
+<p align="center">
+  <a href="https://github.com/bendourthe/Nexus-AI"><img src="assets/nexus-ai-banner.png" alt="Nexus AI" width="400" /></a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/bendourthe/Nexus-Hub"><img src="assets/nexus-hub-banner.png" alt="Nexus Hub" width="400" /></a>
+</p>
+
+The two projects are two halves of one idea, split along a deliberate line: Nexus AI is the runtime, and Nexus Hub is the catalog.
+
+| | <img src="assets/nexus-ai-primary.png" alt="" width="40" align="center" /> Nexus AI (this repository) | <img src="assets/nexus-hub-primary.png" alt="" width="40" align="center" /> Nexus Hub |
+| --- | --- | --- |
+| Role | Desktop AI studio: four pillars, local memory, retrieval, GPU scheduling, and the Windows installer | Harness for AI coding tools: skills, commands, rules, hooks, agents, and guardrails |
+| Where it runs | Local open-source models on your machine | Inside Claude Code, Codex, GitHub Copilot, Cursor, Antigravity, and other agents |
+| How they connect | Pulls the Hub catalog with `nexus skills sync` and scans every skill before it loads | Publishes the releases that Nexus AI syncs |
+| Works alone | Yes, with or without the catalog | Yes, without Nexus AI |
+
+Together they give every agent surface a developer uses (terminal, IDE, and desktop app) one curated skill set. See the [Nexus Hub repository](https://github.com/bendourthe/Nexus-Hub) for its install command and live catalog counts.
+
+## Design Principles
+
+1. **Local-first:** inference, embeddings, image and video synthesis, and memory all run on the host machine. Nothing goes out without your explicit opt-in.
+2. **Original over wrappers:** when an external service or heavy framework can be rebuilt as a lean local module, it is. The only external project linked by design is [Nexus Hub](https://github.com/bendourthe/Nexus-Hub).
+3. **One-GPU ceiling:** every pillar must run on a laptop with one consumer GPU (RTX 3070 to 4090 class). The installer detects the hardware tier and sizes context budgets, batch sizes, and pipeline depth to fit.
+4. **The installer does the heavy lifting:** the Windows installer provisions runtimes, models, the desktop app, and the optional extension in one pass.
+5. **Private by construction:** memory writes pass the [`redactSecrets`](core/observability/redactSecrets.ts) filter before indexing, and telemetry, traces, and logs stay local by default.
+6. **Honest evidence:** a behavior not proven locally is written as "not proven here", and every capability claim states its support tier.
+
+## Developer Quick Start
+
+Prerequisites: Node 20+, Rust and Cargo (for the Tauri core), and Ollama for inference. On a fresh clone, run the bootstrap first: `pwsh scripts/init.ps1` on Windows or `bash scripts/init.sh` on macOS and Linux.
+
+```bash
+git clone https://github.com/bendourthe/Nexus-AI.git
+cd Nexus-AI
+npm ci                       # install root and desktop workspace dependencies
+npm run build                # compile the shared core and Coding module
+npm run test                 # run the vitest suite
+
+npm run dev:shell            # open the Tauri window in dev mode (Vite HMR + sidecar)
+npm run build:shell          # build a platform-native bundle
+npm run lint:shell           # eslint with zero warnings on desktop/
+npm run test:shell:coverage  # desktop tests with the 80% coverage gate
+```
+
+**Command line**
+
+| Command | Purpose |
+| --- | --- |
+| `nexus skills sync [--tag <tag>] [--apply]` | Sync the Nexus Hub catalog into `~/.nexus-ai/catalog/` |
+| `nexus skills list` / `install` / `remove` | Browse and manage installed skills |
+| `nexus skills audit [--deep-logs] [--by-root]` | Read-only token-budget report on the skill catalog |
+| `nexus skills optimize` / `frontier` | Run the local skill optimizer and view its candidate frontier |
+| `nexus golden run` | Run golden tasks live against the headless agent |
+| `nexus memory audit` / `export` / `import` / `decay --now` | Inspect, back up, restore, and age local memory |
+| `nexus doctor [--migration-report] [--json]` | Read-only inventory of stale state; never changes disk |
+| `nexus check ...` | Deterministic source checks (lint, hooks, skill validation) |
+
+Every command group has a reference page under [docs/reference/cli/](docs/reference/cli/README.md).
 
 ## Repository Layout
 
 ```
-src/         VS Code extension host surface: activation, webview panels, tool handlers, storage, and the desktop-daemon adapter
-core/        Shared-core packages imported by both src/ and desktop/sidecar/ (memory, skills, lifecycle, observability, storage, registry, telemetry, codegraph, scheduler, security, image, video)
-modules/     Per-pillar engine code (coding, chat); the agentic-coding engine moved here from src/ in the v1.4.0 cycle
-tests/       Unit, integration, e2e, and benchmark suites
-desktop/     Tauri 2.x desktop shell + Node sidecar (v1.0.0 Phase 1+)
+core/        Shared packages used by the sidecar and the extension (memory, skills, registry, codegraph, storage, telemetry)
+modules/     Per-pillar engine code; the agentic coding engine lives in modules/coding/
+src/         VS Code extension host: activation, webview panels, tool handlers, storage, daemon adapter
+desktop/     Tauri 2 desktop shell
   src/         Vite + React 19 + TypeScript frontend (four-pillar UI)
   src-tauri/   Rust core (sidecar lifecycle, ipc_call command)
-  sidecar/     Node sidecar (esbuild-bundled, JSON-RPC 2.0 over stdio)
-docs/        Per-version architecture docs and history (docs/archive/v1/v1.<MINOR>/; the v0 line archived under docs/archive/versions/v0/)
-configs/     Linter, build, dependency-cruiser, and vitest configs
-scripts/     Build, package, installer, and utility scripts
-assets/      Icons, images, fonts, banners
-.claude/     Agent-agnostic subagent prompts and slash-command definitions (committed)
+  sidecar/     Node sidecar (esbuild bundle, JSON-RPC 2.0 over stdio)
+scripts/     Build, packaging, installer (PyQt wizard in scripts/installer/), and utility scripts
+tests/       Unit, integration, e2e, and benchmark suites
+docs/        Releases, archives, guides, reference, runbooks, and decisions
+assets/      Logos, banners, icons, and favicons
 bin/         CLI entry points (nexus, nexus-check, nexus-image, nexus-video)
+configs/     Linter, build, dependency-cruiser, and vitest configs
 ```
 
-The provisioning-installer source tree lives at [scripts/installer/](scripts/installer/) and contains a PyQt-based branded wizard. For v2.3.1, the complete one-file installer is the only packaged desktop application target; raw Tauri bundles remain internal build outputs until they embed an exact runtime. Video2X is never bundled. The Windows one-shot path landed across the v1.8.0 -> v1.11.0 cycles: dependency provisioning, an embedded desktop bundle, per-VRAM model curation, a clean-machine test harness, and full background continuation.
+## Safety and Privacy
 
----
+Inference, embeddings, memory, and image and video synthesis all run on the host machine. The MCP registry policy rejects search, embeddings, scraping, and generation offered as a service.
 
-## Safety and Use in Regulated Industries
+| Use case | Fit |
+| --- | --- |
+| Open-source, hobby, or internal commercial software | Green, no restrictions |
+| Regulated industries (healthcare, finance, government, life sciences) | Green with caveats: Nexus is local-only, but review your chosen model weights and any MCP servers you add |
+| Defense, classified, or air-gapped | Feasible once the installer payload is staged offline; do your own assessment |
 
-Nexus is built on a **local-first** principle: inference, embeddings, memory storage, and image / video synthesis all run on the host machine, and no outbound calls happen without explicit user opt-in. The MCP Registry Policy in [AGENTS.md](AGENTS.md) categorically rejects search-as-service, embeddings-as-service, scraping-as-service, and generation-as-service. The full threat-model breakdown and reporting policy is in [SECURITY.md](SECURITY.md).
+**Off by default:** telemetry, analytics, phone-home, third-party data processors, model downloads at runtime, and API keys.
 
-Short version:
+**Outside Nexus's control:** your model weights, any MCP server you add, outbound commands you start (`gh`, `git push`, `curl`), and your own hooks and rules. Code the agent runs through `run_terminal` executes with your user privileges behind tool-layer guardrails. An optional OS process sandbox (`nexus.coding.execSandbox`, off by default) adds Seatbelt, Landlock with seccomp, or a Windows job object; when it is off, the UI and logs say **unconfined**.
 
-- **Open-source / hobby / internal commercial software**: green. No restrictions.
-- **Regulated industries (healthcare, finance, government, life sciences, automotive, industrial)**: green WITH caveats. Nexus itself is local-only; the caveat is your chosen model and any MCP servers you add. Use a regulated-cloud option (AWS Bedrock, GCP Vertex AI, Azure OpenAI) only if your data-protection obligations require it, otherwise run fully local against Ollama.
-- **Defense / classified / air-gapped**: feasible (the whole stack runs offline once the installer payload is staged) but do your own assessment.
-
-What Nexus does NOT do by default: telemetry, analytics, phone-home, third-party data processors, model downloads at runtime, API-key requirements. Memory writes are scrubbed by [`redactSecrets`](core/observability/redactSecrets.ts) before SQLite insert. The `lifecycle.tool.failed` HookBus event redacts the error string at the bus boundary so leaked secrets in tool errors never reach trace consumers.
-
-What is OUT of Nexus's control: your chosen LLM weights, any MCP server you wire in, user-initiated outbound calls (`gh`, `git push`, `curl`), and your own user-authored hooks and rules. Code the agent runs via `run_terminal` executes at your user privilege with tool-layer guardrails (command blocklist, touched-path / secret-path denylists, confirmation gate, env scrubbing). An optional OS process sandbox (`nexus.coding.execSandbox`, off by default) adds Seatbelt / Landlock+seccomp / Windows job-object confinement on top; when the setting is off or the host cannot apply a backend, the UI and logs state **unconfined**. Windows does not kernel-enforce filesystem or network (partial). See [SECURITY.md](SECURITY.md) for the full caveats.
-
-To report a security issue: email [benjamin.dourthe@gmail.com](mailto:benjamin.dourthe@gmail.com) or open a private security advisory at [github.com/bendourthe/Nexus-AI/security](https://github.com/bendourthe/Nexus-AI/security).
-
----
+Read [SECURITY.md](SECURITY.md) for the full threat model. To report a vulnerability, email [benjamin.dourthe@gmail.com](mailto:benjamin.dourthe@gmail.com) or open a [private security advisory](https://github.com/bendourthe/Nexus-AI/security).
 
 ## Roadmap
 
-Nexus evolves in versioned slices. Each item below traces to a concrete plan or known-gaps entry under `docs/archive/v1/v1.<MINOR>/` (the durable source) and resolves once its work lands and the next `[X.Y.Z]` block is cut into [CHANGELOG.md](CHANGELOG.md). No star gates, no sponsor tiers, no paid features.
+Each item traces to a known-gaps entry and closes when its work merges and the next release is cut in [CHANGELOG.md](CHANGELOG.md). No star gates, no sponsor tiers, no paid features.
 
 | Focus | Status | Source |
-|-------|--------|--------|
-| OS-level process sandbox for agent code execution (Seatbelt / Landlock / seccomp / job object). Off by default; loud unconfined when off or the backend is missing. Windows is partial (job + token; filesystem and network not kernel-enforced) | Landed (v1.18.0 Phase 6; Windows remainder in DF-11) | [docs/archive/v1/v1.18/known-gaps.md](docs/archive/v1/v1.18/known-gaps.md) (`EM.P5.A`, `DF-11`) |
-| Live extreme-low-bit (BitNet-class) + disk-offload "patient" catalog entries, once runtime support + independent benchmarks are confirmed | Gated | [docs/archive/v1/v1.12/known-gaps.md](docs/archive/v1/v1.12/known-gaps.md) (`EM.P3`, `EM.P4.A`) |
-| Weak-model harness-selector enablement, pending a live A/B net-win on a low-cost model | Gated | [docs/archive/v1/v1.12/known-gaps.md](docs/archive/v1/v1.12/known-gaps.md) (`EM.P1`) |
-| Skill-optimizer live A/B validation (ship the default-on rollout once a net win is measured) | Gated | [docs/archive/v1/v1.7/known-gaps.md](docs/archive/v1/v1.7/known-gaps.md) (`SO003.P3.A`) |
-| Clean-machine installer rehearsals + on-device 3-OS visual QA (Actions freeze lifted 2026-08-01; remaining work is operator hardware) | Tracked | [docs/archive/v1/v1.11/known-gaps.md](docs/archive/v1/v1.11/known-gaps.md) (`IO.P2.A`) |
+| --- | --- | --- |
+| OS process sandbox for agent code; Windows filesystem and network enforcement remain partial | Landed in v1.18.0; Windows remainder tracked | [v1.18 gaps](docs/archive/v1/v1.18/known-gaps.md) (`EM.P5.A`, `DF-11`) |
+| Extreme-low-bit (BitNet-class) and disk-offload "patient" models, once runtimes and independent benchmarks confirm them | Gated | [v1.12 gaps](docs/archive/v1/v1.12/known-gaps.md) (`EM.P3`, `EM.P4.A`) |
+| Harness selector on by default for weak models, after a measured A/B win | Gated | [v1.12 gaps](docs/archive/v1/v1.12/known-gaps.md) (`EM.P1`) |
+| Skill optimizer on by default, after a measured A/B win | Gated | [v1.7 gaps](docs/archive/v1/v1.7/known-gaps.md) (`SO003.P3.A`) |
+| Clean-machine installer rehearsals and on-device visual QA on three operating systems | Tracked | [v1.11 gaps](docs/archive/v1/v1.11/known-gaps.md) (`IO.P2.A`) |
 
-For narrative-style updates on what changed and why, see [docs/DEVLOG.md](docs/DEVLOG.md). For the formal Keep-a-Changelog log of every release, see [CHANGELOG.md](CHANGELOG.md). For the per-version unfinished-work tracker that the next plan reads to decide what carries forward, see `docs/archive/v1/v1.<MINOR>/known-gaps.md`.
+Current open work is in the [v2.17 known gaps](docs/releases/v2/v2.17/known-gaps.md) and the [progress tracker](docs/todos.md).
 
----
+## Documentation
+
+- [Installation guide](docs/install.md) and [interactive guide](guides/interactive-guide/nexus-ai-guide.html)
+- [Architecture](ARCHITECTURE.md) and [agent directive](AGENTS.md)
+- [Release history](docs/reference/release-history.md), [changelog](CHANGELOG.md), and [development log](docs/DEVLOG.md)
+- [Model acceptance bar](docs/reference/model-acceptance.md) and [declined models](docs/reference/declined-models.md)
+- [Feature inventory contract](docs/reference/feature-inventory.md)
+- [Security policy](SECURITY.md)
+- [Contributing](CONTRIBUTING.md) and [first-time contributors](CONTRIBUTING-BEGINNERS.md)
 
 ## Collaboration
 
-Nexus is a curated open-source project. While pull requests are typically not accepted from outside contributors, suggestions, feedback, and recommendations are more than welcomed. If you have a better prompt, a smarter rule, or a pattern you would like to see in the catalog, please reach out directly:
+Nexus AI is a curated open-source project. Outside pull requests are usually not accepted, but suggestions, feedback, and use cases are welcome, especially when they fit the project's direction (local-first, rebuild-over-wrap, no third-party data leaks).
 
-- **Email**: [benjamin.dourthe@gmail.com](mailto:benjamin.dourthe@gmail.com)
-- **GitHub**: [@bendourthe](https://github.com/bendourthe)
-
-I am happy to discuss feature proposals, integration ideas, or specific use cases - especially when the proposal aligns with the policy direction of this project (local-first, reverse-engineering-first, no third-party data leaks).
-
-For internal contributors and AI collaborators, the development workflow lives in [CONTRIBUTING.md](CONTRIBUTING.md); the step-by-step walkthrough for first-time contributors is in [CONTRIBUTING-BEGINNERS.md](CONTRIBUTING-BEGINNERS.md); the agent-agnostic engineering directive is in [AGENTS.md](AGENTS.md).
-
----
+- **Email:** [benjamin.dourthe@gmail.com](mailto:benjamin.dourthe@gmail.com)
+- **GitHub:** [@bendourthe](https://github.com/bendourthe)
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+[MIT](LICENSE). Maintained by [Benjamin Dourthe](https://www.benjamindourthe.com/).
