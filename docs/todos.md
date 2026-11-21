@@ -4,7 +4,7 @@
 
 | Goal | Verified current state | Required outcome |
 |---|---|---|
-| v2.16 release | v2.16.1 published 2026-11-02; v2.16.2 integrated (PR154, PR164) with QG-1 passed in a clean Windows Sandbox and BG-1 (static VC++ runtime) fixed; v2.16.2 release preparation in progress; model HOLD retained | Publish v2.16.2 with verified artifacts, then close and archive v2.16 |
+| v2.16 release | v2.16.1 published 2026-11-02; v2.16.2 integrated (PR154, PR164) with QG-1 passed in a clean Windows Sandbox and BG-1 (static VC++ runtime) fixed; v2.16.2 published 2026-11-21 and its installer verified in a clean Windows Sandbox; v2.16 closed and archived; model HOLD retained | Carry v2.17 BG-11 (Rust 1.100 and tauri-build 2.6.3) into v2.17 |
 | v2.17 release | 384 OPEN records preserved in the requirements matrix; implementation and evidence reconciliation pending | Complete the actual requirements and publish verified artifacts |
 | Final review | Not started | Full codebase, local-agent, UI and behavioral review after both releases |
 
@@ -20,7 +20,7 @@
 - [x] Merge PR148 after 63 successful checks and verify all 28 post-merge checks on fede2197.
 - [x] Integrate reviewed v2.16.1 versions and notes through develop/main, then verify published artifacts (Nexus v2.16.1 released 2026-11-02).
 - [x] Prove the exact frozen Windows installer performs desktop/runtime installation and real backend health on a clean hosted runner (installer-build run 44918087312; v2.16.2 also proved in a clean Windows Sandbox).
-- [ ] Publish the verified v2.16 release.
+- [x] Publish the verified v2.16 release (v2.16.2 published 2026-11-21; published installer passed a clean Windows Sandbox run).
 - [ ] Reconcile every v2.17 obligation against current code and required acceptance evidence.
 - [ ] Review the link audit during v2.17 BG-2 living-document reconciliation (25 existing broken tracker links; zero newly broken links).
 - [ ] Implement and qualify the remaining v2.17 functionality.

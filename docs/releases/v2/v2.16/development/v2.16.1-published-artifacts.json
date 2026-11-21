@@ -1,0 +1,46 @@
+{
+  "schema": "nexus-published-artifacts/v1",
+  "version": "2.16.1",
+  "recordedAt": "2026-11-21",
+  "recordedNote": "Recorded after publication from the published release and its retained workflow artifacts; the release itself was published 2026-11-02.",
+  "tag": {
+    "name": "v2.16.1",
+    "type": "annotated",
+    "commit": "d3505880814cafd7dca9491d843ca29c7776f43b",
+    "onMain": true
+  },
+  "release": {
+    "url": "https://github.com/bendourthe/Gemma-Code/releases/tag/v2.16.1",
+    "publishedAt": "2026-11-02T21:31:14Z",
+    "draft": false,
+    "workflowRun": "41525978062",
+    "workflowConclusion": "success",
+    "jobs": ["Validate release metadata", "Verify release source", "Windows desktop payload (installer input)", "Build VSIX (macos)", "Build VSIX (windows)", "Build VSIX (linux)", "Build Windows installer", "Create GitHub Release"]
+  },
+  "assets": [
+    {"name": "NexusSetup.exe", "bytes": 310958412, "sha256": "8bf9e839408af2de6ef11810865e85b07801e3deefc5f1c829e6b138dbaee4c8", "checksum": "OK"},
+    {"name": "nexus-coding-2.16.1-darwin-arm64.vsix", "bytes": 212437942, "manifestVersion": "2.16.1", "checksum": "OK"},
+    {"name": "nexus-coding-2.16.1-linux-x64.vsix", "bytes": 443632197, "manifestVersion": "2.16.1", "checksum": "OK"},
+    {"name": "nexus-coding-2.16.1-win32-x64.vsix", "bytes": 216563920, "manifestVersion": "2.16.1", "checksum": "OK"},
+    {"name": "SHA256SUMS.txt", "bytes": 387, "sha256": "5149e571927eb0439eddab3cb8497aabb53c2e52106afe52861ab359703e020d"}
+  ],
+  "checksumCommand": "sha256sum -c SHA256SUMS.txt on the downloaded assets: all four OK",
+  "frozenInstallAcceptance": {
+    "artifact": "installer-windows-acceptance (run 41525978062)",
+    "environment": "clean hosted Windows runner",
+    "status": "pass",
+    "installerSha256": "8bf9e839408af2de6ef11810865e85b07801e3deefc5f1c829e6b138dbaee4c8",
+    "installerMatchesPublishedAsset": true,
+    "installedExeSha256": "2a76f1bf4351b5c532c72b4f85ab2a9b24cc7574ad6dba05a909862bd8def89e",
+    "payloadVersion": "2.16.1",
+    "stepsDone": ["desktop", "runtime"],
+    "sidecar": "ok",
+    "catalogRows": 41,
+    "nodeVersion": "v22.11.0",
+    "nodePathMatchesProvisionedRuntime": true
+  },
+  "unproved": [
+    "Clean Windows without the VC++ Redistributable: not proven by the hosted runner, which ships the runtime. The installed app later proved unable to start there (v2.16.2 BG-1, resolved by 241da375 and proven in the v2.16.2 published-installer Sandbox run).",
+    "macOS and Linux VSIX install and activation were not exercised; only manifest version and checksum were verified."
+  ]
+}
