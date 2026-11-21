@@ -1,3 +1,41 @@
+## [2.16.2](https://github.com/bendourthe/Nexus-AI/compare/v2.16.1...v2.16.2) (2026-11-21)
+
+### Added
+
+* Bundled `creative-brief` skill for the desktop agent and the VS Code extension: it creates or reopens a local Markdown brief in the workspace and drafts baseline-plus-delta image requests that keep confirmed facts and reference files unchanged. No hosted service is called.
+* Packaged image-edit check (`desktop/tests/packaged/image-edit-flow.mjs`) for maintainers: it edits a fixture image in the real Windows viewer, restarts the app and proves the edit persisted, the rendered pixels match and the source image and the real profile stayed unchanged.
+
+### Fixed
+
+* The Windows desktop app links the Visual C++ runtime statically again, so the installed app starts on a PC without the VC++ Redistributable. Since v2.12.0 it exited with `0xC0000135` on such a PC because a Tauri CLI upgrade stopped static linking. The hosted installer smoke now fails if the installed app imports a `vcruntime*.dll`.
+* Clear moderate `hono` and `@hono/node-server` audit advisories.
+* Build the packaged page checks from literal selectors.
+
+### Qualification
+
+* Frozen-installer proof in a disposable Windows Sandbox: the release installer installs, its health check passes, and the packaged image-edit check passes with both defect controls failing as required. Model defaults are unchanged.
+* Record the tiny-voca, Qwen-Image merge and Bolt E4B decisions; no model is admitted.
+
+### Internal
+
+* Document the November open-model wave comparison and the v2.17.0 plan, refresh the brand mark and README demos, fix the diff-cover merge base, target Dependabot at `develop`, and stop tracking generated Codex agent mirrors.
+
+### Creative Brief Skill
+
+* Activation: in the desktop coding agent or the VS Code extension chat, type `/creative-brief briefs/<name>.md <what to make>`. The skill is bundled; no install is needed.
+* Validation: type `/` in the composer and confirm `creative-brief` is offered; after a run, confirm `briefs/<name>.md` exists in your workspace with status `incomplete` until you confirm every field.
+* Rollback: do not invoke the skill; delete any brief files it wrote. Nothing outside the workspace is written.
+* Authority: the skill uses the existing guarded file tools and confirmation prompts only. It does not generate images, call hosted brand or asset services, or install anything.
+* Docs: [Creative briefs guide](docs/guides/creative-briefs.md).
+
+### Packaged Image Edit Check
+
+* Activation: after building the desktop app, run `node desktop/tests/packaged/image-edit-flow.mjs --exe <nexus-shell.exe> --sha256 <its sha256> --out <new folder>` from the repository root in PowerShell.
+* Validation: the last line is `{"ok":true,"verdict":"PASS",...}` and the process exits 0; `--control lost-persistence` and `--control source-mutation` must exit 1.
+* Rollback: stop running it. It works in a throwaway profile that is deleted on a pass and kept on a failure for review.
+* Authority: it tests one Brightness edit, save, restart and render on Windows x64. It does not test the installer by itself, other platforms, or other edits, and it is not part of required CI.
+* Docs: [Packaged image-edit check](docs/reference/packaged-image-edit-check.md).
+
 ## [2.16.1](https://github.com/bendourthe/Nexus-AI/compare/v2.15.1...v2.16.1) (2026-11-02)
 
 ### Added
