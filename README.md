@@ -18,13 +18,13 @@ Every clip in this README is a screen recording of the real desktop app running 
 
 > Nexus AI was called **Gemma Code** from v0.1.0 to v0.22.x, when it was a single-purpose coding extension for VS Code. At v1.0.0 that engine became the Agentic AI Coding pillar of the desktop app. The extension is still available as an optional surface.
 
-## What's New in v2.16.1
+## What's New in v2.16.2
 
-- **CPU-only golden runs:** `nexus golden run` accepts a `num_gpu` option, and `0` qualifies a local model on the CPU alone. Model defaults do not change.
-- **Cleaner command line:** the headless CLI exits on its own once pending work finishes, and production dependencies moved to Zod 4 without breaking MCP HTTP transport.
-- **Safer releases:** a release is published only from a reviewed, annotated tag on `main`, and each Windows installer must pass a clean-machine install check before it ships.
+- **Creative briefs:** type `/creative-brief` in the desktop agent or the VS Code extension to keep the facts of a repeated image job in a local Markdown brief and reuse them in every later request. See the [creative briefs guide](docs/guides/creative-briefs.md).
+- **Starts on a fresh PC:** the Windows app no longer needs the Visual C++ Redistributable to start. Since v2.12.0 it failed to open on a PC without it.
+- **Proved on a clean machine:** the Windows installer was tested in a disposable Windows Sandbox, where an image edit survived an app restart with the expected pixels.
 
-[Release details](CHANGELOG.md#2161-2026-11-02) | [Earlier releases](docs/reference/release-history.md)
+[Release details](CHANGELOG.md#2162-2026-11-21) | [Earlier releases](docs/reference/release-history.md)
 
 ## Installation
 
