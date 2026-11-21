@@ -2,8 +2,8 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-11-10
-**Open items**: 1
+**Last updated**: 2026-11-20
+**Open items**: 3
 
 The [archived v2.16.0 ledger](../../../archives/v2/v2.16/known-gaps.md) retains its approved conditional closeout. This active file records the subsequent v2.16.1 release work. All 384 inherited obligations remain OPEN in the [v2.17 ledger](../v2.17/known-gaps.md), with their original bodies, provenance and individually preserved requirements. No inherited item is closed by this patch record. Required integration and publication work remains tracked by unchecked T009-T011 in the [release plan](plans/v2.16.1-release-completion.md).
 
@@ -61,12 +61,32 @@ The global inventory found eight ledgers requiring inspection, zero parse errors
 |---|---|---|
 | Not implemented (NI) | 0 | 0 |
 | Deferred (DF) | 0 | 0 |
-| Bugs / regressions (BG) | 0 | 0 |
-| Warnings (WN) | 0 | 0 |
+| Bugs / regressions (BG) | 1 | 0 |
+| Warnings (WN) | 1 | 0 |
 | Missing tests / coverage gaps (MT) | 0 | 0 |
 | Quality-gate gaps (QG) | 1 | 0 |
 
 ### Open Items
+
+#### Bugs / Regressions
+
+##### BG-1 - Installed desktop app cannot start on a PC without the VC++ Redistributable
+
+- **Source phase**: v2.16.2 Phase 4, T020 (QG-1 Windows Sandbox run, 2026-11-20).
+- **Plan reference**: [v2.16.2 plan](plans/v2.16.2-adoption-specialist-models-desktop-creative-tools.md), owner decision D2 and gate B7; evidence in [the QG-1 Sandbox evidence](development/v2.16.2-qg1-sandbox-evidence.md).
+- **Reason**: `nexus-shell.exe` imports `VCRUNTIME140.dll` and `VCRUNTIME140_1.dll`. A clean Windows (the Sandbox) has neither, so the installed app exits `0xC0000135` and never opens. Commit `f223770d` (2026-10-08) moved npm `@tauri-apps/cli` to 2.12, which no longer sets `STATIC_VCRUNTIME`; the locked Rust `tauri-build` 2.6.3 reads only that variable, so static linking stopped. Releases v2.12.0 through v2.16.1 include the change. The build host and hosted runners already have the redistributable, so no earlier check saw it.
+- **Owner**: v2.16.2 run (this change).
+- **Suggested next step**: `desktop/src-tauri/build.rs` now sets `STATIC_VCRUNTIME=true` for MSVC targets, and the hosted `-InstallDesktop` smoke fails if the installed app imports a `vcruntime*.dll`. Resolve after the CI-built installer passes the clean Sandbox run without any redistributable.
+
+#### Warnings
+
+##### WN-1 - Installer runs the desktop first-run health check before Node is provisioned
+
+- **Source phase**: v2.16.2 Phase 4, T020 (QG-1 Windows Sandbox run, 2026-11-20).
+- **Plan reference**: [v2.16.2 plan](plans/v2.16.2-adoption-specialist-models-desktop-creative-tools.md), gate B7.
+- **Reason**: On a fresh PC the installer logs `Desktop health check FAILED: fail: sidecar spawn failed: program not found (node)` and warns that the app may not work, then provisions Node 22.11.0 in the next step. The installed app is healthy afterwards (an independent `--healthcheck` passes), so the warning is false but alarming.
+- **Owner**: Installer (`scripts/installer`), next plan.
+- **Suggested next step**: Run the desktop health check after the runtime step, or pass the provisioned Node path to it.
 
 #### Quality-Gate Gaps
 
