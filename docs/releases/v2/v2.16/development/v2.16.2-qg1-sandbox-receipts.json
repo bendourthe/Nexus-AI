@@ -1,0 +1,681 @@
+{
+  "schema": "nexus.v2162-qg1-sandbox-receipts/v1",
+  "recorded": "2026-11-21",
+  "method": "Windows Sandbox LogonCommand guest script; installer from GitHub Actions installer-build.yml; repository, its shared .git and Git mapped read-only; only the output folder writable",
+  "runs": [
+    {
+      "label": "attempt 2: pre-fix installer acc4adff, clean Sandbox",
+      "verdict": "FAIL",
+      "error": null,
+      "stages": {
+        "install": 0,
+        "healthcheck": {
+          "exit": -1073741515,
+          "expected": 0,
+          "ok": false
+        },
+        "edit": {
+          "exit": 1,
+          "expected": 0,
+          "ok": false
+        },
+        "control-lost-persistence": {
+          "exit": 1,
+          "expected": 1,
+          "ok": true
+        },
+        "control-source-mutation": {
+          "exit": 1,
+          "expected": 1,
+          "ok": true
+        }
+      },
+      "guest": {
+        "computer": "FFAEA7F0-EF03-4",
+        "user": "WDAGUtilityAccount",
+        "profile": "C:\\Users\\WDAGUtilityAccount",
+        "localAppData": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local",
+        "os": "Microsoft Windows 11 Enterprise",
+        "build": "26100",
+        "started": "2026-11-20T22:29:04.0435494-08:00"
+      },
+      "installer": {
+        "path": "C:\\qg1\\installer\\NexusSetup.exe",
+        "sha256": "30c1d6e65ce88e791432efaf93d6814075a586d5d9b9023b1238ef6251fd6c0b"
+      },
+      "candidate": {
+        "head": "acc4adffcc4aa3e60499668fdfc5c9ae989a6b3f",
+        "dirty": []
+      },
+      "installed": {
+        "root": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Nexus AI Studio",
+        "exe": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Nexus AI Studio\\nexus-shell.exe",
+        "exeSha256": "cadf5c9a8209ec725a1a69f15e446dfc8b40793d29c0c3621e5da9afdc4351b7",
+        "node": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Nexus\\runtime\\node\\node.exe",
+        "nodeSha256": "7447c4ece014aa41fb2ff866c993c708e5a8213a00913cc2ac5049ea3ffc230d",
+        "nodeVersion": "v22.11.0",
+        "payload": {
+          "version": "2.16.1",
+          "sha256": "7e2c9111f1d63ff693d7bdce30439c6b71c814039516b3a90aa20c70dd9e6393",
+          "original_name": "Nexus AI Studio_2.16.1_x64-setup.exe",
+          "writtenAt": "2026-11-21T06:29:33Z"
+        }
+      },
+      "reports": {
+        "edit": {
+          "runId": "ae1cd68c-a4ef-48cc-b5f2-08367ba44c61",
+          "verdict": "FAIL",
+          "error": "stage-timeout: debug-port exceeded 60000 ms",
+          "judge": {
+            "ok": false,
+            "findings": [
+              "run error: stage-timeout: debug-port exceeded 60000 ms",
+              "phase launch: unobserved",
+              "phase open: unobserved",
+              "phase edit: unobserved",
+              "phase export: unobserved",
+              "phase stop: unobserved",
+              "phase relaunch: unobserved",
+              "phase readBack: unobserved",
+              "phase render: unobserved",
+              "phase sourcePreservation: unobserved",
+              "phase realProfile: unobserved",
+              "recipe: save not observed at the expected value",
+              "recipe: persisted value after restart differs",
+              "launches: two distinct owned launches were not observed",
+              "render: rendered pixels do not match the expected edit",
+              "source: original image bytes changed or unobserved"
+            ]
+          },
+          "candidate": {
+            "commit": "acc4adffcc4aa3e60499668fdfc5c9ae989a6b3f",
+            "sourceClean": true,
+            "sidecarMainSha256": "c8bc85d346fe688d73bc3eb48b296aba6970c153e3c1e33c9de73b85e59b4cd3",
+            "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+          },
+          "recipe": {
+            "expected": {
+              "brightness": 110
+            },
+            "observed": {}
+          },
+          "render": null,
+          "sourcePreservation": null,
+          "realProfileChanged": [],
+          "phases": {
+            "refusals": "pass",
+            "seed": "pass"
+          }
+        },
+        "control-lost-persistence": {
+          "runId": "c8ee1673-1fd2-4831-aecf-8f823bb2ec77",
+          "verdict": "FAIL",
+          "error": "stage-timeout: debug-port exceeded 60000 ms",
+          "judge": {
+            "ok": false,
+            "findings": [
+              "controlled defect run (lost-persistence) can never pass",
+              "run error: stage-timeout: debug-port exceeded 60000 ms",
+              "phase launch: unobserved",
+              "phase open: unobserved",
+              "phase edit: unobserved",
+              "phase export: unobserved",
+              "phase stop: unobserved",
+              "phase relaunch: unobserved",
+              "phase readBack: unobserved",
+              "phase render: unobserved",
+              "phase sourcePreservation: unobserved",
+              "phase realProfile: unobserved",
+              "recipe: save not observed at the expected value",
+              "recipe: persisted value after restart differs",
+              "launches: two distinct owned launches were not observed",
+              "render: rendered pixels do not match the expected edit",
+              "source: original image bytes changed or unobserved"
+            ]
+          },
+          "candidate": {
+            "commit": "acc4adffcc4aa3e60499668fdfc5c9ae989a6b3f",
+            "sourceClean": true,
+            "sidecarMainSha256": "c8bc85d346fe688d73bc3eb48b296aba6970c153e3c1e33c9de73b85e59b4cd3",
+            "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+          },
+          "recipe": {
+            "expected": {
+              "brightness": 110
+            },
+            "observed": {}
+          },
+          "render": null,
+          "sourcePreservation": null,
+          "realProfileChanged": [],
+          "phases": {
+            "refusals": "pass",
+            "seed": "pass"
+          }
+        },
+        "control-source-mutation": {
+          "runId": "d5dc25e8-f80d-40d5-978c-989d27c0c70e",
+          "verdict": "FAIL",
+          "error": "stage-timeout: debug-port exceeded 60000 ms",
+          "judge": {
+            "ok": false,
+            "findings": [
+              "controlled defect run (source-mutation) can never pass",
+              "run error: stage-timeout: debug-port exceeded 60000 ms",
+              "phase launch: unobserved",
+              "phase open: unobserved",
+              "phase edit: unobserved",
+              "phase export: unobserved",
+              "phase stop: unobserved",
+              "phase relaunch: unobserved",
+              "phase readBack: unobserved",
+              "phase render: unobserved",
+              "phase sourcePreservation: unobserved",
+              "phase realProfile: unobserved",
+              "recipe: save not observed at the expected value",
+              "recipe: persisted value after restart differs",
+              "launches: two distinct owned launches were not observed",
+              "render: rendered pixels do not match the expected edit",
+              "source: original image bytes changed or unobserved"
+            ]
+          },
+          "candidate": {
+            "commit": "acc4adffcc4aa3e60499668fdfc5c9ae989a6b3f",
+            "sourceClean": true,
+            "sidecarMainSha256": "c8bc85d346fe688d73bc3eb48b296aba6970c153e3c1e33c9de73b85e59b4cd3",
+            "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+          },
+          "recipe": {
+            "expected": {
+              "brightness": 110
+            },
+            "observed": {}
+          },
+          "render": null,
+          "sourcePreservation": null,
+          "realProfileChanged": [],
+          "phases": {
+            "refusals": "pass",
+            "seed": "pass"
+          }
+        }
+      },
+      "ci_run": 44874261359
+    },
+    {
+      "label": "attempt 3: pre-fix installer acc4adff, Microsoft VC++ redistributable installed first (diagnostic)",
+      "verdict": "PASS",
+      "error": null,
+      "stages": {
+        "install": 0,
+        "healthcheck": {
+          "exit": 0,
+          "expected": 0,
+          "ok": true
+        },
+        "edit": {
+          "exit": 0,
+          "expected": 0,
+          "ok": true
+        },
+        "control-lost-persistence": {
+          "exit": 1,
+          "expected": 1,
+          "ok": true
+        },
+        "control-source-mutation": {
+          "exit": 1,
+          "expected": 1,
+          "ok": true
+        }
+      },
+      "guest": {
+        "computer": "FFAEA7F0-EF03-4",
+        "user": "WDAGUtilityAccount",
+        "profile": "C:\\Users\\WDAGUtilityAccount",
+        "localAppData": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local",
+        "os": "Microsoft Windows 11 Enterprise",
+        "build": "26100",
+        "started": "2026-11-20T22:40:02.2920479-08:00"
+      },
+      "installer": {
+        "path": "C:\\qg1\\installer\\NexusSetup.exe",
+        "sha256": "30c1d6e65ce88e791432efaf93d6814075a586d5d9b9023b1238ef6251fd6c0b"
+      },
+      "candidate": {
+        "head": "acc4adffcc4aa3e60499668fdfc5c9ae989a6b3f",
+        "dirty": []
+      },
+      "installed": {
+        "root": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Nexus AI Studio",
+        "exe": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Nexus AI Studio\\nexus-shell.exe",
+        "exeSha256": "cadf5c9a8209ec725a1a69f15e446dfc8b40793d29c0c3621e5da9afdc4351b7",
+        "node": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Nexus\\runtime\\node\\node.exe",
+        "nodeSha256": "7447c4ece014aa41fb2ff866c993c708e5a8213a00913cc2ac5049ea3ffc230d",
+        "nodeVersion": "v22.11.0",
+        "payload": {
+          "version": "2.16.1",
+          "sha256": "7e2c9111f1d63ff693d7bdce30439c6b71c814039516b3a90aa20c70dd9e6393",
+          "original_name": "Nexus AI Studio_2.16.1_x64-setup.exe",
+          "writtenAt": "2026-11-21T06:40:32Z"
+        }
+      },
+      "reports": {
+        "edit": {
+          "runId": "095bfeb5-4fae-4d25-b129-7f51e233c95c",
+          "verdict": "PASS",
+          "error": null,
+          "judge": {
+            "ok": true,
+            "findings": []
+          },
+          "candidate": {
+            "commit": "acc4adffcc4aa3e60499668fdfc5c9ae989a6b3f",
+            "sourceClean": true,
+            "sidecarMainSha256": "c8bc85d346fe688d73bc3eb48b296aba6970c153e3c1e33c9de73b85e59b4cd3",
+            "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+          },
+          "recipe": {
+            "expected": {
+              "brightness": 110
+            },
+            "observed": {
+              "beforeEdit": {
+                "brightness": 100
+              },
+              "afterSave": {
+                "brightness": 110,
+                "status": "Edits saved"
+              },
+              "afterRestart": {
+                "brightness": 110
+              }
+            }
+          },
+          "render": {
+            "ok": true,
+            "width": 64,
+            "height": 64,
+            "brightness": 110,
+            "tolerance": 2,
+            "maxDelta": 1,
+            "mismatchedPixels": 0,
+            "changedChannels": 11904,
+            "exportSha256": "4dde0cf20baa0e79514d26a3127ed48ea0bb6db9c0efc9cd0d00ff2f63e0e92c"
+          },
+          "sourcePreservation": {
+            "fixtureSha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+            "seededSha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+            "expectedSha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6"
+          },
+          "realProfileChanged": [],
+          "phases": {
+            "refusals": "pass",
+            "seed": "pass",
+            "launch": "pass",
+            "open": "pass",
+            "edit": "pass",
+            "export": "pass",
+            "stop": "pass",
+            "relaunch": "pass",
+            "readBack": "pass",
+            "render": "pass",
+            "sourcePreservation": "pass",
+            "realProfile": "pass"
+          }
+        },
+        "control-lost-persistence": {
+          "runId": "5ea6691f-760b-48ca-a076-57e559e36b40",
+          "verdict": "FAIL",
+          "error": "persisted-edit-lost: brightness 100 after restart, expected 110",
+          "judge": {
+            "ok": false,
+            "findings": [
+              "controlled defect run (lost-persistence) can never pass",
+              "run error: persisted-edit-lost: brightness 100 after restart, expected 110",
+              "phase readBack: unobserved",
+              "phase render: unobserved",
+              "phase sourcePreservation: unobserved",
+              "phase realProfile: unobserved",
+              "recipe: persisted value after restart differs",
+              "render: rendered pixels do not match the expected edit",
+              "source: original image bytes changed or unobserved"
+            ]
+          },
+          "candidate": {
+            "commit": "acc4adffcc4aa3e60499668fdfc5c9ae989a6b3f",
+            "sourceClean": true,
+            "sidecarMainSha256": "c8bc85d346fe688d73bc3eb48b296aba6970c153e3c1e33c9de73b85e59b4cd3",
+            "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+          },
+          "recipe": {
+            "expected": {
+              "brightness": 110
+            },
+            "observed": {
+              "beforeEdit": {
+                "brightness": 100
+              },
+              "afterSave": {
+                "brightness": 110,
+                "status": "Edits saved"
+              },
+              "afterRestart": {
+                "brightness": 100
+              }
+            }
+          },
+          "render": null,
+          "sourcePreservation": null,
+          "realProfileChanged": [],
+          "phases": {
+            "refusals": "pass",
+            "seed": "pass",
+            "launch": "pass",
+            "open": "pass",
+            "edit": "pass",
+            "export": "pass",
+            "stop": "pass",
+            "relaunch": "pass"
+          }
+        },
+        "control-source-mutation": {
+          "runId": "4c0fb964-8ee0-4496-b90c-9e1f040e9174",
+          "verdict": "FAIL",
+          "error": "viewer-unavailable: Edits to this image are not saved: sidecar request error: SOURCE_CHANGED: The recipe no longer matches its original image.",
+          "judge": {
+            "ok": false,
+            "findings": [
+              "controlled defect run (source-mutation) can never pass",
+              "run error: viewer-unavailable: Edits to this image are not saved: sidecar request error: SOURCE_CHANGED: The recipe no longer matches its original image.",
+              "phase readBack: unobserved",
+              "phase render: unobserved",
+              "phase sourcePreservation: unobserved",
+              "phase realProfile: unobserved",
+              "recipe: persisted value after restart differs",
+              "render: rendered pixels do not match the expected edit",
+              "source: original image bytes changed or unobserved"
+            ]
+          },
+          "candidate": {
+            "commit": "acc4adffcc4aa3e60499668fdfc5c9ae989a6b3f",
+            "sourceClean": true,
+            "sidecarMainSha256": "c8bc85d346fe688d73bc3eb48b296aba6970c153e3c1e33c9de73b85e59b4cd3",
+            "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+          },
+          "recipe": {
+            "expected": {
+              "brightness": 110
+            },
+            "observed": {
+              "beforeEdit": {
+                "brightness": 100
+              },
+              "afterSave": {
+                "brightness": 110,
+                "status": "Edits saved"
+              }
+            }
+          },
+          "render": null,
+          "sourcePreservation": null,
+          "realProfileChanged": [],
+          "phases": {
+            "refusals": "pass",
+            "seed": "pass",
+            "launch": "pass",
+            "open": "pass",
+            "edit": "pass",
+            "export": "pass",
+            "stop": "pass",
+            "relaunch": "pass"
+          }
+        }
+      },
+      "ci_run": 44874261359,
+      "diagnostic": {
+        "vcruntimeBefore": false,
+        "vcruntime1Before": false,
+        "redistSigner": "CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+        "redistSignature": "Valid",
+        "redistSha256": "cc0ff0eb1dc3f5188ae6300faef32bf5beeba4bdd6e8e445a9184072096b713b",
+        "redistExit": 0,
+        "vcruntimeAfter": true
+      }
+    },
+    {
+      "label": "attempt 5: fixed installer 241da375, clean Sandbox (QG-1 proof)",
+      "verdict": "PASS",
+      "error": null,
+      "stages": {
+        "install": 0,
+        "healthcheck": {
+          "exit": 0,
+          "expected": 0,
+          "ok": true
+        },
+        "edit": {
+          "exit": 0,
+          "expected": 0,
+          "ok": true
+        },
+        "control-lost-persistence": {
+          "exit": 1,
+          "expected": 1,
+          "ok": true
+        },
+        "control-source-mutation": {
+          "exit": 1,
+          "expected": 1,
+          "ok": true
+        }
+      },
+      "guest": {
+        "computer": "FFAEA7F0-EF03-4",
+        "user": "WDAGUtilityAccount",
+        "profile": "C:\\Users\\WDAGUtilityAccount",
+        "localAppData": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local",
+        "os": "Microsoft Windows 11 Enterprise",
+        "build": "26100",
+        "started": "2026-11-21T07:34:24.0818268-08:00",
+        "vcruntime140Present": false,
+        "vcruntime140_1Present": false
+      },
+      "installer": {
+        "path": "C:\\qg1\\installer\\NexusSetup.exe",
+        "sha256": "60a39414c55b3bc1fea4b5e77a150a9d138c6e94f69c9303dab1ac4d9df883d1"
+      },
+      "candidate": {
+        "head": "241da375a3310ff38e81d0ee12f070e82db6c0b7",
+        "dirty": []
+      },
+      "installed": {
+        "root": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Nexus AI Studio",
+        "exe": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Nexus AI Studio\\nexus-shell.exe",
+        "exeSha256": "18d3182f6909d72b285aa728bb86a0a966142d40d6b052504bc20bb9453890a6",
+        "node": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Nexus\\runtime\\node\\node.exe",
+        "nodeSha256": "7447c4ece014aa41fb2ff866c993c708e5a8213a00913cc2ac5049ea3ffc230d",
+        "nodeVersion": "v22.11.0",
+        "payload": {
+          "version": "2.16.1",
+          "sha256": "b46f9728308d691ebde44d1b888b5f4867e110be49eb47aa4f768e81ab4591e7",
+          "original_name": "Nexus AI Studio_2.16.1_x64-setup.exe",
+          "writtenAt": "2026-11-21T15:34:58Z"
+        }
+      },
+      "reports": {
+        "edit": {
+          "runId": "1ee906a4-b088-4e04-97b0-540aeb00d8e4",
+          "verdict": "PASS",
+          "error": null,
+          "judge": {
+            "ok": true,
+            "findings": []
+          },
+          "candidate": {
+            "commit": "241da375a3310ff38e81d0ee12f070e82db6c0b7",
+            "sourceClean": true,
+            "sidecarMainSha256": "c8bc85d346fe688d73bc3eb48b296aba6970c153e3c1e33c9de73b85e59b4cd3",
+            "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+          },
+          "recipe": {
+            "expected": {
+              "brightness": 110
+            },
+            "observed": {
+              "beforeEdit": {
+                "brightness": 100
+              },
+              "afterSave": {
+                "brightness": 110,
+                "status": "Edits saved"
+              },
+              "afterRestart": {
+                "brightness": 110
+              }
+            }
+          },
+          "render": {
+            "ok": true,
+            "width": 64,
+            "height": 64,
+            "brightness": 110,
+            "tolerance": 2,
+            "maxDelta": 1,
+            "mismatchedPixels": 0,
+            "changedChannels": 11904,
+            "exportSha256": "4dde0cf20baa0e79514d26a3127ed48ea0bb6db9c0efc9cd0d00ff2f63e0e92c"
+          },
+          "sourcePreservation": {
+            "fixtureSha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+            "seededSha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+            "expectedSha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6"
+          },
+          "realProfileChanged": [],
+          "phases": {
+            "refusals": "pass",
+            "seed": "pass",
+            "launch": "pass",
+            "open": "pass",
+            "edit": "pass",
+            "export": "pass",
+            "stop": "pass",
+            "relaunch": "pass",
+            "readBack": "pass",
+            "render": "pass",
+            "sourcePreservation": "pass",
+            "realProfile": "pass"
+          }
+        },
+        "control-lost-persistence": {
+          "runId": "0eb15a54-3742-42af-b5ae-9fc13a0880d0",
+          "verdict": "FAIL",
+          "error": "persisted-edit-lost: brightness 100 after restart, expected 110",
+          "judge": {
+            "ok": false,
+            "findings": [
+              "controlled defect run (lost-persistence) can never pass",
+              "run error: persisted-edit-lost: brightness 100 after restart, expected 110",
+              "phase readBack: unobserved",
+              "phase render: unobserved",
+              "phase sourcePreservation: unobserved",
+              "phase realProfile: unobserved",
+              "recipe: persisted value after restart differs",
+              "render: rendered pixels do not match the expected edit",
+              "source: original image bytes changed or unobserved"
+            ]
+          },
+          "candidate": {
+            "commit": "241da375a3310ff38e81d0ee12f070e82db6c0b7",
+            "sourceClean": true,
+            "sidecarMainSha256": "c8bc85d346fe688d73bc3eb48b296aba6970c153e3c1e33c9de73b85e59b4cd3",
+            "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+          },
+          "recipe": {
+            "expected": {
+              "brightness": 110
+            },
+            "observed": {
+              "beforeEdit": {
+                "brightness": 100
+              },
+              "afterSave": {
+                "brightness": 110,
+                "status": "Edits saved"
+              },
+              "afterRestart": {
+                "brightness": 100
+              }
+            }
+          },
+          "render": null,
+          "sourcePreservation": null,
+          "realProfileChanged": [],
+          "phases": {
+            "refusals": "pass",
+            "seed": "pass",
+            "launch": "pass",
+            "open": "pass",
+            "edit": "pass",
+            "export": "pass",
+            "stop": "pass",
+            "relaunch": "pass"
+          }
+        },
+        "control-source-mutation": {
+          "runId": "a9ac4ca1-9e96-463d-b30a-bf98ec2a723d",
+          "verdict": "FAIL",
+          "error": "viewer-unavailable: Edits to this image are not saved: sidecar request error: SOURCE_CHANGED: The recipe no longer matches its original image.",
+          "judge": {
+            "ok": false,
+            "findings": [
+              "controlled defect run (source-mutation) can never pass",
+              "run error: viewer-unavailable: Edits to this image are not saved: sidecar request error: SOURCE_CHANGED: The recipe no longer matches its original image.",
+              "phase readBack: unobserved",
+              "phase render: unobserved",
+              "phase sourcePreservation: unobserved",
+              "phase realProfile: unobserved",
+              "recipe: persisted value after restart differs",
+              "render: rendered pixels do not match the expected edit",
+              "source: original image bytes changed or unobserved"
+            ]
+          },
+          "candidate": {
+            "commit": "241da375a3310ff38e81d0ee12f070e82db6c0b7",
+            "sourceClean": true,
+            "sidecarMainSha256": "c8bc85d346fe688d73bc3eb48b296aba6970c153e3c1e33c9de73b85e59b4cd3",
+            "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+          },
+          "recipe": {
+            "expected": {
+              "brightness": 110
+            },
+            "observed": {
+              "beforeEdit": {
+                "brightness": 100
+              },
+              "afterSave": {
+                "brightness": 110,
+                "status": "Edits saved"
+              }
+            }
+          },
+          "render": null,
+          "sourcePreservation": null,
+          "realProfileChanged": [],
+          "phases": {
+            "refusals": "pass",
+            "seed": "pass",
+            "launch": "pass",
+            "open": "pass",
+            "edit": "pass",
+            "export": "pass",
+            "stop": "pass",
+            "relaunch": "pass"
+          }
+        }
+      },
+      "ci_run": 44918087312
+    }
+  ]
+}
