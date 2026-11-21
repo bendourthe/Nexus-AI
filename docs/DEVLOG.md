@@ -2,9 +2,9 @@
 
 This log tracks significant development milestones, architectural decisions, and implementation notes for Nexus (formerly Gemma Code).
 
-- 2026-11-21 v2.16.2: bundled creative-brief skill, packaged image-edit check, and a static VC++ runtime so the installed app starts on a clean PC (found by the Windows Sandbox installer proof). [Plan](releases/v2/v2.16/plans/v2.16.2-adoption-specialist-models-desktop-creative-tools.md), [history](releases/v2/v2.16/development/history/), [gaps](archives/v2/v2.16/known-gaps.md).
+- 2026-11-21 v2.16.2: bundled creative-brief skill, packaged image-edit check, and a static VC++ runtime so the installed app starts on a clean PC (found by the Windows Sandbox installer proof). [Plan](releases/v2/v2.16/plans/v2.16.2-adoption-specialist-models-desktop-creative-tools.md), [history](releases/v2/v2.16/development/history/), [gaps](releases/v2/v2.16/known-gaps.md).
 
-- 2026-11-02 v2.16.1: CPU-only golden options, natural CLI shutdown and reviewed exact-tag publication guards; candidate model admission remains HOLD. [Plan](releases/v2/v2.16/plans/v2.16.1-release-completion.md), [history](releases/v2/v2.16/development/history/), [gaps](archives/v2/v2.16/known-gaps.md).
+- 2026-11-02 v2.16.1: CPU-only golden options, natural CLI shutdown and reviewed exact-tag publication guards; candidate model admission remains HOLD. [Plan](releases/v2/v2.16/plans/v2.16.1-release-completion.md), [history](releases/v2/v2.16/development/history/), [gaps](releases/v2/v2.16/known-gaps.md).
 
 - 2026-10-31 v2.16 closing CI correction: [PR140](https://github.com/bendourthe/Nexus-AI/pull/140) exposed a newly reported production minimatch advisory. The direct dependency now uses 11.0.3; the secret-path policy and audit threshold remain intact. Fresh root qualification passes 6485 tests with 19 existing skips and 86.90/76.30/87.01 percent line/branch/function coverage; 41 compiled guard cases pass on each Node 22 and 24. All six handbooks pass fresh content, reproducible-build, browser and print review with preserved original receipts and unchanged HTML. [Fresh handbook evidence](archives/v2/v2.16/development/closing-handbooks-20261031/review.md). Closing merge and final native cleanup remain pending; no v2.16.0 release.
 
