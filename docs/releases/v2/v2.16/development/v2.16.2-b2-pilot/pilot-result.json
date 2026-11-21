@@ -1,0 +1,21 @@
+{
+  "model": "gpt-oss:20b",
+  "logoSha256": "c9756fb4a6cb460d6d93dc0174067d86eec10839c134495255c7b5425809cfea",
+  "briefExists": true,
+  "requestsExist": true,
+  "briefUnchangedAfterReopen": true,
+  "briefSha256": "cc162418500f97bd52ee6ceedad300cf1446c4acf55fc582a716864bb46c05a0",
+  "sessions": [
+    {
+      "label": "create",
+      "sessionId": "9b8435d3-d2d7-43e2-91f1-db750670e2ba",
+      "seconds": 27
+    },
+    {
+      "label": "reopen",
+      "sessionId": "23d41515-1800-4244-a2b2-f8de7e73fde5",
+      "seconds": 23
+    }
+  ],
+  "requestsSha256": "7ae49be84a1ab611312a207452b2f0f1e5ed0784df22acb14df313df6eab9a26"
+}

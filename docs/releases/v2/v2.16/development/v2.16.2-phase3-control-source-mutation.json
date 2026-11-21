@@ -1,0 +1,262 @@
+{
+  "schemaVersion": "nexus.packaged-image-edit/v1",
+  "mode": "edit",
+  "control": "source-mutation",
+  "runId": "56c37bc5-b0a0-4c63-98e0-f0efb2959bdc",
+  "startedAt": "2026-11-11T05:56:59.876Z",
+  "executable": {
+    "path": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-v2.16.2\\desktop\\src-tauri\\target\\release\\nexus-shell.exe",
+    "sha256": "3854d2a772aa2788f1380f179d5e90f6f1f963e352bebefe101c3b517aeb7b98"
+  },
+  "phases": {
+    "refusals": {
+      "status": "pass",
+      "at": "2026-11-11T05:56:59.879Z"
+    },
+    "seed": {
+      "status": "pass",
+      "at": "2026-11-11T05:57:00.676Z"
+    },
+    "launch": {
+      "status": "pass",
+      "at": "2026-11-11T05:57:24.262Z"
+    },
+    "open": {
+      "status": "pass",
+      "at": "2026-11-11T05:57:25.223Z"
+    },
+    "edit": {
+      "status": "pass",
+      "at": "2026-11-11T05:57:28.051Z"
+    },
+    "export": {
+      "status": "pass",
+      "at": "2026-11-11T05:57:28.379Z",
+      "file": "nexus-0c83ab00-2c15-4ae1-9175-98bab54fba2c-edited.png"
+    },
+    "stop": {
+      "status": "pass",
+      "at": "2026-11-11T05:57:30.736Z"
+    },
+    "relaunch": {
+      "status": "pass",
+      "at": "2026-11-11T05:57:32.978Z"
+    }
+  },
+  "launches": [
+    {
+      "label": "edit",
+      "at": "2026-11-11T05:57:24.262Z",
+      "appPid": 20052,
+      "ownerPid": 35616,
+      "port": 58649,
+      "listenerPid": 12484,
+      "jobPids": [
+        20052,
+        12484,
+        22036,
+        29944,
+        31644,
+        2816,
+        34896,
+        27808,
+        14976,
+        27344,
+        36492,
+        35428,
+        19764,
+        28812,
+        7420,
+        31308
+      ],
+      "processNames": {
+        "2816": "conhost.exe",
+        "7420": "nvidia-smi.exe",
+        "12484": "msedgewebview2.exe",
+        "14976": "msedgewebview2.exe",
+        "19764": "node.exe",
+        "20052": "nexus-shell.exe",
+        "22036": "msedgewebview2.exe",
+        "27344": "msedgewebview2.exe",
+        "27808": "git-remote-https.exe",
+        "28812": "unknown",
+        "29944": "conhost.exe",
+        "31308": "git.exe",
+        "31644": "unknown",
+        "34896": "git.exe",
+        "35428": "msedgewebview2.exe",
+        "36492": "msedgewebview2.exe"
+      },
+      "sidecarPids": [
+        19764
+      ],
+      "webviewPids": [
+        12484,
+        22036,
+        14976,
+        27344,
+        36492,
+        35428
+      ],
+      "seededSessionVisible": true
+    },
+    {
+      "label": "restart",
+      "at": "2026-11-11T05:57:32.978Z",
+      "appPid": 19320,
+      "ownerPid": 15668,
+      "port": 61405,
+      "listenerPid": 17460,
+      "jobPids": [
+        19320,
+        17460,
+        32296,
+        22640,
+        25536,
+        33224,
+        28332,
+        20380,
+        21416,
+        32084,
+        34824
+      ],
+      "processNames": {
+        "17460": "msedgewebview2.exe",
+        "19320": "nexus-shell.exe",
+        "20380": "msedgewebview2.exe",
+        "21416": "msedgewebview2.exe",
+        "22640": "conhost.exe",
+        "25536": "conhost.exe",
+        "28332": "msedgewebview2.exe",
+        "32084": "node.exe",
+        "32296": "msedgewebview2.exe",
+        "33224": "msedgewebview2.exe",
+        "34824": "powershell.exe"
+      },
+      "sidecarPids": [
+        32084
+      ],
+      "webviewPids": [
+        17460,
+        32296,
+        33224,
+        28332,
+        20380,
+        21416
+      ],
+      "seededSessionVisible": true
+    }
+  ],
+  "stops": [
+    {
+      "label": "edit",
+      "at": "2026-11-11T05:57:30.736Z",
+      "stoppedPids": [
+        20052,
+        12484,
+        22036,
+        29944,
+        14976,
+        27344,
+        36492,
+        35428,
+        19764,
+        18976
+      ],
+      "remaining": [],
+      "stillAlive": [],
+      "portClosed": true
+    }
+  ],
+  "recipe": {
+    "expected": {
+      "brightness": 110
+    },
+    "observed": {
+      "beforeEdit": {
+        "brightness": 100
+      },
+      "afterSave": {
+        "brightness": 110,
+        "status": "Edits saved"
+      }
+    }
+  },
+  "refusals": {
+    "occupiedRoot": "owned-root-occupied: C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-occupied-kNBsqz already exists",
+    "escapingPath": "owned-path-escape: sessionsDb escapes the owned root: C:\\Users\\bdour\\.nexus\\generations\\sessions.db"
+  },
+  "seed": {
+    "root": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI",
+    "identity": {
+      "sourceCommit": "64686107c3566a8b6d34895cd423eeb90e851a0e",
+      "sourceClean": true,
+      "exeSha256": "3854d2a772aa2788f1380f179d5e90f6f1f963e352bebefe101c3b517aeb7b98",
+      "sidecarMainSha256": "cf7f1a5cdffad92a97867284b5054cad669da8ff88d6ae97b1086b7d0249d09e",
+      "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d",
+      "nativeModulesDir": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-v2.16.2\\desktop\\src-tauri\\target\\release\\sidecar\\dist\\node_modules"
+    },
+    "paths": {
+      "osHomedir": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\home",
+      "nexusHome": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\home\\.nexus",
+      "nexusAiHome": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\home\\.nexus-ai",
+      "hubCatalog": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\home\\.nexus-ai\\catalog",
+      "sessionsDb": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\home\\.nexus\\generations\\sessions.db",
+      "generatedImages": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\home\\.nexus\\generations\\images"
+    },
+    "fixture": {
+      "path": "C:\\Users\\bdour\\Documents\\Projects\\Development\\Nexus-AI-v2.16.2\\desktop\\tests\\packaged\\fixtures\\edit-source.png",
+      "sha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+      "seededPath": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\home\\.nexus\\generations\\images\\49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6.png"
+    },
+    "sessionId": "c63fa0c8-012d-426d-bf16-f56761830fab",
+    "turnId": "0c83ab00-2c15-4ae1-9175-98bab54fba2c",
+    "seederSha256": "5802c2612a72b7d008c486bce9eeaad6446c89189f95728ee4ee609a5566105a"
+  },
+  "ownedRoot": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI",
+  "ownedEnvironment": {
+    "USERPROFILE": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\home",
+    "HOME": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\home",
+    "APPDATA": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\home\\AppData\\Roaming",
+    "LOCALAPPDATA": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\home\\AppData\\Local",
+    "TEMP": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\tmp",
+    "WEBVIEW2_USER_DATA_FOLDER": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\webview2",
+    "NEXUS_NODE_PATH": "C:\\Users\\bdour\\AppData\\Local\\Nexus\\runtime\\node\\node.exe"
+  },
+  "candidate": {
+    "commit": "64686107c3566a8b6d34895cd423eeb90e851a0e",
+    "sourceClean": true,
+    "sidecarMainSha256": "cf7f1a5cdffad92a97867284b5054cad669da8ff88d6ae97b1086b7d0249d09e",
+    "nativeModuleSha256": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d"
+  },
+  "ownedProfile": {
+    "root": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI",
+    "ownerRunId": "d7565815-8634-4702-91aa-86ca1bacf354"
+  },
+  "fixture": {
+    "sha256": "49c91bd5d226ed8eb2a74073687a2e22526d42f8d5b5c49d993d4193bf4fa0c6",
+    "sessionId": "c63fa0c8-012d-426d-bf16-f56761830fab",
+    "turnId": "0c83ab00-2c15-4ae1-9175-98bab54fba2c"
+  },
+  "exportPath": "C:\\Users\\bdour\\AppData\\Local\\Temp\\nexus-owned-rq6eGI\\downloads\\nexus-0c83ab00-2c15-4ae1-9175-98bab54fba2c-edited.png",
+  "finishedAt": "2026-11-11T05:57:34.172Z",
+  "error": "viewer-unavailable: Edits to this image are not saved: sidecar request error: SOURCE_CHANGED: The recipe no longer matches its original image.",
+  "judge": {
+    "ok": false,
+    "findings": [
+      "controlled defect run (source-mutation) can never pass",
+      "run error: viewer-unavailable: Edits to this image are not saved: sidecar request error: SOURCE_CHANGED: The recipe no longer matches its original image.",
+      "phase readBack: unobserved",
+      "phase render: unobserved",
+      "phase sourcePreservation: unobserved",
+      "phase realProfile: unobserved",
+      "recipe: persisted value after restart differs",
+      "render: rendered pixels do not match the expected edit",
+      "source: original image bytes changed or unobserved",
+      "real profile: changed or unobserved"
+    ]
+  },
+  "ok": false,
+  "verdict": "FAIL",
+  "exitCode": 1
+}

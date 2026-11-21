@@ -1,0 +1,15 @@
+{
+  "command": "npm run docs:handbooks && npm run docs:handbooks:check",
+  "result": "generate-handbooks: 6 source(s) generated; generate-handbooks: 6 source(s) match",
+  "changedOutputs": [
+    "docs/handbooks/html/atlas.html"
+  ],
+  "unchangedButVerified": [
+    "generation-recovery",
+    "document-outline",
+    "installer-runtime",
+    "media-runtime",
+    "transcript-and-workspaces"
+  ],
+  "atlasOutputSha256": "d30358e47e3e09e671788b52e63f6a2bac10d765ed31b666d95f9d3185791ed5"
+}
