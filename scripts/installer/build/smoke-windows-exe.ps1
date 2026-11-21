@@ -48,6 +48,43 @@ function Assert-True {
     }
 }
 
+# DLL names in a PE file's import and delay-import tables, lower-cased.
+function Get-PeImportNames {
+    param([string]$Path)
+    $b = [IO.File]::ReadAllBytes($Path)
+    $pe = [BitConverter]::ToInt32($b, 0x3C)
+    $sections = [BitConverter]::ToUInt16($b, $pe + 6)
+    $optSize = [BitConverter]::ToUInt16($b, $pe + 20)
+    $opt = $pe + 24
+    $dirs = $opt + $(if ([BitConverter]::ToUInt16($b, $opt) -eq 0x20B) { 112 } else { 96 })
+    $table = $opt + $optSize
+    $toOffset = {
+        param([long]$Rva)
+        for ($i = 0; $i -lt $sections; $i++) {
+            $s = $table + $i * 40
+            $vsize = [BitConverter]::ToUInt32($b, $s + 8); $va = [BitConverter]::ToUInt32($b, $s + 12)
+            $rsize = [BitConverter]::ToUInt32($b, $s + 16); $raw = [BitConverter]::ToUInt32($b, $s + 20)
+            if ($Rva -ge $va -and $Rva -lt $va + [Math]::Max($vsize, $rsize)) { return [long]($raw + $Rva - $va) }
+        }
+        throw "RVA $Rva is outside every section of $Path"
+    }
+    $names = @()
+    foreach ($entry in @(@{ Index = 1; Size = 20; NameAt = 12 }, @{ Index = 13; Size = 32; NameAt = 4 })) {
+        $rva = [BitConverter]::ToUInt32($b, $dirs + $entry.Index * 8)
+        if ($rva -eq 0) { continue }
+        $o = & $toOffset $rva
+        while ($true) {
+            $nameRva = [BitConverter]::ToUInt32($b, $o + $entry.NameAt)
+            if ($nameRva -eq 0) { break }
+            $n = & $toOffset $nameRva; $end = $n
+            while ($b[$end] -ne 0) { $end++ }
+            $names += [Text.Encoding]::ASCII.GetString($b, $n, $end - $n).ToLowerInvariant()
+            $o += $entry.Size
+        }
+    }
+    return $names
+}
+
 if (-not (Test-Path $ExePath)) {
     Write-Host "ERROR: $ExePath not found. Run build-windows.ps1 first." -ForegroundColor Red
     exit 1
@@ -126,6 +163,11 @@ if ($InstallDesktop) {
         if ((Normalized-ExecutablePath $runtime.nodePath) -ne (Normalized-ExecutablePath $nodePath)) { throw 'Runtime configuration did not select the newly provisioned Node.' }
         $installed = @('Nexus AI Studio.exe', 'Nexus.exe', 'nexus-shell.exe') | ForEach-Object { Join-Path $desktopRoot $_ } | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1
         if (-not $installed) { throw 'The installed desktop executable is missing.' }
+        # A hosted runner already has the VC++ Redistributable, so the health check alone
+        # cannot see a dynamically linked runtime; a clean PC fails with 0xC0000135.
+        $stage = 'installed-crt-linkage'
+        $vcImports = @(Get-PeImportNames -Path $installed | Where-Object { $_ -match '^vcruntime\d+(_\d+)?\.dll$' })
+        if ($vcImports.Count -gt 0) { throw "The installed app imports the VC++ runtime dynamically ($($vcImports -join ', ')); it will not start without the redistributable." }
         $stage = 'installed-healthcheck'
         $healthOutput = Invoke-PackagedProcess -File $installed -Arguments @('--healthcheck') -Label 'health' -Seconds 60
         $healthLines = @(Get-Content -LiteralPath $healthOutput | Where-Object { $_.Trim().StartsWith('{') })
