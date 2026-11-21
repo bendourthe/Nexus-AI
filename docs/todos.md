@@ -4,7 +4,7 @@
 
 | Goal | Verified current state | Required outcome |
 |---|---|---|
-| v2.16 release | No published release; 9/11 plan tasks checked; PR148 and post-merge validation green; PR149 source preparation under review; frozen installer acceptance supplement pending hosted proof; model HOLD retained | Complete full validation, green integration, package acceptance and actual publication |
+| v2.16 release | v2.16.1 published 2026-11-02; v2.16.2 integrated (PR154, PR164) with QG-1 passed in a clean Windows Sandbox and BG-1 (static VC++ runtime) fixed; v2.16.2 release preparation in progress; model HOLD retained | Publish v2.16.2 with verified artifacts, then close and archive v2.16 |
 | v2.17 release | 384 OPEN records preserved in the requirements matrix; implementation and evidence reconciliation pending | Complete the actual requirements and publish verified artifacts |
 | Final review | Not started | Full codebase, local-agent, UI and behavioral review after both releases |
 
@@ -18,8 +18,8 @@
 - [x] Pass corrected-source root validation with existing coverage thresholds.
 - [x] Pass the final local review and the complete installer suite after reproducing stale workflow-contract assertions (1,528 passed, three skipped).
 - [x] Merge PR148 after 63 successful checks and verify all 28 post-merge checks on fede2197.
-- [ ] Integrate reviewed v2.16.1 versions and notes through develop/main, then verify published artifacts.
-- [ ] Prove the exact frozen Windows installer performs desktop/runtime installation and real backend health on a clean hosted runner.
+- [x] Integrate reviewed v2.16.1 versions and notes through develop/main, then verify published artifacts (Nexus v2.16.1 released 2026-11-02).
+- [x] Prove the exact frozen Windows installer performs desktop/runtime installation and real backend health on a clean hosted runner (installer-build run 44918087312; v2.16.2 also proved in a clean Windows Sandbox).
 - [ ] Publish the verified v2.16 release.
 - [ ] Reconcile every v2.17 obligation against current code and required acceptance evidence.
 - [ ] Review the link audit during v2.17 BG-2 living-document reconciliation (25 existing broken tracker links; zero newly broken links).
