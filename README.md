@@ -10,6 +10,12 @@ Nexus AI Studio is a local-first desktop app for generative AI. It brings agenti
 
 [Download the latest release](https://github.com/bendourthe/Nexus-AI/releases/latest) | [Installation guide](docs/install.md) | [Interactive guide](guides/interactive-guide/nexus-ai-guide.html) | [Architecture](ARCHITECTURE.md) | [Release history](docs/reference/release-history.md)
 
+<p align="center"><img src="assets/readme/nexus-ai-tour.gif" alt="Tour of the Nexus AI Studio desktop app: a local chat answer, a coding agent's edit summary, a generated mountain-hut image, and the model settings" width="900" /></p>
+
+<p align="center"><a href="assets/readme/nexus-ai-tour.png">Static preview</a></p>
+
+Every clip in this README is a screen recording of the real desktop app running local models on one laptop GPU (RTX 3080 Ti, 16 GB). Nothing is mocked. Long model waits are sped up, and each caption says by how much.
+
 > Nexus AI was called **Gemma Code** from v0.1.0 to v0.22.x, when it was a single-purpose coding extension for VS Code. At v1.0.0 that engine became the Agentic AI Coding pillar of the desktop app. The extension is still available as an optional surface.
 
 ## What's New in v2.16.1
@@ -58,6 +64,10 @@ The printed hash must match the `NexusSetup.exe` line in `SHA256SUMS.txt`. Headl
 
 An autonomous coding agent that reads local repositories, runs code in isolated environments, debugs, and implements features across many files.
 
+![The coding agent with LFM2.5 2.6B reads pace.py, adds input validation to estimate_hike_time, re-reads the file to check the edit, and summarizes the change](assets/readme/nexus-ai-coding.gif)
+
+LFM2.5 2.6B makes a real one-file edit in a small Python project; model thinking time is sped up 3x. [Static preview](assets/readme/nexus-ai-coding.png)
+
 - Inherits the full Gemma Code engine: tool registry, plan mode, four-layer memory, MCP support, skill catalog, and sub-agent dispatch.
 - Picks only from agentic models that this install owns (selected in the installer or Settings), never leftover Ollama tags.
 - Runs in the desktop app or in the optional `nexus-coding` VS Code extension, which proxies to the desktop daemon and falls back to an in-process engine.
@@ -67,6 +77,10 @@ An autonomous coding agent that reads local repositories, runs code in isolated 
 
 A chat interface organized like a file system. Chats live in nested folders, each project can keep its own context, and four memory layers (working, episodic, semantic, graph) keep long threads coherent.
 
+![Gemma 4 12B answers a hiking question in the Chatbot: a time estimate from Naismith's rule and a five-item packing list](assets/readme/nexus-ai-chat.gif)
+
+Gemma 4 12B answers in about 20 seconds; the wait before the reply appears is sped up 10x. [Static preview](assets/readme/nexus-ai-chat.png)
+
 - Hybrid retrieval combines BM25, dense vectors, and the memory graph through Reciprocal Rank Fusion (`k=60`).
 - The `all-MiniLM-L6-v2` embedder is bundled by the installer, so retrieval never calls the Hugging Face Hub.
 - Model pickers list only the models this install owns, in recommended order.
@@ -75,6 +89,10 @@ A chat interface organized like a file system. Chats live in nested folders, eac
 
 Text-to-image, image-to-image, inpainting, and outpainting on local diffusion pipelines tuned for one laptop GPU.
 
+![Image Studio renders a 1024 px photo of a wooden mountain hut beside an alpine lake from a typed prompt](assets/readme/nexus-ai-image.gif)
+
+RealVisXL V5 renders a 1024 x 1024 image in about 20 seconds; generation is sped up 8x. [Static preview](assets/readme/nexus-ai-image.png)
+
 - SANA-1.6B is the default 1024 px model (about 2x faster than SDXL Turbo, Apache-2.0 weights), with Sana-Sprint as the "Fast Preview" tier.
 - SANA 2K and 4K sit behind a `DiffusionTier` policy, alongside SANA-ControlNet and the Flow-DPM-Solver sampler.
 - Edits are saved as a versioned recipe with undo and redo; the original image bytes never change.
@@ -82,6 +100,10 @@ Text-to-image, image-to-image, inpainting, and outpainting on local diffusion pi
 ### 4. Video Lab
 
 Short video synthesis from a text prompt or a reference image, with a timeline preview and detailed generation controls.
+
+![Video Lab turns a typed prompt into a 4-second aerial clip over a misty pine forest and a mountain lake, then plays it inline](assets/readme/nexus-ai-video.gif)
+
+Wan 2.1 T2V 1.3B renders a 4-second 480p clip in about 11 minutes on this GPU; generation is sped up 60x and the clip plays at real speed. [Static preview](assets/readme/nexus-ai-video.png)
 
 - SANA-Video 2B is the "Fast 720p" tier between LTX-Video and CogVideoX.
 - Optional enhancement can upscale or interpolate a finished clip through a Video2X 6.4.0 executable you install yourself (`NEXUS_VIDEO2X_PATH` or Settings > Video). Nexus never downloads or bundles Video2X.
