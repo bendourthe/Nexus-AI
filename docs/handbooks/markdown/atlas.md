@@ -6,8 +6,9 @@ This walkthrough maps Nexus's durable user flows to their owning components.
 |---|---|---|---|
 | Install or repair media | `scripts/installer/` | Owner-aware lease; atomic runtime state | Tests; packaged run |
 | Generate an image | [Image dispatcher](../../../desktop/sidecar/src/diffusion/dispatcher.ts) and Python pipelines | Shared readiness API | Validated PNG artifact |
-| Edit or recover an image | [Image edit runtime](../../../desktop/sidecar/src/studio/imageEditRuntime.ts) and viewer | Revisioned recipes; approval recovery; retained originals | Retry, restart, restore and grant tests |
+| Edit or recover an image | [Image edit runtime](../../../desktop/sidecar/src/studio/imageEditRuntime.ts) and viewer | Revisioned recipes; approval recovery; retained originals | Retry, restart, restore and grant tests; [packaged edit, restart and render check](../../reference/packaged-image-edit-check.md) |
 | Generate a video | [Video dispatcher](../../../desktop/sidecar/src/diffusion/videoDispatcher.ts) and Python pipelines | Shared readiness API | Probed video artifact |
+| Create a creative brief | [Built-in skill](../../../modules/coding/skills/catalog/creative-brief/SKILL.md), bundled for the desktop by [bundled skills](../../../desktop/sidecar/src/skills/bundledSkills.ts) | Workspace Markdown brief; reference SHA-256 checks; existing generate queue | Loader, delivery and fixture rehearsal tests |
 | Browse and install models | `core/registry/` and Settings | Shared availability/recommendation tuple | Cross-language rank fixture |
 | Read chat usage | `core/chat/` and shared chat UI | Role-local token provenance | Protocol, hydration, and UI tests |
 | Organize chats; select workspaces | Chat explorer and Coding workspace | Persisted folder colors; union-of-roots boundary | Database reopen, picker and denial tests |
