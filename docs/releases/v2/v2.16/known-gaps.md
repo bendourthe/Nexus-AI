@@ -2,7 +2,7 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-11-20
+**Last updated**: 2026-11-21
 **Open items**: 0
 
 The [archived v2.16.0 ledger](../../../archives/v2/v2.16/known-gaps.md) retains its approved conditional closeout. This active file records the subsequent v2.16.1 release work. All 384 inherited obligations remain OPEN in the [v2.17 ledger](../v2.17/known-gaps.md), with their original bodies, provenance and individually preserved requirements. No inherited item is closed by this patch record. Required integration and publication work remains tracked by unchecked T009-T011 in the [release plan](plans/v2.16.1-release-completion.md).
@@ -115,3 +115,4 @@ These do not block the plan Goal; each is outside this plan's scope or an inheri
 | Observation 6 | With `qwen3.5:9b`, the desktop agent emitted `<|tool>{...}<tool|>` tool calls that no registered parser accepted, so no tool ran; `gpt-oss:20b` ran the same skill correctly | Coding LLM tool-call formats (`modules/coding/llm/ToolCallFormat.ts`) |
 | Observation 7 | The desktop coding runtime never sets `num_ctx`, so a session gets the Ollama server's default window; on Ollama 0.32.15 that is 4096 tokens, which a tool-using session overflows (`n_tokens = 4095, truncated = 1`). B2 passed only against a temporary server started with `OLLAMA_CONTEXT_LENGTH=16384` | Desktop coding runtime: request a window sized to the model, or tell the user to raise `OLLAMA_CONTEXT_LENGTH` |
 | Observation 8 | On a fresh PC the installer runs the desktop first-run health check before it provisions Node, so it logs `Desktop health check FAILED: fail: sidecar spawn failed: program not found (node)` and warns the user, then provisions Node 22.11.0; the installed app passes an independent `--healthcheck` afterwards ([QG-1 evidence](development/v2.16.2-qg1-sandbox-evidence.md)) | Installer (`scripts/installer`): run the desktop health check after the runtime step, or pass it the provisioned Node path |
+| Observation 9 | Hosted builds now use Rust 1.100, whose Cargo layout change makes the locked `tauri-build` 2.6.3 copy the sidecar into the wrong build-tree folder; the non-required packaged window smoke on PR #166 failed with `sidecar\dist\main.js missing`. v2.16.2 was released over it by maintainer decision on 2026-11-21 | Carried as [v2.17 BG-11](../v2.17/known-gaps.md): upgrade `tauri-build` to 2.7.x and rerun the packaged smoke and the Sandbox proof |

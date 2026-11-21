@@ -2,8 +2,8 @@
 
 **Project**: Nexus AI Studio
 **Status**: in-progress
-**Last updated**: 2026-10-31
-**Open items**: 384
+**Last updated**: 2026-11-21
+**Open items**: 385
 
 ## v2.17.0
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | Not implemented (NI) | 14 | 0 |
 | Deferred (DF) | 264 | 0 |
-| Bugs / regressions (BG) | 10 | 0 |
+| Bugs / regressions (BG) | 11 | 0 |
 | Warnings (WN) | 25 | 0 |
 | Missing tests / coverage gaps (MT) | 52 | 0 |
 | Quality-gate gaps (QG) | 19 | 0 |
@@ -4768,6 +4768,14 @@ Source phase: v2.12.0 Phase 1. Plan reference: `docs/v2/v2.12/plans/v2.12.0-adop
 
 - **Migrated from**: v2.16#DF-151 on 2026-10-31 (reason: user-deferred)
 - **Migration evidence**: No admitted golden slots under signed E-3 HOLD; approved follow-on carry to v2.17.0.
+
+#### BG-11 - Rust 1.100 breaks the build-tree sidecar copy of the locked `tauri-build` 2.6.3
+
+- **Source phase**: v2.16.2 release (develop-to-main PR #166, 2026-11-21).
+- **Plan reference**: [v2.16.2 plan](../v2.16/plans/v2.16.2-adoption-specialist-models-desktop-creative-tools.md), final-phase integration; failing run 44923931013, job `Launch Windows bundle and judge the probe`.
+- **Reason**: Rust 1.100.0 (2026-11-09) moved Cargo build-script output one directory deeper. `tauri-build` 2.6.3 finds the target directory by counting parents up from `OUT_DIR`, so it copies `desktop/sidecar/dist` into `target/release/build/` instead of next to `nexus-shell.exe`. The packaged window smoke then stops with `candidate-incomplete: ...target\release\sidecar\dist\main.js missing`. The last passing run used Rust 1.99.1. The workflows install the `stable` toolchain, so every hosted build now uses 1.100. The check is not required, and `ci-required` passed. The published installer is not affected: release run 44936597603 built v2.16.2 on Rust 1.100.0, and the installed app from that `NexusSetup.exe` contains `sidecar/dist/main.js` and passed the packaged image-edit check in a clean Windows Sandbox. Only builds run from the build tree (this smoke, local `tauri build` checks) see the missing copy.
+- **Owner**: Next desktop build plan.
+- **Suggested next step**: Upgrade `tauri-build` (and the matching `tauri` crates) to a 2.7.x release that reads the new layout, which public reports place at 2.7.5 or later, then rerun the packaged window smoke and the frozen-installer Sandbox proof. Pinning the Windows workflows to Rust 1.99 is the fallback if the upgrade is not ready. When `tauri-build` reads `build.windows.staticVCRuntime`, the `STATIC_VCRUNTIME` override in `desktop/src-tauri/build.rs` can be removed (v2.16 BG-1).
 
 ### Resolved
 
