@@ -123,6 +123,11 @@ scripts/installer/build/stage/
 !/.claude/commands/
 settings.local.json
 
+# Per-user Codex conversions of the .claude artifacts above. They are
+# generated locally and drift from their sources, so they are not committed.
+/.codex/
+/.agents/
+
 # ==============================================================================
 # Node.js / TypeScript (VS Code Extension)
 # ==============================================================================
