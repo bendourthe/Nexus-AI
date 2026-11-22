@@ -859,9 +859,9 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 | Adoption | Approved 2026-11-05; 4 phases, 21 tasks, 0 implemented; seven review lenses complete | Refresh implementation admission; A3/A4 remain parked |
 | Publication | Owner requested merge into develop; attribution check passes | Required pull-request checks and merge |
 
-- [x] Complete the [comparison](releases/v2/v2.16/comparisons/v2.16.2-comparison-specialist-models-desktop-creative-tools.md) and source receipts (2026-11-04).
-- [x] Draft and critique the [A1/A2 plan](releases/v2/v2.16/plans/v2.16.2-adoption-specialist-models-desktop-creative-tools.md): four phases, 21 tasks, seven lenses and four findings corrected/rechecked; both-channel skill delivery and disposable-VM installer proof/HOLD confirmed.
-- [x] Obtain owner approval of the plan and its merge into develop ([approval and publication note](releases/v2/v2.16/development/v2.16.2-plan-approval-publication.md), 2026-11-05).
+- [x] Complete the [comparison](archives/v2/v2.16/comparisons/v2.16.2-comparison-specialist-models-desktop-creative-tools.md) and source receipts (2026-11-04).
+- [x] Draft and critique the [A1/A2 plan](archives/v2/v2.16/plans/v2.16.2-adoption-specialist-models-desktop-creative-tools.md): four phases, 21 tasks, seven lenses and four findings corrected/rechecked; both-channel skill delivery and disposable-VM installer proof/HOLD confirmed.
+- [x] Obtain owner approval of the plan and its merge into develop ([approval and publication note](archives/v2/v2.16/development/v2.16.2-plan-approval-publication.md), 2026-11-05).
 - [ ] Start implementation only through its refreshed admission and preflight; preserve the approved boundaries and all predecessor obligations. No implementation has started.
 
 ## Recurring Obligations
