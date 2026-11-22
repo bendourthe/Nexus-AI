@@ -4,7 +4,7 @@
 
 | Goal | Verified current state | Required outcome |
 |---|---|---|
-| v2.16 release | v2.16.1 published 2026-11-02; v2.16.2 integrated (PR154, PR164) with QG-1 passed in a clean Windows Sandbox and BG-1 (static VC++ runtime) fixed; v2.16.2 release preparation in progress; model HOLD retained | Publish v2.16.2 with verified artifacts, then close and archive v2.16 |
+| v2.16 release | v2.16.1 published 2026-11-02; v2.16.2 integrated (PR154, PR164) with QG-1 passed in a clean Windows Sandbox and BG-1 (static VC++ runtime) fixed; v2.16.2 published 2026-11-21 and its installer verified in a clean Windows Sandbox; v2.16 closed and archived; model HOLD retained | Carry v2.17 BG-11 (Rust 1.100 and tauri-build 2.6.3) into v2.17 |
 | v2.17 release | 384 OPEN records preserved in the requirements matrix; implementation and evidence reconciliation pending | Complete the actual requirements and publish verified artifacts |
 | Final review | Not started | Full codebase, local-agent, UI and behavioral review after both releases |
 
@@ -20,7 +20,7 @@
 - [x] Merge PR148 after 63 successful checks and verify all 28 post-merge checks on fede2197.
 - [x] Integrate reviewed v2.16.1 versions and notes through develop/main, then verify published artifacts (Nexus v2.16.1 released 2026-11-02).
 - [x] Prove the exact frozen Windows installer performs desktop/runtime installation and real backend health on a clean hosted runner (installer-build run 44918087312; v2.16.2 also proved in a clean Windows Sandbox).
-- [ ] Publish the verified v2.16 release.
+- [x] Publish the verified v2.16 release (v2.16.2 published 2026-11-21; published installer passed a clean Windows Sandbox run).
 - [ ] Reconcile every v2.17 obligation against current code and required acceptance evidence.
 - [ ] Review the link audit during v2.17 BG-2 living-document reconciliation (25 existing broken tracker links; zero newly broken links).
 - [ ] Implement and qualify the remaining v2.17 functionality.
@@ -859,9 +859,9 @@ Follow-up to the COMPLETE `installer-and-app-experience-overhaul`, authored from
 | Adoption | Approved 2026-11-05; 4 phases, 21 tasks, 0 implemented; seven review lenses complete | Refresh implementation admission; A3/A4 remain parked |
 | Publication | Owner requested merge into develop; attribution check passes | Required pull-request checks and merge |
 
-- [x] Complete the [comparison](releases/v2/v2.16/comparisons/v2.16.2-comparison-specialist-models-desktop-creative-tools.md) and source receipts (2026-11-04).
-- [x] Draft and critique the [A1/A2 plan](releases/v2/v2.16/plans/v2.16.2-adoption-specialist-models-desktop-creative-tools.md): four phases, 21 tasks, seven lenses and four findings corrected/rechecked; both-channel skill delivery and disposable-VM installer proof/HOLD confirmed.
-- [x] Obtain owner approval of the plan and its merge into develop ([approval and publication note](releases/v2/v2.16/development/v2.16.2-plan-approval-publication.md), 2026-11-05).
+- [x] Complete the [comparison](archives/v2/v2.16/comparisons/v2.16.2-comparison-specialist-models-desktop-creative-tools.md) and source receipts (2026-11-04).
+- [x] Draft and critique the [A1/A2 plan](archives/v2/v2.16/plans/v2.16.2-adoption-specialist-models-desktop-creative-tools.md): four phases, 21 tasks, seven lenses and four findings corrected/rechecked; both-channel skill delivery and disposable-VM installer proof/HOLD confirmed.
+- [x] Obtain owner approval of the plan and its merge into develop ([approval and publication note](archives/v2/v2.16/development/v2.16.2-plan-approval-publication.md), 2026-11-05).
 - [ ] Start implementation only through its refreshed admission and preflight; preserve the approved boundaries and all predecessor obligations. No implementation has started.
 
 ## Recurring Obligations
