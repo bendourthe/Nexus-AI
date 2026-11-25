@@ -21,7 +21,7 @@ function disposableFixture(): string {
     const sources = [...new Set<string>(corpus.chunks.map((chunk: { source: string }) => chunk.source))];
     const output = execFileSync("git", ["cat-file", "--batch"], {
       cwd: checkout, maxBuffer: 8 * 1024 * 1024,
-      input: sources.map((path) => "90b95f2439959ddfa4c902d287a6d673df785dd9:" + path).join("\n") + "\n",
+      input: sources.map((path) => "2e27bdad4ddbe54b1e7b1a2b421e901f9ae71886:" + path).join("\n") + "\n",
     });
     const captured = new Map<string, Buffer>();
     let offset = 0;
