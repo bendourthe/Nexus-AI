@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "release": "2.13.0",
-  "baselineHead": "90b95f2439959ddfa4c902d287a6d673df785dd9",
+  "baselineHead": "2e27bdad4ddbe54b1e7b1a2b421e901f9ae71886",
   "fixtureManifest": "tests/fixtures/embedding-eval/manifest.json",
-  "fixtureManifestSha256": "09bd598eaae038e3c2b4f94dd54fd4c7fd7a7499d5377947a1df3de55227ba13",
+  "fixtureManifestSha256": "2aa66db7a4bcb311df6b2d21828f532149299da06b00ddd5eec256a40efaafc5",
   "baseline": {
     "model": "embeddinggemma:300m",
     "digest": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
